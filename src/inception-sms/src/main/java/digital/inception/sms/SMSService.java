@@ -132,7 +132,7 @@ public class SMSService
     throws SMSServiceException
   {
     String createSMSSQL =
-        "INSERT INTO SMS.SMS (id, mobile_number, message, status, send_attempts) "
+        "INSERT INTO sms.sms (id, mobile_number, message, status, send_attempts) "
         + "VALUES (?, ?, ?, ?, 0)";
 
     try (Connection connection = dataSource.getConnection();
@@ -162,24 +162,31 @@ public class SMSService
   /**
    * Delete the existing SMS.
    *
-   * @param id the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    */
   @Override
-  public void deleteSMS(long id)
-    throws SMSServiceException
+  public void deleteSMS(long smsId)
+    throws SMSNotFoundException, SMSServiceException
   {
     String deleteSMSSQL = "DELETE FROM sms.sms WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteSMSSQL))
     {
-      statement.setLong(1, id);
+      statement.setLong(1, smsId);
 
-      statement.executeUpdate();
+      if (statement.executeUpdate() <= 0)
+      {
+        throw new SMSNotFoundException(smsId);
+      }
+    }
+    catch (SMSNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format("Failed to delete the SMS (%d)", id), e);
+      throw new SMSServiceException(String.format("Failed to delete the SMS (%d)", smsId), e);
     }
   }
 
@@ -285,7 +292,11 @@ public class SMSService
         throw new RuntimeException("Invalid API result XML: data element not found");
       }
 
-      return Integer.parseInt(XmlUtil.getChildElementText(dataElement, "credits"));
+      String credits = XmlUtil.getChildElementText(dataElement, "credits");
+
+      return StringUtil.isNullOrEmpty(credits)
+          ? 0
+          : Integer.parseInt(credits);
     }
     catch (Throwable e)
     {
@@ -296,13 +307,13 @@ public class SMSService
   /**
    * Retrieve the SMS.
    *
-   * @param id the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
-  public SMS getSMS(long id)
-    throws SMSServiceException
+  public SMS getSMS(long smsId)
+    throws SMSNotFoundException, SMSServiceException
   {
     String getSMSByIdSQL =
         "SELECT id, mobile_number, message, status, send_attempts, lock_name, last_processed "
@@ -311,7 +322,7 @@ public class SMSService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getSMSByIdSQL))
     {
-      statement.setLong(1, id);
+      statement.setLong(1, smsId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -321,14 +332,18 @@ public class SMSService
         }
         else
         {
-          return null;
+          throw new SMSNotFoundException(smsId);
         }
       }
+    }
+    catch (SMSNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new SMSServiceException(String.format(
-          "Failed to retrieve the SMS (%d) from the database", id), e);
+          "Failed to retrieve the SMS (%d) from the database", smsId), e);
     }
   }
 
@@ -339,7 +354,7 @@ public class SMSService
    */
   @Override
   public void incrementSMSSendAttempts(SMS sms)
-    throws SMSServiceException
+    throws SMSNotFoundException, SMSServiceException
   {
     String incrementSMSSendAttemptsSQL =
         "UPDATE sms.sms SET send_attempts=send_attempts + 1, last_processed=? WHERE id=?";
@@ -354,13 +369,15 @@ public class SMSService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SMSServiceException(
-            "No rows were affected as a result of executing the SQL statement ("
-            + incrementSMSSendAttemptsSQL + ")");
+        throw new SMSNotFoundException(sms.getId());
       }
 
       sms.setSendAttempts(sms.getSendAttempts() + 1);
       sms.setLastProcessed(currentTime);
+    }
+    catch (SMSNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -515,7 +532,7 @@ public class SMSService
 
       if (!result)
       {
-        String error = XmlUtil.getChildElementText(callResultElement, "error");
+        String error = StringUtil.notNull(XmlUtil.getChildElementText(callResultElement, "error"));
 
         // If the SMS cannot be sent...
         if (error.equalsIgnoreCase("No data to send"))
@@ -536,21 +553,15 @@ public class SMSService
         throw new RuntimeException("Invalid API result XML: send_info element not found");
       }
 
-      int credits;
+      String credits = XmlUtil.getChildElementText(sendInfoElement, "credits");
 
-      try
-      {
-        credits = Integer.parseInt(XmlUtil.getChildElementText(sendInfoElement, "credits"));
-      }
-      catch (Throwable e)
-      {
-        throw new RuntimeException("Invalid API result XML: "
-            + "Failed to retrieve and parse the value of the credits element", e);
-      }
+      int remainingCredits = StringUtil.isNullOrEmpty(credits)
+          ? 0
+          : Integer.parseInt(credits);
 
-      if (credits < 100)
+      if (remainingCredits < 100)
       {
-        logger.warn(String.format("There are %d SMS credits remaining", credits));
+        logger.warn(String.format("There are %d SMS credits remaining", remainingCredits));
       }
 
       if (logger.isDebugEnabled())
@@ -571,11 +582,11 @@ public class SMSService
   /**
    * Set the status for the SMS.
    *
-   * @param id     the ID uniquely identifying the SMS
+   * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  public void setSMSStatus(long id, SMS.Status status)
-    throws SMSServiceException
+  public void setSMSStatus(long smsId, SMS.Status status)
+    throws SMSNotFoundException, SMSServiceException
   {
     String setSMSStatusSQL = "UPDATE sms.sms SET status=? WHERE id=?";
 
@@ -583,19 +594,21 @@ public class SMSService
       PreparedStatement statement = connection.prepareStatement(setSMSStatusSQL))
     {
       statement.setInt(1, status.getCode());
-      statement.setLong(2, id);
+      statement.setLong(2, smsId);
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SMSServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setSMSStatusSQL));
+        throw new SMSNotFoundException(smsId);
       }
+    }
+    catch (SMSNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new SMSServiceException(String.format(
-          "Failed to set the status for the SMS (%d) to (%s) in the database", id,
+          "Failed to set the status for the SMS (%d) to (%s) in the database", smsId,
           status.toString()), e);
     }
   }
@@ -603,11 +616,11 @@ public class SMSService
   /**
    * Unlock the SMS.
    *
-   * @param id     the ID uniquely identifying the SMS
+   * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  public void unlockSMS(long id, SMS.Status status)
-    throws SMSServiceException
+  public void unlockSMS(long smsId, SMS.Status status)
+    throws SMSNotFoundException, SMSServiceException
   {
     String unlockSMSSQL = "UPDATE sms.sms SET status=?, lock_name=NULL WHERE id=?";
 
@@ -615,18 +628,21 @@ public class SMSService
       PreparedStatement statement = connection.prepareStatement(unlockSMSSQL))
     {
       statement.setInt(1, status.getCode());
-      statement.setLong(2, id);
+      statement.setLong(2, smsId);
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SMSServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", unlockSMSSQL));
+        throw new SMSNotFoundException(smsId);
       }
+    }
+    catch (SMSNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new SMSServiceException(String.format(
-          "Failed to unlock and set the status for the SMS (%d) to (%s) in the database", id,
+          "Failed to unlock and set the status for the SMS (%d) to (%s) in the database", smsId,
           status.toString()), e);
     }
   }

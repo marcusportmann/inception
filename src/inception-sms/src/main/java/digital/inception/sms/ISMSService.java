@@ -36,10 +36,10 @@ public interface ISMSService
   /**
    * Delete the existing SMS.
    *
-   * @param id the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    */
-  void deleteSMS(long id)
-    throws SMSServiceException;
+  void deleteSMS(long smsId)
+    throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Returns the maximum number of send attempts for a SMS.
@@ -70,12 +70,12 @@ public interface ISMSService
   /**
    * Retrieve the SMS.
    *
-   * @param id the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
-  SMS getSMS(long id)
-    throws SMSServiceException;
+  SMS getSMS(long smsId)
+    throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Increment the send attempts for the SMS.
@@ -83,7 +83,7 @@ public interface ISMSService
    * @param sms the SMS whose send attempts should be incremented
    */
   void incrementSMSSendAttempts(SMS sms)
-    throws SMSServiceException;
+    throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Reset the SMS locks.
@@ -122,18 +122,18 @@ public interface ISMSService
   /**
    * Set the status for the SMS.
    *
-   * @param id     the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  void setSMSStatus(long id, SMS.Status status)
-    throws SMSServiceException;
+  void setSMSStatus(long smsId, SMS.Status status)
+    throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Unlock the SMS.
    *
-   * @param id     the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  void unlockSMS(long id, SMS.Status status)
-    throws SMSServiceException;
+  void unlockSMS(long smsId, SMS.Status status)
+    throws SMSNotFoundException, SMSServiceException;
 }
