@@ -1,0 +1,6 @@
+application:
+
+  messaging:
+    encryptionKey: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
+    processingRetryDelay: 60000
+    maximumProcessingAttempts: 1000

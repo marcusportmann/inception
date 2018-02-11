@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE messaging SYSTEM "MessagingConfig.dtd">
+
+<messaging>
+  <messageHandler>
+    <name>System Message Handler</name>
+    <class>digital.inception.messaging.handler.SystemMessageHandler</class>
+    <messages>
+      <!--  Authenticate Request Message -->
+      <message type="d21fb54e-5c5b-49e8-881f-ce00c6ced1a3" typeVersion="1" isSynchronous="Y" isAsynchronous="N" isArchivable="N"/>
+      <!--  Check User Exists Request Message -->
+      <message type="cc005e6a-b01b-48eb-98a0-026297be69f3" typeVersion="1" isSynchronous="Y" isAsynchronous="N" isArchivable="N"/>
+      <!--  Test Request Message -->
+      <message type="a589dc87-2328-4a9b-bdb6-970e55ca2323" typeVersion="1" isSynchronous="Y" isAsynchronous="N" isArchivable="N"/>
+      <!--  Another Test Request Message -->
+      <message type="e9918051-8ebc-48f1-bad7-13c59b550e1a" typeVersion="1" isSynchronous="N" isAsynchronous="Y" isArchivable="Y"/>
+      <!--  Submit Error Report Request Message -->
+      <message type="ff638c33-b4f1-4e79-804c-9560da2543d6" typeVersion="1" isSynchronous="N" isAsynchronous="Y" isArchivable="N"/>
+      <!--  Get Code Category Request -->
+      <message type="94d60eb6-a062-492d-b5e7-9fb1f05cf088" typeVersion="1" isSynchronous="Y" isAsynchronous="N" isArchivable="N"/>
+    </messages>
+  </messageHandler>
+</messaging>
+
+
+
+
+
+

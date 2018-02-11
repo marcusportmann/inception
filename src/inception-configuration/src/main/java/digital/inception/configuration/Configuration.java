@@ -1,0 +1,159 @@
+/*
+ * Copyright 2018 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package digital.inception.configuration;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
+import java.io.Serializable;
+
+//~--- JDK imports ------------------------------------------------------------
+
+/**
+ * The <code>Configuration</code> class stores the key, value and description for the configuration.
+ *
+ * @author Marcus Portmann
+ */
+@ApiModel(value = "Configuration")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "key", "value", "description" })
+@XmlRootElement(name = "Configuration", namespace = "http://configuration.inception.digital")
+@XmlType(name = "Configuration", namespace = "http://configuration.inception.digital",
+    propOrder = { "key", "value", "description" })
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Configuration
+  implements Serializable
+{
+  private static final long serialVersionUID = 1000000;
+
+  /**
+   * The key used to uniquely identify the configuration.
+   */
+  @ApiModelProperty(value = "The key used to uniquely identify the configuration", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Key", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
+  private String key;
+
+  /**
+   * The value for the configuration.
+   */
+  @ApiModelProperty(value = "The value for the configuration", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Value", required = true)
+  @NotNull
+  @Size(max = 4000)
+  private String value;
+
+  /**
+   * The description for the configuration.
+   */
+  @ApiModelProperty(value = "The description for the configuration", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 4000)
+  private String description;
+
+  /**
+   * Constructs a new <code>Configuration</code>.
+   */
+  public Configuration() {}
+
+  /**
+   * Constructs a new <code>Configuration</code>.
+   *
+   * @param key         the key used to uniquely identify the configuration
+   * @param value       the value for the configuration
+   * @param description the description for the configuration
+   */
+  Configuration(String key, String value, String description)
+  {
+    this.key = key;
+    this.value = value;
+    this.description = description;
+  }
+
+  /**
+   * Returns the description for the configuration.
+   *
+   * @return the description for the configuration
+   */
+  public String getDescription()
+  {
+    return description;
+  }
+
+  /**
+   * Returns the key used to uniquely identify the configuration.
+   *
+   * @return the key used to uniquely identify the configuration
+   */
+  public String getKey()
+  {
+    return key;
+  }
+
+  /**
+   * Returns the value for the configuration.
+   *
+   * @return the value for the configuration
+   */
+  public String getValue()
+  {
+    return value;
+  }
+
+  /**
+   * Set the description for the configuration.
+   *
+   * @param description the description for the configuration
+   */
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+
+  /**
+   * Set the key used to uniquely identify the configuration.
+   *
+   * @param key the key used to uniquely identify the configuration
+   */
+  public void setKey(String key)
+  {
+    this.key = key;
+  }
+
+  /**
+   * Set the value for the configuration.
+   *
+   * @param value the value for the configuration
+   */
+  public void setValue(String value)
+  {
+    this.value = value;
+  }
+}

@@ -1,0 +1,8 @@
+application:
+
+  sms:
+    myMobileAPIEndPoint: http://www.mymobileapi.com/api5/api.asmx
+    myMobileAPIUsername: USERNAME
+    myMobileAPIPassword: PASSWORD
+    maximumSendAttempts: 100
+    sendRetryDelay: 600000

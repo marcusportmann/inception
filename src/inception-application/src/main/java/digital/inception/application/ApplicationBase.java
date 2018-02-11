@@ -1,0 +1,636 @@
+/*
+ * Copyright 2018 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package digital.inception.application;
+
+//~--- non-JDK imports --------------------------------------------------------
+
+import digital.inception.core.util.CryptoUtil;
+import digital.inception.core.util.StringUtil;
+import digital.inception.json.databind.DateTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.stereotype.Component;
+import org.xnio.Options;
+import org.xnio.SslClientAuthMode;
+
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+import javax.xml.ws.Endpoint;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+
+//~--- JDK imports ------------------------------------------------------------
+
+/**
+ * The <code>ApplicationBase</code> class provides the base class that application classes can be
+ * derived from.
+ *
+ * @author Marcus Portmann
+ */
+@Component
+@ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
+@SpringBootApplication
+@SuppressWarnings({ "unused", "WeakerAccess" })
+public abstract class ApplicationBase
+  implements ServletContextInitializer
+{
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
+
+  static
+  {
+    System.setProperty("com.atomikos.icatch.registered", "true");
+  }
+
+  /**
+   * The application key store path.
+   */
+  @Value("${application.keyStore.path:#{null}}")
+  private String applicationKeyStorePath;
+
+  /**
+   * The application key store password.
+   */
+  @Value("${application.keyStore.password:#{null}}")
+  private String applicationKeyStorePassword;
+
+  /**
+   * The application key store alias.
+   */
+  @Value("${application.keyStore.alias:#{null}}")
+  private String applicationKeyStoreAlias;
+
+  /**
+   * The optional application trust store type.
+   */
+  @Value("${application.trustStore.type:#{null}}")
+  private String applicationTrustStoreType;
+
+  /**
+   * The optional application trust store path.
+   */
+  @Value("${application.trustStore.path:#{null}}")
+  private String applicationTrustStorePath;
+
+  /**
+   * The optional application trust store password.
+   */
+  @Value("${application.trustStore.password:#{null}}")
+  private String applicationTrustStorePassword;
+
+  /**
+   * The server port.
+   */
+  @Value("${server.port:#{null}}")
+  private Integer serverPort;
+
+  /**
+   * Is server security enabled?
+   */
+  @Value("${server.security.enabled:#{false}}")
+  private boolean isServerSecurityEnabled;
+
+  /**
+   * The server security port.
+   */
+  @Value("${server.security.port:#{null}}")
+  private Integer serverSecurityPort;
+
+  /**
+   * The server security key store type.
+   */
+  @Value("${server.security.keyStore.type:#{null}}")
+  private String serverSecurityKeyStoreType;
+
+  /**
+   * The server security key store path.
+   */
+  @Value("${server.security.keyStore.path:#{null}}")
+  private String serverSecurityKeyStorePath;
+
+  /**
+   * The server security key store password.
+   */
+  @Value("${server.security.keyStore.password:#{null}}")
+  private String serverSecurityKeyStorePassword;
+
+  /**
+   * The server security key store alias.
+   */
+  @Value("${server.security.keyStore.alias:#{null}}")
+  private String serverSecurityKeyStoreAlias;
+
+  /**
+   * The optional server security trust store type.
+   */
+  @Value("${server.security.trustStore.type:#{null}}")
+  private String serverSecurityTrustStoreType;
+
+  /**
+   * The optional server security trust store path.
+   */
+  @Value("${server.security.trustStore.path:#{null}}")
+  private String serverSecurityTrustStorePath;
+
+  /**
+   * The optional server security trust store password.
+   */
+  @Value("${server.security.trustStore.password:#{null}}")
+  private String serverSecurityTrustStorePassword;
+
+  /**
+   * The optional server security client authentication mode.
+   */
+  @Value("${server.security.clientAuthMode:#{null}}")
+  private String serverSecurityClientAuthMode;
+
+  /**
+   * Is the Web Services Security X.509 Certificate Token Profile enabled?
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.enabled:false}")
+  private boolean isWSSX509CertificateTokenProfileEnabled;
+
+  /**
+   * The Web Services Security X.509 Certificate Token Profile key store type.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.keyStore.type:#{null}}")
+  private String wssX509CertificateTokenProfileKeyStoreType;
+
+  /**
+   * The Web Services Security X.509 Certificate Token Profile key store path.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.keyStore.path:#{null}}")
+  private String wssX509CertificateTokenProfileKeyStorePath;
+
+  /**
+   * The Web Services Security X.509 Certificate Token Profile key store password.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.keyStore.password:#{null}}")
+  private String wssX509CertificateTokenProfileKeyStorePassword;
+
+  /**
+   * The Web Services Security X.509 Certificate Token Profile key store alias.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.keyStore.alias:#{null}}")
+  private String wssX509CertificateTokenProfileKeyStoreAlias;
+
+  /**
+   * The optional Web Services Security X.509 Certificate Token Profile trust store type.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.trustStore.type:#{null}}")
+  private String wssX509CertificateTokenProfileTrustStoreType;
+
+  /**
+   * The optional Web Services Security X.509 Certificate Token Profile trust store path.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.trustStore.path:#{null}}")
+  private String wssX509CertificateTokenProfileTrustStorePath;
+
+  /**
+   * The optional Web Services Security X.509 Certificate Token Profile trust store password.
+   */
+  @Value("${webServices.security.x509CertificateTokenProfile.trustStore.password:#{null}}")
+  private String wssX509CertificateTokenProfileTrustStorePassword;
+
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
+
+  /**
+   * Returns the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   * processor package.
+   *
+   * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   *         processor package
+   */
+  @Bean
+  public Jackson2ObjectMapperBuilder jacksonBuilder()
+  {
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
+    jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
+
+    return jackson2ObjectMapperBuilder;
+  }
+
+  /**
+   * Configure the given {@link ServletContext} with any servlets, filters, listeners,
+   * context-params and attributes necessary for initialization.
+   *
+   * @param servletContext the {@code ServletContext} to initialize
+   */
+  @Override
+  public void onStartup(ServletContext servletContext)
+  {
+    try
+    {
+      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread()
+          .getContextClassLoader().loadClass("org.springframework.web.servlet.DispatcherServlet")
+          .asSubclass(Servlet.class);
+
+      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet",
+          (dispatcherServletClass));
+      dispatcherServlet.addMapping("/*");
+
+      dispatcherServlet.setInitParameter("contextClass",
+          "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+
+      logger.info("Initialising the Spring Dispatcher servlet");
+    }
+    catch (ClassNotFoundException ignored) {}
+
+    try
+    {
+      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
+
+      ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
+      cxfServlet.addMapping("/service/*");
+
+      logger.info("Initialising the Apache CXF framework");
+    }
+    catch (ClassNotFoundException ignored) {}
+  }
+
+  /**
+   * Returns the embedded servlet container factory used to configure the embedded Undertow servlet
+   * container.
+   *
+   * @return the embedded servlet container factory used to configure the embedded Undertow servlet
+   *         container
+   */
+  @Bean
+  public UndertowServletWebServerFactory undertowServletWebServerFactory()
+  {
+    UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
+
+    if (isServerSecurityEnabled)
+    {
+      factory.addBuilderCustomizers((UndertowBuilderCustomizer) builder ->
+          {
+            int serverSSLHttpListenerPort = (serverSecurityPort != null)
+            ? serverSecurityPort
+            : (serverPort != null)
+            ? (serverPort >= 15000) && (serverPort < 16000)
+            ? serverPort + 1000
+            : 8443
+            : 8443;
+
+            try
+            {
+              if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreType))
+              {
+                throw new GeneralSecurityException(
+                    "The type was not specified for the server security key store");
+              }
+
+              if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePath))
+              {
+                throw new GeneralSecurityException(
+                    "The path was not specified for the server security key store");
+              }
+
+              if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePassword))
+              {
+                throw new GeneralSecurityException(
+                    "The password was not specified for the server security key store");
+              }
+
+              if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreAlias))
+              {
+                throw new GeneralSecurityException(
+                    "The alias was not specified for the server security key store");
+              }
+
+              KeyStore keyStore;
+
+              try
+              {
+                keyStore = CryptoUtil.loadKeyStorex(serverSecurityKeyStoreType,
+                    serverSecurityKeyStorePath, serverSecurityKeyStorePassword,
+                    serverSecurityKeyStoreAlias);
+              }
+              catch (Throwable e)
+              {
+                throw new GeneralSecurityException("Failed to initialise the server SSL key store",
+                    e);
+              }
+
+              KeyStore trustStore = keyStore;
+
+              if ((!StringUtil.isNullOrEmpty(serverSecurityTrustStoreType))
+                  || (!StringUtil.isNullOrEmpty(serverSecurityTrustStorePath))
+                  || (!StringUtil.isNullOrEmpty(serverSecurityTrustStorePassword)))
+              {
+                if (StringUtil.isNullOrEmpty(serverSecurityTrustStoreType))
+                {
+                  throw new GeneralSecurityException(
+                      "The type was not specified for the server security trust store");
+                }
+
+                if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePath))
+                {
+                  throw new GeneralSecurityException(
+                      "The path was not specified for the server security trust store");
+                }
+
+                if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePassword))
+                {
+                  throw new GeneralSecurityException(
+                      "The password was not specified for the server security trust store");
+                }
+
+                try
+                {
+                  trustStore = CryptoUtil.loadTrustStorex(serverSecurityTrustStoreType,
+                      serverSecurityTrustStorePath, serverSecurityTrustStorePassword);
+                }
+                catch (Throwable e)
+                {
+                  throw new GeneralSecurityException(
+                      "Failed to initialise the server SSL key store", e);
+                }
+              }
+
+              // Setup the key manager factory
+              KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+                  KeyManagerFactory.getDefaultAlgorithm());
+
+              keyManagerFactory.init(keyStore, serverSecurityKeyStorePassword.toCharArray());
+
+              // Setup the trust manager factory
+              TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                  TrustManagerFactory.getDefaultAlgorithm());
+
+              trustManagerFactory.init(trustStore);
+
+              SSLContext sslContext = SSLContext.getInstance("TLS");
+              sslContext.init(keyManagerFactory.getKeyManagers(),
+                  trustManagerFactory.getTrustManagers(), new SecureRandom());
+
+              builder.addHttpsListener(serverSSLHttpListenerPort, "0.0.0.0", sslContext);
+
+              if (!StringUtil.isNullOrEmpty(serverSecurityClientAuthMode))
+              {
+                if (serverSecurityClientAuthMode.equalsIgnoreCase("required"))
+                {
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.REQUIRED);
+                }
+                else if (serverSecurityClientAuthMode.equalsIgnoreCase("requested"))
+                {
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
+                      .REQUESTED);
+                }
+                else
+                {
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
+                      .NOT_REQUESTED);
+                }
+              }
+              else
+              {
+                builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
+                    .NOT_REQUESTED);
+              }
+            }
+            catch (Throwable e)
+            {
+              logger.error("Failed to initialise the server SSL HTTP listener on port "
+                  + serverSSLHttpListenerPort, e);
+            }
+          }
+          );
+    }
+
+    factory.addInitializers();
+
+    return factory;
+  }
+
+  /**
+   * Returns the web services bean factory post processor.
+   *
+   * @return web services bean factory post processor
+   */
+  @Bean
+  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor()
+  {
+    return beanFactory ->
+        {
+          try
+          {
+            Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
+                "org.apache.cxf.bus.spring.SpringBus");
+
+            Object springBus = springBusClass.newInstance();
+
+            beanFactory.registerSingleton("cxf", springBus);
+          }
+          catch (ClassNotFoundException ignored) {}
+          catch (Throwable e)
+          {
+            throw new FatalBeanException(
+                "Failed to initialise the org.apache.cxf.bus.spring.SpringBus bean", e);
+          }
+        }
+        ;
+  }
+
+  /**
+   * Create the web service endpoint.
+   * <p/>
+   * Requires the Apache CXF framework to have been initialised by adding the
+   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b>, <b>org.apache.cxf:cxf-rt-transports-http</b>
+   * <b>org.apache.cxf:cxf-rt-ws-security</b> and <b>org.apache.wss4j:wss4j-ws-security-common</b>
+   * Maven dependencies to the project.
+   *
+   * @param name           the web service name
+   * @param implementation the web service implementation
+   *
+   * @return the web service endpoint
+   */
+  @SuppressWarnings("ConstantConditions")
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation)
+  {
+    try
+    {
+      Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
+
+      Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.Bus");
+
+      Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.bus.spring.SpringBus");
+
+      Object springBus = applicationContext.getBean(springBusClass);
+
+      Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass,
+          Object.class);
+
+      Endpoint endpoint = constructor.newInstance(springBus, implementation);
+
+      Method publishMethod = endpointImplClass.getMethod("publish", String.class);
+
+      publishMethod.invoke(endpoint, "/" + name);
+
+      applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
+
+      if (isWSSX509CertificateTokenProfileEnabled)
+      {
+        try
+        {
+          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreType))
+          {
+            throw new GeneralSecurityException(
+                "The type was not specified for the server SSL key store");
+          }
+
+          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePath))
+          {
+            throw new GeneralSecurityException(
+                "The path was not specified for the server SSL key store");
+          }
+
+          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePassword))
+          {
+            throw new GeneralSecurityException(
+                "The password was not specified for the server SSL key store");
+          }
+
+          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
+          {
+            throw new GeneralSecurityException(
+                "The alias was not specified for the server SSL key store");
+          }
+
+          KeyStore keyStore;
+
+          try
+          {
+            keyStore = CryptoUtil.loadKeyStorex(wssX509CertificateTokenProfileKeyStoreType,
+                wssX509CertificateTokenProfileKeyStorePath,
+                wssX509CertificateTokenProfileKeyStorePassword,
+                wssX509CertificateTokenProfileKeyStoreAlias);
+          }
+          catch (Throwable e)
+          {
+            throw new GeneralSecurityException(
+                "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
+                e);
+          }
+
+          KeyStore trustStore = keyStore;
+
+          if ((!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
+              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
+              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
+          {
+            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
+            {
+              throw new GeneralSecurityException(
+                  "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+            }
+
+            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
+            {
+              throw new GeneralSecurityException(
+                  "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+            }
+
+            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword))
+            {
+              throw new GeneralSecurityException(
+                  "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+            }
+
+            try
+            {
+              trustStore = CryptoUtil.loadTrustStorex(wssX509CertificateTokenProfileTrustStoreType,
+                  wssX509CertificateTokenProfileTrustStorePath,
+                  wssX509CertificateTokenProfileTrustStorePassword);
+            }
+            catch (Throwable e)
+            {
+              throw new GeneralSecurityException(
+                  "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
+                  e);
+            }
+          }
+
+          Class<?> cxfWSSX509CertificateTokenProfileEndpointConfigurator = Thread.currentThread()
+              .getContextClassLoader().loadClass(
+              "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
+
+          Method configureEndpointMethod =
+              cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod("configureEndpoint",
+              Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
+
+          configureEndpointMethod.invoke(null, endpoint, keyStore,
+              wssX509CertificateTokenProfileKeyStorePassword,
+              wssX509CertificateTokenProfileKeyStoreAlias, trustStore);
+        }
+        catch (ClassNotFoundException e)
+        {
+          throw new ApplicationException(
+              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
+              + name + "): The inception-ws library could not be found", e);
+        }
+        catch (Throwable e)
+        {
+          throw new ApplicationException(
+              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
+              + name + ")", e);
+        }
+      }
+
+      return endpoint;
+    }
+    catch (ClassNotFoundException e)
+    {
+      throw new ApplicationException("Failed to create the endpoint for the service (" + name
+          + "): The Apache CXF framework has not been initialised", e);
+    }
+    catch (Throwable e)
+    {
+      throw new ApplicationException("Failed to create the endpoint for the service (" + name
+          + ")", e);
+    }
+  }
+}

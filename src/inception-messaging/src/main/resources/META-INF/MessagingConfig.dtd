@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT messaging (messageHandler*)>
+
+  <!ELEMENT messageHandler (name, class, messages)>
+
+    <!ELEMENT name ( #PCDATA )>
+
+    <!ELEMENT class ( #PCDATA )>
+
+    <!ELEMENT messages ( message* )>
+
+      <!ELEMENT message EMPTY>
+
+      <!ATTLIST message
+        type  CDATA #REQUIRED
+        typeVersion CDATA #REQUIRED
+        isSynchronous CDATA #REQUIRED
+        isAsynchronous CDATA #REQUIRED
+        isArchivable CDATA #REQUIRED
+      >
+
+
+
+
+
+        
