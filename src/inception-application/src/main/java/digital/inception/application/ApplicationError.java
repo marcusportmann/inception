@@ -138,7 +138,7 @@ public class ApplicationError
 
     this.status = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
 
-    if (annotation == null)
+    if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
       this.exception = cause.getClass().getName();
 
