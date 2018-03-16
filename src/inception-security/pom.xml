@@ -37,6 +37,12 @@
       <artifactId>inception-validation</artifactId>
     </dependency>
 
+    <!-- Dependencies -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-core</artifactId>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>

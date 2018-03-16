@@ -19,6 +19,7 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.StringUtil;
+import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 import io.swagger.annotations.ApiOperation;
@@ -27,11 +28,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -66,11 +69,14 @@ public class CodesRestController
    */
   @ApiOperation(value = "Create a code", notes = "Create the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 409, message = "A code with the specified ID already exists") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 409, message = "A code with the specified ID already exists",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -111,10 +117,12 @@ public class CodesRestController
   @ApiOperation(value = "Create a code category", notes = "Create the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 409, message = "A code category with the specified ID already exists") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 409, message = "A code category with the specified ID already exists",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -147,10 +155,12 @@ public class CodesRestController
    */
   @ApiOperation(value = "Delete a code", notes = "Delete the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -184,10 +194,12 @@ public class CodesRestController
   @ApiOperation(value = "Delete a code category", notes = "Delete the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -213,13 +225,17 @@ public class CodesRestController
   @ApiOperation(value = "Retrieve the code categories", notes = "Retrieve the code categories")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Application.CodeCategoryAdministration')")
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
     return codesService.getCodeCategories();
   }
 
@@ -234,10 +250,12 @@ public class CodesRestController
   @ApiOperation(value = "Retrieve the codes for a code category",
       notes = "Retrieve the codes for a code category")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -266,10 +284,12 @@ public class CodesRestController
   @ApiOperation(value = "Retrieve the XML or JSON data for a code category",
       notes = "Retrieve the XML or JSON data for a code category")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/data", method = RequestMethod.GET)
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
@@ -298,10 +318,12 @@ public class CodesRestController
   @ApiOperation(value = "Retrieve the date and time the code category was last updated",
       notes = "Retrieve the date and time the code category was last updated")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/updated",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseBody
@@ -330,11 +352,14 @@ public class CodesRestController
    */
   @ApiOperation(value = "Update a code", notes = "Update the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 409, message = "A code with the specified ID already exists") ,
-      @ApiResponse(code = 404, message = "The code could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 409, message = "A code with the specified ID already exists",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -383,10 +408,12 @@ public class CodesRestController
   @ApiOperation(value = "Update a code category", notes = "Update the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The code category could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)

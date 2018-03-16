@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.application;
+package digital.inception.rs;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -33,26 +33,27 @@ import javax.servlet.http.HttpServletRequest;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ApplicationErrorHandler</code> class implements the application error handler.
+ * The <code>RestControllerErrorHandler</code> class implements the error handler for RESTful web
+ * services.
  *
  * @author Marcus Portmann
  */
 @ControllerAdvice
 @SuppressWarnings("unused")
-public class ApplicationErrorHandler
+public class RestControllerErrorHandler
 {
   @ExceptionHandler
   @ResponseBody
-  protected ResponseEntity<ApplicationError> handle(HttpServletRequest request,
+  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request,
       HttpMessageNotReadableException ex)
   {
-    return new ResponseEntity<>(new ApplicationError(request, HttpStatus.BAD_REQUEST,
+    return new ResponseEntity<>(new RestControllerError(request, HttpStatus.BAD_REQUEST,
         ex.getMostSpecificCause()), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler
   @ResponseBody
-  protected ResponseEntity<ApplicationError> handle(HttpServletRequest request, Throwable cause)
+  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request, Throwable cause)
   {
     ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
         ResponseStatus.class);
@@ -61,13 +62,13 @@ public class ApplicationErrorHandler
     {
       HttpStatus responseStatus = annotation.value();
 
-      return new ResponseEntity<>(new ApplicationError(request, responseStatus, cause),
+      return new ResponseEntity<>(new RestControllerError(request, responseStatus, cause),
           new HttpHeaders(), responseStatus);
     }
     else
     {
-      return new ResponseEntity<>(new ApplicationError(request, HttpStatus.INTERNAL_SERVER_ERROR,
-          cause), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(new RestControllerError(request, HttpStatus
+          .INTERNAL_SERVER_ERROR, cause), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

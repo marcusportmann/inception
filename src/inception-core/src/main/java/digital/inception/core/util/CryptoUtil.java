@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPrivateCrtKey;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -75,6 +77,33 @@ public class CryptoUtil
   }
 
   /**
+   * Retrieve the key pair with the specified alias from the key store.
+   *
+   * @param keyStore the key store
+   * @param alias    the alias for the key pair
+   * @param password the password for the key
+   *
+   * @return the key pair
+   */
+  public static KeyPair getKeyPair(KeyStore keyStore, String alias, String password)
+    throws GeneralSecurityException
+  {
+    try
+    {
+      RSAPrivateCrtKey key = (RSAPrivateCrtKey) keyStore.getKey(alias, password.toCharArray());
+      RSAPublicKeySpec spec = new RSAPublicKeySpec(key.getModulus(), key.getPublicExponent());
+      PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(spec);
+
+      return new KeyPair(publicKey, key);
+    }
+    catch (Throwable e)
+    {
+      throw new GeneralSecurityException("Failed to load the key pair (" + alias
+          + ") from the key store", e);
+    }
+  }
+
+  /**
    * Returns a randomly generated AES key.
    *
    * @return a randomly generated AES key
@@ -95,7 +124,7 @@ public class CryptoUtil
    *
    * @return the key store that was loaded
    */
-  public static KeyStore loadKeyStorex(String type, String path, String password)
+  public static KeyStore loadKeyStore(String type, String path, String password)
     throws GeneralSecurityException
   {
     InputStream input = null;
@@ -150,7 +179,7 @@ public class CryptoUtil
    *
    * @return the key store that was loaded
    */
-  public static KeyStore loadKeyStorex(String type, String path, String password, String alias)
+  public static KeyStore loadKeyStore(String type, String path, String password, String alias)
     throws GeneralSecurityException
   {
     InputStream input = null;
@@ -232,7 +261,7 @@ public class CryptoUtil
    *
    * @return the trust store that was loaded
    */
-  public static KeyStore loadTrustStorex(String type, String path, String password)
+  public static KeyStore loadTrustStore(String type, String path, String password)
     throws GeneralSecurityException
   {
     KeyStore ks;

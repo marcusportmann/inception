@@ -19,6 +19,7 @@ package digital.inception.configuration;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.StringUtil;
+import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 import io.swagger.annotations.ApiOperation;
@@ -64,10 +65,12 @@ public class ConfigurationRestController
   @ApiOperation(value = "Delete the configuration", notes = "Delete the configuration")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The configuration was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The configuration could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The configuration could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/configuration/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -93,10 +96,12 @@ public class ConfigurationRestController
    */
   @ApiOperation(value = "Retrieve the configuration", notes = "Retrieve the configuration")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The configuration could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The configuration could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/configuration/{key}", method = RequestMethod.GET,
       produces = "application/json")
   public Configuration getConfiguration(@ApiParam(name = "key",
@@ -122,10 +127,12 @@ public class ConfigurationRestController
   @ApiOperation(value = "Retrieve the configuration value",
       notes = "Retrieve the configuration value")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The configuration could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The configuration could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/configuration/{key}/value", method = RequestMethod.GET)
   @ResponseBody
   public String getConfigurationValue(@ApiParam(name = "key",
@@ -150,7 +157,8 @@ public class ConfigurationRestController
       notes = "Retrieve all the configurations")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/configuration", method = RequestMethod.GET,
       produces = "application/json")
   public List<Configuration> getConfigurations()
@@ -167,9 +175,10 @@ public class ConfigurationRestController
   @ApiOperation(value = "Set the configuration", notes = "Set the configuration")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The configuration was set successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/configuration", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)

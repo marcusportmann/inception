@@ -1,3 +1,62 @@
+server:
+  port: 8080
+
+  security:
+    enabled: true
+    port: 8443
+    keyStore:
+      type: JKS
+      path: classpath:META-INF/Sample.jks
+      alias: Sample
+      password: Sample
+    trustStore:
+      type: JKS
+      path: classpath:META-INF/Sample.jks
+      password: Sample
+    clientAuthMode: required
+
+security:
+  oauth2:
+    jwt:
+      privateKey: |
+        -----BEGIN RSA PRIVATE KEY-----
+        MIIEpQIBAAKCAQEA3q/ZhTMRvFfjSEI9GJ0OUUIDkuupnDNL/7Z2TvPK/j52ihUe
+        BuhZgLtd+hFMEptIt7Ay1vSBF1AnJ5FWQnhV88NZCzah82P9YLFqBuaO/EIHxt4T
+        vG1ZDeV8pJRr20wrxxS7OZ/d6NXMvI4Mh8EfHFEDVgLZU3yE9NAZrVLaKhLDXUBe
+        mbsYlOeBdkiJrZX07xwqMDSKYRi0N3ubvPrP0vtO0Rhe2spiMjqqRAZRyscAdIBA
+        LTGyK8o6mA2EkcgnoehFsv4P5P5oV50Xni9gzz3qKUvmXlEMBiv8J9T/MWX+d0Px
+        +LxHo5gclU7/YYvvBmlVltfOLQ95goi3ydBmFwIDAQABAoIBAQCIkU/VYHyABWZd
+        6kGN1sPxEYsfj2d1ZAA30q67vMfBJI2OIWVI1zYMvNvlgLYmsxTlkimbqleA9KcO
+        nRNJsIMF+8egGOE5YxkBM8zSbpNCITyjuY5hAK6c1yCZzmxXEV/Ht+8aZ/Cv2m61
+        NGh62PU7aHOjTBv8F2Fywiz9HtKs+a9Jz1MPv0rGTB+5iKIk8BMcRw4wQXVw4C7m
+        dQA6lJ66OnfPEMfHrkSNtUP/AsuFahOvONx/8SO9NX06UW7ZFQJoRrbDbPDAWW/V
+        LJrWk2RIBGisnBQXiNEj/fBxCEObWA+C9UuqDvlpW6ZbkO95iR0LeNaSqMJzL1jg
+        gP3Vk7gBAoGBAP+/B9rBwo/DVGXd28CnQtBOPeespUkXyZCxQ0nk7mqR/DYU+qJO
+        dOOWnSFcWA14RmDN3Y7R2bN/pMLYK93UkXaLm43526K31Nc+fzgr3hv/Jj98q2LY
+        RvCaOu+62OZmz84aziJRM2ysnyypu5iAXA8f5c3VWMK7SsS2LXj8xEbTAoGBAN7o
+        a7G1nKVRbcUjlPc0rhkivWC8H1IWN0sF/cfB5yOHW7h4ZIVcS6IZNXkU4skpZY8v
+        Hbn2kackPY3di8i12ftLpJInyTpXFbFppiCmM4spG27Yn0lPOyxB27iPRfPgbFYZ
+        k3nZgUq1NSsVnlaB2H7ADlHfqocwosuGfBI5XmEtAoGBAMm59woYd81KN5I6U5I8
+        3LjOXooVZjKnbriQ+hCZYW3yRMyr855+4Dh8nuinnFTToD/PYom7AUtSzbVbKg7K
+        Ews8x7BPe214L4ywoUy/XW0b7yF4xv8qtZonLYHXEit6wUNDZYEwJ63643spTu3V
+        ocfUU0HunRrM/Qb45Blg17k9AoGALtotYLHqlfjymKAs/HTPLytVINMJxkgzIQrG
+        V8lS2u3lgnWTs1A9+XlQ+v0/2cZguWLO3bqMzNPaOEpbyjkm8yHoGmxQaHnLbnnl
+        WDF23gYq5PaVLGSB7IB/PWCn9GW0f7hqfg8QlPJXlZG6sTYjmiimGeFoR3gaj6rZ
+        wz7ZrpUCgYEAqPK8B8tpc+TpQOQMLVYWbsBbOJ4QK+51CFXmG7TB3wKpmWlnT6xn
+        QcKz2VlIxaLIy4uCeT7/kSoG4ga/wj8NgWMkrJQOaDMsWSs8S30Babp/WIVjfVZC
+        HzoJOD3Px5hJyICNMd+svoWVyJq2k063RUM+mfdvdFjGQbig5th1XPQ=
+        -----END RSA PRIVATE KEY-----
+      publicKey: |
+        -----BEGIN PUBLIC KEY-----
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3q/ZhTMRvFfjSEI9GJ0O
+        UUIDkuupnDNL/7Z2TvPK/j52ihUeBuhZgLtd+hFMEptIt7Ay1vSBF1AnJ5FWQnhV
+        88NZCzah82P9YLFqBuaO/EIHxt4TvG1ZDeV8pJRr20wrxxS7OZ/d6NXMvI4Mh8Ef
+        HFEDVgLZU3yE9NAZrVLaKhLDXUBembsYlOeBdkiJrZX07xwqMDSKYRi0N3ubvPrP
+        0vtO0Rhe2spiMjqqRAZRyscAdIBALTGyK8o6mA2EkcgnoehFsv4P5P5oV50Xni9g
+        zz3qKUvmXlEMBiv8J9T/MWX+d0Px+LxHo5gclU7/YYvvBmlVltfOLQ95goi3ydBm
+        FwIDAQAB
+        -----END PUBLIC KEY-----
+
 application:
 
   database:
@@ -11,6 +70,17 @@ application:
     url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
     minPoolSize: 5
     maxPoolSize: 10
+
+  security:
+    keyStore:
+      type: JKS
+      path: classpath:META-INF/Sample.jks
+      alias: Sample
+      password: Sample
+    trustStore:
+      type: JKS
+      path: classpath:META-INF/Sample.jks
+      password: Sample
 
   cacheManager:
     cluster:

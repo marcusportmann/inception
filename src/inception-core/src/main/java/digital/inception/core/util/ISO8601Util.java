@@ -64,7 +64,11 @@ public final class ISO8601Util
    */
   public static String fromLocalDateTime(LocalDateTime localDateTime)
   {
-    return localDateTime.format(threadLocalDateTimeFormatter.get());
+    ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+
+    ZonedDateTime gmtZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
+
+    return gmtZonedDateTime.format(threadLocalDateTimeFormatter.get());
   }
 
   /**

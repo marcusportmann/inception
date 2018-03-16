@@ -24,7 +24,7 @@
   </parent>
 
   <dependencies>
-    <!-- Dependencies -->
+    <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-application</artifactId>
@@ -53,20 +53,30 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-reporting-ws</artifactId>
     </dependency>
-
-    <!--
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-configuration-rs</artifactId>
     </dependency>
-    -->
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs</artifactId>
     </dependency>
+
+    <!--
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-security</artifactId>
+      <artifactId>inception-rs-oauth-authorization</artifactId>
+    </dependency>
+    -->
+
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-rs-oauth-resource</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-security-rs</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -77,6 +87,7 @@
       <artifactId>inception-ws</artifactId>
     </dependency>
 
+    <!-- Dependencies -->
     <dependency>
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>

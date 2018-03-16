@@ -19,7 +19,6 @@ package digital.inception.sample;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.application.Application;
-import digital.inception.codes.CodesRestController;
 import digital.inception.codes.CodesWebService;
 import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.core.util.ResourceUtil;
@@ -72,6 +71,7 @@ public class SampleApplication extends Application
   /* Reporting Service */
   @Autowired
   private IReportingService reportingService;
+
 //
 ///* Sample Configuration */
 //@Inject
@@ -101,8 +101,8 @@ public class SampleApplication extends Application
   public Docket api()
   {
     ApiInfo apiInfo = new ApiInfo("Sample", "REST API documentation for the Sample application",
-        Version.PROJECT_VERSION, "", new Contact("Marcus Portmann", "", ""), "", "",
-        new ArrayList<>());
+        Version.PROJECT_VERSION, "", new Contact("Marcus Portmann", "", ""), "Apache 2.0",
+        "http://www.apache.org/licenses/LICENSE-2.0.html", new ArrayList<>());
 
     // Versioned API path selector: /v[0-9]*/.*
     return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
@@ -131,19 +131,6 @@ public class SampleApplication extends Application
   {
     return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService());
   }
-
-  /**
-   * Returns the Spring bean for the Reporting Service web service.
-   *
-   * @return the Spring bean for the Reporting Service web service
-   */
-  @Bean
-  protected Endpoint reportingWebService()
-  {
-    return createWebServiceEndpoint("ReportingService", new ReportingWebService());
-  }
-
-
 
 ///**
 // * Returns the in-memory distributed cache manager.
@@ -187,6 +174,17 @@ public class SampleApplication extends Application
   }
 
   /**
+   * Returns the Spring bean for the Reporting Service web service.
+   *
+   * @return the Spring bean for the Reporting Service web service
+   */
+  @Bean
+  protected Endpoint reportingWebService()
+  {
+    return createWebServiceEndpoint("ReportingService", new ReportingWebService());
+  }
+
+  /**
    * Returns the Spring bean for the Sample Service web service.
    *
    * @return the Spring bean for the Sample Service web service
@@ -208,8 +206,7 @@ public class SampleApplication extends Application
     {
       byte[] cxfXml = ResourceUtil.getClasspathResource("/cxf.xml");
 
-
-      int xxx =0;
+      int xxx = 0;
       xxx++;
     }
     catch (Throwable e)
@@ -217,9 +214,7 @@ public class SampleApplication extends Application
       int xxx = 0;
       xxx++;
 
-
     }
-
 
     try
     {

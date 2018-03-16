@@ -18,6 +18,7 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 import io.swagger.annotations.ApiOperation;
@@ -73,11 +74,12 @@ public class ReportingRestController
   @ApiOperation(value = "Create a report definition", notes = "Create the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 409,
-          message = "A report definition with the specified ID already exists") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 409, message = "A report definition with the specified ID already exists",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -112,10 +114,12 @@ public class ReportingRestController
   @ApiOperation(value = "Delete a report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The report definition could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The report definition could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -143,10 +147,12 @@ public class ReportingRestController
   @ApiOperation(value = "Generate a PDF report", notes = "Generate the PDF report")
   @ApiResponses(value = { @ApiResponse(code = 200,
       message = "The PDF report was generated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The report definition could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The report definition could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/generateReport", method = RequestMethod.POST,
       produces = "application/pdf")
   public ResponseEntity<byte[]> generateReport(
@@ -215,7 +221,8 @@ public class ReportingRestController
       notes = "Retrieve the report definition summaries")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/reportDefinitionSummaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -234,7 +241,8 @@ public class ReportingRestController
       notes = "Retrieve the report definitions")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -254,10 +262,12 @@ public class ReportingRestController
   @ApiOperation(value = "Update a report definition", notes = "Update the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument") ,
-      @ApiResponse(code = 404, message = "The report definition could not be found") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The report definition could not be found",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time") })
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)

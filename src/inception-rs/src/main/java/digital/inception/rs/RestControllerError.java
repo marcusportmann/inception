@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.application;
+package digital.inception.rs;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -37,7 +37,8 @@ import java.util.List;
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ApplicationError</code> class holds the information for an error.
+ * The <code>RestControllerError</code> class holds the information for an error returned by a
+ * RESTful web service.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +46,7 @@ import java.util.List;
 @JsonPropertyOrder({ "path", "timestamp", "status", "message", "detail", "exception", "stackTrace",
     "name", "validationErrors" })
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class ApplicationError
+public class RestControllerError
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
@@ -109,7 +110,7 @@ public class ApplicationError
    *
    * @param cause the exception
    */
-  public ApplicationError(HttpServletRequest request, HttpStatus responseStatus, Throwable cause)
+  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus, Throwable cause)
   {
     this.timestamp = LocalDateTime.now();
 
