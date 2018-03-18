@@ -61,19 +61,14 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs</artifactId>
     </dependency>
-
-    <!--
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs-oauth-authorization</artifactId>
     </dependency>
-    -->
-
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs-oauth-resource</artifactId>
     </dependency>
-
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-security-rs</artifactId>
