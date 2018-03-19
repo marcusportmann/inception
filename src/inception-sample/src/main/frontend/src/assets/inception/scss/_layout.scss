@@ -15,11 +15,11 @@ app-root {
   min-height: 100vh;
 }
 
-.inception-header {
+.app-header {
   flex: 0 0 $navbar-height;
 }
 
-.inception-footer {
+.app-footer {
   flex: 0 0 $footer-height;
 }
 
@@ -51,7 +51,7 @@ app-root {
 // header
 //
 .header-fixed {
-  .inception-header {
+  .app-header {
     position: fixed;
     z-index: $zindex-sticky;
     width: 100%;
@@ -83,12 +83,12 @@ app-root {
     // }
   }
 
-  .main, .inception-footer {
+  .main, .app-footer {
     margin-left: $sidebar-width;
   }
 
   &.sidebar-hidden {
-    .main, .inception-footer {
+    .main, .app-footer {
       margin-left: 0;
     }
   }
@@ -115,7 +115,7 @@ app-root {
     }
 
     &.sidebar-fixed {
-      .main, .inception-footer {
+      .main, .app-footer {
         margin-left: $sidebar-compact-width;
       }
 
@@ -124,7 +124,7 @@ app-root {
       }
 
       &.sidebar-hidden {
-        .main, .inception-footer {
+        .main, .app-footer {
           margin-left: 0;
         }
       }
@@ -146,7 +146,7 @@ app-root {
     }
 
     &.sidebar-fixed {
-      .main, .inception-footer {
+      .main, .app-footer {
         margin-left: $sidebar-minimized-width;
       }
 
@@ -155,7 +155,7 @@ app-root {
       }
 
       &.sidebar-hidden {
-        .main, .inception-footer {
+        .main, .app-footer {
           margin-left: 0;
         }
       }
@@ -183,12 +183,12 @@ app-root {
     }
   }
 
-  .main, .inception-footer {
+  .main, .app-footer {
     margin-right: $aside-menu-width;
   }
 
   &.aside-menu-hidden {
-    .main, .inception-footer {
+    .main, .app-footer {
       margin-right: 0;
     }
   }
@@ -270,7 +270,7 @@ app-root {
 // Footer
 //
 .footer-fixed {
-  .inception-footer {
+  .app-footer {
     position: fixed;
     right: 0;
     bottom: 0;
@@ -287,8 +287,8 @@ app-root {
 //
 // Animations
 //
-.inception-header,
-.inception-footer,
+.app-header,
+.app-footer,
 .sidebar,
 .main,
 .aside-menu {
@@ -306,7 +306,7 @@ app-root {
 //
 
 @include media-breakpoint-down(md) {
-  .inception-header.navbar {
+  .app-header.navbar {
     position: fixed !important;
     z-index: $zindex-sticky;
     width: 100%;
@@ -359,7 +359,7 @@ app-root {
     }
   }
 
-  .main, .inception-footer {
+  .main, .app-footer {
     margin-left: 0 !important;
   }
 

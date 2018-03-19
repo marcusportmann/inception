@@ -16,28 +16,28 @@ const INCEPTION_LAYOUTS = [
 
 // Import components
 import {
-  InceptionAsideComponent,
-  InceptionBreadcrumbsComponent,
-  InceptionFooterComponent,
-  InceptionHeaderComponent,
-  InceptionSidebarComponent,
-  InceptionSidebarFooterComponent,
-  InceptionSidebarFormComponent,
-  InceptionSidebarHeaderComponent,
-  InceptionSidebarMinimizerComponent,
+  AppAsideComponent,
+  AppBreadcrumbsComponent,
+  AppFooterComponent,
+  AppHeaderComponent,
+  AppSidebarComponent,
+  AppSidebarFooterComponent,
+  AppSidebarFormComponent,
+  AppSidebarHeaderComponent,
+  AppSidebarMinimizerComponent,
   APP_SIDEBAR_NAV
 } from './components';
 
 const INCEPTION_COMPONENTS = [
-  InceptionAsideComponent,
-  InceptionBreadcrumbsComponent,
-  InceptionFooterComponent,
-  InceptionHeaderComponent,
-  InceptionSidebarComponent,
-  InceptionSidebarFooterComponent,
-  InceptionSidebarFormComponent,
-  InceptionSidebarHeaderComponent,
-  InceptionSidebarMinimizerComponent,
+  AppAsideComponent,
+  AppBreadcrumbsComponent,
+  AppFooterComponent,
+  AppHeaderComponent,
+  AppSidebarComponent,
+  AppSidebarFooterComponent,
+  AppSidebarFormComponent,
+  AppSidebarHeaderComponent,
+  AppSidebarMinimizerComponent,
   APP_SIDEBAR_NAV
 ]
 
@@ -82,7 +82,6 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     useClass: HashLocationStrategy
   }]
 })
-
 export class InceptionModule
 {
   public static registrationEnabled = true;
