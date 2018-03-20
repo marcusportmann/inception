@@ -103,8 +103,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     // http.requiresChannel().anyRequest().requiresSecure();
 
     // Enable anonymous access to the SpringFox Swagger resources
-    http.authorizeRequests().antMatchers("/swagger-ui.html", "/webjars/springfox-swagger-ui/**",
-        "/swagger-resources/**", "/v2/api-docs").permitAll();
+    http.authorizeRequests().antMatchers("/**").permitAll();
+    http.authorizeRequests().antMatchers("/api/**").authenticated();
 
     // All other requests need to be authenticated
     http.authorizeRequests().anyRequest().authenticated();

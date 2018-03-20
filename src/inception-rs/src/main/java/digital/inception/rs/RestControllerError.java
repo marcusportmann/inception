@@ -137,9 +137,11 @@ public class RestControllerError
       this.message = cause.getMessage();
     }
 
-    this.status = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
-
-    if ((annotation == null) || (annotation.value().is5xxServerError()))
+    if (cause instanceof org.springframework.security.access.AccessDeniedException)
+    {
+      responseStatus = HttpStatus.FORBIDDEN;
+    }
+    else if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
       this.exception = cause.getClass().getName();
 
@@ -161,6 +163,8 @@ public class RestControllerError
     }
 
     this.path = request.getRequestURI();
+
+    this.status = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
 
     try
     {
