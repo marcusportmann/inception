@@ -15,6 +15,7 @@ import { InceptionModule } from './inception/inception.module';
     AppRoutingModule,
 
     BrowserModule,
+
     InceptionModule
   ],
   providers: [],
