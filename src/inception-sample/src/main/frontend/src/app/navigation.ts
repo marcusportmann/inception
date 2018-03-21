@@ -11,6 +11,6 @@ export const navigation = [
   {
     name: 'Login',
     url: '/login',
-    icon: 'icon-speedometer'
+    icon: 'icon-login'
   }
 ];

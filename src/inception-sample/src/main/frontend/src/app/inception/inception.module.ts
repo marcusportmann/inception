@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 // Import layouts
 import {
@@ -82,7 +81,14 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
     useClass: HashLocationStrategy
   }]
 })
-export class InceptionModule
-{
+
+export class InceptionModule {
+
   public static registrationEnabled = true;
+
+  public constructor() {
+    console.log("Initialising InceptionModule");
+  }
 }
+
+

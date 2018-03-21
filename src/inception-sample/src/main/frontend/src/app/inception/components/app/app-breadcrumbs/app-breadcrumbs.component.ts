@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import 'rxjs/add/operator/filter';
 
@@ -14,7 +14,7 @@ import 'rxjs/add/operator/filter';
     </li>
   </ng-template>`
 })
-export class AppBreadcrumbsComponent {
+export class AppBreadcrumbsComponent implements OnInit {
   breadcrumbs: Array<Object>;
   constructor(
     private router: Router,
@@ -42,4 +42,8 @@ export class AppBreadcrumbsComponent {
       } while (currentRoute);
     });
   }
+
+  ngOnInit(): void {
+  }
+
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 // Import navigation elements
-import { navigation } from './../../../navigation';
+import { navigation } from '../../../../navigation';
 
 @Component({
   selector: 'app-sidebar-nav',
@@ -20,7 +20,7 @@ import { navigation } from './../../../navigation';
       </ul>
     </nav>`
 })
-export class AppSidebarNavComponent {
+export class AppSidebarNavComponent implements OnInit {
 
   public navigation = navigation;
 
@@ -33,6 +33,10 @@ export class AppSidebarNavComponent {
   }
 
   constructor() { }
+
+  ngOnInit(): void {
+  }
+
 }
 
 import { Router } from '@angular/router';
@@ -53,7 +57,7 @@ import { Router } from '@angular/router';
     </ng-template>
     `
 })
-export class AppSidebarNavItemComponent {
+export class AppSidebarNavItemComponent implements OnInit {
   @Input() item: any;
 
   public hasClass() {
@@ -73,6 +77,9 @@ export class AppSidebarNavItemComponent {
   }
 
   constructor( private router: Router )  { }
+
+  ngOnInit(): void {
+  }
 
 }
 
@@ -96,7 +103,7 @@ export class AppSidebarNavItemComponent {
     </ng-template>
   `
 })
-export class AppSidebarNavLinkComponent {
+export class AppSidebarNavLinkComponent implements  OnInit {
   @Input() link: any;
 
   public hasVariant() {
@@ -116,6 +123,11 @@ export class AppSidebarNavLinkComponent {
   }
 
   constructor() { }
+
+
+  ngOnInit(): void {
+  }
+
 }
 
 @Component({
@@ -133,7 +145,7 @@ export class AppSidebarNavLinkComponent {
     </ul>
   `
 })
-export class AppSidebarNavDropdownComponent {
+export class AppSidebarNavDropdownComponent implements OnInit {
   @Input() link: any;
 
   public isBadge() {
@@ -145,6 +157,10 @@ export class AppSidebarNavDropdownComponent {
   }
 
   constructor() { }
+
+  ngOnInit(): void {
+  }
+
 }
 
 @Component({
