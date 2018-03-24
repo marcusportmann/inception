@@ -21,13 +21,9 @@ import { InceptionModule } from './inception/inception.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule
-{
-  public constructor()
-  {
-    console.log("Initialising AppModule");
-    console.log("Registration enabled = " + InceptionModule.registrationEnabled);
-
-
+export class AppModule {
+  public constructor() {
+    console.log('Initialising AppModule');
+    console.log('Registration enabled = ' + InceptionModule.registrationEnabled);
   }
 }

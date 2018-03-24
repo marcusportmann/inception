@@ -1,4 +1,4 @@
-.app-header.navbar {
+.inception-layout-header.navbar {
   position: relative;
   flex-direction: row;
   height: $navbar-height;
@@ -114,7 +114,7 @@
 
 @include media-breakpoint-up(lg) {
   .brand-minimized {
-    .app-header.navbar {
+    .inception-layout-header.navbar {
       .navbar-brand {
         width: $navbar-brand-minimized-width;
         background-color: $navbar-brand-minimized-bg;

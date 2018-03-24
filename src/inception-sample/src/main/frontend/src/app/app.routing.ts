@@ -1,11 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-// Import Layouts
-import {
-  AdminLayoutComponent,
-  SimpleLayoutComponent
-} from './inception/layouts';
+import {AdminContainerComponent, SimpleContainerComponent} from './inception/components/layout';
 
 export const routes: Routes = [
   {
@@ -15,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: AdminLayoutComponent,
+    component: AdminContainerComponent,
     data: {
       title: 'Home'
     },
@@ -28,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: SimpleLayoutComponent,
+    component: SimpleContainerComponent,
     data: {
       title: 'Login'
     },
