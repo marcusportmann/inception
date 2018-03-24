@@ -76,10 +76,11 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 export class InceptionModule {
 
-  public static registrationEnabled = true;
+  public static forgottenPasswordEnabled = false;
+
+  public static registrationEnabled = false;
 
   public constructor() {
-    console.log('Initialising InceptionModule');
   }
 }
 
