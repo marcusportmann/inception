@@ -7,28 +7,42 @@
             <div class="card-body">
               <h1>Login</h1>
               <p class="text-muted">Sign in to your account</p>
-              <form novalidate [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-user"></i></span>
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+
+                <div class="formGroup has-danger">
+                <div class="input-group mb-3 has-danger">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-user"></i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Username" formControlName="username" [(ngModel)]="username">
+
+
                 </div>
-                <input type="text" class="form-control" placeholder="Username" formControlName="username" required>
-              </div>
-              <div class="input-group mb-4">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-lock"></i></span>
+
+                  <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].pristine">
+                    <div [hidden]="!loginForm.controls['username'].errors.required" class="form-control-feedback">Username is required.</div>
+                    <div [hidden]="!loginForm.controls['username'].errors.patternInvalid">Username is invalid.</div>
+                  </div>
+
                 </div>
-                <input type="password" class="form-control" placeholder="Password" formControlName="password" required>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary px-4 float-right ml-1">Login</button>
-                  <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
+
+
+                <div class="input-group mb-4">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="icon-lock"></i></span>
+                  </div>
+                  <input type="password" class="form-control" placeholder="Password" formControlName="password" [(ngModel)]="password">
                 </div>
-                <div *ngIf="isForgottenPasswordEnabled()" class="col-6 text-right">
-                  <button type="button" class="btn btn-link px-0">Forgot password?</button>
+                <div class="row">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary px-4 float-right ml-1">Login</button>
+                    <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
+                  </div>
+                  <div *ngIf="isForgottenPasswordEnabled()" class="col-6 text-right">
+                    <button type="button" class="btn btn-link px-0">Forgot password?</button>
+                  </div>
                 </div>
-              </div>
               </form>
             </div>
           </div>

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
 
-import {ReactiveFormsModule, FormsModule, FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
-
-import {Session} from '../../models/session';
 import {InceptionModule} from '../../inception.module';
+import {Session} from '../../models/session';
+
+import {patternValidator} from "../../validators/pattern-validator";
 
 @Component({
   templateUrl: 'login.component.html'
@@ -11,14 +12,18 @@ import {InceptionModule} from '../../inception.module';
 export class LoginComponent implements OnInit {
 
   private loginForm: FormGroup;
-  private username: FormControl;
-  private password: FormControl;
+  private username: string;
+  private password: string;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
-    this.createFormControls();
-    this.createForm();
+    this.loginForm = new FormGroup({
+      // tslint:disable-next-line
+      username: new FormControl('', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+      password: new FormControl('', Validators.required),
+    });
   }
 
   public isForgottenPasswordEnabled(): boolean {
@@ -35,32 +40,17 @@ export class LoginComponent implements OnInit {
     console.log('Cancel clicked!');
   }
 
-  public onLogin() {
-    console.log('Login clicked!');
-  }
-
   public onSubmit() {
     console.log('Form submitted (' + this.loginForm.valid + ')!');
 
     if (this.loginForm.valid)
     {
-
+      console.log('username = ' + this.username);
+      console.log('password = ' + this.password);
     }
     else
     {
       //this.loginForm.reset();
     }
-  }
-
-  private createFormControls() {
-    this.username = new FormControl('', Validators.required);
-    this.password = new FormControl('', Validators.required);
-  }
-
-  private createForm() {
-    this.loginForm = new FormGroup({
-      username: this.username,
-      password: this.password
-    });
   }
 }
