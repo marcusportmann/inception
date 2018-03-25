@@ -9,39 +9,35 @@
               <p class="text-muted">Sign in to your account</p>
               <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-
-                <div class="formGroup has-danger">
-                <div class="input-group mb-3 has-danger">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-user"></i></span>
+                <div class="formGroup mb-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Username" formControlName="username" [(ngModel)]="username" inceptionAutofocus>
                   </div>
-                  <input type="text" class="form-control" placeholder="Username" formControlName="username" [(ngModel)]="username">
+                  <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched" class="form-control-error">
+                    <div *ngIf="loginForm.controls['username'].errors?.patternInvalid">A valid username is required.</div>
+                  </div>
+                </div>
 
+                <div class="formGroup mb-4">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input type="password" class="form-control" placeholder="Password" formControlName="password" [(ngModel)]="password">
+                  </div>
+                  <div *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched" class="form-control-error">
+                    <div *ngIf="loginForm.controls['password'].errors?.required">A password is required.</div>
+                  </div>
 
                 </div>
 
-                  <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].pristine">
-                    <div [hidden]="!loginForm.controls['username'].errors.required" class="form-control-feedback">Username is required.</div>
-                    <div [hidden]="!loginForm.controls['username'].errors.patternInvalid">Username is invalid.</div>
-                  </div>
-
-                </div>
-
-
-                <div class="input-group mb-4">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-lock"></i></span>
-                  </div>
-                  <input type="password" class="form-control" placeholder="Password" formControlName="password" [(ngModel)]="password">
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <button type="submit" class="btn btn-primary px-4 float-right ml-1">Login</button>
-                    <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
-                  </div>
-                  <div *ngIf="isForgottenPasswordEnabled()" class="col-6 text-right">
-                    <button type="button" class="btn btn-link px-0">Forgot password?</button>
-                  </div>
+                <div class="form-buttons">
+                  <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
+                  <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
+                  <button *ngIf="isForgottenPasswordEnabled()" type="button" class="btn btn-link px-0">Forgot password?</button>
                 </div>
               </form>
             </div>

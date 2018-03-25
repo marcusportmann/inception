@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       // tslint:disable-next-line
-      username: new FormControl('', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
-      password: new FormControl('', Validators.required),
+      'username': new FormControl('', [patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+      'password': new FormControl('', Validators.required),
     });
   }
 
@@ -41,7 +41,11 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log('Form submitted (' + this.loginForm.valid + ')!');
+
+    // Mark all controls as touched
+    for (let controlName in this.loginForm.controls) {
+      this.loginForm.controls[controlName].markAsTouched();
+    }
 
     if (this.loginForm.valid)
     {
@@ -50,6 +54,12 @@ export class LoginComponent implements OnInit {
     }
     else
     {
+      // Mark all controls as touched
+      for (let controlName in this.loginForm.controls) {
+        this.loginForm.controls[controlName]
+      }
+
+
       //this.loginForm.reset();
     }
   }

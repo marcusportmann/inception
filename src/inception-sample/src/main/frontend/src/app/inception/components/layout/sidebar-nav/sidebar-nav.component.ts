@@ -51,7 +51,7 @@ import { Router } from '@angular/router';
       <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
           [class.open]="isActive()"
           routerLinkActive="open"
-          appNavDropdown>
+          inceptionNavDropdown>
         <inception-layout-sidebar-nav-dropdown [link]='item'></inception-layout-sidebar-nav-dropdown>
       </li>
     </ng-template>
@@ -133,7 +133,7 @@ export class SidebarNavLinkComponent implements  OnInit {
 @Component({
   selector: 'inception-layout-sidebar-nav-dropdown',
   template: `
-    <a class="nav-link nav-dropdown-toggle" appNavDropdownToggle>
+    <a class="nav-link nav-dropdown-toggle" inceptionNavDropdownToggle>
       <i *ngIf="isIcon()" class="{{ link.icon }}"></i>
       {{ link.name }}
       <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>

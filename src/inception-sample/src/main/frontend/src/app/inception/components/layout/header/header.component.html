@@ -1,16 +1,16 @@
 <header class="inception-layout-header navbar">
-  <button class="navbar-toggler d-lg-none" type="button" appMobileSidebarToggler>
+  <button class="navbar-toggler d-lg-none" type="button" inceptionMobileSidebarToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
   <a class="navbar-brand" href="#"></a>
-  <button class="navbar-toggler d-md-down-none mr-auto" type="button" appSidebarToggler>
+  <button class="navbar-toggler d-md-down-none mr-auto" type="button" inceptionSidebarToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div *ngIf="!isLoggedIn()">showLogin = {{ showLogin }}</div>
 
 
-  <button class="navbar-toggler d-md-down-none" type="button" appAsideMenuToggler>
+  <button class="navbar-toggler d-md-down-none" type="button" inceptionAsideMenuToggler>
     <span class="navbar-toggler-icon"></span>
   </button>
 </header>
