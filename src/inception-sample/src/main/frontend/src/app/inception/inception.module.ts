@@ -33,23 +33,6 @@ const INCEPTION_COMPONENTS = [
   INCEPTION_SIDEBAR_NAV_COMPONENTS
 ];
 
-// Import directives
-import {
-  AsideToggleDirective,
-  AutofocusDirective,
-  NAV_DROPDOWN_DIRECTIVES,
-  ReplaceDirective,
-  SIDEBAR_TOGGLE_DIRECTIVES
-} from './directives';
-
-const INCEPTION_DIRECTIVES = [
-  AsideToggleDirective,
-  AutofocusDirective,
-  NAV_DROPDOWN_DIRECTIVES,
-  ReplaceDirective,
-  SIDEBAR_TOGGLE_DIRECTIVES
-];
-
 // Import routing module
 import { AppRoutingModule } from '../app.routing';
 
@@ -57,19 +40,20 @@ import { AppRoutingModule } from '../app.routing';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import {DirectivesModule} from "./directives/directives.module";
 
 
 @NgModule({
   imports: [
-    CommonModule,
     AppRoutingModule,
     BsDropdownModule.forRoot(),
-    TabsModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    CommonModule,
+    DirectivesModule,
+    TabsModule.forRoot()
   ],
   declarations: [
     ...INCEPTION_COMPONENTS,
-    ...INCEPTION_DIRECTIVES
   ],
   providers: [{
     provide: LocationStrategy,

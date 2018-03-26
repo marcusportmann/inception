@@ -27,5 +27,3 @@ export class NavDropdownToggleDirective {
     this.dropdown.toggle();
   }
 }
-
-export const NAV_DROPDOWN_DIRECTIVES = [NavDropdownDirective, NavDropdownToggleDirective];
