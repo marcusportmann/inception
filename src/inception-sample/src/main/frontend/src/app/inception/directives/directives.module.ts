@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import {
   AsideToggleDirective,
   AutofocusDirective,
+  FormControlDomDirective,
   ReplaceDirective,
   NavDropdownDirective,
   NavDropdownToggleDirective,
@@ -14,6 +15,7 @@ import {
   MobileSidebarToggleDirective
 } from './'
 
+
 @NgModule({
   imports: [
     CommonModule
@@ -21,6 +23,7 @@ import {
   declarations: [
     AsideToggleDirective,
     AutofocusDirective,
+    FormControlDomDirective,
     ReplaceDirective,
     NavDropdownDirective,
     NavDropdownToggleDirective,
@@ -33,6 +36,7 @@ import {
   exports: [
     AsideToggleDirective,
     AutofocusDirective,
+    FormControlDomDirective,
     ReplaceDirective,
     NavDropdownDirective,
     NavDropdownToggleDirective,

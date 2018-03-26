@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -12,6 +12,10 @@ import {patternValidator} from "../../validators/pattern-validator";
 export class LoginComponent implements OnInit {
 
   private loginForm: FormGroup;
+
+  @ViewChildren(FormControl)
+  private loginFormChildren: QueryList<FormControl>;
+
   private username: string;
   private password: string;
 
@@ -42,8 +46,16 @@ export class LoginComponent implements OnInit {
 
   public onSubmit() {
 
+    let xxx = this.loginFormChildren.toArray();
+
     // Mark all controls as touched
     for (let controlName in this.loginForm.controls) {
+
+      let yyy = this.loginForm.controls[controlName];
+
+
+      let zzz = (<any>this.loginForm.controls[controlName]).nativeElement;
+
       this.loginForm.controls[controlName].markAsTouched();
     }
 
