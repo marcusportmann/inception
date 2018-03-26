@@ -12,7 +12,8 @@ import {
   SidebarMinimizeDirective,
   BrandMinimizeDirective,
   SidebarOffCanvasCloseDirective,
-  MobileSidebarToggleDirective
+  MobileSidebarToggleDirective,
+  ValidatedFormDirective
 } from './'
 
 
@@ -31,7 +32,8 @@ import {
     SidebarMinimizeDirective,
     BrandMinimizeDirective,
     SidebarOffCanvasCloseDirective,
-    MobileSidebarToggleDirective
+    MobileSidebarToggleDirective,
+    ValidatedFormDirective
   ],
   exports: [
     AsideToggleDirective,
@@ -44,7 +46,8 @@ import {
     SidebarMinimizeDirective,
     BrandMinimizeDirective,
     SidebarOffCanvasCloseDirective,
-    MobileSidebarToggleDirective
+    MobileSidebarToggleDirective,
+    ValidatedFormDirective
   ]
 })
 export class DirectivesModule { }

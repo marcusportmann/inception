@@ -4,3 +4,4 @@ export * from './form-control-dom';
 export * from './nav-dropdown';
 export * from './replace';
 export * from './sidebar';
+export * from './validated-form';

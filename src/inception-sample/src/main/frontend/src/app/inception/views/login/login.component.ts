@@ -5,16 +5,14 @@ import {InceptionModule} from '../../inception.module';
 import {Session} from '../../models/session';
 
 import {patternValidator} from "../../validators/pattern-validator";
+import {ValidatedFormGroup} from '../../directives/validated-form';
 
 @Component({
   templateUrl: 'login.component.html'
 })
 export class LoginComponent implements OnInit {
 
-  private loginForm: FormGroup;
-
-  @ViewChildren(FormControl)
-  private loginFormChildren: QueryList<FormControl>;
+  private loginForm: ValidatedFormGroup;
 
   private username: string;
   private password: string;
@@ -23,7 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
+    this.loginForm = new ValidatedFormGroup({
       // tslint:disable-next-line
       'username': new FormControl('', [patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
       'password': new FormControl('', Validators.required),
@@ -45,8 +43,6 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit() {
-
-    let xxx = this.loginFormChildren.toArray();
 
     // Mark all controls as touched
     for (let controlName in this.loginForm.controls) {
