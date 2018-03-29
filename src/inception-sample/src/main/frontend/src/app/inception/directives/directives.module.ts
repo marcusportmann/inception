@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import {
   AsideToggleDirective,
   AutofocusDirective,
-  FormControlDomDirective,
   ReplaceDirective,
   NavDropdownDirective,
   NavDropdownToggleDirective,
@@ -15,16 +14,18 @@ import {
   MobileSidebarToggleDirective,
   ValidatedFormDirective
 } from './'
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AsideToggleDirective,
     AutofocusDirective,
-    FormControlDomDirective,
     ReplaceDirective,
     NavDropdownDirective,
     NavDropdownToggleDirective,
@@ -38,7 +39,6 @@ import {
   exports: [
     AsideToggleDirective,
     AutofocusDirective,
-    FormControlDomDirective,
     ReplaceDirective,
     NavDropdownDirective,
     NavDropdownToggleDirective,

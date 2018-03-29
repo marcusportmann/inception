@@ -1,51 +1,101 @@
 import {
+  AfterViewInit,
   Directive,
-  ElementRef,
-  forwardRef,
-  Inject,
-  Input,
+  Host,
   Optional,
-  Renderer2
+  Self, ViewContainerRef
 } from '@angular/core'
+// import {
+//   COMPOSITION_BUFFER_MODE,
+//   ControlValueAccessor, Form, FormControl, FormGroup, FormGroupDirective,
+//   NG_VALUE_ACCESSOR, NgControl, NgForm
+// } from '@angular/forms';
+
 import {
-  COMPOSITION_BUFFER_MODE,
-  ControlValueAccessor, FormControl, FormGroup,
-  NG_VALUE_ACCESSOR, NgControl, NgForm
+  FormGroupDirective,
 } from '@angular/forms';
-
-
-export class ValidatedFormGroup extends FormGroup {
-
-
-
-}
-
 
 
 
 @Directive({
-  selector: 'form[inceptionValidatedForm]'
-//  host: {'(submit)': 'onSubmit($event)', '(reset)': 'onReset()'}
+  selector: 'form[inceptionValidatedForm]',
+  host: {'(submit)': 'onSubmit($event)', '(reset)': 'onReset()'}
 })
-export class ValidatedFormDirective {
+export class ValidatedFormDirective implements AfterViewInit {
 
   constructor(
-    private elementRef: ElementRef
-  ) {
-    console.log('this.elementRef.nativeElement: ', this.elementRef.nativeElement);
-    //console.log('this.form: ', this.form);
-
-
-
+    private viewContainer: ViewContainerRef,
+    @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
   }
 
-  onReset(): void {
-
+  ngAfterViewInit() {
   }
 
-  onSubmit($event: Event): boolean {
+  public onReset(): void {
+  }
 
+  public onSubmit($event: Event): boolean {
+
+    // Mark all controls as touched
+    if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
+
+      let form = this.formGroupDirective.control;
+
+      for (let controlName in form.controls) {
+
+        form.controls[controlName].markAsTouched();
+      }
+    }
+
+    // Find the first invalid form control and set focus to it
+    if (this.checkForInvalidFormControlAndSetFocus(this.viewContainer.element.nativeElement)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
+
+    if (nativeElement.children && (nativeElement.children.length > 0)) {
+      for (let i = 0; i < nativeElement.children.length; i++) {
+
+        let nativeChildElement = nativeElement.children[i];
+
+        if (nativeChildElement && nativeChildElement.nodeName && this.isFormElement(nativeChildElement.nodeName)) {
+
+          if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
+
+            let formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
+
+            if (formControl && formControl.invalid) {
+
+              nativeChildElement.focus();
+
+              return true;
+            }
+          }
+        }
+
+        if (this.checkForInvalidFormControlAndSetFocus(nativeChildElement)) {
+          return true;
+        }
+      }
+    }
 
     return false;
+  }
+
+  private isFormElement(nodeName: string): boolean {
+
+    switch(nodeName) {
+      case 'INPUT': {
+        return true;
+      }
+
+      default: {
+        return false;
+      }
+    }
   }
 }

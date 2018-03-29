@@ -14,9 +14,10 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-user"></i></span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Username" formControlName="username" [(ngModel)]="username" inceptionAutofocus>
+                    <input type="text" class="form-control" placeholder="Username" name="username" formControlName="username" inceptionAutofocus>
                   </div>
                   <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched" class="form-control-error">
+                    <div *ngIf="loginForm.controls['username'].errors?.required">A username is required.</div>
                     <div *ngIf="loginForm.controls['username'].errors?.patternInvalid">A valid username is required.</div>
                   </div>
                 </div>
@@ -26,7 +27,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="icon-lock"></i></span>
                     </div>
-                    <input type="password" class="form-control" placeholder="Password" formControlName="password" [(ngModel)]="password">
+                    <input type="password" class="form-control" placeholder="Password" name="password" formControlName="password">
                   </div>
                   <div *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched" class="form-control-error">
                     <div *ngIf="loginForm.controls['password'].errors?.required">A password is required.</div>
