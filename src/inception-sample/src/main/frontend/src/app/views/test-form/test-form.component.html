@@ -1,0 +1,178 @@
+<div class="card">
+  <div class="card-header">
+    <i class="fa fa-edit"></i>Test Form
+  </div>
+  <div class="card-body">
+
+    <form [formGroup]="testForm" (ngSubmit)="onSubmit()" inceptionValidatedForm>
+
+      <div class="row">
+        <div class="col-sm">
+          <div class="form-group">
+            <label>Read Only Value</label>
+            <div class="form-field-value">XXX</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="firstName">First Name</label>
+            <input id="firstName" name="firstName" formControlName="firstName" type="text" class="form-control" placeholder="Enter a first name" inceptionAutofocus>
+            <div *ngIf="testForm.controls['firstName'].errors && !testForm.controls['firstName'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['firstName'].errors?.required">A first name is required.</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="lastName">Last Name</label>
+            <input id="lastName" name="lastName" formControlName="lastName" type="text" class="form-control" placeholder="Enter a last name">
+            <div *ngIf="testForm.controls['lastName'].errors && !testForm.controls['lastName'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['lastName'].errors?.required">A last name is required.</div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="title">Title</label>
+            <ng-select
+              id="title" name="title" formControlName="title" class="bootstrap" placeholder="Select a title" [options]="titles" [allowClear]="true">
+            </ng-select>
+            <div *ngIf="testForm.controls['title'].errors && !testForm.controls['title'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['title'].errors?.required">A title is required.</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          &nbsp;
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" formControlName="password" type="password" class="form-control" placeholder="Enter a password">
+            <div *ngIf="testForm.controls['password'].errors && !testForm.controls['password'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['password'].errors?.required">A password is required.</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" name="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Confirm the password">
+            <div *ngIf="testForm.controls['confirmPassword'].errors && !testForm.controls['confirmPassword'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['confirmPassword'].errors?.required">Password confirmation is required.</div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+<!--
+
+      <div class="form-group">
+        <div class="col-xs-6">
+          <label>Title
+            <select name="p::title" class="select2 select2-hidden-accessible  has-error" data-placeholder="Select a title" id="id8" tabindex="-1" aria-hidden="true">
+              <option selected="selected" value="">Choose One</option>
+              <option value="0">Mr</option>
+              <option value="1">Mrs</option>
+              <option value="2">Ms</option>
+              <option value="3">Dr</option>
+            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 1px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-id8-container"><span class="select2-selection__rendered" id="select2-id8-container"><span class="select2-selection__placeholder">Select a title</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+          </label>
+          <div id="id8-feedback" class="has-error  help-block help-block-left animated fadeInDown">A title is required.</div></div>
+        <div class="col-xs-6">
+          <label>Date of Birth
+            <input id="dateOfBirth" name="dateOfBirth" type="text" class="datepicker" placeholder="Enter a date of birth" value="">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+          </label>
+          <div id="dateOfBirth-feedback" class="has-error  help-block help-block-left animated fadeInDown">A date of birth is required.</div></div>
+      </div>
+
+
+      <div class="form-group">
+        <div class="col-xs-6">
+          <label class="select-wrapper has-error">Favourite Pet
+            <select id="favouritePet" name="favouritePet" size="1" class=" has-error">
+              <option selected="selected" value="">Choose One</option>
+              <option value="0">Dog</option>
+              <option value="1">Cat</option>
+              <option value="2">Hamster</option>
+            </select>
+          </label>
+          <div id="favouritePet-feedback" class="has-error  help-block help-block-left animated fadeInDown">A favourite pet is required.</div></div>
+        <div class="col-xs-6">
+          <label>Favourite Time
+            <div class="bootstrap-timepicker"><div class="bootstrap-timepicker-widget dropdown-menu"><table><tbody><tr><td><a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a></td><td class="separator">&nbsp;</td><td><a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a></td><td class="separator">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-up"></i></a></td></tr><tr><td><span class="bootstrap-timepicker-hour">10</span></td> <td class="separator">:</td><td><span class="bootstrap-timepicker-minute">15</span></td> <td class="separator">&nbsp;</td><td><span class="bootstrap-timepicker-meridian">PM</span></td></tr><tr><td><a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a></td><td class="separator"></td><td><a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a></td><td class="separator">&nbsp;</td><td><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-down"></i></a></td></tr></tbody></table></div>
+              <input id="favouriteTime" name="favouriteTime" type="text" class="timepicker" placeholder="Enter a favourite time" value="10:15 PM">
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-12">
+          <label>Notes
+            <textarea id="notes" name="notes" rows="4" cols="5" placeholder="Enter the notes" class=" has-error"></textarea>
+          </label>
+          <div id="notes-feedback" class="has-error  help-block help-block-left animated fadeInDown">Notes are required.</div></div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-12">Role</label>
+        <div class="col-xs-12">
+          <div id="role" class=" has-error">
+            <label class="css-input css-radio css-radio-default push-10-r">
+              <input name="role" type="radio" id="id9" value="radio0">
+              <span></span>
+              Manager
+            </label>
+            <label class="css-input css-radio css-radio-default push-10-r">
+              <input name="role" type="radio" id="ida" value="radio1">
+              <span></span>
+              Supervisor
+            </label>
+            <label class="css-input css-radio css-radio-default">
+              <input name="role" type="radio" id="idb" value="radio2">
+              <span></span>
+              Worker
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-6">
+          <label class="css-input css-checkbox css-checkbox-default">
+            <input name="isActive" type="checkbox">
+            <span></span>
+            Is Active?
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group-separator"></div>
+
+
+
+-->
+
+      <div class="form-buttons">
+        <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
+        <button type="button" class="btn btn-secondary px-4 float-right">Cancel</button>
+      </div>
+
+
+
+    </form>
+
+  </div>
+</div>
