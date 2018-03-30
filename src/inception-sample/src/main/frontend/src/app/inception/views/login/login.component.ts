@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
 import {Session} from '../../models/session';
@@ -9,23 +9,17 @@ import {patternValidator} from "../../validators/pattern-validator";
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   private loginForm: FormGroup;
 
-  constructor() {
-  }
+  constructor(private formBuilder: FormBuilder) {
 
-  ngOnInit(): void {
-
-    this.loginForm = new FormGroup({
+    this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      'username': new FormControl('', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
-      'password': new FormControl('', Validators.required),
+      username: ['', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+      password: ['', Validators.required],
     });
-
-    //this.loginForm.patchValue({'username': 'marcus@mmp.guru'});
-    //this.loginForm.setValue({'username': 'marcus@mmp.guru', 'password': 'Password1'});
   }
 
   public isForgottenPasswordEnabled(): boolean {
@@ -39,7 +33,9 @@ export class LoginComponent implements OnInit {
   }
 
   public onCancel() {
-    console.log('Cancel clicked!');
+    //console.log('Cancel clicked!');
+    // let control = this.loginForm.get('username')
+    // control.disabled ? control.enable() : control.disable()
   }
 
   public onSubmit() {

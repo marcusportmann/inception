@@ -9,6 +9,11 @@ export const navigation = [
     }
   },
   {
+    name: 'Test Form',
+    url: '/test-form',
+    icon: 'icon-note'
+  },
+  {
     name: 'Login',
     url: '/login',
     icon: 'icon-login'

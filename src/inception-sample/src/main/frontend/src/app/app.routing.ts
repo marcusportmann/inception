@@ -5,7 +5,7 @@ import {AdminContainerComponent, SimpleContainerComponent} from './inception/com
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'test-form',
     pathMatch: 'full',
   },
   {
@@ -14,11 +14,16 @@ export const routes: Routes = [
     data: {
       title: 'Home'
     },
+
     children: [
       {
         path: 'dashboard',
         loadChildren: './views/dashboard/dashboard.module#DashboardModule'
       },
+      {
+        path: 'test-form',
+        loadChildren: './views/test-form/test-form.module#TestFormModule'
+      }
     ]
   },
   {
