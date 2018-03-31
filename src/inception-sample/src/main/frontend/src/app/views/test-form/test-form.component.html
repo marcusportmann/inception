@@ -49,7 +49,18 @@
           </fieldset>
         </div>
         <div class="col-sm">
-          &nbsp;
+          <fieldset class="form-group">
+            <label for="dateOfBirth">Date of Birth</label>
+            <div class="input-group">
+              <input id="dateOfBirth" name="dateOfBirth" formControlName="dateOfBirth" type="text" class="form-control" [minDate]="MIN_DATE" [maxDate]="MAX_DATE" #dp="bsDatepicker" bsDatepicker>
+              <div class="input-group-append" (click)="dp.toggle()">
+                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+              </div>
+            </div>
+            <div *ngIf="testForm.controls['dateOfBirth'].errors && !testForm.controls['dateOfBirth'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['dateOfBirth'].errors?.required">A date of birth is required.</div>
+            </div>
+          </fieldset>
         </div>
       </div>
 
@@ -74,38 +85,33 @@
         </div>
       </div>
 
-<!--
-
-      <div class="form-group">
-        <div class="col-xs-6">
-          <label>Title
-            <select name="p::title" class="select2 select2-hidden-accessible  has-error" data-placeholder="Select a title" id="id8" tabindex="-1" aria-hidden="true">
-              <option selected="selected" value="">Choose One</option>
-              <option value="0">Mr</option>
-              <option value="1">Mrs</option>
-              <option value="2">Ms</option>
-              <option value="3">Dr</option>
-            </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 1px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-id8-container"><span class="select2-selection__rendered" id="select2-id8-container"><span class="select2-selection__placeholder">Select a title</span></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-          </label>
-          <div id="id8-feedback" class="has-error  help-block help-block-left animated fadeInDown">A title is required.</div></div>
-        <div class="col-xs-6">
-          <label>Date of Birth
-            <input id="dateOfBirth" name="dateOfBirth" type="text" class="datepicker" placeholder="Enter a date of birth" value="">
-            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-          </label>
-          <div id="dateOfBirth-feedback" class="has-error  help-block help-block-left animated fadeInDown">A date of birth is required.</div></div>
-      </div>
-
-
-      <div class="form-group">
-        <div class="col-xs-6">
-          <label class="select-wrapper has-error">Favourite Pet
-            <select id="favouritePet" name="favouritePet" size="1" class=" has-error">
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="password">Favourite Pet</label>
+            <select id="favouritePet" name="favouritePet" formControlName="favouritePet" class="form-control" size="1">
               <option selected="selected" value="">Choose One</option>
               <option value="0">Dog</option>
               <option value="1">Cat</option>
               <option value="2">Hamster</option>
             </select>
+            <div *ngIf="testForm.controls['favouritePet'].errors && !testForm.controls['favouritePet'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['favouritePet'].errors?.required">A password is required.</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          &nbsp;
+        </div>
+      </div>
+
+<!--
+
+
+
+      <div class="form-group">
+        <div class="col-xs-6">
+          <label class="select-wrapper has-error">Favourite Pet
           </label>
           <div id="favouritePet-feedback" class="has-error  help-block help-block-left animated fadeInDown">A favourite pet is required.</div></div>
         <div class="col-xs-6">

@@ -196,10 +196,3 @@ export class SidebarNavTitleComponent implements OnInit {
   }
 }
 
-export const INCEPTION_SIDEBAR_NAV_COMPONENTS = [
-  SidebarNavComponent,
-  SidebarNavDropdownComponent,
-  SidebarNavItemComponent,
-  SidebarNavLinkComponent,
-  SidebarNavTitleComponent
-];

@@ -4,7 +4,7 @@
 @import "bootstrap-variables";
 
 // Import Bootstrap source files
-@import "node_modules/bootstrap/scss/bootstrap";
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
 
 // Import core styles
 @import "variables";
@@ -56,5 +56,9 @@
 // Right-to-left
 @import "rtl";
 
+// ng-select
+@import "vendors/ng-select/ng-select";
 
+// bs-datepicker
+@import "vendors/bs-datepicker/bs-datepicker";
 

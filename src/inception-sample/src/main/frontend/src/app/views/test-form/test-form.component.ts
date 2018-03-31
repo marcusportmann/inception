@@ -8,6 +8,9 @@ import {patternValidator} from '../../inception/validators/pattern-validator';
 })
 export class TestFormComponent {
 
+  public static readonly MIN_DATE = new Date(1900, 1, 1);
+  public static readonly MAX_DATE = Date.now();
+
   private testForm: FormGroup;
 
   public titles: Array<IOption> = [
@@ -20,12 +23,13 @@ export class TestFormComponent {
 
     this.testForm = this.formBuilder.group({
       // tslint:disable-next-line
-      //username: [{value: ''}, [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       title: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
+      favouritePet: ['', Validators.required]
     });
   }
 

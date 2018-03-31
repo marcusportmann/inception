@@ -1,23 +1,16 @@
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// Import Angular decorators
 import { NgModule } from '@angular/core';
 
-import { SelectModule } from 'ng-select';
+// Import Inception module
+import {InceptionModule} from '../../inception/inception.module';
 
-import {DirectivesModule} from '../../inception/directives/directives.module';
-
+// Local imports
 import {TestFormComponent} from './test-form.component';
 import {TestFormRoutingModule} from './test-form-routing.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    SelectModule,
-
-    DirectivesModule,
+    InceptionModule,
 
     TestFormRoutingModule
   ],
@@ -25,9 +18,6 @@ import {TestFormRoutingModule} from './test-form-routing.module';
     TestFormComponent
   ],
   exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
   ]
 })
 export class TestFormModule { }
