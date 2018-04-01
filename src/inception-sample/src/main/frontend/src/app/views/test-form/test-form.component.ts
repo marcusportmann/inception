@@ -31,6 +31,14 @@ export class TestFormComponent {
       confirmPassword: ['', Validators.required],
       favouritePet: ['', Validators.required],
       employmentPeriod: ['', Validators.required],
+      inlineRadio: ['', Validators.required],
+      inlineCheckbox1: [''],
+      inlineCheckbox2: [''],
+      inlineCheckbox3: [''],
+      radio: ['', Validators.required],
+      checkbox1: [''],
+      checkbox2: [''],
+      checkbox3: [''],
       favouriteTime: ['', Validators.required],
       notes: ['', Validators.required]
     });

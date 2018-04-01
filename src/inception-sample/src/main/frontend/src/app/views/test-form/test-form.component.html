@@ -88,6 +88,15 @@
       <div class="row">
         <div class="col-sm">
           <fieldset class="form-group">
+            <label for="employmentPeriod">Employment Period</label>
+            <input id="employmentPeriod" name="employmentPeriod" formControlName="employmentPeriod" class="form-control" #drp="bsDaterangepicker" bsDaterangepicker>
+            <div *ngIf="testForm.controls['employmentPeriod'].errors && !testForm.controls['employmentPeriod'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['employmentPeriod'].errors?.required">An employment period is required.</div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <fieldset class="form-group">
             <label for="favouritePet">Favourite Pet</label>
             <select id="favouritePet" name="favouritePet" formControlName="favouritePet" class="form-control">
               <option selected="selected" value="">Choose One</option>
@@ -100,48 +109,45 @@
             </div>
           </fieldset>
         </div>
-        <div class="col-sm">
-          <fieldset class="form-group">
-            <label for="employmentPeriod">Employment Period</label>
-            <input id="employmentPeriod" name="employmentPeriod" formControlName="employmentPeriod" class="form-control" #drp="bsDaterangepicker" bsDaterangepicker>
-          </fieldset>
-        </div>
       </div>
 
       <div class="row">
         <div class="col-sm">
           <fieldset class="form-group">
-            <label for="inline-radios">Inline Radios</label>
+            Inline Radios
             <div class="col-md-9 col-form-label">
-              <div class="form-check form-check-inline mr-1" id="inline-radios">
-                <input id="inlineRadio1" name="inline-radios" class="form-check-input" type="radio" value="option1">
+              <div class="form-check form-check-inline mr-1">
+                <input id="inlineRadio1" name="inlineRadio" formControlName="inlineRadio" type="radio" class="form-check-input" value="option1">
                 <label for="inlineRadio1" class="form-check-label">One</label>
               </div>
               <div class="form-check form-check-inline mr-1">
-                <input id="inlineRadio2" name="inline-radios" class="form-check-input" type="radio" value="option2">
+                <input id="inlineRadio2" name="inlineRadio" formControlName="inlineRadio" type="radio" class="form-check-input" value="option2">
                 <label for="inlineRadio2" class="form-check-label">Two</label>
               </div>
               <div class="form-check form-check-inline mr-1">
-                <input id="inlineRadio3" name="inline-radios" class="form-check-input" type="radio" value="option3">
+                <input id="inlineRadio3" name="inlineRadio" formControlName="inlineRadio" type="radio" class="form-check-input" value="option3">
                 <label for="inlineRadio3" class="form-check-label">Three</label>
               </div>
+            </div>
+            <div *ngIf="testForm.controls['inlineRadio'].errors && !testForm.controls['inlineRadio'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['inlineRadio'].errors?.required">Please select an option.</div>
             </div>
           </fieldset>
         </div>
         <div class="col-sm">
-          <label for="notes">Inline Radios</label>
+          Inline Checkboxes
           <div class="col-md-9 col-form-label">
             <div class="form-check form-check-inline mr-1">
-              <input id="inline-checkbox1" class="form-check-input" type="checkbox" value="option1">
-              <label for="inline-checkbox1" class="form-check-label">One</label>
+              <input id="inlineCheckbox1" name="inlineCheckbox1" formControlName="inlineCheckbox1" type="checkbox" class="form-check-input" value="option1">
+              <label for="inlineCheckbox1" class="form-check-label">One</label>
             </div>
             <div class="form-check form-check-inline mr-1">
-              <input  id="inline-checkbox2" class="form-check-input" type="checkbox" value="option2">
-              <label for="inline-checkbox2" class="form-check-label">Two</label>
+              <input id="inlineCheckbox2" name="inlineCheckbox2" formControlName="inlineCheckbox2" type="checkbox" class="form-check-input" value="option2">
+              <label for="inlineCheckbox2" class="form-check-label">Two</label>
             </div>
             <div class="form-check form-check-inline mr-1">
-              <input id="inline-checkbox3" class="form-check-input" type="checkbox" value="option3">
-              <label for="inline-checkbox3" class="form-check-label">Three</label>
+              <input id="inlineCheckbox3" name="inlineCheckbox3" formControlName="inlineCheckbox3" type="checkbox" class="form-check-input" value="option3">
+              <label for="inlineCheckbox3" class="form-check-label">Three</label>
             </div>
           </div>
         </div>
@@ -173,58 +179,47 @@
           <label >Radios</label>
           <div class="col-md-9 col-form-label">
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="radios" id="radio1" value="option1">
+              <input id="radio1" name="radio" formControlName="radio" type="radio" class="form-check-input" value="option1">
               <label for="radio1" class="form-check-label">Option 1</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="radios" id="radio2" value="option2">
+              <input id="radio2" name="radio" formControlName="radio" type="radio" class="form-check-input" value="option2">
               <label for="radio2" class="form-check-label">Option 2</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="radios" id="radio3" value="option3">
+              <input id="radio3" name="radio" formControlName="radio" type="radio" class="form-check-input" value="option3">
               <label for="radio3" class="form-check-label">Option 3</label>
             </div>
+          </div>
+          <div *ngIf="testForm.controls['radio'].errors && !testForm.controls['radio'].untouched" class="form-control-error">
+            <div *ngIf="testForm.controls['radio'].errors?.required">Please select an option.</div>
           </div>
         </div>
         <div class="col-sm">
           <label>Checkboxes</label>
           <div class="col-md-9 col-form-label">
             <div class="form-check">
-              <input id="checkbox1" class="form-check-input" type="checkbox" value="option1">
+              <input id="checkbox1" name="checkbox1" formControlName="checkbox1" type="checkbox" class="form-check-input" value="checkbox1">
               <label for="checkbox1" class="form-check-label">Option 1</label>
             </div>
             <div class="form-check">
-              <input id="checkbox2" class="form-check-input" type="checkbox" value="option1">
+              <input id="checkbox2" name="checkbox2" formControlName="checkbox2" type="checkbox" class="form-check-input" value="checkbox2">
               <label for="checkbox2" class="form-check-label">Option 2</label>
             </div>
             <div class="form-check checkbox">
-              <input id="checkbox3" class="form-check-input" type="checkbox" value="option1">
+              <input id="checkbox3" name="checkbox3" formControlName="checkbox3" type="checkbox" class="form-check-input" value="checkbox3">
               <label for="checkbox3" class="form-check-label">Option 3</label>
             </div>
           </div>
         </div>
       </div>
 
-
-
-
       <div class="form-group-separator"></div>
 
-<!--
-
-
-
-
-
-
--->
-
       <div class="form-buttons">
-        <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
+        <button type="submit" class="btn btn-primary px-4 float-right ml-2">Submit</button>
         <button type="button" class="btn btn-secondary px-4 float-right">Cancel</button>
       </div>
-
-
 
     </form>
 
