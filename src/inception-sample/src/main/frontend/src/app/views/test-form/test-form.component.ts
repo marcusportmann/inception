@@ -29,7 +29,10 @@ export class TestFormComponent {
       dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      favouritePet: ['', Validators.required]
+      favouritePet: ['', Validators.required],
+      employmentPeriod: ['', Validators.required],
+      favouriteTime: ['', Validators.required],
+      notes: ['', Validators.required]
     });
   }
 

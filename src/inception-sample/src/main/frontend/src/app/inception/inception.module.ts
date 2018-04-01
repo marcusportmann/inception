@@ -34,7 +34,7 @@ import {
 } from './components/layout';
 
 // Import 3rd party components
-import { BsDatepickerConfig } from 'ngx-bootstrap';
+import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
 import { BsDatepickerModule} from 'ngx-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
@@ -102,8 +102,9 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  public constructor(private bsDatepickerConfig: BsDatepickerConfig) {
+  public constructor(private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
     this.bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
+    this.bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
   }
 }
 

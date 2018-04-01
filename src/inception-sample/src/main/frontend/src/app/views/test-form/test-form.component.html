@@ -88,7 +88,7 @@
       <div class="row">
         <div class="col-sm">
           <fieldset class="form-group">
-            <label for="password">Favourite Pet</label>
+            <label for="favouritePet">Favourite Pet</label>
             <select id="favouritePet" name="favouritePet" formControlName="favouritePet" class="form-control">
               <option selected="selected" value="">Choose One</option>
               <option value="0">Dog</option>
@@ -101,71 +101,119 @@
           </fieldset>
         </div>
         <div class="col-sm">
-          &nbsp;
+          <fieldset class="form-group">
+            <label for="employmentPeriod">Employment Period</label>
+            <input id="employmentPeriod" name="employmentPeriod" formControlName="employmentPeriod" class="form-control" #drp="bsDaterangepicker" bsDaterangepicker>
+          </fieldset>
         </div>
       </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="inline-radios">Inline Radios</label>
+            <div class="col-md-9 col-form-label">
+              <div class="form-check form-check-inline mr-1" id="inline-radios">
+                <input id="inlineRadio1" name="inline-radios" class="form-check-input" type="radio" value="option1">
+                <label for="inlineRadio1" class="form-check-label">One</label>
+              </div>
+              <div class="form-check form-check-inline mr-1">
+                <input id="inlineRadio2" name="inline-radios" class="form-check-input" type="radio" value="option2">
+                <label for="inlineRadio2" class="form-check-label">Two</label>
+              </div>
+              <div class="form-check form-check-inline mr-1">
+                <input id="inlineRadio3" name="inline-radios" class="form-check-input" type="radio" value="option3">
+                <label for="inlineRadio3" class="form-check-label">Three</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <label for="notes">Inline Radios</label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check form-check-inline mr-1">
+              <input id="inline-checkbox1" class="form-check-input" type="checkbox" value="option1">
+              <label for="inline-checkbox1" class="form-check-label">One</label>
+            </div>
+            <div class="form-check form-check-inline mr-1">
+              <input  id="inline-checkbox2" class="form-check-input" type="checkbox" value="option2">
+              <label for="inline-checkbox2" class="form-check-label">Two</label>
+            </div>
+            <div class="form-check form-check-inline mr-1">
+              <input id="inline-checkbox3" class="form-check-input" type="checkbox" value="option3">
+              <label for="inline-checkbox3" class="form-check-label">Three</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" formControlName="notes" rows="4" cols="5" placeholder="Enter the notes" class="form-control"></textarea>
+            <div *ngIf="testForm.controls['notes'].errors && !testForm.controls['notes'].untouched" class="form-control-error">
+              <div *ngIf="testForm.controls['notes'].errors?.required">Please enter the required notes.</div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <fieldset class="form-group">
+            <label for="favouriteTime">Favourite Time</label>
+            <timepicker id="favouriteTime" name="favouriteTime" formControlName="favouriteTime"></timepicker>
+            <!--
+            [(ngModel)]="favouriteTime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="ismeridian" [readonlyInput]="!isEnabled"
+            -->
+          </fieldset>
+        </div>
+        <div class="col-sm">
+          <label >Radios</label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radios" id="radio1" value="option1">
+              <label for="radio1" class="form-check-label">Option 1</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radios" id="radio2" value="option2">
+              <label for="radio2" class="form-check-label">Option 2</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="radios" id="radio3" value="option3">
+              <label for="radio3" class="form-check-label">Option 3</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm">
+          <label>Checkboxes</label>
+          <div class="col-md-9 col-form-label">
+            <div class="form-check">
+              <input id="checkbox1" class="form-check-input" type="checkbox" value="option1">
+              <label for="checkbox1" class="form-check-label">Option 1</label>
+            </div>
+            <div class="form-check">
+              <input id="checkbox2" class="form-check-input" type="checkbox" value="option1">
+              <label for="checkbox2" class="form-check-label">Option 2</label>
+            </div>
+            <div class="form-check checkbox">
+              <input id="checkbox3" class="form-check-input" type="checkbox" value="option1">
+              <label for="checkbox3" class="form-check-label">Option 3</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="form-group-separator"></div>
 
 <!--
 
 
 
-      <div class="form-group">
-        <div class="col-xs-6">
-          <label class="select-wrapper has-error">Favourite Pet
-          </label>
-          <div id="favouritePet-feedback" class="has-error  help-block help-block-left animated fadeInDown">A favourite pet is required.</div></div>
-        <div class="col-xs-6">
-          <label>Favourite Time
-            <div class="bootstrap-timepicker"><div class="bootstrap-timepicker-widget dropdown-menu"><table><tbody><tr><td><a href="#" data-action="incrementHour"><i class="glyphicon glyphicon-chevron-up"></i></a></td><td class="separator">&nbsp;</td><td><a href="#" data-action="incrementMinute"><i class="glyphicon glyphicon-chevron-up"></i></a></td><td class="separator">&nbsp;</td><td class="meridian-column"><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-up"></i></a></td></tr><tr><td><span class="bootstrap-timepicker-hour">10</span></td> <td class="separator">:</td><td><span class="bootstrap-timepicker-minute">15</span></td> <td class="separator">&nbsp;</td><td><span class="bootstrap-timepicker-meridian">PM</span></td></tr><tr><td><a href="#" data-action="decrementHour"><i class="glyphicon glyphicon-chevron-down"></i></a></td><td class="separator"></td><td><a href="#" data-action="decrementMinute"><i class="glyphicon glyphicon-chevron-down"></i></a></td><td class="separator">&nbsp;</td><td><a href="#" data-action="toggleMeridian"><i class="glyphicon glyphicon-chevron-down"></i></a></td></tr></tbody></table></div>
-              <input id="favouriteTime" name="favouriteTime" type="text" class="timepicker" placeholder="Enter a favourite time" value="10:15 PM">
-              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-            </div>
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-xs-12">
-          <label>Notes
-            <textarea id="notes" name="notes" rows="4" cols="5" placeholder="Enter the notes" class=" has-error"></textarea>
-          </label>
-          <div id="notes-feedback" class="has-error  help-block help-block-left animated fadeInDown">Notes are required.</div></div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-12">Role</label>
-        <div class="col-xs-12">
-          <div id="role" class=" has-error">
-            <label class="css-input css-radio css-radio-default push-10-r">
-              <input name="role" type="radio" id="id9" value="radio0">
-              <span></span>
-              Manager
-            </label>
-            <label class="css-input css-radio css-radio-default push-10-r">
-              <input name="role" type="radio" id="ida" value="radio1">
-              <span></span>
-              Supervisor
-            </label>
-            <label class="css-input css-radio css-radio-default">
-              <input name="role" type="radio" id="idb" value="radio2">
-              <span></span>
-              Worker
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-xs-6">
-          <label class="css-input css-checkbox css-checkbox-default">
-            <input name="isActive" type="checkbox">
-            <span></span>
-            Is Active?
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group-separator"></div>
 
 
 
