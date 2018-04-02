@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 // Import Angular modules
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -32,6 +33,9 @@ import {
   SidebarNavTitleComponent,
   SimpleContainerComponent,
 } from './components/layout';
+
+// Import Inception services
+import { SecurityService } from './services/security/security.service';
 
 // Import 3rd party components
 import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
@@ -79,6 +83,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
   exports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
 
@@ -92,9 +97,10 @@ import { TimepickerModule } from 'ngx-bootstrap';
     DirectivesModule
   ],
   providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }]
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy,
+    },
+    SecurityService]
 })
 export class InceptionModule {
 

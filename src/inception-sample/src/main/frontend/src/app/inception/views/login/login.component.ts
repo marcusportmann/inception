@@ -5,6 +5,7 @@ import {InceptionModule} from '../../inception.module';
 import {Session} from '../../models/session';
 
 import {patternValidator} from "../../validators/pattern-validator";
+import {SecurityService} from '../../services/security/security.service';
 
 @Component({
   templateUrl: 'login.component.html'
@@ -13,7 +14,7 @@ export class LoginComponent {
 
   private loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private securityService: SecurityService) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -41,8 +42,13 @@ export class LoginComponent {
   public onSubmit() {
 
     if (this.loginForm.valid) {
-      console.log('username = ' + this.loginForm.get('username').value);
-      console.log('password = ' + this.loginForm.get('password').value);
+
+      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(data => {
+
+      },
+        data => {
+
+        });
     }
   }
 }
