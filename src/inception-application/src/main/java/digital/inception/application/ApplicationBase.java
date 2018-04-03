@@ -39,6 +39,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,9 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
@@ -62,6 +66,7 @@ import java.lang.reflect.Method;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -85,6 +90,12 @@ public abstract class ApplicationBase
   {
     System.setProperty("com.atomikos.icatch.registered", "true");
   }
+
+  /**
+   * Enable cross-origin resource sharing (CORS).
+   */
+  @Value("${application.security.enableCORS:#{false}}")
+  private boolean enableCORS;
 
   /**
    * The application key store type.
@@ -247,6 +258,35 @@ public abstract class ApplicationBase
    */
   @Autowired
   private ApplicationContext applicationContext;
+
+  /**
+   * Returns the cross-origin resource sharing (CORS) filter registration bean.
+   *
+   * @return the cross-origin resource sharing (CORS) filter registration bean
+   */
+  @Bean
+  public FilterRegistrationBean corsFilterRegistrationBean()
+  {
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+    if (enableCORS)
+    {
+      CorsConfiguration config = new CorsConfiguration();
+      config.applyPermitDefaultValues();
+      config.setAllowCredentials(true);
+      config.setAllowedOrigins(Arrays.asList("*"));
+      config.setAllowedHeaders(Arrays.asList("*"));
+      config.setAllowedMethods(Arrays.asList("*"));
+      config.setExposedHeaders(Arrays.asList("content-length"));
+      config.setMaxAge(3600L);
+      source.registerCorsConfiguration("/**", config);
+    }
+
+    FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+    bean.setOrder(0);
+
+    return bean;
+  }
 
   /**
    * Returns the HTTP client bean.

@@ -72,6 +72,7 @@ application:
     maxPoolSize: 10
 
   security:
+    enableCORS: true
     keyStore:
       type: JKS
       path: classpath:META-INF/Sample.jks
