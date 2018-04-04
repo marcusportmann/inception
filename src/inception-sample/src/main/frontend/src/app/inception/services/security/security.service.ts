@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { decode } from "jsonwebtoken";
 
 @Injectable()
 export class SecurityService {
@@ -31,12 +32,18 @@ export class SecurityService {
     //let options = {headers: headers, withCredentials: true};
     let options = {};
 
-    return this.httpClient.post('http://localhost:20000/oauth/token', body.toString(), {
+    return this.httpClient.post<any>('http://localhost:8080/oauth/token', body.toString(), {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
       .map(data => {
 
-        console.log('data = ' + data);
+          console.log('data.access_token = ' + data.access_token);
+
+        let token:any = decode(data.access_token);
+
+
+
+        console.log('token = ' + token);
 
         return false;
       },

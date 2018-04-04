@@ -6,6 +6,10 @@ import {Session} from '../../models/session';
 
 import {patternValidator} from "../../validators/pattern-validator";
 import {SecurityService} from '../../services/security/security.service';
+import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
+
+import { decode } from "jsonwebtoken";
+
 
 @Component({
   templateUrl: 'login.component.html'
@@ -44,6 +48,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
 
       this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(data => {
+
+        //decode(data);
 
       },
         data => {
