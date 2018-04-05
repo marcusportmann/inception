@@ -2,13 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
-import {Session} from '../../models/session';
+
 
 import {patternValidator} from "../../validators/pattern-validator";
 import {SecurityService} from '../../services/security/security.service';
 import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 
 import { decode } from "jsonwebtoken";
+import {Session} from "../../services/security/session";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -47,12 +49,20 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
-      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(data => {
+      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(result => {
 
-        //decode(data);
+        if (result instanceof Session) {
+          console.log('session = ', result);
+        }
+        else if (result instanceof HttpErrorResponse) {
+          console.log('error = ', result);
+        }
+
 
       },
-        data => {
+        error => {
+
+        console.log('error = ', error);
 
         });
     }

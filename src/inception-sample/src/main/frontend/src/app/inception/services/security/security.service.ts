@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs/Rx';
+import { catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+
+
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse
+} from '@angular/common/http';
 import { decode } from "jsonwebtoken";
+import {Session} from "./session";
+import {TokenResponse} from "./token-response";
+
 
 @Injectable()
 export class SecurityService {
@@ -11,47 +23,30 @@ export class SecurityService {
 
   }
 
-  public login(username: string, password: string): Observable<boolean> {
+  public login(username: string, password: string): Observable<HttpErrorResponse | Session> {
 
     let body = new HttpParams()
     .set('grant_type', 'password')
     .set('username', 'Administrator')
-    .set('password', 'Password1')
+    .set('password', 'Password12')
     .set('scope', 'inception-sample')
-    .set('client_id', 'inception-sample')
+    .set('client_id', 'inception-sample');
 
-    console.log('body = ' + body.toString());
-    console.log('body = ' + body.toString());
+    let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 
-    // Authorization: Basic VGVzdENsaWVudDo=
+    return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
+      map(tokenResponse => {
 
-    let headers = new HttpHeaders();
-    headers = headers.append('Authorization', 'Basic VGVzdENsaWVudDo=');
-    headers = headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        let token:any = decode(tokenResponse.access_token);
 
-    //let options = {headers: headers, withCredentials: true};
-    let options = {};
+        return new Session(token.user_name, token.scope, token.authorities, token.exp, tokenResponse.access_token, tokenResponse.refresh_token);
+      }), catchError((error: HttpErrorResponse) => {
 
-    return this.httpClient.post<any>('http://localhost:8080/oauth/token', body.toString(), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
-      .map(data => {
+        console.log('catchError = ', error);
 
-          console.log('data.access_token = ' + data.access_token);
+        return Observable.of(error);
 
-        let token:any = decode(data.access_token);
+      }));
 
-
-
-        console.log('token = ' + token);
-
-        return false;
-      },
-      err => {
-
-        console.log('err = ' + err);
-
-        return of(false);
-    })
   }
 }

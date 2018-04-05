@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Session} from '../../../models/session';
 
 
 @Component({
@@ -23,7 +22,9 @@ export class HeaderComponent implements OnInit {
 
     console.log('Invoking HeaderComponent::isLoggedIn()');
 
-    return Session.getSession().isLoggedIn();
+    //return Session.getSession().isLoggedIn();
+
+    return false;
   }
 
 

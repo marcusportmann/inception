@@ -14,7 +14,7 @@ public class TokenEnhancer implements org.springframework.security.oauth2.provid
     OAuth2AccessToken accessToken,
     OAuth2Authentication authentication) {
     Map<String, Object> additionalInfo = new HashMap<>();
-    additionalInfo.put("organization", authentication.getName() + "Org");
+
     ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
     return accessToken;
   }
