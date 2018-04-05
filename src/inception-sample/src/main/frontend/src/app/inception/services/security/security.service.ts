@@ -14,6 +14,7 @@ import {
 import { decode } from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
+import {TestError} from "./security.service.errors";
 
 
 @Injectable()
@@ -44,7 +45,9 @@ export class SecurityService {
 
         console.log('catchError = ', error);
 
-        return Observable.of(error);
+        //return Observable.of(error);
+
+        return Observable.throw(new TestError(error.status));
 
       }));
 

@@ -11,6 +11,7 @@ import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 import { decode } from "jsonwebtoken";
 import {Session} from "../../services/security/session";
 import {HttpErrorResponse} from "@angular/common/http";
+import {TestError} from "../../services/security/security.service.errors";
 
 
 @Component({
@@ -62,7 +63,12 @@ export class LoginComponent {
       },
         error => {
 
-        console.log('error = ', error);
+        if (error instanceof TestError ) {
+          console.log('Test error = ', error);
+        }
+        else {
+          console.log('Unknown error = ', error);
+        }
 
         });
     }
