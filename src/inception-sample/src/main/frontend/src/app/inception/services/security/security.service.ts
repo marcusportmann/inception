@@ -24,12 +24,12 @@ export class SecurityService {
 
   }
 
-  public login(username: string, password: string): Observable<HttpErrorResponse | Session> {
+  public login(username: string, password: string): Observable<Session> {
 
     let body = new HttpParams()
     .set('grant_type', 'password')
     .set('username', 'Administrator')
-    .set('password', 'Password12')
+    .set('password', 'Password1')
     .set('scope', 'inception-sample')
     .set('client_id', 'inception-sample');
 
@@ -45,7 +45,8 @@ export class SecurityService {
 
         console.log('catchError = ', error);
 
-        //return Observable.of(error);
+        // TODO: Map different HTTP error codes to specific error types -- MARCUS
+
 
         return Observable.throw(new TestError(error.status));
 

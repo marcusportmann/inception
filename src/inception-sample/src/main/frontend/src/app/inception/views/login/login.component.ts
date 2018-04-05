@@ -50,15 +50,18 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
-      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(result => {
+      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
+        console.log('session = ', session);
+
+        /*
         if (result instanceof Session) {
           console.log('session = ', result);
         }
         else if (result instanceof HttpErrorResponse) {
           console.log('error = ', result);
         }
-
+        */
 
       },
         error => {
