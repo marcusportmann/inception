@@ -20,7 +20,6 @@ package digital.inception.scheduler;
 
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.util.StringUtil;
-import digital.inception.validation.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,7 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @Service
+@SuppressWarnings("unused")
 public class SchedulerService
   implements ISchedulerService
 {
@@ -57,8 +57,7 @@ public class SchedulerService
   /**
    * The Spring application context.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
@@ -75,9 +74,22 @@ public class SchedulerService
   /**
    * The data source used to provide connections to the application database.
    */
+  private final DataSource dataSource;
+
+  /**
+   * Constructs a new <code>SchedulerService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   */
   @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  public SchedulerService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+  }
 
   /**
    * Create the job.
@@ -86,13 +98,8 @@ public class SchedulerService
    */
   @Override
   public void createJob(Job job)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (job == null)
-    {
-      throw new InvalidArgumentException("job");
-    }
-
     String createJobSQL =
         "INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, is_enabled, status) "
         + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -127,13 +134,8 @@ public class SchedulerService
    */
   @Override
   public void createJobParameter(JobParameter jobParameter)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobParameter == null)
-    {
-      throw new InvalidArgumentException("jobParameter");
-    }
-
     String createJobParameterSQL =
         "INSERT INTO scheduler.job_parameters (id, job_id, name, value) VALUES (?, ?, ?, ?)";
 
@@ -167,13 +169,8 @@ public class SchedulerService
    */
   @Override
   public void deleteJob(UUID jobId)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String deleteJobSQL = "DELETE FROM scheduler.jobs WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -200,13 +197,8 @@ public class SchedulerService
    */
   @Override
   public void executeJob(Job job)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (job == null)
-    {
-      throw new InvalidArgumentException("job");
-    }
-
     Class<?> jobClass;
 
     // Load the job class.
@@ -283,13 +275,8 @@ public class SchedulerService
    */
   @Override
   public List<Job> getFilteredJobs(String filter)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     String getJobsSQL =
         "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
         + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs";
@@ -328,13 +315,8 @@ public class SchedulerService
    */
   @Override
   public Job getJob(UUID jobId)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String getJobSQL =
         "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
         + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs WHERE id = ?";
@@ -358,7 +340,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId), e);
+      throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId),
+          e);
     }
   }
 
@@ -371,13 +354,8 @@ public class SchedulerService
    */
   @Override
   public List<JobParameter> getJobParameters(UUID jobId)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String getJobParametersSQL =
         "SELECT id, job_id, name, value FROM scheduler.job_parameters WHERE job_id = ?";
 
@@ -525,13 +503,8 @@ public class SchedulerService
    */
   @Override
   public int getNumberOfFilteredJobs(String filter)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     String getNumberOfJobsSQL = "SELECT COUNT(id) FROM scheduler.jobs";
 
     String getNumberOfFilteredJobsSQL = "SELECT COUNT(id) FROM scheduler.jobs "
@@ -641,13 +614,8 @@ public class SchedulerService
    */
   @Override
   public void incrementJobExecutionAttempts(UUID jobId)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String incrementJobExecutionAttemptsSQL = "UPDATE scheduler.jobs "
         + "SET execution_attempts=execution_attempts + 1, updated=?, last_executed=? WHERE id=?";
 
@@ -691,13 +659,8 @@ public class SchedulerService
    */
   @Override
   public void lockJob(UUID jobId, JobStatus status)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -731,13 +694,8 @@ public class SchedulerService
    */
   @Override
   public void rescheduleJob(UUID jobId, String schedulingPattern)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     try (Connection connection = dataSource.getConnection())
     {
       Predictor predictor = new Predictor(schedulingPattern, System.currentTimeMillis());
@@ -763,7 +721,7 @@ public class SchedulerService
    */
   @Override
   public int resetJobLocks(JobStatus status, JobStatus newStatus)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
     String resetJobLocksSQL = "UPDATE scheduler.jobs SET status=?, lock_name=NULL, updated=? "
         + "WHERE lock_name=? AND status=?";
@@ -871,13 +829,8 @@ public class SchedulerService
    */
   @Override
   public void setJobStatus(UUID jobId, JobStatus status)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     try (Connection connection = dataSource.getConnection())
     {
       setJobStatus(connection, jobId, status);
@@ -897,13 +850,8 @@ public class SchedulerService
    */
   @Override
   public void unlockJob(UUID jobId, JobStatus status)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (jobId == null)
-    {
-      throw new InvalidArgumentException("jobId");
-    }
-
     String unlockJobSQL =
         "UPDATE scheduler.jobs SET status=?, updated=?, lock_name=NULL WHERE id=?";
 
@@ -935,13 +883,8 @@ public class SchedulerService
    */
   @Override
   public void updateJob(Job job)
-    throws InvalidArgumentException, SchedulerServiceException
+    throws SchedulerServiceException
   {
-    if (job == null)
-    {
-      throw new InvalidArgumentException("job");
-    }
-
     String updateJobSQL =
         "UPDATE scheduler.jobs SET name=?, scheduling_pattern=?, job_class=?, is_enabled=?, "
         + "status=? WHERE id=?";

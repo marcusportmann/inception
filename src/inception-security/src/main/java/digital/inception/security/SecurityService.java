@@ -91,26 +91,34 @@ public class SecurityService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
-  private IDGenerator idGenerator;
+  private final IDGenerator idGenerator;
 
   /**
    * The Spring application context.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /**
    * Constructs a new <code>SecurityService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param idGenerator        the ID Generator
    */
-  public SecurityService() {}
+  @Autowired
+  public SecurityService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+  {
+    this.dataSource = dataSource;
+    this.idGenerator = idGenerator;
+    this.applicationContext = applicationContext;
+  }
 
   /**
    * Add the user to the security group.
@@ -122,25 +130,9 @@ public class SecurityService
    */
   @Override
   public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        GroupNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+        SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -167,25 +159,8 @@ public class SecurityService
   public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (newPassword == null)
-    {
-      throw new InvalidArgumentException("newPassword");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -207,20 +182,9 @@ public class SecurityService
    */
   @Override
   public UUID authenticate(String username, String password)
-    throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-        ExpiredPasswordException, UserNotFoundException, SecurityServiceException
+    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
+        UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (password == null)
-    {
-      throw new InvalidArgumentException("password");
-    }
-
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
@@ -293,25 +257,9 @@ public class SecurityService
    */
   @Override
   public UUID changePassword(String username, String password, String newPassword)
-    throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-        UserNotFoundException, ExistingPasswordException, SecurityServiceException
+    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+        ExistingPasswordException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (password == null)
-    {
-      throw new InvalidArgumentException("password");
-    }
-
-    if (newPassword == null)
-    {
-      throw new InvalidArgumentException("newPassword");
-    }
-
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
@@ -380,30 +328,8 @@ public class SecurityService
    */
   @Override
   public void createFunction(Function function)
-    throws InvalidArgumentException, DuplicateFunctionException, SecurityServiceException
-
+    throws DuplicateFunctionException, SecurityServiceException
   {
-    // Validate parameters
-    if (function == null)
-    {
-      throw new InvalidArgumentException("function");
-    }
-
-    if (isNullOrEmpty(function.getDescription()))
-    {
-      throw new InvalidArgumentException("function.id");
-    }
-
-    if (isNullOrEmpty(function.getCode()))
-    {
-      throw new InvalidArgumentException("function.code");
-    }
-
-    if (isNullOrEmpty(function.getName()))
-    {
-      throw new InvalidArgumentException("function.name");
-    }
-
     String createFunctionSQL =
         "INSERT INTO security.functions (id, code, name, description) VALUES (?, ?, ?, ?)";
 
@@ -447,25 +373,8 @@ public class SecurityService
    */
   @Override
   public void createGroup(UUID userDirectoryId, Group group)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (group == null)
-    {
-      throw new InvalidArgumentException("group");
-    }
-
-    if (isNullOrEmpty(group.getGroupName()))
-    {
-      throw new InvalidArgumentException("group.groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -488,19 +397,8 @@ public class SecurityService
   @Override
   @Transactional(rollbackFor = Exception.class)
   public UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
-    throws InvalidArgumentException, DuplicateOrganisationException, SecurityServiceException
+    throws DuplicateOrganisationException, SecurityServiceException
   {
-    // Validate parameters
-    if (organisation == null)
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(organisation.getName()))
-    {
-      throw new InvalidArgumentException("organisation.name");
-    }
-
     try
     {
       UUID organisationId = idGenerator.nextUUID();
@@ -625,20 +523,8 @@ public class SecurityService
   @Override
   public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(user.getUsername()))
-    {
-      throw new InvalidArgumentException("user.username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -656,24 +542,8 @@ public class SecurityService
    */
   @Override
   public void createUserDirectory(UserDirectory userDirectory)
-    throws InvalidArgumentException, SecurityServiceException
+    throws SecurityServiceException
   {
-    // Validate parameters
-    if (userDirectory == null)
-    {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    if (isNullOrEmpty(userDirectory.getName()))
-    {
-      throw new InvalidArgumentException("userDirectory.name");
-    }
-
-    if (isNullOrEmpty(userDirectory.getTypeId()))
-    {
-      throw new InvalidArgumentException("userDirectory.typeId");
-    }
-
     String createUserDirectorySQL = "INSERT INTO security.user_directories "
         + "(id, type_id, name, configuration) VALUES (?, ?, ?, ?)";
 
@@ -720,14 +590,8 @@ public class SecurityService
    */
   @Override
   public void deleteFunction(String code)
-    throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException
+    throws FunctionNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
     String deleteFunctionSQL = "DELETE FROM security.functions WHERE code=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -767,20 +631,9 @@ public class SecurityService
    */
   @Override
   public void deleteGroup(UUID userDirectoryId, String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        ExistingGroupMembersException, SecurityServiceException
+    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
+        SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -799,14 +652,8 @@ public class SecurityService
    */
   @Override
   public void deleteOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+    throws OrganisationNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(organisationId))
-    {
-      throw new InvalidArgumentException("id");
-    }
-
     String deleteOrganisationSQL = "DELETE FROM security.organisations WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -846,20 +693,8 @@ public class SecurityService
    */
   @Override
   public void deleteUser(UUID userDirectoryId, String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -878,14 +713,8 @@ public class SecurityService
    */
   @Override
   public void deleteUserDirectory(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("id");
-    }
-
     String deleteUserDirectorySQL = "DELETE FROM security.user_directories WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -929,20 +758,8 @@ public class SecurityService
    */
   @Override
   public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (attributes == null)
-    {
-      throw new InvalidArgumentException("attributes");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1012,14 +829,8 @@ public class SecurityService
    */
   @Override
   public List<UserDirectory> getFilteredUserDirectories(String filter)
-    throws InvalidArgumentException, SecurityServiceException
+    throws SecurityServiceException
   {
-    // Validate parameters
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     String getUserDirectoriesSQL =
         "SELECT id, type_id, name, configuration FROM security.user_directories";
 
@@ -1071,14 +882,8 @@ public class SecurityService
    */
   @Override
   public List<User> getFilteredUsers(UUID userDirectoryId, String filter)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1098,14 +903,8 @@ public class SecurityService
    */
   @Override
   public Function getFunction(String code)
-    throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException
+    throws FunctionNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(code))
-    {
-      throw new InvalidArgumentException("code");
-    }
-
     String getFunctionSQL =
         "SELECT id, code, name, description FROM security.functions WHERE code=?";
 
@@ -1151,20 +950,8 @@ public class SecurityService
    */
   @Override
   public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1219,20 +1006,8 @@ public class SecurityService
    */
   @Override
   public Group getGroup(UUID userDirectoryId, String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1254,20 +1029,8 @@ public class SecurityService
    */
   @Override
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1288,14 +1051,8 @@ public class SecurityService
    */
   @Override
   public List<Group> getGroups(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1317,20 +1074,8 @@ public class SecurityService
    */
   @Override
   public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1350,14 +1095,8 @@ public class SecurityService
    */
   @Override
   public int getNumberOfFilteredOrganisations(String filter)
-    throws InvalidArgumentException, SecurityServiceException
+    throws SecurityServiceException
   {
-    // Validate parameters
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     String getNumberOfOrganisationsSQL = "SELECT COUNT(id) FROM security.organisations";
 
     String getNumberOfFilteredOrganisationsSQL =
@@ -1407,14 +1146,8 @@ public class SecurityService
    */
   @Override
   public int getNumberOfFilteredUserDirectories(String filter)
-    throws InvalidArgumentException, SecurityServiceException
+    throws SecurityServiceException
   {
-    // Validate parameters
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     String getNumberOfUserDirectoriesSQL = "SELECT COUNT(id) FROM security.user_directories";
 
     String getNumberOfFilteredUserDirectoriesSQL =
@@ -1466,19 +1199,8 @@ public class SecurityService
    */
   @Override
   public int getNumberOfFilteredUsers(UUID userDirectoryId, String filter)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (filter == null)
-    {
-      throw new InvalidArgumentException("filter");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1499,14 +1221,8 @@ public class SecurityService
    */
   @Override
   public int getNumberOfGroups(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1593,14 +1309,8 @@ public class SecurityService
    */
   @Override
   public int getNumberOfUsers(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1621,14 +1331,8 @@ public class SecurityService
    */
   @Override
   public Organisation getOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+    throws OrganisationNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(organisationId))
-    {
-      throw new InvalidArgumentException("id");
-    }
-
     String getOrganisationSQL = "SELECT id, name, status FROM security.organisations WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -1671,14 +1375,8 @@ public class SecurityService
    */
   @Override
   public List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     String getOrganisationIdsForUserDirectorySQL =
         "SELECT organisation_id FROM security.user_directory_to_organisation_map "
         + "WHERE user_directory_id=?";
@@ -1762,14 +1460,8 @@ public class SecurityService
    */
   @Override
   public List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     String getOrganisationsForUserDirectorySQL =
         "SELECT o.id, o.name, o.status FROM security.organisations o INNER JOIN "
         + "security.user_directory_to_organisation_map udtom ON o.id = udtom.organisation_id WHERE "
@@ -1821,20 +1513,8 @@ public class SecurityService
    */
   @Override
   public User getUser(UUID userDirectoryId, String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1889,14 +1569,8 @@ public class SecurityService
    */
   @Override
   public List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+    throws OrganisationNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(organisationId))
-    {
-      throw new InvalidArgumentException("organisationId");
-    }
-
     String getUserDirectoriesForOrganisationSQL =
         "SELECT ud.id, ud.type_id, ud.name, ud.configuration FROM security.user_directories ud "
         + "INNER JOIN security.user_directory_to_organisation_map udtom "
@@ -1948,14 +1622,8 @@ public class SecurityService
    */
   @Override
   public UserDirectory getUserDirectory(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("id");
-    }
-
     String getUserDirectorySQL = "SELECT id, type_id, name, configuration "
         + "FROM security.user_directories WHERE id=?";
 
@@ -1999,14 +1667,8 @@ public class SecurityService
    */
   @Override
   public UUID getUserDirectoryIdForUser(String username)
-    throws InvalidArgumentException, SecurityServiceException
+    throws SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
@@ -2094,14 +1756,8 @@ public class SecurityService
    */
   @Override
   public List<User> getUsers(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2145,25 +1801,9 @@ public class SecurityService
    */
   @Override
   public boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        GroupNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+        SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2253,25 +1893,9 @@ public class SecurityService
    */
   @Override
   public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        GroupNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+        SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (isNullOrEmpty(username))
-    {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (isNullOrEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2293,14 +1917,8 @@ public class SecurityService
    */
   @Override
   public boolean supportsGroupAdministration(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException
+    throws UserDirectoryNotFoundException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2322,14 +1940,8 @@ public class SecurityService
    */
   @Override
   public boolean supportsUserAdministration(UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException
+    throws UserDirectoryNotFoundException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2347,29 +1959,8 @@ public class SecurityService
    */
   @Override
   public void updateFunction(Function function)
-    throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException
+    throws FunctionNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (function == null)
-    {
-      throw new InvalidArgumentException("function");
-    }
-
-    if (isNullOrEmpty(function.getId()))
-    {
-      throw new InvalidArgumentException("function.id");
-    }
-
-    if (isNullOrEmpty(function.getCode()))
-    {
-      throw new InvalidArgumentException("function.code");
-    }
-
-    if (isNullOrEmpty(function.getName()))
-    {
-      throw new InvalidArgumentException("function.name");
-    }
-
     String updateFunctionSQL = "UPDATE security.functions SET name=?, description=? WHERE code=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -2411,25 +2002,8 @@ public class SecurityService
    */
   @Override
   public void updateGroup(UUID userDirectoryId, Group group)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (group == null)
-    {
-      throw new InvalidArgumentException("group");
-    }
-
-    if (isNullOrEmpty(group.getGroupName()))
-    {
-      throw new InvalidArgumentException("group.groupName");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2447,24 +2021,8 @@ public class SecurityService
    */
   @Override
   public void updateOrganisation(Organisation organisation)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+    throws OrganisationNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (organisation == null)
-    {
-      throw new InvalidArgumentException("organisation");
-    }
-
-    if (isNullOrEmpty(organisation.getId()))
-    {
-      throw new InvalidArgumentException("organisation.id");
-    }
-
-    if (isNullOrEmpty(organisation.getName()))
-    {
-      throw new InvalidArgumentException("organisation.name");
-    }
-
     String updateOrganisationSQL = "UPDATE security.organisations SET name=?, status=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -2508,25 +2066,8 @@ public class SecurityService
    */
   @Override
   public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (isNullOrEmpty(userDirectoryId))
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (user == null)
-    {
-      throw new InvalidArgumentException("user");
-    }
-
-    if (isNullOrEmpty(user.getUsername()))
-    {
-      throw new InvalidArgumentException("user.username");
-    }
-
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -2544,24 +2085,8 @@ public class SecurityService
    */
   @Override
   public void updateUserDirectory(UserDirectory userDirectory)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+    throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    // Validate parameters
-    if (userDirectory == null)
-    {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    if (isNullOrEmpty(userDirectory.getName()))
-    {
-      throw new InvalidArgumentException("userDirectory.name");
-    }
-
-    if (isNullOrEmpty(userDirectory.getTypeId()))
-    {
-      throw new InvalidArgumentException("userDirectory.typeId");
-    }
-
     String updateUserDirectorySQL = "UPDATE security.user_directories "
         + "SET name=?, configuration=? WHERE id=?";
 

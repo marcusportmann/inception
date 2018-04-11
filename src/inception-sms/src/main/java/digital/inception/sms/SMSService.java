@@ -76,21 +76,17 @@ public class SMSService
   /**
    * The Spring application context.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  @Autowired
-  private IDGenerator idGenerator;
+  private final IDGenerator idGenerator;
 
   /**
    * The MyMobileAPI endpoint.
@@ -121,6 +117,23 @@ public class SMSService
    */
   @Value("${application.sms.sendRetryDelay:#{600000}}")
   private int sendRetryDelay;
+
+  /**
+   * Constructs a new <code>SMSService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param idGenerator        the ID Generator
+   */
+  @Autowired
+  public SMSService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+    this.idGenerator = idGenerator;
+  }
 
   /**
    * Create the SMS.
