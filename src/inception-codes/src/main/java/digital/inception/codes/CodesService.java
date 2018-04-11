@@ -67,8 +67,7 @@ public class CodesService
   /**
    * The Spring application context.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
@@ -76,9 +75,7 @@ public class CodesService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * The configuration information for the code providers read from the code provider configuration
@@ -88,8 +85,18 @@ public class CodesService
 
   /**
    * Constructs a new <code>CodesService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
    */
-  public CodesService() {}
+  @Autowired
+  public CodesService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+  }
 
   /**
    * Check whether the code category exists.

@@ -23,6 +23,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
@@ -40,6 +41,7 @@ public class ValidationConfiguration
    * @return the local validator factory bean that provides support for JSR 303 Bean Validation
    */
   @Bean
+  @Primary
   @DependsOn({ "validationMessageSource" })
   public javax.validation.Validator localValidatorFactoryBean()
   {

@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,15 +125,26 @@ public class MessagingService
   /**
    * The Spring application context.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the database.
    */
+  private final DataSource dataSource;
+
+  /**
+   * Constructs a new <code>MessagingService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the database
+   */
   @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  public MessagingService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+  }
 
   /**
    * Have all the parts been queued for assembly for the message?

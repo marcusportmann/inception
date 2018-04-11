@@ -48,9 +48,18 @@ public class ConfigurationService
   /**
    * The data source used to provide connections to the application database.
    */
+  private final DataSource dataSource;
+
+  /**
+   * Constructs a new <code>ConfigurationService</code>.
+   *
+   * @param dataSource the data source used to provide connections to the application database
+   */
   @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  public ConfigurationService(@Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.dataSource = dataSource;
+  }
 
   /**
    * Remove the configuration with the specified key.
