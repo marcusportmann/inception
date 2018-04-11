@@ -60,14 +60,18 @@ public class ReportingService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * Constructs a new <code>ReportingService</code>.
+   *
+   * @param dataSource the data source used to provide connections to the application database
    */
-  public ReportingService() {}
+  @Autowired
+  public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.dataSource = dataSource;
+  }
 
   /**
    * Create the new report definition.

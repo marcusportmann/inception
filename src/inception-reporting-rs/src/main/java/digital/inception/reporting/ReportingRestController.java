@@ -53,19 +53,31 @@ import java.util.*;
 public class ReportingRestController
 {
   /* Reporting Service */
-  @Autowired
-  private IReportingService reportingService;
+  private final IReportingService reportingService;
 
   /* Validator */
-  @Autowired
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * The data source used to provide connections to the application database.
    */
+  private final DataSource dataSource;
+
+  /**
+   * Constructs a new <code>ReportingRestController</code>.
+   *
+   * @param reportingService the Reporting Service
+   * @param validator        the validator
+   * @param dataSource       the data source used to provide connections to the application database
+   */
   @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  public ReportingRestController(IReportingService reportingService, Validator validator,
+      @Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.reportingService = reportingService;
+    this.validator = validator;
+    this.dataSource = dataSource;
+  }
 
   /**
    * Create a report definition.
@@ -201,9 +213,7 @@ public class ReportingRestController
       headers.setContentDispositionFormData(filename, filename);
       headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
-      ResponseEntity<byte[]> response = new ResponseEntity<>(reportPDF, headers, HttpStatus.OK);
-
-      return response;
+      return new ResponseEntity<>(reportPDF, headers, HttpStatus.OK);
     }
     catch (ReportDefinitionNotFoundException e)
     {
