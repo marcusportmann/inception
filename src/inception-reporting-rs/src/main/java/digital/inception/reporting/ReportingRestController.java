@@ -31,6 +31,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
@@ -83,6 +84,7 @@ public class ReportingRestController
   @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.ReportDefinitionAdministration')")
   public void createReportDefinition(@ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
@@ -123,6 +125,7 @@ public class ReportingRestController
   @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.ReportDefinitionAdministration')")
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
       required = true)
@@ -226,6 +229,7 @@ public class ReportingRestController
   @RequestMapping(value = "/api/reportDefinitionSummaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Application.ReportDefinitionAdministration')")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
   {
@@ -246,6 +250,7 @@ public class ReportingRestController
   @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Application.ReportDefinitionAdministration')")
   public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
   {
@@ -271,6 +276,7 @@ public class ReportingRestController
   @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.ReportDefinitionAdministration')")
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the reportDefinition",
       required = true)
