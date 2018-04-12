@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 // Import Angular modules
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -34,17 +34,22 @@ import {
   SimpleContainerComponent,
 } from './components/layout';
 
+// Import Inception interceptors
+import { AuthorizationInterceptor } from "./interceptors/authorization-interceptor";
+
 // Import Inception services
 import { SecurityService } from './services/security/security.service';
 
 // Import 3rd party components
-import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
-import { BsDatepickerModule} from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SelectModule } from 'ng-select';
+import { StorageServiceModule } from "angular-webstorage-service";
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TimepickerModule } from 'ngx-bootstrap';
+
 
 @NgModule({
   imports: [
@@ -57,6 +62,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     BsDropdownModule.forRoot(),
     ChartsModule,
     SelectModule,
+    StorageServiceModule,
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
 
@@ -91,6 +97,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     BsDropdownModule,
     ChartsModule,
     SelectModule,
+    StorageServiceModule,
     TabsModule,
     TimepickerModule,
 
@@ -99,6 +106,11 @@ import { TimepickerModule } from 'ngx-bootstrap';
   providers: [{
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthorizationInterceptor,
+      multi: true
     },
     SecurityService]
 })
