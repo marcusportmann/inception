@@ -82,10 +82,10 @@ public class RestControllerError
   private String detail;
 
   /**
-   * The fully qualified name of the exception associated with the error.
+   * The type of error e.g. the fully qualified name of the exception associated with the error.
    */
   @JsonProperty
-  private String exception;
+  private String type;
 
   /**
    * The stack trace associated with the error.
@@ -143,7 +143,7 @@ public class RestControllerError
     }
     else if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
-      this.exception = cause.getClass().getName();
+      this.type = cause.getClass().getName();
 
       try
       {
@@ -200,13 +200,14 @@ public class RestControllerError
   }
 
   /**
-   * Returns the fully qualified name of the exception associated with the error.
+   * Returns the type of error e.g. the fully qualified name of the exception associated with the
+   * error.
    *
-   * @return the fully qualified name of the exception associated with the error
+   * @return the type of error
    */
-  public String getException()
+  public String getType()
   {
-    return exception;
+    return type;
   }
 
   /**
@@ -281,13 +282,13 @@ public class RestControllerError
   }
 
   /**
-   * Set the fully qualified name of the exception associated with the error.
+   * Set the type of error e.g. the fully qualified name of the exception associated with the error.
    *
-   * @param exception the fully qualified name of the exception associated with the error
+   * @param type the type of error
    */
-  public void setException(String exception)
+  public void setType(String type)
   {
-    this.exception = exception;
+    this.type = type;
   }
 
   /**

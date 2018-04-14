@@ -1,0 +1,7 @@
+
+
+interface Error {
+
+  type: string;
+
+}
