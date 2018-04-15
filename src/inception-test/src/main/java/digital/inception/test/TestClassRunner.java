@@ -24,7 +24,7 @@ import org.junit.runners.model.InitializationError;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.transaction.Transaction;
+//import javax.transaction.Transaction;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -76,41 +76,41 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
   {
     super.runChild(method, notifier);
 
-    checkForActiveTransactions(method,
-        TransactionManagerTransactionTracker.getActiveTransactionStackTraces());
+    //checkForActiveTransactions(method,
+    //    TransactionManagerTransactionTracker.getActiveTransactionStackTraces());
 
-    checkForActiveTransactions(method, UserTransactionTracker.getActiveTransactionStackTraces());
+    //checkForActiveTransactions(method, UserTransactionTracker.getActiveTransactionStackTraces());
 
     checkForOpenDatabaseConnections(method, DataSourceTracker.getActiveDatabaseConnections());
   }
 
-  private void checkForActiveTransactions(FrameworkMethod method, Map<Transaction,
-      StackTraceElement[]> activeTransactionStackTraces)
-  {
-    for (Transaction transaction : activeTransactionStackTraces.keySet())
-    {
-      StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
-
-      for (int i = 0; i < stackTrace.length; i++)
-      {
-        if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
-        {
-          LoggerFactory.getLogger(TestClassRunner.class).warn(
-              "Failed to successfully execute the test (" + method.getName() + "): Found an "
-              + "unexpected active transaction (" + transaction.toString() + ") that was "
-              + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class ("
-              + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
-
-          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-              + "): Found an unexpected active transaction (" + transaction.toString()
-              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
-        }
-      }
-    }
-  }
+//  private void checkForActiveTransactions(FrameworkMethod method, Map<Transaction,
+//      StackTraceElement[]> activeTransactionStackTraces)
+//  {
+//    for (Transaction transaction : activeTransactionStackTraces.keySet())
+//    {
+//      StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
+//
+//      for (int i = 0; i < stackTrace.length; i++)
+//      {
+//        if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber() != -1))
+//        {
+//          LoggerFactory.getLogger(TestClassRunner.class).warn(
+//              "Failed to successfully execute the test (" + method.getName() + "): Found an "
+//              + "unexpected active transaction (" + transaction.toString() + ") that was "
+//              + "started by the method (" + stackTrace[i + 1].getMethodName() + ") on the class ("
+//              + stackTrace[i + 1].getClassName() + ") on line ("
+//              + stackTrace[i + 1].getLineNumber() + ")");
+//
+//          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+//              + "): Found an unexpected active transaction (" + transaction.toString()
+//              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
+//              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+//              + stackTrace[i + 1].getLineNumber() + ")");
+//        }
+//      }
+//    }
+//  }
 
   private void checkForOpenDatabaseConnections(FrameworkMethod method, Map<Connection,
       StackTraceElement[]> activeDatabaseConnections)

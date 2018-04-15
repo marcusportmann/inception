@@ -14,18 +14,12 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
     if (session) {
 
-
-
-
-      /*
       const cloned = req.clone({
         headers: req.headers.set("Authorization",
-          "Bearer " + session.accessToken)
+          session.accessToken)
       });
-      */
 
-      //return next.handle(cloned);
-      return next.handle(req);
+      return next.handle(cloned);
     }
     else {
       return next.handle(req);

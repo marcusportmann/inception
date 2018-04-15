@@ -52,6 +52,12 @@ public class RestControllerError
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The type of error e.g. the fully qualified name of the exception associated with the error.
+   */
+  @JsonProperty
+  private String type;
+
+  /**
    * The URI for the HTTP request that resulted in the error.
    */
   @JsonProperty
@@ -80,12 +86,6 @@ public class RestControllerError
    */
   @JsonProperty
   private String detail;
-
-  /**
-   * The type of error e.g. the fully qualified name of the exception associated with the error.
-   */
-  @JsonProperty
-  private String type;
 
   /**
    * The stack trace associated with the error.
@@ -137,14 +137,14 @@ public class RestControllerError
       this.message = cause.getMessage();
     }
 
+    this.type = cause == null ? "Unknown" : cause.getClass().getName();
+
     if (cause instanceof org.springframework.security.access.AccessDeniedException)
     {
       responseStatus = HttpStatus.FORBIDDEN;
     }
     else if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
-      this.type = cause.getClass().getName();
-
       try
       {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

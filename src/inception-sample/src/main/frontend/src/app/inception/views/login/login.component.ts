@@ -16,6 +16,7 @@ import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
 import {TokenResponse} from "../../services/security/token-response";
 import {catchError, map} from "rxjs/operators";
 import {Observable} from "rxjs/Rx";
+import {Error} from '../../core/error';
 
 
 @Component({
@@ -53,20 +54,63 @@ export class LoginComponent {
 
   public onGetCodes() {
 
-    this.httpClient.get<any>('http://localhost:8080/api/codeCategories').pipe(
-      map(data => {
+    let x:number = 1;
+    let y:number = 2;
 
-        console.log('data = ' + data);
+    if (x == y) {
+
+      this.httpClient.get<any>('http://localhost:8080/api/codeCategories').pipe(
+        map(data => {
+
+          console.log('data = ' + data);
 
 
-      }), catchError((error: HttpErrorResponse) => {
+        }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        console.log('catchError = ', error);
+          console.log('httpErrorResponse = ', httpErrorResponse);
+
+          console.log('httpErrorResponse.error = ', httpErrorResponse.error);
+
+          let error: Error = httpErrorResponse.error as Error;
+
+          // TODO: Map different HTTP error codes to specific error types -- MARCUS
+
+          return Observable.throw(new TestError(httpErrorResponse.status));
+
+        })).subscribe(data => {
+
+          console.log('data = ', data);
+
+
+        },
+        error => {
+
+          if (error instanceof TestError) {
+            console.log('Test error = ', error);
+          }
+          else {
+            console.log('Unknown error = ', error);
+          }
+        });
+    }
+
+
+    let codeCategory = {};
+
+    let options = { headers: { 'Content-Type': 'application/json' } };
+
+    this.httpClient.post<void>('http://localhost:20000/api/codeCategories', codeCategory, options).pipe(
+      catchError((httpErrorResponse: HttpErrorResponse) => {
+
+        console.log('httpErrorResponse = ', httpErrorResponse);
+
+        console.log('httpErrorResponse.error = ', httpErrorResponse.error);
+
+        let error:Error = httpErrorResponse.error as Error;
 
         // TODO: Map different HTTP error codes to specific error types -- MARCUS
 
-
-        return Observable.throw(new TestError(error.status));
+        return Observable.throw(new TestError(httpErrorResponse.status));
 
       })).subscribe(data => {
 
@@ -82,8 +126,9 @@ export class LoginComponent {
         else {
           console.log('Unknown error = ', error);
         }
-
       });
+
+
 
   }
 
