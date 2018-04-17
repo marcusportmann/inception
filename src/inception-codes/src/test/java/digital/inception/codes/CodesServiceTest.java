@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.codes.test;
+package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 

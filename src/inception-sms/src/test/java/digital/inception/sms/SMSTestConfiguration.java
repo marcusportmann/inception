@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.sms.test;
+package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 

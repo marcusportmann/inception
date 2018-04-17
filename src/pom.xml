@@ -10,35 +10,6 @@
 
   <packaging>pom</packaging>
 
-  <!--
-  <repositories>
-    <repository> 
-      <id>spring-milestone</id>
-      <url>http://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>spring-libs-milestone</id>
-      <url>https://repo.spring.io/libs-milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>spring-milestone</id>
-      <url>http://repo.spring.io/milestone</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>  
-  -->
-
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -55,15 +26,20 @@
     <atomikos.version>4.0.6</atomikos.version>
     <cglib.version>3.2.6</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.2.2</cxf.version>
+    <cxf.version>3.2.4</cxf.version>
     <glassfish-el.version>3.0.1-b08</glassfish-el.version>
     <groovy.version>2.4.13</groovy.version>
     <hazelcast.version>3.9.2</hazelcast.version>
     <hibernate-validator.version>6.0.7.Final</hibernate-validator.version>
     <jackson.version>2.9.5</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
+    <java-jaxb.version>2.3.0</java-jaxb.version>
+    <javax-activation.version>1.1.1</javax-activation.version>
+    <javax-annotation-api.version>1.3.2</javax-annotation-api.version>
+    <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <javax-transaction.version>1.3</javax-transaction.version>
     <jaxb-xew-plugin.version>1.9</jaxb-xew-plugin.version>
+    <jaxws-api.version>2.3.0</jaxws-api.version>
     <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.2.1.RELEASE</spring-security-oauth2.version>
@@ -97,6 +73,16 @@
         <version>${mssql-jdbc.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-core</artifactId>
+        <version>${java-jaxb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${java-jaxb.version}</version>
+      </dependency>
+      <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
@@ -115,6 +101,26 @@
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
         <version>${swagger-annotations.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>${javax-activation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>${javax-annotation-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.jws</groupId>
+        <artifactId>jsr181-api</artifactId>
+        <version>${jsr181-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.ws</groupId>
+        <artifactId>jaxws-api</artifactId>
+        <version>${jaxws-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -183,22 +189,12 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-codes-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-configuration</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-configuration-rs</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-configuration-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -228,22 +224,12 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-messaging-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-reporting</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-reporting-rs</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-reporting-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -278,11 +264,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-scheduler-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-security</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -293,22 +274,12 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-security-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-sms</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-sms-rs</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-sms-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -335,16 +306,20 @@
   </dependencyManagement>
 
   <modules>
-
-
     <module>inception-application</module>
     <module>inception-codes</module>
     <module>inception-core</module>
     <module>inception-json</module>
+    <module>inception-sms</module>
     <module>inception-test</module>
     <module>inception-transaction</module>
-
+    <module>inception-ws</module>
     <!--
+
+
+
+
+
 
 
 
@@ -355,35 +330,29 @@
     <module>inception-cache</module>
 
     <module>inception-codes-rs</module>
-    <module>inception-codes-ws</module>
+
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
-    <module>inception-configuration-ws</module>
 
 
     <module>inception-kafka</module>
     <module>inception-messaging</module>
     <module>inception-messaging-rs</module>
-    <module>inception-messaging-ws</module>
     <module>inception-reporting</module>
     <module>inception-reporting-rs</module>
-    <module>inception-reporting-ws</module>
     <module>inception-rs</module>
     <module>inception-rs-oauth-authorization</module>
     <module>inception-rs-oauth-resource</module>
     <module>inception-sample</module>
     <module>inception-scheduler</module>
     <module>inception-scheduler-rs</module>
-    <module>inception-scheduler-ws</module>
     <module>inception-security</module>
     <module>inception-security-rs</module>
-    <module>inception-security-ws</module>
-    <module>inception-sms</module>
+
     <module>inception-sms-rs</module>
-    <module>inception-sms-ws</module>
 
     <module>inception-validation</module>
-    <module>inception-ws</module>
+
     -->
   </modules>
 
@@ -396,15 +365,6 @@
         <configuration>
           <release>9</release>
         </configuration>
-        <!--
-        <dependencies>
-          <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>6.1.1</version>
-          </dependency>
-        </dependencies>
-        -->
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -429,6 +389,32 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- Set wsimport for Windows/Linux -->
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <tool.wsimport>${java.home}/bin/wsimport.exe</tool.wsimport>
+      </properties>
+    </profile>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>!windows</family>
+        </os>
+      </activation>
+      <properties>
+        <tool.wsimport>${java.home}/bin/wsimport</tool.wsimport>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
 

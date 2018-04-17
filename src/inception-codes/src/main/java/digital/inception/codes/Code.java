@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -40,10 +39,6 @@ import java.util.UUID;
 @ApiModel(value = "Code")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "codeCategoryId", "name", "value" })
-@XmlRootElement(name = "Code", namespace = "http://codes.inception.digital")
-@XmlType(name = "Code", namespace = "http://codes.inception.digital",
-    propOrder = { "id", "codeCategoryId", "name", "value" })
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Code
   implements Serializable
 {
@@ -57,7 +52,6 @@ public class Code
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category the code is associated with",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "CodeCategoryId", required = true)
   @NotNull
   private UUID codeCategoryId;
 
@@ -66,7 +60,6 @@ public class Code
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the code", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 4000)
   private String id;
@@ -76,7 +69,6 @@ public class Code
    */
   @ApiModelProperty(value = "The name of the code", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 4000)
   private String name;
@@ -86,7 +78,6 @@ public class Code
    */
   @ApiModelProperty(value = "The value for the code", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
   private String value;

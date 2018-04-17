@@ -470,6 +470,8 @@ public class SMSService
   public boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException
   {
+    com.sun.xml.bind.v2.model.impl.RuntimeBuiltinLeafInfoImpl xxx;
+
     try
     {
       if (StringUtil.isNullOrEmpty(message))

@@ -10,7 +10,6 @@
     </repository>
   </repositories>
 
-  <groupId>digital.inception</groupId>
   <artifactId>inception-reporting</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>inception-reporting</name>

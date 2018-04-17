@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package digital.inception.sms.test;
+package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.sms.ISMSService;
 import digital.inception.test.TestClassRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,6 +55,6 @@ public class SMSServiceTest
   public void test()
     throws Exception
   {
-    // smsService.sendSMSSynchronously(1, "0832763107", "Testing 1.. 2.. 3..");
+    //smsService.sendSMSSynchronously(1, "0832763107", "Testing 3.. 2.. 1..");
   }
 }
