@@ -24,6 +24,7 @@ import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -33,7 +34,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,7 +53,7 @@ import java.util.*;
 @Service
 @SuppressWarnings("unused")
 public class CodesService
-  implements ICodesService
+  implements ICodesService, InitializingBean
 {
   /**
    * The path to the code provider configuration files (META-INF/code-providers.xml) on the
@@ -96,6 +96,30 @@ public class CodesService
   {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
+  }
+
+  /**
+   * Initialize the bean.
+   */
+  @Override
+  public void afterPropertiesSet()
+  {
+    logger.info("Initialising the Codes Service");
+
+    codeProviders = new ArrayList<>();
+
+    try
+    {
+      // Read the codes configuration
+      readCodeProviderConfigurations();
+
+      // Initialise the code providers
+      initCodeProviders();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialise the Codes Service", e);
+    }
   }
 
   /**
@@ -814,30 +838,6 @@ public class CodesService
           "Failed to retrieve the number of codes for the code category (%s)", codeCategoryId), e);
     }
 
-  }
-
-  /**
-   * Initialise the Codes Service.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info("Initialising the Codes Service");
-
-    codeProviders = new ArrayList<>();
-
-    try
-    {
-      // Read the codes configuration
-      readCodeProviderConfigurations();
-
-      // Initialise the code providers
-      initCodeProviders();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Codes Service", e);
-    }
   }
 
   /**

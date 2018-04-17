@@ -3,7 +3,7 @@ module digital.inception.core
   requires java.naming;
   requires java.sql;
   requires java.xml;
-  //requires java.xml.bind;
+  requires java.xml.bind;
 
   requires slf4j.api;
   requires spring.beans;

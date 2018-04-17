@@ -21,7 +21,7 @@ package digital.inception.application;
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.StringUtil;
-import digital.inception.json.databind.*;
+import digital.inception.json.databind.DateTimeModule;
 import io.undertow.Undertow;
 import org.apache.http.client.HttpClient;
 import org.apache.http.config.Registry;
@@ -34,7 +34,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,7 +41,6 @@ import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -61,19 +59,14 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-//import javax.xml.ws.Endpoint;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
-import java.util.Arrays;
+import java.util.Collections;
 
 //~--- JDK imports ------------------------------------------------------------
+
+//import javax.xml.ws.Endpoint;
 
 /**
  * The <code>ApplicationBase</code> class provides the base class that application classes can be
@@ -259,12 +252,6 @@ public abstract class ApplicationBase
   private String wssX509CertificateTokenProfileTrustStorePassword;
 
   /**
-   * The Spring application context.
-   */
-  @Autowired
-  private ApplicationContext applicationContext;
-
-  /**
    * Returns the cross-origin resource sharing (CORS) filter registration bean.
    *
    * @return the cross-origin resource sharing (CORS) filter registration bean
@@ -279,15 +266,15 @@ public abstract class ApplicationBase
       CorsConfiguration config = new CorsConfiguration();
       config.applyPermitDefaultValues();
       config.setAllowCredentials(true);
-      config.setAllowedOrigins(Arrays.asList("*"));
-      config.setAllowedHeaders(Arrays.asList("*"));
-      config.setAllowedMethods(Arrays.asList("*"));
-      config.setExposedHeaders(Arrays.asList("content-length"));
+      config.setAllowedOrigins(Collections.singletonList("*"));
+      config.setAllowedHeaders(Collections.singletonList("*"));
+      config.setAllowedMethods(Collections.singletonList("*"));
+      config.setExposedHeaders(Collections.singletonList("content-length"));
       config.setMaxAge(3600L);
       source.registerCorsConfiguration("/**", config);
     }
 
-    FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+    FilterRegistrationBean<?> bean = new FilterRegistrationBean<>(new CorsFilter(source));
     bean.setOrder(0);
 
     return bean;
@@ -521,8 +508,6 @@ public abstract class ApplicationBase
 
     if (isServerSecurityEnabled)
     {
-      //Undertow.Builder xxx;
-
       factory.addBuilderCustomizers((UndertowBuilderCustomizer) builder ->
           {
             int serverSSLHttpListenerPort = (serverSecurityPort != null)
@@ -692,82 +677,119 @@ public abstract class ApplicationBase
         ;
   }
 
-//  /**
-//   * Create the web service endpoint.
-//   * <p/>
-//   * Requires the Apache CXF framework to have been initialised by adding the
-//   * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b>, <b>org.apache.cxf:cxf-rt-transports-http</b>
-//   * <b>org.apache.cxf:cxf-rt-ws-security</b> and <b>org.apache.wss4j:wss4j-ws-security-common</b>
-//   * Maven dependencies to the project.
-//   *
-//   * @param name           the web service name
-//   * @param implementation the web service implementation
-//   *
-//   * @return the web service endpoint
-//   */
-//  @SuppressWarnings("ConstantConditions")
-//  protected Endpoint createWebServiceEndpoint(String name, Object implementation)
+///**
+// * Create the web service endpoint.
+// * <p/>
+// * Requires the Apache CXF framework to have been initialised by adding the
+// * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b>, <b>org.apache.cxf:cxf-rt-transports-http</b>
+// * <b>org.apache.cxf:cxf-rt-ws-security</b> and <b>org.apache.wss4j:wss4j-ws-security-common</b>
+// * Maven dependencies to the project.
+// *
+// * @param name           the web service name
+// * @param implementation the web service implementation
+// *
+// * @return the web service endpoint
+// */
+//@SuppressWarnings("ConstantConditions")
+//protected Endpoint createWebServiceEndpoint(String name, Object implementation)
+//{
+//  try
 //  {
-//    try
+//    Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
+//        .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
+//
+//    Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass(
+//        "org.apache.cxf.Bus");
+//
+//    Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
+//        "org.apache.cxf.bus.spring.SpringBus");
+//
+//    Object springBus = applicationContext.getBean(springBusClass);
+//
+//    Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass,
+//        Object.class);
+//
+//    Endpoint endpoint = constructor.newInstance(springBus, implementation);
+//
+//    Method publishMethod = endpointImplClass.getMethod("publish", String.class);
+//
+//    publishMethod.invoke(endpoint, "/" + name);
+//
+//    applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
+//
+//    if (isWSSX509CertificateTokenProfileEnabled)
 //    {
-//      Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
-//          .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
-//
-//      Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass(
-//          "org.apache.cxf.Bus");
-//
-//      Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
-//          "org.apache.cxf.bus.spring.SpringBus");
-//
-//      Object springBus = applicationContext.getBean(springBusClass);
-//
-//      Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass,
-//          Object.class);
-//
-//      Endpoint endpoint = constructor.newInstance(springBus, implementation);
-//
-//      Method publishMethod = endpointImplClass.getMethod("publish", String.class);
-//
-//      publishMethod.invoke(endpoint, "/" + name);
-//
-//      applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
-//
-//      if (isWSSX509CertificateTokenProfileEnabled)
+//      try
 //      {
+//        if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreType))
+//        {
+//          throw new ConfigurationException(
+//              "The type was not specified for the server SSL key store");
+//        }
+//
+//        if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePath))
+//        {
+//          throw new ConfigurationException(
+//              "The path was not specified for the server SSL key store");
+//        }
+//
+//        if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePassword))
+//        {
+//          throw new ConfigurationException(
+//              "The password was not specified for the server SSL key store");
+//        }
+//
+//        if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
+//        {
+//          throw new ConfigurationException(
+//              "The alias was not specified for the server SSL key store");
+//        }
+//
+//        KeyStore keyStore;
+//
 //        try
 //        {
-//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreType))
+//          keyStore = CryptoUtil.loadKeyStore(wssX509CertificateTokenProfileKeyStoreType,
+//              wssX509CertificateTokenProfileKeyStorePath,
+//              wssX509CertificateTokenProfileKeyStorePassword,
+//              wssX509CertificateTokenProfileKeyStoreAlias);
+//        }
+//        catch (Throwable e)
+//        {
+//          throw new ApplicationException(
+//              "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
+//              e);
+//        }
+//
+//        KeyStore trustStore = keyStore;
+//
+//        if ((!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
+//            || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
+//            || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
+//        {
+//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
 //          {
 //            throw new ConfigurationException(
-//                "The type was not specified for the server SSL key store");
+//                "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
 //          }
 //
-//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePath))
+//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
 //          {
 //            throw new ConfigurationException(
-//                "The path was not specified for the server SSL key store");
+//                "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
 //          }
 //
-//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePassword))
+//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword))
 //          {
 //            throw new ConfigurationException(
-//                "The password was not specified for the server SSL key store");
+//                "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
 //          }
-//
-//          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
-//          {
-//            throw new ConfigurationException(
-//                "The alias was not specified for the server SSL key store");
-//          }
-//
-//          KeyStore keyStore;
 //
 //          try
 //          {
-//            keyStore = CryptoUtil.loadKeyStore(wssX509CertificateTokenProfileKeyStoreType,
-//                wssX509CertificateTokenProfileKeyStorePath,
-//                wssX509CertificateTokenProfileKeyStorePassword,
-//                wssX509CertificateTokenProfileKeyStoreAlias);
+//            trustStore = CryptoUtil.loadTrustStore(wssX509CertificateTokenProfileTrustStoreType,
+//                wssX509CertificateTokenProfileTrustStorePath,
+//                wssX509CertificateTokenProfileTrustStorePassword);
 //          }
 //          catch (Throwable e)
 //          {
@@ -775,82 +797,45 @@ public abstract class ApplicationBase
 //                "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
 //                e);
 //          }
-//
-//          KeyStore trustStore = keyStore;
-//
-//          if ((!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
-//              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
-//              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
-//          {
-//            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
-//            {
-//              throw new ConfigurationException(
-//                  "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
-//            }
-//
-//            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
-//            {
-//              throw new ConfigurationException(
-//                  "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
-//            }
-//
-//            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword))
-//            {
-//              throw new ConfigurationException(
-//                  "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
-//            }
-//
-//            try
-//            {
-//              trustStore = CryptoUtil.loadTrustStore(wssX509CertificateTokenProfileTrustStoreType,
-//                  wssX509CertificateTokenProfileTrustStorePath,
-//                  wssX509CertificateTokenProfileTrustStorePassword);
-//            }
-//            catch (Throwable e)
-//            {
-//              throw new ApplicationException(
-//                  "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
-//                  e);
-//            }
-//          }
-//
-//          Class<?> cxfWSSX509CertificateTokenProfileEndpointConfigurator = Thread.currentThread()
-//              .getContextClassLoader().loadClass(
-//              "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
-//
-//          Method configureEndpointMethod =
-//              cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod("configureEndpoint",
-//              Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
-//
-//          configureEndpointMethod.invoke(null, endpoint, keyStore,
-//              wssX509CertificateTokenProfileKeyStorePassword,
-//              wssX509CertificateTokenProfileKeyStoreAlias, trustStore);
 //        }
-//        catch (ClassNotFoundException e)
-//        {
-//          throw new ApplicationException(
-//              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-//              + name + "): The inception-ws library could not be found", e);
-//        }
-//        catch (Throwable e)
-//        {
-//          throw new ApplicationException(
-//              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-//              + name + ")", e);
-//        }
+//
+//        Class<?> cxfWSSX509CertificateTokenProfileEndpointConfigurator = Thread.currentThread()
+//            .getContextClassLoader().loadClass(
+//            "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
+//
+//        Method configureEndpointMethod =
+//            cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod("configureEndpoint",
+//            Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
+//
+//        configureEndpointMethod.invoke(null, endpoint, keyStore,
+//            wssX509CertificateTokenProfileKeyStorePassword,
+//            wssX509CertificateTokenProfileKeyStoreAlias, trustStore);
 //      }
+//      catch (ClassNotFoundException e)
+//      {
+//        throw new ApplicationException(
+//            "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
+//            + name + "): The inception-ws library could not be found", e);
+//      }
+//      catch (Throwable e)
+//      {
+//        throw new ApplicationException(
+//            "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
+//            + name + ")", e);
+//      }
+//    }
 //
-//      return endpoint;
-//    }
-//    catch (ClassNotFoundException e)
-//    {
-//      throw new ApplicationException("Failed to create the endpoint for the service (" + name
-//          + "): The Apache CXF framework has not been initialised", e);
-//    }
-//    catch (Throwable e)
-//    {
-//      throw new ApplicationException("Failed to create the endpoint for the service (" + name
-//          + ")", e);
-//    }
+//    return endpoint;
 //  }
+//  catch (ClassNotFoundException e)
+//  {
+//    throw new ApplicationException("Failed to create the endpoint for the service (" + name
+//        + "): The Apache CXF framework has not been initialised", e);
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new ApplicationException("Failed to create the endpoint for the service (" + name
+//        + ")", e);
+//  }
+//}
 }
