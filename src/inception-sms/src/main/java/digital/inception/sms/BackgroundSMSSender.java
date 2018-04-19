@@ -46,7 +46,7 @@ public class BackgroundSMSSender
   private ISMSService smsService;
 
   /**
-   * Initialize the bean.
+   * Initialize the Background SMS Sender.
    */
   @Override
   public void afterPropertiesSet()

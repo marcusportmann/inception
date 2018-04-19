@@ -99,7 +99,7 @@ public class CodesService
   }
 
   /**
-   * Initialize the bean.
+   * Initialize the Codes Service.
    */
   @Override
   public void afterPropertiesSet()

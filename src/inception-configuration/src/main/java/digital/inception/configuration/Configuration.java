@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -39,10 +38,6 @@ import java.io.Serializable;
 @ApiModel(value = "Configuration")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "key", "value", "description" })
-@XmlRootElement(name = "Configuration", namespace = "http://configuration.inception.digital")
-@XmlType(name = "Configuration", namespace = "http://configuration.inception.digital",
-    propOrder = { "key", "value", "description" })
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Configuration
   implements Serializable
 {
@@ -53,7 +48,6 @@ public class Configuration
    */
   @ApiModelProperty(value = "The key used to uniquely identify the configuration", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Key", required = true)
   @NotNull
   @Size(min = 1, max = 4000)
   private String key;
@@ -63,7 +57,6 @@ public class Configuration
    */
   @ApiModelProperty(value = "The value for the configuration", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
   private String value;
@@ -73,7 +66,6 @@ public class Configuration
    */
   @ApiModelProperty(value = "The description for the configuration", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
   private String description;

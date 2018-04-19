@@ -22,6 +22,7 @@ import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
@@ -46,7 +46,7 @@ import java.util.Date;
 @Service
 @SuppressWarnings("unused")
 public class SchedulerService
-  implements ISchedulerService
+  implements ISchedulerService, InitializingBean
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
@@ -89,6 +89,15 @@ public class SchedulerService
   {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
+  }
+
+  /**
+   * Initialize the Scheduler Service.
+   */
+  @Override
+  public void afterPropertiesSet()
+  {
+    logger.info(String.format("Initialising the Scheduler Service (%s)", instanceName));
   }
 
   /**
@@ -219,7 +228,7 @@ public class SchedulerService
     try
     {
       // Create a new instance of the job
-      Object jobObject = jobClass.newInstance();
+      Object jobObject = jobClass.getConstructor().newInstance();
 
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob))
@@ -640,15 +649,6 @@ public class SchedulerService
       throw new SchedulerServiceException(String.format(
           "Failed to increment the execution attempts for the job (%s)", jobId), e);
     }
-  }
-
-  /**
-   * Initialise the Scheduler Service.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info(String.format("Initialising the Scheduler Service (%s)", instanceName));
   }
 
   /**

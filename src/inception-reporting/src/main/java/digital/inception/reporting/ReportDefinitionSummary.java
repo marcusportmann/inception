@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,9 +26,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
@@ -39,10 +40,6 @@ import java.util.UUID;
 @ApiModel(value = "ReportDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name" })
-@XmlRootElement(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital")
-@XmlType(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital",
-  propOrder = { "id", "name" })
-@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportDefinitionSummary
   implements Serializable
@@ -53,10 +50,9 @@ public class ReportDefinitionSummary
    * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
   @ApiModelProperty(
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
-    required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+      required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @NotNull
   private UUID id;
 
@@ -65,7 +61,6 @@ public class ReportDefinitionSummary
    */
   @ApiModelProperty(value = "The name of the report definition", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 256)
   private String name;

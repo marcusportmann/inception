@@ -22,8 +22,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.core.xml.LocalDateAdapter;
-import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,8 +30,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,10 +44,6 @@ import java.time.LocalDateTime;
 @ApiModel(value = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
-@XmlRootElement(name = "Data", namespace = "http://sample.inception.digital")
-@XmlType(name = "Data", namespace = "http://sample.inception.digital",
-    propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
-@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "SAMPLE", name = "DATA")
 @SuppressWarnings({ "unused", "WeakerAccess" })
@@ -65,7 +57,6 @@ public class Data
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the data", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @Id
   @NotNull
   @Column(name = "ID", nullable = false)
@@ -76,7 +67,6 @@ public class Data
    */
   @ApiModelProperty(value = "The name for the data", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @NotNull
   @Column(name = "NAME", nullable = false)
   private String name;
@@ -86,7 +76,6 @@ public class Data
    */
   @ApiModelProperty(value = "The string string value for the data")
   @JsonProperty
-  @XmlElement(name = "StringValue")
   @Column(name = "STRING_VALUE")
   private String stringValue;
 
@@ -95,7 +84,6 @@ public class Data
    */
   @ApiModelProperty(value = "The integer value for the data")
   @JsonProperty
-  @XmlElement(name = "IntegerValue")
   @Column(name = "INTEGER_VALUE")
   private Integer integerValue;
 
@@ -105,9 +93,6 @@ public class Data
   @ApiModelProperty(value = "The date value for the data")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
   @Column(name = "DATE_VALUE")
   private LocalDate dateValue;
 
@@ -116,9 +101,6 @@ public class Data
    */
   @ApiModelProperty(value = "The timestamp value for the data")
   @JsonProperty
-  @XmlElement(name = "TimestampValue")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
   @Column(name = "TIMESTAMP_VALUE")
   public LocalDateTime timestampValue;
 

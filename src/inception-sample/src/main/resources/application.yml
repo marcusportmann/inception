@@ -83,7 +83,8 @@ application:
       path: classpath:META-INF/Sample.jks
       password: Sample
 
-  cacheManager:
+  cache:
+    enabled: true
     cluster:
       port: 15000
       name: test-cluster

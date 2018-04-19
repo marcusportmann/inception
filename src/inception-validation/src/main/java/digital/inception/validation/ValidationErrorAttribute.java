@@ -34,7 +34,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ValidationErrorAttribute")
 @JsonPropertyOrder({ "name", "value" })
-@XmlRootElement(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital")
+@XmlRootElement(name = "ValidationErrorAttribute",
+    namespace = "http://validation.inception.digital")
 @XmlType(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital",
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)

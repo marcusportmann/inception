@@ -307,34 +307,13 @@
 
   <modules>
     <module>inception-application</module>
-    <module>inception-codes</module>
-    <module>inception-core</module>
-    <module>inception-json</module>
-    <module>inception-sms</module>
-    <module>inception-test</module>
-    <module>inception-transaction</module>
-    <module>inception-ws</module>
-    <!--
-
-
-
-
-
-
-
-
-
-
-
-
     <module>inception-cache</module>
-
+    <module>inception-codes</module>
     <module>inception-codes-rs</module>
-
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
-
-
+    <module>inception-core</module>
+    <module>inception-json</module>
     <module>inception-kafka</module>
     <module>inception-messaging</module>
     <module>inception-messaging-rs</module>
@@ -348,12 +327,12 @@
     <module>inception-scheduler-rs</module>
     <module>inception-security</module>
     <module>inception-security-rs</module>
-
+    <module>inception-sms</module>
     <module>inception-sms-rs</module>
-
+    <module>inception-test</module>
+    <module>inception-transaction</module>
     <module>inception-validation</module>
-
-    -->
+    <module>inception-ws</module>
   </modules>
 
   <build>
@@ -363,7 +342,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.7.0</version>
         <configuration>
-          <release>9</release>
+          <release>10</release>
         </configuration>
       </plugin>
       <plugin>

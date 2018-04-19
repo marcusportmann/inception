@@ -25,8 +25,7 @@ package digital.inception.scheduler;
  * @author Marcus Portmann
  */
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class SchedulerServiceException
-  extends Exception
+public class SchedulerServiceException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

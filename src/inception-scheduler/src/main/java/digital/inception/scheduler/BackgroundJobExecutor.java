@@ -20,11 +20,11 @@ package digital.inception.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor
+  implements InitializingBean
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
@@ -73,6 +74,42 @@ public class BackgroundJobExecutor
    * The executor responsible for processing jobs.
    */
   private Executor jobProcessor;
+
+  /**
+   * Initialize the Background Job Executor.
+   */
+  @Override
+  public void afterPropertiesSet()
+  {
+    logger.info("Initialising the Background Job Executor");
+
+    if (schedulerService != null)
+    {
+      // Initialise the job processor
+      this.jobProcessor = new ThreadPoolExecutor(DEFAULT_INITIAL_PROCESSING_THREADS,
+          DEFAULT_MAXIMUM_PROCESSING_THREADS, DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
+          TimeUnit.MINUTES, new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
+
+      /*
+       * Reset any locks for jobs that were previously being executed.
+       */
+      try
+      {
+        logger.info("Resetting the locks for the jobs being executed");
+
+        schedulerService.resetJobLocks(JobStatus.EXECUTING, JobStatus.SCHEDULED);
+      }
+      catch (Throwable e)
+      {
+        logger.error("Failed to reset the locks for the jobs being executed", e);
+      }
+    }
+    else
+    {
+      logger.error("Failed to initialise the Background Job Executor: "
+          + "The Scheduler Service was NOT injected");
+    }
+  }
 
   /**
    * Execute the jobs.
@@ -116,42 +153,6 @@ public class BackgroundJobExecutor
       }
 
       jobProcessor.execute(new JobExecutor(schedulerService, job));
-    }
-  }
-
-  /**
-   * Initialise the Background Job Executor.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info("Initialising the Background Job Executor");
-
-    if (schedulerService != null)
-    {
-      // Initialise the job processor
-      this.jobProcessor = new ThreadPoolExecutor(DEFAULT_INITIAL_PROCESSING_THREADS,
-          DEFAULT_MAXIMUM_PROCESSING_THREADS, DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
-          TimeUnit.MINUTES, new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
-
-      /*
-       * Reset any locks for jobs that were previously being executed.
-       */
-      try
-      {
-        logger.info("Resetting the locks for the jobs being executed");
-
-        schedulerService.resetJobLocks(JobStatus.EXECUTING, JobStatus.SCHEDULED);
-      }
-      catch (Throwable e)
-      {
-        logger.error("Failed to reset the locks for the jobs being executed", e);
-      }
-    }
-    else
-    {
-      logger.error("Failed to initialise the Background Job Executor: "
-          + "The Scheduler Service was NOT injected");
     }
   }
 }
