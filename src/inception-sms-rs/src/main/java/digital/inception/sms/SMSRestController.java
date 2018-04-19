@@ -37,21 +37,10 @@ import javax.validation.Validator;
 public class SMSRestController
 {
   /* SMS Service */
-  private final ISMSService smsService;
+  @Autowired
+  private ISMSService smsService;
 
   /* Validator */
-  private final Validator validator;
-
-  /**
-   * Constructs a new <code>SMSRestController</code>.
-   *
-   * @param smsService the SMS Service
-   * @param validator  the validator
-   */
   @Autowired
-  public SMSRestController(ISMSService smsService, Validator validator)
-  {
-    this.smsService = smsService;
-    this.validator = validator;
-  }
+  private Validator validator;
 }

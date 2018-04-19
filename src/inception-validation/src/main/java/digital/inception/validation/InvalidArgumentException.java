@@ -21,6 +21,9 @@ package digital.inception.validation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -34,10 +37,19 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
+@WebFault(name = "InvalidArgumentException",
+    targetNamespace = "http://validation.inception.digital",
+    faultBean = "digital.inception.validation.InvalidArgumentError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings("unused")
 public class InvalidArgumentException extends Exception
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The invalid argument error information.
+   */
+  private InvalidArgumentError invalidArgumentError;
 
   /**
    * The name of the invalid argument.
@@ -60,6 +72,7 @@ public class InvalidArgumentException extends Exception
     super();
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -75,6 +88,7 @@ public class InvalidArgumentException extends Exception
 
     this.name = name;
     this.validationErrors = validationErrors;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -88,6 +102,7 @@ public class InvalidArgumentException extends Exception
     super(message);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -104,6 +119,7 @@ public class InvalidArgumentException extends Exception
     super(cause);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -121,6 +137,7 @@ public class InvalidArgumentException extends Exception
 
     this.name = name;
     this.validationErrors = validationErrors;
+    this.invalidArgumentError = new InvalidArgumentError(this);
   }
 
   /**
@@ -136,6 +153,27 @@ public class InvalidArgumentException extends Exception
     super(message, cause);
 
     this.name = name;
+    this.invalidArgumentError = new InvalidArgumentError(this);
+  }
+
+  /**
+   * Returns the fault info.
+   *
+   * @return the fault info
+   */
+  public InvalidArgumentError getFaultInfo()
+  {
+    return invalidArgumentError;
+  }
+
+  /**
+   * Returns the invalid argument error info.
+   *
+   * @return the invalid argument error info
+   */
+  public InvalidArgumentError getInvalidArgumentError()
+  {
+    return invalidArgumentError;
   }
 
   /**

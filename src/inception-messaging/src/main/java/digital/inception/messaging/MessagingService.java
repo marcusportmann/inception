@@ -124,26 +124,15 @@ public class MessagingService
   /**
    * The Spring application context.
    */
-  private final ApplicationContext applicationContext;
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the database.
    */
-  private final DataSource dataSource;
-
-  /**
-   * Constructs a new <code>MessagingService</code>.
-   *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the database
-   */
   @Autowired
-  public MessagingService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource)
-  {
-    this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
-  }
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
    * Have all the parts been queued for assembly for the message?

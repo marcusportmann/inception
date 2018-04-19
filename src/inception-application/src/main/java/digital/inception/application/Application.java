@@ -24,8 +24,6 @@ import digital.inception.core.support.MergedMessageSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -49,7 +47,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-//import javax.annotation.PreDestroy;
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import java.sql.Connection;
@@ -76,8 +74,7 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableTransactionManagement
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public abstract class Application extends ApplicationBase implements
-  DisposableBean
+public abstract class Application extends ApplicationBase
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -127,16 +124,6 @@ public abstract class Application extends ApplicationBase implements
    * Constructs a new <code>Application</code>.
    */
   public Application() {}
-
-  /**
-   * Destroy the bean.
-   */
-  @Override
-  public void destroy()
-    throws Exception
-  {
-    shutdownInMemoryApplicationDatabase();
-  }
 
   /**
    * Returns the application entity manager factory bean associated with the application data
@@ -475,6 +462,7 @@ public abstract class Application extends ApplicationBase implements
   /**
    * Shutdown the in-memory application database if required.
    */
+  @PreDestroy
   protected void shutdownInMemoryApplicationDatabase()
   {
     if (dataSource != null)

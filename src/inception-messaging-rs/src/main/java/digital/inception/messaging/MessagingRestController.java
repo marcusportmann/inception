@@ -37,21 +37,10 @@ import javax.validation.Validator;
 public class MessagingRestController
 {
   /* Messaging Service */
-  private final IMessagingService messagingService;
+  @Autowired
+  private IMessagingService messagingService;
 
   /* Validator */
-  private final Validator validator;
-
-  /**
-   * Constructs a new <code>MessagingRestController</code>.
-   *
-   * @param messagingService the Messaging Service
-   * @param validator        the validator
-   */
   @Autowired
-  public MessagingRestController(IMessagingService messagingService, Validator validator)
-  {
-    this.messagingService = messagingService;
-    this.validator = validator;
-  }
+  private Validator validator;
 }

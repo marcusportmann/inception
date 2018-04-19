@@ -18,8 +18,13 @@ package digital.inception.sample.model;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -33,8 +38,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
     reason = "An error has occurred and the service is unable to process the request at this time")
+@WebFault(name = "SampleServiceException", targetNamespace = "http://sample.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class SampleServiceException extends Exception
+public class SampleServiceException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

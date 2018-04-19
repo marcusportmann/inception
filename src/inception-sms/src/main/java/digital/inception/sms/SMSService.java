@@ -76,17 +76,21 @@ public class SMSService
   /**
    * The Spring application context.
    */
-  private final ApplicationContext applicationContext;
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the application database.
    */
-  private final DataSource dataSource;
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
    * The ID Generator.
    */
-  private final IDGenerator idGenerator;
+  @Autowired
+  private IDGenerator idGenerator;
 
   /**
    * The MyMobileAPI endpoint.
@@ -117,23 +121,6 @@ public class SMSService
    */
   @Value("${application.sms.sendRetryDelay:#{600000}}")
   private int sendRetryDelay;
-
-  /**
-   * Constructs a new <code>SMSService</code>.
-   *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
-   * @param idGenerator        the ID Generator
-   */
-  @Autowired
-  public SMSService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
-  {
-    this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
-    this.idGenerator = idGenerator;
-  }
 
   /**
    * Create the SMS.
@@ -470,8 +457,6 @@ public class SMSService
   public boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
     throws SMSServiceException
   {
-    com.sun.xml.bind.v2.model.impl.RuntimeBuiltinLeafInfoImpl xxx;
-
     try
     {
       if (StringUtil.isNullOrEmpty(message))

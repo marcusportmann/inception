@@ -16,10 +16,14 @@
 
 package digital.inception.scheduler;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
+
+import digital.inception.validation.InvalidArgumentException;
 
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler
@@ -36,7 +40,7 @@ public interface ISchedulerService
    * @param job the <code>Job</code> instance containing the information for the job
    */
   void createJob(Job job)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Create the job parameter.
@@ -44,7 +48,7 @@ public interface ISchedulerService
    * @param jobParameter the job parameter
    */
   void createJobParameter(JobParameter jobParameter)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Delete the job
@@ -52,7 +56,7 @@ public interface ISchedulerService
    * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   void deleteJob(UUID jobId)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Execute the job.
@@ -60,7 +64,7 @@ public interface ISchedulerService
    * @param job the job
    */
   void executeJob(Job job)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the filtered jobs.
@@ -70,7 +74,7 @@ public interface ISchedulerService
    * @return the jobs
    */
   List<Job> getFilteredJobs(String filter)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the job.
@@ -80,7 +84,7 @@ public interface ISchedulerService
    * @return the job or <code>null</code> if the job could not be found
    */
   Job getJob(UUID jobId)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the parameters for the job.
@@ -90,7 +94,7 @@ public interface ISchedulerService
    * @return the parameters for the job
    */
   List<JobParameter> getJobParameters(UUID jobId)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the jobs.
@@ -126,7 +130,7 @@ public interface ISchedulerService
    * @return the number of filtered jobs
    */
   int getNumberOfFilteredJobs(String filter)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the number of jobs.
@@ -150,7 +154,7 @@ public interface ISchedulerService
    * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   void incrementJobExecutionAttempts(UUID jobId)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Lock a job.
@@ -159,7 +163,7 @@ public interface ISchedulerService
    * @param status the new status for the locked job
    */
   void lockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Reschedule the job for execution.
@@ -170,7 +174,7 @@ public interface ISchedulerService
    *                          next execution time
    */
   void rescheduleJob(UUID jobId, String schedulingPattern)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Reset the job locks.
@@ -181,7 +185,7 @@ public interface ISchedulerService
    * @return the number of job locks reset
    */
   int resetJobLocks(JobStatus status, JobStatus newStatus)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Schedule the next unscheduled job for execution.
@@ -199,7 +203,7 @@ public interface ISchedulerService
    * @param status the new status for the job
    */
   void setJobStatus(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Unlock a locked job.
@@ -208,7 +212,7 @@ public interface ISchedulerService
    * @param status the new status for the unlocked job
    */
   void unlockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Update the job.
@@ -216,5 +220,5 @@ public interface ISchedulerService
    * @param job the <code>Job</code> instance containing the updated information for the job
    */
   void updateJob(Job job)
-    throws SchedulerServiceException;
+    throws InvalidArgumentException, SchedulerServiceException;
 }

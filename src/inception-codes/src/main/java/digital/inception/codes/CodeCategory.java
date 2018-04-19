@@ -21,11 +21,14 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -40,6 +43,10 @@ import java.util.UUID;
 @ApiModel(value = "CodeCategory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "updated" })
+@XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
+@XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital",
+    propOrder = { "id", "name", "updated" })
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CodeCategory
   implements Serializable
 {
@@ -52,6 +59,7 @@ public class CodeCategory
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)
   @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   private UUID id;
 
@@ -60,6 +68,7 @@ public class CodeCategory
    */
   @ApiModelProperty(value = "The name of the code category", required = true)
   @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 4000)
   private String name;
@@ -69,12 +78,28 @@ public class CodeCategory
    */
   @ApiModelProperty(value = "The date and time the code category was last updated")
   @JsonProperty
+  @XmlElement(name = "Updated")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
   private LocalDateTime updated;
 
   /**
    * Constructs a new <code>CodeCategory</code>.
    */
   public CodeCategory() {}
+
+  /**
+   * Constructs a new <code>CodeCategory</code>.
+   *
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the code
+   *             category
+   * @param name the name of the code category
+   */
+  public CodeCategory(UUID id, String name)
+  {
+    this.id = id;
+    this.name = name;
+  }
 
   /**
    * Constructs a new <code>CodeCategory</code>.

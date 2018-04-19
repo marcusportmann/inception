@@ -20,11 +20,14 @@ package digital.inception.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundMessageProcessor</code> class implements the Background Message Processor.
@@ -34,7 +37,6 @@ import org.springframework.stereotype.Service;
 @Service
 @SuppressWarnings("unused")
 public class BackgroundMessageProcessor
-  implements InitializingBean
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
@@ -44,10 +46,10 @@ public class BackgroundMessageProcessor
   private IMessagingService messagingService;
 
   /**
-   * Initialize the Background Message Processor.
+   * Initialise the Background Message Processor.
    */
-  @Override
-  public void afterPropertiesSet()
+  @PostConstruct
+  public void init()
   {
     logger.info("Initialising the Background Message Processor");
 

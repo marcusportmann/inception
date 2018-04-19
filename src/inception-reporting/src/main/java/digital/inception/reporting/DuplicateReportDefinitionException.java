@@ -18,9 +18,13 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,7 +40,11 @@ import java.util.UUID;
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
     reason = "A report definition with the specified ID already exists")
-public class DuplicateReportDefinitionException extends Exception
+@WebFault(name = "DuplicateReportDefinitionException",
+    targetNamespace = "http://reporting.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class DuplicateReportDefinitionException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

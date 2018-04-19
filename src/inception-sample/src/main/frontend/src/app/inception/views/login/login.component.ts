@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -10,13 +10,8 @@ import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 
 import { decode } from "jsonwebtoken";
 import {Session} from "../../services/security/session";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpErrorResponse} from "@angular/common/http";
 import {TestError} from "../../services/security/security.service.errors";
-import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
-import {TokenResponse} from "../../services/security/token-response";
-import {catchError, map} from "rxjs/operators";
-import {Observable} from "rxjs/Rx";
-import {Error} from '../../core/error';
 
 
 @Component({
@@ -26,7 +21,7 @@ export class LoginComponent {
 
   private loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private securityService: SecurityService,) {
+  constructor(private formBuilder: FormBuilder, private securityService: SecurityService) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -51,96 +46,11 @@ export class LoginComponent {
     // control.disabled ? control.enable() : control.disable()
   }
 
-
-  public onGetCodes() {
-
-    let x:number = 1;
-    let y:number = 2;
-
-    if (x == y) {
-
-      this.httpClient.get<any>('http://localhost:8080/api/codeCategories').pipe(
-        map(data => {
-
-          console.log('data = ' + data);
-
-
-        }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
-          console.log('httpErrorResponse = ', httpErrorResponse);
-
-          console.log('httpErrorResponse.error = ', httpErrorResponse.error);
-
-          let error: Error = httpErrorResponse.error as Error;
-
-          // TODO: Map different HTTP error codes to specific error types -- MARCUS
-
-          return Observable.throw(new TestError(httpErrorResponse.status));
-
-        })).subscribe(data => {
-
-          console.log('data = ', data);
-
-
-        },
-        error => {
-
-          if (error instanceof TestError) {
-            console.log('Test error = ', error);
-          }
-          else {
-            console.log('Unknown error = ', error);
-          }
-        });
-    }
-
-
-    let codeCategory = {};
-
-    let options = { headers: { 'Content-Type': 'application/json' } };
-
-    this.httpClient.post<void>('http://localhost:20000/api/codeCategories', codeCategory, options).pipe(
-      catchError((httpErrorResponse: HttpErrorResponse) => {
-
-        console.log('httpErrorResponse = ', httpErrorResponse);
-
-        console.log('httpErrorResponse.error = ', httpErrorResponse.error);
-
-        let error:Error = httpErrorResponse.error as Error;
-
-        // TODO: Map different HTTP error codes to specific error types -- MARCUS
-
-        return Observable.throw(new TestError(httpErrorResponse.status));
-
-      })).subscribe(data => {
-
-        console.log('data = ', data);
-
-
-      },
-      error => {
-
-        if (error instanceof TestError ) {
-          console.log('Test error = ', error);
-        }
-        else {
-          console.log('Unknown error = ', error);
-        }
-      });
-
-
-
-  }
-
   public onSubmit() {
 
     if (this.loginForm.valid) {
 
-      sessionStorage.removeItem("session");
-
       this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
-
-        sessionStorage.setItem("session", JSON.stringify(session));
 
         console.log('session = ', session);
 

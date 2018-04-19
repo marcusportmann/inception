@@ -24,7 +24,6 @@ import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -34,6 +33,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,7 +53,7 @@ import java.util.*;
 @Service
 @SuppressWarnings("unused")
 public class CodesService
-  implements ICodesService, InitializingBean
+  implements ICodesService
 {
   /**
    * The path to the code provider configuration files (META-INF/code-providers.xml) on the
@@ -67,7 +67,8 @@ public class CodesService
   /**
    * The Spring application context.
    */
-  private final ApplicationContext applicationContext;
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
@@ -75,7 +76,9 @@ public class CodesService
   /**
    * The data source used to provide connections to the application database.
    */
-  private final DataSource dataSource;
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
    * The configuration information for the code providers read from the code provider configuration
@@ -85,42 +88,8 @@ public class CodesService
 
   /**
    * Constructs a new <code>CodesService</code>.
-   *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
    */
-  @Autowired
-  public CodesService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource)
-  {
-    this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
-  }
-
-  /**
-   * Initialize the Codes Service.
-   */
-  @Override
-  public void afterPropertiesSet()
-  {
-    logger.info("Initialising the Codes Service");
-
-    codeProviders = new ArrayList<>();
-
-    try
-    {
-      // Read the codes configuration
-      readCodeProviderConfigurations();
-
-      // Initialise the code providers
-      initCodeProviders();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Codes Service", e);
-    }
-  }
+  public CodesService() {}
 
   /**
    * Check whether the code category exists.
@@ -421,11 +390,6 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
-    if (false)
-    {
-      throw new CodesServiceException("Testing 1.. 2.. 3..");
-    }
-
     String getCodeCategoriesSQL =
         "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
 
@@ -838,6 +802,30 @@ public class CodesService
           "Failed to retrieve the number of codes for the code category (%s)", codeCategoryId), e);
     }
 
+  }
+
+  /**
+   * Initialise the Codes Service.
+   */
+  @PostConstruct
+  public void init()
+  {
+    logger.info("Initialising the Codes Service");
+
+    codeProviders = new ArrayList<>();
+
+    try
+    {
+      // Read the codes configuration
+      readCodeProviderConfigurations();
+
+      // Initialise the code providers
+      initCodeProviders();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialise the Codes Service", e);
+    }
   }
 
   /**

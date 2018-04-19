@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
@@ -48,25 +47,15 @@ import java.util.Set;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ConfigurationRestController
 {
-  /* Configuration Service */
-  private final IConfigurationService configurationService;
-
-  /* Validator */
-  private final Validator validator;
-
   /**
-   * Constructs a new <code>ConfigurationRestController</code>.
-   *
-   * @param configurationService the Configuration Service
-   * @param validator            the validator
+   * The Configuration Service.
    */
   @Autowired
-  public ConfigurationRestController(IConfigurationService configurationService,
-      Validator validator)
-  {
-    this.configurationService = configurationService;
-    this.validator = validator;
-  }
+  private IConfigurationService configurationService;
+
+  /* Validator */
+  @Autowired
+  private Validator validator;
 
   /**
    * Delete the configuration.
@@ -85,7 +74,6 @@ public class ConfigurationRestController
   @RequestMapping(value = "/api/configuration/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public void deleteConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -194,7 +182,6 @@ public class ConfigurationRestController
   @RequestMapping(value = "/api/configuration", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public void setConfiguration(@ApiParam(name = "configuration", value = "The configuration",
       required = true)
   @RequestBody Configuration configuration)

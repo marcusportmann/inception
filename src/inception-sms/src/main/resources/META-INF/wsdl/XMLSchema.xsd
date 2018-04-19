@@ -14,7 +14,7 @@
 <!ATTLIST xs:simpleContent   id  ID  #IMPLIED>
 <!ATTLIST xs:extension       id  ID  #IMPLIED>
 <!ATTLIST xs:element         id  ID  #IMPLIED>
-<!ATTLIST xs:group           id  ID  #IMPLIED>
+<!ATTLIST xs:group           id  ID  #IMPLIED> 
 <!ATTLIST xs:all             id  ID  #IMPLIED>
 <!ATTLIST xs:choice          id  ID  #IMPLIED>
 <!ATTLIST xs:sequence        id  ID  #IMPLIED>

@@ -19,18 +19,21 @@ package digital.inception.sample;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.application.Application;
+import digital.inception.codes.CodesWebService;
+import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
+import digital.inception.reporting.ReportingWebService;
 import digital.inception.sample.api.SampleServiceController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.DependsOn;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -39,6 +42,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.annotation.PostConstruct;
+import javax.xml.ws.Endpoint;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,7 +60,6 @@ import java.util.UUID;
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
 @EnableSwagger2
 public class SampleApplication extends Application
-  implements InitializingBean
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
@@ -67,6 +71,11 @@ public class SampleApplication extends Application
   /* Reporting Service */
   @Autowired
   private IReportingService reportingService;
+
+//
+///* Sample Configuration */
+//@Inject
+//private Configuration configuration;
 
   /**
    * Constructs a new <code>SampleApplication</code>.
@@ -81,32 +90,6 @@ public class SampleApplication extends Application
   public static void main(String[] args)
   {
     SpringApplication.run(SampleApplication.class, args);
-  }
-
-  /**
-   * Initialize the Sample Application.
-   */
-  @Override
-  public void afterPropertiesSet()
-  {
-    try
-    {
-      byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
-          "digital/inception/sample/SampleReport.jasper");
-
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
-          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
-
-      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
-      {
-        reportingService.createReportDefinition(sampleReportDefinition);
-        logger.info("Saved the \"Sample Report\" report definition");
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Sample application", e);
-    }
   }
 
   /**
@@ -126,6 +109,40 @@ public class SampleApplication extends Application
         .paths(PathSelectors.regex("/api/.*")).build().useDefaultResponseMessages(false).apiInfo(
         apiInfo);
   }
+
+  /**
+   * Returns the Spring bean for the Codes Service web service.
+   *
+   * @return the Spring bean for the Codes Service web service
+   */
+  @Bean
+  protected Endpoint codesWebService()
+  {
+    return createWebServiceEndpoint("CodesService", new CodesWebService());
+  }
+
+  /**
+   * Returns the Spring bean for the Configuration Service web service.
+   *
+   * @return the Spring bean for the Configuration Service web service
+   */
+  @Bean
+  protected Endpoint configurationWebService()
+  {
+    return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService());
+  }
+
+///**
+// * Returns the in-memory distributed cache manager.
+// *
+// * @return the in-memory distributed cache manager
+// */
+//@Bean
+//protected CacheManager cacheManager()
+//  throws CacheManagerException
+//{
+//  return new CacheManager(configuration.getCacheManager());
+//}
 
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
@@ -154,6 +171,69 @@ public class SampleApplication extends Application
     packagesToScan.add("digital.inception.sample");
 
     return packagesToScan;
+  }
+
+  /**
+   * Returns the Spring bean for the Reporting Service web service.
+   *
+   * @return the Spring bean for the Reporting Service web service
+   */
+  @Bean
+  protected Endpoint reportingWebService()
+  {
+    return createWebServiceEndpoint("ReportingService", new ReportingWebService());
+  }
+
+  /**
+   * Returns the Spring bean for the Sample Service web service.
+   *
+   * @return the Spring bean for the Sample Service web service
+   */
+  @Bean
+  @DependsOn("sampleServiceController")
+  protected Endpoint sampleWebService()
+  {
+    return createWebServiceEndpoint("SampleService", sampleServiceController);
+  }
+
+  /**
+   * Initialise the Sample application.
+   */
+  @PostConstruct
+  private void initSampleApplication()
+  {
+    try
+    {
+      byte[] cxfXml = ResourceUtil.getClasspathResource("/cxf.xml");
+
+      int xxx = 0;
+      xxx++;
+    }
+    catch (Throwable e)
+    {
+      int xxx = 0;
+      xxx++;
+
+    }
+
+    try
+    {
+      byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
+          "digital/inception/sample/SampleReport.jasper");
+
+      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
+          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
+
+      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
+      {
+        reportingService.createReportDefinition(sampleReportDefinition);
+        logger.info("Saved the \"Sample Report\" report definition");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialise the Sample application", e);
+    }
   }
 
 ///**

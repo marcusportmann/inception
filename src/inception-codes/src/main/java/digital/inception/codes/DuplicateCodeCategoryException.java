@@ -18,9 +18,13 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -36,7 +40,11 @@ import java.util.UUID;
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
     reason = "A code category with the specified ID already exists")
-public class DuplicateCodeCategoryException extends Exception
+@WebFault(name = "DuplicateCodeCategoryException",
+    targetNamespace = "http://codes.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class DuplicateCodeCategoryException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

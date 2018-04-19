@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+import javax.transaction.UserTransaction;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -45,9 +46,8 @@ public class TransactionManagementConfigurer
   private static UserTransactionManager userTransactionManager;
   private static UserTransactionImp userTransaction;
   private static Class<?> enhancerClass;
-  private static Class<?> transactionManagerClass;
-  private static Class<?> transactionManagerTransactionTrackerClass;
   private static Class<?> userTransactionTrackerClass;
+  private static Class<?> transactionManagerTransactionTrackerClass;
   private static Method enhancerClassSetSuperclassMethod;
   private static Method enhancerClassSetCallbackMethod;
   private static Method enhancerClassCreateMethod;
@@ -73,18 +73,13 @@ public class TransactionManagementConfigurer
       // Retrieve the create method for the net.sf.cglib.proxy.Enhancer class
       enhancerClassCreateMethod = enhancerClass.getMethod("create");
 
-      // Attempt to load the javax.transaction.TransactionManager
-      transactionManagerClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "javax.transaction.TransactionManager");
-
-      // Attempt to load the digital.inception.test.TransactionManagerTransactionTracker class
-      transactionManagerTransactionTrackerClass = Thread.currentThread().getContextClassLoader()
-          .loadClass("digital.inception.test.TransactionManagerTransactionTracker");
-
       // Attempt to load the digital.inception.test.UserTransactionTracker class
       userTransactionTrackerClass = Thread.currentThread().getContextClassLoader().loadClass(
           "digital.inception.test.UserTransactionTracker");
 
+      // Attempt to load the digital.inception.test.TransactionManagerTransactionTracker class
+      transactionManagerTransactionTrackerClass = Thread.currentThread().getContextClassLoader()
+          .loadClass("digital.inception.test.TransactionManagerTransactionTracker");
     }
     catch (ClassNotFoundException | NoSuchMethodException ignored) {}
   }
@@ -104,25 +99,7 @@ public class TransactionManagementConfigurer
   @DependsOn({ "userTransactionManager", "userTransaction" })
   public PlatformTransactionManager transactionManager()
   {
-    try
-    {
-      for (Constructor<?> constructor : JtaTransactionManager.class.getConstructors())
-      {
-        if (constructor.getParameterCount() == 2)
-        {
-          return PlatformTransactionManager.class.cast(constructor.newInstance(userTransaction(),
-              userTransactionManager()));
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException(
-          "Failed to invoke the required constructor on the org.springframework.transaction.jta.JtaTransactionManager class");
-    }
-
-    throw new RuntimeException(
-        "Failed to find the required constructor on the org.springframework.transaction.jta.JtaTransactionManager class");
+    return new JtaTransactionManager(userTransaction(), userTransactionManager());
   }
 
   /**
@@ -132,7 +109,7 @@ public class TransactionManagementConfigurer
    */
   @Bean
   @DependsOn({ "userTransactionManager" })
-  public UserTransactionImp userTransaction()
+  public UserTransaction userTransaction()
   {
     synchronized (lock)
     {
@@ -142,13 +119,14 @@ public class TransactionManagementConfigurer
         {
           if ((enhancerClass != null) && (userTransactionTrackerClass != null))
           {
-            Object userTransactionEnhancer = enhancerClass.getConstructor().newInstance();
+            Object userTransactionEnhancer = enhancerClass.newInstance();
 
             enhancerClassSetSuperclassMethod.invoke(userTransactionEnhancer,
                 UserTransactionImp.class);
 
             Constructor<?> userTransactionTrackerConstructor =
-                userTransactionTrackerClass.getDeclaredConstructor(transactionManagerClass);
+                userTransactionTrackerClass.getDeclaredConstructor(javax.transaction
+                .TransactionManager.class);
 
             userTransactionTrackerConstructor.setAccessible(true);
 
@@ -158,19 +136,13 @@ public class TransactionManagementConfigurer
             userTransaction = (UserTransactionImp) enhancerClassCreateMethod.invoke(
                 userTransactionEnhancer);
 
-            Method setTransactionTimeoutMethod = UserTransactionImp.class.getMethod(
-                "setTransactionTimeout", Integer.TYPE);
-
-            setTransactionTimeoutMethod.invoke(userTransaction, 300);
+            userTransaction.setTransactionTimeout(300);
           }
           else
           {
             userTransaction = new UserTransactionImp();
 
-            Method setTransactionTimeoutMethod = UserTransactionImp.class.getMethod(
-                "setTransactionTimeout", Integer.TYPE);
-
-            setTransactionTimeoutMethod.invoke(userTransaction, 300);
+            userTransaction.setTransactionTimeout(300);
           }
         }
         catch (Throwable e)
@@ -199,7 +171,7 @@ public class TransactionManagementConfigurer
         {
           if ((enhancerClass != null) && (transactionManagerTransactionTrackerClass != null))
           {
-            Object transactionManagerEnhancer = enhancerClass.getConstructor().newInstance();
+            Object transactionManagerEnhancer = enhancerClass.newInstance();
 
             enhancerClassSetSuperclassMethod.invoke(transactionManagerEnhancer,
                 UserTransactionManager.class);
@@ -215,19 +187,13 @@ public class TransactionManagementConfigurer
             userTransactionManager = (UserTransactionManager) enhancerClassCreateMethod.invoke(
                 transactionManagerEnhancer);
 
-            Method setForceShutdownMethod = UserTransactionManager.class.getMethod(
-                "setForceShutdown", Boolean.TYPE);
-
-            setForceShutdownMethod.invoke(userTransactionManager, false);
+            userTransactionManager.setForceShutdown(false);
           }
           else
           {
             userTransactionManager = new UserTransactionManager();
 
-            Method setForceShutdownMethod = UserTransactionManager.class.getMethod(
-                "setForceShutdown", Boolean.TYPE);
-
-            setForceShutdownMethod.invoke(userTransactionManager, false);
+            userTransactionManager.setForceShutdown(false);
           }
         }
         catch (Throwable e)

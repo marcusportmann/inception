@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -39,6 +40,10 @@ import java.util.UUID;
 @ApiModel(value = "ReportDefinition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "template" })
+@XmlRootElement(name = "ReportDefinition", namespace = "http://reporting.inception.digital")
+@XmlType(name = "ReportDefinition", namespace = "http://reporting.inception.digital",
+    propOrder = { "id", "name", "template" })
+@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportDefinition
   implements Serializable
@@ -52,6 +57,7 @@ public class ReportDefinition
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   private UUID id;
 
@@ -60,6 +66,7 @@ public class ReportDefinition
    */
   @ApiModelProperty(value = "The name of the report definition", required = true)
   @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 256)
   private String name;
@@ -69,6 +76,7 @@ public class ReportDefinition
    */
   @ApiModelProperty(value = "The JasperReports template for the report definition", required = true)
   @JsonProperty(required = true)
+  @XmlElement(name = "Template", required = true)
   @NotNull
   @Size(min = 1)
   private byte[] template;

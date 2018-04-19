@@ -24,7 +24,6 @@ import org.junit.runners.model.InitializationError;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//import javax.transaction.Transaction;
 import javax.transaction.Transaction;
 import java.sql.Connection;
 import java.util.Map;

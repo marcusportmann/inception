@@ -53,23 +53,12 @@ import java.util.UUID;
 public class CodesRestController
 {
   /* Codes Service */
-  private final ICodesService codesService;
+  @Autowired
+  private ICodesService codesService;
 
   /* Validator */
-  private final Validator validator;
-
-  /**
-   * Constructs a new <code>CodesRestController</code>.
-   *
-   * @param codesService the Codes Service
-   * @param validator    the validator
-   */
   @Autowired
-  public CodesRestController(ICodesService codesService, Validator validator)
-  {
-    this.codesService = codesService;
-    this.validator = validator;
-  }
+  private Validator validator;
 
   /**
    * Create a code.
@@ -91,7 +80,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void createCode(@ApiParam(name = "codeCategoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)
@@ -138,7 +126,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void createCodeCategory(@ApiParam(name = "codeCategory", value = "The code category",
       required = true)
   @RequestBody CodeCategory codeCategory)
@@ -177,7 +164,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void deleteCode(@ApiParam(name = "codeCategoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)
@@ -217,7 +203,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void deleteCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)
@@ -245,6 +230,7 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Application.CodeCategoryAdministration')")
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
@@ -377,7 +363,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void updateCode(@ApiParam(name = "codeCategoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)
@@ -432,7 +417,6 @@ public class CodesRestController
   @RequestMapping(value = "/api/codeCategories/{codeCategoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.CodeAdministration')")
   public void updateCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
       required = true)

@@ -18,8 +18,14 @@ package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -32,7 +38,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The SMS could not be found")
-public class SMSNotFoundException extends Exception
+@WebFault(name = "SMSNotFoundException",
+    targetNamespace = "http://sms.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class SMSNotFoundException
+  extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

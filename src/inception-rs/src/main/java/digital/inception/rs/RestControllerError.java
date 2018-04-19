@@ -52,12 +52,6 @@ public class RestControllerError
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The type of error e.g. the fully qualified name of the exception associated with the error.
-   */
-  @JsonProperty
-  private String type;
-
-  /**
    * The URI for the HTTP request that resulted in the error.
    */
   @JsonProperty
@@ -86,6 +80,12 @@ public class RestControllerError
    */
   @JsonProperty
   private String detail;
+
+  /**
+   * The fully qualified name of the exception associated with the error.
+   */
+  @JsonProperty
+  private String exception;
 
   /**
    * The stack trace associated with the error.
@@ -137,14 +137,14 @@ public class RestControllerError
       this.message = cause.getMessage();
     }
 
-    this.type = cause == null ? "Unknown" : cause.getClass().getName();
-
     if (cause instanceof org.springframework.security.access.AccessDeniedException)
     {
       responseStatus = HttpStatus.FORBIDDEN;
     }
     else if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
+      this.exception = cause.getClass().getName();
+
       try
       {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -200,14 +200,13 @@ public class RestControllerError
   }
 
   /**
-   * Returns the type of error e.g. the fully qualified name of the exception associated with the
-   * error.
+   * Returns the fully qualified name of the exception associated with the error.
    *
-   * @return the type of error
+   * @return the fully qualified name of the exception associated with the error
    */
-  public String getType()
+  public String getException()
   {
-    return type;
+    return exception;
   }
 
   /**
@@ -282,13 +281,13 @@ public class RestControllerError
   }
 
   /**
-   * Set the type of error e.g. the fully qualified name of the exception associated with the error.
+   * Set the fully qualified name of the exception associated with the error.
    *
-   * @param type the type of error
+   * @param exception the fully qualified name of the exception associated with the error
    */
-  public void setType(String type)
+  public void setException(String exception)
   {
-    this.type = type;
+    this.exception = exception;
   }
 
   /**

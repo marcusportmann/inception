@@ -37,21 +37,10 @@ import javax.validation.Validator;
 public class SchedulerRestController
 {
   /* Scheduler Service */
-  private final ISchedulerService schedulerService;
+  @Autowired
+  private ISchedulerService schedulerService;
 
   /* Validator */
-  private final Validator validator;
-
-  /**
-   * Constructs a new <code>SchedulerRestController</code>.
-   *
-   * @param schedulerService the scheduler service
-   * @param validator        the validator
-   */
   @Autowired
-  public SchedulerRestController(ISchedulerService schedulerService, Validator validator)
-  {
-    this.schedulerService = schedulerService;
-    this.validator = validator;
-  }
+  private Validator validator;
 }
