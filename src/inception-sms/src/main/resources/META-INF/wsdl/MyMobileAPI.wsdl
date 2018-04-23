@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.mymobileapi.com/api5" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.mymobileapi.com/api5" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:tns="http://www.mymobileapi.com/api5"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  targetNamespace="http://www.mymobileapi.com/api5"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://www.mymobileapi.com/api5">
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.mymobileapi.com/api5" xmlns:s="http://www.w3.org/2001/XMLSchema">
       <s:element name="Credits_STR">
         <s:complexType>
           <s:sequence>
@@ -31,7 +40,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Credits_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -54,7 +63,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Send_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -86,7 +95,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -125,7 +134,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -139,7 +148,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Send_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -162,7 +171,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Sent_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -194,7 +203,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -217,7 +226,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -231,7 +240,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Sent_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -263,7 +272,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -293,7 +302,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Reply_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -325,7 +334,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -348,7 +357,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -362,7 +371,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Reply_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -394,7 +403,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -417,7 +426,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -447,7 +456,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -479,7 +488,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -502,7 +511,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -516,7 +525,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -539,7 +548,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Update_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -571,7 +580,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -594,7 +603,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -608,7 +617,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Update_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -631,7 +640,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Get_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -663,7 +672,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -686,7 +695,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -700,7 +709,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Get_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -732,7 +741,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -755,7 +764,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -769,7 +778,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Count_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -785,7 +794,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -815,7 +824,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="ShortCode_Count_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -854,7 +863,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Groups_List_STR_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -886,7 +895,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -909,7 +918,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Data">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -923,7 +932,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Groups_List_DS_DSResult">
               <s:complexType>
                 <s:sequence>
-                  <s:element ref="s:schema" />
+                  
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -2120,9 +2129,6 @@
   <wsdl:service name="API">
     <wsdl:port name="APISoap" binding="tns:APISoap">
       <soap:address location="http://www.mymobileapi.com/api5/api.asmx" />
-    </wsdl:port>
-    <wsdl:port name="APISoap12" binding="tns:APISoap12">
-      <soap12:address location="http://www.mymobileapi.com/api5/api.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

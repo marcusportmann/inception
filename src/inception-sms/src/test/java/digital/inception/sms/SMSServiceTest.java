@@ -55,6 +55,6 @@ public class SMSServiceTest
   public void test()
     throws Exception
   {
-    smsService.sendSMSSynchronously(1, "0832763107", "Testing 1.. 2.. 3..");
+    smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
   }
 }

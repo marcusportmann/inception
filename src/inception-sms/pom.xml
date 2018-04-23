@@ -151,7 +151,12 @@
               <args>
                 <arg>-disableXmlSecurity</arg>
                 <arg>-b</arg>
+                <arg>${basedir}/src/main/resources/META-INF/wsdl/inception-bindings.xjb</arg>
+
+                <!--
+                <arg>-b</arg>
                 <arg>${basedir}/src/main/resources/META-INF/wsdl/xsd.xjb</arg>
+                -->
                 <!--
                 <arg>-b</arg>
                 <arg>http://www.w3.org/2001/XMLSchema.xsd</arg>
