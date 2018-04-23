@@ -20,14 +20,11 @@ package digital.inception.sms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundSMSSender</code> class implements the Background SMS Sender.
@@ -37,19 +34,30 @@ import javax.annotation.PostConstruct;
 @Service
 @SuppressWarnings("unused")
 public class BackgroundSMSSender
+  implements InitializingBean
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
-  @Autowired
-  private ISMSService smsService;
+  private final ISMSService smsService;
 
   /**
-   * Initialise the Background SMS Sender.
+   * Constructs a new <code>BackgroundSMSSender</code>.
+   *
+   * @param smsService the SMS Service
    */
-  @PostConstruct
-  public void init()
+  @Autowired
+  public BackgroundSMSSender(ISMSService smsService)
+  {
+    this.smsService = smsService;
+  }
+
+  /**
+   * Initialize the Background SMS Sender.
+   */
+  @Override
+  public void afterPropertiesSet()
   {
     logger.info("Initialising the Background SMS Sender");
 

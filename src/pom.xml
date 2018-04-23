@@ -42,12 +42,12 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.0.RELEASE</version>
+    <version>2.0.1.RELEASE</version>
   </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
+    <java.version>1.10</java.version>
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
@@ -55,14 +55,21 @@
     <atomikos.version>4.0.6</atomikos.version>
     <cglib.version>3.2.6</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.2.2</cxf.version>
+    <cxf.version>3.2.4</cxf.version>
     <glassfish-el.version>3.0.1-b08</glassfish-el.version>
     <groovy.version>2.4.13</groovy.version>
     <hazelcast.version>3.9.2</hazelcast.version>
     <hibernate-validator.version>6.0.7.Final</hibernate-validator.version>
-    <jackson.version>2.9.4</jackson.version>
+    <jackson.version>2.9.5</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
+    <java-jaxb.version>2.3.0</java-jaxb.version>
+    <javax-activation.version>1.1.1</javax-activation.version>
+    <javax-annotation-api.version>1.3.2</javax-annotation-api.version>
+    <javax-transaction.version>1.3</javax-transaction.version>
     <jaxb-xew-plugin.version>1.9</jaxb-xew-plugin.version>
+    <jaxws-api.version>2.3.0</jaxws-api.version>
+    <jsr181-api.version>1.0-MR1</jsr181-api.version>
+    <metro.version>2.4.0</metro.version>
     <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.2.1.RELEASE</spring-security-oauth2.version>
@@ -86,9 +93,24 @@
         <version>${hazelcast.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
         <artifactId>mssql-jdbc</artifactId>
         <version>${mssql-jdbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-core</artifactId>
+        <version>${java-jaxb.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${java-jaxb.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -109,6 +131,26 @@
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
         <version>${swagger-annotations.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.activation</groupId>
+        <artifactId>activation</artifactId>
+        <version>${javax-activation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.annotation</groupId>
+        <artifactId>javax.annotation-api</artifactId>
+        <version>${javax-annotation-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.jws</groupId>
+        <artifactId>jsr181-api</artifactId>
+        <version>${jsr181-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.ws</groupId>
+        <artifactId>jaxws-api</artifactId>
+        <version>${jaxws-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -329,15 +371,27 @@
   </dependencyManagement>
 
   <modules>
+
+    <module>inception-codes</module>
+
+    <module>inception-core</module>
+
+    <module>inception-sms</module>
+
+    <module>inception-test</module>
+    <module>inception-transaction</module>
+
+    <!--<module>inception-ws</module>-->
+
+
+    <!--
     <module>inception-application</module>
     <module>inception-cache</module>
-    <module>inception-codes</module>
     <module>inception-codes-rs</module>
     <module>inception-codes-ws</module>
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
     <module>inception-configuration-ws</module>
-    <module>inception-core</module>
     <module>inception-json</module>
     <module>inception-kafka</module>
     <module>inception-messaging</module>
@@ -356,13 +410,13 @@
     <module>inception-security</module>
     <module>inception-security-rs</module>
     <module>inception-security-ws</module>
-    <module>inception-sms</module>
+
     <module>inception-sms-rs</module>
     <module>inception-sms-ws</module>
-    <module>inception-test</module>
-    <module>inception-transaction</module>
+
+
     <module>inception-validation</module>
-    <module>inception-ws</module>
+    -->
   </modules>
 
   <build>
@@ -370,10 +424,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.7.0</version>
         <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
+          <release>10</release>
         </configuration>
       </plugin>
       <plugin>
@@ -399,6 +452,32 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- Set wsimport for Windows/Linux -->
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <tool.wsimport>${java.home}/bin/wsimport.exe</tool.wsimport>
+      </properties>
+    </profile>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>!windows</family>
+        </os>
+      </activation>
+      <properties>
+        <tool.wsimport>${java.home}/bin/wsimport</tool.wsimport>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
 

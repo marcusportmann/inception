@@ -3,7 +3,6 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>digital.inception</groupId>
   <artifactId>inception-core</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <name>inception-core</name>
@@ -17,8 +16,12 @@
   <dependencies>
     <!-- Dependencies -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.ws</groupId>
+      <artifactId>jaxws-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
