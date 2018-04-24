@@ -52,7 +52,7 @@ public class Parser
     // Local variables
     int tmpValue;
 
-    // Initialise the input stream
+    // Initialize the input stream
     stream = new ByteArrayInputStream(data);
 
     // Read the version number

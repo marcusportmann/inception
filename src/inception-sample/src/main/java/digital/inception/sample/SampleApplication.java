@@ -146,7 +146,7 @@ public class SampleApplication extends Application
 
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialise the in-memory application database.
+   * initialize the in-memory application database.
    */
   @Override
   protected List<String> getInMemoryDatabaseInitResources()
@@ -197,7 +197,7 @@ public class SampleApplication extends Application
   }
 
   /**
-   * Initialise the Sample application.
+   * Initialize the Sample application.
    */
   @PostConstruct
   private void initSampleApplication()
@@ -232,7 +232,7 @@ public class SampleApplication extends Application
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Sample application", e);
+      throw new RuntimeException("Failed to initialize the Sample application", e);
     }
   }
 

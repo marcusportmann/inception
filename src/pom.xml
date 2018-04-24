@@ -57,9 +57,9 @@
     <commons-io.version>2.6</commons-io.version>
     <cxf.version>3.2.4</cxf.version>
     <glassfish-el.version>3.0.1-b08</glassfish-el.version>
-    <groovy.version>2.4.13</groovy.version>
-    <hazelcast.version>3.9.2</hazelcast.version>
-    <hibernate-validator.version>6.0.7.Final</hibernate-validator.version>
+    <groovy.version>2.4.15</groovy.version>
+    <hazelcast.version>3.9.4</hazelcast.version>
+    <hibernate-validator.version>6.0.9.Final</hibernate-validator.version>
     <jackson.version>2.9.5</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
     <java-jaxb.version>2.3.0</java-jaxb.version>
@@ -68,15 +68,15 @@
     <javax-transaction.version>1.3</javax-transaction.version>
     <jaxb-xew-plugin.version>1.9</jaxb-xew-plugin.version>
     <jaxws-api.version>2.3.0</jaxws-api.version>
+    <jaxws-maven-plugin.version>2.5</jaxws-maven-plugin.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
-    <metro.version>2.4.0</metro.version>
     <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.2.1.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.8.0</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.8.0</springfox-swagger-ui.version>
-    <swagger-annotations.version>1.5.18</swagger-annotations.version>
+    <swagger-annotations.version>1.5.19</swagger-annotations.version>
     <wss4j-ws-security-common.version>2.2.0</wss4j-ws-security-common.version>
   </properties>
 
@@ -371,27 +371,15 @@
   </dependencyManagement>
 
   <modules>
-
-    <module>inception-codes</module>
-
-    <module>inception-core</module>
-
-    <module>inception-sms</module>
-
-    <module>inception-test</module>
-    <module>inception-transaction</module>
-
-    <!--<module>inception-ws</module>-->
-
-
-    <!--
     <module>inception-application</module>
     <module>inception-cache</module>
+    <module>inception-codes</module>
     <module>inception-codes-rs</module>
     <module>inception-codes-ws</module>
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
     <module>inception-configuration-ws</module>
+    <module>inception-core</module>
     <module>inception-json</module>
     <module>inception-kafka</module>
     <module>inception-messaging</module>
@@ -410,13 +398,13 @@
     <module>inception-security</module>
     <module>inception-security-rs</module>
     <module>inception-security-ws</module>
-
+    <module>inception-sms</module>
     <module>inception-sms-rs</module>
     <module>inception-sms-ws</module>
-
-
+    <module>inception-test</module>
+    <module>inception-transaction</module>
     <module>inception-validation</module>
-    -->
+    <module>inception-ws</module>
   </modules>
 
   <build>

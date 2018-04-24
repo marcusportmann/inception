@@ -21,19 +21,7 @@ package digital.inception.messaging.test;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.messaging.*;
-import digital.inception.test.TestClassRunner;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
-import org.springframework.test.context.BootstrapWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -57,7 +45,7 @@ public class PojoTest
   private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
   private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
   private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
-  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALISED;
+  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
   private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
   private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
   private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();

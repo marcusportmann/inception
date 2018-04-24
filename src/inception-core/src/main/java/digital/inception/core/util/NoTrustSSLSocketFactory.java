@@ -79,7 +79,7 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the no-trust SSL socket factory", e);
+      throw new RuntimeException("Failed to initialize the no-trust SSL socket factory", e);
     }
   }
 

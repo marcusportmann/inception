@@ -65,7 +65,7 @@ public class CacheManager
 
     try
     {
-      logger.info("Initialising the distributed in-memory cache cluster ("
+      logger.info("Initializing the distributed in-memory cache cluster ("
           + configuration.getCluster().getName() + ")");
 
       Config config = new Config();
@@ -113,11 +113,11 @@ public class CacheManager
       groupConfig.setName(configuration.getCluster().getName());
       groupConfig.setPassword(configuration.getCluster().getPassword());
 
-      // Initialise the caches
+      // Initialize the caches
       for (CacheManagerConfiguration.CacheConfiguration cacheConfiguration :
           configuration.getCaches())
       {
-        logger.info("Initialising the distributed in-memory cache (" + cacheConfiguration.getName()
+        logger.info("Initializing the distributed in-memory cache (" + cacheConfiguration.getName()
             + ")");
 
         MapConfig mapConfig = config.getMapConfig(cacheConfiguration.getName());
@@ -163,7 +163,7 @@ public class CacheManager
     catch (Throwable e)
     {
       throw new CacheManagerException(
-          "Failed to initialise the distributed in-memory cache cluster ("
+          "Failed to initialize the distributed in-memory cache cluster ("
           + configuration.getCluster().getName() + ")", e);
     }
   }

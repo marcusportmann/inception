@@ -282,7 +282,7 @@ public abstract class ApplicationBase
       source.registerCorsConfiguration("/**", config);
     }
 
-    FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+    FilterRegistrationBean<?> bean = new FilterRegistrationBean<>(new CorsFilter(source));
     bean.setOrder(0);
 
     return bean;
@@ -331,7 +331,7 @@ public abstract class ApplicationBase
         }
         catch (Throwable e)
         {
-          throw new FatalBeanException("Failed to initialise the application key store", e);
+          throw new FatalBeanException("Failed to initialize the application key store", e);
         }
 
         KeyStore trustStore = null;
@@ -361,7 +361,7 @@ public abstract class ApplicationBase
           }
           catch (Throwable e)
           {
-            throw new ApplicationException("Failed to initialise the application trust store", e);
+            throw new ApplicationException("Failed to initialize the application trust store", e);
           }
         }
 
@@ -419,7 +419,7 @@ public abstract class ApplicationBase
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialise the HTTP client", e);
+      throw new FatalBeanException("Failed to initialize the HTTP client", e);
     }
   }
 
@@ -462,7 +462,7 @@ public abstract class ApplicationBase
       dispatcherServlet.setInitParameter("contextClass",
           "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
 
-      logger.info("Initialising the Spring Dispatcher servlet");
+      logger.info("Initializing the Spring Dispatcher servlet");
     }
     catch (ClassNotFoundException ignored) {}
 
@@ -474,7 +474,7 @@ public abstract class ApplicationBase
       ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
       cxfServlet.addMapping("/service/*");
 
-      logger.info("Initialising the Apache CXF framework");
+      logger.info("Initializing the Apache CXF framework");
     }
     catch (ClassNotFoundException ignored) {}
   }
@@ -498,7 +498,7 @@ public abstract class ApplicationBase
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialise the REST template", e);
+      throw new FatalBeanException("Failed to initialize the REST template", e);
     }
   }
 
@@ -562,7 +562,7 @@ public abstract class ApplicationBase
               }
               catch (Throwable e)
               {
-                throw new ApplicationException("Failed to initialise the server SSL key store", e);
+                throw new ApplicationException("Failed to initialize the server SSL key store", e);
               }
 
               KeyStore trustStore = keyStore;
@@ -596,7 +596,7 @@ public abstract class ApplicationBase
                 }
                 catch (Throwable e)
                 {
-                  throw new ApplicationException("Failed to initialise the server SSL key store",
+                  throw new ApplicationException("Failed to initialize the server SSL key store",
                       e);
                 }
               }
@@ -644,7 +644,7 @@ public abstract class ApplicationBase
             }
             catch (Throwable e)
             {
-              logger.error("Failed to initialise the server SSL HTTP listener on port "
+              logger.error("Failed to initialize the server SSL HTTP listener on port "
                   + serverSSLHttpListenerPort, e);
             }
           }
@@ -671,7 +671,7 @@ public abstract class ApplicationBase
             Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
                 "org.apache.cxf.bus.spring.SpringBus");
 
-            Object springBus = springBusClass.newInstance();
+            Object springBus = springBusClass.getConstructor().newInstance();
 
             beanFactory.registerSingleton("cxf", springBus);
           }
@@ -679,7 +679,7 @@ public abstract class ApplicationBase
           catch (Throwable e)
           {
             throw new FatalBeanException(
-                "Failed to initialise the org.apache.cxf.bus.spring.SpringBus bean", e);
+                "Failed to initialize the org.apache.cxf.bus.spring.SpringBus bean", e);
           }
         }
         ;
@@ -688,7 +688,7 @@ public abstract class ApplicationBase
   /**
    * Create the web service endpoint.
    * <p/>
-   * Requires the Apache CXF framework to have been initialised by adding the
+   * Requires the Apache CXF framework to have been initialized by adding the
    * <b>org.apache.cxf:cxf-rt-frontend-jaxws</b>, <b>org.apache.cxf:cxf-rt-transports-http</b>
    * <b>org.apache.cxf:cxf-rt-ws-security</b> and <b>org.apache.wss4j:wss4j-ws-security-common</b>
    * Maven dependencies to the project.
@@ -765,7 +765,7 @@ public abstract class ApplicationBase
           catch (Throwable e)
           {
             throw new ApplicationException(
-                "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
+                "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
                 e);
           }
 
@@ -802,7 +802,7 @@ public abstract class ApplicationBase
             catch (Throwable e)
             {
               throw new ApplicationException(
-                  "Failed to initialise the Web Services Security X.509 Certificate Token Profile key store",
+                  "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
                   e);
             }
           }
@@ -838,7 +838,7 @@ public abstract class ApplicationBase
     catch (ClassNotFoundException e)
     {
       throw new ApplicationException("Failed to create the endpoint for the service (" + name
-          + "): The Apache CXF framework has not been initialised", e);
+          + "): The Apache CXF framework has not been initialized", e);
     }
     catch (Throwable e)
     {

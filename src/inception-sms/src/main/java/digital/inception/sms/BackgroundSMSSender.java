@@ -59,7 +59,7 @@ public class BackgroundSMSSender
   @Override
   public void afterPropertiesSet()
   {
-    logger.info("Initialising the Background SMS Sender");
+    logger.info("Initializing the Background SMS Sender");
 
     if (smsService != null)
     {
@@ -81,7 +81,7 @@ public class BackgroundSMSSender
     else
     {
       logger.error(
-          "Failed to initialise the Background SMS Sender: The SMS Service was NOT injected");
+          "Failed to initialize the Background SMS Sender: The SMS Service was NOT injected");
     }
   }
 

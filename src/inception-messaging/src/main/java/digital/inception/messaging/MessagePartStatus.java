@@ -21,7 +21,7 @@ package digital.inception.messaging;
  */
 public enum MessagePartStatus
 {
-  INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"),
+  INITIALIZED(0, "Initialized"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"),
       QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"), ASSEMBLING(4, "Assembling"), QUEUED_FOR_DOWNLOAD(
       5, "QueuedForDownload"), DOWNLOADING(6, "Downloading"), ABORTED(7, "Aborted"), FAILED(8,
       "Failed"), UNKNOWN(-1, "Unknown");
@@ -47,7 +47,7 @@ public enum MessagePartStatus
     switch (code)
     {
       case 0:
-        return MessagePartStatus.INITIALISED;
+        return MessagePartStatus.INITIALIZED;
 
       case 1:
         return MessagePartStatus.QUEUED_FOR_SENDING;

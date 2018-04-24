@@ -42,7 +42,7 @@ public class Encoder
    */
   public Encoder(Document document)
   {
-    // Initialise member variables
+    // Initialize member variables
     buffer = new BinaryBuffer();
     stringTable = new ArrayList<>();
 

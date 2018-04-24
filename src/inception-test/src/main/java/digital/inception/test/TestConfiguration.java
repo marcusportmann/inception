@@ -135,7 +135,7 @@ public class TestConfiguration
   }
 
   /**
-   * Initialise the in-memory application database and return a data source that can be used to
+   * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    * <p/>
    * NOTE: This data source returned by this method must be closed after use with the
@@ -180,14 +180,14 @@ public class TestConfiguration
               ));
 
           /*
-           * Initialise the in-memory database using the SQL statements contained in the file with
+           * Initialize the in-memory database using the SQL statements contained in the file with
            * the specified resource path.
            */
           for (String resourcePath : getDatabaseInitResources())
           {
             try
             {
-              // Load the SQL statements used to initialise the database tables
+              // Load the SQL statements used to initialize the database tables
               List<String> sqlStatements = JDBCUtil.loadSQL(resourcePath);
 
               // Get a connection to the in-memory database
@@ -243,7 +243,7 @@ public class TestConfiguration
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to initialise the in-memory application database", e);
+          throw new RuntimeException("Failed to initialize the in-memory application database", e);
         }
       }
 
@@ -253,7 +253,7 @@ public class TestConfiguration
 
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialise the in-memory application database.
+   * initialize the in-memory application database.
    */
   protected List<String> getDatabaseInitResources()
   {

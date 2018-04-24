@@ -88,7 +88,7 @@ public class MessagePart
   private UUID messageDeviceId;
 
   /**
-   * The base-64 encoded initialisation vector for the encryption scheme for the original message.
+   * The base-64 encoded initialization vector for the encryption scheme for the original message.
    */
   private String messageEncryptionIV;
 
@@ -129,7 +129,7 @@ public class MessagePart
   private int sendAttempts;
 
   /**
-   * The message part status e.g. Initialised, Sending, etc
+   * The message part status e.g. Initialized, Sending, etc
    */
   private MessagePartStatus status;
 
@@ -163,7 +163,7 @@ public class MessagePart
     this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
     this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
     this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
-    this.status = MessagePartStatus.INITIALISED;
+    this.status = MessagePartStatus.INITIALIZED;
 
     this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
     this.messageUsername = rootElement.getAttributeValue("messageUsername");
@@ -214,7 +214,7 @@ public class MessagePart
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV  the base-64 encoded initialisation vector for the encryption
+   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption
    *                             scheme for the original message
    * @param messageChecksum      the checksum for the original message
    * @param data                 the binary data for the message part
@@ -228,7 +228,7 @@ public class MessagePart
     this.partNo = partNo;
     this.totalParts = totalParts;
     this.sendAttempts = 0;
-    this.status = MessagePartStatus.INITIALISED;
+    this.status = MessagePartStatus.INITIALIZED;
     this.messageId = messageId;
     this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
@@ -255,7 +255,7 @@ public class MessagePart
    *                             attempted
    * @param downloadAttempts     the number of times that downloading of the message part was
    *                             attempted
-   * @param status               the message part status e.g. Initialised, Sending, etc
+   * @param status               the message part status e.g. Initialized, Sending, etc
    * @param persisted            the date and time the message part was persisted
    * @param updated              the date and time the message part was last updated
    * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
@@ -271,7 +271,7 @@ public class MessagePart
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV  the base-64 encoded initialisation vector for the encryption
+   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption
    *                             scheme for the original message
    * @param messageChecksum      the checksum for the original message
    * @param lockName             the name of the entity that has locked the message part for
@@ -424,10 +424,10 @@ public class MessagePart
   }
 
   /**
-   * Returns the base-64 encoded initialisation vector for the encryption scheme for the original
+   * Returns the base-64 encoded initialization vector for the encryption scheme for the original
    * message.
    *
-   * @return the base-64 encoded initialisation vector for the encryption scheme for the original
+   * @return the base-64 encoded initialization vector for the encryption scheme for the original
    * message
    */
   public String getMessageEncryptionIV()
@@ -509,9 +509,9 @@ public class MessagePart
   }
 
   /**
-   * Returns the message part status e.g. Initialised, Sending, etc.
+   * Returns the message part status e.g. Initialized, Sending, etc.
    *
-   * @return the message part status e.g. Initialised, Sending, etc
+   * @return the message part status e.g. Initialized, Sending, etc
    */
   public MessagePartStatus getStatus()
   {
@@ -644,10 +644,10 @@ public class MessagePart
   }
 
   /**
-   * Set the base-64 encoded initialisation vector for the encryption scheme for the original
+   * Set the base-64 encoded initialization vector for the encryption scheme for the original
    * message.
    *
-   * @param messageEncryptionIV the base-64 encoded initialisation vector for the encryption scheme
+   * @param messageEncryptionIV the base-64 encoded initialization vector for the encryption scheme
    *                            for the original message
    */
   public void setMessageEncryptionIV(String messageEncryptionIV)
@@ -730,9 +730,9 @@ public class MessagePart
   }
 
   /**
-   * Set the message part status e.g. Initialised, Sending, etc.
+   * Set the message part status e.g. Initialized, Sending, etc.
    *
-   * @param status the message part status e.g. Initialised, Sending, etc
+   * @param status the message part status e.g. Initialized, Sending, etc
    */
   public void setStatus(MessagePartStatus status)
   {

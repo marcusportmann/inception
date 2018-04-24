@@ -21,7 +21,7 @@ package digital.inception.messaging;
  */
 public enum MessageStatus
 {
-  INITIALISED(0, "Initialised"), QUEUED_FOR_SENDING(1, "QueuedForSending"), QUEUED_FOR_PROCESSING(
+  INITIALIZED(0, "Initialized"), QUEUED_FOR_SENDING(1, "QueuedForSending"), QUEUED_FOR_PROCESSING(
       2, "QueuedForProcessing"), ABORTED(3, "Aborted"), FAILED(4, "Failed"), PROCESSING(5,
       "Processing"), SENDING(6, "Sending"), QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"),
       DOWNLOADING(8, "Downloading"), PROCESSED(10, "Processed"), UNKNOWN(-1, "Unknown");
@@ -47,7 +47,7 @@ public enum MessageStatus
     switch (code)
     {
       case 0:
-        return MessageStatus.INITIALISED;
+        return MessageStatus.INITIALIZED;
 
       case 1:
         return MessageStatus.QUEUED_FOR_SENDING;

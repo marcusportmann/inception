@@ -92,12 +92,12 @@ public class CodesService
   public CodesService() {}
 
   /**
-   * Initialise the Codes Service.
+   * Initialize the Codes Service.
    */
   @Override
   public void afterPropertiesSet()
   {
-    logger.info("Initialising the Codes Service");
+    logger.info("Initializing the Codes Service");
 
     codeProviders = new ArrayList<>();
 
@@ -106,12 +106,12 @@ public class CodesService
       // Read the codes configuration
       readCodeProviderConfigurations();
 
-      // Initialise the code providers
+      // Initialize the code providers
       initCodeProviders();
     }
     catch (Throwable e)
     {
-      throw new RuntimeException("Failed to initialise the Codes Service", e);
+      throw new RuntimeException("Failed to initialize the Codes Service", e);
     }
   }
 
@@ -1031,16 +1031,16 @@ public class CodesService
   }
 
   /**
-   * Initialise the code providers.
+   * Initialize the code providers.
    */
   private void initCodeProviders()
   {
-    // Initialise each code provider
+    // Initialize each code provider
     for (CodeProviderConfig codeProviderConfig : codeProviderConfigs)
     {
       try
       {
-        logger.info(String.format("Initialising the code provider (%s) with class (%s)",
+        logger.info(String.format("Initializing the code provider (%s) with class (%s)",
             codeProviderConfig.getName(), codeProviderConfig.getClassName()));
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
@@ -1067,7 +1067,7 @@ public class CodesService
       }
       catch (Throwable e)
       {
-        logger.error(String.format("Failed to initialise the code provider (%s) with class (%s)",
+        logger.error(String.format("Failed to initialize the code provider (%s) with class (%s)",
             codeProviderConfig.getName(), codeProviderConfig.getClassName()), e);
       }
     }

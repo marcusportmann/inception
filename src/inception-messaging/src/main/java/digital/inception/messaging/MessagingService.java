@@ -29,6 +29,7 @@ import digital.inception.messaging.handler.IMessageHandler;
 import digital.inception.messaging.handler.MessageHandlerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +41,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -67,7 +67,7 @@ import java.util.*;
 @Service
 @SuppressWarnings("unused")
 public class MessagingService
-  implements IMessagingService
+  implements IMessagingService, InitializingBean
 {
   /**
    * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the
@@ -133,6 +133,36 @@ public class MessagingService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * Initialize the Messaging Service.
+   *
+   * @throws Exception
+   */
+  @Override
+  public void afterPropertiesSet()
+    throws Exception
+  {
+    logger.info(String.format("Initializing the Messaging Service (%s)", instanceName));
+
+    messageHandlers = new HashMap<>();
+
+    try
+    {
+      // Initialize the configuration for the Messaging Service
+      initConfiguration();
+
+      // Read the messaging configuration
+      readMessagingConfig();
+
+      // Initialize the message handlers
+      initMessageHandlers();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialize the Messaging Service", e);
+    }
+  }
 
   /**
    * Have all the parts been queued for assembly for the message?
@@ -1291,33 +1321,6 @@ public class MessagingService
   }
 
   /**
-   * Initialise the Messaging Service.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info(String.format("Initialising the Messaging Service (%s)", instanceName));
-
-    messageHandlers = new HashMap<>();
-
-    try
-    {
-      // Initialise the configuration for the Messaging Service
-      initConfiguration();
-
-      // Read the messaging configuration
-      readMessagingConfig();
-
-      // Initialise the message handlers
-      initMessageHandlers();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Messaging Service", e);
-    }
-  }
-
-  /**
    * Should the specified message be archived?
    *
    * @param message the message
@@ -1688,7 +1691,7 @@ public class MessagingService
         Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUsername(),
             messagePart.getMessageDeviceId(), messagePart.getMessageTypeId(),
             messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(), MessageStatus
-            .INITIALISED, messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null,
+            .INITIALIZED, messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null,
             reconstructedData, messagePart.getMessageDataHash(),
             messagePart.getMessageEncryptionIV());
 
@@ -2052,7 +2055,7 @@ public class MessagingService
   }
 
   /**
-   * Initialise the configuration for the Messaging Service.
+   * Initialize the configuration for the Messaging Service.
    */
   private void initConfiguration()
     throws MessagingServiceException
@@ -2072,21 +2075,21 @@ public class MessagingService
     catch (Throwable e)
     {
       throw new MessagingServiceException(
-          "Failed to initialise the configuration for the Messaging Service", e);
+          "Failed to initialize the configuration for the Messaging Service", e);
     }
   }
 
   /**
-   * Initialise the message handlers.
+   * Initialize the message handlers.
    */
   private void initMessageHandlers()
   {
-    // Initialise each message handler
+    // Initialize each message handler
     for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
     {
       try
       {
-        logger.info(String.format("Initialising the message handler (%s) with class (%s)",
+        logger.info(String.format("Initializing the message handler (%s) with class (%s)",
             messageHandlerConfig.getName(), messageHandlerConfig.getClassName()));
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
@@ -2135,7 +2138,7 @@ public class MessagingService
       }
       catch (Throwable e)
       {
-        logger.error(String.format("Failed to initialise the message handler (%s) with class (%s)",
+        logger.error(String.format("Failed to initialize the message handler (%s) with class (%s)",
             messageHandlerConfig.getName(), messageHandlerConfig.getClassName()), e);
       }
     }

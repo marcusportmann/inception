@@ -196,7 +196,7 @@ public abstract class Application extends ApplicationBase
     catch (Throwable e)
     {
       throw new FatalBeanException(
-          "Failed to initialise the application entity manager factory bean", e);
+          "Failed to initialize the application entity manager factory bean", e);
     }
   }
 
@@ -289,10 +289,10 @@ public abstract class Application extends ApplicationBase
 
       if (databaseVendor == Database.H2)
       {
-        logger.info("Initialising the in-memory H2 database");
+        logger.info("Initializing the in-memory H2 database");
 
         /*
-         * Initialise the in-memory database using the SQL statements contained in the file with
+         * Initialize the in-memory database using the SQL statements contained in the file with
          * the specified resource path.
          */
         for (String resourcePath : getInMemoryDatabaseInitResources())
@@ -301,7 +301,7 @@ public abstract class Application extends ApplicationBase
 
           try
           {
-            // Load the SQL statements used to initialise the database tables
+            // Load the SQL statements used to initialize the database tables
             List<String> sqlStatements = JDBCUtil.loadSQL(resourcePath);
 
             // Get a connection to the in-memory database
@@ -372,13 +372,13 @@ public abstract class Application extends ApplicationBase
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialise the application data source", e);
+      throw new FatalBeanException("Failed to initialize the application data source", e);
     }
   }
 
   /**
    * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialise the in-memory application database.
+   * initialize the in-memory application database.
    */
   protected List<String> getInMemoryDatabaseInitResources()
   {

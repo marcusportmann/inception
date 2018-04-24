@@ -32,7 +32,7 @@ public class BinaryBuffer
   private byte[] data;
 
   /**
-   * Constructs a new <code>BinaryBuffer</code> and initialises it using the specified binary data.
+   * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied
    *             and managed by the <code>BinaryBuffer</code> instance
@@ -43,7 +43,7 @@ public class BinaryBuffer
   }
 
   /**
-   * Constructs a new <code>BinaryBuffer</code> and initialises it using the specified binary data.
+   * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data the binary data that will be copied and managed by the <code>BinaryBuffer</code>
    *             instance

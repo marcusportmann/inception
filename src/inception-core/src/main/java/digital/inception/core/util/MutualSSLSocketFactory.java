@@ -111,7 +111,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
     catch (Throwable e)
     {
       throw new MutualSSLSocketFactoryException(
-          "Failed to initialise the Mutual SSL socket factory", e);
+          "Failed to initialize the Mutual SSL socket factory", e);
     }
   }
 

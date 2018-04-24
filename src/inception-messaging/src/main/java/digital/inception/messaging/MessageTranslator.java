@@ -49,7 +49,7 @@ public class MessageTranslator
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to initialise the SHA-256 message digest", e);
+          throw new RuntimeException("Failed to initialize the SHA-256 message digest", e);
         }
       }
       );
@@ -103,7 +103,7 @@ public class MessageTranslator
    * Decrypt the message data.
    *
    * @param encryptionKey the encryption key to use to decrypt the message data
-   * @param encryptionIV  the encryption initialisation vector
+   * @param encryptionIV  the encryption initialization vector
    * @param data          the message data to decrypt
    *
    * @return the decrypted message data
@@ -137,7 +137,7 @@ public class MessageTranslator
    * Encrypt the message data.
    *
    * @param encryptionKey the encryption key to use to encrypt the message data
-   * @param encryptionIV  the encryption initialisation vector
+   * @param encryptionIV  the encryption initialization vector
    * @param data          the message data to encrypt
    *
    * @return the encrypted message data

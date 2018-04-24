@@ -110,6 +110,7 @@ public class RestControllerError
    *
    * @param cause the exception
    */
+  @SuppressWarnings("unchecked")
   public RestControllerError(HttpServletRequest request, HttpStatus responseStatus, Throwable cause)
   {
     this.timestamp = LocalDateTime.now();

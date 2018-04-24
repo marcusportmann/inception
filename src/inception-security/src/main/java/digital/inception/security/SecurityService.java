@@ -22,13 +22,13 @@ import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
@@ -51,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SecurityService
-  implements ISecurityService
+  implements ISecurityService, InitializingBean
 {
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
@@ -195,6 +195,29 @@ public class SecurityService
 
     userDirectory.adminChangePassword(username, newPassword, expirePassword, lockUser,
         resetPasswordHistory, reason);
+  }
+
+  /**
+   * Initialize the Security Service.
+   *
+   * @throws Exception
+   */
+  @Override
+  public void afterPropertiesSet()
+    throws Exception
+  {
+    try
+    {
+      // Load the user directory types
+      reloadUserDirectoryTypes();
+
+      // Load the user directories
+      reloadUserDirectories();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialize the Security Service", e);
+    }
   }
 
   /**
@@ -2113,26 +2136,6 @@ public class SecurityService
   }
 
   /**
-   * Initialise the <code>SecurityService</code> instance.
-   */
-  @PostConstruct
-  public void init()
-  {
-    try
-    {
-      // Load the user directory types
-      reloadUserDirectoryTypes();
-
-      // Load the user directories
-      reloadUserDirectories();
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialise the Security Service", e);
-    }
-  }
-
-  /**
    * Is the user in the security group?
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -2230,7 +2233,7 @@ public class SecurityService
         catch (Throwable e)
         {
           throw new SecurityServiceException(String.format(
-              "Failed to initialise the user directory (%s)(%s)", userDirectory.getId(),
+              "Failed to initialize the user directory (%s)(%s)", userDirectory.getId(),
               userDirectory.getName()), e);
         }
       }

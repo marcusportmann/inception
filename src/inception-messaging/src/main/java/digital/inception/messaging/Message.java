@@ -79,7 +79,7 @@ public class Message
   private int downloadAttempts;
 
   /**
-   * The base-64 encoded initialisation vector for the encryption scheme for the message.
+   * The base-64 encoded initialization vector for the encryption scheme for the message.
    */
   private String encryptionIV;
 
@@ -126,7 +126,7 @@ public class Message
   private int sendAttempts;
 
   /**
-   * The message status e.g. Initialised, Sending, etc.
+   * The message status e.g. Initialized, Sending, etc.
    */
   private MessageStatus status;
 
@@ -188,7 +188,7 @@ public class Message
     this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
     this.processAttempts = Integer.parseInt(rootElement.getAttributeValue("processAttempts"));
     this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
-    this.status = MessageStatus.INITIALISED;
+    this.status = MessageStatus.INITIALIZED;
   }
 
   /**
@@ -219,7 +219,7 @@ public class Message
     this.sendAttempts = 0;
     this.processAttempts = 0;
     this.downloadAttempts = 0;
-    this.status = MessageStatus.INITIALISED;
+    this.status = MessageStatus.INITIALIZED;
   }
 
   /**
@@ -234,7 +234,7 @@ public class Message
    * @param priority      the message priority
    * @param data          the data for the message which may be encrypted
    * @param dataHash      the hash of the unencrypted data for the message
-   * @param encryptionIV  the base-64 encoded initialisation vector for the encryption scheme
+   * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
       MessagePriority priority, byte[] data, String dataHash, String encryptionIV)
@@ -251,7 +251,7 @@ public class Message
     if (dataHash.length() == 0)
     {
       throw new RuntimeException(
-          "Unable to initialise a message with encrypted data using a blank data hash");
+          "Unable to initialize a message with encrypted data using a blank data hash");
     }
 
     this.encryptionIV = encryptionIV;
@@ -259,7 +259,7 @@ public class Message
     this.sendAttempts = 0;
     this.processAttempts = 0;
     this.downloadAttempts = 0;
-    this.status = MessageStatus.INITIALISED;
+    this.status = MessageStatus.INITIALIZED;
   }
 
   /**
@@ -274,7 +274,7 @@ public class Message
    *                         type of message
    * @param correlationId    the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority         the message priority
-   * @param status           the message status e.g. Initialised, Sending, etc
+   * @param status           the message status e.g. Initialized, Sending, etc
    * @param created          the date and time the message was created
    * @param persisted        the date and time the message was persisted
    * @param updated          the date and time the message was updated
@@ -286,7 +286,7 @@ public class Message
    * @param lastProcessed    the date and time the last attempt was made to process the message
    * @param data             the data for the message which may be encrypted
    * @param dataHash         the hash of the unencrypted data for the message
-   * @param encryptionIV     the base-64 encoded initialisation vector for the encryption scheme
+   * @param encryptionIV     the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
       MessagePriority priority, MessageStatus status, LocalDateTime created,
@@ -400,9 +400,9 @@ public class Message
   }
 
   /**
-   * Returns the base-64 encoded initialisation vector for the encryption scheme for the message.
+   * Returns the base-64 encoded initialization vector for the encryption scheme for the message.
    *
-   * @return the base-64 encoded initialisation vector for the encryption scheme for the message
+   * @return the base-64 encoded initialization vector for the encryption scheme for the message
    */
   public String getEncryptionIV()
   {
@@ -485,9 +485,9 @@ public class Message
   }
 
   /**
-   * Returns the message status e.g. Initialised, Sending, etc.
+   * Returns the message status e.g. Initialized, Sending, etc.
    *
-   * @return the message status e.g. Initialised, Sending, etc
+   * @return the message status e.g. Initialized, Sending, etc
    */
   public MessageStatus getStatus()
   {
@@ -611,9 +611,9 @@ public class Message
   }
 
   /**
-   * Set the base-64 encoded initialisation vector for the encryption scheme for the message.
+   * Set the base-64 encoded initialization vector for the encryption scheme for the message.
    *
-   * @param encryptionIV the base-64 encoded initialisation vector for the encryption scheme for
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for
    *                     the message
    */
   public void setEncryptionIV(String encryptionIV)
@@ -707,9 +707,9 @@ public class Message
   }
 
   /**
-   * Set the message status e.g. Initialised, Sending, etc.
+   * Set the message status e.g. Initialized, Sending, etc.
    *
-   * @param status the message status e.g. Initialised, Sending, etc
+   * @param status the message status e.g. Initialized, Sending, etc
    */
   public void setStatus(MessageStatus status)
   {

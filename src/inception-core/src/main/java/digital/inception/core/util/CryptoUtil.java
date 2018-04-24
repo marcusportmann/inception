@@ -61,11 +61,11 @@ public class CryptoUtil
   private static SecureRandom secureRandom = new SecureRandom();
 
   /**
-   * Creates a random encryption initialisation vector with the specified length.
+   * Creates a random encryption initialization vector with the specified length.
    *
-   * @param length the length of the random encryption initialisation vector
+   * @param length the length of the random encryption initialization vector
    *
-   * @return the random encryption initialisation vector
+   * @return the random encryption initialization vector
    */
   public static byte[] createRandomEncryptionIV(int length)
   {

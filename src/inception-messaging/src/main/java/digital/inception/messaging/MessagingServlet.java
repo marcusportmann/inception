@@ -69,7 +69,7 @@ public class MessagingServlet extends HttpServlet
   public MessagingServlet() {}
 
   /**
-   * Initialise the servlet.
+   * Initialize the servlet.
    *
    * @param config the servlet configuration
    */
@@ -236,7 +236,7 @@ public class MessagingServlet extends HttpServlet
       return false;
     }
 
-    // Create the message and initialise it using the WBXML document sent as part of the request
+    // Create the message and initialize it using the WBXML document sent as part of the request
     Message message = new Message(document);
 
     // Check whether we can process the message
@@ -457,7 +457,7 @@ public class MessagingServlet extends HttpServlet
     }
 
     /*
-     * Create the message part and initialise it using the WBXML document sent as part of the
+     * Create the message part and initialize it using the WBXML document sent as part of the
      * request
      */
     MessagePart messagePart = new MessagePart(document);

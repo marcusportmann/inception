@@ -301,7 +301,7 @@ public class JDBCUtil
           else
           {
             /*
-             * If this is a new multi-line SQL statement then initialise the buffer
+             * If this is a new multi-line SQL statement then initialize the buffer
              * that will be used to concatenate the individual lines of the statement into
              * a single-line SQL statement.
              */

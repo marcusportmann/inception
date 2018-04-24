@@ -110,14 +110,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     if (StringUtil.isNullOrEmpty(jwtPrivateKey))
     {
       throw new ConfigurationException(
-          "Failed to initialise the JWT access token converter for the authorization server: "
+          "Failed to initialize the JWT access token converter for the authorization server: "
           + "The JWT private key was not specified");
     }
 
     if (StringUtil.isNullOrEmpty(jwtPublicKey))
     {
       throw new ConfigurationException(
-          "Failed to initialise the JWT access token converter for the authorization server: "
+          "Failed to initialize the JWT access token converter for the authorization server: "
           + "The JWT public key was not specified");
     }
 
@@ -134,7 +134,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     catch (Throwable e)
     {
       throw new FatalBeanException(
-          "Failed to initialise the JWT access token converter for the authorization server", e);
+          "Failed to initialize the JWT access token converter for the authorization server", e);
     }
   }
 

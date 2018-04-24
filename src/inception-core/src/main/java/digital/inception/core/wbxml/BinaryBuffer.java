@@ -45,7 +45,7 @@ public class BinaryBuffer
   /**
    * Constructs a new <code>BinaryBuffer</code> containing the specified binary data.
    *
-   * @param data the binary data to initialise the <code>BinaryBuffer</code> with
+   * @param data the binary data to initialize the <code>BinaryBuffer</code> with
    */
   public BinaryBuffer(byte[] data)
   {

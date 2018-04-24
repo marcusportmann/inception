@@ -23,6 +23,7 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
@@ -46,7 +46,7 @@ import java.util.Date;
  */
 @Service
 public class SchedulerService
-  implements ISchedulerService
+  implements ISchedulerService, InitializingBean
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
@@ -78,6 +78,18 @@ public class SchedulerService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * Initialize the Scheduler Service.
+   *
+   * @throws Exception
+   */
+  @Override
+  public void afterPropertiesSet()
+    throws Exception
+  {
+    logger.info(String.format("Initializing the Scheduler Service (%s)", instanceName));
+  }
 
   /**
    * Create the job.
@@ -221,13 +233,13 @@ public class SchedulerService
           job.getName(), job.getId(), job.getJobClass()), e);
     }
 
-    // Initialise the job
+    // Initialize the job
     IJob jobImplementation;
 
     try
     {
       // Create a new instance of the job
-      Object jobObject = jobClass.newInstance();
+      Object jobObject = jobClass.getConstructor().newInstance();
 
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob))
@@ -245,7 +257,7 @@ public class SchedulerService
     catch (Throwable e)
     {
       throw new SchedulerServiceException(String.format(
-          "Failed to initialise the job (%s) with ID (%s)", job.getName(), job.getId()), e);
+          "Failed to initialize the job (%s) with ID (%s)", job.getName(), job.getId()), e);
     }
 
     // Execute the job
@@ -261,7 +273,7 @@ public class SchedulerService
         parameters.put(jobParameter.getName(), jobParameter.getValue());
       }
 
-      // Initialise the job execution context
+      // Initialize the job execution context
       JobExecutionContext context = new JobExecutionContext(job.getNextExecution(), parameters);
 
       // Execute the job
@@ -358,7 +370,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId), e);
+      throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId),
+          e);
     }
   }
 
@@ -672,15 +685,6 @@ public class SchedulerService
       throw new SchedulerServiceException(String.format(
           "Failed to increment the execution attempts for the job (%s)", jobId), e);
     }
-  }
-
-  /**
-   * Initialise the Scheduler Service.
-   */
-  @PostConstruct
-  public void init()
-  {
-    logger.info(String.format("Initialising the Scheduler Service (%s)", instanceName));
   }
 
   /**

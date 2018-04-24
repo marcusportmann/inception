@@ -76,7 +76,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     if (StringUtil.isNullOrEmpty(jwtPublicKey))
     {
       throw new ConfigurationException(
-        "Failed to initialise the JWT access token converter for the resource server: "
+        "Failed to initialize the JWT access token converter for the resource server: "
           + "The JWT public key was not specified");
     }
 
@@ -91,7 +91,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     catch (Throwable e)
     {
       throw new FatalBeanException(
-        "Failed to initialise the JWT access token converter for the resource server", e);
+        "Failed to initialize the JWT access token converter for the resource server", e);
     }
   }
 

@@ -175,7 +175,7 @@ public class TransactionManagementConfigurer
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to initialise the Atomikos User Transaction", e);
+          throw new RuntimeException("Failed to initialize the Atomikos User Transaction", e);
         }
       }
 
@@ -232,7 +232,7 @@ public class TransactionManagementConfigurer
         }
         catch (Throwable e)
         {
-          throw new RuntimeException("Failed to initialise the Atomikos Transaction Manager", e);
+          throw new RuntimeException("Failed to initialize the Atomikos Transaction Manager", e);
         }
       }
 
