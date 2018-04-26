@@ -54,10 +54,6 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-configuration-rs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-rs</artifactId>
     </dependency>
     <dependency>
