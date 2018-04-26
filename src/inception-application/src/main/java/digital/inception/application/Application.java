@@ -19,11 +19,12 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
-import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.support.MergedMessageSource;
+import digital.inception.core.util.JDBCUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -47,7 +48,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
 import java.sql.Connection;
@@ -75,6 +75,7 @@ import java.util.concurrent.Executor;
 @EnableTransactionManagement
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public abstract class Application extends ApplicationBase
+  implements DisposableBean
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
@@ -124,6 +125,15 @@ public abstract class Application extends ApplicationBase
    * Constructs a new <code>Application</code>.
    */
   public Application() {}
+
+  /**
+   * Destroy.
+   */
+  public void destroy()
+    throws Exception
+  {
+    shutdownInMemoryApplicationDatabase();
+  }
 
   /**
    * Returns the application entity manager factory bean associated with the application data
@@ -462,7 +472,6 @@ public abstract class Application extends ApplicationBase
   /**
    * Shutdown the in-memory application database if required.
    */
-  @PreDestroy
   protected void shutdownInMemoryApplicationDatabase()
   {
     if (dataSource != null)

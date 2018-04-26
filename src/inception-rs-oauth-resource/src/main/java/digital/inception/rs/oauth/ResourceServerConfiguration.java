@@ -19,20 +19,16 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
-import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.StringUtil;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.config.annotation.method.configuration
   .EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.jwt.crypto.sign.SignatureVerifier;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration
   .ResourceServerConfigurerAdapter;
@@ -42,10 +38,8 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPublicKeySpec;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ResourceServerConfiguration</code> class provides the OAuth2 Resource Server
@@ -70,13 +64,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
    *
    * @return the OAuth2 access token converter for the resource server
    */
-  @Bean
   public JwtAccessTokenConverter accessTokenConverter()
   {
     if (StringUtil.isNullOrEmpty(jwtPublicKey))
     {
       throw new ConfigurationException(
-        "Failed to initialize the JWT access token converter for the resource server: "
+          "Failed to initialize the JWT access token converter for the resource server: "
           + "The JWT public key was not specified");
     }
 
@@ -91,7 +84,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     catch (Throwable e)
     {
       throw new FatalBeanException(
-        "Failed to initialize the JWT access token converter for the resource server", e);
+          "Failed to initialize the JWT access token converter for the resource server", e);
     }
   }
 
@@ -121,7 +114,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
    *
    * @return the OAuth2 token services for the resource server
    */
-  @Bean
   public DefaultTokenServices tokenServices()
   {
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
@@ -135,7 +127,6 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
    *
    * @return the OAuth2 token store for the resource server
    */
-  @Bean
   public TokenStore tokenStore()
   {
     return new JwtTokenStore(accessTokenConverter());

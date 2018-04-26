@@ -101,8 +101,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the JWT access token converter for the authorization server
    */
-  @Bean
-  @Primary
   public JwtAccessTokenConverter accessTokenConverter()
   {
     org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration xxx;
@@ -210,7 +208,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the token enhancer for the authorization server
    */
-  @Bean
   public TokenEnhancer tokenEnhancer()
   {
     return new TokenEnhancer();
@@ -221,7 +218,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the token services for the authorization server
    */
-  @Bean
   public DefaultTokenServices tokenServices()
   {
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
@@ -237,7 +233,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the OAuth2 token store for the authorization server
    */
-  @Bean
   public TokenStore tokenStore()
   {
     return new JwtTokenStore(accessTokenConverter());
@@ -248,7 +243,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the user details service
    */
-  @Bean
   public UserDetailsService userDetailsService()
   {
     return new UserDetailsService();
