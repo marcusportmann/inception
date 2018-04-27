@@ -35,6 +35,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -166,7 +167,7 @@ public class SystemMessageTest
     throws Exception
   {
     CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", LocalDateTime.now());
+        "Test Standard Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -235,7 +236,7 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", LocalDateTime.now());
+        "Test Custom Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {
@@ -277,7 +278,7 @@ public class SystemMessageTest
     parameters.put("Parameter Name 2", "Parameter Value 2");
 
     CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", LocalDateTime.now());
+        "Test Standard Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -346,7 +347,7 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", LocalDateTime.now());
+        "Test Custom Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {
