@@ -11,7 +11,7 @@ import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 import { decode } from "jsonwebtoken";
 import {Session} from "../../services/security/session";
 import {HttpErrorResponse} from "@angular/common/http";
-import {TestError} from "../../services/security/security.service.errors";
+import {LoginError} from "../../services/security/security.service.errors";
 
 
 @Component({
@@ -25,8 +25,8 @@ export class LoginComponent {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      username: ['', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      password: ['', Validators.required],
+      username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+      password: ['Password1', Validators.required],
     });
   }
 
@@ -66,8 +66,8 @@ export class LoginComponent {
       },
         error => {
 
-        if (error instanceof TestError ) {
-          console.log('Test error = ', error);
+        if (error instanceof LoginError ) {
+          console.log('Login error = ', error);
         }
         else {
           console.log('Unknown error = ', error);

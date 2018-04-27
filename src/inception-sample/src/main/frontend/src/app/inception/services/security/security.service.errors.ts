@@ -1,6 +1,6 @@
 
 
-export class TestError {
+export class LoginError {
 
   public code: number;
 

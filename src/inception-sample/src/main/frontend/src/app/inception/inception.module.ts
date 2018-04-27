@@ -19,6 +19,7 @@ import {
   AdminContainerComponent,
   AsideComponent,
   BreadcrumbsComponent,
+  ErrorModalComponent,
   FooterComponent,
   HeaderComponent,
   SidebarComponent,
@@ -38,10 +39,11 @@ import {
 import { SecurityService } from './services/security/security.service';
 
 // Import 3rd party components
-import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
-import { BsDatepickerModule} from 'ngx-bootstrap';
+import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SelectModule } from 'ng-select';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TimepickerModule } from 'ngx-bootstrap';
@@ -56,6 +58,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     ChartsModule,
+    ModalModule.forRoot(),
     SelectModule,
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
@@ -66,6 +69,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     AdminContainerComponent,
     AsideComponent,
     BreadcrumbsComponent,
+    ErrorModalComponent,
     FooterComponent,
     HeaderComponent,
     SidebarComponent,

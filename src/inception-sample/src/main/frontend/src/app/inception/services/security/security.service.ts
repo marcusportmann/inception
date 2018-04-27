@@ -14,7 +14,7 @@ import {
 import { decode } from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
-import {TestError} from "./security.service.errors";
+import {LoginError} from "./security.service.errors";
 
 
 @Injectable()
@@ -29,7 +29,7 @@ export class SecurityService {
     let body = new HttpParams()
     .set('grant_type', 'password')
     .set('username', 'Administrator')
-    .set('password', 'Password1')
+    .set('password', 'Password12')
     .set('scope', 'inception-sample')
     .set('client_id', 'inception-sample');
 
@@ -48,9 +48,13 @@ export class SecurityService {
         // TODO: Map different HTTP error codes to specific error types -- MARCUS
 
 
-        return Observable.throw(new TestError(error.status));
+        return Observable.throw(new LoginError(error.status));
 
       }));
 
   }
+
+
+
+
 }
