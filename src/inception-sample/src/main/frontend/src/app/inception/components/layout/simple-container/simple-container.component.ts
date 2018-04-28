@@ -1,7 +1,17 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ContainerComponent} from "../container";
 
 @Component({
   selector: 'inception-layout-simple-container',
   template: '<router-outlet></router-outlet>',
 })
-export class SimpleContainerComponent { }
+export class SimpleContainerComponent extends ContainerComponent implements OnInit {
+
+  constructor() {
+    super();
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+  }
+}

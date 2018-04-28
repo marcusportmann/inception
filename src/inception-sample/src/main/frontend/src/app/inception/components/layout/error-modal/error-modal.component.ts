@@ -12,5 +12,8 @@ export class ErrorModalComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  show(): void {
+    this.errorModal.show();
+  }
 
 }

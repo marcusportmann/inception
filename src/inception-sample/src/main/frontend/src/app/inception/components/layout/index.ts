@@ -1,6 +1,7 @@
 export * from './admin-container';
 export * from './aside';
 export * from './breadcrumbs';
+export * from './container';
 export * from './error-modal';
 export * from './footer';
 export * from './header';

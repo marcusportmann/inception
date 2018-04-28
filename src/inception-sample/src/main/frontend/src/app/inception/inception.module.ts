@@ -19,6 +19,7 @@ import {
   AdminContainerComponent,
   AsideComponent,
   BreadcrumbsComponent,
+  ContainerComponent,
   ErrorModalComponent,
   FooterComponent,
   HeaderComponent,
@@ -36,6 +37,7 @@ import {
 } from './components/layout';
 
 // Import Inception services
+import { ErrorService } from './services/error/error.service';
 import { SecurityService } from './services/security/security.service';
 
 // Import 3rd party components
@@ -69,6 +71,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     AdminContainerComponent,
     AsideComponent,
     BreadcrumbsComponent,
+    ContainerComponent,
     ErrorModalComponent,
     FooterComponent,
     HeaderComponent,
@@ -104,7 +107,9 @@ import { TimepickerModule } from 'ngx-bootstrap';
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
-    SecurityService]
+    ErrorService,
+    SecurityService],
+  bootstrap: [ErrorModalComponent]
 })
 export class InceptionModule {
 
