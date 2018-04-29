@@ -43,7 +43,7 @@ export class LoginComponent {
 
   public onCancel() {
 
-    this.errorService.show();
+    this.errorService.showConfirm('This is a title', 'This is a message');
 
     //console.log('Cancel clicked!');
     // let control = this.loginForm.get('username')

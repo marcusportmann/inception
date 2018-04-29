@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 // Import Angular components
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
-// Import Inception directives
+// Import Inception modules
 import { DirectivesModule } from "./directives/directives.module";
 
 // Import Inception components
@@ -40,8 +40,7 @@ import {
 import { ErrorService } from './services/error/error.service';
 import { SecurityService } from './services/security/security.service';
 
-// Import 3rd party components
-import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
+// Import 3rd party modules
 import { BsDatepickerModule } from 'ngx-bootstrap';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
@@ -49,6 +48,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SelectModule } from 'ng-select';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TimepickerModule } from 'ngx-bootstrap';
+
+// Import 3rd party components
+import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
@@ -97,6 +99,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
     BsDatepickerModule,
     BsDropdownModule,
     ChartsModule,
+    ModalModule,
     SelectModule,
     TabsModule,
     TimepickerModule,
