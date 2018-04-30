@@ -15,19 +15,10 @@
  */
 
 /**
- * The OrganizationStatus enumeration defines the possible status for an Organization.
+ * The Error class provides the base class that all error classes should be derived from.
  *
  * @author Marcus Portmann
  */
-export enum OrganizationStatus {
+export abstract class Error {
 
-  /**
-   * The organization is inactive.
-   */
-  Inactive = 0,
-
-  /**
-   * The organization is active.
-   */
-  Active = 1
 }
