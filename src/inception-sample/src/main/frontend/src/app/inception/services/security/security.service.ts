@@ -17,6 +17,8 @@ import {TokenResponse} from "./token-response";
 import {LoginError} from "./security.service.errors";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
 import {Organization} from "./organization";
+import {OrganizationStatus} from "./organization-status";
+import {forEach} from "@angular/router/src/utils/collection";
 
 
 @Injectable()
@@ -68,14 +70,32 @@ export class SecurityService {
 
   public getOrganizations(): Observable<Organization[]> {
 
+    //let organization: Organization = new Organization('ID', 'Name', OrganizationStatus.Active);
+
+    //console.log('organization.id = ' + organization.id);
+
+
     let session:Session  = this.getSession();
 
     let options = { headers: { 'Authorization': 'Bearer ' + session.accessToken } };
 
 
-    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations', options).pipe(
+    return this.httpClient.get<Organization[]>('http://localhost:8080/api/organizations', options).pipe(
       map(organizations => {
 
+
+        for(var i:number = 0; i < organizations.length; i++) {
+
+
+          console.log('organizations[' + i+ '] = ', organizations[i]);
+
+          if (organizations[i].status == OrganizationStatus.Active) {
+            console.log('Found active organization ', organizations[i].name);
+          }
+          else if (organizations[i].status == OrganizationStatus.Inactive) {
+            console.log('Found inactive organization ', organizations[i].name);
+          }
+        }
 
 
         return organizations;

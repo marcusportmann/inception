@@ -21,6 +21,9 @@ export class Organization {
 
 
   constructor(id:string, name: string, status: OrganizationStatus) {
+
+    console.log('In Organization constructor');
+
     this._id = id;
     this._name = name;
     this._status = status;
@@ -32,10 +35,16 @@ export class Organization {
    * @returns the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   get id(): string {
+
+    console.log('In get Organization::id()');
+
     return this._id;
   }
 
   set id(id: string) {
+
+    console.log('In set Organization::id()');
+
     this._id = id;
   }
 
