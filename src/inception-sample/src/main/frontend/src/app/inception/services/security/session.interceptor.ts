@@ -27,17 +27,7 @@ export class SessionInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${session.accessToken}`
         }
       });
-
     }
-
-
-    /*
-
-    if (session) {
-
-
-    }
-    */
 
     return nextHttpHandler.handle(httpRequest);
   }
