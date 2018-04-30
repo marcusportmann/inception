@@ -6,13 +6,13 @@ import {
   HttpRequest
 } from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {SecurityService} from "./security.service";
+
 import {Session} from "./session";
 
 @Injectable()
 export class SessionInterceptor implements HttpInterceptor {
 
-  constructor(private _securityService: SecurityService) {
+  constructor(private _securityService: SessionS) {
 
   }
 

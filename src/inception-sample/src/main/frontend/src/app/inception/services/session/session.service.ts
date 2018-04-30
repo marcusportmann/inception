@@ -16,13 +16,10 @@ import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {LoginError} from "./session.service.errors";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
-import {Organization} from "./organization";
-import {OrganizationStatus} from "./organization-status";
-import {forEach} from "@angular/router/src/utils/collection";
 
 
 @Injectable()
-export class SecurityService {
+export class SessionService {
 
   constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private sessionStorage: WebStorageService) {
 
@@ -68,47 +65,6 @@ export class SecurityService {
     // TODO: Check if session has expired and if so remove from session storage -- MARCUS
 
     return session;
-  }
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @returns {Observable<Organization[]>}
-   */
-  public getOrganizations(): Observable<Organization[]> {
-
-    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
-      map(organizations => {
-
-
-        for(var i:number = 0; i < organizations.length; i++) {
-
-
-          console.log('organizations[' + i+ '] = ', organizations[i]);
-
-          if (organizations[i].status == OrganizationStatus.Active) {
-            console.log('Found active organization ', organizations[i].name);
-          }
-          else if (organizations[i].status == OrganizationStatus.Inactive) {
-            console.log('Found inactive organization ', organizations[i].name);
-          }
-        }
-
-
-        return organizations;
-
-      }), catchError((error: HttpErrorResponse) => {
-
-        console.log('catchError = ', error);
-
-        // TODO: Map different HTTP error codes to specific error types -- MARCUS
-
-
-        return Observable.throw(new LoginError(error.status));
-
-      }));
-
-
   }
 
 

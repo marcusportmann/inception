@@ -1,5 +1,6 @@
 
 
+/*
 export class LoginError {
 
   public code: number;
@@ -8,3 +9,4 @@ export class LoginError {
     this.code = code;
   }
 }
+*/

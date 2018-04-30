@@ -24,9 +24,6 @@ export class Organization {
    * @return {string}
    */
   get id(): string {
-
-    console.log('In get Organization::id()');
-
     return this._id;
   }
 
@@ -37,9 +34,6 @@ export class Organization {
    *                    organization.
    */
   set id(id: string) {
-
-    console.log('In set Organization::id()');
-
     this._id = id;
   }
 
@@ -78,5 +72,4 @@ export class Organization {
   set status(status: OrganizationStatus) {
     this._status = status;
   }
-
 }
