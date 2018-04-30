@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 // Import Angular modules
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -52,6 +52,7 @@ import { TimepickerModule } from 'ngx-bootstrap';
 
 // Import 3rd party components
 import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
+import {SessionInterceptor} from "./services/security/session.interceptor";
 
 @NgModule({
   imports: [
@@ -112,6 +113,11 @@ import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
   providers: [{
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SessionInterceptor,
+      multi: true
     },
     ErrorService,
     SecurityService],
