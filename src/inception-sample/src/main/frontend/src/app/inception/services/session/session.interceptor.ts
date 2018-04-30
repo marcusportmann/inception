@@ -18,7 +18,7 @@ export class SessionInterceptor implements HttpInterceptor {
 
   intercept(httpRequest: HttpRequest<any>, nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
 
-    let session:Session  = this._securityService.getSession();
+    let session: Session = this._securityService.getSession();
 
     if ((!httpRequest.url.endsWith('/oauth/token')) && session) {
 
