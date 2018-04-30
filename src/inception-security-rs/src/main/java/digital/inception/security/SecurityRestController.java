@@ -18,11 +18,22 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.rs.RestControllerError;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Validator;
+import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,6 +54,30 @@ public class SecurityRestController
   /* Validator */
   @Autowired
   private Validator validator;
+
+
+
+  /**
+   * Retrieve the organizations.
+   *
+   * @return the organizations
+   */
+  @ApiOperation(value = "Retrieve the organizations", notes = "Retrieve the organizations")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/api/organizations", method = RequestMethod.GET,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  public List<Organization> getOrganizations()
+    throws SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    return securityService.getOrganizations();
+  }
 
 
 }

@@ -74,7 +74,7 @@ public class SecurityService
       "e5741a89-c87b-4406-8a60-2cc0b0a5fa3e");
 
   /**
-   * The maximum number of filtered organisations.
+   * The maximum number of filtered organizations.
    */
   private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
@@ -500,67 +500,67 @@ public class SecurityService
   }
 
   /**
-   * Create a new organisation.
+   * Create a new organization.
    *
-   * @param organisation        the organisation
-   * @param createUserDirectory should a new internal user directory be created for the organisation
+   * @param organization        the organization
+   * @param createUserDirectory should a new internal user directory be created for the organization
    *
-   * @return the new internal user directory that was created for the organisation or
+   * @return the new internal user directory that was created for the organization or
    *         <code>null</code> if no user directory was created
    */
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
-    throws InvalidArgumentException, DuplicateOrganisationException, SecurityServiceException
+  public UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
+    throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException
   {
     // Validate parameters
-    if (organisation == null)
+    if (organization == null)
     {
-      throw new InvalidArgumentException("organisation");
+      throw new InvalidArgumentException("organization");
     }
 
-    if (isNullOrEmpty(organisation.getName()))
+    if (isNullOrEmpty(organization.getName()))
     {
-      throw new InvalidArgumentException("organisation.name");
+      throw new InvalidArgumentException("organization.name");
     }
 
     try
     {
-      UUID organisationId = idGenerator.nextUUID();
+      UUID organizationId = idGenerator.nextUUID();
 
       UserDirectory userDirectory = null;
 
       try (Connection connection = dataSource.getConnection())
       {
-        String createOrganisationSQL =
-            "INSERT INTO security.organisations (id, name, status) VALUES (?, ?, ?)";
+        String createOrganizationSQL =
+            "INSERT INTO security.organizations (id, name, status) VALUES (?, ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(createOrganisationSQL))
+        try (PreparedStatement statement = connection.prepareStatement(createOrganizationSQL))
         {
-          if (organisationWithNameExists(connection, organisation.getName()))
+          if (organizationWithNameExists(connection, organization.getName()))
           {
-            throw new DuplicateOrganisationException(organisation.getName());
+            throw new DuplicateOrganizationException(organization.getName());
           }
 
-          statement.setObject(1, organisationId);
-          statement.setString(2, organisation.getName());
-          statement.setInt(3, organisation.getStatus().code());
+          statement.setObject(1, organizationId);
+          statement.setString(2, organization.getName());
+          statement.setInt(3, organization.getStatus().code());
 
           if (statement.executeUpdate() != 1)
           {
             throw new SecurityServiceException(String.format(
                 "No rows were affected as a result of executing the SQL statement (%s)",
-                createOrganisationSQL));
+                createOrganizationSQL));
           }
         }
 
-        String addUserDirectoryToOrganisationSQL =
-            "INSERT INTO security.user_directory_to_organisation_map "
-            + "(user_directory_id, organisation_id) VALUES (?, ?)";
+        String addUserDirectoryToOrganizationSQL =
+            "INSERT INTO security.user_directory_to_organization_map "
+            + "(user_directory_id, organization_id) VALUES (?, ?)";
 
         if (createUserDirectory)
         {
-          userDirectory = newInternalUserDirectoryForOrganisation(organisation);
+          userDirectory = newInternalUserDirectoryForOrganization(organization);
 
           String createUserDirectorySQL = "INSERT INTO security.user_directories "
               + "(id, type_id, name, configuration) VALUES (?, ?, ?, ?)";
@@ -580,39 +580,39 @@ public class SecurityService
             }
           }
 
-          // Link the new user directory to the new organisation
+          // Link the new user directory to the new organization
           try (PreparedStatement statement = connection.prepareStatement(
-              addUserDirectoryToOrganisationSQL))
+              addUserDirectoryToOrganizationSQL))
           {
             statement.setObject(1, userDirectory.getId());
-            statement.setObject(2, organisationId);
+            statement.setObject(2, organizationId);
 
             if (statement.executeUpdate() != 1)
             {
               throw new SecurityServiceException(String.format(
                   "No rows were affected as a result of executing the SQL statement (%s)",
-                  addUserDirectoryToOrganisationSQL));
+                  addUserDirectoryToOrganizationSQL));
             }
           }
         }
 
-        // Link the new organisation to the default user directory
+        // Link the new organization to the default user directory
         try (PreparedStatement statement = connection.prepareStatement(
-            addUserDirectoryToOrganisationSQL))
+            addUserDirectoryToOrganizationSQL))
         {
           statement.setObject(1, DEFAULT_USER_DIRECTORY_ID);
-          statement.setObject(2, organisationId);
+          statement.setObject(2, organizationId);
 
           if (statement.executeUpdate() != 1)
           {
             throw new SecurityServiceException(String.format(
                 "No rows were affected as a result of executing the SQL statement (%s)",
-                addUserDirectoryToOrganisationSQL));
+                addUserDirectoryToOrganizationSQL));
           }
         }
       }
 
-      organisation.setId(organisationId);
+      organization.setId(organizationId);
 
       try
       {
@@ -625,14 +625,14 @@ public class SecurityService
 
       return userDirectory;
     }
-    catch (DuplicateOrganisationException e)
+    catch (DuplicateOrganizationException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the organisation (%s): %s", organisation.getId(), e.getMessage()), e);
+          "Failed to create the organization (%s): %s", organization.getId(), e.getMessage()), e);
     }
   }
 
@@ -815,48 +815,48 @@ public class SecurityService
   }
 
   /**
-   * Delete the organisation.
+   * Delete the organization.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    */
   @Override
-  public void deleteOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+  public void deleteOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisationId))
+    if (isNullOrEmpty(organizationId))
     {
       throw new InvalidArgumentException("id");
     }
 
-    String deleteOrganisationSQL = "DELETE FROM security.organisations WHERE id=?";
+    String deleteOrganizationSQL = "DELETE FROM security.organizations WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(deleteOrganizationSQL))
     {
-      if (!organisationExists(connection, organisationId))
+      if (!organizationExists(connection, organizationId))
       {
-        throw new OrganisationNotFoundException(organisationId);
+        throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, organisationId);
+      statement.setObject(1, organizationId);
 
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteOrganisationSQL));
+            deleteOrganizationSQL));
       }
     }
-    catch (OrganisationNotFoundException e)
+    catch (OrganizationNotFoundException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the organisation (%s): %s", organisationId, e.getMessage()), e);
+          "Failed to delete the organization (%s): %s", organizationId, e.getMessage()), e);
     }
   }
 
@@ -977,26 +977,26 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the filtered list of organisations.
+   * Retrieve the filtered list of organizations.
    *
-   * @param filter the filter to apply to the organisations
+   * @param filter the filter to apply to the organizations
    *
-   * @return the filtered list of organisations
+   * @return the filtered list of organizations
    */
   @Override
-  public List<Organisation> getFilteredOrganisations(String filter)
+  public List<Organization> getFilteredOrganizations(String filter)
     throws SecurityServiceException
   {
-    String getOrganisationsSQL =
-        "SELECT id, name, status FROM security.organisations ORDER BY name";
+    String getOrganizationsSQL =
+        "SELECT id, name, status FROM security.organizations ORDER BY name";
 
-    String getFilteredOrganisationsSQL = "SELECT id, name, status FROM security.organisations "
+    String getFilteredOrganizationsSQL = "SELECT id, name, status FROM security.organizations "
         + "WHERE (UPPER(name) LIKE ?) ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getOrganisationsSQL
-          : getFilteredOrganisationsSQL))
+          ? getOrganizationsSQL
+          : getFilteredOrganizationsSQL))
     {
       statement.setMaxRows(MAX_FILTERED_ORGANISATIONS);
 
@@ -1009,11 +1009,11 @@ public class SecurityService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        List<Organisation> list = new ArrayList<>();
+        List<Organization> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(buildOrganisationFromResultSet(rs));
+          list.add(buildOrganizationFromResultSet(rs));
         }
 
         return list;
@@ -1022,7 +1022,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered organisations: %s", e.getMessage()), e);
+          "Failed to retrieve the filtered organizations: %s", e.getMessage()), e);
     }
   }
 
@@ -1365,14 +1365,14 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the number of filtered organisations.
+   * Retrieve the number of filtered organizations.
    *
-   * @param filter the filter to apply to the organisations
+   * @param filter the filter to apply to the organizations
    *
-   * @return the number of filtered organisations
+   * @return the number of filtered organizations
    */
   @Override
-  public int getNumberOfFilteredOrganisations(String filter)
+  public int getNumberOfFilteredOrganizations(String filter)
     throws InvalidArgumentException, SecurityServiceException
   {
     // Validate parameters
@@ -1381,15 +1381,15 @@ public class SecurityService
       throw new InvalidArgumentException("filter");
     }
 
-    String getNumberOfOrganisationsSQL = "SELECT COUNT(id) FROM security.organisations";
+    String getNumberOfOrganizationsSQL = "SELECT COUNT(id) FROM security.organizations";
 
-    String getNumberOfFilteredOrganisationsSQL =
-        "SELECT COUNT(id) FROM security.organisations WHERE (UPPER(name) LIKE ?)";
+    String getNumberOfFilteredOrganizationsSQL =
+        "SELECT COUNT(id) FROM security.organizations WHERE (UPPER(name) LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
-          ? getNumberOfOrganisationsSQL
-          : getNumberOfFilteredOrganisationsSQL))
+          ? getNumberOfOrganizationsSQL
+          : getNumberOfFilteredOrganizationsSQL))
     {
       if (!StringUtil.isNullOrEmpty(filter))
       {
@@ -1402,11 +1402,11 @@ public class SecurityService
       {
         if (rs.next())
         {
-          int numberOfFilteredOrganisations = rs.getInt(1);
+          int numberOfFilteredOrganizations = rs.getInt(1);
 
-          return ((numberOfFilteredOrganisations > MAX_FILTERED_ORGANISATIONS)
+          return ((numberOfFilteredOrganizations > MAX_FILTERED_ORGANISATIONS)
               ? MAX_FILTERED_ORGANISATIONS
-              : numberOfFilteredOrganisations);
+              : numberOfFilteredOrganizations);
         }
         else
         {
@@ -1417,7 +1417,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of filtered organisations: %s", e.getMessage()), e);
+          "Failed to retrieve the number of filtered organizations: %s", e.getMessage()), e);
     }
   }
 
@@ -1541,18 +1541,18 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the number of organisations
+   * Retrieve the number of organizations
    *
-   * @return the number of organisations
+   * @return the number of organizations
    */
   @Override
-  public int getNumberOfOrganisations()
+  public int getNumberOfOrganizations()
     throws SecurityServiceException
   {
-    String getNumberOfOrganisationsSQL = "SELECT COUNT(id) FROM security.organisations";
+    String getNumberOfOrganizationsSQL = "SELECT COUNT(id) FROM security.organizations";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfOrganisationsSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfOrganizationsSQL))
     {
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1569,7 +1569,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of organisations: %s", e.getMessage()), e);
+          "Failed to retrieve the number of organizations: %s", e.getMessage()), e);
     }
   }
 
@@ -1635,65 +1635,65 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the organisation.
+   * Retrieve the organization.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
-   * @return the organisation
+   * @return the organization
    */
   @Override
-  public Organisation getOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+  public Organization getOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisationId))
+    if (isNullOrEmpty(organizationId))
     {
       throw new InvalidArgumentException("id");
     }
 
-    String getOrganisationSQL = "SELECT id, name, status FROM security.organisations WHERE id=?";
+    String getOrganizationSQL = "SELECT id, name, status FROM security.organizations WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(getOrganizationSQL))
     {
-      statement.setObject(1, organisationId);
+      statement.setObject(1, organizationId);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return buildOrganisationFromResultSet(rs);
+          return buildOrganizationFromResultSet(rs);
         }
         else
         {
-          throw new OrganisationNotFoundException(organisationId);
+          throw new OrganizationNotFoundException(organizationId);
         }
       }
     }
-    catch (OrganisationNotFoundException e)
+    catch (OrganizationNotFoundException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the organisation (%s): %s", organisationId, e.getMessage()), e);
+          "Failed to retrieve the organization (%s): %s", organizationId, e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
    * associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
    *         associated with the user directory
    */
   @Override
-  public List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
+  public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     // Validate parameters
@@ -1702,13 +1702,13 @@ public class SecurityService
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    String getOrganisationIdsForUserDirectorySQL =
-        "SELECT organisation_id FROM security.user_directory_to_organisation_map "
+    String getOrganizationIdsForUserDirectorySQL =
+        "SELECT organization_id FROM security.user_directory_to_organization_map "
         + "WHERE user_directory_id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-          getOrganisationIdsForUserDirectorySQL))
+          getOrganizationIdsForUserDirectorySQL))
     {
       if (!userDirectoryExists(connection, userDirectoryId))
       {
@@ -1736,33 +1736,33 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the IDs for the organisations for the user directory (%s): %s",
+          "Failed to retrieve the IDs for the organizations for the user directory (%s): %s",
           userDirectoryId, e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the organisations.
+   * Retrieve the organizations.
    *
-   * @return the list of organisations
+   * @return the list of organizations
    */
   @Override
-  public List<Organisation> getOrganisations()
+  public List<Organization> getOrganizations()
     throws SecurityServiceException
   {
-    String getOrganisationsSQL =
-        "SELECT id, name, status FROM security.organisations ORDER BY name";
+    String getOrganizationsSQL =
+        "SELECT id, name, status FROM security.organizations ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganisationsSQL))
+      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
     {
       try (ResultSet rs = statement.executeQuery())
       {
-        List<Organisation> list = new ArrayList<>();
+        List<Organization> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(buildOrganisationFromResultSet(rs));
+          list.add(buildOrganizationFromResultSet(rs));
         }
 
         return list;
@@ -1770,21 +1770,21 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the organisations: %s",
+      throw new SecurityServiceException(String.format("Failed to retrieve the organizations: %s",
           e.getMessage()), e);
     }
   }
 
   /**
-   * Retrieve the organisations associated with the user directory.
+   * Retrieve the organizations associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organisations associated with the user directory
+   * @return the organizations associated with the user directory
    */
   @Override
-  public List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
+  public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     // Validate parameters
@@ -1793,14 +1793,14 @@ public class SecurityService
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    String getOrganisationsForUserDirectorySQL =
-        "SELECT o.id, o.name, o.status FROM security.organisations o INNER JOIN "
-        + "security.user_directory_to_organisation_map udtom ON o.id = udtom.organisation_id WHERE "
+    String getOrganizationsForUserDirectorySQL =
+        "SELECT o.id, o.name, o.status FROM security.organizations o INNER JOIN "
+        + "security.user_directory_to_organization_map udtom ON o.id = udtom.organization_id WHERE "
         + "udtom.user_directory_id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-          getOrganisationsForUserDirectorySQL))
+          getOrganizationsForUserDirectorySQL))
     {
       if (!userDirectoryExists(connection, userDirectoryId))
       {
@@ -1811,11 +1811,11 @@ public class SecurityService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        List<Organisation> list = new ArrayList<>();
+        List<Organization> list = new ArrayList<>();
 
         while (rs.next())
         {
-          list.add(buildOrganisationFromResultSet(rs));
+          list.add(buildOrganizationFromResultSet(rs));
         }
 
         return list;
@@ -1828,7 +1828,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the organisations associated with the user directory (%s): %s",
+          "Failed to retrieve the organizations associated with the user directory (%s): %s",
           userDirectoryId, e.getMessage()), e);
     }
   }
@@ -1903,39 +1903,39 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the user directories the organisation is associated with.
+   * Retrieve the user directories the organization is associated with.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
-   * @return the user directories the organisation is associated with
+   * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     // Validate parameters
-    if (isNullOrEmpty(organisationId))
+    if (isNullOrEmpty(organizationId))
     {
-      throw new InvalidArgumentException("organisationId");
+      throw new InvalidArgumentException("organizationId");
     }
 
-    String getUserDirectoriesForOrganisationSQL =
+    String getUserDirectoriesForOrganizationSQL =
         "SELECT ud.id, ud.type_id, ud.name, ud.configuration FROM security.user_directories ud "
-        + "INNER JOIN security.user_directory_to_organisation_map udtom "
-        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organisations o "
-        + "ON udtom.organisation_id = o.id WHERE o.id=?";
+        + "INNER JOIN security.user_directory_to_organization_map udtom "
+        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
+        + "ON udtom.organization_id = o.id WHERE o.id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
-          getUserDirectoriesForOrganisationSQL))
+          getUserDirectoriesForOrganizationSQL))
     {
-      if (!organisationExists(connection, organisationId))
+      if (!organizationExists(connection, organizationId))
       {
-        throw new OrganisationNotFoundException(organisationId);
+        throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, organisationId);
+      statement.setObject(1, organizationId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1949,15 +1949,15 @@ public class SecurityService
         return list;
       }
     }
-    catch (OrganisationNotFoundException e)
+    catch (OrganizationNotFoundException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directories associated with the organisation (%s): %s",
-          organisationId, e.getMessage()), e);
+          "Failed to retrieve the user directories associated with the organization (%s): %s",
+          organizationId, e.getMessage()), e);
     }
   }
 
@@ -2444,59 +2444,59 @@ public class SecurityService
   }
 
   /**
-   * Update the organisation.
+   * Update the organization.
    *
-   * @param organisation the organisation
+   * @param organization the organization
    */
   @Override
-  public void updateOrganisation(Organisation organisation)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException
+  public void updateOrganization(Organization organization)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     // Validate parameters
-    if (organisation == null)
+    if (organization == null)
     {
-      throw new InvalidArgumentException("organisation");
+      throw new InvalidArgumentException("organization");
     }
 
-    if (isNullOrEmpty(organisation.getId()))
+    if (isNullOrEmpty(organization.getId()))
     {
-      throw new InvalidArgumentException("organisation.id");
+      throw new InvalidArgumentException("organization.id");
     }
 
-    if (isNullOrEmpty(organisation.getName()))
+    if (isNullOrEmpty(organization.getName()))
     {
-      throw new InvalidArgumentException("organisation.name");
+      throw new InvalidArgumentException("organization.name");
     }
 
-    String updateOrganisationSQL = "UPDATE security.organisations SET name=?, status=? WHERE id=?";
+    String updateOrganizationSQL = "UPDATE security.organizations SET name=?, status=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateOrganisationSQL))
+      PreparedStatement statement = connection.prepareStatement(updateOrganizationSQL))
     {
-      if (!organisationExists(connection, organisation.getId()))
+      if (!organizationExists(connection, organization.getId()))
       {
-        throw new OrganisationNotFoundException(organisation.getId());
+        throw new OrganizationNotFoundException(organization.getId());
       }
 
-      statement.setString(1, organisation.getName());
-      statement.setInt(2, organisation.getStatus().code());
-      statement.setObject(3, organisation.getId());
+      statement.setString(1, organization.getName());
+      statement.setInt(2, organization.getStatus().code());
+      statement.setObject(3, organization.getId());
 
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            updateOrganisationSQL));
+            updateOrganizationSQL));
       }
     }
-    catch (OrganisationNotFoundException e)
+    catch (OrganizationNotFoundException e)
     {
       throw e;
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to update the organisation (%s): %s", organisation.getId(), e.getMessage()), e);
+          "Failed to update the organization (%s): %s", organization.getId(), e.getMessage()), e);
     }
   }
 
@@ -2613,23 +2613,23 @@ public class SecurityService
   }
 
   /**
-   * Create a new <code>Organisation</code> instance and populate it with the contents of the
+   * Create a new <code>Organization</code> instance and populate it with the contents of the
    * current row in the specified <code>ResultSet</code>.
    *
    * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>Organisation</code> instance
+   *           <code>Organization</code> instance
    *
-   * @return the populated <code>Organisation</code> instance
+   * @return the populated <code>Organization</code> instance
    */
-  private Organisation buildOrganisationFromResultSet(ResultSet rs)
+  private Organization buildOrganizationFromResultSet(ResultSet rs)
     throws SQLException
   {
-    Organisation organisation = new Organisation();
-    organisation.setId(UUID.fromString(rs.getString(1)));
-    organisation.setName(rs.getString(2));
-    organisation.setStatus(OrganisationStatus.fromCode(rs.getInt(3)));
+    Organization organization = new Organization();
+    organization.setId(UUID.fromString(rs.getString(1)));
+    organization.setName(rs.getString(2));
+    organization.setStatus(OrganizationStatus.fromCode(rs.getInt(3)));
 
-    return organisation;
+    return organization;
   }
 
   /**
@@ -2754,14 +2754,14 @@ public class SecurityService
     return false;
   }
 
-  private UserDirectory newInternalUserDirectoryForOrganisation(Organisation organisation)
+  private UserDirectory newInternalUserDirectoryForOrganization(Organization organization)
     throws SecurityServiceException
   {
     UserDirectory userDirectory = new UserDirectory();
 
     userDirectory.setId(idGenerator.nextUUID());
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
-    userDirectory.setName(organisation.getName() + " User Directory");
+    userDirectory.setName(organization.getName() + " User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory "
         + "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>"
@@ -2777,22 +2777,22 @@ public class SecurityService
   }
 
   /**
-   * Returns <code>true</code> if the organisation exists or <code>false</code> otherwise.
+   * Returns <code>true</code> if the organization exists or <code>false</code> otherwise.
    *
    * @param connection     the existing database connection to use
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
-   * @return <code>true</code> if the organisation exists or <code>false</code> otherwise
+   * @return <code>true</code> if the organization exists or <code>false</code> otherwise
    */
-  private boolean organisationExists(Connection connection, UUID organisationId)
+  private boolean organizationExists(Connection connection, UUID organizationId)
     throws SecurityServiceException
   {
-    String organisationExistsSQL = "SELECT COUNT(id) FROM security.organisations WHERE id=?";
+    String organizationExistsSQL = "SELECT COUNT(id) FROM security.organizations WHERE id=?";
 
-    try (PreparedStatement statement = connection.prepareStatement(organisationExistsSQL))
+    try (PreparedStatement statement = connection.prepareStatement(organizationExistsSQL))
     {
-      statement.setObject(1, organisationId);
+      statement.setObject(1, organizationId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2802,27 +2802,27 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check whether the organisation (%s) exists", organisationId), e);
+          "Failed to check whether the organization (%s) exists", organizationId), e);
     }
   }
 
   /**
-   * Returns <code>true</code> if an organisation with the specified name exists or
+   * Returns <code>true</code> if an organization with the specified name exists or
    * <code>false</code> otherwise.
    *
    * @param connection the existing database connection to use
-   * @param name       the organisation name
+   * @param name       the organization name
    *
-   * @return <code>true</code> if an organisation with the specified name exists or
+   * @return <code>true</code> if an organization with the specified name exists or
    *         <code>false</code> otherwise
    */
-  private boolean organisationWithNameExists(Connection connection, String name)
+  private boolean organizationWithNameExists(Connection connection, String name)
     throws SecurityServiceException
   {
-    String organisationWithNameExistsSQL =
-        "SELECT COUNT(id) FROM security.organisations WHERE (UPPER(name) LIKE ?)";
+    String organizationWithNameExistsSQL =
+        "SELECT COUNT(id) FROM security.organizations WHERE (UPPER(name) LIKE ?)";
 
-    try (PreparedStatement statement = connection.prepareStatement(organisationWithNameExistsSQL))
+    try (PreparedStatement statement = connection.prepareStatement(organizationWithNameExistsSQL))
     {
       statement.setString(1, name.toUpperCase());
 
@@ -2834,7 +2834,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check whether an organisation with the name (%s) exists", name), e);
+          "Failed to check whether an organization with the name (%s) exists", name), e);
     }
   }
 

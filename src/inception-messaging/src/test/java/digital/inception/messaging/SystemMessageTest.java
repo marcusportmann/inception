@@ -118,14 +118,14 @@ public class SystemMessageTest
     assertEquals(0, responseData.getErrorCode());
     assertNotNull(responseData.getErrorMessage());
 
-    List<OrganisationData> organisations = responseData.getOrganisations();
+    List<OrganizationData> organizations = responseData.getOrganizations();
 
-    assertEquals(1, organisations.size());
+    assertEquals(1, organizations.size());
 
-    OrganisationData organisation = organisations.get(0);
+    OrganizationData organization = organizations.get(0);
 
-    assertEquals(UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5"), organisation.getId());
-    assertEquals("MMP", organisation.getName());
+    assertEquals(UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5"), organization.getId());
+    assertEquals("MMP", organization.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());
 

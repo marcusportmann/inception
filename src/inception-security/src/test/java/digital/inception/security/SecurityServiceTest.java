@@ -19,7 +19,6 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.BinaryBuffer;
-import digital.inception.security.*;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import org.junit.Test;
@@ -52,7 +51,7 @@ public class SecurityServiceTest
 {
   private static int functionCount;
   private static int groupCount;
-  private static int organisationCount;
+  private static int organizationCount;
   private static int userCount;
   private static int userDirectoryCount;
 
@@ -69,9 +68,9 @@ public class SecurityServiceTest
   public void addUserToGroupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -106,9 +105,9 @@ public class SecurityServiceTest
   public void adminChangePasswordTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -236,9 +235,9 @@ public class SecurityServiceTest
   public void changePasswordTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -263,9 +262,9 @@ public class SecurityServiceTest
   public void deleteGroupWithExistingMembers()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -306,9 +305,9 @@ public class SecurityServiceTest
   public void deleteInvalidGroupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -323,9 +322,9 @@ public class SecurityServiceTest
   public void deleteInvalidUserTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -353,9 +352,9 @@ public class SecurityServiceTest
   public void duplicateGroupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -364,16 +363,16 @@ public class SecurityServiceTest
   }
 
   /**
-   * Test the duplicate organisation functionality.
+   * Test the duplicate organization functionality.
    */
-  @Test(expected = digital.inception.security.DuplicateOrganisationException.class)
-  public void duplicateOrganisationTest()
+  @Test(expected = DuplicateOrganizationException.class)
+  public void duplicateOrganizationTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    securityService.createOrganisation(organisation, false);
-    securityService.createOrganisation(organisation, false);
+    securityService.createOrganization(organization, false);
+    securityService.createOrganization(organization, false);
   }
 
   /**
@@ -383,9 +382,9 @@ public class SecurityServiceTest
   public void duplicateUserTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -400,9 +399,9 @@ public class SecurityServiceTest
   public void expiredUserPasswordTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -419,9 +418,9 @@ public class SecurityServiceTest
   public void failedAuthenticationTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -446,9 +445,9 @@ public class SecurityServiceTest
   public void findUsersTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     for (int i = 1; i < 20; i++)
     {
@@ -587,9 +586,9 @@ public class SecurityServiceTest
   public void groupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     assertEquals("The user directory does not support group administration", true,
         securityService.supportsGroupAdministration(userDirectory.getId()));
@@ -643,9 +642,9 @@ public class SecurityServiceTest
   public void isUserInGroupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -668,9 +667,9 @@ public class SecurityServiceTest
   public void lockedUserTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -711,86 +710,86 @@ public class SecurityServiceTest
 //}
 
   /**
-   * Test the organisation functionality.
+   * Test the organization functionality.
    */
   @Test
-  public void organisationTest()
+  public void organizationTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    List<Organisation> beforeRetrievedOrganisations = securityService.getOrganisations();
+    List<Organization> beforeRetrievedOrganizations = securityService.getOrganizations();
 
-    securityService.createOrganisation(organisation, false);
+    securityService.createOrganization(organization, false);
 
-    Organisation retrievedOrganisation = securityService.getOrganisation(organisation.getId());
+    Organization retrievedOrganization = securityService.getOrganization(organization.getId());
 
-    compareOrganisations(organisation, retrievedOrganisation);
+    compareOrganizations(organization, retrievedOrganization);
 
-    int numberOfOrganisations = securityService.getNumberOfOrganisations();
+    int numberOfOrganizations = securityService.getNumberOfOrganizations();
 
-    assertEquals("The correct number of organisations (" + (beforeRetrievedOrganisations.size()
-        + 1) + ") " + "was not retrieved", beforeRetrievedOrganisations.size() + 1,
-        numberOfOrganisations);
+    assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
+        + 1) + ") " + "was not retrieved", beforeRetrievedOrganizations.size() + 1,
+        numberOfOrganizations);
 
-    List<Organisation> afterRetrievedOrganisations = securityService.getOrganisations();
+    List<Organization> afterRetrievedOrganizations = securityService.getOrganizations();
 
-    assertEquals("The correct number of organisations (" + (beforeRetrievedOrganisations.size()
-        + 1) + ") " + "was not retrieved", beforeRetrievedOrganisations.size() + 1,
-        afterRetrievedOrganisations.size());
+    assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
+        + 1) + ") " + "was not retrieved", beforeRetrievedOrganizations.size() + 1,
+        afterRetrievedOrganizations.size());
 
-    boolean foundOrganisation = false;
+    boolean foundOrganization = false;
 
-    for (Organisation afterRetrievedOrganisation : afterRetrievedOrganisations)
+    for (Organization afterRetrievedOrganization : afterRetrievedOrganizations)
     {
-      if (afterRetrievedOrganisation.getId().equals(organisation.getId()))
+      if (afterRetrievedOrganization.getId().equals(organization.getId()))
       {
-        compareOrganisations(organisation, afterRetrievedOrganisation);
+        compareOrganizations(organization, afterRetrievedOrganization);
 
-        foundOrganisation = true;
+        foundOrganization = true;
 
         break;
       }
     }
 
-    if (!foundOrganisation)
+    if (!foundOrganization)
     {
-      fail("Failed to find the organisation (" + organisation.getId() + ") in the list of "
-          + "organisations");
+      fail("Failed to find the organization (" + organization.getId() + ") in the list of "
+          + "organizations");
     }
 
-    int numberOfFilteredOrganisations = securityService.getNumberOfFilteredOrganisations(
-        organisation.getName());
+    int numberOfFilteredOrganizations = securityService.getNumberOfFilteredOrganizations(
+        organization.getName());
 
-    assertEquals("The correct number of filtered organisations (1) was not retrieved", 1,
-        numberOfFilteredOrganisations);
+    assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
+        numberOfFilteredOrganizations);
 
-    List<Organisation> filteredOrganisations = securityService.getFilteredOrganisations(
-        organisation.getName());
+    List<Organization> filteredOrganizations = securityService.getFilteredOrganizations(
+        organization.getName());
 
-    assertEquals("The correct number of filtered organisations (1) was not retrieved", 1,
-        filteredOrganisations.size());
+    assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
+        filteredOrganizations.size());
 
-    compareOrganisations(organisation, filteredOrganisations.get(0));
+    compareOrganizations(organization, filteredOrganizations.get(0));
 
-    organisation.setName("Updated " + organisation.getName());
+    organization.setName("Updated " + organization.getName());
 
-    securityService.updateOrganisation(organisation);
+    securityService.updateOrganization(organization);
 
-    retrievedOrganisation = securityService.getOrganisation(organisation.getId());
+    retrievedOrganization = securityService.getOrganization(organization.getId());
 
-    compareOrganisations(organisation, retrievedOrganisation);
+    compareOrganizations(organization, retrievedOrganization);
 
-    securityService.deleteOrganisation(organisation.getId());
+    securityService.deleteOrganization(organization.getId());
 
     try
     {
-      securityService.getOrganisation(organisation.getId());
+      securityService.getOrganization(organization.getId());
 
-      fail("Retrieved the organisation (" + organisation.getId() + ") that should have been "
+      fail("Retrieved the organization (" + organization.getId() + ") that should have been "
           + "deleted");
     }
-    catch (OrganisationNotFoundException ignored) {}
+    catch (OrganizationNotFoundException ignored) {}
   }
 
   /**
@@ -810,9 +809,9 @@ public class SecurityServiceTest
   public void removeUserFromGroupTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Group group = getTestGroupDetails();
 
@@ -889,36 +888,36 @@ public class SecurityServiceTest
   }
 
   /**
-   * Test the user directory organisation mapping functionality.
+   * Test the user directory organization mapping functionality.
    */
   @Test
-  public void userDirectoryOrganisationMappingTest()
+  public void userDirectoryOrganizationMappingTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    List<Organisation> organisationsForUserDirectory =
-        securityService.getOrganisationsForUserDirectory(userDirectory.getId());
+    List<Organization> organizationsForUserDirectory =
+        securityService.getOrganizationsForUserDirectory(userDirectory.getId());
 
     assertEquals(
-        "The correct number of organisations (1) was not retrieved for the user directory", 1,
-        organisationsForUserDirectory.size());
+        "The correct number of organizations (1) was not retrieved for the user directory", 1,
+        organizationsForUserDirectory.size());
 
-    List<UUID> organisationIdsForUserDirectory = securityService.getOrganisationIdsForUserDirectory(
+    List<UUID> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
         userDirectory.getId());
 
     assertEquals(
-        "The correct number of organisation IDs (1) was not retrieved for the user directory", 1,
-        organisationIdsForUserDirectory.size());
+        "The correct number of organization IDs (1) was not retrieved for the user directory", 1,
+        organizationIdsForUserDirectory.size());
 
-    List<UserDirectory> userDirectoriesForOrganisation =
-        securityService.getUserDirectoriesForOrganisation(organisation.getId());
+    List<UserDirectory> userDirectoriesForOrganization =
+        securityService.getUserDirectoriesForOrganization(organization.getId());
 
     assertEquals(
-        "The correct number of user directories (1) was not retrieved for the organisation", 2,
-        userDirectoriesForOrganisation.size());
+        "The correct number of user directories (1) was not retrieved for the organization", 2,
+        userDirectoriesForOrganization.size());
   }
 
   /**
@@ -970,7 +969,7 @@ public class SecurityServiceTest
     if (!foundUserDirectory)
     {
       fail("Failed to find the user directory (" + userDirectory.getId() + ") in the list of "
-          + "organisations");
+          + "organizations");
     }
 
     int numberOfFilteredUserDirectories = securityService.getNumberOfFilteredUserDirectories(
@@ -1014,9 +1013,9 @@ public class SecurityServiceTest
   public void userPasswordHistoryTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -1049,9 +1048,9 @@ public class SecurityServiceTest
   public void userTest()
     throws Exception
   {
-    Organisation organisation = getTestOrganisationDetails();
+    Organization organization = getTestOrganizationDetails();
 
-    UserDirectory userDirectory = securityService.createOrganisation(organisation, true);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     User user = getTestUserDetails();
 
@@ -1160,12 +1159,12 @@ public class SecurityServiceTest
     return group;
   }
 
-  private static synchronized Organisation getTestOrganisationDetails()
+  private static synchronized Organization getTestOrganizationDetails()
   {
-    organisationCount++;
+    organizationCount++;
 
-    return new Organisation(UUID.randomUUID(), "Test Organisation Name " + organisationCount,
-        OrganisationStatus.ACTIVE);
+    return new Organization(UUID.randomUUID(), "Test Organization Name " + organizationCount,
+        OrganizationStatus.ACTIVE);
   }
 
   private static synchronized User getTestUserDetails()
@@ -1230,12 +1229,12 @@ public class SecurityServiceTest
     assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
   }
 
-  private void compareOrganisations(Organisation organisation1, Organisation organisation2)
+  private void compareOrganizations(Organization organization1, Organization organization2)
   {
-    assertEquals("The ID values for the two organisations do not match", organisation1.getId(),
-        organisation2.getId());
-    assertEquals("The name values for the two organisations do not match", organisation1.getName(),
-        organisation2.getName());
+    assertEquals("The ID values for the two organizations do not match", organization1.getId(),
+        organization2.getId());
+    assertEquals("The name values for the two organizations do not match", organization1.getName(),
+        organization2.getName());
   }
 
   private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2)

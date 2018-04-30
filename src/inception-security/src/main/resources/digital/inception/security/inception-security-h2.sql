@@ -6,7 +6,7 @@ CREATE SCHEMA security;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
-CREATE TABLE security.organisations (
+CREATE TABLE security.organizations (
   id     UUID          NOT NULL,
   name   VARCHAR(4000) NOT NULL,
   status INTEGER       NOT NULL,
@@ -14,18 +14,18 @@ CREATE TABLE security.organisations (
   PRIMARY KEY (id)
 );
 
-CREATE INDEX organisations_name_ix
-  ON security.organisations
+CREATE INDEX organizations_name_ix
+  ON security.organizations
   (name);
 
-COMMENT ON COLUMN security.organisations.id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
+COMMENT ON COLUMN security.organizations.id
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
-COMMENT ON COLUMN security.organisations.name
-IS 'The name of the organisation';
+COMMENT ON COLUMN security.organizations.name
+IS 'The name of the organization';
 
-COMMENT ON COLUMN security.organisations.status
-IS 'The status for the organisation';
+COMMENT ON COLUMN security.organizations.status
+IS 'The status for the organization';
 
 
 CREATE TABLE security.user_directory_types (
@@ -73,28 +73,28 @@ COMMENT ON COLUMN security.user_directories.configuration
 IS 'The XML configuration data for the user directory';
 
 
-CREATE TABLE security.user_directory_to_organisation_map (
+CREATE TABLE security.user_directory_to_organization_map (
   user_directory_id UUID NOT NULL,
-  organisation_id   UUID NOT NULL,
+  organization_id   UUID NOT NULL,
 
-  PRIMARY KEY (user_directory_id, organisation_id),
-  CONSTRAINT user_directory_to_organisation_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories (id) ON DELETE CASCADE,
-  CONSTRAINT user_directory_to_organisation_map_organisation_fk FOREIGN KEY (organisation_id) REFERENCES security.organisations (id) ON DELETE CASCADE
+  PRIMARY KEY (user_directory_id, organization_id),
+  CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories (id) ON DELETE CASCADE,
+  CONSTRAINT user_directory_to_organization_map_organization_fk FOREIGN KEY (organization_id) REFERENCES security.organizations (id) ON DELETE CASCADE
 );
 
-CREATE INDEX user_directory_to_organisation_map_user_directory_id_ix
-  ON security.user_directory_to_organisation_map
+CREATE INDEX user_directory_to_organization_map_user_directory_id_ix
+  ON security.user_directory_to_organization_map
   (user_directory_id);
 
-CREATE INDEX user_directory_to_organisation_map_organisation_id_ix
-  ON security.user_directory_to_organisation_map
-  (organisation_id);
+CREATE INDEX user_directory_to_organization_map_organization_id_ix
+  ON security.user_directory_to_organization_map
+  (organization_id);
 
-COMMENT ON COLUMN security.user_directory_to_organisation_map.user_directory_id
+COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id
 IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directory_to_organisation_map.organisation_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organisation';
+COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id
+IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 
 CREATE TABLE security.internal_users (
@@ -362,7 +362,7 @@ IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO security.organisations (id, name, status) VALUES
+INSERT INTO security.organizations (id, name, status) VALUES
   ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
 
 INSERT INTO security.user_directory_types (id, name, user_directory_class) VALUES
@@ -377,7 +377,7 @@ INSERT INTO security.user_directories (id, type_id, name, configuration) VALUES
    'Internal User Directory',
    '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
-INSERT INTO security.user_directory_to_organisation_map (user_directory_id, organisation_id) VALUES
+INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id) VALUES
   ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
 INSERT INTO security.internal_users (id, user_directory_id, username, password, first_name, last_name, phone, mobile, email, password_attempts, password_expiry)
@@ -391,7 +391,7 @@ INSERT INTO security.internal_groups (id, user_directory_id, groupname, descript
    'Administrators');
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description) VALUES
   ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organisation Administrators', 'Organisation Administrators');
+   'Organization Administrators', 'Organization Administrators');
 
 INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
 VALUES
@@ -402,15 +402,15 @@ INSERT INTO security.groups (id, user_directory_id, groupname) VALUES
    'Administrators');
 INSERT INTO security.groups (id, user_directory_id, groupname) VALUES
   ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organisation Administrators');
+   'Organization Administrators');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
   ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
 INSERT INTO security.functions (id, code, name, description) VALUES
   ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganisationAdministration',
-   'Organisation Administration', 'Organisation Administration');
+  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganizationAdministration',
+   'Organization Administration', 'Organization Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
   ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration',
    'User Administration');
@@ -459,8 +459,8 @@ INSERT INTO security.functions (id, code, name, description) VALUES
 INSERT INTO security.roles (id, name, description) VALUES
   ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO security.roles (id, name, description) VALUES
-  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organisation Administrator',
-   'Organisation Administrator');
+  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator',
+   'Organization Administrator');
 
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
@@ -470,7 +470,7 @@ INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
    '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('2d52b029-920f-4b15-b646-5b9955c188e3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganisationAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganizationAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
    '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserAdministration

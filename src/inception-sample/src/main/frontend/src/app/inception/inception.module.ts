@@ -46,6 +46,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SelectModule } from 'ng-select';
+import { StorageServiceModule } from "angular-webstorage-service";
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TimepickerModule } from 'ngx-bootstrap';
 
@@ -64,6 +65,7 @@ import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
     ChartsModule,
     ModalModule.forRoot(),
     SelectModule,
+    StorageServiceModule,
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
 
@@ -101,6 +103,7 @@ import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
     ChartsModule,
     ModalModule,
     SelectModule,
+    StorageServiceModule,
     TabsModule,
     TimepickerModule,
 

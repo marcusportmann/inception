@@ -25,7 +25,7 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-import digital.inception.security.Organisation;
+import digital.inception.security.Organization;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -75,9 +75,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
   private String errorMessage;
 
   /**
-   * The list of organisations the authenticated user is associated with.
+   * The list of organizations the authenticated user is associated with.
    */
-  private List<OrganisationData> organisations;
+  private List<OrganizationData> organizations;
 
   /**
    * The encryption key used to encrypt data on the user's device and any data passed as part of a
@@ -110,7 +110,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
-    this.organisations = new ArrayList<>();
+    this.organizations = new ArrayList<>();
     this.userEncryptionKey = new byte[0];
     this.userProperties = new HashMap<>();
   }
@@ -118,12 +118,12 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organisations     the list of organisations the authenticated user is associated with
+   * @param organizations     the list of organizations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
    */
-  public AuthenticateResponseData(List<Organisation> organisations, byte[] userEncryptionKey,
+  public AuthenticateResponseData(List<Organization> organizations, byte[] userEncryptionKey,
       Map<String, Object> userProperties)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -133,9 +133,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
     this.userEncryptionKey = userEncryptionKey;
     this.userProperties = userProperties;
 
-    this.organisations = new ArrayList<>();
+    this.organizations = new ArrayList<>();
 
-    this.organisations.addAll(organisations.stream().map(OrganisationData::new).collect(
+    this.organizations.addAll(organizations.stream().map(OrganizationData::new).collect(
         Collectors.toList()));
   }
 
@@ -177,15 +177,15 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    this.organisations = new ArrayList<>();
+    this.organizations = new ArrayList<>();
 
-    if (rootElement.hasChild("Organisations"))
+    if (rootElement.hasChild("Organizations"))
     {
-      Element organisationsElement = rootElement.getChild("Organisations");
+      Element organizationsElement = rootElement.getChild("Organizations");
 
-      List<Element> organisationElements = organisationsElement.getChildren("Organisation");
+      List<Element> organizationElements = organizationsElement.getChildren("Organization");
 
-      this.organisations.addAll(organisationElements.stream().map(OrganisationData::new).collect(
+      this.organizations.addAll(organizationElements.stream().map(OrganizationData::new).collect(
           Collectors.toList()));
     }
 
@@ -251,13 +251,13 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the list of organisations the authenticated user is associated with.
+   * Returns the list of organizations the authenticated user is associated with.
    *
-   * @return the list of organisations the authenticated user is associated with
+   * @return the list of organizations the authenticated user is associated with
    */
-  public List<OrganisationData> getOrganisations()
+  public List<OrganizationData> getOrganizations()
   {
-    return organisations;
+    return organizations;
   }
 
   /**
@@ -298,16 +298,16 @@ public class AuthenticateResponseData extends WbxmlMessageData
     rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
 
-    if ((organisations != null) && (organisations.size() > 0))
+    if ((organizations != null) && (organizations.size() > 0))
     {
-      Element organisationsElement = new Element("Organisations");
+      Element organizationsElement = new Element("Organizations");
 
-      for (OrganisationData organisation : organisations)
+      for (OrganizationData organization : organizations)
       {
-        organisationsElement.addContent(organisation.toElement());
+        organizationsElement.addContent(organization.toElement());
       }
 
-      rootElement.addContent(organisationsElement);
+      rootElement.addContent(organizationsElement);
     }
 
     if ((userProperties != null) && (userProperties.size() > 0))

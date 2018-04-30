@@ -104,16 +104,16 @@ public interface ISecurityService
         SecurityServiceException;
 
   /**
-   * Create a new organisation.
+   * Create a new organization.
    *
-   * @param organisation        the organisation
-   * @param createUserDirectory should a new internal user directory be created for the organisation
+   * @param organization        the organization
+   * @param createUserDirectory should a new internal user directory be created for the organization
    *
-   * @return the new internal user directory that was created for the organisation or
+   * @return the new internal user directory that was created for the organization or
    *         <code>null</code> if no user directory was created
    */
-  UserDirectory createOrganisation(Organisation organisation, boolean createUserDirectory)
-    throws InvalidArgumentException, DuplicateOrganisationException, SecurityServiceException;
+  UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
+    throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException;
 
   /**
    * Create a new user.
@@ -156,13 +156,13 @@ public interface ISecurityService
         ExistingGroupMembersException, SecurityServiceException;
 
   /**
-   * Delete the organisation.
+   * Delete the organization.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    */
-  void deleteOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException;
+  void deleteOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException;
 
   /**
    * Delete the user.
@@ -198,13 +198,13 @@ public interface ISecurityService
         SecurityServiceException;
 
   /**
-   * Retrieve the filtered list of organisations.
+   * Retrieve the filtered list of organizations.
    *
-   * @param filter the filter to apply to the organisations
+   * @param filter the filter to apply to the organizations
    *
-   * @return the filtered list of organisations
+   * @return the filtered list of organizations
    */
-  List<Organisation> getFilteredOrganisations(String filter)
+  List<Organization> getFilteredOrganizations(String filter)
     throws InvalidArgumentException, SecurityServiceException;
 
   /**
@@ -311,13 +311,13 @@ public interface ISecurityService
         SecurityServiceException;
 
   /**
-   * Retrieve the number of filtered organisations.
+   * Retrieve the number of filtered organizations.
    *
-   * @param filter the filter to apply to the organisations
+   * @param filter the filter to apply to the organizations
    *
-   * @return the number of filtered organisations
+   * @return the number of filtered organizations
    */
-  int getNumberOfFilteredOrganisations(String filter)
+  int getNumberOfFilteredOrganizations(String filter)
     throws InvalidArgumentException, SecurityServiceException;
 
   /**
@@ -354,11 +354,11 @@ public interface ISecurityService
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the number of organisations
+   * Retrieve the number of organizations
    *
-   * @return the number of organisations
+   * @return the number of organizations
    */
-  int getNumberOfOrganisations()
+  int getNumberOfOrganizations()
     throws SecurityServiceException;
 
   /**
@@ -381,46 +381,46 @@ public interface ISecurityService
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the organisation.
+   * Retrieve the organization.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
-   * @return the organisation
+   * @return the organization
    */
-  Organisation getOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException;
+  Organization getOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
    * associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organisations
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
    *         associated with the user directory
    */
-  List<UUID> getOrganisationIdsForUserDirectory(UUID userDirectoryId)
+  List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the organisations.
+   * Retrieve the organizations.
    *
-   * @return the list of organisations
+   * @return the list of organizations
    */
-  List<Organisation> getOrganisations()
+  List<Organization> getOrganizations()
     throws SecurityServiceException;
 
   /**
-   * Retrieve the organisations associated with the user directory.
+   * Retrieve the organizations associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organisations associated with the user directory
+   * @return the organizations associated with the user directory
    */
-  List<Organisation> getOrganisationsForUserDirectory(UUID userDirectoryId)
+  List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
@@ -445,15 +445,15 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
-   * Retrieve the user directories the organisation is associated with.
+   * Retrieve the user directories the organization is associated with.
    *
-   * @param organisationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organisation
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
-   * @return the user directories the organisation is associated with
+   * @return the user directories the organization is associated with
    */
-  List<UserDirectory> getUserDirectoriesForOrganisation(UUID organisationId)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException;
+  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory.
@@ -575,12 +575,12 @@ public interface ISecurityService
         SecurityServiceException;
 
   /**
-   * Update the organisation.
+   * Update the organization.
    *
-   * @param organisation the organisation
+   * @param organization the organization
    */
-  void updateOrganisation(Organisation organisation)
-    throws InvalidArgumentException, OrganisationNotFoundException, SecurityServiceException;
+  void updateOrganization(Organization organization)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException;
 
   /**
    * Update the user.
