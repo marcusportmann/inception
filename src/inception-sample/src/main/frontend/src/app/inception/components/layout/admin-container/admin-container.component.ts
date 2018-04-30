@@ -6,7 +6,7 @@ import {ContainerComponent} from "../container";
   templateUrl: './admin-container.component.html',
   styleUrls: ['./admin-container.component.css']
 })
-export class AdminContainerComponent extends ContainerComponent implements OnInit {
+export class AdminContainerComponent extends ContainerComponent {
 
   constructor() {
     super();

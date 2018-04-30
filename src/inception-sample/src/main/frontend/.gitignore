@@ -6,6 +6,10 @@
 /tmp
 /out-tsc
 
+# documentation output
+/doc
+/documentation
+
 # dependencies
 /node_modules
 

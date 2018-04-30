@@ -5,7 +5,7 @@ import {ContainerComponent} from "../container";
   selector: 'inception-layout-simple-container',
   template: '<router-outlet></router-outlet>',
 })
-export class SimpleContainerComponent extends ContainerComponent implements OnInit {
+export class SimpleContainerComponent extends ContainerComponent {
 
   constructor() {
     super();
