@@ -36,7 +36,7 @@ public class ClientDetails
   /**
    * The access token validity in seconds.
    */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 60 * 24 * 60 * 60;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 60 * 5;
 
   /**
    * The refresh token validity in seconds.

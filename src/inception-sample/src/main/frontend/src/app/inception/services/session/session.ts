@@ -38,12 +38,12 @@ export class Session {
   functions: string[];
 
   /**
-   * The base-64 encoded OAuth2 access token for the user session.
+   * The base-64 encoded OAuth2 JWT access token for the user session.
    */
   accessToken: string;
 
   /**
-   * The date and time the OAuth2 access token for the user session will expire.
+   * The date and time the OAuth2 JWT access token for the user session will expire.
    */
   accessTokenExpiry: Date;
 
@@ -60,8 +60,9 @@ export class Session {
    * @param {string[]} scopes          The OAuth2 scopes for the user session.
    * @param {string[]} functions       The codes identifying the functions the user associated with
    *                                   the user session has access to.
-   * @param {string} accessToken       The base-64 encoded OAuth2 access token for the user session.
-   * @param {number} accessTokenExpiry The date and time the OAuth2 access token for the user
+   * @param {string} accessToken       The base-64 encoded OAuth2 JWT access token for the user
+   *                                   session.
+   * @param {number} accessTokenExpiry The date and time the OAuth2 JWT access token for the user
    *                                   session will expire.
    * @param {string} refreshToken      The base-64 encoded OAuth2 refresh token for the user
    *                                   session.

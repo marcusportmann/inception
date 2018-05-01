@@ -48,7 +48,7 @@ export class SecurityService {
   public getOrganizations(): Observable<Organization[]> {
 
     return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
-      map(organizations => {
+      map((organizations: Organization[]) => {
 
         return organizations;
 

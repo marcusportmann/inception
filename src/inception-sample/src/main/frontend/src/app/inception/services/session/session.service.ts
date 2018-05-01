@@ -63,7 +63,7 @@ export class SessionService {
     let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 
     return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-      map(tokenResponse => {
+      map((tokenResponse: TokenResponse) => {
 
         let token:any = decode(tokenResponse.access_token);
 
@@ -90,12 +90,59 @@ export class SessionService {
    *
    * @returns {Session}
    */
-  public getSession(): Session {
+  public getSession(): Observable<Session> {
 
     let session:Session = this.sessionStorageService.get("session");
 
-    // TODO: Check if session has expired and if so remove from session storage -- MARCUS
+    //return Observable.of(session);
 
-    return session;
+    // If the access token has expired then obtain a new one using the refresh token
+     if (true) {
+
+      let body = new HttpParams()
+        .set('grant_type', 'refresh_token')
+        .set('refresh_token', session.refreshToken);
+
+      let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+
+      return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+        map((tokenResponse: TokenResponse) => {
+
+          let token:any = decode(tokenResponse.access_token);
+
+          let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
+
+          this.sessionStorageService.set('session', session);
+
+          return session;
+
+        }));
+
+
+       // return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+       //   map((tokenResponse: TokenResponse) => {
+       //
+       //     let token:any = decode(tokenResponse.access_token);
+       //
+       //     let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
+       //
+       //     this.sessionStorageService.set('session', session);
+       //
+       //     return session;
+       //
+       //   }), catchError((error: HttpErrorResponse) => {
+       //
+       //     console.log('catchError = ', error);
+       //
+       //     // TODO: Map different HTTP error codes to specific error types -- MARCUS
+       //
+       //     return Observable.throw(new LoginError(error.status));
+       //   }));
+
+    }
+    else {
+
+      return Observable.of(session);
+    }
   }
 }
