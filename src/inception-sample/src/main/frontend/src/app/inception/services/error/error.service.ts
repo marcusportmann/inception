@@ -34,13 +34,13 @@ export class ErrorService {
    *
    * @param {BsModalService} bsModalService The Bootstrap Modal Service.
    */
-  constructor(private _bsModalService: BsModalService) {
+  constructor(private bsModalService: BsModalService) {
   }
 
 
 
   showConfirm(title?: string, message?: string) {
-    let bsModalRef = this._bsModalService.show(ErrorModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
+    let bsModalRef = this.bsModalService.show(ErrorModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
     console.log("bsModalRef: ", bsModalRef);
   }
 }

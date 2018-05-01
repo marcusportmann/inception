@@ -37,33 +37,18 @@ export class SecurityService {
    *
    * @param {HttpClient} httpClient The HTTP client.
    */
-  constructor(private _httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {
   }
 
   /**
    * Retrieve the organizations.
    *
-   * @returns {Observable<Organization[]>}
+   * @returns {Observable<Organization[]>} The list of organizations.
    */
   public getOrganizations(): Observable<Organization[]> {
 
-    return this._httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
+    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
       map(organizations => {
-
-
-        for (var i: number = 0; i < organizations.length; i++) {
-
-
-          console.log('organizations[' + i + '] = ', organizations[i]);
-
-          if (organizations[i].status == OrganizationStatus.Active) {
-            console.log('Found active organization ', organizations[i].name);
-          }
-          else if (organizations[i].status == OrganizationStatus.Inactive) {
-            console.log('Found inactive organization ', organizations[i].name);
-          }
-        }
-
 
         return organizations;
 

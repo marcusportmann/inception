@@ -24,68 +24,31 @@ import {OrganizationStatus} from "./organization-status";
 export class Organization {
 
   /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   */
+  id: string;
+
+  /**
+   * The name of the organization.
+   */
+  name: string;
+
+  /**
+   * The status for the organization.
+   */
+  status: OrganizationStatus;
+
+  /**
    * Constructs a new Organization.
    *
-   * @param {string} _id     The Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param {string} id     The Universally Unique Identifier (UUID) used to uniquely identify the
    *                         organization.
-   * @param {string} _name   The name of the organization.
-   * @param {string} _status The status for the organization.
+   * @param {string} name   The name of the organization.
+   * @param {string} status The status for the organization.
    */
-  constructor(private _id: string, private _name: string, private _status: OrganizationStatus) {
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   *
-   * @return {string}
-   */
-  get id(): string {
-    return this._id;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   *
-   * @param {string} id The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                    organization.
-   */
-  set id(id: string) {
-    this._id = id;
-  }
-
-  /**
-   * Returns the name of the organization.
-   *
-   * @returns {string}
-   */
-  get name(): string {
-    return this._name;
-  }
-
-  /**
-   * Set the name of the organization.
-   *
-   * @param {string} name The name of the organization.
-   */
-  set name(name: string) {
-    this._name = name;
-  }
-
-  /**
-   * Returns the status for the organization.
-   *
-   * @returns {OrganizationStatus}
-   */
-  get status(): OrganizationStatus {
-    return this._status;
-  }
-
-  /**
-   * Set the status for the organization.
-   *
-   * @param {OrganizationStatus} status The status for the organization.
-   */
-  set status(status: OrganizationStatus) {
-    this._status = status;
+  constructor(id: string, name: string, status: OrganizationStatus) {
+    this.id = id;
+    this.name = name;
+    this.status = status;
   }
 }

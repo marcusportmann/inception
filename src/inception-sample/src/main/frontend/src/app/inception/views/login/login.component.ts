@@ -9,14 +9,16 @@ import {SecurityService} from '../../services/security/security.service';
 import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 
 import { decode } from "jsonwebtoken";
-import {Session} from "../../services/security/session";
+
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {LoginError} from "../../services/security/security.service.errors";
+
 import {ErrorService} from "../../services/error/error.service";
 import {catchError, map} from "rxjs/operators";
 import {Observable} from "../../../../../node_modules/rxjs";
-import {TokenResponse} from "../../services/security/token-response";
+
 import {Organization} from "../../services/security/organization";
+import {SessionService} from "../../services/session/session.service";
+import {LoginError} from "../../services/session/session.service.errors";
 
 
 @Component({
@@ -26,7 +28,7 @@ export class LoginComponent {
 
   private loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -58,7 +60,7 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
-      this.securityService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
+      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
         console.log('session = ', session);
 

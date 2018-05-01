@@ -1,18 +1,18 @@
 // Import Angular decorators
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
 // Import Angular components
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 
 // Import Inception modules
-import { DirectivesModule } from "./directives/directives.module";
+import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
@@ -37,22 +37,23 @@ import {
 } from './components/layout';
 
 // Import Inception services
-import { ErrorService } from './services/error/error.service';
-import { SecurityService } from './services/security/security.service';
+import {ErrorService} from './services/error/error.service';
+import {SecurityService} from './services/security/security.service';
+import {SessionService} from './services/session/session.service';
 
 // Import 3rd party modules
-import { BsDatepickerModule } from 'ngx-bootstrap';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { SelectModule } from 'ng-select';
-import { StorageServiceModule } from "angular-webstorage-service";
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TimepickerModule } from 'ngx-bootstrap';
+import {BsDatepickerModule} from 'ngx-bootstrap';
+import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+import {ChartsModule} from 'ng2-charts/ng2-charts';
+import {ModalModule} from 'ngx-bootstrap/modal';
+import {SelectModule} from 'ng-select';
+import {StorageServiceModule} from "angular-webstorage-service";
+import {TabsModule} from 'ngx-bootstrap/tabs';
+import {TimepickerModule} from 'ngx-bootstrap';
 
 // Import 3rd party components
-import { BsDatepickerConfig, BsDaterangepickerConfig } from 'ngx-bootstrap';
-import {SessionInterceptor} from "./services/security/session.interceptor";
+import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
+import {SessionInterceptor} from "./services/session/session.interceptor";
 
 @NgModule({
   imports: [
@@ -120,7 +121,8 @@ import {SessionInterceptor} from "./services/security/session.interceptor";
       multi: true
     },
     ErrorService,
-    SecurityService],
+    SecurityService,
+    SessionService],
   bootstrap: [ErrorModalComponent]
 })
 export class InceptionModule {
