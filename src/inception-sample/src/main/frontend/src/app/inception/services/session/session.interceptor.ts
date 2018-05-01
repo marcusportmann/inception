@@ -7,7 +7,8 @@ import {SessionService} from "./session.service";
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
- * access token associated with the current active session as an Authorization header.
+ * access token associated with the current active session into HTTP requests as an Authorization
+ * header.
  *
  * @author Marcus Portmann
  */

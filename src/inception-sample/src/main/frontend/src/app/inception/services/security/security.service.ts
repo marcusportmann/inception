@@ -79,9 +79,5 @@ export class SecurityService {
         //return Observable.throw(new LoginError(error.status));
 
       }));
-
-
   }
-
-
 }

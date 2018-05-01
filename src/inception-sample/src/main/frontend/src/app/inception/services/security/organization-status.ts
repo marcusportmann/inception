@@ -15,7 +15,7 @@
  */
 
 /**
- * The OrganizationStatus enumeration defines the possible status for an Organization.
+ * The OrganizationStatus enumeration defines the possible statuses for an Organization.
  *
  * @author Marcus Portmann
  */
