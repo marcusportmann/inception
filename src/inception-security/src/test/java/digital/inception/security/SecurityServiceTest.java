@@ -31,7 +31,12 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -1091,10 +1096,11 @@ public class SecurityServiceTest
 
     Calendar calendar = Calendar.getInstance();
 
-    calendar.setTime(new Date());
-    calendar.add(Calendar.DAY_OF_MONTH, 10);
+    LocalDateTime passwordExpiry = LocalDateTime.now();
+    passwordExpiry = passwordExpiry.plus(10, ChronoUnit.DAYS);
+
     user.setPassword("Test Updated Password");
-    user.setPasswordExpiry(calendar.getTime());
+    user.setPasswordExpiry(passwordExpiry);
     user.setPasswordAttempts(2);
     user.setEmail("Test Updated E-Mail");
     user.setFirstName("Test Updated FirstName");
@@ -1124,12 +1130,13 @@ public class SecurityServiceTest
     User user = new User();
 
     user.setUsername("Numbered Test Username " + number);
-    user.setPassword("Numbered Test Password " + number);
+    user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Numbered Test E-Mail " + number);
     user.setFirstName("Numbered Test FirstName " + number);
     user.setLastName("Numbered Test LastName " + number);
     user.setPhoneNumber("Numbered Test Phone Number " + number);
     user.setMobileNumber("Numbered Test Mobile Number " + number);
+    user.setPassword("Numbered Test Password " + number);
 
     return user;
   }
@@ -1174,12 +1181,13 @@ public class SecurityServiceTest
     User user = new User();
 
     user.setUsername("Test User Username " + userCount);
-    user.setPassword("Test User Password " + userCount);
+    user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Test User E-Mail " + userCount);
     user.setFirstName("Test User FirstName " + userCount);
     user.setLastName("Test User LastName " + userCount);
     user.setPhoneNumber("Test User Phone Number " + userCount);
     user.setMobileNumber("Test User Mobile Number " + userCount);
+    user.setPassword("Test User Password " + userCount);
 
     return user;
   }
@@ -1251,12 +1259,8 @@ public class SecurityServiceTest
 
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
   {
-    if (checkPasswordExpiry)
-    {
-      assertEquals("The password expiry values for the two users do not match",
-          user1.getPasswordExpiry(), user2.getPasswordExpiry());
-    }
-
+    assertEquals("The status values for the two users do not match", user1.getStatus(),
+      user2.getStatus());
     assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
         user2.getEmail());
     assertEquals("The first name values for the two users do not match", user1.getFirstName(),
@@ -1270,5 +1274,11 @@ public class SecurityServiceTest
         user1.getPasswordAttempts(), user2.getPasswordAttempts());
     assertEquals("The username values for the two users do not match", user1.getUsername(),
         user2.getUsername());
+
+    if (checkPasswordExpiry)
+    {
+      assertEquals("The password expiry values for the two users do not match",
+        user1.getPasswordExpiry(), user2.getPasswordExpiry());
+    }
   }
 }

@@ -43,7 +43,7 @@ export class SecurityService {
   /**
    * Retrieve the organizations.
    *
-   * @returns {Observable<Organization[]>} The list of organizations.
+   * @return {Observable<Organization[]>} The list of organizations.
    */
   public getOrganizations(): Observable<Organization[]> {
 

@@ -19,8 +19,8 @@ package digital.inception.rs.oauth;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 
 /**
- * The <code>ClientDetailsService</code> provides the Client Details Service implementation that
- * provides the details for OAuth2 clients.
+ * The <code>ClientDetailsService</code> class provides the Client Details Service implementation
+ * that provides the details for OAuth2 clients.
  *
  * @author Marcus Portmann
  */

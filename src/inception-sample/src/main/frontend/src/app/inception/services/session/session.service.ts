@@ -88,7 +88,7 @@ export class SessionService {
   /**
    * Returns the current active session if one exists.
    *
-   * @returns {Session}
+   * @return {Session}
    */
   public getSession(): Observable<Session> {
 
@@ -97,11 +97,13 @@ export class SessionService {
     //return Observable.of(session);
 
     // If the access token has expired then obtain a new one using the refresh token
-     if (true) {
+     if (session) {
 
       let body = new HttpParams()
         .set('grant_type', 'refresh_token')
-        .set('refresh_token', session.refreshToken);
+        .set('refresh_token', session.refreshToken)
+        .set('scope', 'inception-sample')
+        .set('client_id', 'inception-sample');;
 
       let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 

@@ -18,7 +18,7 @@ package digital.inception.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -41,10 +41,11 @@ public class User
   private String mobileNumber;
   private String password;
   private Integer passwordAttempts;
-  private Date passwordExpiry;
+  private LocalDateTime passwordExpiry;
   private UUID userDirectoryId;
   private String username;
   private String phoneNumber;
+  private UserStatus status;
 
   /**
    * Constructs a new <code>User</code>.
@@ -128,7 +129,7 @@ public class User
    *
    * @return the date and time the password for the user expires
    */
-  public Date getPasswordExpiry()
+  public LocalDateTime getPasswordExpiry()
   {
     return passwordExpiry;
   }
@@ -155,6 +156,16 @@ public class User
   public String getProperty(String name)
   {
     return properties.get(name);
+  }
+
+  /**
+   * Returns the status for the user.
+   *
+   * @return the status for the user
+   */
+  public UserStatus getStatus()
+  {
+    return status;
   }
 
   /**
@@ -185,6 +196,22 @@ public class User
   }
 
   /**
+   * Has the password for the user expired?
+   *
+   * @return <code>true</code> if the password for the user has expired or <code>false</code>
+   *         otherwise
+   */
+  public boolean hasPasswordExpired()
+  {
+    if (passwordExpiry != null)
+    {
+      return LocalDateTime.now().isAfter(passwordExpiry);
+    }
+
+    return false;
+  }
+
+  /**
    * Returns <code>true</code> if the user has a property with the specified name or
    * <code>false</code> otherwise.
    *
@@ -196,6 +223,36 @@ public class User
   public boolean hasProperty(String name)
   {
     return properties.containsKey(name);
+  }
+
+  /**
+   * Is the user active?
+   *
+   * @return <code>true</code> if the user is active or <code>false</code> otherwise
+   */
+  public boolean isActive()
+  {
+    return (status == UserStatus.ACTIVE);
+  }
+
+  /**
+   * Is the user expired?
+   *
+   * @return <code>true</code> if the user is expired or <code>false</code> otherwise
+   */
+  public boolean isExpired()
+  {
+    return (status == UserStatus.EXPIRED);
+  }
+
+  /**
+   * Is the user locked?
+   *
+   * @return <code>true</code> if the user is locked or <code>false</code> otherwise
+   */
+  public boolean isLocked()
+  {
+    return (status == UserStatus.LOCKED);
   }
 
   /**
@@ -283,7 +340,7 @@ public class User
    *
    * @param passwordExpiry the password expiry for the user
    */
-  public void setPasswordExpiry(Date passwordExpiry)
+  public void setPasswordExpiry(LocalDateTime passwordExpiry)
   {
     this.passwordExpiry = passwordExpiry;
   }
@@ -317,6 +374,16 @@ public class User
   public void setReadOnly(boolean isReadOnly)
   {
     this.isReadOnly = isReadOnly;
+  }
+
+  /**
+   * Set the status for the user.
+   *
+   * @param status the status for the user
+   */
+  public void setStatus(UserStatus status)
+  {
+    this.status = status;
   }
 
   /**

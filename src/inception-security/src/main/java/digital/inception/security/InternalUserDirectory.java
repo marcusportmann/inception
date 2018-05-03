@@ -25,6 +25,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Date;
 
@@ -329,7 +331,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserLockedException(username);
       }
 
-      if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
+      if (user.hasPasswordExpired())
       {
         throw new ExpiredPasswordException(username);
       }
@@ -517,8 +519,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws DuplicateUserException, SecurityServiceException
   {
     String createInternalUserSQL = "INSERT INTO security.internal_users "
-        + "(id, user_directory_id, username, password, first_name, last_name, phone, mobile, "
-        + "email, password_attempts, password_expiry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        + "(id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, "
+        + "password, password_attempts, password_expiry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createInternalUserSQL))
@@ -533,6 +535,12 @@ public class InternalUserDirectory extends UserDirectoryBase
       statement.setObject(1, internalUserId);
       statement.setObject(2, getUserDirectoryId());
       statement.setString(3, user.getUsername());
+      statement.setInt(4, user.getStatus().code());
+      statement.setString(5, StringUtil.notNull(user.getFirstName()));
+      statement.setString(6, StringUtil.notNull(user.getLastName()));
+      statement.setString(7, StringUtil.notNull(user.getPhoneNumber()));
+      statement.setString(8, StringUtil.notNull(user.getMobileNumber()));
+      statement.setString(9, StringUtil.notNull(user.getEmail()));
 
       String passwordHash;
 
@@ -545,39 +553,35 @@ public class InternalUserDirectory extends UserDirectoryBase
         passwordHash = createPasswordHash("");
       }
 
-      statement.setString(4, passwordHash);
-      statement.setString(5, StringUtil.notNull(user.getFirstName()));
-      statement.setString(6, StringUtil.notNull(user.getLastName()));
-      statement.setString(7, StringUtil.notNull(user.getPhoneNumber()));
-      statement.setString(8, StringUtil.notNull(user.getMobileNumber()));
-      statement.setString(9, StringUtil.notNull(user.getEmail()));
+      statement.setString(10, passwordHash);
+
 
       if (userLocked)
       {
-        statement.setInt(10, maxPasswordAttempts);
+        statement.setInt(11, maxPasswordAttempts);
         user.setPasswordAttempts(maxPasswordAttempts);
       }
       else
       {
-        statement.setInt(10, 0);
+        statement.setInt(11, 0);
         user.setPasswordAttempts(0);
       }
 
       if (expiredPassword)
       {
-        statement.setTimestamp(11, new Timestamp(0));
-        user.setPasswordExpiry(new Date(0));
+        Timestamp expiryTime = new Timestamp(0);
+
+        statement.setTimestamp(12, expiryTime);
+        user.setPasswordExpiry(expiryTime.toLocalDateTime());
       }
       else
       {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MONTH, passwordExpiryMonths);
+        LocalDateTime passwordExpiry = LocalDateTime.now();
 
-        long expiryTime = calendar.getTimeInMillis();
+        passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
 
-        statement.setTimestamp(11, new Timestamp(expiryTime));
-        user.setPasswordExpiry(new Date(expiryTime));
+        statement.setTimestamp(12, Timestamp.valueOf(passwordExpiry));
+        user.setPasswordExpiry(passwordExpiry);
       }
 
       if (statement.executeUpdate() != 1)
@@ -756,12 +760,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<User> getFilteredUsers(String filter)
     throws SecurityServiceException
   {
-    String getInternalUsersSQL = "SELECT id, username, password, first_name, "
-        + "last_name, phone, mobile, email, password_attempts, password_expiry "
+    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
+        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
         + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
 
-    String getFilteredInternalUsersSQL = "SELECT id, username, password, first_name, "
-        + "last_name, phone, mobile, email, password_attempts, password_expiry "
+    String getFilteredInternalUsersSQL = "SELECT id, username, status, first_name, "
+        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
         + "FROM security.internal_users WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) "
         + "OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?)) ORDER BY username";
 
@@ -1192,8 +1196,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<User> getUsers()
     throws SecurityServiceException
   {
-    String getInternalUsersSQL = "SELECT id, username, password, first_name, "
-        + "last_name, phone, mobile, email, password_attempts, password_expiry "
+    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
+        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
         + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
 
     try (Connection connection = dataSource.getConnection();
@@ -1572,8 +1576,7 @@ public class InternalUserDirectory extends UserDirectoryBase
           }
           else
           {
-            statement.setTimestamp(parameterIndex, new Timestamp(user.getPasswordExpiry()
-                .getTime()));
+            statement.setTimestamp(parameterIndex, Timestamp.valueOf(user.getPasswordExpiry()));
           }
         }
 
@@ -1624,8 +1627,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     // Build the SQL statement to select the users
     StringBuilder buffer = new StringBuilder();
 
-    buffer.append("SELECT id, username, password, first_name, last_name, phone, mobile, email, ");
-    buffer.append("password_attempts, password_expiry FROM security.internal_users");
+    buffer.append("SELECT id, username, status, first_name, last_name, phone, mobile, email, ");
+    buffer.append("password, password_attempts, password_expiry FROM security.internal_users");
 
     if (attributes.size() > 0)
     {
@@ -1636,7 +1639,11 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         whereParameters.append(" AND ");
 
-        if (attribute.getName().equalsIgnoreCase("email"))
+        if (attribute.getName().equalsIgnoreCase("status"))
+        {
+          whereParameters.append("status = ?");
+        }
+        else if (attribute.getName().equalsIgnoreCase("email"))
         {
           whereParameters.append("LOWER(email) LIKE LOWER(?)");
         }
@@ -1683,7 +1690,12 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     for (Attribute attribute : attributes)
     {
-      if (attribute.getName().equalsIgnoreCase("email"))
+      if (attribute.getName().equalsIgnoreCase("status"))
+      {
+        statement.setInt(parameterIndex, Integer.parseInt(attribute.getStringValue()));
+        parameterIndex++;
+      }
+      else if (attribute.getName().equalsIgnoreCase("email"))
       {
         statement.setString(parameterIndex, attribute.getStringValue());
         parameterIndex++;
@@ -1735,21 +1747,23 @@ public class InternalUserDirectory extends UserDirectoryBase
     user.setId(UUID.fromString(rs.getString(1)));
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
-    user.setPassword(StringUtil.notNull(rs.getString(3)));
+    user.setStatus(UserStatus.fromCode(rs.getInt(3)));
     user.setFirstName(StringUtil.notNull(rs.getString(4)));
     user.setLastName(StringUtil.notNull(rs.getString(5)));
     user.setPhoneNumber(StringUtil.notNull(rs.getString(6)));
     user.setMobileNumber(StringUtil.notNull(rs.getString(7)));
     user.setEmail(StringUtil.notNull(rs.getString(8)));
 
-    if (rs.getObject(9) != null)
-    {
-      user.setPasswordAttempts(rs.getInt(9));
-    }
+    user.setPassword(StringUtil.notNull(rs.getString(9)));
 
     if (rs.getObject(10) != null)
     {
-      user.setPasswordExpiry(new Date(rs.getTimestamp(10).getTime()));
+      user.setPasswordAttempts(rs.getInt(10));
+    }
+
+    if (rs.getObject(11) != null)
+    {
+      user.setPasswordExpiry(rs.getTimestamp(11).toLocalDateTime());
     }
 
     return user;
@@ -2001,8 +2015,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   private User getUser(Connection connection, String username)
     throws SQLException
   {
-    String getInternalUserSQL = "SELECT id, username, password, first_name, last_name, phone, "
-        + "mobile, email, password_attempts, password_expiry FROM security.internal_users "
+    String getInternalUserSQL = "SELECT id, username, status, first_name, last_name, phone, "
+        + "mobile, email, password, password_attempts, password_expiry FROM security.internal_users "
         + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
 
     try (PreparedStatement statement = connection.prepareStatement(getInternalUserSQL))

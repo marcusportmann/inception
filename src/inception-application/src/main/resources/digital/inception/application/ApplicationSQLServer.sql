@@ -866,12 +866,13 @@ CREATE TABLE "SECURITY"."INTERNAL_USERS" (
   ID                 UNIQUEIDENTIFIER NOT NULL,
   USER_DIRECTORY_ID  UNIQUEIDENTIFIER NOT NULL,
   USERNAME           NVARCHAR(256) NOT NULL,
-  PASSWORD           NVARCHAR(512),
+  STATUS             INTEGER NOT NULL,
   FIRST_NAME         NVARCHAR(256),
   LAST_NAME          NVARCHAR(256),
   PHONE              NVARCHAR(256),
   MOBILE             NVARCHAR(256),
   EMAIL              NVARCHAR(256),
+  PASSWORD           NVARCHAR(512),
   PASSWORD_ATTEMPTS  INTEGER,
   PASSWORD_EXPIRY    DATETIME,
 
@@ -898,6 +899,10 @@ EXEC sys.sp_addextendedproperty
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The username for the internal user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'INTERNAL_USERS', @level2type=N'COLUMN', @level2name=N'USERNAME';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The status for the internal user' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'INTERNAL_USERS', @level2type=N'COLUMN', @level2name=N'STATUS';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The password for the internal user' ,
@@ -1439,8 +1444,8 @@ INSERT INTO "SECURITY"."USER_DIRECTORIES" (ID, TYPE_ID, NAME, CONFIG) VALUES
 INSERT INTO "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (USER_DIRECTORY_ID, ORGANIZATION_ID) VALUES
   ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO "SECURITY"."INTERNAL_USERS" (ID, USER_DIRECTORY_ID, USERNAME, PASSWORD, FIRST_NAME, LAST_NAME, PHONE, MOBILE, EMAIL, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES
-  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '', '', '', '', null, null);
+INSERT INTO "SECURITY"."INTERNAL_USERS" (ID, USER_DIRECTORY_ID, USERNAME, STATUS, FIRST_NAME, LAST_NAME, PHONE, MOBILE, EMAIL, PASSWORD, PASSWORD_ATTEMPTS, PASSWORD_EXPIRY) VALUES
+  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', null, null);
 
 INSERT INTO "SECURITY"."INTERNAL_GROUPS" (ID, USER_DIRECTORY_ID, GROUPNAME, DESCRIPTION) VALUES
   ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');

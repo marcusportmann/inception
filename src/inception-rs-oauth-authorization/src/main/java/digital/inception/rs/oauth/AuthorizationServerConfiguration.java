@@ -42,6 +42,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers
   .AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers
   .AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
+import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -103,8 +105,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    */
   public JwtAccessTokenConverter accessTokenConverter()
   {
-    org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration xxx;
-
     if (StringUtil.isNullOrEmpty(jwtPrivateKey))
     {
       throw new ConfigurationException(
@@ -126,6 +126,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
       converter.setSigningKey(jwtPrivateKey);
 
       converter.setVerifier(new RsaVerifier(jwtPublicKey));
+
+      TokenEndpoint zzz = null;
 
       return converter;
     }
@@ -243,6 +245,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the user details service
    */
+  @Bean
   public UserDetailsService userDetailsService()
   {
     return new UserDetailsService();

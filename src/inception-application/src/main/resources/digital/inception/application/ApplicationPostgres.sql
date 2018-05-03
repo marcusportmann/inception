@@ -738,15 +738,16 @@ IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organ
 
 
 CREATE TABLE security.internal_users (
-  codecategoryid    UUID NOT NULL,
-  user_directory_id UUID NOT NULL,
-  username          TEXT NOT NULL,
-  password          TEXT,
+  codecategoryid    UUID    NOT NULL,
+  user_directory_id UUID    NOT NULL,
+  username          TEXT    NOT NULL,
+  status            INTEGER NOT NULL,
   first_name        TEXT,
   last_name         TEXT,
   phone             TEXT,
   mobile            TEXT,
   email             TEXT,
+  password          TEXT,
   password_attempts INTEGER,
   password_expiry   TIMESTAMP,
 
@@ -771,8 +772,8 @@ IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user 
 COMMENT ON COLUMN security.internal_users.username
 IS 'The username for the internal user';
 
-COMMENT ON COLUMN security.internal_users.password
-IS 'The password for the internal user';
+COMMENT ON COLUMN security.internal_users.status
+IS 'The status for the internal user';
 
 COMMENT ON COLUMN security.internal_users.first_name
 IS 'The first name for the internal user';
@@ -788,6 +789,9 @@ IS 'The mobile number for the internal user';
 
 COMMENT ON COLUMN security.internal_users.email
 IS 'The e-mail address for the internal user';
+
+COMMENT ON COLUMN security.internal_users.password
+IS 'The password for the internal user';
 
 COMMENT ON COLUMN security.internal_users.password_attempts
 IS 'The number of failed attempts to authenticate the internal user';
@@ -1114,11 +1118,12 @@ INSERT INTO security.user_directories (codecategoryid, type_id, name, configurat
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id) VALUES
   ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (codecategoryid, user_directory_id, username, password, first_name, last_name, phone, mobile, email, password_attempts, password_expiry)
+INSERT INTO security.internal_users (codecategoryid, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
 VALUES
   ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator',
-                                           'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', '', '',
-                                           '', '', '', NULL, NULL);
+    1, '', '',
+    '', '', '',
+    'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', NULL, NULL);
 
 INSERT INTO security.internal_groups (codecategoryid, user_directory_id, groupname, description)
 VALUES

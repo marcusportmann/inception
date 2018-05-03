@@ -34,6 +34,8 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -652,7 +654,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
           throw new UserLockedException(username);
         }
 
-        if ((user.getPasswordExpiry() != null) && (user.getPasswordExpiry().before(new Date())))
+        if (user.hasPasswordExpired())
         {
           throw new ExpiredPasswordException(username);
         }
@@ -2223,7 +2225,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         {
           modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userPasswordExpiryAttribute, String.valueOf(
-              user.getPasswordExpiry().getTime()))));
+              user.getPasswordExpiry().toEpochSecond(ZoneOffset.UTC)))));
         }
       }
 
@@ -2357,8 +2359,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttributeValue))
           && (!userPasswordExpiryAttributeValue.equals("-1")))
       {
-        user.setPasswordExpiry(new Date(Long.parseLong(String.valueOf(attributes.get(
-            userPasswordExpiryAttribute).get()))));
+        LocalDateTime epochSecond = LocalDateTime.ofEpochSecond(Long.parseLong(String.valueOf(
+            attributes.get(userPasswordExpiryAttribute).get())), 0, ZoneOffset.UTC);
+
+        user.setPasswordExpiry(epochSecond);
       }
     }
 
