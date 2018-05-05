@@ -16,8 +16,8 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import { catchError } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 
 import {
@@ -27,7 +27,7 @@ import {
   HttpParams,
   HttpResponse
 } from '@angular/common/http';
-import { decode } from "jsonwebtoken";
+import {decode} from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {LoginError} from "./session.service.errors";
@@ -60,26 +60,28 @@ export class SessionService {
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
-    let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
     return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
       map((tokenResponse: TokenResponse) => {
 
-        let token:any = decode(tokenResponse.access_token);
+        let token: any = decode(tokenResponse.access_token);
 
-        let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
+        var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+
+        let session: Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
         this.sessionStorageService.set('session', session);
 
         return session;
-      }), catchError((error: HttpErrorResponse) => {
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        console.log('catchError = ', error);
+        console.log('catchError = ', httpErrorResponse);
 
         // TODO: Map different HTTP error codes to specific error types -- MARCUS
 
 
-        return Observable.throw(new LoginError(error.status));
+        return Observable.throw(new LoginError(httpErrorResponse.status));
 
       }));
 
@@ -92,27 +94,28 @@ export class SessionService {
    */
   public getSession(): Observable<Session> {
 
-    let session:Session = this.sessionStorageService.get("session");
-
-    //return Observable.of(session);
+    let session: Session = this.sessionStorageService.get("session");
 
     // If the access token has expired then obtain a new one using the refresh token
-     if (session) {
+    if (session.accessTokenExpiry && (Date.now() > parseInt(session.accessTokenExpiry))) {
 
       let body = new HttpParams()
         .set('grant_type', 'refresh_token')
         .set('refresh_token', session.refreshToken)
         .set('scope', 'inception-sample')
-        .set('client_id', 'inception-sample');;
+        .set('client_id', 'inception-sample');
+      ;
 
-      let options = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+      let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
       return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
         map((tokenResponse: TokenResponse) => {
 
-          let token:any = decode(tokenResponse.access_token);
+          let token: any = decode(tokenResponse.access_token);
 
-          let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
+          var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+
+          let session: Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
           this.sessionStorageService.set('session', session);
 
@@ -121,25 +124,25 @@ export class SessionService {
         }));
 
 
-       // return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-       //   map((tokenResponse: TokenResponse) => {
-       //
-       //     let token:any = decode(tokenResponse.access_token);
-       //
-       //     let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
-       //
-       //     this.sessionStorageService.set('session', session);
-       //
-       //     return session;
-       //
-       //   }), catchError((error: HttpErrorResponse) => {
-       //
-       //     console.log('catchError = ', error);
-       //
-       //     // TODO: Map different HTTP error codes to specific error types -- MARCUS
-       //
-       //     return Observable.throw(new LoginError(error.status));
-       //   }));
+      // return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+      //   map((tokenResponse: TokenResponse) => {
+      //
+      //     let token:any = decode(tokenResponse.access_token);
+      //
+      //     let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
+      //
+      //     this.sessionStorageService.set('session', session);
+      //
+      //     return session;
+      //
+      //   }), catchError((error: HttpErrorResponse) => {
+      //
+      //     console.log('catchError = ', error);
+      //
+      //     // TODO: Map different HTTP error codes to specific error types -- MARCUS
+      //
+      //     return Observable.throw(new LoginError(error.status));
+      //   }));
 
     }
     else {

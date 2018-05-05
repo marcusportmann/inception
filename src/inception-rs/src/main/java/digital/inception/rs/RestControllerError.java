@@ -43,8 +43,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "path", "timestamp", "status", "message", "detail", "exception", "stackTrace",
-    "name", "validationErrors" })
+@JsonPropertyOrder({ "uri", "timestamp", "status", "reasonPhrase", "message", "detail", "exception",
+    "stackTrace", "name", "validationErrors" })
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class RestControllerError
   implements Serializable
@@ -55,7 +55,7 @@ public class RestControllerError
    * The URI for the HTTP request that resulted in the error.
    */
   @JsonProperty
-  private String path;
+  private String uri;
 
   /**
    * The date and time the error occurred.
@@ -64,10 +64,16 @@ public class RestControllerError
   private LocalDateTime timestamp;
 
   /**
-   * The HTTP status for the error.
+   * The HTTP status-code for the error.
    */
   @JsonProperty
-  private String status;
+  private int status;
+
+  /**
+   * The HTTP reason-phrase for the HTTP status-code for the error.
+   */
+  @JsonProperty
+  private String reasonPhrase;
 
   /**
    * The message.
@@ -76,31 +82,32 @@ public class RestControllerError
   private String message;
 
   /**
-   * The detail.
+   * The optional detail.
    */
   @JsonProperty
   private String detail;
 
   /**
-   * The fully qualified name of the exception associated with the error.
+   * The optional fully qualified name of the exception associated with the error.
    */
   @JsonProperty
   private String exception;
 
   /**
-   * The stack trace associated with the error.
+   * The optional stack trace associated with the error.
    */
   @JsonProperty
   private String stackTrace;
 
   /**
-   * The name of the entity associated with the error e.g. the name of the argument or parameter.
+   * The optional name of the entity associated with the error e.g. the name of the argument or
+   * parameter.
    */
   @JsonProperty
   private String name;
 
   /**
-   * The validation errors associated with the error.
+   * The optional validation errors associated with the error.
    */
   @JsonProperty
   private List<Object> validationErrors;
@@ -163,9 +170,11 @@ public class RestControllerError
       catch (Throwable ignored) {}
     }
 
-    this.path = request.getRequestURI();
+    this.uri = request.getRequestURI();
 
-    this.status = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
+    this.status = responseStatus.value();
+
+    this.reasonPhrase = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
 
     try
     {
@@ -191,9 +200,9 @@ public class RestControllerError
   }
 
   /**
-   * Returns the detail.
+   * Returns the optional detail.
    *
-   * @return the detail
+   * @return the optional detail
    */
   public String getDetail()
   {
@@ -201,9 +210,9 @@ public class RestControllerError
   }
 
   /**
-   * Returns the fully qualified name of the exception associated with the error.
+   * Returns the optional fully qualified name of the exception associated with the error.
    *
-   * @return the fully qualified name of the exception associated with the error
+   * @return the optional fully qualified name of the exception associated with the error
    */
   public String getException()
   {
@@ -221,10 +230,10 @@ public class RestControllerError
   }
 
   /**
-   * Returns the name of the entity associated with the error e.g. the name of the argument or
-   * parameter.
+   * Returns the optional name of the entity associated with the error e.g. the name of the argument
+   * or parameter.
    *
-   * @return the name of the entity associated with the error
+   * @return the optional name of the entity associated with the error
    */
   public String getName()
   {
@@ -232,19 +241,19 @@ public class RestControllerError
   }
 
   /**
-   * Returns the URI for the HTTP request that resulted in the error.
+   * Returns the HTTP reason-phrase for the HTTP status-code for the error.
    *
-   * @return the URI for the HTTP request that resulted in the error
+   * @return the HTTP reason-phrase for the HTTP status-code for the error
    */
-  public String getPath()
+  public String getReasonPhrase()
   {
-    return path;
+    return reasonPhrase;
   }
 
   /**
-   * Returns the stack trace associated with the error.
+   * Returns the optional stack trace associated with the error.
    *
-   * @return the stack trace associated with the error
+   * @return the optional stack trace associated with the error
    */
   public String getStackTrace()
   {
@@ -252,11 +261,11 @@ public class RestControllerError
   }
 
   /**
-   * Returns the HTTP status for the error.
+   * Returns the HTTP status-code for the error.
    *
-   * @return the HTTP status for the error
+   * @return the HTTP status-code for the error
    */
-  public String getStatus()
+  public int getStatus()
   {
     return status;
   }
@@ -272,83 +281,12 @@ public class RestControllerError
   }
 
   /**
-   * Set the detail.
+   * Returns the URI for the HTTP request that resulted in the error.
    *
-   * @param detail the detail
+   * @return the URI for the HTTP request that resulted in the error
    */
-  public void setDetail(String detail)
+  public String getURI()
   {
-    this.detail = detail;
-  }
-
-  /**
-   * Set the fully qualified name of the exception associated with the error.
-   *
-   * @param exception the fully qualified name of the exception associated with the error
-   */
-  public void setException(String exception)
-  {
-    this.exception = exception;
-  }
-
-  /**
-   * Set the message.
-   *
-   * @param message the message
-   */
-  public void setMessage(String message)
-  {
-    this.message = message;
-  }
-
-  /**
-   * Set the name of the entity associated with the error e.g. the name of the argument or
-   * parameter.
-   *
-   * @param name the name of the entity associated with the error
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the URI for the HTTP request that resulted in the error.
-   *
-   * @param path the URI for the HTTP request that resulted in the error
-   */
-  public void setPath(String path)
-  {
-    this.path = path;
-  }
-
-  /**
-   * Set the stack trace associated with the error.
-   *
-   * @param stackTrace the stack trace associated with the error
-   */
-  public void setStackTrace(String stackTrace)
-  {
-    this.stackTrace = stackTrace;
-  }
-
-  /**
-   * Set the HTTP status for the error.
-   *
-   * @param status the HTTP status for the error
-   */
-  public void setStatus(String status)
-  {
-    this.status = status;
-  }
-
-  /**
-   * Set the date and time the error occurred.
-   *
-   * @param timestamp the date and time the error occurred
-   */
-  public void setTimestamp(LocalDateTime timestamp)
-  {
-    this.timestamp = timestamp;
+    return uri;
   }
 }

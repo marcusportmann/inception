@@ -43,9 +43,10 @@ export class Session {
   accessToken: string;
 
   /**
-   * The date and time the OAuth2 JWT access token for the user session will expire.
+   * The ISO8601 format string giving the date and time the OAuth2 JWT access token for the user
+   * session will expire.
    */
-  accessTokenExpiry: Date;
+  accessTokenExpiry: string;
 
   /**
    * The base-64 encoded OAuth2 refresh token for the user session.
@@ -62,17 +63,17 @@ export class Session {
    *                                   the user session has access to.
    * @param {string} accessToken       The base-64 encoded OAuth2 JWT access token for the user
    *                                   session.
-   * @param {number} accessTokenExpiry The date and time the OAuth2 JWT access token for the user
-   *                                   session will expire.
+   * @param {number} accessTokenExpiry The ISO8601 format string giving the date and time the OAuth2
+   *                                   JWT access token for the user session will expire.
    * @param {string} refreshToken      The base-64 encoded OAuth2 refresh token for the user
    *                                   session.
    */
-  constructor(username: string, scopes: string[], functions: string[], accessToken: string, accessTokenExpiry: number, refreshToken: string) {
+  constructor(username: string, scopes: string[], functions: string[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functions = functions;
     this.accessToken = accessToken;
-    this.accessTokenExpiry = new Date(accessTokenExpiry * 1000);
+    this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
   }
 }

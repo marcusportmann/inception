@@ -52,14 +52,14 @@ export class SecurityService {
 
         return organizations;
 
-      }), catchError((error: HttpErrorResponse) => {
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        console.log('catchError = ', error);
+        console.log('catchError = ', httpErrorResponse);
 
         // TODO: Map different HTTP error codes to specific error types -- MARCUS
 
 
-        return Observable.throw(error);
+        return Observable.throw(httpErrorResponse);
 
         //return Observable.throw(new LoginError(error.status));
 

@@ -83,6 +83,16 @@ import java.util.Arrays;
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {
   /**
+   * The access token validity in seconds.
+   */
+  public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
+
+  /**
+   * The refresh token validity in seconds.
+   */
+  public static final Integer REFRESH_TOKEN_VALIDITY = 2 * 365 * 24 * 60 * 60;
+
+  /**
    * The private key used to sign OAuth2 tokens.
    */
   @Value("${security.oauth2.jwt.privateKey:#{null}}")
@@ -126,8 +136,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
       converter.setSigningKey(jwtPrivateKey);
 
       converter.setVerifier(new RsaVerifier(jwtPublicKey));
-
-      TokenEndpoint zzz = null;
 
       return converter;
     }
@@ -203,6 +211,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     // Set the password encoder
     security.passwordEncoder(new BCryptPasswordEncoder());
+
+    //security.accessDeniedHandler() TODO: Investigate this -- MARCUS
   }
 
   /**
@@ -226,6 +236,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     defaultTokenServices.setTokenStore(tokenStore());
     defaultTokenServices.setSupportRefreshToken(true);
     defaultTokenServices.setClientDetailsService(clientDetailsService());
+
+    defaultTokenServices.setAccessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY);
+    defaultTokenServices.setRefreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY);
 
     return defaultTokenServices;
   }

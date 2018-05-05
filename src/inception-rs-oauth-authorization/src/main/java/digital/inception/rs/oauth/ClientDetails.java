@@ -34,16 +34,6 @@ public class ClientDetails
   implements org.springframework.security.oauth2.provider.ClientDetails
 {
   /**
-   * The access token validity in seconds.
-   */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
-
-  /**
-   * The refresh token validity in seconds.
-   */
-  public static final Integer REFRESH_TOKEN_VALIDITY = 2 * 365 * 24 * 60 * 60;
-
-  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the client.
    */
   private String clientId;
@@ -66,7 +56,7 @@ public class ClientDetails
   @Override
   public Integer getAccessTokenValiditySeconds()
   {
-    return ACCESS_TOKEN_VALIDITY;
+    return AuthorizationServerConfiguration.ACCESS_TOKEN_VALIDITY;
   }
 
   /**
@@ -143,7 +133,7 @@ public class ClientDetails
   @Override
   public Integer getRefreshTokenValiditySeconds()
   {
-    return REFRESH_TOKEN_VALIDITY;
+    return AuthorizationServerConfiguration.REFRESH_TOKEN_VALIDITY;
   }
 
   /**
