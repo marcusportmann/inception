@@ -35,7 +35,7 @@ export abstract class Error {
   uri: string;
 
   /**
-   * The The date and time the error occurred.
+   * The date and time the error occurred.
    */
   timestamp: Date;
 
@@ -55,17 +55,17 @@ export abstract class Error {
   message: string;
 
   /**
-   * The detail.
+   * The optional detail.
    */
   detail?: string;
 
   /**
-   * The fully qualified name of the exception associated with the error.
+   * The optional fully qualified name of the exception associated with the error.
    */
   exception?: string;
 
   /**
-   * The stack trace associated with the error.
+   * The optional stack trace associated with the error.
    */
   stackTrace?: string;
 
@@ -76,8 +76,7 @@ export abstract class Error {
   name: string;
 
   /**
-   * The validation errors associated with the error.
+   * The optional validation errors associated with the error.
    */
   validationErrprs: ValidationError[];
-
 }
