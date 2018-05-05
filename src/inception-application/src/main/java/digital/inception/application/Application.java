@@ -21,6 +21,7 @@ package digital.inception.application;
 import com.atomikos.jdbc.AtomikosDataSourceBean;
 import digital.inception.core.support.MergedMessageSource;
 import digital.inception.core.util.JDBCUtil;
+import digital.inception.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
@@ -35,6 +36,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -57,6 +59,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
@@ -109,6 +112,24 @@ public abstract class Application extends ApplicationBase
    */
   @Value("${application.database.maxPoolSize:#{5}}")
   private int databaseMaxPoolSize;
+
+  /**
+   * The XA server name for the application database.
+   */
+  @Value("${application.database.xaServerName:#{null}}")
+  private String databaseXaServerName;
+
+  /**
+   * The XA username for the application database.
+   */
+  @Value("${application.database.xaUsername:#{null}}")
+  private String databaseXaUsername;
+
+  /**
+   * The XA password for the application database.
+   */
+  @Value("${application.database.xaPassword:#{null}}")
+  private String databaseXaPassword;
 
   /**
    * The Spring application context.
@@ -262,10 +283,24 @@ public abstract class Application extends ApplicationBase
         throw new ApplicationException("Failed to retrieve the application database configuration");
       }
 
-      Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
+      /*
+       * The SAP JDBC driver does not return a DataSource, instead it provides connections so we
+       * make use of the DriverManagerDataSource.
+       */
+      if (databaseDataSourceClass.equals("com.sap.db.jdbc.Driver"))
+      {
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+        ds.setDriverClassName(databaseDataSourceClass);
+        ds.setUrl(databaseUrl);
+        dataSource = ds;
+      }
+      else
+      {
+        Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
           .loadClass(databaseDataSourceClass).asSubclass(DataSource.class);
 
-      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(databaseUrl).build();
+        dataSource = DataSourceBuilder.create().type(dataSourceClass).url(databaseUrl).build();
+      }
 
       Database databaseVendor = Database.DEFAULT;
 
@@ -354,10 +389,34 @@ public abstract class Application extends ApplicationBase
         atomikosDataSourceBean.setUniqueResourceName("ApplicationDataSource");
         atomikosDataSourceBean.setXaDataSource((XADataSource) dataSource);
 
+        if (databaseVendor == Database.SQL_SERVER)
+        {
+          // Set the test query
+          atomikosDataSourceBean.setTestQuery("SELECT 1;");
+
+          // Set the XA properties if they are available
+          // See: https://www.atomikos.com/Documentation/ConfiguringSQLServer
+          if ((!StringUtil.isNullOrEmpty(databaseXaServerName))
+            && (!StringUtil.isNullOrEmpty(databaseXaUsername))
+            && (!StringUtil.isNullOrEmpty(databaseXaPassword)))
+          {
+            Properties p = new Properties();
+            p.setProperty("serverName", databaseXaServerName);
+            p.setProperty("user", databaseXaUsername);
+            p.setProperty("password", databaseXaPassword);
+
+            atomikosDataSourceBean.setXaProperties(p);
+          }
+          else
+          {
+            throw new FatalBeanException(
+              "No XA properties specified for the AtomikosDataSourceBean for Microsoft SQL Server");
+          }
+        }
+
         if (databaseMinPoolSize > 0)
         {
           atomikosDataSourceBean.setMinPoolSize(databaseMinPoolSize);
-
         }
         else
         {

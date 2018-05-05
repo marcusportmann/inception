@@ -83,15 +83,16 @@ application:
       path: classpath:META-INF/Sample.jks
       password: Sample
 
-  cacheManager:
+  cache:
+    enabled: true
     cluster:
       port: 15000
-      name: test-cluster
+      name: sample-cluster
       password: YROTLEYO6Z05WAXbCuK4
       members:
     caches:
       - cache:
-        name: test-cache
+        name: sample-cache
         maxSizePolicy: PER_NODE
         maxSize: 10000
         inMemoryFormat: OBJECT
