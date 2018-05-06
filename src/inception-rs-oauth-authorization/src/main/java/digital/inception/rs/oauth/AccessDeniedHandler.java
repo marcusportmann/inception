@@ -57,7 +57,7 @@ public class AccessDeniedHandler
       jsonObjectBuilder.add("timestamp", ISO8601Util.fromLocalDateTime(LocalDateTime.now()));
       jsonObjectBuilder.add("status", BigDecimal.valueOf(HttpStatus.UNAUTHORIZED.value()));
       jsonObjectBuilder.add("reasonPhrase", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-      jsonObjectBuilder.add("message", "Access Denied");
+      jsonObjectBuilder.add("message", "Access is denied");
 
       JsonObject jsonObject = jsonObjectBuilder.build();
 

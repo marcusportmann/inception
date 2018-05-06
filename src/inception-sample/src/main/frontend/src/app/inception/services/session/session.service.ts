@@ -56,7 +56,7 @@ export class SessionService {
     let body = new HttpParams()
       .set('grant_type', 'password')
       .set('username', 'Administrator')
-      .set('password', 'Password1x')
+      .set('password', 'Password1')
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
