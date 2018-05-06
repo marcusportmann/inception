@@ -63,6 +63,7 @@
     <jackson.version>2.9.5</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
     <java-jaxb.version>2.3.0</java-jaxb.version>
+    <json-p.version>1.1</json-p.version>
     <javax-activation.version>1.1.1</javax-activation.version>
     <javax-annotation-api.version>1.3.2</javax-annotation-api.version>
     <javax-transaction.version>1.3</javax-transaction.version>
@@ -72,7 +73,7 @@
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <mssql-jdbc.version>6.2.2.jre8</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
-    <spring-security-oauth2.version>2.2.1.RELEASE</spring-security-oauth2.version>
+    <spring-security-oauth2.version>2.3.2.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.8.0</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.8.0</springfox-swagger-ui.version>
@@ -143,6 +144,11 @@
         <version>${javax-annotation-api.version}</version>
       </dependency>
       <dependency>
+        <groupId>javax.json</groupId>
+        <artifactId>javax.json-api</artifactId>
+        <version>${json-p.version}</version>
+      </dependency>
+      <dependency>
         <groupId>javax.jws</groupId>
         <artifactId>jsr181-api</artifactId>
         <version>${jsr181-api.version}</version>
@@ -176,6 +182,11 @@
         <groupId>org.apache.wss4j</groupId>
         <artifactId>wss4j-ws-security-common</artifactId>
         <version>${wss4j-ws-security-common.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.json</artifactId>
+        <version>${json-p.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>

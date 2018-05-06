@@ -38,6 +38,13 @@
       <artifactId>spring-security-oauth2</artifactId>
     </dependency>
 
+    <!-- Provided Dependencies -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- Test Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>

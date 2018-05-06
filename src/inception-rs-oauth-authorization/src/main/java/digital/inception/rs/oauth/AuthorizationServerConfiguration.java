@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration
   .EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,6 +54,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -85,7 +87,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   /**
    * The access token validity in seconds.
    */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
+  //public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 1;
 
   /**
    * The refresh token validity in seconds.
@@ -212,7 +215,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     // Set the password encoder
     security.passwordEncoder(new BCryptPasswordEncoder());
 
-    //security.accessDeniedHandler() TODO: Investigate this -- MARCUS
+    // Set the access denied handler
+    security.accessDeniedHandler(new AccessDeniedHandler());
   }
 
   /**
@@ -236,7 +240,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     defaultTokenServices.setTokenStore(tokenStore());
     defaultTokenServices.setSupportRefreshToken(true);
     defaultTokenServices.setClientDetailsService(clientDetailsService());
-
     defaultTokenServices.setAccessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY);
     defaultTokenServices.setRefreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY);
 
