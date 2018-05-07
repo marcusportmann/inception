@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-import {Error} from "../error/error";
+/**
+ * The Error class provides the base class that all error classes should be derived from.
+ *
+ * @author Marcus Portmann
+ */
+export abstract class OAuthError {
 
-/*
-export class LoginError extends Error {
+  /**
+   * The type of error e.g. invalid_request, invalid_client, invalid_grant, etc.
+   */
+  error: string;
 
-  code: number;
+  /**
+   * The optional error description.
+   */
+  error_description?: string;
 
-  constructor(code: number) {
-    super();
-
-    this.code = code;
-  }
+  /**
+   * The URI containing more information about the error.
+   */
+  error_uri?: string;
 }
-*/

@@ -30,8 +30,9 @@ import {
 import {decode} from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
-import {LoginError} from "./session.service.errors";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
+import {OAuthError} from "../error/oauth-error";
+import {Error} from "../error/error";
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -56,7 +57,7 @@ export class SessionService {
     let body = new HttpParams()
       .set('grant_type', 'password')
       .set('username', 'Administrator')
-      .set('password', 'Password1')
+      .set('password', 'Password2')
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
@@ -76,13 +77,13 @@ export class SessionService {
         return session;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        console.log('catchError = ', httpErrorResponse);
-
-        // TODO: Map different HTTP error codes to specific error types -- MARCUS
-
-
-        return Observable.throw(new LoginError(httpErrorResponse.status));
-
+        if (httpErrorResponse.error && httpErrorResponse.error.error) {
+          let oauthError: OAuthError = httpErrorResponse.error;
+          return Observable.throw(oauthError);
+        }
+        else {
+          return Observable.throw(new Error(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+        }
       }));
 
   }
@@ -121,29 +122,16 @@ export class SessionService {
 
           return session;
 
+        }), catchError ((httpErrorResponse: HttpErrorResponse) => {
+
+          if (httpErrorResponse.error && httpErrorResponse.error.error) {
+            let oauthError: OAuthError = httpErrorResponse.error;
+            return Observable.throw(oauthError);
+          }
+          else {
+            return Observable.throw(new Error(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          }
         }));
-
-
-      // return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-      //   map((tokenResponse: TokenResponse) => {
-      //
-      //     let token:any = decode(tokenResponse.access_token);
-      //
-      //     let session:Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, token.exp, tokenResponse.refresh_token);
-      //
-      //     this.sessionStorageService.set('session', session);
-      //
-      //     return session;
-      //
-      //   }), catchError((error: HttpErrorResponse) => {
-      //
-      //     console.log('catchError = ', error);
-      //
-      //     // TODO: Map different HTTP error codes to specific error types -- MARCUS
-      //
-      //     return Observable.throw(new LoginError(error.status));
-      //   }));
-
     }
     else {
 

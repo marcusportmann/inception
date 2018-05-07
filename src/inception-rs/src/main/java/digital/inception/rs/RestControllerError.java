@@ -43,7 +43,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "uri", "timestamp", "status", "reasonPhrase", "message", "detail", "exception",
+@JsonPropertyOrder({ "uri", "timestamp", "status", "statusText", "message", "detail", "exception",
     "stackTrace", "name", "validationErrors" })
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class RestControllerError
@@ -73,7 +73,7 @@ public class RestControllerError
    * The HTTP reason-phrase for the HTTP status-code for the error.
    */
   @JsonProperty
-  private String reasonPhrase;
+  private String statusText;
 
   /**
    * The message.
@@ -174,7 +174,7 @@ public class RestControllerError
 
     this.status = responseStatus.value();
 
-    this.reasonPhrase = responseStatus.getReasonPhrase() + " (" + responseStatus.value() + ")";
+    this.statusText = responseStatus.getReasonPhrase();
 
     try
     {
@@ -241,16 +241,6 @@ public class RestControllerError
   }
 
   /**
-   * Returns the HTTP reason-phrase for the HTTP status-code for the error.
-   *
-   * @return the HTTP reason-phrase for the HTTP status-code for the error
-   */
-  public String getReasonPhrase()
-  {
-    return reasonPhrase;
-  }
-
-  /**
    * Returns the optional stack trace associated with the error.
    *
    * @return the optional stack trace associated with the error
@@ -268,6 +258,16 @@ public class RestControllerError
   public int getStatus()
   {
     return status;
+  }
+
+  /**
+   * Returns the HTTP reason-phrase for the HTTP status-code for the error.
+   *
+   * @return the HTTP reason-phrase for the HTTP status-code for the error
+   */
+  public String getStatusText()
+  {
+    return statusText;
   }
 
   /**

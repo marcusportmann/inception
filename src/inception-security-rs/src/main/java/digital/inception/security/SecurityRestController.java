@@ -70,7 +70,7 @@ public class SecurityRestController
   @RequestMapping(value = "/api/organizations", method = RequestMethod.GET,
     produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Application.OrganizationAdministrationx')")
+  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
   public List<Organization> getOrganizations()
     throws SecurityServiceException
   {

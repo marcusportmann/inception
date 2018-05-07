@@ -18,7 +18,7 @@ import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
-import {LoginError} from "../../services/session/session.service.errors";
+
 
 
 @Component({
@@ -96,12 +96,7 @@ export class LoginComponent {
       },
         error => {
 
-        if (error instanceof LoginError ) {
-          console.log('Login error = ', error);
-        }
-        else {
-          console.log('Unknown error = ', error);
-        }
+          console.log('error = ', error);
 
         });
 

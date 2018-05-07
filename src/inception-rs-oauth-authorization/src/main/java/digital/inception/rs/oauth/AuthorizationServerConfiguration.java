@@ -27,9 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration
   .EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -43,18 +41,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers
   .AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers
   .AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
-import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -87,7 +79,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   /**
    * The access token validity in seconds.
    */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
+  //public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 1;
 
   /**
    * The refresh token validity in seconds.

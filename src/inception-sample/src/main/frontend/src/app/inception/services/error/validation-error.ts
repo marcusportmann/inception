@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-import {Error} from "../error/error";
+/**
+ * The ValidationError class holds the information for a validation error.
+ *
+ * @author Marcus Portmann
+ */
+export class ValidationError {
 
-/*
-export class LoginError extends Error {
-
-  code: number;
-
-  constructor(code: number) {
-    super();
-
-    this.code = code;
-  }
 }
-*/
