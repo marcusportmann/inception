@@ -1441,11 +1441,6 @@ public class SecurityService
   public List<Organization> getOrganizations()
     throws SecurityServiceException
   {
-    if (true)
-    {
-      throw new SecurityServiceException("Testing 1.. 2.. 3..");
-    }
-
     String getOrganizationsSQL =
         "SELECT id, name, status FROM security.organizations ORDER BY name";
 

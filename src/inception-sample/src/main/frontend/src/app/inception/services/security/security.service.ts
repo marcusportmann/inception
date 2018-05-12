@@ -56,15 +56,12 @@ export class SecurityService {
 
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        if (httpErrorResponse.error) {
-
-
+        if (httpErrorResponse.error && httpErrorResponse.error.exception) {
           return Observable.throw(new SecurityServiceError(httpErrorResponse));
         }
         else {
           return Observable.throw(new CommunicationError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
         }
-
 
       }));
   }
