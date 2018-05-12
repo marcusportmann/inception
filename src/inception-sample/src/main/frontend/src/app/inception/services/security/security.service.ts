@@ -22,7 +22,9 @@ import {map} from 'rxjs/operators';
 
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Organization} from "./organization";
-import {OrganizationStatus} from "./organization-status";
+import {SessionError} from "../session/session.service.errors";
+import {SecurityServiceError} from "./security.service.errors";
+import {CommunicationError} from "../../common/errors/communication-error";
 
 /**
  * The SecurityService class provides the Security Service implementation.
@@ -54,14 +56,15 @@ export class SecurityService {
 
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        console.log('catchError = ', httpErrorResponse);
-
-        // TODO: Map different HTTP error codes to specific error types -- MARCUS
+        if (httpErrorResponse.error) {
 
 
-        return Observable.throw(httpErrorResponse);
+          return Observable.throw(new SecurityServiceError(httpErrorResponse));
+        }
+        else {
+          return Observable.throw(new CommunicationError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+        }
 
-        //return Observable.throw(new LoginError(error.status));
 
       }));
   }

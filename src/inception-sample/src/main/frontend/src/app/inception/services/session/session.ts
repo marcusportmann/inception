@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {Organization} from "../security/organization";
+
 /**
  * The Session class holds the information for an active user session associated with an
  * authenticated user.
@@ -23,7 +25,7 @@
 export class Session {
 
   /**
-   * The username for the user the user session is associated with.
+   * The username for the user, the user session is associated with.
    */
   username: string;
 
@@ -33,7 +35,7 @@ export class Session {
   scopes: string[];
 
   /**
-   * The codes identifying the functions the user associated with the user session has access to.
+   * The codes identifying the functions the user, associated with the user session, has access to.
    */
   functions: string[];
 
@@ -54,24 +56,32 @@ export class Session {
   refreshToken: string;
 
   /**
+   * The organizations for the user, the user session is associated with.
+   */
+  organizations: Organization[];
+
+  /**
    * Constructs a new Session.
    *
-   * @param {string} username          The username for the user the user session is associated
-   *                                   with.
-   * @param {string[]} scopes          The OAuth2 scopes for the user session.
-   * @param {string[]} functions       The codes identifying the functions the user associated with
-   *                                   the user session has access to.
-   * @param {string} accessToken       The base-64 encoded OAuth2 JWT access token for the user
-   *                                   session.
-   * @param {number} accessTokenExpiry The ISO8601 format string giving the date and time the OAuth2
-   *                                   JWT access token for the user session will expire.
-   * @param {string} refreshToken      The base-64 encoded OAuth2 refresh token for the user
-   *                                   session.
+   * @param {string} username              The username for the user the user session is associated
+   *                                       with.
+   * @param {string[]} scopes              The OAuth2 scopes for the user session.
+   * @param {string[]} functions           The codes identifying the functions the user associated
+   *                                       with the user session has access to.
+   * @param {Organization[]} organizations The organizations for the user, the user session is
+   *                                       associated with.
+   * @param {string} accessToken           The base-64 encoded OAuth2 JWT access token for the user
+   *                                       session.
+   * @param {number} accessTokenExpiry     The ISO8601 format string giving the date and time the
+   *                                       OAuth2 JWT access token for the user session will expire.
+   * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
+   *                                       session.
    */
-  constructor(username: string, scopes: string[], functions: string[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
+  constructor(username: string, scopes: string[], functions: string[], organizations: Organization[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functions = functions;
+    this.organizations = organizations;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;

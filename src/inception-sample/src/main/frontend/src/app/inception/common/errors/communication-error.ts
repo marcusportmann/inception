@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
+import {Error} from "./error";
+
 /**
- * The Error class provides the base class that all error classes should be derived from.
+ * The CommunicationError class holds the information for a communication error.
  *
  * @author Marcus Portmann
  */
-export abstract class OAuthError {
+export class CommunicationError extends Error {
 
   /**
-   * The type of error e.g. invalid_request, invalid_client, invalid_grant, etc.
+   * Constructs a new CommunicationError.
+   *
+   * @param {Date} timestamp The date and time the error occurred.
+   * @param {string} message The message.
+   * @param {string} detail  The optional detail.
    */
-  error: string;
-
-  /**
-   * The optional error description.
-   */
-  error_description?: string;
-
-  /**
-   * The URI containing more information about the error.
-   */
-  error_uri?: string;
+  constructor(timestamp: Date, message: string, detail?: string) {
+    super(timestamp, message, detail);
+  }
 }

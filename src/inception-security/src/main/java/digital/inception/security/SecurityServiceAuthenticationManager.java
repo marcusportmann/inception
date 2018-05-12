@@ -128,7 +128,7 @@ public class SecurityServiceAuthenticationManager
     catch (UserNotFoundException e)
     {
       throw new UsernameNotFoundException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): The user could not be found");
+          + authentication.getPrincipal() + ")");
     }
     catch (Throwable e)
     {

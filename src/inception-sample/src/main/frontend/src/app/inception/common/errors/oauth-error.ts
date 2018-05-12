@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from "@angular/common/http";
-import {RestControllerError} from "../../common/errors/rest-controller-error";
-
 /**
- * The SecurityServiceError class holds the information for a Security Service error.
+ * The OAuthError interface defines the structure for an OAuth error.
  *
  * @author Marcus Portmann
  */
-export class SecurityServiceError extends RestControllerError {
+export interface OAuthError {
 
   /**
-   * Constructs a new SecurityServiceError.
-   *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
-   *                                              information returned by the Security Service.
+   * The type of error e.g. invalid_request, invalid_client, invalid_grant, etc.
    */
-  constructor(httpErrorResponse: HttpErrorResponse) {
-    super(httpErrorResponse);
-  }
+  error: string;
+
+  /**
+   * The optional error description.
+   */
+  error_description?: string;
+
+  /**
+   * The URI containing more information about the error.
+   */
+  error_uri?: string;
 }

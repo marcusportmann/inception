@@ -31,8 +31,8 @@ import {decode} from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
-import {OAuthError} from "../error/oauth-error";
-import {Error} from "../error/error";
+import {LoginError, SessionError} from "./session.service.errors";
+import {OAuthError} from "../../common/errors/oauth-error";
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -56,8 +56,8 @@ export class SessionService {
 
     let body = new HttpParams()
       .set('grant_type', 'password')
-      .set('username', 'Administrator')
-      .set('password', 'Password2')
+      .set('username', username)
+      .set('password', password)
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
@@ -70,19 +70,21 @@ export class SessionService {
 
         var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
 
-        let session: Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+        let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
         this.sessionStorageService.set('session', session);
 
         return session;
+
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
         if (httpErrorResponse.error && httpErrorResponse.error.error) {
           let oauthError: OAuthError = httpErrorResponse.error;
-          return Observable.throw(oauthError);
+
+          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
         }
         else {
-          return Observable.throw(new Error(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
         }
       }));
 
@@ -116,7 +118,7 @@ export class SessionService {
 
           var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
 
-          let session: Session = new Session(token.user_name, token.scope, token.authorities, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+          let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
           this.sessionStorageService.set('session', session);
 
@@ -126,10 +128,11 @@ export class SessionService {
 
           if (httpErrorResponse.error && httpErrorResponse.error.error) {
             let oauthError: OAuthError = httpErrorResponse.error;
-            return Observable.throw(oauthError);
+
+            return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
           }
           else {
-            return Observable.throw(new Error(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+            return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
           }
         }));
     }

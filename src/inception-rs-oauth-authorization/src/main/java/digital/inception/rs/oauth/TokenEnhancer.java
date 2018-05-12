@@ -18,12 +18,18 @@ package digital.inception.rs.oauth;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.security.ISecurityService;
+import digital.inception.security.Organization;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -36,6 +42,22 @@ import java.util.Map;
 public class TokenEnhancer
   implements org.springframework.security.oauth2.provider.token.TokenEnhancer
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(TokenEnhancer.class);
+
+  /* Security Service */
+  private ISecurityService securityService;
+
+  /**
+   * Constructs a new <code>TokenEnhancer</code>.
+   *
+   * @param securityService the Security Service
+   */
+  public TokenEnhancer(ISecurityService securityService)
+  {
+    this.securityService = securityService;
+  }
+
   /**
    * Provides an opportunity for customization of an access token (e.g. through its additional
    * information map) during the process of creating a new token for use by a client.
@@ -50,6 +72,39 @@ public class TokenEnhancer
       OAuth2Authentication authentication)
   {
     Map<String, Object> additionalInfo = new HashMap<>();
+
+    try
+    {
+      Object principal = authentication.getPrincipal();
+
+      String username;
+
+      if (principal instanceof String)
+      {
+        username = principal.toString();
+      }
+      else if (principal instanceof UserDetails)
+      {
+        username = ((UserDetails) principal).getUsername();
+      }
+      else
+      {
+        throw new RuntimeException("Unexpected principal type (" + principal.getClass().getName()
+            + ")");
+      }
+
+      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+
+      List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
+          userDirectoryId);
+
+      additionalInfo.put("organizations", organizations);
+    }
+    catch (Throwable e)
+    {
+      throw new TokenEnhancerException("Failed to retrieve the organizations for the user ("
+          + authentication.getPrincipal() + "): " + e.getMessage(), e);
+    }
 
     ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
@@ -8,7 +24,7 @@ import {patternValidator} from "../../validators/pattern-validator";
 import {SecurityService} from '../../services/security/security.service';
 import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 
-import { decode } from "jsonwebtoken";
+import {decode} from "jsonwebtoken";
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
@@ -18,7 +34,6 @@ import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
-
 
 
 @Component({
@@ -32,7 +47,8 @@ export class LoginComponent {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
+      username: ['Administrator', Validators.required],
+      //username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
       password: ['Password1', Validators.required],
     });
   }
@@ -62,48 +78,28 @@ export class LoginComponent {
 
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
-        console.log('session = ', session);
+          console.log('session = ', session);
 
 
-        this.securityService.getOrganizations().subscribe(organizations => {
+          this.securityService.getOrganizations().subscribe(organizations => {
 
-            console.log('Found organizations = ', organizations);
-        },
-          error => {
+            console.log('organizations = ', organizations);
 
+          }, error => {
 
-            console.log('Unknown error = ', error);
+            console.log('error = ', error);
+
           });
 
 
 
 
 
-
-
-
-
-
-        /*
-        if (result instanceof Session) {
-          console.log('session = ', result);
-        }
-        else if (result instanceof HttpErrorResponse) {
-          console.log('error = ', result);
-        }
-        */
-
-      },
-        error => {
+        },error => {
 
           console.log('error = ', error);
 
         });
-
-
-
-
-
     }
   }
 }

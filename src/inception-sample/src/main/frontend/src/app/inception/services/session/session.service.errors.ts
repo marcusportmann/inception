@@ -14,17 +14,42 @@
  * limitations under the License.
  */
 
-import {Error} from "../error/error";
+import {Error} from "../../common/errors/error";
 
-/*
+/**
+ * The LoginError class holds the information for a login error.
+ *
+ * @author Marcus Portmann
+ */
 export class LoginError extends Error {
 
-  code: number;
-
-  constructor(code: number) {
-    super();
-
-    this.code = code;
+  /**
+   * Constructs a new LoginError.
+   *
+   * @param {Date} timestamp The date and time the error occurred.
+   * @param {string} message The message.
+   * @param {string} detail  The optional detail.
+   */
+  constructor(timestamp: Date, message: string, detail?: string) {
+    super(timestamp, message, detail);
   }
 }
-*/
+
+/**
+ * The SessionError class holds the information for a session error.
+ *
+ * @author Marcus Portmann
+ */
+export class SessionError extends Error {
+
+  /**
+   * Constructs a new SessionError.
+   *
+   * @param {Date} timestamp The date and time the error occurred.
+   * @param {string} message The message.
+   * @param {string} detail  The optional detail.
+   */
+  constructor(timestamp: Date, message: string, detail?: string) {
+    super(timestamp, message, detail);
+  }
+}
