@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ContainerComponent} from "../container";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'inception-layout-admin-container',
@@ -8,7 +9,7 @@ import {ContainerComponent} from "../container";
 })
 export class AdminContainerComponent extends ContainerComponent {
 
-  constructor() {
+  constructor(private router: Router) {
     super();
   }
 

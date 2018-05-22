@@ -5,6 +5,7 @@ export * from './container';
 export * from './error-modal';
 export * from './footer';
 export * from './header';
+export * from './not-found';
 export * from './sidebar';
 export * from './sidebar-footer';
 export * from './sidebar-form';

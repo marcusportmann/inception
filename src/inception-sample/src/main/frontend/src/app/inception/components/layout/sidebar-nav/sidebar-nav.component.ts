@@ -1,7 +1,13 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 // Import navigation elements
-import { navigation } from '../../../../navigation';
+
+import { Router } from '@angular/router';
+import {NavigationService} from "../../../services/navigation/navigation.service";
+import {NavigationItem} from "../../../services/navigation/navigation-item";
+
+
+//import { navigation } from '../../../../navigation';
 
 @Component({
   selector: 'inception-layout-sidebar-nav',
@@ -22,7 +28,12 @@ import { navigation } from '../../../../navigation';
 })
 export class SidebarNavComponent implements OnInit {
 
-  public navigation = navigation;
+  public navigation: NavigationItem[];
+
+  constructor(private navigationService: NavigationService) {
+
+    this.navigation = navigationService.getNavigation();
+  }
 
   public isDivider(item) {
     return !!item.divider;
@@ -32,14 +43,10 @@ export class SidebarNavComponent implements OnInit {
     return !!item.title;
   }
 
-  constructor() { }
-
   ngOnInit(): void {
   }
 
 }
-
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'inception-layout-sidebar-nav-item',

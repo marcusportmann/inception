@@ -28,6 +28,7 @@ import digital.inception.reporting.ReportingWebService;
 import digital.inception.sample.api.SampleServiceController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,7 +43,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.annotation.PostConstruct;
 import javax.xml.ws.Endpoint;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +60,7 @@ import java.util.UUID;
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
 @EnableSwagger2
 public class SampleApplication extends Application
+  implements InitializingBean
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
@@ -90,6 +91,47 @@ public class SampleApplication extends Application
   public static void main(String[] args)
   {
     SpringApplication.run(SampleApplication.class, args);
+  }
+
+  /**
+   * Initialize the sample application.
+   */
+  @Override
+  public void afterPropertiesSet()
+    throws Exception
+  {
+    try
+    {
+      byte[] cxfXml = ResourceUtil.getClasspathResource("/cxf.xml");
+
+      int xxx = 0;
+      xxx++;
+    }
+    catch (Throwable e)
+    {
+      int xxx = 0;
+      xxx++;
+
+    }
+
+    try
+    {
+      byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
+          "digital/inception/sample/SampleReport.jasper");
+
+      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
+          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
+
+      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
+      {
+        reportingService.createReportDefinition(sampleReportDefinition);
+        logger.info("Saved the \"Sample Report\" report definition");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to initialize the Sample application", e);
+    }
   }
 
   /**
@@ -194,46 +236,6 @@ public class SampleApplication extends Application
   protected Endpoint sampleWebService()
   {
     return createWebServiceEndpoint("SampleService", sampleServiceController);
-  }
-
-  /**
-   * Initialize the Sample application.
-   */
-  @PostConstruct
-  private void initSampleApplication()
-  {
-    try
-    {
-      byte[] cxfXml = ResourceUtil.getClasspathResource("/cxf.xml");
-
-      int xxx = 0;
-      xxx++;
-    }
-    catch (Throwable e)
-    {
-      int xxx = 0;
-      xxx++;
-
-    }
-
-    try
-    {
-      byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
-          "digital/inception/sample/SampleReport.jasper");
-
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
-          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
-
-      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
-      {
-        reportingService.createReportDefinition(sampleReportDefinition);
-        logger.info("Saved the \"Sample Report\" report definition");
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new RuntimeException("Failed to initialize the Sample application", e);
-    }
   }
 
 ///**

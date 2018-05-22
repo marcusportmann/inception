@@ -63,7 +63,7 @@ export class SessionService {
 
     let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+    return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
       map((tokenResponse: TokenResponse) => {
 
         let token: any = decode(tokenResponse.access_token);
@@ -111,7 +111,7 @@ export class SessionService {
 
       let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-      return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+      return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
         map((tokenResponse: TokenResponse) => {
 
           let token: any = decode(tokenResponse.access_token);

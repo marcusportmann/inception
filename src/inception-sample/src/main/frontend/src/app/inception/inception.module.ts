@@ -22,7 +22,7 @@ import {
   ContainerComponent,
   ErrorModalComponent,
   FooterComponent,
-  HeaderComponent,
+  HeaderComponent, NotFoundComponent,
   SidebarComponent,
   SidebarFooterComponent,
   SidebarFormComponent,
@@ -38,6 +38,7 @@ import {
 
 // Import Inception services
 import {ErrorService} from './services/error/error.service';
+import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
 
@@ -81,6 +82,7 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
     ErrorModalComponent,
     FooterComponent,
     HeaderComponent,
+    NotFoundComponent,
     SidebarComponent,
     SidebarFooterComponent,
     SidebarFormComponent,
@@ -121,9 +123,10 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
       multi: true
     },
     ErrorService,
+    NavigationService,
     SecurityService,
     SessionService],
-  bootstrap: [ErrorModalComponent]
+  bootstrap: [AdminContainerComponent, ErrorModalComponent]
 })
 export class InceptionModule {
 
@@ -131,7 +134,8 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  public constructor(private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  constructor(private navigationService: NavigationService, private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
+    console.log('Initialising InceptionModule');
     this.bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
     this.bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
   }
