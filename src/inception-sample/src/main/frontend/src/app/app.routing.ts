@@ -38,6 +38,9 @@ export const routes: Routes = [
       sidebarNav: true
     }
   },
+
+
+
   {
     path: '',
     loadChildren: './inception/inception.module#InceptionModule',
