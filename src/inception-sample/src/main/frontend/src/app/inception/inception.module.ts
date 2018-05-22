@@ -6,7 +6,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 
 // Import Angular components
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
@@ -126,7 +126,7 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
     NavigationService,
     SecurityService,
     SessionService],
-  bootstrap: [AdminContainerComponent, ErrorModalComponent]
+  bootstrap: [AdminContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
 
@@ -134,11 +134,22 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  constructor(private navigationService: NavigationService, private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  constructor(private router: Router, private navigationService: NavigationService, private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
     console.log('Initialising InceptionModule');
     this.bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
     this.bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
+
+    // Initialise the default routes for the Inception module
+    this.initDefaultRoutes();
+  }
+
+  /**
+   * Initialise the default routes for the Inception module.
+   */
+  private initDefaultRoutes() {
+    this.router.config.unshift({path: 'login', component: SimpleContainerComponent, loadChildren: './views/login/login.module#LoginModule' });
   }
 }
+
 
 

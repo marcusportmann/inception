@@ -41,9 +41,8 @@ export class AppModule {
    */
   initNavigation(navigationService: NavigationService ) {
 
-    navigationService.addNavigationItem(new NavigationItem('Dashboard', '/dashboard', 'icon-speedometer', true, 'dashboard', './views/dashboard/dashboard.module#DashboardModule', new NavigationItemBadge('info', 'NEW')));
-    navigationService.addNavigationItem(new NavigationItem('Test Form', '/test-form', 'icon-note', true, 'test-form', './views/test-form/test-form.module#TestFormModule'));
-    //navigationService.addNavigationItem(new NavigationItem('Login', '/login', 'icon-login', false, 'login'));
+    //navigationService.addNavigationItem(new NavigationItem('Dashboard', '/dashboard', 'icon-speedometer', 'dashboard', './views/dashboard/dashboard.module#DashboardModule', new NavigationItemBadge('info', 'NEW')));
+    //navigationService.addNavigationItem(new NavigationItem('Test Form', '/test-form', 'icon-note', 'test-form', './views/test-form/test-form.module#TestFormModule'));
   }
 }
 

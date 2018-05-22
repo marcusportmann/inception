@@ -39,11 +39,6 @@ export class NavigationItem {
   icon: string;
 
   /**
-   * Should the navigation item be displayed in the sidebar navigation?
-   */
-  showInSidebarNav: boolean;
-
-  /**
    * The route path for the navigation item.
    */
   routePath: string;
@@ -64,19 +59,15 @@ export class NavigationItem {
    * @param {string} name               The name of the navigation item.
    * @param {string} url                The URL for the navigation item.
    * @param {string} icon               The icon for the navigation item.
-   * @param {boolean} showInSidebarNav  Should the navigation item be displayed in the sidebar
-   *                                    navigation?
-   * @param {string} routePath          The path to the module that the child routes for the
-   *                                    navigation item will be loaded from.
+   * @param {string} routePath          The route path for the navigation item.
    * @param {string} routeLoadChildren  The path to the module that the child routes for the
    *                                    navigation item will be loaded from.
    * @param {NavigationItemBadge} badge The optional badge associated with the navigation item.
    */
-  constructor(name: string, url: string, icon: string, showInSidebarNav: boolean, routePath: string, routeLoadChildren: string, badge?: NavigationItemBadge) {
+  constructor(name: string, url: string, icon: string, routePath: string, routeLoadChildren: string, badge?: NavigationItemBadge) {
     this.name = name;
     this.url = url;
     this.icon = icon;
-    this.showInSidebarNav = showInSidebarNav;
     this.routePath = routePath;
     this.routeLoadChildren = routeLoadChildren;
     this.badge = badge;

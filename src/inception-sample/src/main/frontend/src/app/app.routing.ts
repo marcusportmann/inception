@@ -13,6 +13,8 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
+
+  /*
   {
     path: 'login',
     component: SimpleContainerComponent,
@@ -26,6 +28,7 @@ export const routes: Routes = [
       }
     ]
   },
+  */
   {
     path: '**',
     component: NotFoundComponent
