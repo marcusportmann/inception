@@ -13,6 +13,7 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
+import {InceptionRoutingModule} from "./inception-routing.module";
 
 // Import Inception components
 import {
@@ -38,7 +39,6 @@ import {
 
 // Import Inception services
 import {ErrorService} from './services/error/error.service';
-import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
 
@@ -72,7 +72,8 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
 
-    DirectivesModule
+    DirectivesModule,
+    InceptionRoutingModule
   ],
   declarations: [
     AdminContainerComponent,
@@ -123,7 +124,6 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
       multi: true
     },
     ErrorService,
-    NavigationService,
     SecurityService,
     SessionService],
   bootstrap: [AdminContainerComponent, ErrorModalComponent, SimpleContainerComponent]
@@ -134,20 +134,10 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  constructor(private router: Router, private navigationService: NavigationService, private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  constructor(private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
     console.log('Initialising InceptionModule');
     this.bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
     this.bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
-
-    // Initialise the default routes for the Inception module
-    this.initDefaultRoutes();
-  }
-
-  /**
-   * Initialise the default routes for the Inception module.
-   */
-  private initDefaultRoutes() {
-    this.router.config.unshift({path: 'login', component: SimpleContainerComponent, loadChildren: './views/login/login.module#LoginModule' });
   }
 }
 

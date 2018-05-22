@@ -15,25 +15,25 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
-// Import Inception module
-import {InceptionModule} from '../../inception/inception.module';
-
-// Import Inception components
-import {TestFormComponent} from './test-form.component';
-
 const routes: Routes = [
   {
     path: '',
-    component: TestFormComponent,
-    data: {
-      title: 'Test Form'
-    }
+    redirectTo: 'level11',
+    pathMatch: 'full',
+  },
+  {
+    path: 'level11',
+    loadChildren: './level11/level11.module#Level11Module',
+  },
+  {
+    path: 'level12',
+    loadChildren: './level12/level12.module#Level12Module',
   }
 ];
 
@@ -41,10 +41,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
 
-    InceptionModule,
-
     RouterModule.forChild(routes)
   ],
-  declarations: [ TestFormComponent ]
+  declarations: []
 })
-export class TestFormModule { }
+export class Level1Module {
+}

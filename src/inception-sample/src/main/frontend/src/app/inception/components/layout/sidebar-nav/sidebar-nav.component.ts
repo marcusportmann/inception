@@ -3,8 +3,6 @@ import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 // Import navigation elements
 
 import { Router } from '@angular/router';
-import {NavigationService} from "../../../services/navigation/navigation.service";
-import {NavigationItem} from "../../../services/navigation/navigation-item";
 
 
 //import { navigation } from '../../../../navigation';
@@ -28,11 +26,26 @@ import {NavigationItem} from "../../../services/navigation/navigation-item";
 })
 export class SidebarNavComponent implements OnInit {
 
-  public navigation: NavigationItem[];
+  public navigation = [];
 
-  constructor(private navigationService: NavigationService) {
+  constructor(private router: Router) {
 
-    this.navigation = navigationService.getNavigation();
+    for (var i = 0; i < router.config.length; i++) {
+
+      var route:any = router.config[i];
+
+      if (route.data) {
+        if (route.data.sidebarNav) {
+          if (route.data.title) {
+            this.navigation.push({
+              name: route.data.title,
+              url: '/' + route.path,
+              icon: route.data.icon
+            });
+          }
+        }
+      }
+    }
   }
 
   public isDivider(item) {

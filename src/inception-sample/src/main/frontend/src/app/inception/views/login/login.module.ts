@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
+// Import Angular modules
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
+// Import Angular classes
+import {RouterModule, Routes} from "@angular/router";
+
+// Import Inception modules
 import {DirectivesModule} from "../../directives/directives.module";
 
+// Import Inception components
 import { LoginComponent } from './login.component';
-import { LoginRoutingModule } from './login-routing.module';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: LoginComponent,
+    data: {
+      title: 'Login'
+    }
+  }
+];
 
 @NgModule({
   imports: [
@@ -31,7 +46,7 @@ import { LoginRoutingModule } from './login-routing.module';
 
     DirectivesModule,
 
-    LoginRoutingModule
+    RouterModule.forChild(routes)
   ],
   declarations: [
     LoginComponent

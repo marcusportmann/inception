@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-/**
- * The NavigationItemBadge class stores the information for a navigation item badge.
- *
- * @author Marcus Portmann
- */
-export class NavigationItemBadge {
+// Import Angular modules
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
-  /**
-   * The type of navigation item badge.
-   */
-  variant: string;
+// Import Angular classes
+import {RouterModule, Routes} from "@angular/router";
 
-  /**
-   * The text for the navigation item badge.
-   */
-  text: string;
+// Import Inception components
+import {Level12Component} from "./level12.component";
 
-  /**
-   * Constructs a new NavigationItemBadge.
-   *
-   * @param {string} variant The type of navigation item badge.
-   * @param {string} text    The text for the navigation item badge.
-   */
-  constructor(variant: string, text: string) {
-    this.variant = variant;
-    this.text = text;
+const routes: Routes = [
+  {
+    path: '',
+    component: Level12Component,
+    data: {
+      title: 'Level 1.2'
+    }
   }
+];
+
+@NgModule({
+  imports: [
+    CommonModule,
+
+    RouterModule.forChild(routes)
+  ],
+  declarations: [Level12Component]
+})
+export class Level12Module {
 }

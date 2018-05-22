@@ -15,24 +15,21 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
-// Import Inception module
-import {InceptionModule} from '../../inception/inception.module';
-
 // Import Inception components
-import {TestFormComponent} from './test-form.component';
+import {Level11Component} from "./level11.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: TestFormComponent,
+    component: Level11Component,
     data: {
-      title: 'Test Form'
+      title: 'Level 1.1'
     }
   }
 ];
@@ -41,10 +38,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
 
-    InceptionModule,
-
     RouterModule.forChild(routes)
   ],
-  declarations: [ TestFormComponent ]
+  declarations: [Level11Component]
 })
-export class TestFormModule { }
+export class Level11Module {
+}

@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {Component} from '@angular/core';
 
-import { LoginComponent } from './login.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent,
-    data: {
-      title: 'Login'
-    }
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+/**
+ * The Level12Component class.
+ *
+ * @author Marcus Portmann
+ */
+@Component({
+  template: `Level 1.2`
 })
-export class LoginRoutingModule {}
+export class Level12Component {
+
+  constructor( ) { }
+}
