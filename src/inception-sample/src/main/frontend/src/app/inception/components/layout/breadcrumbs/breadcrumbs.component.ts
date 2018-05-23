@@ -7,7 +7,7 @@ import 'rxjs/add/operator/filter';
   template: `
   <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs" let-last = last>
     <li class="breadcrumb-item"
-        *ngIf="breadcrumb.label.title&&breadcrumb.url.substring(breadcrumb.url.length-1) == '/'||breadcrumb.label.title&&last"
+        *ngIf="(breadcrumb.label.title&&(!last)) || (breadcrumb.label.title&&last)"
         [ngClass]="{active: last}">
       <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</a>
       <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
@@ -40,6 +40,17 @@ export class BreadcrumbsComponent implements OnInit {
           }
         });
       } while (currentRoute);
+
+      console.log('breadcrumbs = ', this.breadcrumbs);
+
+      for (var i = 0; i < this.breadcrumbs.length; i++) {
+
+        let breadcrumb:any = this.breadcrumbs[i];
+
+        console.log('breadcrumb.label.title = ', breadcrumb.label.title);
+        console.log('breadcrumb.url.substring(breadcrumb.url.length-1) = ', breadcrumb.url.substring(breadcrumb.url.length-1));
+      }
+
     });
   }
 

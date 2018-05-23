@@ -29,11 +29,21 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'level1',
+    path: 'menu1',
     component: AdminContainerComponent,
-    loadChildren: './views/level1/level1.module#Level1Module',
+    loadChildren: './views/menu1/menu1.module#Menu1Module',
     data: {
-      title: 'Level 1',
+      title: 'Menu 1',
+      icon: 'icon-doc',
+      sidebarNav: true
+    }
+  },
+  {
+    path: 'menu2',
+    component: AdminContainerComponent,
+    loadChildren: './views/menu2/menu2.module#Menu2Module',
+    data: {
+      title: 'Menu 2',
       icon: 'icon-doc',
       sidebarNav: true
     }
