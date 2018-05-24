@@ -5,7 +5,7 @@ import {AdminContainerComponent, NotFoundComponent} from './inception/components
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'menu1/menu11',
     pathMatch: 'full',
   },
   {
@@ -47,6 +47,29 @@ export const routes: Routes = [
       icon: 'icon-doc',
       sidebarNav: true
     }
+  },
+
+
+
+  {
+    path: 'administration',
+    component: AdminContainerComponent,
+    data: {
+      title: 'Administration',
+      icon: 'fa fa-gear',
+      sidebarNav: true
+    },
+    children: [
+      {
+        path: 'security',
+        loadChildren: './inception/views/security/security.module#SecurityModule',
+        data: {
+          title: 'Security',
+          icon: 'fa fa-lock',
+          sidebarNav: true
+        }
+      }
+    ]
   },
 
 

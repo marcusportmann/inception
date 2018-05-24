@@ -59,7 +59,7 @@
     <glassfish-el.version>3.0.1-b08</glassfish-el.version>
     <groovy.version>2.4.15</groovy.version>
     <hazelcast.version>3.9.4</hazelcast.version>
-    <hibernate-validator.version>6.0.9.Final</hibernate-validator.version>
+    <hibernate-validator.version>6.0.10.Final</hibernate-validator.version>
     <jackson.version>2.9.5</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
     <java-jaxb.version>2.3.0</java-jaxb.version>
