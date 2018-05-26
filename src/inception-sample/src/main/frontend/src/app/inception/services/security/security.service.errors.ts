@@ -15,7 +15,7 @@
  */
 
 import {HttpErrorResponse} from "@angular/common/http";
-import {RestControllerError} from "../../common/errors/rest-controller-error";
+import {RestControllerError} from "../../errors/rest-controller-error";
 
 /**
  * The SecurityServiceError class holds the information for a Security Service error.

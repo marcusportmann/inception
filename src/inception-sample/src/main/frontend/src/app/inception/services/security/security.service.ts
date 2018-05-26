@@ -24,7 +24,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Organization} from "./organization";
 import {SessionError} from "../session/session.service.errors";
 import {SecurityServiceError} from "./security.service.errors";
-import {CommunicationError} from "../../common/errors/communication-error";
+import {CommunicationError} from "../../errors/communication-error";
 
 /**
  * The SecurityService class provides the Security Service implementation.

@@ -32,7 +32,7 @@ import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
 import {LoginError, SessionError} from "./session.service.errors";
-import {OAuthError} from "../../common/errors/oauth-error";
+import {OAuthError} from "../../errors/oauth-error";
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -100,45 +100,55 @@ export class SessionService {
     let session: Session = this.sessionStorageService.get("session");
 
     // If the access token has expired then obtain a new one using the refresh token
-    if (session.accessTokenExpiry && (Date.now() > parseInt(session.accessTokenExpiry))) {
+    if (session) {
+      if (session.accessTokenExpiry) {
+        if (Date.now() > parseInt(session.accessTokenExpiry)) {
 
-      let body = new HttpParams()
-        .set('grant_type', 'refresh_token')
-        .set('refresh_token', session.refreshToken)
-        .set('scope', 'inception-sample')
-        .set('client_id', 'inception-sample');
-      ;
+          this.sessionStorageService.remove("session");
 
-      let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+          TODO FIX THIS
 
-      return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
-        map((tokenResponse: TokenResponse) => {
+          let body = new HttpParams()
+            .set('grant_type', 'refresh_token')
+            .set('refresh_token', session.refreshToken)
+            .set('scope', 'inception-sample')
+            .set('client_id', 'inception-sample');
+          ;
 
-          let token: any = decode(tokenResponse.access_token);
+          let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-          var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+          return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
+            map((tokenResponse: TokenResponse) => {
 
-          let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+              let token: any = decode(tokenResponse.access_token);
 
-          this.sessionStorageService.set('session', session);
+              var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
 
-          return session;
+              let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
-        }), catchError ((httpErrorResponse: HttpErrorResponse) => {
+              this.sessionStorageService.set('session', session);
 
-          if (httpErrorResponse.error && httpErrorResponse.error.error) {
-            let oauthError: OAuthError = httpErrorResponse.error;
+              return session;
 
-            return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
-          }
-          else {
-            return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
-          }
-        }));
+            }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+              if (httpErrorResponse.error && httpErrorResponse.error.error) {
+                let oauthError: OAuthError = httpErrorResponse.error;
+
+                return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
+              }
+              else {
+                return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+              }
+            }));
+        }
+        else {
+
+          return Observable.of(session);
+        }
+      }
     }
-    else {
 
-      return Observable.of(session);
-    }
+
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../common/errors/error";
+import {Error} from "../../errors/error";
 
 /**
  * The LoginError class holds the information for a login error.

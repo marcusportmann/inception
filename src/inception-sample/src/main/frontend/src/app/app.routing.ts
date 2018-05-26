@@ -1,6 +1,10 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {AdminContainerComponent, NotFoundComponent} from './inception/components/layout';
+import {
+  AdminContainerComponent,
+  NotFoundComponent,
+  SimpleContainerComponent
+} from './inception/components/layout';
 
 export const routes: Routes = [
   {
@@ -50,7 +54,7 @@ export const routes: Routes = [
   },
 
 
-
+  // Administration routes
   {
     path: 'administration',
     component: AdminContainerComponent,
@@ -72,12 +76,17 @@ export const routes: Routes = [
     ]
   },
 
-
-
+  // Login route
   {
-    path: '',
-    loadChildren: './inception/inception.module#InceptionModule',
+    path: 'login',
+    component: SimpleContainerComponent,
+    loadChildren: './inception/views/login/login.module#LoginModule',
+    data: {
+      title: 'Login'
+    }
   },
+
+  // Default route for invalid paths
   {
     path: '**',
     component: NotFoundComponent
