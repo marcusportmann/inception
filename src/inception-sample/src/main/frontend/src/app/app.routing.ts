@@ -23,6 +23,7 @@ export const routes: Routes = [
     data: {
       title: 'Dashboard',
       icon: 'icon-speedometer',
+      functionCodes: ['Application.Dashboard'],
       sidebarNav: true
     }
   },
@@ -56,7 +57,6 @@ export const routes: Routes = [
       sidebarNav: true
     }
   },
-
 
   // Administration routes
   {

@@ -37,7 +37,7 @@ export class Session {
   /**
    * The codes identifying the functions the user, associated with the user session, has access to.
    */
-  functions: string[];
+  functionCodes: string[];
 
   /**
    * The base-64 encoded OAuth2 JWT access token for the user session.
@@ -66,7 +66,7 @@ export class Session {
    * @param {string} username              The username for the user the user session is associated
    *                                       with.
    * @param {string[]} scopes              The OAuth2 scopes for the user session.
-   * @param {string[]} functions           The codes identifying the functions the user associated
+   * @param {string[]} functionCodes       The codes identifying the functions the user associated
    *                                       with the user session has access to.
    * @param {Organization[]} organizations The organizations for the user, the user session is
    *                                       associated with.
@@ -77,10 +77,10 @@ export class Session {
    * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
    *                                       session.
    */
-  constructor(username: string, scopes: string[], functions: string[], organizations: Organization[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
+  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
-    this.functions = functions;
+    this.functionCodes = functionCodes;
     this.organizations = organizations;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;

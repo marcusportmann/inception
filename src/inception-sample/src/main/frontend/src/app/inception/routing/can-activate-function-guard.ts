@@ -15,8 +15,10 @@
  */
 
 import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate} from "@angular/router";
+import {ActivatedRouteSnapshot, CanActivate, Router} from "@angular/router";
 import {SessionService} from "../services/session/session.service";
+import {Session} from "../services/session/session";
+import {Observable} from "rxjs/Observable";
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route
@@ -31,14 +33,62 @@ export class CanActivateFunctionGuard implements CanActivate {
    * Constructs a new CanActivateFunctionGuard.
    *
    * @param {SessionService} sessionService The Session Service.
+   * @param {Router}         router         The router.
    */
-  constructor(private sessionService: SessionService) {
+  constructor(private sessionService: SessionService, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
 
 
+    return this.sessionService.getSession().map((session: Session) => {
 
-    return true;
+      if (route) {
+        if (route.data) {
+          if (route.data.functionCodes) {
+
+            // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
+
+            if (session) {
+              for (var i = 0; i < route.data.functionCodes.length; i++) {
+                for (var j = 0; j < session.functionCodes.length; j++) {
+                  if (route.data.functionCodes[i] == session.functionCodes[j]) {
+                    return true;
+                  }
+                }
+              }
+
+              this.router.navigate(['/login']);
+
+              return false;
+            }
+            else {
+              this.router.navigate(['/login']);
+
+              return false;
+            }
+          }
+          else {
+            return true;
+          }
+        }
+        else {
+          return true;
+        }
+      }
+      else {
+        this.router.navigate(['/login']);
+
+        return false;
+      }
+    }, error => {
+
+      // TODO: Handle or log error -- MARCUS
+
+      this.router.navigate(['/login']);
+
+      return false;
+    });
+
   }
 }
