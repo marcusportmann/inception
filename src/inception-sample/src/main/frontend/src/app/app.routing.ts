@@ -5,6 +5,7 @@ import {
   NotFoundComponent,
   SimpleContainerComponent
 } from './inception/components/layout';
+import {CanActivateFunctionGuard} from "./inception/routing/can-activate-function-guard";
 
 export const routes: Routes = [
   {
@@ -15,6 +16,9 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: AdminContainerComponent,
+    canActivate: [
+      CanActivateFunctionGuard
+    ],
     loadChildren: './views/dashboard/dashboard.module#DashboardModule',
     data: {
       title: 'Dashboard',

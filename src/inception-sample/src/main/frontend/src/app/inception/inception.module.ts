@@ -13,7 +13,6 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
-import {InceptionRoutingModule} from "./inception-routing.module";
 
 // Import Inception components
 import {
@@ -55,6 +54,7 @@ import {TimepickerModule} from 'ngx-bootstrap';
 // Import 3rd party components
 import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
 import {SessionInterceptor} from "./services/session/session.interceptor";
+import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 
 @NgModule({
   imports: [
@@ -72,8 +72,7 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
 
-    DirectivesModule,
-    InceptionRoutingModule
+    DirectivesModule
   ],
   declarations: [
     AdminContainerComponent,
@@ -114,15 +113,20 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
 
     DirectivesModule
   ],
-  providers: [{
+  providers: [
+    {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SessionInterceptor,
       multi: true
     },
+
+    CanActivateFunctionGuard,
+
     ErrorService,
     SecurityService,
     SessionService],

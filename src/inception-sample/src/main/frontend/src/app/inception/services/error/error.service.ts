@@ -37,8 +37,6 @@ export class ErrorService {
   constructor(private bsModalService: BsModalService) {
   }
 
-
-
   showConfirm(title?: string, message?: string) {
     let bsModalRef = this.bsModalService.show(ErrorModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
     console.log("bsModalRef: ", bsModalRef);

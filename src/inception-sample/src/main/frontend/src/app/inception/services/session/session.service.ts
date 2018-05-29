@@ -87,15 +87,14 @@ export class SessionService {
           return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
         }
       }));
-
   }
 
   /**
    * Returns the current active session if one exists.
    *
-   * @return {Session}
+   * @return {Session} The current active session if one exists or null.
    */
-  public getSession(): Observable<Session> {
+  public getSession(): Observable<Session | null> {
 
     let session: Session = this.sessionStorageService.get("session");
 
@@ -104,43 +103,44 @@ export class SessionService {
       if (session.accessTokenExpiry) {
         if (Date.now() > parseInt(session.accessTokenExpiry)) {
 
-          this.sessionStorageService.remove("session");
+            this.sessionStorageService.remove("session");
 
-          TODO FIX THIS
+            if (session.refreshToken) {
 
-          let body = new HttpParams()
-            .set('grant_type', 'refresh_token')
-            .set('refresh_token', session.refreshToken)
-            .set('scope', 'inception-sample')
-            .set('client_id', 'inception-sample');
-          ;
+              let body = new HttpParams()
+                .set('grant_type', 'refresh_token')
+                .set('refresh_token', session.refreshToken)
+                .set('scope', 'inception-sample')
+                .set('client_id', 'inception-sample');
+              ;
 
-          let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+              let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-          return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
-            map((tokenResponse: TokenResponse) => {
+              return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
+                map((tokenResponse: TokenResponse) => {
 
-              let token: any = decode(tokenResponse.access_token);
+                  let token: any = decode(tokenResponse.access_token);
 
-              var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+                  var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
 
-              let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+                  let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
-              this.sessionStorageService.set('session', session);
+                  this.sessionStorageService.set('session', session);
 
-              return session;
+                  return session;
 
-            }), catchError((httpErrorResponse: HttpErrorResponse) => {
+                }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-              if (httpErrorResponse.error && httpErrorResponse.error.error) {
-                let oauthError: OAuthError = httpErrorResponse.error;
+                  if (httpErrorResponse.error && httpErrorResponse.error.error) {
+                    let oauthError: OAuthError = httpErrorResponse.error;
 
-                return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
-              }
-              else {
-                return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
-              }
-            }));
+                    return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
+                  }
+                  else {
+                    return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+                  }
+                }));
+            }
         }
         else {
 
@@ -149,6 +149,6 @@ export class SessionService {
       }
     }
 
-
+    return Observable.of(null);
   }
 }
