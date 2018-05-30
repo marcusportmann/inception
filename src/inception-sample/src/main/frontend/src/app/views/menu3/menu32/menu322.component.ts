@@ -14,33 +14,17 @@
  * limitations under the License.
  */
 
-// Import Angular modules
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
+import {Component} from '@angular/core';
 
-// Import Angular classes
-import {RouterModule, Routes} from "@angular/router";
-
-// Import Inception components
-import {Menu11Component} from "./menu11.component";
-
-const routes: Routes = [
-  {
-    path: '',
-    component: Menu11Component,
-    data: {
-      title: 'Menu 1.1'
-    }
-  }
-];
-
-@NgModule({
-  imports: [
-    CommonModule,
-
-    RouterModule.forChild(routes)
-  ],
-  declarations: [Menu11Component]
+/**
+ * The Menu322Component class.
+ *
+ * @author Marcus Portmann
+ */
+@Component({
+  template: `Menu 3.2.2`
 })
-export class Menu11Module {
+export class Menu322Component {
+
+  constructor( ) { }
 }

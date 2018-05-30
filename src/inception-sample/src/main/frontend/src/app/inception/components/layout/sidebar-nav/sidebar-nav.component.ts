@@ -2,7 +2,8 @@ import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 // Import navigation elements
 
-import { Router } from '@angular/router';
+import {Route, Router, RouterState, RouterStateSnapshot} from '@angular/router';
+
 
 
 //import { navigation } from '../../../../navigation';
@@ -26,37 +27,53 @@ import { Router } from '@angular/router';
 })
 export class SidebarNavComponent implements OnInit {
 
-  public navigation = [];
+  navigation = [];
 
   constructor(private router: Router) {
 
     for (var i = 0; i < router.config.length; i++) {
 
-      var route:any = router.config[i];
+      var navigation: any = this.buildNavigation(router.config[i]);
 
-      if (route.data) {
-        if (route.data.sidebarNav) {
-          if (route.data.title) {
-            this.navigation.push({
-              name: route.data.title,
-              url: '/' + route.path,
-              icon: route.data.icon
-            });
-          }
-        }
+      if (navigation) {
+        this.navigation.push();
       }
     }
   }
 
-  public isDivider(item) {
+  isDivider(item) {
     return !!item.divider;
   }
 
-  public isTitle(item) {
+  isTitle(item) {
     return !!item.title;
   }
 
   ngOnInit(): void {
+  }
+
+  private buildNavigation(route: any): any {
+
+    if (route._loadedConfig) {
+      console.log('route._loadedConfig = ', route._loadedConfig);
+    }
+
+    if (route.data) {
+      if (route.data.sidebarNav) {
+        if (route.data.title) {
+
+
+
+
+          return ({
+            name: route.data.title,
+            url: '/' + route.path,
+            icon: route.data.icon
+          });
+        }
+      }
+    }
+
   }
 
 }

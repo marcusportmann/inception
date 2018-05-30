@@ -34,8 +34,6 @@ const routes: Routes = [
     component: Menu21Component,
     data: {
       title: 'Menu 2.1',
-      icon: 'icon-doc',
-      sidebarNav: true
     }
   },
   {
@@ -43,12 +41,16 @@ const routes: Routes = [
     component: Menu22Component,
     data: {
       title: 'Menu 2.2',
-      icon: 'icon-doc',
-      sidebarNav: true
     }
   }
 ];
 
+/**
+ * The Menu2Module class implements a module that contains two components that can be loaded into
+ * the AdminContainerComponent component when the corresponding menu option is selected.
+ *
+ * @author Marcus Portmann
+ */
 @NgModule({
   imports: [
     CommonModule,

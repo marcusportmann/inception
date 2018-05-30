@@ -15,25 +15,38 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
-// Import Inception components
-import { Menu1Component } from './menu1.component';
-
 const routes: Routes = [
   {
     path: '',
-    component: Menu1Component,
+    redirectTo: 'menu31',
+    pathMatch: 'full',
+  },
+  {
+    path: 'menu31',
+    loadChildren: './menu31/menu31.module#Menu31Module',
+    data: {
+      title: 'Menu 3.1',
+    }
+  },
+  {
+    path: 'menu32',
+    loadChildren: './menu32/menu32.module#Menu32Module',
+    data: {
+      title: 'Menu 3.2',
+    }
   }
 ];
 
 /**
- * The Menu1Module class implements a module that contains a single component that is loaded into
- * the AdminContainerComponent component when the corresponding menu option is selected.
+ * The Menu3Module class implements a module that contains two child modules that each contain two
+ * components that can be loaded into the AdminContainerComponent component when the corresponding
+ * menu option is selected.
  *
  * @author Marcus Portmann
  */
@@ -43,6 +56,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ Menu1Component ]
+  declarations: []
 })
-export class Menu1Module { }
+export class Menu3Module {
+}

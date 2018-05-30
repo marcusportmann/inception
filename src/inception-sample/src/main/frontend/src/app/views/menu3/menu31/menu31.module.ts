@@ -20,27 +20,44 @@ import {NgModule} from '@angular/core';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
-// Import Inception components
-import {Menu12Component} from "./menu12.component";
+import {Menu311Component} from "./menu311.component";
+import {Menu312Component} from "./menu312.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: Menu12Component,
+    redirectTo: 'menu311',
+    pathMatch: 'full',
+  },
+  {
+    path: 'menu311',
+    component: Menu311Component,
     data: {
-      title: 'Menu 1.2'
+      title: 'Menu 3.1.1',
+    }
+  },
+  {
+    path: 'menu312',
+    component: Menu312Component,
+    data: {
+      title: 'Menu 3.1.2',
     }
   }
 ];
 
+/**
+ * The Menu31Module class implements a module that contains two components that can be loaded into
+ * the AdminContainerComponent component when the corresponding menu option is selected.
+ *
+ * @author Marcus Portmann
+ */
 @NgModule({
   imports: [
     CommonModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [Menu12Component]
+  declarations: [Menu311Component, Menu312Component]
 })
-export class Menu12Module {
+export class Menu31Module {
 }

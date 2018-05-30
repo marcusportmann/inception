@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
+/**
+ * The Menu311Component class.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
-  templateUrl: 'dashboard.component.html'
+  template: `Menu 3.1.1`
 })
-export class DashboardComponent {
+export class Menu311Component {
 
   constructor( ) { }
-
 }

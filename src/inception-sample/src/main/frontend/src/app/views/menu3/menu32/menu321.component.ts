@@ -17,14 +17,14 @@
 import {Component} from '@angular/core';
 
 /**
- * The Menu12Component class.
+ * The Menu321Component class.
  *
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 1.2`
+  template: `Menu 3.2.1`
 })
-export class Menu12Component {
+export class Menu321Component {
 
   constructor( ) { }
 }
