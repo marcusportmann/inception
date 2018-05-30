@@ -40,7 +40,6 @@ export class CanActivateFunctionGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
 
-
     return this.sessionService.getSession().map((session: Session) => {
 
       if (route) {
