@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
 
   public isLoggedIn(): boolean {
 
-    console.log('Invoking HeaderComponent::isLoggedIn()');
+    //console.log('Invoking HeaderComponent::isLoggedIn()');
 
     //return Session.getSession().isLoggedIn();
 

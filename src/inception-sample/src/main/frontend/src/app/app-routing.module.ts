@@ -26,7 +26,7 @@ export const routes: Routes = [
         loadChildren: './views/dashboard/dashboard.module#DashboardModule',
         data: {
           title: 'Dashboard',
-          functionCodes: ['Application.Dashboard'],
+          functionCodes: ['Application.Dashboard']
         }
       },
 
@@ -34,7 +34,7 @@ export const routes: Routes = [
         path: 'test-form',
         loadChildren: './views/test-form/test-form.module#TestFormModule',
         data: {
-          title: 'Test Form',
+          title: 'Test Form'
         },
       },
 
@@ -42,7 +42,7 @@ export const routes: Routes = [
         path: 'menu1',
         loadChildren: './views/menu1/menu1.module#Menu1Module',
         data: {
-          title: 'Menu 1',
+          title: 'Menu 1'
         },
       },
 
@@ -50,7 +50,7 @@ export const routes: Routes = [
         path: 'menu2',
         loadChildren: './views/menu2/menu2.module#Menu2Module',
         data: {
-          title: 'Menu 2',
+          title: 'Menu 2'
         },
       },
 
@@ -58,7 +58,7 @@ export const routes: Routes = [
         path: 'menu3',
         loadChildren: './views/menu3/menu3.module#Menu3Module',
         data: {
-          title: 'Menu 3',
+          title: 'Menu 3'
         },
       },
 
@@ -73,14 +73,11 @@ export const routes: Routes = [
             path: 'security',
             loadChildren: './inception/views/security/security.module#SecurityModule',
             data: {
-              title: 'Security',
+              title: 'Security'
             }
           }
         ]
       }
-
-
-
     ]
   },
 
