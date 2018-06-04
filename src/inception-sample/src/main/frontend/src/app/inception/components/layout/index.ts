@@ -11,5 +11,5 @@ export * from './sidebar-footer';
 export * from './sidebar-form';
 export * from './sidebar-header';
 export * from './sidebar-minimizer';
-export * from './sidebar-nav';
+export * from './sidebar-navigation';
 export * from './simple-container';

@@ -26,9 +26,9 @@ import {NavigationService} from "./inception/services/navigation/navigation.serv
 })
 export class AppModule extends InceptionAppModule {
 
-  constructor(navigationService: NavigationService) {
+  constructor() {
 
-    super(navigationService);
+    super();
 
     console.log('Initialising AppModule');
     console.log('Registration enabled = ' + InceptionModule.registrationEnabled);
@@ -39,7 +39,7 @@ export class AppModule extends InceptionAppModule {
    *
    * @returns {NavigationItem[]}
    */
-  initNavigation(): NavigationItem[] {
+  protected initNavigation(): NavigationItem[] {
 
     var navigation: NavigationItem[] = [];
 

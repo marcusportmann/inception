@@ -16,6 +16,7 @@
 
 import {NavigationItem} from "./services/navigation/navigation-item";
 import {NavigationService} from "./services/navigation/navigation.service";
+import {InceptionInjector} from "./inception-injector";
 
 /**
  * The InceptionAppModule class provides the base class that all application module classes that
@@ -28,8 +29,16 @@ export abstract class InceptionAppModule {
   /**
    * Constructs a new InceptionAppModule.
    */
-  constructor(navigationService: NavigationService) {
-    navigationService.setNavigation(this.initNavigation());
+  protected constructor() {
+
+    const navigationService: NavigationService = InceptionInjector.get(NavigationService);
+
+    if (navigationService) {
+      navigationService.setNavigation(this.initNavigation());
+    }
+    else {
+      console.error('Failed to initialise the NavigationService');
+    }
   }
 
   /**
@@ -37,5 +46,5 @@ export abstract class InceptionAppModule {
    *
    * @returns {NavigationItem[]}
    */
-  abstract initNavigation(): NavigationItem[];
+  protected abstract initNavigation(): NavigationItem[];
 }

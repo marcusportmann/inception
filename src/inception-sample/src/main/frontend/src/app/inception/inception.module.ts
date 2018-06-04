@@ -15,7 +15,7 @@
  */
 
 // Import Angular decorators
-import {NgModule} from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 
 // Import Angular modules
 import {CommonModule} from '@angular/common';
@@ -44,11 +44,11 @@ import {
   SidebarFormComponent,
   SidebarHeaderComponent,
   SidebarMinimizerComponent,
-  SidebarNavComponent,
-  SidebarNavDropdownComponent,
-  SidebarNavItemComponent,
-  SidebarNavLinkComponent,
-  SidebarNavTitleComponent,
+  SidebarNavigationComponent,
+  SidebarNavigationDropdownComponent,
+  SidebarNavigationItemComponent,
+  SidebarNavigationLinkComponent,
+  SidebarNavigationTitleComponent,
   SimpleContainerComponent,
 } from './components/layout';
 
@@ -72,6 +72,7 @@ import {TimepickerModule} from 'ngx-bootstrap';
 import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
 import {SessionInterceptor} from "./services/session/session.interceptor";
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
+import {setInceptionInjector} from "./inception-injector";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -110,11 +111,11 @@ import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
     SidebarFormComponent,
     SidebarHeaderComponent,
     SidebarMinimizerComponent,
-    SidebarNavComponent,
-    SidebarNavDropdownComponent,
-    SidebarNavItemComponent,
-    SidebarNavLinkComponent,
-    SidebarNavTitleComponent,
+    SidebarNavigationComponent,
+    SidebarNavigationDropdownComponent,
+    SidebarNavigationItemComponent,
+    SidebarNavigationLinkComponent,
+    SidebarNavigationTitleComponent,
     SimpleContainerComponent
   ],
   exports: [
@@ -161,10 +162,11 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  constructor(private bsDatepickerConfig: BsDatepickerConfig, private bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  constructor(injector: Injector, bsDatepickerConfig: BsDatepickerConfig, bsDaterangepickerConfig: BsDaterangepickerConfig) {
     console.log('Initialising InceptionModule');
-    this.bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
-    this.bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
+    setInceptionInjector(injector);
+    bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
+    bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
   }
 }
 

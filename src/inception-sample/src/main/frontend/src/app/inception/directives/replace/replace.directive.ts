@@ -2,7 +2,7 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
 
 @Directive({
   // tslint:disable-next-line:max-line-length
-  selector: '[inceptionHostReplace], inception-layout-aside, inception-layout-breadcrumbs, inception-layout-footer, inception-layout-header, inception-layout-sidebar, inception-layout-sidebar-footer, inception-layout-sidebar-form, inception-layout-sidebar-header, inception-layout-sidebar-minimizer, inception-layout-sidebar-nav, inception-layout-sidebar-nav-dropdown, inception-layout-sidebar-nav-item, inception-layout-sidebar-nav-link, inception-layout-sidebar-nav-title'
+  selector: '[inceptionHostReplace], inception-layout-aside, inception-layout-breadcrumbs, inception-layout-footer, inception-layout-header, inception-layout-sidebar, inception-layout-sidebar-footer, inception-layout-sidebar-form, inception-layout-sidebar-header, inception-layout-sidebar-minimizer, inception-layout-sidebar-navigation, inception-layout-sidebar-navigation-dropdown, inception-layout-sidebar-navigation-item, inception-layout-sidebar-navigation-link, inception-layout-sidebar-navigation-title'
 })
 export class ReplaceDirective implements OnInit {
 
