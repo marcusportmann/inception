@@ -10,7 +10,7 @@ import {CanActivateFunctionGuard} from "./inception/routing/can-activate-functio
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu1/menu11',
+    redirectTo: 'menu1',
     pathMatch: 'full',
   },
 
