@@ -48,13 +48,13 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [
-    LoginComponent
-  ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule
+  ],
+  declarations: [
+    LoginComponent
   ]
 })
 export class LoginModule { }

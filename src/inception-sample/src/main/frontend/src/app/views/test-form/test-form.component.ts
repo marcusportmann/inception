@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IOption} from 'ng-select';
 import {patternValidator} from '../../inception/validators/pattern-validator';
+import {NavigationService} from "../../inception/services/navigation/navigation.service";
 
 @Component({
   templateUrl: 'test-form.component.html'
@@ -19,7 +20,7 @@ export class TestFormComponent {
     {label: 'Ms', value: 'Ms'}
   ];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
 
     this.testForm = this.formBuilder.group({
       // tslint:disable-next-line

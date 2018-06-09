@@ -17,6 +17,7 @@
 import {NavigationItem} from "./services/navigation/navigation-item";
 import {NavigationService} from "./services/navigation/navigation.service";
 import {InceptionInjector} from "./inception-injector";
+import {Injector} from "@angular/core";
 
 /**
  * The InceptionAppModule class provides the base class that all application module classes that
@@ -30,6 +31,12 @@ export abstract class InceptionAppModule {
    * Constructs a new InceptionAppModule.
    */
   protected constructor() {
+
+    //const navigationService: NavigationService = Injector.create([{provide: NavigationService, deps:[]}]).get(NavigationService);
+
+
+
+
 
     const navigationService: NavigationService = InceptionInjector.get(NavigationService);
 

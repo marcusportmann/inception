@@ -1,11 +1,14 @@
-import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 
 // Import navigation elements
 
 import {Route, Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {NavigationService} from "../../../services/navigation/navigation.service";
 import {NavigationItem} from "../../../services/navigation/navigation-item";
-
+import {Observable} from "rxjs/Observable";
+import {Session} from "../../../services/session/session";
+import {SessionService} from "../../../services/session/session.service";
+import {NavigationBadge} from "../../../services/navigation/navigation-badge";
 
 
 //import { navigation } from '../../../../navigation';
@@ -31,8 +34,52 @@ export class SidebarNavigationComponent implements OnInit {
 
   navigation: NavigationItem[] = [];
 
-  constructor(private navigationService: NavigationService) {
-    this.navigation = this.navigationService.getNavigation();
+  constructor(private navigationService: NavigationService, private sessionService: SessionService) {
+  }
+
+  filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
+
+    if (!navigationItems) {
+      return navigationItems;
+    }
+
+    var filteredNavigationItems: NavigationItem[] = [];
+
+    for (var i = 0; i < navigationItems.length; i++) {
+
+      var navigationItem: NavigationItem = navigationItems[i];
+
+      var functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
+
+      if (functionCodes.length > 0) {
+
+        if (session) {
+
+          for (var j = 0; j < functionCodes.length; j++) {
+            for (var k = 0; k < session.functionCodes.length; k++) {
+              if (functionCodes[j] == session.functionCodes[k]) {
+
+                var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+
+                filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
+                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems,
+                  navigationItem.badge));
+              }
+            }
+          }
+        }
+      }
+      else {
+
+        var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+
+        filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
+          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems,
+          navigationItem.badge));
+      }
+    }
+
+    return filteredNavigationItems;
   }
 
   isDivider(item) {
@@ -44,6 +91,11 @@ export class SidebarNavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    // Retrieve and filter the navigation items
+    this.sessionService.getSession().map((session: Session) => {
+      this.navigation = this.filterNavigationItems(this.navigationService.getNavigation(), session);
+    }).subscribe();
   }
 }
 
@@ -61,7 +113,7 @@ export class SidebarNavigationComponent implements OnInit {
         <inception-layout-sidebar-navigation-dropdown [link]='item'></inception-layout-sidebar-navigation-dropdown>
       </li>
     </ng-template>
-    `
+  `
 })
 export class SidebarNavigationItemComponent implements OnInit {
   @Input() item: any;
@@ -82,7 +134,8 @@ export class SidebarNavigationItemComponent implements OnInit {
     return this.router.isActive(this.thisUrl(), false);
   }
 
-  constructor( private router: Router )  { }
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
   }
@@ -93,9 +146,9 @@ export class SidebarNavigationItemComponent implements OnInit {
   selector: 'inception-layout-sidebar-navigation-link',
   template: `
     <a *ngIf="!isExternalLink(); else external"
-      [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
-      routerLinkActive="active"
-      [routerLink]="[link.url]">
+       [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
+       routerLinkActive="active"
+       [routerLink]="[link.url]">
       <i *ngIf="isIcon()" class="{{ link.icon }}"></i>
       {{ link.name }}
       <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
@@ -109,7 +162,7 @@ export class SidebarNavigationItemComponent implements OnInit {
     </ng-template>
   `
 })
-export class SidebarNavigationLinkComponent implements  OnInit {
+export class SidebarNavigationLinkComponent implements OnInit {
   @Input() link: any;
 
   public hasVariant() {
@@ -128,7 +181,8 @@ export class SidebarNavigationLinkComponent implements  OnInit {
     return !!this.link.icon;
   }
 
-  constructor() { }
+  constructor() {
+  }
 
 
   ngOnInit(): void {
@@ -162,7 +216,8 @@ export class SidebarNavigationDropdownComponent implements OnInit {
     return !!this.link.icon;
   }
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
@@ -176,7 +231,8 @@ export class SidebarNavigationDropdownComponent implements OnInit {
 export class SidebarNavigationTitleComponent implements OnInit {
   @Input() title: any;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) { }
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+  }
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;
@@ -185,12 +241,12 @@ export class SidebarNavigationTitleComponent implements OnInit {
 
     this.renderer.addClass(li, 'nav-title');
 
-    if ( this.title.class ) {
+    if (this.title.class) {
       const classes = this.title.class;
       this.renderer.addClass(li, classes);
     }
 
-    if ( this.title.wrapper ) {
+    if (this.title.wrapper) {
       const wrapper = this.renderer.createElement(this.title.wrapper.element);
 
       this.renderer.appendChild(wrapper, name);

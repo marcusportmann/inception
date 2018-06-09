@@ -30,4 +30,15 @@ export class NavigationBadge {
    * The text for the navigation badge.
    */
   text: string;
+
+  /**
+   * Constructs a new NavigationBadge.
+   *
+   * @param {string} variant
+   * @param {string} text
+   */
+  constructor(variant: string, text: string) {
+    this.variant = variant;
+    this.text = text;
+  }
 }

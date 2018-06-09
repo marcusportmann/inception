@@ -15,7 +15,7 @@
  */
 
 // Import Angular decorators
-import {Injector, NgModule} from '@angular/core';
+import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
 
 // Import Angular modules
 import {CommonModule} from '@angular/common';
@@ -97,6 +97,24 @@ import {setInceptionInjector} from "./inception-injector";
 
     DirectivesModule
   ],
+  exports: [
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    RouterModule,
+
+    BsDatepickerModule,
+    BsDropdownModule,
+    ChartsModule,
+    ModalModule,
+    SelectModule,
+    StorageServiceModule,
+    TabsModule,
+    TimepickerModule,
+
+    DirectivesModule
+  ],
   declarations: [
     AdminContainerComponent,
     AsideComponent,
@@ -118,42 +136,6 @@ import {setInceptionInjector} from "./inception-injector";
     SidebarNavigationTitleComponent,
     SimpleContainerComponent
   ],
-  exports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    RouterModule,
-
-    BsDatepickerModule,
-    BsDropdownModule,
-    ChartsModule,
-    ModalModule,
-    SelectModule,
-    StorageServiceModule,
-    TabsModule,
-    TimepickerModule,
-
-    DirectivesModule
-  ],
-  providers: [
-    {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy,
-    },
-
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: SessionInterceptor,
-      multi: true
-    },
-
-    CanActivateFunctionGuard,
-
-    ErrorService,
-    NavigationService,
-    SecurityService,
-    SessionService],
   bootstrap: [AdminContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
@@ -167,6 +149,32 @@ export class InceptionModule {
     setInceptionInjector(injector);
     bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
     bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
+  }
+
+  static forRoot(): ModuleWithProviders
+  {
+    return {
+      ngModule: InceptionModule,
+      providers: [
+        {
+          provide: LocationStrategy,
+          useClass: HashLocationStrategy,
+        },
+
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: SessionInterceptor,
+          multi: true
+        },
+
+        CanActivateFunctionGuard,
+
+        ErrorService,
+        NavigationService,
+        SecurityService,
+        SessionService
+      ]
+    }
   }
 }
 

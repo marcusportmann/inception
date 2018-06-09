@@ -54,6 +54,8 @@ export class SessionService {
 
   public login(username: string, password: string): Observable<Session> {
 
+    this.sessionStorageService.remove("session");
+
     let body = new HttpParams()
       .set('grant_type', 'password')
       .set('username', username)
@@ -63,7 +65,7 @@ export class SessionService {
 
     let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
       map((tokenResponse: TokenResponse) => {
 
         let token: any = decode(tokenResponse.access_token);
@@ -116,7 +118,7 @@ export class SessionService {
 
               let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-              return this.httpClient.post<TokenResponse>('http://localhost:8080/oauth/token', body.toString(), options).pipe(
+              return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
                 map((tokenResponse: TokenResponse) => {
 
                   let token: any = decode(tokenResponse.access_token);
@@ -132,12 +134,18 @@ export class SessionService {
                 }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
                   if (httpErrorResponse.error && httpErrorResponse.error.error) {
+
                     let oauthError: OAuthError = httpErrorResponse.error;
 
-                    return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
+                    console.error('Failed to refresh the access token: ', oauthError);
+
+                    return Observable.of(null);
                   }
                   else {
-                    return Observable.throw(new SessionError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+
+                    console.error('Failed to refresh the access token: ', httpErrorResponse.error);
+
+                    return Observable.of(null);
                   }
                 }));
             }

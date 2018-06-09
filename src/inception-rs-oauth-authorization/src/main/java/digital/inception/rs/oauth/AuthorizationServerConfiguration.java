@@ -80,8 +80,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   /**
    * The access token validity in seconds.
    */
-  //public static final Integer ACCESS_TOKEN_VALIDITY = 24 * 60 * 60;
-  public static final Integer ACCESS_TOKEN_VALIDITY = 1;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 1 * 60;
 
   /**
    * The refresh token validity in seconds.

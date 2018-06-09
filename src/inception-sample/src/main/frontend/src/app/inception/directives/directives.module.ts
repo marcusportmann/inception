@@ -23,7 +23,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [
+  exports: [
     AsideToggleDirective,
     AutofocusDirective,
     ReplaceDirective,
@@ -36,7 +36,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MobileSidebarToggleDirective,
     ValidatedFormDirective
   ],
-  exports: [
+  declarations: [
     AsideToggleDirective,
     AutofocusDirective,
     ReplaceDirective,

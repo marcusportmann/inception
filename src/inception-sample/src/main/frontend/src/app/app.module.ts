@@ -9,17 +9,21 @@ import { InceptionModule } from './inception/inception.module';
 import {InceptionAppModule} from "./inception/inception-app.module";
 import {NavigationItem} from "./inception/services/navigation/navigation-item";
 import {NavigationService} from "./inception/services/navigation/navigation.service";
+import {NavigationBadge} from "./inception/services/navigation/navigation-badge";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     AppRoutingModule,
 
     BrowserModule,
 
+    InceptionModule.forRoot()
+  ],
+  exports: [
     InceptionModule
+  ],
+  declarations: [
+    AppComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -43,15 +47,11 @@ export class AppModule extends InceptionAppModule {
 
     var navigation: NavigationItem[] = [];
 
-    navigation.push({
-      name: 'Dashboard',
-      url: '/dashboard',
-      icon: 'icon-speedometer',
-      badge: {
-        variant: 'info',
-        text: 'NEW'
-      }
-    });
+    navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, new NavigationBadge('info', 'NEW')));
+
+    navigation.push(new NavigationItem('icon-note', 'Test Form', '/test-form', []));
+
+    // icon-login
 
     return navigation;
   }

@@ -15,7 +15,8 @@
  */
 
 
-import {Injector} from "@angular/core";
+import {Injector, NgModuleRef} from "@angular/core";
+
 
 /**
  * The Angular injector that allows singletons to be retrieved by the Inception framework.
@@ -23,16 +24,28 @@ import {Injector} from "@angular/core";
 export let InceptionInjector: Injector;
 
 /**
- * Helper to set the exported {@link AppInjector}, needed as ES6 modules export immutable bindings
- * (see http://2ality.com/2015/07/es6-module-exports.html) for which trying to make changes after
- * using `import {AppInjector}` would throw:
+ * Helper to set the exported {@link InceptionInjector}, needed as ES6 modules export immutable
+ * bindings (see http://2ality.com/2015/07/es6-module-exports.html) for which trying to make changes
+ * after using `import {InceptionInjector}` would throw:
  * "TS2539: Cannot assign to 'InceptionInjector' because it is not a variable".
  */
 export function setInceptionInjector(injector: Injector) {
-  if (InceptionInjector) {
-    console.error('InceptionInjector was already set');
-  }
-  else {
-    InceptionInjector = injector;
+
+  if (!InceptionInjector) {
+
+    // Attempt to find the StaticInjector injector (root injector)
+    var injectorObject:any = injector;
+
+    while (injectorObject._parent) {
+      if (!injectorObject._parent._parent) {
+        InceptionInjector = injectorObject._parent as Injector;
+        return;
+      }
+
+      injectorObject = injectorObject._parent;
+    }
+
+    var xxx = 0;
+    xxx++;
   }
 }

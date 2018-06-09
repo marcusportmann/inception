@@ -49,7 +49,7 @@ export class SecurityService {
    */
   public getOrganizations(): Observable<Organization[]> {
 
-    return this.httpClient.get<Organization[]>('http://localhost:8080/api/organizations').pipe(
+    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
       map((organizations: Organization[]) => {
 
         return organizations;

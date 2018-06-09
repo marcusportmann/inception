@@ -24,6 +24,11 @@ import {NavigationBadge} from "./navigation-badge";
 export class NavigationItem {
 
   /**
+   * The optional icon associated with the navigation item.
+   */
+  icon?: string;
+
+  /**
    * The optional name of navigation item.
    */
   name?: string;
@@ -34,14 +39,9 @@ export class NavigationItem {
   url?: string;
 
   /**
-   * The optional icon associated with the navigation item.
+   * The optional function codes that are used to restrict access to the navigation item.
    */
-  icon?: string;
-
-  /**
-   * The optional navigation badge associated with the navigation item.
-   */
-  badge?: NavigationBadge;
+  functionCodes?: string[];
 
   /**
    * The optional child navigation items.
@@ -49,7 +49,35 @@ export class NavigationItem {
   children?: NavigationItem[];
 
   /**
+   * The optional navigation badge associated with the navigation item.
+   */
+  badge?: NavigationBadge;
+
+  /**
    * The optional divider indicator.
    */
   divider?: boolean;
+
+  /**
+   * Constructs a new NavigationItem.
+   *
+   * @param {string} icon               The icon associated with the navigation item.
+   * @param {string} name               The name of navigation item.
+   * @param {string} url                The url associated with the navigation item.
+   * @param {string[]} functionCodes    The function codes that are used to restrict access to the
+   *                                    navigation item.
+   * @param {NavigationItem[]} children The optional child navigation items.
+   * @param {NavigationBadge} badge     The optional navigation badge associated with the navigation
+   *                                    item.
+   * @param {boolean} divider           The optional divider indicator.
+   */
+  constructor(icon: string, name: string, url: string, functionCodes: string[], children?: NavigationItem[], badge?: NavigationBadge, divider?: boolean) {
+    this.icon = icon;
+    this.name = name;
+    this.url = url;
+    this.functionCodes = functionCodes;
+    this.children = children;
+    this.badge = badge;
+    this.divider = divider;
+  }
 }

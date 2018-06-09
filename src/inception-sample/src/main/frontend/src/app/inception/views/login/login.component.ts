@@ -34,6 +34,7 @@ import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -43,7 +44,7 @@ export class LoginComponent {
 
   private loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -84,6 +85,8 @@ export class LoginComponent {
           this.securityService.getOrganizations().subscribe(organizations => {
 
             console.log('organizations = ', organizations);
+
+            this.router.navigate(['/']);
 
           }, error => {
 

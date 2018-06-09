@@ -31,6 +31,7 @@ export class NavigationService {
    * Constructs a new NavigationService.
    */
   constructor() {
+    console.log('Initializing the NavigationService!!!!!!!');
   }
 
   /**
