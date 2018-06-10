@@ -31,11 +31,18 @@ export class BreadcrumbsComponent implements OnInit {
         childrenRoutes.forEach(route => {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
-            url += routeSnapshot.url.map(segment => segment.path).join('/');
-            this.breadcrumbs.push({
-              label: route.snapshot.data,
-              url:   url
-            });
+
+            if (routeSnapshot.url.length > 0) {
+
+              url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+              this.breadcrumbs.push({
+                label: route.snapshot.data,
+                url: url
+              });
+
+              console.log('url = ', url);
+            }
+
             currentRoute = route;
           }
         });
