@@ -40,6 +40,7 @@ export class SecurityService {
    * @param {HttpClient} httpClient The HTTP client.
    */
   constructor(private httpClient: HttpClient) {
+    console.log('Initializing the Security Service');
   }
 
   /**

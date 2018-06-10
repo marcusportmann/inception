@@ -145,7 +145,7 @@ export class InceptionModule {
   public static registrationEnabled = false;
 
   constructor(injector: Injector, bsDatepickerConfig: BsDatepickerConfig, bsDaterangepickerConfig: BsDaterangepickerConfig) {
-    console.log('Initialising InceptionModule');
+    console.log('Initialising the Inception Module');
     setInceptionInjector(injector);
     bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
     bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';

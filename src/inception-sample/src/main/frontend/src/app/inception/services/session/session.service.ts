@@ -49,7 +49,7 @@ export class SessionService {
    * @param {WebStorageService} sessionStorage The session storage service.
    */
   constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
-
+    console.log('Initializing the Session Service');
   }
 
   public login(username: string, password: string): Observable<Session> {

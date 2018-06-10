@@ -32,20 +32,6 @@ export let InceptionInjector: Injector;
 export function setInceptionInjector(injector: Injector) {
 
   if (!InceptionInjector) {
-
-    // Attempt to find the StaticInjector injector (root injector)
-    var injectorObject:any = injector;
-
-    while (injectorObject._parent) {
-      if (!injectorObject._parent._parent) {
-        InceptionInjector = injectorObject._parent as Injector;
-        return;
-      }
-
-      injectorObject = injectorObject._parent;
-    }
-
-    var xxx = 0;
-    xxx++;
+    InceptionInjector = injector;
   }
 }

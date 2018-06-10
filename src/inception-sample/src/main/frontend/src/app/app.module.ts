@@ -34,8 +34,8 @@ export class AppModule extends InceptionAppModule {
 
     super();
 
-    console.log('Initialising AppModule');
-    console.log('Registration enabled = ' + InceptionModule.registrationEnabled);
+    console.log('Initialising the Application Module');
+    //console.log('Registration enabled = ' + InceptionModule.registrationEnabled);
   }
 
   /**
@@ -50,6 +50,24 @@ export class AppModule extends InceptionAppModule {
     navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, new NavigationBadge('info', 'NEW')));
 
     navigation.push(new NavigationItem('icon-note', 'Test Form', '/test-form', []));
+
+    navigation.push(new NavigationItem('icon-doc', 'Menu 1', '/menu1', []));
+
+    navigation.push(new NavigationItem('icon-doc', 'Menu 2', '/menu2', [], [
+      new NavigationItem('icon-doc', 'Menu 2.1', '/menu2/menu21', []),
+      new NavigationItem('icon-doc', 'Menu 2.2', '/menu2/menu22', [])
+    ]));
+
+    navigation.push(new NavigationItem('icon-doc', 'Menu 3', '/menu3', [], [
+      new NavigationItem('icon-doc', 'Menu 3.1', '/menu3/menu31', [], [
+        new NavigationItem('icon-doc', 'Menu 3.1.1', '/menu3/menu31/menu311', []),
+        new NavigationItem('icon-doc', 'Menu 3.1.2', '/menu3/menu31/menu312', [])
+      ]),
+      new NavigationItem('icon-doc', 'Menu 3.2', '/menu3/menu32', [], [
+        new NavigationItem('icon-doc', 'Menu 3.2.1', '/menu3/menu32/menu321', []),
+        new NavigationItem('icon-doc', 'Menu 3.2.2', '/menu3/menu32/menu322', [])
+      ])
+    ]));
 
     // icon-login
 
