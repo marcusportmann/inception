@@ -32,7 +32,7 @@ import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
-  AdminContainerComponent,
+  StandardContainerComponent,
   AsideComponent,
   BreadcrumbsComponent,
   ContainerComponent,
@@ -116,7 +116,7 @@ import {setInceptionInjector} from "./inception-injector";
     DirectivesModule
   ],
   declarations: [
-    AdminContainerComponent,
+    StandardContainerComponent,
     AsideComponent,
     BreadcrumbsComponent,
     ContainerComponent,
@@ -136,7 +136,7 @@ import {setInceptionInjector} from "./inception-injector";
     SidebarNavigationTitleComponent,
     SimpleContainerComponent
   ],
-  bootstrap: [AdminContainerComponent, ErrorModalComponent, SimpleContainerComponent]
+  bootstrap: [StandardContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
 

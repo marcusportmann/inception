@@ -7,10 +7,16 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div *ngIf="!isLoggedIn()">showLogin = {{ showLogin }}</div>
+  <div *ngIf="!isLoggedIn()">
+    <button class="navbar-toggler navbar-toggler-login" type="button" (click)="login()">
+      <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
+      Login
+    </button>
+  </div>
+  <div *ngIf="isLoggedIn()">
+    <button class="navbar-toggler" type="button" inceptionAsideMenuToggler>
+      <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
+    </button>
+  </div>
 
-
-  <button class="navbar-toggler d-md-down-none" type="button" inceptionAsideMenuToggler>
-    <span class="navbar-toggler-icon"></span>
-  </button>
 </header>

@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {SessionService} from "../../../services/session/session.service";
+import {Observable} from "rxjs/Observable";
 
 
 @Component({
@@ -10,7 +12,7 @@ export class HeaderComponent implements OnInit {
   public showLogin = false;
 
 
-  public constructor() {
+  public constructor(private sessionService: SessionService) {
 
   }
 
@@ -18,14 +20,19 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  public isLoggedIn(): boolean {
+  public isLoggedIn(): Observable<boolean> {
+
+    return Observable.of(true);
+
 
     //console.log('Invoking HeaderComponent::isLoggedIn()');
 
     //return Session.getSession().isLoggedIn();
 
-    return false;
+    //return false;
   }
+
+
 
 
 }

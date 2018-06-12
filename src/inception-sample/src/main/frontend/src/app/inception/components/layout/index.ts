@@ -1,4 +1,4 @@
-export * from './admin-container';
+export * from './standard-container';
 export * from './aside';
 export * from './breadcrumbs';
 export * from './container';

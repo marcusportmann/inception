@@ -23,16 +23,51 @@
 
   .navbar-toggler {
     min-width: 50px;
+    min-height: 35px;
     padding: $navbar-toggler-padding-y 0;
 
     &:hover .navbar-toggler-icon {
       background-image: $navbar-toggler-icon-hover;
     }
+
+    &:hover .navbar-toggler-login-icon {
+      background-image: $navbar-toggler-login-icon-hover;
+    }
+
+    &:hover .navbar-toggler-user-icon {
+      background-image: $navbar-toggler-user-icon-hover;
+    }
   }
+
+  .navbar-toggler:focus {
+    outline:0;
+  }
+
+  .navbar-toggler-login {
+    color: #536c79;
+    padding-right: 12px;
+    font-size: 14px;
+  }
+
+  .navbar-toggler-login:hover {
+    color: #31393f;
+  }
+
 
   .navbar-toggler-icon {
     height: 23px;
     background-image: $navbar-toggler-icon;
+  }
+
+  .navbar-toggler-login-icon {
+    height: 16px;
+    background-image: $navbar-toggler-login-icon;
+    padding-right: 5px;
+  }
+
+  .navbar-toggler-user-icon {
+    height: 30px;
+    background-image: $navbar-toggler-user-icon;
   }
 
   .navbar-nav {

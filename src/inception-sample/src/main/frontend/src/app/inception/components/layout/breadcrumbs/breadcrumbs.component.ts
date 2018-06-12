@@ -39,27 +39,12 @@ export class BreadcrumbsComponent implements OnInit {
                 label: route.snapshot.data,
                 url: url
               });
-
-              console.log('url = ', url);
             }
 
             currentRoute = route;
           }
         });
       } while (currentRoute);
-
-      // TODO: CLEANUP
-      console.log('breadcrumbs = ', this.breadcrumbs);
-
-      for (var i = 0; i < this.breadcrumbs.length; i++) {
-
-        let breadcrumb:any = this.breadcrumbs[i];
-
-        // TODO: CLEANUP
-        console.log('breadcrumb.label.title = ', breadcrumb.label.title);
-        console.log('breadcrumb.url = ' + breadcrumb.url);
-      }
-
     });
   }
 

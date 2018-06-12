@@ -6,9 +6,9 @@
   }
 }
 
-// inception-layout-admin-container and app-root are Angular2+ selectors. You can add here your own selectors if you need.
+// inception-layout-standard-container and app-root are Angular2+ selectors. You can add here your own selectors if you need.
 .app,
-inception-layout-admin-container,
+inception-layout-standard-container,
 app-root {
   display: flex;
   flex-direction: column;
