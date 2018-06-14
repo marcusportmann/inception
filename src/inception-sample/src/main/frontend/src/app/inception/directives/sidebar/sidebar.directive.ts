@@ -1,18 +1,47 @@
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener, Input, OnInit} from '@angular/core';
+import {sidebarCssClasses} from "../../shared/classes";
+import {ToggleClasses} from "../../shared/toggle-classes";
 
-/**
-* Allows the sidebar to be toggled via click.
-*/
 @Directive({
-  selector: '[inceptionSidebarToggler]'
+  selector: '[inceptionBrandMinimizer]'
 })
-export class SidebarToggleDirective {
+export class BrandMinimizeDirective {
   constructor() { }
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    document.querySelector('body').classList.toggle('sidebar-hidden');
+    document.querySelector('body').classList.toggle('brand-minimized');
+  }
+}
+
+
+
+
+
+
+
+
+
+/**
+ * Allows the sidebar to be toggled via click.
+ */
+@Directive({
+  selector: '[inceptionSidebarToggler]'
+})
+export class SidebarToggleDirective implements OnInit {
+  @Input('inceptionSidebarToggler') breakpoint: string;
+  public bp;
+  constructor() {}
+  ngOnInit(): void {
+    this.bp = this.breakpoint;
+  }
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any) {
+    $event.preventDefault();
+    let cssClass;
+    this.bp ? cssClass = `sidebar-${this.bp}-show` : cssClass = sidebarCssClasses[0];
+    ToggleClasses(cssClass, sidebarCssClasses);
   }
 }
 
@@ -26,19 +55,6 @@ export class SidebarMinimizeDirective {
   toggleOpen($event: any) {
     $event.preventDefault();
     document.querySelector('body').classList.toggle('sidebar-minimized');
-  }
-}
-
-@Directive({
-  selector: '[inceptionBrandMinimizer]'
-})
-export class BrandMinimizeDirective {
-  constructor() { }
-
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any) {
-    $event.preventDefault();
-    document.querySelector('body').classList.toggle('brand-minimized');
   }
 }
 
@@ -61,8 +77,8 @@ export class MobileSidebarToggleDirective {
 }
 
 /**
-* Allows the off-canvas sidebar to be closed via click.
-*/
+ * Allows the off-canvas sidebar to be closed via click.
+ */
 @Directive({
   selector: '[inceptionSidebarClose]'
 })
@@ -96,4 +112,24 @@ export class SidebarOffCanvasCloseDirective {
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

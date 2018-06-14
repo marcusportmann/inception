@@ -24,8 +24,6 @@ import {patternValidator} from "../../validators/pattern-validator";
 import {SecurityService} from '../../services/security/security.service';
 import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
 
-import {decode} from "jsonwebtoken";
-
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {ErrorService} from "../../services/error/error.service";

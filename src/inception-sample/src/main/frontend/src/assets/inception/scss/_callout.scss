@@ -1,12 +1,15 @@
+//
+// Base styles
+//
+
 .callout {
   position: relative;
   padding: 0 $spacer;
   margin: $spacer 0;
-  border: 0 solid $border-color;
-  border-left-width: .25rem;
+  border-left: 4px solid $border-color;
 
   @if $enable-rounded {
-    border-radius: .25rem;
+    border-radius: $border-radius;
   }
 
   .chart-wrapper {
@@ -20,10 +23,10 @@
 
 .callout-bordered {
   border: 1px solid $border-color;
-  border-left-width: .25rem;
+  border-left-width: 4px;
 }
 .callout code {
-  border-radius: .25rem;
+  border-radius: $border-radius;
 }
 .callout h4 {
   margin-top: 0;
@@ -36,13 +39,9 @@
   margin-top: - .25rem;
 }
 
-.callout-default {
-  border-left-color: $text-muted;
-
-  h4 {
-    color: $text-muted;
-  }
-}
+//
+// Variants
+//
 
 @each $color, $value in $theme-colors {
   .callout-#{$color} {
@@ -50,6 +49,25 @@
 
     h4 {
       color: $value;
+    }
+  }
+}
+
+// Right-to-Left Support
+*[dir="rtl"] {
+  .callout {
+    border-right: 4px solid $border-color;
+    border-left: 0;
+
+    @each $color, $value in $theme-colors {
+      &.callout-#{$color} {
+        border-right-color: $value;
+      }
+    }
+
+    .chart-wrapper {
+      left: 0;
+      float: left;
     }
   }
 }

@@ -27,12 +27,12 @@ import {
   HttpParams,
   HttpResponse
 } from '@angular/common/http';
-import {decode} from "jsonwebtoken";
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
 import {LoginError, SessionError} from "./session.service.errors";
 import {OAuthError} from "../../errors/oauth-error";
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -68,9 +68,11 @@ export class SessionService {
     return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
       map((tokenResponse: TokenResponse) => {
 
-        let token: any = decode(tokenResponse.access_token);
+        const helper = new JwtHelperService();
 
-        var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+        const token: any = helper.decodeToken(tokenResponse.access_token);
+
+        const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
 
         let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 
@@ -121,9 +123,11 @@ export class SessionService {
               return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
                 map((tokenResponse: TokenResponse) => {
 
-                  let token: any = decode(tokenResponse.access_token);
+                  const helper = new JwtHelperService();
 
-                  var accessTokenExpiry: number = Date.now() + (tokenResponse.expires_in * 1000);
+                  const token: any = helper.decodeToken(tokenResponse.access_token);
+
+                  const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
 
                   let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
 

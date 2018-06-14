@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {IOption} from 'ng-select';
+//import {IOption} from '@ng-select/ng-select';
 import {patternValidator} from '../../inception/validators/pattern-validator';
 import {NavigationService} from "../../inception/services/navigation/navigation.service";
 
@@ -14,7 +14,7 @@ export class TestFormComponent {
 
   private testForm: FormGroup;
 
-  public titles: Array<IOption> = [
+  public titles: Array<any> = [
     {label: 'Mr', value: 'Mr'},
     {label: 'Mrs', value: 'Mrs'},
     {label: 'Ms', value: 'Ms'}

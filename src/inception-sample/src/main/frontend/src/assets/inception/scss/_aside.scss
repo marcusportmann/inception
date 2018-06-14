@@ -11,6 +11,7 @@
       padding: $aside-menu-nav-padding-y $aside-menu-nav-padding-x;
       color: $body-color;
       border-top: 0;
+      @include border-radius(0);
       &.active {
         color: theme-color("primary");
         border-right-color: $border-color;
@@ -35,7 +36,7 @@
     &::-webkit-scrollbar {
       width: 10px;
       margin-left: -10px;
-      -webkit-appearance: none;
+      appearance: none;
     }
 
     // &::-webkit-scrollbar-button {    }

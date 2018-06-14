@@ -1,42 +1,50 @@
-//@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+/*!
+ * CoreUI - Open Source Dashboard UI Kit
+ * @version v2.0.2
+ * @link https://coreui.io
+ * Copyright (c) 2018 creativeLabs Łukasz Holeczek
+ * Licensed under MIT (https://coreui.io/license)
+ */
 
 // Override Boostrap variables
 @import "bootstrap-variables";
 
 // Import Bootstrap source files
-@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "node_modules/bootstrap/scss/bootstrap";
 
 // Import core styles
 @import "variables";
 @import "mixins";
 
-// Additional typography
-@import "typography";
-
 // Animations
 @import "animate";
+
+// Vendors
+@import "vendors";
 
 // Components
 @import "aside";
 @import "avatars";
 @import "badge";
-@import "box";
 @import "breadcrumb-menu";
 @import "breadcrumb";
+@import "brand-card";
+@import "brand-buttons";
 @import "buttons";
 @import "callout";
 @import "card";
 @import "charts";
 @import "dropdown";
 @import "footer";
-@import "form";
 @import "grid";
+@import "header";
 @import "input-group";
-@import "loading";
+@import "images";
+@import "list-group";
 @import "modal";
 @import "nav";
-@import "navbar";
 @import "progress";
+@import "progress-group";
 @import "sidebar";
 @import "switches";
 @import "tables";
@@ -50,15 +58,8 @@
 // Utility classes
 @import "utilities";
 
-// Temporary fixes
-@import "temp";
-
 // Right-to-left
 @import "rtl";
 
-// ng-select
-@import "vendors/ng-select/ng-select";
-
-// bs-datepicker
-@import "vendors/bs-datepicker/bs-datepicker";
-
+// Custom Properties support for Internet Explorer
+@import "ie-custom-properties";

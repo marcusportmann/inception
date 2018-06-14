@@ -1,4 +1,3 @@
-export * from './standard-container';
 export * from './aside';
 export * from './breadcrumbs';
 export * from './container';
@@ -7,9 +6,5 @@ export * from './footer';
 export * from './header';
 export * from './not-found';
 export * from './sidebar';
-export * from './sidebar-footer';
-export * from './sidebar-form';
-export * from './sidebar-header';
-export * from './sidebar-minimizer';
-export * from './sidebar-navigation';
 export * from './simple-container';
+export * from './standard-container';

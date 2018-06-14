@@ -4,15 +4,29 @@ import { NgModule } from '@angular/core';
 import {
   AsideToggleDirective,
   AutofocusDirective,
-  ReplaceDirective,
-  NavDropdownDirective,
-  NavDropdownToggleDirective,
+  BrandMinimizeDirective,
+
+
+  MobileSidebarToggleDirective,
   SidebarToggleDirective,
   SidebarMinimizeDirective,
-  BrandMinimizeDirective,
   SidebarOffCanvasCloseDirective,
-  MobileSidebarToggleDirective,
+
   ValidatedFormDirective
+
+
+
+
+  //ReplaceDirective,
+
+
+  //NavigationDropdownDirective,
+  //NavigationDropdownToggleDirective,
+  //SidebarToggleDirective,
+  //SidebarMinimizeDirective,
+  //SidebarOffCanvasCloseDirective,
+  //MobileSidebarToggleDirective,
+
 } from './'
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
@@ -26,28 +40,48 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   exports: [
     AsideToggleDirective,
     AutofocusDirective,
-    ReplaceDirective,
-    NavDropdownDirective,
-    NavDropdownToggleDirective,
+    BrandMinimizeDirective,
+
+    MobileSidebarToggleDirective,
     SidebarToggleDirective,
     SidebarMinimizeDirective,
-    BrandMinimizeDirective,
     SidebarOffCanvasCloseDirective,
-    MobileSidebarToggleDirective,
+
     ValidatedFormDirective
+
+
+
+    //ReplaceDirective,
+    //NavigationDropdownDirective,
+    //NavigationDropdownToggleDirective,
+    // SidebarToggleDirective,
+    // SidebarMinimizeDirective,
+    // SidebarOffCanvasCloseDirective,
+    // MobileSidebarToggleDirective,
+    // ValidatedFormDirective
   ],
   declarations: [
     AsideToggleDirective,
     AutofocusDirective,
-    ReplaceDirective,
-    NavDropdownDirective,
-    NavDropdownToggleDirective,
+    BrandMinimizeDirective,
+
+    MobileSidebarToggleDirective,
     SidebarToggleDirective,
     SidebarMinimizeDirective,
-    BrandMinimizeDirective,
     SidebarOffCanvasCloseDirective,
-    MobileSidebarToggleDirective,
+
     ValidatedFormDirective
+
+
+
+    //ReplaceDirective,
+    //NavigationDropdownDirective,
+    //NavigationDropdownToggleDirective,
+    // SidebarToggleDirective,
+    // SidebarMinimizeDirective,
+    // SidebarOffCanvasCloseDirective,
+    // MobileSidebarToggleDirective,
+    // ValidatedFormDirective
   ]
 })
 export class DirectivesModule { }

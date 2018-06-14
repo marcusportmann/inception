@@ -33,3 +33,25 @@
     border: 0;
   }
 }
+
+.nav-fill {
+  .nav-link {
+    background-color: #fff;
+    border-color: $border-color;
+  }
+  .nav-link + .nav-link {
+    margin-left: -1px;
+  }
+  .nav-link.active {
+    margin-top: -1px;
+    // margin-left: 0;
+    border-top: 2px solid $primary;
+  }
+}
+
+// Right-to-Left Support
+*[dir="rtl"] {
+  .nav {
+    padding-right: 0;
+  }
+}

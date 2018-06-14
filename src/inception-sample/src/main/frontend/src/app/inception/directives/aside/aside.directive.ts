@@ -1,17 +1,25 @@
-import { Directive, HostListener } from '@angular/core';
+import {Directive, HostListener, Input, OnInit} from '@angular/core';
+import {ToggleClasses} from "../../shared/toggle-classes";
+import {asideMenuCssClasses} from "../../shared/classes";
 
 /**
-* Allows the aside to be toggled via click.
-*/
+ * Allows the aside to be toggled via click.
+ */
 @Directive({
   selector: '[inceptionAsideMenuToggler]',
 })
-export class AsideToggleDirective {
-  constructor() { }
-
+export class AsideToggleDirective implements OnInit {
+  @Input('inceptionAsideMenuToggler') breakpoint: string;
+  public bp;
+  constructor() {}
+  ngOnInit(): void {
+    this.bp = this.breakpoint;
+  }
   @HostListener('click', ['$event'])
   toggleOpen($event: any) {
     $event.preventDefault();
-    document.querySelector('body').classList.toggle('aside-menu-hidden');
+    let cssClass;
+    this.bp ? cssClass = `aside-menu-${this.bp}-show` : cssClass = asideMenuCssClasses[0];
+    ToggleClasses(cssClass, asideMenuCssClasses);
   }
 }

@@ -22,7 +22,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
-import {Router, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 
 // Import Angular components
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
@@ -32,13 +32,13 @@ import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
-  StandardContainerComponent,
   AsideComponent,
   BreadcrumbsComponent,
   ContainerComponent,
   ErrorModalComponent,
   FooterComponent,
-  HeaderComponent, NotFoundComponent,
+  HeaderComponent,
+  NotFoundComponent,
   SidebarComponent,
   SidebarFooterComponent,
   SidebarFormComponent,
@@ -50,9 +50,11 @@ import {
   SidebarNavigationLinkComponent,
   SidebarNavigationTitleComponent,
   SimpleContainerComponent,
+  StandardContainerComponent
 } from './components/layout';
 
 // Import Inception services
+import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
 import {ErrorService} from './services/error/error.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
@@ -63,7 +65,8 @@ import {BsDatepickerModule} from 'ngx-bootstrap';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
 import {ModalModule} from 'ngx-bootstrap/modal';
-import {SelectModule} from 'ng-select';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {StorageServiceModule} from "angular-webstorage-service";
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import {TimepickerModule} from 'ngx-bootstrap';
@@ -73,6 +76,14 @@ import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
 import {SessionInterceptor} from "./services/session/session.interceptor";
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 import {setInceptionInjector} from "./inception-injector";
+
+// Import perfect scrollbar dependencies
+import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
+import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -90,7 +101,8 @@ import {setInceptionInjector} from "./inception-injector";
     BsDropdownModule.forRoot(),
     ChartsModule,
     ModalModule.forRoot(),
-    SelectModule,
+    NgSelectModule,
+    PerfectScrollbarModule,
     StorageServiceModule,
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
@@ -108,7 +120,8 @@ import {setInceptionInjector} from "./inception-injector";
     BsDropdownModule,
     ChartsModule,
     ModalModule,
-    SelectModule,
+    NgSelectModule,
+    PerfectScrollbarModule,
     StorageServiceModule,
     TabsModule,
     TimepickerModule,
@@ -116,7 +129,6 @@ import {setInceptionInjector} from "./inception-injector";
     DirectivesModule
   ],
   declarations: [
-    StandardContainerComponent,
     AsideComponent,
     BreadcrumbsComponent,
     ContainerComponent,
@@ -134,7 +146,8 @@ import {setInceptionInjector} from "./inception-injector";
     SidebarNavigationItemComponent,
     SidebarNavigationLinkComponent,
     SidebarNavigationTitleComponent,
-    SimpleContainerComponent
+    SimpleContainerComponent,
+    StandardContainerComponent
   ],
   bootstrap: [StandardContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })
@@ -169,6 +182,7 @@ export class InceptionModule {
 
         CanActivateFunctionGuard,
 
+        BreadcrumbsService,
         ErrorService,
         NavigationService,
         SecurityService,
