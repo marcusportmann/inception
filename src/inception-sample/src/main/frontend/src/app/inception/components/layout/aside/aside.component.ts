@@ -4,7 +4,7 @@ import { asideMenuCssClasses, Replace } from './../../../shared/index';
 @Component({
   selector: 'inception-layout-aside',
   template: `
-    <aside class="aside-menu">
+    <aside class="aside">
       <ng-content></ng-content>
     </aside>
   `
@@ -23,17 +23,17 @@ export class AsideComponent implements OnInit {
   }
 
   isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('aside-menu-fixed'); }
+    if (this.fixed) { document.querySelector('body').classList.add('aside-fixed'); }
   }
 
   isOffCanvas(offCanvas: boolean): void {
-    if (this.offCanvas) { document.querySelector('body').classList.add('aside-menu-off-canvas'); }
+    if (this.offCanvas) { document.querySelector('body').classList.add('aside-off-canvas'); }
   }
 
   displayBreakpoint(display: any): void {
     if (this.display !== false ) {
       let cssClass;
-      this.display ? cssClass = `aside-menu-${this.display}-show` : cssClass = asideMenuCssClasses[0];
+      this.display ? cssClass = `aside-${this.display}-show` : cssClass = asideMenuCssClasses[0];
       document.querySelector('body').classList.add(cssClass);
     }
   }

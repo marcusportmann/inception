@@ -27,11 +27,14 @@ export class BreadcrumbsService {
         childrenRoutes.forEach(route => {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
-            url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
-            breadcrumbs.push({
-              label: route.snapshot.data,
-              url:   url
-            });
+
+            if (routeSnapshot.url.length > 0) {
+              url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+              breadcrumbs.push({
+                label: route.snapshot.data,
+                url: url
+              });
+            }
             currentRoute = route;
           }
         });

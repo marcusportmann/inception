@@ -178,10 +178,10 @@ $breadcrumb-borders: (
 
 // Aside
 
-$aside-menu-width:                    250px !default;
-$aside-menu-color:                    $gray-800 !default;
-$aside-menu-bg:                       #fff !default;
-$aside-menu-borders: (
+$aside-width:                    250px !default;
+$aside-color:                    $gray-800 !default;
+$aside-bg:                       #fff !default;
+$aside-borders: (
   left: (
     size:                             1px,
     style:                            solid,
@@ -189,8 +189,8 @@ $aside-menu-borders: (
   )
 ) !default;
 
-$aside-menu-nav-padding-y:            .75rem !default;
-$aside-menu-nav-padding-x:            1rem !default;
+$aside-nav-padding-y:            .75rem !default;
+$aside-nav-padding-x:            1rem !default;
 
 // Footer
 

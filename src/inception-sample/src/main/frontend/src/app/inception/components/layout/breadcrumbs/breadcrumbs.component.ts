@@ -29,7 +29,7 @@ export class BreadcrumbsComponent implements OnInit {
   }
 
   isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('breadcrumb-fixed'); }
+    if (this.fixed) { document.querySelector('body').classList.add('breadcrumbs-fixed'); }
   }
 }
 
@@ -50,7 +50,7 @@ export class BreadcrumbsComponent implements OnInit {
 // import 'rxjs/add/operator/filter';
 //
 // @Component({
-//   selector: 'inception-layout-breadcrumbs',
+//   selector: 'layout-breadcrumbs',
 //   template: `
 //   <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs" let-last = last>
 //     <li class="breadcrumb-item"

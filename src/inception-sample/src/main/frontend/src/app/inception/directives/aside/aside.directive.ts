@@ -19,7 +19,7 @@ export class AsideToggleDirective implements OnInit {
   toggleOpen($event: any) {
     $event.preventDefault();
     let cssClass;
-    this.bp ? cssClass = `aside-menu-${this.bp}-show` : cssClass = asideMenuCssClasses[0];
+    this.bp ? cssClass = `layout-aside-${this.bp}-show` : cssClass = asideMenuCssClasses[0];
     ToggleClasses(cssClass, asideMenuCssClasses);
   }
 }
