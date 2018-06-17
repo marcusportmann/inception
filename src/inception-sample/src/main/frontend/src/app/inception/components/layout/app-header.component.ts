@@ -118,8 +118,8 @@ export class AppHeaderComponent implements OnInit {
 //
 //
 // @Component({
-//   selector: 'inception-layout-header',
-//   templateUrl: './header.component.html'
+//   selector: 'app-header',
+//   templateUrl: './app-header.component.html'
 // })
 // export class AppHeaderComponent implements OnInit {
 //
