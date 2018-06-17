@@ -16,7 +16,7 @@ app-root {
   min-height: 100vh;
 }
 
-.inception-layout-header {
+.header {
   flex: 0 0 $navbar-height;
 }
 
@@ -70,7 +70,7 @@ html[dir="rtl"] {
   // Header
   //
   .header-fixed {
-    .inception-layout-header {
+    .header {
       position: fixed;
       z-index: $zindex-sticky;
       width: 100%;
@@ -91,7 +91,7 @@ html[dir="rtl"] {
     }
   }
   .sidebar-fixed {
-    .inception-layout-header + .inception-layout-body .sidebar {
+    .header + .inception-layout-body .sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -132,7 +132,7 @@ html[dir="rtl"] {
   }
 
   .sidebar-off-canvas {
-    .inception-layout-header + .inception-layout-body .sidebar {
+    .header + .inception-layout-body .sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -178,7 +178,7 @@ html[dir="rtl"] {
   }
 
   .aside-fixed {
-    .inception-layout-header + .inception-layout-body .aside {
+    .header + .inception-layout-body .aside {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -192,7 +192,7 @@ html[dir="rtl"] {
   }
 
   .aside-off-canvas {
-    .inception-layout-header + .inception-layout-body .aside {
+    .header + .inception-layout-body .aside {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -407,7 +407,7 @@ html[dir="rtl"] {
 //
 // Animations
 //
-.inception-layout-header,
+.header,
 .inception-layout-footer,
 .sidebar,
 .main,
@@ -426,7 +426,7 @@ html[dir="rtl"] {
 //
 
 @include media-breakpoint-down(md) {
-  .inception-layout-header {
+  .header {
     position: fixed;
     z-index: $zindex-sticky;
     width: 100%;
