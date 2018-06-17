@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
-  AsideToggleDirective,
+  AppAsideToggleDirective,
   AutofocusDirective,
   BrandMinimizeDirective,
 
@@ -38,7 +38,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     ReactiveFormsModule
   ],
   exports: [
-    AsideToggleDirective,
+    AppAsideToggleDirective,
     AutofocusDirective,
     BrandMinimizeDirective,
 
@@ -61,7 +61,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     // ValidatedFormDirective
   ],
   declarations: [
-    AsideToggleDirective,
+    AppAsideToggleDirective,
     AutofocusDirective,
     BrandMinimizeDirective,
 

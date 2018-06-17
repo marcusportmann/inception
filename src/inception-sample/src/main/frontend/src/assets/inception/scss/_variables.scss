@@ -176,12 +176,12 @@ $breadcrumb-borders: (
   )
 ) !default;
 
-// Aside
+// Application Aside
 
-$aside-width:                    250px !default;
-$aside-color:                    $gray-800 !default;
-$aside-bg:                       #fff !default;
-$aside-borders: (
+$app-aside-width:                    250px !default;
+$app-aside-color:                    $gray-800 !default;
+$app-aside-bg:                       #fff !default;
+$app-aside-borders: (
   left: (
     size:                             1px,
     style:                            solid,
@@ -189,8 +189,8 @@ $aside-borders: (
   )
 ) !default;
 
-$aside-nav-padding-y:            .75rem !default;
-$aside-nav-padding-x:            1rem !default;
+$app-aside-nav-padding-y:            .75rem !default;
+$app-aside-nav-padding-x:            1rem !default;
 
 // Footer
 

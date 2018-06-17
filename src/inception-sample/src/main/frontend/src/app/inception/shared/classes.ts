@@ -6,10 +6,10 @@ export const sidebarCssClasses: Array<string> = [
   'sidebar-xl-show'
 ];
 
-export const asideMenuCssClasses: Array<string> = [
-  'layout-aside-show',
-  'layout-aside-sm-show',
-  'layout-aside-md-show',
-  'layout-aside-lg-show',
-  'layout-aside-xl-show'
+export const appAsideCssClasses: Array<string> = [
+  'app-aside-show',
+  'app-aside-sm-show',
+  'app-aside-md-show',
+  'app-aside-lg-show',
+  'app-aside-xl-show'
 ];

@@ -1,14 +1,14 @@
-.aside {
+.app-aside {
   z-index: $zindex-sticky - 1;
-  width: $aside-width;
-  color: $aside-color;
-  background: $aside-bg;
-  @include borders($aside-borders);
+  width: $app-aside-width;
+  color: $app-aside-color;
+  background: $app-aside-bg;
+  @include borders($app-aside-borders);
 
   .nav-tabs {
     border-color: $border-color;
     .nav-link {
-      padding: $aside-nav-padding-y $aside-nav-padding-x;
+      padding: $app-aside-nav-padding-y $app-aside-nav-padding-x;
       color: $body-color;
       border-top: 0;
       @include border-radius(0);
@@ -42,16 +42,16 @@
     // &::-webkit-scrollbar-button {    }
 
     &::-webkit-scrollbar-track {
-      background-color: lighten($aside-bg, 5%);
-      border-right: 1px solid darken($aside-bg, 5%);
-      border-left: 1px solid darken($aside-bg, 5%);
+      background-color: lighten($app-aside-bg, 5%);
+      border-right: 1px solid darken($app-aside-bg, 5%);
+      border-left: 1px solid darken($app-aside-bg, 5%);
     }
 
     // &::-webkit-scrollbar-track-piece {    }
 
     &::-webkit-scrollbar-thumb {
       height: 50px;
-      background-color: darken($aside-bg, 10%);
+      background-color: darken($app-aside-bg, 10%);
       background-clip: content-box;
       border-color: transparent;
       border-style: solid;

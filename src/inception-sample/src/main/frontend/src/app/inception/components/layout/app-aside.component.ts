@@ -1,15 +1,15 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { asideMenuCssClasses, Replace } from './../../../shared/index';
+import { appAsideCssClasses, Replace } from './../../shared/index';
 
 @Component({
-  selector: 'inception-layout-aside',
+  selector: 'app-aside',
   template: `
-    <aside class="aside">
+    <aside class="app-aside">
       <ng-content></ng-content>
     </aside>
   `
 })
-export class AsideComponent implements OnInit {
+export class AppAsideComponent implements OnInit {
   @Input() display: any;
   @Input() fixed: boolean;
   @Input() offCanvas: boolean;
@@ -23,17 +23,17 @@ export class AsideComponent implements OnInit {
   }
 
   isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('aside-fixed'); }
+    if (this.fixed) { document.querySelector('body').classList.add('app-aside-fixed'); }
   }
 
   isOffCanvas(offCanvas: boolean): void {
-    if (this.offCanvas) { document.querySelector('body').classList.add('aside-off-canvas'); }
+    if (this.offCanvas) { document.querySelector('body').classList.add('app-aside-off-canvas'); }
   }
 
   displayBreakpoint(display: any): void {
     if (this.display !== false ) {
       let cssClass;
-      this.display ? cssClass = `aside-${this.display}-show` : cssClass = asideMenuCssClasses[0];
+      this.display ? cssClass = `app-aside-${this.display}-show` : cssClass = appAsideCssClasses[0];
       document.querySelector('body').classList.add(cssClass);
     }
   }

@@ -1,10 +1,10 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { Replace } from './../../../shared';
+import { Replace } from './../../shared';
 
 @Component({
-  selector: 'inception-layout-header',
+  selector: 'app-header',
   template: `
-    <header class="inception-layout-header navbar">
+    <header class="app-header navbar">
       <ng-template [ngIf]="mobileSidebarToggler != false">
         <button class="navbar-toggler d-lg-none" type="button" inceptionSidebarToggler>
           <span class="navbar-toggler-icon"></span>
@@ -38,20 +38,20 @@ import { Replace } from './../../../shared';
         </button>
       </ng-template>
       <ng-content></ng-content>
-      <ng-template [ngIf]="asideMenuToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [inceptionAsideMenuToggler]="asideMenuToggler">
+      <ng-template [ngIf]="appAsideToggle != false">
+        <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggle]="appAsideToggle">
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-template [ngIf]="mobileAsideMenuToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" inceptionAsideMenuToggler>
+      <ng-template [ngIf]="mobileAppAsideToggle != false">
+        <button class="navbar-toggler d-lg-none" type="button" appAsideToggle>
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
     </header>
   `
 })
-export class HeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit {
 
   @Input() fixed: boolean;
 
@@ -62,8 +62,8 @@ export class HeaderComponent implements OnInit {
   @Input() sidebarToggler: any;
   @Input() mobileSidebarToggler: any;
 
-  @Input() asideMenuToggler: any;
-  @Input() mobileAsideMenuToggler: any;
+  @Input() appAsideToggle: any;
+  @Input() mobileAppAsideToggle: any;
 
   constructor(private el: ElementRef) {}
 
@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('header-fixed'); }
+    if (this.fixed) { document.querySelector('body').classList.add('app-header-fixed'); }
   }
 
   imgSrc(brand: any): void {
@@ -121,7 +121,7 @@ export class HeaderComponent implements OnInit {
 //   selector: 'inception-layout-header',
 //   templateUrl: './header.component.html'
 // })
-// export class HeaderComponent implements OnInit {
+// export class AppHeaderComponent implements OnInit {
 //
 //   public showLogin = false;
 //
@@ -139,7 +139,7 @@ export class HeaderComponent implements OnInit {
 //     return Observable.of(true);
 //
 //
-//     //console.log('Invoking HeaderComponent::isLoggedIn()');
+//     //console.log('Invoking AppHeaderComponent::isLoggedIn()');
 //
 //     //return Session.getSession().isLoggedIn();
 //
