@@ -42,14 +42,15 @@ import {Router} from "@angular/router";
       </ng-template>
       <ng-content></ng-content>
       
-      <div [ngIf]="!isLoggedIn()">
+      <div *ngIf="showLogin() | async">
+        Not Logged In
         <button class="navbar-toggler navbar-toggler-login" type="button" (click)="login()">
           <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
           Login
         </button>
       </div>      
       
-      <div [ngIf]="isLoggedIn()">
+      <div *ngIf="isLoggedIn() | async">
         <ng-template [ngIf]="asideToggler != false">
           <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
             <span class="navbar-toggler-icon"></span>
@@ -60,7 +61,7 @@ import {Router} from "@angular/router";
             <span class="navbar-toggler-icon"></span>
           </button>
         </ng-template>
-       </div>
+      </div>
         
     </header>
   `
@@ -116,6 +117,14 @@ export class AppHeaderComponent implements OnInit {
     return Observable.of(false);
 
     //return Session.getSession().isLoggedIn();
+  }
+
+  showLogin() : Observable<boolean> {
+
+
+
+    return Observable.of(true);
+
   }
 
   login() {
