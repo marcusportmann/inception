@@ -42,33 +42,48 @@ import {Session} from "../../services/session/session";
         </button>
       </ng-template>
       <ng-content></ng-content>
+
       
       <div *ngIf="!(isLoggedIn() | async)">
-        Not Logged In
-        <button class="navbar-toggler navbar-toggler-login" type="button" (click)="login()">
-          <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
-          Login
-        </button>
+        <ul class="nav navbar-nav ml-auto">
+          <li class="nav-item d-md-down-none">
+            <a class="nav-link" (click)="login()">
+              <span class="navbar-login pull-right">Login</span>
+              <span class="navbar-toggler-icon navbar-toggler-login-icon pull-right"></span>
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" (click)="login()">
+              <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
+            </a>
+          </li>
+        </ul>
       </div>      
       
       <div *ngIf="isLoggedIn() | async">
-        
-        
         <ng-template [ngIf]="asideToggler != false">
-          <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
-            <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
-            <span class="navbar-user d-md-down-none">Administrator</span>
-          </button>
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item d-md-down-none">
+              <a class="nav-link" href="#" [appAsideToggler]="asideToggler">
+                <span class="navbar-user pull-right">Administrator</span>
+                <span class="navbar-toggler-icon navbar-toggler-user-icon pull-right"></span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
         <ng-template [ngIf]="mobileAppAsideToggler != false">
-          <button class="navbar-toggler d-lg-none" type="button" appAsideToggler>
-            <span class="navbar-toggler-icon  navbar-toggler-user-icon"></span>
-            <span class="navbar-user d-md-down-none">Administrator</span>
-          </button>
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item d-lg-none">
+              <a class="nav-link" href="#" appAsideToggler>
+                <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
+              </a>
+            </li>
+          </ul>
         </ng-template>
-
-        
       </div>
+      
+      
+      
         
       
     </header>

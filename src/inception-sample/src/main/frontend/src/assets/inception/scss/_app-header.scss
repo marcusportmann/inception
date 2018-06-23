@@ -37,20 +37,63 @@
   }
 
   .navbar-toggler-icon {
-    height: 23px;
+    height: 1.4em;
+    width: 1.4em;
     background-image: $navbar-toggler-icon;
   }
 
-  .navbar-toggler-user-icon {
-    height: 23px;
-    background-image: $navbar-toggler-user-icon;
-  }
+  .nav-link
+  {
+    .navbar-toggler-user-icon
+    {
+      height: 1.7em;
+      width: 1.7em;
+      background-image: $navbar-toggler-user-icon;
+    }
 
-  .navbar-toggler .navbar-user {
-    color: #73818f;
-    padding-right: 15px;
-  }
+    .navbar-toggler-login-icon
+    {
+      height: 1.5em;
+      width: 1.5em;
+      background-image: $navbar-toggler-login-icon;
+    }
 
+    .navbar-user
+    {
+      display: inline-block;
+      height: 1.7em;
+      line-height: 1.7em;
+      color: $navbar-color;
+      padding-left: 6px;
+      padding-right: 15px;
+    }
+
+    .navbar-login
+    {
+      display: inline-block;
+      height: 1.4em;
+      line-height: 1.4em;
+      color: $navbar-color;
+      padding-left: 6px;
+      padding-right: 15px;
+    }
+
+    &:hover .navbar-toggler-user-icon {
+      background-image: $navbar-toggler-user-icon-hover;
+    }
+
+    &:hover .navbar-toggler-login-icon {
+      background-image: $navbar-toggler-login-icon-hover;
+    }
+
+    &:hover .navbar-user {
+      color: $navbar-hover-color;
+    }
+
+    &:hover .navbar-login {
+      color: $navbar-hover-color;
+    }
+  }
 
   .navbar-nav {
     flex-direction: row;
