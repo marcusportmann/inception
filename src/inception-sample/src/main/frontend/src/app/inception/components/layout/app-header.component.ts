@@ -1,5 +1,8 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Replace } from './../../shared';
+import {SessionService} from "../../services/session/session.service";
+import {Observable} from "rxjs/Observable";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -38,16 +41,27 @@ import { Replace } from './../../shared';
         </button>
       </ng-template>
       <ng-content></ng-content>
-      <ng-template [ngIf]="asideToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
-          <span class="navbar-toggler-icon"></span>
+      
+      <div [ngIf]="!isLoggedIn()">
+        <button class="navbar-toggler navbar-toggler-login" type="button" (click)="login()">
+          <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
+          Login
         </button>
-      </ng-template>
-      <ng-template [ngIf]="mobileAppAsideToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </ng-template>
+      </div>      
+      
+      <div [ngIf]="isLoggedIn()">
+        <ng-template [ngIf]="asideToggler != false">
+          <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </ng-template>
+        <ng-template [ngIf]="mobileAppAsideToggler != false">
+          <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </ng-template>
+       </div>
+        
     </header>
   `
 })
@@ -65,7 +79,7 @@ export class AppHeaderComponent implements OnInit {
   @Input() asideToggler: any;
   @Input() mobileAsideToggler: any;
 
-  constructor(private el: ElementRef) {}
+  constructor(private el: ElementRef, private router: Router, private sessionService: SessionService) {}
 
   ngOnInit() {
     Replace(this.el);
@@ -95,6 +109,17 @@ export class AppHeaderComponent implements OnInit {
   breakpoint(breakpoint: any): void {
     console.log(breakpoint);
     return breakpoint ? breakpoint : '';
+  }
+
+  isLoggedIn(): Observable<boolean> {
+
+    return Observable.of(false);
+
+    //return Session.getSession().isLoggedIn();
+  }
+
+  login() {
+    this.router.navigate(['/login']);
   }
 }
 
