@@ -94,8 +94,22 @@ export class AppContainerComponent extends ContainerComponent {
 
   navItems: NavigationItem[] = [];
 
+  sidebarMinimized = true;
+
+  private changes: MutationObserver;
+
+  public element: HTMLElement = document.body;
+
   constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService) {
     super();
+
+    this.changes = new MutationObserver((mutations) => {
+      this.sidebarMinimized = document.body.classList.contains('app-sidebar-minimized')
+    });
+
+    this.changes.observe(<Element>this.element, {
+      attributes: true
+    });
   }
 
   filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
