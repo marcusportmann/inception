@@ -86,7 +86,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
       </app-aside>
     </div>
     <app-footer>
-      <span><a href="https://coreui.io">Sample</a> &copy; 2018 inception.digital.</span>
+      <span>2018 &copy; <span class="copyright-name"></span></span>
     </app-footer>
   `
 })
