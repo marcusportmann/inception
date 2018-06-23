@@ -6,7 +6,7 @@ import { Replace } from './../../shared';
   template: `
     <header class="app-header navbar">
       <ng-template [ngIf]="mobileSidebarToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" inceptionSidebarToggler>
+        <button class="navbar-toggler d-lg-none" type="button" appSidebarToggler>
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
@@ -33,18 +33,18 @@ import { Replace } from './../../shared';
         </a>
       </ng-template>
       <ng-template [ngIf]="sidebarToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [inceptionSidebarToggler]="sidebarToggler">
+        <button class="navbar-toggler d-md-down-none" type="button" [appSidebarToggler]="sidebarToggler">
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
       <ng-content></ng-content>
-      <ng-template [ngIf]="appAsideToggle != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggle]="appAsideToggle">
+      <ng-template [ngIf]="asideToggler != false">
+        <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-template [ngIf]="mobileAppAsideToggle != false">
-        <button class="navbar-toggler d-lg-none" type="button" appAsideToggle>
+      <ng-template [ngIf]="mobileAppAsideToggler != false">
+        <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
@@ -62,8 +62,8 @@ export class AppHeaderComponent implements OnInit {
   @Input() sidebarToggler: any;
   @Input() mobileSidebarToggler: any;
 
-  @Input() appAsideToggle: any;
-  @Input() mobileAppAsideToggle: any;
+  @Input() asideToggler: any;
+  @Input() mobileAsideToggler: any;
 
   constructor(private el: ElementRef) {}
 

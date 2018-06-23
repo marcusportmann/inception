@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {
-  StandardContainerComponent,
+  AppContainerComponent,
   NotFoundComponent,
   SimpleContainerComponent
 } from './inception/components/layout';
@@ -16,7 +16,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    component: StandardContainerComponent,
+    component: AppContainerComponent,
     children: [
       {
         path: 'dashboard',

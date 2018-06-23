@@ -9,7 +9,7 @@
 // stylelint-disable selector-type-no-unknown, no-duplicate-selectors, selector-no-qualifying-type
 // app-dashboard and app-root are Angular2+ selectors. You can add here your own selectors if you need.
 .app,
-app-dashboard,
+app-container,
 app-root {
   display: flex;
   flex-direction: column;
@@ -20,24 +20,24 @@ app-root {
   flex: 0 0 $navbar-height;
 }
 
-.inception-layout-footer {
+.app-footer {
   flex: 0 0 $footer-height;
 }
 
-.inception-layout-body {
+.app-body {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
   overflow-x: hidden;
 
-  .main {
+  .app-main {
     flex: 1;
     min-width: 0;
   }
 
-  .sidebar {
-    // $sidebar-width is the width of the columns
-    flex: 0 0 $sidebar-width;
+  .app-sidebar {
+    // $app-sidebar-width is the width of the columns
+    flex: 0 0 $app-sidebar-width;
     // put the nav on the left
     order: -1;
   }
@@ -49,16 +49,16 @@ app-root {
 }
 
 html:not([dir="rtl"]) {
-  .sidebar {
-    margin-left: - $sidebar-width;
+  .app-sidebar {
+    margin-left: - $app-sidebar-width;
   }
   .app-aside {
     margin-right: - $app-aside-width;
   }
 }
 html[dir="rtl"] {
-  .sidebar {
-    margin-right: - $sidebar-width;
+  .app-sidebar {
+    margin-right: - $app-sidebar-width;
   }
   .app-aside {
     margin-left: - $app-aside-width;
@@ -75,89 +75,89 @@ html[dir="rtl"] {
       z-index: $zindex-sticky;
       width: 100%;
     }
-    .inception-layout-body {
+    .app-body {
       margin-top: $navbar-height;
     }
   }
   //
   // Sidebar
   //
-  .sidebar-fixed {
-    .sidebar {
+  .app-sidebar-fixed {
+    .app-sidebar {
       position: fixed;
       z-index: $zindex-sticky - 1;
-      width: $sidebar-width;
+      width: $app-sidebar-width;
       height: 100vh;
     }
   }
-  .sidebar-fixed {
-    .app-header + .inception-layout-body .sidebar {
+  .app-sidebar-fixed {
+    .app-header + .app-body .app-sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
 
-  .sidebar-compact {
-    .sidebar {
-      flex: 0 0 $sidebar-compact-width;
+  .app-sidebar-compact {
+    .app-sidebar {
+      flex: 0 0 $app-sidebar-compact-width;
     }
 
-    &.sidebar-fixed {
-      .sidebar {
-        width: $sidebar-compact-width;
+    &.app-sidebar-fixed {
+      .app-sidebar {
+        width: $app-sidebar-compact-width;
       }
     }
-    .sidebar-minimizer {
+    .app-sidebar-minimizer {
       display: none;
     }
   }
 
-  .sidebar-minimized {
-    .sidebar {
-      flex: 0 0 $sidebar-minimized-width;
+  .app-sidebar-minimized {
+    .app-sidebar {
+      flex: 0 0 $app-sidebar-minimized-width;
     }
 
-    &.sidebar-fixed {
-      .sidebar {
-        width: $sidebar-minimized-width;
+    &.app-sidebar-fixed {
+      .app-sidebar {
+        width: $app-sidebar-minimized-width;
       }
     }
   }
 
-  .sidebar-off-canvas {
-    .sidebar {
+  .app-sidebar-off-canvas {
+    .app-sidebar {
       position: fixed;
       z-index: $zindex-sticky - 1;
       height: 100%;
     }
   }
 
-  .sidebar-off-canvas {
-    .app-header + .inception-layout-body .sidebar {
+  .app-sidebar-off-canvas {
+    .app-header + .app-body .app-sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
 
   html:not([dir="rtl"]) {
-    .sidebar-compact {
-      .sidebar {
-        margin-left: - $sidebar-compact-width;
+    .app-sidebar-compact {
+      .app-sidebar {
+        margin-left: - $app-sidebar-compact-width;
       }
     }
-    .sidebar-minimized {
-      .sidebar {
-        margin-left: - $sidebar-minimized-width;
+    .app-sidebar-minimized {
+      .app-sidebar {
+        margin-left: - $app-sidebar-minimized-width;
       }
     }
   }
   html[dir="rtl"] {
-    .sidebar-compact {
-      .sidebar {
-        margin-right: - $sidebar-compact-width;
+    .app-sidebar-compact {
+      .app-sidebar {
+        margin-right: - $app-sidebar-compact-width;
       }
     }
-    .sidebar-minimized {
-      .sidebar {
-        margin-right: - $sidebar-minimized-width;
+    .app-sidebar-minimized {
+      .app-sidebar {
+        margin-right: - $app-sidebar-minimized-width;
       }
     }
   }
@@ -178,7 +178,7 @@ html[dir="rtl"] {
   }
 
   .app-aside-fixed {
-    .app-header + .inception-layout-body .app-aside {
+    .app-header + .app-body .app-aside {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -192,7 +192,7 @@ html[dir="rtl"] {
   }
 
   .app-aside-off-canvas {
-    .app-header + .inception-layout-body .app-aside {
+    .app-header + .app-body .app-aside {
       height: calc(100vh - #{$navbar-height});
     }
   }
@@ -219,7 +219,7 @@ html[dir="rtl"] {
 // Breadcrumb
 //
 .breadcrumbs-fixed {
-  .main {
+  .app-main {
     $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 * $spacer;
     padding-top: $breadcrumb-height;
   }
@@ -237,41 +237,41 @@ html[dir="rtl"] {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
     html:not([dir="rtl"]) {
-      .sidebar#{$infix}-show {
-        .sidebar {
+      .app-sidebar#{$infix}-show {
+        .app-sidebar {
           margin-left: 0;
         }
         @include media-breakpoint-up(sm) {
-          &.sidebar-fixed {
-            .main,
-            .inception-layout-footer {
-              margin-left: $sidebar-width;
+          &.app-sidebar-fixed {
+            .app-main,
+            .app-footer {
+              margin-left: $app-sidebar-width;
             }
-            &.sidebar-compact {
-              .main,
-              .inception-layout-footer {
-                margin-left: $sidebar-compact-width;
+            &.app-sidebar-compact {
+              .app-main,
+              .app-footer {
+                margin-left: $app-sidebar-compact-width;
               }
             }
-            &.sidebar-minimized {
-              .main,
-              .inception-layout-footer {
-                margin-left: $sidebar-minimized-width;
+            &.app-sidebar-minimized {
+              .app-main,
+              .app-footer {
+                margin-left: $app-sidebar-minimized-width;
               }
             }
           }
           &.breadcrumbs-fixed {
             .breadcrumb {
-              left: $sidebar-width;
+              left: $app-sidebar-width;
             }
-            &.sidebar-compact {
+            &.app-sidebar-compact {
               .breadcrumb {
-                left: $sidebar-compact-width;
+                left: $app-sidebar-compact-width;
               }
             }
-            &.sidebar-minimized {
+            &.app-sidebar-minimized {
               .breadcrumb {
-                left: $sidebar-minimized-width;
+                left: $app-sidebar-minimized-width;
               }
             }
           }
@@ -284,8 +284,8 @@ html[dir="rtl"] {
         }
         @include media-breakpoint-up(sm) {
           &.app-aside-fixed {
-            .main,
-            .inception-layout-footer {
+            .app-main,
+            .app-footer {
               margin-right: $app-aside-width;
             }
           }
@@ -299,41 +299,41 @@ html[dir="rtl"] {
     }
 
     html[dir="rtl"] {
-      .sidebar#{$infix}-show {
-        .sidebar {
+      .app-sidebar#{$infix}-show {
+        .app-sidebar {
           margin-right: 0;
         }
         @include media-breakpoint-up(sm) {
-          &.sidebar-fixed {
-            .main,
-            .inception-layout-footer {
-              margin-right: $sidebar-width;
+          &.app-sidebar-fixed {
+            .app-main,
+            .app-footer {
+              margin-right: $app-sidebar-width;
             }
-            &.sidebar-compact {
-              .main,
-              .inception-layout-footer {
-                margin-right: $sidebar-compact-width;
+            &.app-sidebar-compact {
+              .app-main,
+              .app-footer {
+                margin-right: $app-sidebar-compact-width;
               }
             }
-            &.sidebar-minimized {
-              .main,
-              .inception-layout-footer {
-                margin-right: $sidebar-minimized-width;
+            &.app-sidebar-minimized {
+              .app-main,
+              .app-footer {
+                margin-right: $app-sidebar-minimized-width;
               }
             }
           }
           &.breadcrumbs-fixed {
             .breadcrumb {
-              right: $sidebar-width;
+              right: $app-sidebar-width;
             }
-            &.sidebar-compact {
+            &.app-sidebar-compact {
               .breadcrumb {
-                right: $sidebar-compact-width;
+                right: $app-sidebar-compact-width;
               }
             }
-            &.sidebar-minimized {
+            &.app-sidebar-minimized {
               .breadcrumb {
-                right: $sidebar-minimized-width;
+                right: $app-sidebar-minimized-width;
               }
             }
           }
@@ -346,8 +346,8 @@ html[dir="rtl"] {
         }
         @include media-breakpoint-up(sm) {
           &.app-aside-fixed {
-            .main,
-            .inception-layout-footer {
+            .app-main,
+            .app-footer {
               margin-left: $app-aside-width;
             }
           }
@@ -359,7 +359,7 @@ html[dir="rtl"] {
         }
       }
     }
-    .sidebar#{$infix}-show,
+    .app-sidebar#{$infix}-show,
     .app-aside#{$infix}-show {
       @keyframes opacity {
         0%   { opacity: 0; }
@@ -367,7 +367,7 @@ html[dir="rtl"] {
       }
 
       @include media-breakpoint-down(xs) {
-        .main {
+        .app-main {
           position: relative;
           &::before {
             position: absolute;
@@ -389,8 +389,8 @@ html[dir="rtl"] {
 //
 // Footer
 //
-.footer-fixed {
-  .inception-layout-footer {
+.app-footer-fixed {
+  .app-footer {
     position: fixed;
     right: 0;
     bottom: 0;
@@ -399,7 +399,7 @@ html[dir="rtl"] {
     height: $footer-height;
   }
 
-  .inception-layout-body {
+  .app-body {
     margin-bottom: $footer-height;
   }
 }
@@ -408,13 +408,13 @@ html[dir="rtl"] {
 // Animations
 //
 .app-header,
-.inception-layout-footer,
-.sidebar,
-.main,
+.app-footer,
+.app-sidebar,
+.app-main,
 .app-aside {
   transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
 }
-.sidebar-nav {
+.app-sidebar-nav {
   transition: width $layout-transition-speed;
 }
 .breadcrumb {
@@ -453,18 +453,18 @@ html[dir="rtl"] {
     }
   }
 
-  .inception-layout-body {
+  .app-body {
     margin-top: $navbar-height;
   }
 
-  .sidebar {
+  .app-sidebar {
     position: fixed;
     z-index: $zindex-sticky - 1;
-    width: $sidebar-width;
+    width: $app-sidebar-width;
     height: calc(100vh - #{$navbar-height});
   }
 
-  .sidebar-minimizer {
+  .app-sidebar-minimizer {
     display: none;
   }
 

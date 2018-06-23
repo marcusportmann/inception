@@ -1,4 +1,4 @@
-export * from './app-aside.directive';
+export * from './layout/app-aside-toggler.directive';
+export * from './layout/app-sidebar.directive';
 export * from './autofocus';
-export * from './sidebar';
 export * from './validated-form';

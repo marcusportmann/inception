@@ -37,20 +37,20 @@ import {
   BreadcrumbsComponent,
   ContainerComponent,
   ErrorModalComponent,
-  FooterComponent,
+  AppFooterComponent,
   NotFoundComponent,
-  SidebarComponent,
-  SidebarFooterComponent,
-  SidebarFormComponent,
-  SidebarHeaderComponent,
-  SidebarMinimizerComponent,
-  SidebarNavigationComponent,
-  SidebarNavigationDropdownComponent,
-  SidebarNavigationItemComponent,
-  SidebarNavigationLinkComponent,
-  SidebarNavigationTitleComponent,
+  AppSidebarComponent,
+  AppSidebarFooterComponent,
+  AppSidebarFormComponent,
+  AppSidebarHeaderComponent,
+  AppSidebarMinimizerComponent,
+  AppSidebarNavComponent,
+  AppSidebarNavDropdownComponent,
+  AppSidebarNavItemComponent,
+  AppSidebarNavLinkComponent,
+  AppSidebarNavTitleComponent,
   SimpleContainerComponent,
-  StandardContainerComponent
+  AppContainerComponent
 } from './components/layout';
 
 // Import Inception services
@@ -81,7 +81,7 @@ import {setInceptionInjector} from "./inception-injector";
 import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
 import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
@@ -134,22 +134,22 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BreadcrumbsComponent,
     ContainerComponent,
     ErrorModalComponent,
-    FooterComponent,
+    AppFooterComponent,
     NotFoundComponent,
-    SidebarComponent,
-    SidebarFooterComponent,
-    SidebarFormComponent,
-    SidebarHeaderComponent,
-    SidebarMinimizerComponent,
-    SidebarNavigationComponent,
-    SidebarNavigationDropdownComponent,
-    SidebarNavigationItemComponent,
-    SidebarNavigationLinkComponent,
-    SidebarNavigationTitleComponent,
+    AppSidebarComponent,
+    AppSidebarFooterComponent,
+    AppSidebarFormComponent,
+    AppSidebarHeaderComponent,
+    AppSidebarMinimizerComponent,
+    AppSidebarNavComponent,
+    AppSidebarNavDropdownComponent,
+    AppSidebarNavItemComponent,
+    AppSidebarNavLinkComponent,
+    AppSidebarNavTitleComponent,
     SimpleContainerComponent,
-    StandardContainerComponent
+    AppContainerComponent
   ],
-  bootstrap: [StandardContainerComponent, ErrorModalComponent, SimpleContainerComponent]
+  bootstrap: [AppContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
 
@@ -178,6 +178,11 @@ export class InceptionModule {
           provide: HTTP_INTERCEPTORS,
           useClass: SessionInterceptor,
           multi: true
+        },
+
+        {
+          provide: PERFECT_SCROLLBAR_CONFIG,
+          useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
         },
 
         CanActivateFunctionGuard,

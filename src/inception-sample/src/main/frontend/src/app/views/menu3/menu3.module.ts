@@ -45,7 +45,7 @@ const routes: Routes = [
 
 /**
  * The Menu3Module class implements a module that contains two child modules that each contain two
- * components that can be loaded into the StandardContainerComponent component when the corresponding
+ * components that can be loaded into the AppContainerComponent component when the corresponding
  * menu option is selected.
  *
  * @author Marcus Portmann
