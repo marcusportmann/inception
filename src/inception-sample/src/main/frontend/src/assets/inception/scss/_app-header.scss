@@ -41,6 +41,17 @@
     background-image: $navbar-toggler-icon;
   }
 
+  .navbar-toggler-user-icon {
+    height: 23px;
+    background-image: $navbar-toggler-user-icon;
+  }
+
+  .navbar-toggler .navbar-user {
+    color: #73818f;
+    padding-right: 15px;
+  }
+
+
   .navbar-nav {
     flex-direction: row;
     align-items: center;

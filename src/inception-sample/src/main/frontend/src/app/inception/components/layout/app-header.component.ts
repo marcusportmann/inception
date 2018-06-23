@@ -52,18 +52,25 @@ import {Session} from "../../services/session/session";
       </div>      
       
       <div *ngIf="isLoggedIn() | async">
+        
+        
         <ng-template [ngIf]="asideToggler != false">
           <button class="navbar-toggler d-md-down-none" type="button" [appAsideToggler]="asideToggler">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
+            <span class="navbar-user d-md-down-none">Administrator</span>
           </button>
         </ng-template>
         <ng-template [ngIf]="mobileAppAsideToggler != false">
           <button class="navbar-toggler d-lg-none" type="button" appAsideToggler>
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon  navbar-toggler-user-icon"></span>
+            <span class="navbar-user d-md-down-none">Administrator</span>
           </button>
         </ng-template>
+
+        
       </div>
         
+      
     </header>
   `
 })
