@@ -3,6 +3,7 @@ import { Replace } from './../../shared';
 import {SessionService} from "../../services/session/session.service";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
+import {Session} from "../../services/session/session";
 
 @Component({
   selector: 'app-header',
@@ -42,7 +43,7 @@ import {Router} from "@angular/router";
       </ng-template>
       <ng-content></ng-content>
       
-      <div *ngIf="showLogin() | async">
+      <div *ngIf="!(isLoggedIn() | async)">
         Not Logged In
         <button class="navbar-toggler navbar-toggler-login" type="button" (click)="login()">
           <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
@@ -57,7 +58,7 @@ import {Router} from "@angular/router";
           </button>
         </ng-template>
         <ng-template [ngIf]="mobileAppAsideToggler != false">
-          <button class="navbar-toggler d-lg-none" type="button" appAsideMenuToggler>
+          <button class="navbar-toggler d-lg-none" type="button" appAsideToggler>
             <span class="navbar-toggler-icon"></span>
           </button>
         </ng-template>
@@ -114,17 +115,15 @@ export class AppHeaderComponent implements OnInit {
 
   isLoggedIn(): Observable<boolean> {
 
-    return Observable.of(false);
+    return this.sessionService.getSession().map((session : (Session | null)) => {
 
-    //return Session.getSession().isLoggedIn();
-  }
-
-  showLogin() : Observable<boolean> {
-
-
-
-    return Observable.of(true);
-
+      if (session) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
   }
 
   login() {
