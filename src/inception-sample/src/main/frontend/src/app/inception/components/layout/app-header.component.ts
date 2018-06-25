@@ -69,6 +69,23 @@ import {Session} from "../../services/session/session";
                 <span class="navbar-toggler-icon navbar-toggler-user-icon pull-right"></span>
               </a>
             </li>
+            <li class="nav-item-divider d-md-down-none"></li>
+            <li class="nav-item d-md-down-none">
+              <a class="nav-link" href="#">
+                <span class="navbar-logout-icon"></span>  
+              </a>
+            </li>
+
+            <!--
+            <li class="nav-item d-md-down-none">
+              <a class="nav-link" href="#" [appAsideToggler]="asideToggler">
+                <span class="navbar-logout pull-right">Logout</span>
+                <span class="navbar-toggler-icon navbar-toggler-logout-icon pull-right"></span>
+              </a>
+            </li>
+            -->
+            
+            
           </ul>
         </ng-template>
         <ng-template [ngIf]="mobileAppAsideToggler != false">
@@ -78,14 +95,18 @@ import {Session} from "../../services/session/session";
                 <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
               </a>
             </li>
+            <li class="nav-item-divider d-lg-none"></li>
+            <li class="nav-item d-lg-none">
+              <a class="nav-link" href="#">
+                <span class="navbar-logout-icon"></span>
+              </a>
+            </li>
           </ul>
         </ng-template>
-      </div>
-      
-      
-      
+
         
-      
+        
+      </div>
     </header>
   `
 })

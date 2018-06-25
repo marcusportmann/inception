@@ -37,8 +37,8 @@
   }
 
   .navbar-toggler-icon {
-    height: 1.4em;
-    width: 1.4em;
+    height: 1.2em;
+    width: 1.2em;
     background-image: $navbar-toggler-icon;
   }
 
@@ -46,23 +46,42 @@
   {
     .navbar-toggler-user-icon
     {
-      height: 1.7em;
-      width: 1.7em;
+      width: 1.6em;
+      height: 1.6em;
       background-image: $navbar-toggler-user-icon;
     }
 
     .navbar-toggler-login-icon
     {
-      height: 1.5em;
-      width: 1.5em;
+      width: 1.2em;
+      height: 1.2em;
       background-image: $navbar-toggler-login-icon;
     }
+
+    .navbar-toggler-logout-icon
+    {
+      width: 1.2em;
+      height: 1.2em;
+      background-image: $navbar-toggler-logout-icon;
+    }
+
+    .navbar-logout-icon
+    {
+      display: inline-block;
+      width: 1.6em;
+      height: 1.6em;
+      vertical-align: middle;
+      content: "";
+      background-image: $navbar-logout-icon;
+      background-size: 100% 100%;
+    }
+
 
     .navbar-user
     {
       display: inline-block;
-      height: 1.7em;
-      line-height: 1.7em;
+      height: 1.6em;
+      line-height: 1.6em;
       color: $navbar-color;
       padding-left: 6px;
       padding-right: 15px;
@@ -71,8 +90,18 @@
     .navbar-login
     {
       display: inline-block;
-      height: 1.4em;
-      line-height: 1.4em;
+      height: 1.2em;
+      line-height: 1.2em;
+      color: $navbar-color;
+      padding-left: 6px;
+      padding-right: 15px;
+    }
+
+    .navbar-logout
+    {
+      display: inline-block;
+      height: 1.2em;
+      line-height: 1.2em;
       color: $navbar-color;
       padding-left: 6px;
       padding-right: 15px;
@@ -86,6 +115,15 @@
       background-image: $navbar-toggler-login-icon-hover;
     }
 
+    &:hover .navbar-toggler-logout-icon {
+      background-image: $navbar-toggler-logout-icon-hover;
+    }
+
+    &:hover .navbar-logout-icon {
+      background-image: $navbar-logout-icon-hover;
+    }
+
+
     &:hover .navbar-user {
       color: $navbar-hover-color;
     }
@@ -93,7 +131,18 @@
     &:hover .navbar-login {
       color: $navbar-hover-color;
     }
+
+    &:hover .navbar-logout {
+      color: $navbar-hover-color;
+    }
+
   }
+
+
+
+
+
+
 
   .navbar-nav {
     flex-direction: row;
@@ -129,6 +178,12 @@
         margin: 0 10px;
       }
     }
+  }
+
+  .nav-item-divider {
+    width: 1px;
+    height: 55px;
+    border-left: 1px solid #C8CDD2;
   }
 
   .dropdown-menu {
