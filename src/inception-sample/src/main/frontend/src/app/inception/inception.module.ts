@@ -32,12 +32,10 @@ import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
-  AppHeaderComponent,
-  BreadcrumbsComponent,
-  ContainerComponent,
-  ErrorModalComponent,
+  AppBreadcrumbsComponent,
+  AppContainerComponent,
   AppFooterComponent,
-  NotFoundComponent,
+  AppHeaderComponent,
   AppSidebarComponent,
   AppSidebarFooterComponent,
   AppSidebarFormComponent,
@@ -48,9 +46,10 @@ import {
   AppSidebarNavItemComponent,
   AppSidebarNavLinkComponent,
   AppSidebarNavTitleComponent,
-  SimpleContainerComponent,
-  AppContainerComponent
+  NotFoundComponent,
+  SimpleContainerComponent
 } from './components/layout';
+import { ErrorModalComponent } from './components/error';
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
@@ -91,11 +90,13 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
  */
 @NgModule({
   imports: [
+    // Angular modules
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
 
+    // 3rd party modules
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     ChartsModule,
@@ -106,15 +107,18 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TabsModule.forRoot(),
     TimepickerModule.forRoot(),
 
+    // Inception modules
     DirectivesModule
   ],
   exports: [
+    // Angular modules
     CommonModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
 
+    // 3rd party modules
     BsDatepickerModule,
     BsDropdownModule,
     ChartsModule,
@@ -125,15 +129,15 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TabsModule,
     TimepickerModule,
 
+    // Inception modules
     DirectivesModule
   ],
   declarations: [
-    AppHeaderComponent,
-    BreadcrumbsComponent,
-    ContainerComponent,
-    ErrorModalComponent,
+    // Inception layout components
+    AppBreadcrumbsComponent,
+    AppContainerComponent,
     AppFooterComponent,
-    NotFoundComponent,
+    AppHeaderComponent,
     AppSidebarComponent,
     AppSidebarFooterComponent,
     AppSidebarFormComponent,
@@ -144,8 +148,11 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarNavItemComponent,
     AppSidebarNavLinkComponent,
     AppSidebarNavTitleComponent,
+    NotFoundComponent,
     SimpleContainerComponent,
-    AppContainerComponent
+
+    // Inception error components
+    ErrorModalComponent
   ],
   bootstrap: [AppContainerComponent, ErrorModalComponent, SimpleContainerComponent]
 })

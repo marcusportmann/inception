@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {ContainerComponent} from "./container/index";
 import {Router} from "@angular/router";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
@@ -14,10 +13,6 @@ import {NavigationService} from "../../services/navigation/navigation.service";
       [navbarBrandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
       [navbarBrandMinimized]="{src: 'assets/images/logo-symbol.png', width: 30, height: 30, alt: 'Logo'}"
       [sidebarToggler]="'lg'">
-
-
-
-
     </app-header>
     <div class="app-body">
       <app-sidebar [fixed]="true" [display]="'lg'">
@@ -28,7 +23,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
       <main class="app-main">
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
-          <inception-layout-breadcrumbs></inception-layout-breadcrumbs>
+          <app-breadcrumbs></app-breadcrumbs>
         </ol>
         <div class="container-fluid">
           <router-outlet></router-outlet>
@@ -40,7 +35,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
     </app-footer>
   `
 })
-export class AppContainerComponent extends ContainerComponent {
+export class AppContainerComponent {
 
   navItems: NavigationItem[] = [];
 
@@ -51,7 +46,6 @@ export class AppContainerComponent extends ContainerComponent {
   public element: HTMLElement = document.body;
 
   constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService) {
-    super();
 
     this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('app-sidebar-minimized')
@@ -108,7 +102,6 @@ export class AppContainerComponent extends ContainerComponent {
   }
 
   ngOnInit() {
-    super.ngOnInit();
 
     // Retrieve and filter the navigation items
     this.sessionService.getSession().map((session: Session) => {

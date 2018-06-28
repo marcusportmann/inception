@@ -155,7 +155,7 @@ html[dir="rtl"] {
 //
 // Breadcrumb
 //
-.breadcrumbs-fixed {
+.app-breadcrumbs-fixed {
   .app-main {
     $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 * $spacer;
     padding-top: $breadcrumb-height;
@@ -197,7 +197,7 @@ html[dir="rtl"] {
               }
             }
           }
-          &.breadcrumbs-fixed {
+          &.app-breadcrumbs-fixed {
             .breadcrumb {
               left: $app-sidebar-width;
             }
@@ -240,7 +240,7 @@ html[dir="rtl"] {
               }
             }
           }
-          &.breadcrumbs-fixed {
+          &.app-breadcrumbs-fixed {
             .breadcrumb {
               right: $app-sidebar-width;
             }

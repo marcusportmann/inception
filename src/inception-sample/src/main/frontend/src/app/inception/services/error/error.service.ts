@@ -18,7 +18,7 @@ import { Injectable } from "@angular/core";
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
-import { ErrorModalComponent } from "../../components/layout/error-modal";
+import { ErrorModalComponent } from "../../components/error/index";
 
 /**
  * The ErrorService class provides the capability to process an application error or back-end error

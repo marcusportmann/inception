@@ -64,10 +64,12 @@
 
     &:hover .navbar-login-icon {
       background-image: $navbar-login-icon-hover;
+      cursor: pointer;
     }
 
     &:hover .navbar-login {
       color: $navbar-hover-color;
+      cursor: pointer;
     }
 
     .navbar-user-icon  {
@@ -85,21 +87,23 @@
       line-height: 1.5em;
       color: $navbar-color;
       padding-left: 6px;
-      padding-right: 15px;
     }
 
     &:hover .navbar-user-icon {
       background-image: $navbar-user-icon-hover;
+      cursor: pointer;
     }
 
     &:hover .navbar-user-full-name {
       color: $navbar-hover-color;
+      cursor: pointer;
     }
   }
 
   .navbar-nav {
     flex-direction: row;
     align-items: center;
+    padding-right: 15px;
   }
 
   .nav-item {
