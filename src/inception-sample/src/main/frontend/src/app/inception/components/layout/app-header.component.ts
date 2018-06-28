@@ -41,72 +41,40 @@ import {Session} from "../../services/session/session";
           <span class="navbar-toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-content></ng-content>
-
       
-      <div *ngIf="!(isLoggedIn() | async)">
-        <ul class="nav navbar-nav ml-auto">
-          <li class="nav-item d-md-down-none">
-            <a class="nav-link" (click)="login()">
-              <span class="navbar-login pull-right">Login</span>
-              <span class="navbar-toggler-icon navbar-toggler-login-icon pull-right"></span>
-            </a>
-          </li>
-          <li class="nav-item d-lg-none">
-            <a class="nav-link" (click)="login()">
-              <span class="navbar-toggler-icon navbar-toggler-login-icon"></span>
-            </a>
-          </li>
-        </ul>
-      </div>      
-      
-      <div *ngIf="isLoggedIn() | async">
-        <ng-template [ngIf]="asideToggler != false">
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item d-md-down-none">
-              <a class="nav-link" href="#" [appAsideToggler]="asideToggler">
-                <span class="navbar-user pull-right">Administrator</span>
-                <span class="navbar-toggler-icon navbar-toggler-user-icon pull-right"></span>
-              </a>
-            </li>
-            <li class="nav-item-divider d-md-down-none"></li>
-            <li class="nav-item d-md-down-none">
-              <a class="nav-link" href="#">
-                <span class="navbar-logout-icon"></span>  
-              </a>
-            </li>
-
-            <!--
-            <li class="nav-item d-md-down-none">
-              <a class="nav-link" href="#" [appAsideToggler]="asideToggler">
-                <span class="navbar-logout pull-right">Logout</span>
-                <span class="navbar-toggler-icon navbar-toggler-logout-icon pull-right"></span>
-              </a>
-            </li>
-            -->
-            
-            
-          </ul>
-        </ng-template>
-        <ng-template [ngIf]="mobileAppAsideToggler != false">
-          <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item d-lg-none">
-              <a class="nav-link" href="#" appAsideToggler>
-                <span class="navbar-toggler-icon navbar-toggler-user-icon"></span>
-              </a>
-            </li>
-            <li class="nav-item-divider d-lg-none"></li>
-            <li class="nav-item d-lg-none">
-              <a class="nav-link" href="#">
-                <span class="navbar-logout-icon"></span>
-              </a>
-            </li>
-          </ul>
-        </ng-template>
-
+      <ul class="nav navbar-nav ml-auto">
+        <!--
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#"><i class="icon-list"></i></a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
+        </li>
+        -->
         
-        
-      </div>
+        <li *ngIf="isLoggedIn() | async" class="nav-item dropdown" dropdown>
+          <a href="#" class="nav-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
+            <span class="navbar-user-full-name pull-right d-md-down-none">Administrator</span>
+            <span class="navbar-user-icon pull-right"></span>
+          </a>
+
+          <div id="basic-link-dropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-user" *dropdownMenu aria-labelledby="simple-dropdown">
+            <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+            <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
+            <a class="dropdown-item" href="#" (click)="logout()"><i class="fa fa-lock"></i> Logout</a>
+          </div>
+        </li>
+
+        <li *ngIf="!(isLoggedIn() | async)" class="nav-item">
+          <a class="nav-link" (click)="login()">
+            <span class="navbar-login pull-right d-md-down-none">Login</span>
+            <span class="navbar-login-icon pull-right"></span>
+          </a>
+        </li>
+      </ul>
     </header>
   `
 })
@@ -171,6 +139,12 @@ export class AppHeaderComponent implements OnInit {
 
   login() {
     this.router.navigate(['/login']);
+  }
+
+  logout() {
+    this.sessionService.logout();
+
+    this.router.navigate(['/']);
   }
 }
 

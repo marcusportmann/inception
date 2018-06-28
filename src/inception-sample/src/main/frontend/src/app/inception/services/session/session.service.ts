@@ -52,7 +52,7 @@ export class SessionService {
     console.log('Initializing the Session Service');
   }
 
-  public login(username: string, password: string): Observable<Session> {
+  login(username: string, password: string): Observable<Session> {
 
     this.sessionStorageService.remove("session");
 
@@ -98,7 +98,7 @@ export class SessionService {
    *
    * @return {Session} The current active session if one exists or null.
    */
-  public getSession(): Observable<Session | null> {
+  getSession(): Observable<Session | null> {
 
     let session: Session = this.sessionStorageService.get("session");
 
@@ -162,5 +162,12 @@ export class SessionService {
     }
 
     return Observable.of(null);
+  }
+
+  /**
+   * Logout the current active session if one exists.
+   */
+  logout() {
+    this.sessionStorageService.remove("session");
   }
 }

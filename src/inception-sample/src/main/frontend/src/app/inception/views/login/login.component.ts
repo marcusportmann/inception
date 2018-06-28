@@ -64,7 +64,9 @@ export class LoginComponent {
 
   public onCancel() {
 
-    this.errorService.showConfirm('This is a title', 'This is a message');
+    this.router.navigate(['/']);
+
+    //this.errorService.showConfirm('This is a title', 'This is a message');
 
     //console.log('Cancel clicked!');
     // let control = this.loginForm.get('username')

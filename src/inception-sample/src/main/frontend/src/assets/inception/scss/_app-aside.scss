@@ -1,6 +1,9 @@
 .app-aside {
   z-index: $zindex-sticky - 1;
   width: $app-aside-width;
+
+  /*flex: 0 0 $app-aside-width;*/
+
   color: $app-aside-color;
   background: $app-aside-bg;
   @include borders($app-aside-borders);

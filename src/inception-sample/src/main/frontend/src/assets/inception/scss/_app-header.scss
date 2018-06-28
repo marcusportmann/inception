@@ -44,105 +44,58 @@
 
   .nav-link
   {
-    .navbar-toggler-user-icon
-    {
-      width: 1.6em;
-      height: 1.6em;
-      background-image: $navbar-toggler-user-icon;
-    }
-
-    .navbar-toggler-login-icon
-    {
-      width: 1.2em;
-      height: 1.2em;
-      background-image: $navbar-toggler-login-icon;
-    }
-
-    .navbar-toggler-logout-icon
-    {
-      width: 1.2em;
-      height: 1.2em;
-      background-image: $navbar-toggler-logout-icon;
-    }
-
-    .navbar-logout-icon
-    {
+    .navbar-login-icon {
       display: inline-block;
-      width: 1.6em;
-      height: 1.6em;
+      width: 1.3em;
+      height: 1.3em;
       vertical-align: middle;
-      content: "";
-      background-image: $navbar-logout-icon;
       background-size: 100% 100%;
+      background-image: $navbar-login-icon;
+      content: "";
     }
 
-
-    .navbar-user
-    {
+    .navbar-login {
       display: inline-block;
-      height: 1.6em;
-      line-height: 1.6em;
+      line-height: 1.3em;
       color: $navbar-color;
       padding-left: 6px;
       padding-right: 15px;
     }
 
-    .navbar-login
-    {
-      display: inline-block;
-      height: 1.2em;
-      line-height: 1.2em;
-      color: $navbar-color;
-      padding-left: 6px;
-      padding-right: 15px;
-    }
-
-    .navbar-logout
-    {
-      display: inline-block;
-      height: 1.2em;
-      line-height: 1.2em;
-      color: $navbar-color;
-      padding-left: 6px;
-      padding-right: 15px;
-    }
-
-    &:hover .navbar-toggler-user-icon {
-      background-image: $navbar-toggler-user-icon-hover;
-    }
-
-    &:hover .navbar-toggler-login-icon {
-      background-image: $navbar-toggler-login-icon-hover;
-    }
-
-    &:hover .navbar-toggler-logout-icon {
-      background-image: $navbar-toggler-logout-icon-hover;
-    }
-
-    &:hover .navbar-logout-icon {
-      background-image: $navbar-logout-icon-hover;
-    }
-
-
-    &:hover .navbar-user {
-      color: $navbar-hover-color;
+    &:hover .navbar-login-icon {
+      background-image: $navbar-login-icon-hover;
     }
 
     &:hover .navbar-login {
       color: $navbar-hover-color;
     }
 
-    &:hover .navbar-logout {
-      color: $navbar-hover-color;
+    .navbar-user-icon  {
+      display: inline-block;
+      width: 1.5em;
+      height: 1.5em;
+      vertical-align: middle;
+      background-size: 100% 100%;
+      background-image: $navbar-user-icon;
+      content: "";
     }
 
+    .navbar-user-full-name {
+      display: inline-block;
+      line-height: 1.5em;
+      color: $navbar-color;
+      padding-left: 6px;
+      padding-right: 15px;
+    }
+
+    &:hover .navbar-user-icon {
+      background-image: $navbar-user-icon-hover;
+    }
+
+    &:hover .navbar-user-full-name {
+      color: $navbar-hover-color;
+    }
   }
-
-
-
-
-
-
 
   .navbar-nav {
     flex-direction: row;
@@ -180,29 +133,24 @@
     }
   }
 
-  .nav-item-divider {
-    width: 1px;
-    height: 55px;
-    border-left: 1px solid #C8CDD2;
-  }
-
   .dropdown-menu {
     padding-bottom: 0;
     line-height: $line-height-base;
+    border-radius: 0px;
+    border-top: none;
+    margin: 0;
+  }
+
+  .dropdown-menu-user {
+    position: fixed !important;
+    right: 0;
+    top: 55px !important;
   }
 
   .dropdown-item {
     min-width: 180px;
   }
 }
-
-// .navbar-brand {
-//   color: $navbar-active-color;
-//
-//   @include hover-focus {
-//     color: $navbar-active-color;
-//   }
-// }
 
 .navbar-nav {
   .nav-link {
