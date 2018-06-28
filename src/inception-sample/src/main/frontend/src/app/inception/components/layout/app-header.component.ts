@@ -89,9 +89,6 @@ export class AppHeaderComponent implements OnInit {
   @Input() sidebarToggler: any;
   @Input() mobileSidebarToggler: any;
 
-  @Input() asideToggler: any;
-  @Input() mobileAsideToggler: any;
-
   constructor(private el: ElementRef, private router: Router, private sessionService: SessionService) {}
 
   ngOnInit() {

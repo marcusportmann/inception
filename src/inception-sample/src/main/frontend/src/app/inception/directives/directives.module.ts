@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
-  AppAsideTogglerDirective,
   AppBrandMinimizerDirective,
   AppMobileSidebarTogglerDirective,
 
@@ -29,7 +28,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     ReactiveFormsModule
   ],
   exports: [
-    AppAsideTogglerDirective,
     AppBrandMinimizerDirective,
     AppMobileSidebarTogglerDirective,
 
@@ -45,7 +43,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
   ],
   declarations: [
-    AppAsideTogglerDirective,
     AppBrandMinimizerDirective,
     AppMobileSidebarTogglerDirective,
 

@@ -41,27 +41,16 @@ app-root {
     // put the nav on the left
     order: -1;
   }
-
-  .app-aside {
-    // $app-aside-width is the width of the columns
-    flex: 0 0 $app-aside-width;
-  }
 }
 
 html:not([dir="rtl"]) {
   .app-sidebar {
     margin-left: - $app-sidebar-width;
   }
-  .app-aside {
-    margin-right: - $app-aside-width;
-  }
 }
 html[dir="rtl"] {
   .app-sidebar {
     margin-right: - $app-sidebar-width;
-  }
-  .app-aside {
-    margin-left: - $app-aside-width;
   }
 }
 
@@ -161,58 +150,6 @@ html[dir="rtl"] {
       }
     }
   }
-
-  //
-  // Application Aside Menu
-  //
-
-  .app-aside-fixed {
-    .app-aside {
-      position: fixed;
-      height: 100%;
-
-      .tab-content {
-        height: calc(100vh - #{$app-aside-nav-padding-y * 2 + $font-size-base} - #{$navbar-height});
-      }
-    }
-  }
-
-  .app-aside-fixed {
-    .app-header + .app-body .app-aside {
-      height: calc(100vh - #{$navbar-height});
-    }
-  }
-
-  .app-aside-off-canvas {
-    .app-aside {
-      position: fixed;
-      z-index: $zindex-sticky - 1;
-      height: 100%;
-    }
-  }
-
-  .app-aside-off-canvas {
-    .app-header + .app-body .app-aside {
-      height: calc(100vh - #{$navbar-height});
-    }
-  }
-
-  html:not([dir="rtl"]) {
-    .app-aside-fixed,
-    .app-aside-off-canvas {
-      .app-aside {
-        right: 0;
-      }
-    }
-  }
-  html[dir="rtl"] {
-    .app-aside-fixed,
-    .app-aside-off-canvas {
-      .app-aside {
-        left: 0;
-      }
-    }
-  }
 }
 
 //
@@ -277,25 +214,6 @@ html[dir="rtl"] {
           }
         }
       }
-
-      .app-aside#{$infix}-show {
-        .app-aside {
-          margin-right: 0;
-        }
-        @include media-breakpoint-up(sm) {
-          &.app-aside-fixed {
-            .app-main,
-            .app-footer {
-              margin-right: $app-aside-width;
-            }
-          }
-          &.breadcrumbs-fixed {
-            .breadcrumb {
-              right: $app-aside-width;
-            }
-          }
-        }
-      }
     }
 
     html[dir="rtl"] {
@@ -340,27 +258,9 @@ html[dir="rtl"] {
         }
       }
 
-      .app-aside#{$infix}-show {
-        .app-aside {
-          margin-left: 0;
-        }
-        @include media-breakpoint-up(sm) {
-          &.app-aside-fixed {
-            .app-main,
-            .app-footer {
-              margin-left: $app-aside-width;
-            }
-          }
-          &.breadcrumbs-fixed {
-            .breadcrumb {
-              left: $app-aside-width;
-            }
-          }
-        }
-      }
+
     }
-    .app-sidebar#{$infix}-show,
-    .app-aside#{$infix}-show {
+    .app-sidebar#{$infix}-show {
       @keyframes opacity {
         0%   { opacity: 0; }
         100% { opacity: 1; }
@@ -410,8 +310,7 @@ html[dir="rtl"] {
 .app-header,
 .app-footer,
 .app-sidebar,
-.app-main,
-.app-aside {
+.app-main {
   transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
 }
 .app-sidebar-nav {
@@ -466,11 +365,5 @@ html[dir="rtl"] {
 
   .app-sidebar-minimizer {
     display: none;
-  }
-
-  .app-aside {
-    position: fixed;
-    right: 0;
-    height: 100%;
   }
 }

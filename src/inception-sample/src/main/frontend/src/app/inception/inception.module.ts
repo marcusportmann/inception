@@ -32,7 +32,6 @@ import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
-  AppAsideComponent,
   AppHeaderComponent,
   BreadcrumbsComponent,
   ContainerComponent,
@@ -129,7 +128,6 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DirectivesModule
   ],
   declarations: [
-    AppAsideComponent,
     AppHeaderComponent,
     BreadcrumbsComponent,
     ContainerComponent,

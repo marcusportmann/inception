@@ -1,5 +1,3 @@
-export * from './app-aside.component';
-
 export * from './app-sidebar.component';
 export * from './app-sidebar-footer.component';
 export * from './app-sidebar-form.component';
