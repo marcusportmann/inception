@@ -57,21 +57,21 @@ import {Session} from "../../services/session/session";
         
         <li *ngIf="isLoggedIn() | async" class="nav-item dropdown" dropdown>
           <a href="#" class="nav-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
-            <span class="navbar-user-full-name pull-right d-md-down-none">{{ userFullName() | async}}</span>
-            <span class="navbar-user-icon pull-right"></span>
+            <span class="navbar-user-full-name float-right d-md-down-none">{{ userFullName() | async}}</span>
+            <span class="navbar-user-icon float-right"></span>
           </a>
 
           <div id="basic-link-dropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-user" *dropdownMenu aria-labelledby="simple-dropdown">
-            <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
-            <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
-            <a class="dropdown-item" href="#" (click)="logout()"><i class="fa fa-lock"></i> Logout</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a>
+            <a class="dropdown-item" href="#"><i class="fas fa-cogs"></i> Settings</a>
+            <a class="dropdown-item" href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
           </div>
         </li>
 
         <li *ngIf="!(isLoggedIn() | async)" class="nav-item">
           <a class="nav-link" (click)="login()">
-            <span class="navbar-login pull-right d-md-down-none">Login</span>
-            <span class="navbar-login-icon pull-right"></span>
+            <span class="navbar-login float-right d-md-down-none">Login</span>
+            <span class="navbar-login-icon float-right"></span>
           </a>
         </li>
       </ul>

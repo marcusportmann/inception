@@ -31,6 +31,14 @@ export const routes: Routes = [
       },
 
       {
+        path: 'base',
+        loadChildren: './views/base/base.module#BaseModule',
+        data: {
+          title: 'Base'
+        },
+      },
+
+      {
         path: 'test-form',
         loadChildren: './views/test-form/test-form.module#TestFormModule',
         data: {

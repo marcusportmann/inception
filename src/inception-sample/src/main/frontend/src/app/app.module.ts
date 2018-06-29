@@ -49,6 +49,13 @@ export class AppModule extends InceptionAppModule {
 
     navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, new NavigationBadge('info', 'NEW')));
 
+    navigation.push(new NavigationItem('icon-puzzle', 'Base', '/base', [], [
+      new NavigationItem('icon-puzzle', 'Cards', '/base/cards', []),
+      new NavigationItem('icon-puzzle', 'Collapses', '/base/collapses', []),
+      new NavigationItem('icon-puzzle', 'Paginations', '/base/paginations', []),
+      new NavigationItem('icon-puzzle', 'Popovers', '/base/popovers', [])
+    ]));
+
     navigation.push(new NavigationItem('icon-note', 'Test Form', '/test-form', []));
 
     navigation.push(new NavigationItem('icon-doc', 'Menu 1', '/menu1', []));

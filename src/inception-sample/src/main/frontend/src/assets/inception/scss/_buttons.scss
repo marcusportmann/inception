@@ -30,3 +30,7 @@ button {
     @include button-ghost-variant($value);
   }
 }
+
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: none;
+}
