@@ -13,7 +13,7 @@ import {
 
 
 @Directive({
-  selector: 'form[inceptionValidatedForm]',
+  selector: 'form[validatedForm]',
   host: {'(submit)': 'onSubmit($event)', '(reset)': 'onReset()'}
 })
 export class ValidatedFormDirective implements AfterViewInit {

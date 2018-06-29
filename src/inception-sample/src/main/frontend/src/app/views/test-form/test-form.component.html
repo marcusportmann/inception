@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
 
-    <form [formGroup]="testForm" (ngSubmit)="onSubmit()" inceptionValidatedForm>
+    <form [formGroup]="testForm" (ngSubmit)="onSubmit()" validatedForm>
 
       <div class="row">
         <div class="col-sm">
@@ -19,7 +19,7 @@
         <div class="col-sm">
           <div class="form-group">
             <label for="firstName">First Name</label>
-            <input id="firstName" name="firstName" formControlName="firstName" type="text" class="form-control" placeholder="Enter a first name" inceptionAutofocus>
+            <input id="firstName" name="firstName" formControlName="firstName" type="text" class="form-control" placeholder="Enter a first name" autofocus>
             <div *ngIf="testForm.controls['firstName'].errors && !testForm.controls['firstName'].untouched" class="form-control-error">
               <div *ngIf="testForm.controls['firstName'].errors?.required">A first name is required.</div>
             </div>
@@ -41,7 +41,7 @@
           <div class="form-group">
             <label for="title">Title</label>
             <ng-select
-              id="title" name="title" formControlName="title" class="bootstrap" placeholder="Select a title" [options]="titles" [allowClear]="true">
+              id="title" name="title" formControlName="title" class="bootstrap" placeholder="Select a title" [items]="titles" >
             </ng-select>
             <div *ngIf="testForm.controls['title'].errors && !testForm.controls['title'].untouched" class="form-control-error">
               <div *ngIf="testForm.controls['title'].errors?.required">A title is required.</div>

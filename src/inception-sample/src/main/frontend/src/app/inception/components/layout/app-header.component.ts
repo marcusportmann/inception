@@ -57,7 +57,7 @@ import {Session} from "../../services/session/session";
         
         <li *ngIf="isLoggedIn() | async" class="nav-item dropdown" dropdown>
           <a href="#" class="nav-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
-            <span class="navbar-user-full-name pull-right d-md-down-none">Administrator</span>
+            <span class="navbar-user-full-name pull-right d-md-down-none">{{ userFullName() | async}}</span>
             <span class="navbar-user-icon pull-right"></span>
           </a>
 
@@ -142,6 +142,18 @@ export class AppHeaderComponent implements OnInit {
     this.sessionService.logout();
 
     this.router.navigate(['/']);
+  }
+
+  userFullName(): Observable<string> {
+    return this.sessionService.getSession().map((session: Session) => {
+
+      if (session) {
+        return session.username;
+      }
+      else {
+        return '';
+      }
+    });
   }
 }
 

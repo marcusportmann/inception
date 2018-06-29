@@ -23,9 +23,9 @@
 @import "vendors";
 
 // Components
+@import "app-header";
 @import "app-sidebar";
 
-@import "avatars";
 @import "badge";
 @import "breadcrumb";
 @import "brand-card";
@@ -36,8 +36,8 @@
 @import "charts";
 @import "dropdown";
 @import "footer";
+@import "form";
 @import "grid";
-@import "app-header";
 @import "input-group";
 @import "images";
 @import "list-group";
