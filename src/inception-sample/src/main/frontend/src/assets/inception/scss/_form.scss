@@ -1,0 +1,33 @@
+
+
+.form-group {
+
+}
+
+.form-control:focus {
+  box-shadow: none;
+}
+
+.form-control-error {
+  color: $red !important;
+  padding-left: 0.75rem;
+  padding-top: 2px;
+  font-size: 0.9em;
+}
+
+.form-control.ng-invalid:focus {
+  border-color: $red !important;
+}
+
+.ng-select {
+  &.ng-select-focused {
+    &.ng-invalid > .ng-select-container {
+      border-color: $red !important;
+    }
+
+    &.ng-invalid > .ng-dropdown-panel {
+      border-color: $red !important;
+    }
+  }
+}
+
