@@ -1,5 +1,15 @@
-import { Component, Directive, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
-import { Replace } from '../../shared/index';
+import {
+  Component,
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewEncapsulation
+} from '@angular/core';
+import {Replace} from '../../shared/index';
 
 @Component({
   selector: 'app-sidebar-nav',
@@ -17,29 +27,24 @@ import { Replace } from '../../shared/index';
     </ul>`
 })
 export class AppSidebarNavComponent {
-  @Input() navItems: any;
+  @Input() navItems: NavigationItem[];
 
   @HostBinding('class.app-sidebar-nav') true;
   @HostBinding('attr.role') role = 'nav';
 
   constructor() {
-
   }
 
-  isDivider(item) {
+  isDivider(item): boolean {
     return item.divider ? true : false;
   }
 
-  isTitle(item) {
+  isTitle(item): boolean {
     return item.title ? true : false;
   }
-
-
-
-
 }
 
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
@@ -48,54 +53,59 @@ import {Session} from "../../services/session/session";
 @Component({
   selector: 'app-sidebar-nav-item',
   template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.class : 'nav-item'">
+    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.cssClass : 'nav-item'">
       <app-sidebar-nav-link [link]='item'></app-sidebar-nav-link>
     </li>
     <ng-template #dropdown>
-      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.class : 'nav-item nav-dropdown'"
+      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.cssClass : 'nav-item nav-dropdown'"
           [class.open]="isActive()"
           routerLinkActive="open"
           appSidebarNavDropdown>
         <app-sidebar-nav-dropdown [link]='item'></app-sidebar-nav-dropdown>
       </li>
     </ng-template>
-    `
+  `
 })
 export class AppSidebarNavItemComponent implements OnInit {
-  @Input() item: any;
+  @Input() item: NavigationItem;
 
-  public hasClass() {
-    return this.item.class ? true : false;
+  constructor(private router: Router, private el: ElementRef) {
   }
 
-  public isDropdown() {
+  hasClass(): boolean {
+    return this.item.cssClass ? true : false;
+  }
+
+  isActive(): boolean {
+    if (this.item.url) {
+      return this.router.isActive(this.thisUrl(), false);
+    }
+    else {
+      return false;
+    }
+  }
+
+  isDropdown(): boolean {
     return this.item.children ? true : false;
   }
-
-  public thisUrl() {
-    return this.item.url;
-  }
-
-  public isActive() {
-    return this.router.isActive(this.thisUrl(), false);
-  }
-
-  constructor( private router: Router, private el: ElementRef ) { }
 
   ngOnInit() {
     Replace(this.el);
   }
 
+  thisUrl(): string {
+    return this.item.url;
+  }
 }
 
 @Component({
   selector: 'app-sidebar-nav-link',
   template: `
     <a *ngIf="!isExternalLink(); else external"
-      [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
-      routerLinkActive="active"
-      [routerLink]="[link.url]"
-      (click)="hideMobile()">
+       [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
+       routerLinkActive="active"
+       [routerLink]="[link.url]"
+       (click)="hideMobile()">
       <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
       {{ link.name }}
       <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
@@ -121,7 +131,14 @@ export class AppSidebarNavLinkComponent implements OnInit {
   }
 
   public isExternalLink() {
-    return this.link.url.substring(0, 4) === 'http' ? true : false;
+
+    if (this.link) {
+      if (this.link.url) {
+        return this.link.url.substring(0, 4) === 'http' ? true : false;
+      }
+    }
+
+    return false;
   }
 
   public isIcon() {
@@ -134,7 +151,8 @@ export class AppSidebarNavLinkComponent implements OnInit {
     }
   }
 
-  constructor( private router: Router, private el: ElementRef ) { }
+  constructor(private router: Router, private el: ElementRef) {
+  }
 
   ngOnInit() {
     Replace(this.el);
@@ -168,7 +186,8 @@ export class AppSidebarNavDropdownComponent implements OnInit {
     return this.link.icon ? true : false;
   }
 
-  constructor( private router: Router, private el: ElementRef ) { }
+  constructor(private router: Router, private el: ElementRef) {
+  }
 
   ngOnInit() {
     Replace(this.el);
@@ -182,7 +201,8 @@ export class AppSidebarNavDropdownComponent implements OnInit {
 export class AppSidebarNavTitleComponent implements OnInit {
   @Input() title: any;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) { }
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+  }
 
   ngOnInit() {
     const nativeElement: HTMLElement = this.el.nativeElement;
@@ -191,12 +211,12 @@ export class AppSidebarNavTitleComponent implements OnInit {
 
     this.renderer.addClass(li, 'nav-title');
 
-    if ( this.title.class ) {
+    if (this.title.class) {
       const classes = this.title.class;
       this.renderer.addClass(li, classes);
     }
 
-    if ( this.title.wrapper ) {
+    if (this.title.wrapper) {
       const wrapper = this.renderer.createElement(this.title.wrapper.element);
 
       this.renderer.appendChild(wrapper, name);
@@ -208,19 +228,6 @@ export class AppSidebarNavTitleComponent implements OnInit {
     Replace(this.el);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';

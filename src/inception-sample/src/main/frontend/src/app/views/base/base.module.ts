@@ -17,12 +17,12 @@
 // Import Angular modules
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
-// Import Inception components
+// Cards component
 import {CardsComponent} from './cards.component';
 
 // Collapse Component
@@ -36,6 +36,22 @@ import {PaginationsComponent} from './paginations.component';
 // Popovers Component
 import {PopoverModule} from 'ngx-bootstrap/popover';
 import {PopoversComponent} from './popovers.component';
+
+// Progress Component
+import {ProgressbarModule} from 'ngx-bootstrap/progressbar';
+import {ProgressComponent} from './progress.component';
+
+// Switches Component
+import {SwitchesComponent} from './switches.component';
+
+// Tabs Component
+import {TabsModule} from 'ngx-bootstrap/tabs';
+import {TabsComponent} from './tabs.component';
+
+// Tooltips Component
+import {TooltipModule} from 'ngx-bootstrap/tooltip';
+import {TooltipsComponent} from './tooltips.component';
+
 
 const routes: Routes = [
   {
@@ -70,6 +86,34 @@ const routes: Routes = [
     data: {
       title: 'Popovers',
     }
+  },
+  {
+    path: 'progress',
+    component: ProgressComponent,
+    data: {
+      title: 'Progress',
+    }
+  },
+  {
+    path: 'switches',
+    component: SwitchesComponent,
+    data: {
+      title: 'Switches',
+    }
+  },
+  {
+    path: 'tabs',
+    component: TabsComponent,
+    data: {
+      title: 'Tabs',
+    }
+  },
+  {
+    path: 'tooltips',
+    component: TooltipsComponent,
+    data: {
+      title: 'Tooltips',
+    }
   }
 ];
 
@@ -81,9 +125,13 @@ const routes: Routes = [
     CollapseModule.forRoot(),
     PaginationModule.forRoot(),
     PopoverModule.forRoot(),
+    ProgressbarModule.forRoot(),
+    TabsModule.forRoot(),
+    TooltipModule.forRoot(),
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ CardsComponent, CollapsesComponent, PaginationsComponent, PopoversComponent ]
+  declarations: [CardsComponent, CollapsesComponent, PaginationsComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TooltipsComponent]
 })
-export class BaseModule { }
+export class BaseModule {
+}

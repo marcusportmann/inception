@@ -4,6 +4,14 @@ import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
 import {Session} from "../../services/session/session";
 import {NavigationService} from "../../services/navigation/navigation.service";
+import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
+
+
+const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true,
+  suppressScrollY: true
+};
+
 
 @Component({
   selector: 'app-container',
@@ -81,8 +89,8 @@ export class AppContainerComponent {
                 var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
                 filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems,
-                  navigationItem.badge));
+                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+                  navigationItem.badge, navigationItem.divider, navigationItem.title));
               }
             }
           }
@@ -93,8 +101,8 @@ export class AppContainerComponent {
         var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
         filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems,
-          navigationItem.badge));
+          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+          navigationItem.badge, navigationItem.divider, navigationItem.title));
       }
     }
 
