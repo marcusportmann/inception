@@ -24,6 +24,7 @@
     "@angular/router": "^6.0.5",
     "@auth0/angular-jwt": "^2.0.0",
     "@ng-select/ng-select": "^2.3.2",
+    "angular2-ladda": "2.0.0",
     "angular-webstorage-service": "1.0.2",
     "chart.js": "^2.7.2",
     "core-js": "^2.5.7",

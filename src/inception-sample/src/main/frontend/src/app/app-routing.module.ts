@@ -31,18 +31,10 @@ export const routes: Routes = [
       },
 
       {
-        path: 'theme',
-        loadChildren: './views/theme/theme.module#ThemeModule',
+        path: 'components',
+        loadChildren: './views/components/components.module#ComponentsModule',
         data: {
-          title: 'Theme'
-        },
-      },
-
-      {
-        path: 'base',
-        loadChildren: './views/base/base.module#BaseModule',
-        data: {
-          title: 'Base'
+          title: 'Components'
         },
       },
 

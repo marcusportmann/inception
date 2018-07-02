@@ -62,6 +62,7 @@ import {SessionService} from './services/session/session.service';
 import {BsDatepickerModule} from 'ngx-bootstrap';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
+import {LaddaModule} from 'angular2-ladda';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
@@ -100,6 +101,8 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BsDatepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     ChartsModule,
+    LaddaModule.forRoot({
+    }),
     ModalModule.forRoot(),
     NgSelectModule,
     PerfectScrollbarModule,
@@ -122,6 +125,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BsDatepickerModule,
     BsDropdownModule,
     ChartsModule,
+    LaddaModule,
     ModalModule,
     NgSelectModule,
     PerfectScrollbarModule,

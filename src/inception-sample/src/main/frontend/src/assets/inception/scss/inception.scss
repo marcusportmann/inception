@@ -1,11 +1,3 @@
-/*!
- * CoreUI - Open Source Dashboard UI Kit
- * @version v2.0.2
- * @link https://coreui.io
- * Copyright (c) 2018 creativeLabs Łukasz Holeczek
- * Licensed under MIT (https://coreui.io/license)
- */
-
 // Override Boostrap variables
 @import "bootstrap-variables";
 
@@ -60,3 +52,7 @@
 
 // Custom Properties support for Internet Explorer
 @import "ie-custom-properties";
+
+// Import Ladda source files
+@import "node_modules/ladda/css/ladda";
+

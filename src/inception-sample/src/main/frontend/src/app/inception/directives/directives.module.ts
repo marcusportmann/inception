@@ -11,10 +11,7 @@ import {
   AppSidebarOffCanvasCloseDirective,
   AppSidebarTogglerDirective,
 
-
-
   AutofocusDirective,
-
 
   ValidatedFormDirective
 } from './'
@@ -40,7 +37,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     AutofocusDirective,
 
     ValidatedFormDirective
-
   ],
   declarations: [
     AppBrandMinimizerDirective,

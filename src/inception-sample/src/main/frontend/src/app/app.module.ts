@@ -50,22 +50,22 @@ export class AppModule extends InceptionAppModule {
 
     navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, new NavigationBadge('info', 'NEW')));
 
-    navigation.push(new NavigationTitle('Theme'));
+    //navigation.push(new NavigationTitle('Theme'));
 
-    navigation.push(new NavigationItem('icon-drop', 'Colors', '/theme/colors', []));
-    navigation.push(new NavigationItem('icon-pencil', 'Typography', '/theme/typography', []));
-
-    navigation.push(new NavigationTitle('Components'));
-
-    navigation.push(new NavigationItem('icon-puzzle', 'Base', '/base', [], [
-      new NavigationItem('icon-puzzle', 'Cards', '/base/cards', []),
-      new NavigationItem('icon-puzzle', 'Collapses', '/base/collapses', []),
-      new NavigationItem('icon-puzzle', 'Paginations', '/base/paginations', []),
-      new NavigationItem('icon-puzzle', 'Popovers', '/base/popovers', []),
-      new NavigationItem('icon-puzzle', 'Progress', '/base/progress', []),
-      new NavigationItem('icon-puzzle', 'Switches', '/base/switches', []),
-      new NavigationItem('icon-puzzle', 'Tabs', '/base/tabs', []),
-      new NavigationItem('icon-puzzle', 'Tooltips', '/base/tooltips', [])
+    navigation.push(new NavigationItem('icon-puzzle', 'Components', '/components', [], [
+      new NavigationItem('icon-puzzle', 'Buttons', '/components/buttons', []),
+      new NavigationItem('icon-puzzle', 'Cards', '/components/cards', []),
+      new NavigationItem('icon-puzzle', 'Collapses', '/components/collapses', []),
+      new NavigationItem('icon-puzzle', 'Colors', '/components/colors', []),
+      new NavigationItem('icon-puzzle', 'Dropdowns', '/components/dropdowns', []),
+      new NavigationItem('icon-puzzle', 'Loading Buttons', '/components/loading-buttons', []),
+      new NavigationItem('icon-puzzle', 'Paginations', '/components/paginations', []),
+      new NavigationItem('icon-puzzle', 'Popovers', '/components/popovers', []),
+      new NavigationItem('icon-puzzle', 'Progress', '/components/progress', []),
+      new NavigationItem('icon-puzzle', 'Switches', '/components/switches', []),
+      new NavigationItem('icon-puzzle', 'Tabs', '/components/tabs', []),
+      new NavigationItem('icon-puzzle', 'Tooltips', '/components/tooltips', []),
+      new NavigationItem('icon-puzzle', 'Typography', '/components/typography', [])
     ]));
 
     navigation.push(new NavigationItem('icon-note', 'Test Form', '/test-form', []));
