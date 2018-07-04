@@ -10,3 +10,4 @@ export * from './app-sidebar-minimizer.component';
 export * from './app-sidebar-nav.component';
 export * from './not-found.component';
 export * from './simple-container.component';
+export * from './spinner.component';

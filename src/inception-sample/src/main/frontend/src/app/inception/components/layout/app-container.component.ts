@@ -16,6 +16,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @Component({
   selector: 'app-container',
   template: `
+    <div class="spinner"></div>
     <app-header
       [fixed]="true"
       [navbarBrandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"

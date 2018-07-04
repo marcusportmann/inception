@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
+import {Component} from '@angular/core';
+import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
 
 
 import {patternValidator} from "../../validators/pattern-validator";
 import {SecurityService} from '../../services/security/security.service';
-import {JSONP_ERR_WRONG_RESPONSE_TYPE} from "@angular/common/http/src/jsonp";
+
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
@@ -35,12 +35,16 @@ import {SessionService} from "../../services/session/session.service";
 import {Router} from "@angular/router";
 
 
+
+
 @Component({
   templateUrl: 'login.component.html'
 })
 export class LoginComponent {
 
-  private loginForm: FormGroup;
+  loggingIn: boolean = false;
+
+  loginForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
 
@@ -77,10 +81,11 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
+      this.loggingIn = true;
+
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
           console.log('session = ', session);
-
 
           this.securityService.getOrganizations().subscribe(organizations => {
 
@@ -90,17 +95,17 @@ export class LoginComponent {
 
           }, error => {
 
-            console.log('error = ', error);
+            this.loggingIn = false;
+
+            this.errorService.showErrorReport(error);
 
           });
 
-
-
-
-
         },error => {
 
-          console.log('error = ', error);
+          this.loggingIn = false;
+
+          this.errorService.showErrorReport(error);
 
         });
     }

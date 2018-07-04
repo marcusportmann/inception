@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {st} from "@angular/core/src/render3";
+
 /**
  * The Error class provides the base class that all error classes should be derived from.
  *
@@ -37,16 +39,22 @@ export class Error {
   detail?: string;
 
   /**
+   * The optional stack trace.
+   */
+  stackTrace?: string;
+
+  /**
    * Constructs a new Error.
    *
    * @param {Date} timestamp The date and time the error occurred.
    * @param {string} message The message.
    * @param {string} detail  The optional detail.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
+  constructor(timestamp: Date, message: string, detail?: string, stackTrace?: string) {
     this.timestamp = timestamp;
     this.message = message;
     this.detail = detail;
+    this.stackTrace = stackTrace;
   }
 }
 

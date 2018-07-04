@@ -1,1 +1,1 @@
-export * from './error-modal.component';
+export * from './error-report-modal.component';

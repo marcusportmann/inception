@@ -18,7 +18,8 @@ import { Injectable } from "@angular/core";
 
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
-import { ErrorModalComponent } from "../../components/error/index";
+import { ErrorReportModalComponent } from "../../components/error/index";
+import {Error} from "../../errors/error";
 
 /**
  * The ErrorService class provides the capability to process an application error or back-end error
@@ -37,8 +38,26 @@ export class ErrorService {
   constructor(private bsModalService: BsModalService) {
   }
 
-  showConfirm(title?: string, message?: string) {
-    let bsModalRef = this.bsModalService.show(ErrorModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
-    console.log("bsModalRef: ", bsModalRef);
+  /**
+   * Show the specified error using the error report modal
+   * .
+   * @param {Error} error The error.
+   */
+  showErrorReport(error: Error) {
+
+    console.log('Error: ', error);
+
+    let bsModalRef:BsModalRef = this.bsModalService.show(ErrorReportModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
+
+    (<ErrorReportModalComponent>bsModalRef.content).timestamp = error.timestamp;
+    (<ErrorReportModalComponent>bsModalRef.content).message = error.message;
+
+    if (error.detail) {
+      (<ErrorReportModalComponent>bsModalRef.content).detail = error.detail;
+    }
+
+    if (error.stackTrace) {
+      (<ErrorReportModalComponent>bsModalRef.content).stackTrace = error.stackTrace;
+    }
   }
 }

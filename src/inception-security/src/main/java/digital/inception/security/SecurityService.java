@@ -29,6 +29,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.ServiceUnavailableException;
 import javax.sql.DataSource;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
@@ -1441,6 +1442,12 @@ public class SecurityService
   public List<Organization> getOrganizations()
     throws SecurityServiceException
   {
+    if (true)
+    {
+      throw new SecurityServiceException("Testing 1.. 2.. 3..");
+    }
+
+
     String getOrganizationsSQL =
         "SELECT id, name, status FROM security.organizations ORDER BY name";
 

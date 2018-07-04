@@ -47,9 +47,9 @@ import {
   AppSidebarNavLinkComponent,
   AppSidebarNavTitleComponent,
   NotFoundComponent,
-  SimpleContainerComponent
+  SimpleContainerComponent, SpinnerComponent
 } from './components/layout';
-import { ErrorModalComponent } from './components/error';
+import { ErrorReportModalComponent } from './components/error';
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
@@ -134,7 +134,13 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     TimepickerModule,
 
     // Inception modules
-    DirectivesModule
+    DirectivesModule,
+
+    // Inception  components
+    AppContainerComponent,
+    NotFoundComponent,
+    SimpleContainerComponent,
+    SpinnerComponent
   ],
   declarations: [
     // Inception layout components
@@ -154,11 +160,12 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppSidebarNavTitleComponent,
     NotFoundComponent,
     SimpleContainerComponent,
+    SpinnerComponent,
 
     // Inception error components
-    ErrorModalComponent
+    ErrorReportModalComponent
   ],
-  bootstrap: [AppContainerComponent, ErrorModalComponent, SimpleContainerComponent]
+  bootstrap: [AppContainerComponent, ErrorReportModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
 

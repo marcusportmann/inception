@@ -16,6 +16,11 @@
       <div class="row text-center">
 
         <div class="col-md-3 py-4">
+          <h6>expand-down</h6>
+          <button class="btn btn-success btn-ladda" data-style="expand-down" [ladda]="expandDown" (click)="toggleExpandDown()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
           <h6>expand-left</h6>
           <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]="expandLeft" (click)="toggleExpandLeft()">Submit</button>
         </div>
@@ -28,11 +33,6 @@
         <div class="col-md-3 py-4">
           <h6>expand-up</h6>
           <button class="btn btn-success btn-ladda" data-style="expand-up" [ladda]="expandUp" (click)="toggleExpandUp()">Submit</button>
-        </div>
-
-        <div class="col-md-3 py-4">
-          <h6>expand-down</h6>
-          <button class="btn btn-success btn-ladda" data-style="expand-down" [ladda]="expandDown" (click)="toggleExpandDown()">Submit</button>
         </div>
 
 
@@ -58,6 +58,11 @@
 
 
         <div class="col-md-3 py-4">
+          <h6>slide-down</h6>
+          <button class="btn btn-info btn-ladda" data-style="slide-down" [ladda]="slideDown" (click)="toggleSlideDown()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
           <h6>slide-left</h6>
           <button class="btn btn-info btn-ladda" data-style="slide-left" [ladda]="slideLeft" (click)="toggleSlideLeft()">Submit</button>
         </div>
@@ -72,10 +77,6 @@
           <button class="btn btn-info btn-ladda" data-style="slide-up" [ladda]="slideUp" (click)="toggleSlideUp()">Submit</button>
         </div>
 
-        <div class="col-md-3 py-4">
-          <h6>slide-down</h6>
-          <button class="btn btn-info btn-ladda" data-style="slide-down" [ladda]="slideDown" (click)="toggleSlideDown()">Submit</button>
-        </div>
       </div>
 
       <hr class="my-4">

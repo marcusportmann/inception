@@ -32,12 +32,6 @@ export abstract class InceptionAppModule {
    */
   protected constructor() {
 
-    //const navigationService: NavigationService = Injector.create([{provide: NavigationService, deps:[]}]).get(NavigationService);
-
-
-
-
-
     const navigationService: NavigationService = InceptionInjector.get(NavigationService);
 
     if (navigationService) {

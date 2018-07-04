@@ -23,10 +23,10 @@ import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
 
 // Import Inception modules
-import {DirectivesModule} from "../../directives/directives.module";
+import {InceptionModule} from "../../inception.module";
 
 // Import Inception components
-import { LoginComponent } from './login.component';
+import {LoginComponent} from './login.component';
 
 const routes: Routes = [
   {
@@ -44,7 +44,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
 
-    DirectivesModule,
+    InceptionModule,
 
     RouterModule.forChild(routes)
   ],
