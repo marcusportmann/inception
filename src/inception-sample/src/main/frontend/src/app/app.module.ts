@@ -55,20 +55,21 @@ export class AppModule extends InceptionAppModule {
     navigation.push(new NavigationItem('icon-puzzle', 'Components', '/components', [], [
       new NavigationItem('icon-puzzle', 'Buttons', '/components/buttons', []),
       new NavigationItem('icon-puzzle', 'Cards', '/components/cards', []),
+      new NavigationItem('icon-puzzle', 'Charts', '/components/charts', []),
       new NavigationItem('icon-puzzle', 'Collapses', '/components/collapses', []),
       new NavigationItem('icon-puzzle', 'Colors', '/components/colors', []),
       new NavigationItem('icon-puzzle', 'Dropdowns', '/components/dropdowns', []),
+      new NavigationItem('icon-puzzle', 'Form', '/components/form', []),
       new NavigationItem('icon-puzzle', 'Loading Buttons', '/components/loading-buttons', []),
       new NavigationItem('icon-puzzle', 'Paginations', '/components/paginations', []),
       new NavigationItem('icon-puzzle', 'Popovers', '/components/popovers', []),
       new NavigationItem('icon-puzzle', 'Progress', '/components/progress', []),
       new NavigationItem('icon-puzzle', 'Switches', '/components/switches', []),
       new NavigationItem('icon-puzzle', 'Tabs', '/components/tabs', []),
+      new NavigationItem('icon-puzzle', 'Text Editors', '/components/text-editors', []),
       new NavigationItem('icon-puzzle', 'Tooltips', '/components/tooltips', []),
       new NavigationItem('icon-puzzle', 'Typography', '/components/typography', [])
     ]));
-
-    navigation.push(new NavigationItem('icon-note', 'Test Form', '/test-form', []));
 
     navigation.push(new NavigationTitle('Menus'));
 

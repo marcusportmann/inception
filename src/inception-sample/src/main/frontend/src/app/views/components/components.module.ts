@@ -31,6 +31,9 @@ import {ButtonsComponent} from './buttons.component';
 // Cards component
 import {CardsComponent} from './cards.component';
 
+// Charts Component
+import {ChartsComponent} from './charts.component';
+
 // Collapse Component
 import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {CollapsesComponent} from './collapses.component';
@@ -41,6 +44,9 @@ import {ColorsComponent} from './colors.component';
 // Dropdowns component
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {DropdownsComponent} from './dropdowns.component';
+
+// Form component
+import {FormComponent} from "./form.component";
 
 // Loading Buttons component
 import {LoadingButtonsComponent} from './loading-buttons.component';
@@ -63,6 +69,10 @@ import {SwitchesComponent} from './switches.component';
 // Tabs Component
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import {TabsComponent} from './tabs.component';
+
+// Text Editors Components
+import {QuillModule} from 'ngx-quill';
+import {TextEditorsComponent} from './text-editors.component';
 
 // Tooltips Component
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
@@ -93,6 +103,13 @@ const routes: Routes = [
     }
   },
   {
+    path: 'charts',
+    component: ChartsComponent,
+    data: {
+      title: 'Charts',
+    }
+  },
+  {
     path: 'collapses',
     component: CollapsesComponent,
     data: {
@@ -111,6 +128,13 @@ const routes: Routes = [
     component: DropdownsComponent,
     data: {
       title: 'Dropdowns',
+    }
+  },
+  {
+    path: 'form',
+    component: FormComponent,
+    data: {
+      title: 'Form',
     }
   },
   {
@@ -156,6 +180,13 @@ const routes: Routes = [
     }
   },
   {
+    path: 'text-editors',
+    component: TextEditorsComponent,
+    data: {
+      title: 'Text Editors',
+    }
+  },
+  {
     path: 'tooltips',
     component: TooltipsComponent,
     data: {
@@ -181,6 +212,7 @@ const routes: Routes = [
     PaginationModule.forRoot(),
     PopoverModule.forRoot(),
     ProgressbarModule.forRoot(),
+    QuillModule,
     TabsModule.forRoot(),
     TooltipModule.forRoot(),
 
@@ -188,7 +220,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ButtonsComponent, CardsComponent, CollapsesComponent, ColorsComponent, DropdownsComponent, LoadingButtonsComponent, PaginationsComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TooltipsComponent, TypographyComponent]
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, CollapsesComponent, ColorsComponent, DropdownsComponent, FormComponent, LoadingButtonsComponent, PaginationsComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent, TypographyComponent]
 })
 export class ComponentsModule {
 }

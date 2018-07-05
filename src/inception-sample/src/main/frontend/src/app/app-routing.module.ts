@@ -37,15 +37,6 @@ export const routes: Routes = [
           title: 'Components'
         },
       },
-
-      {
-        path: 'test-form',
-        loadChildren: './views/test-form/test-form.module#TestFormModule',
-        data: {
-          title: 'Test Form'
-        },
-      },
-
       {
         path: 'menu1',
         loadChildren: './views/menu1/menu1.module#Menu1Module',

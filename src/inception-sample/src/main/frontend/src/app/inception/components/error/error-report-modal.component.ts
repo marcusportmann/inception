@@ -24,6 +24,12 @@ import {Error} from "../../errors/error";
           <span class="form-control-static">{{message}}</span>
         </div>
       </div>
+      <div *ngIf="detail" class="form-group row">
+        <label class="col-sm-12 col-form-label">Detail</label>
+        <div class="col-sm-12">
+          <span class="form-control-static">{{detail}}</span>
+        </div>
+      </div>      
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
