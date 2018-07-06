@@ -37,7 +37,7 @@ import {CollapsesComponent} from './collapses.component';
 
 // Pagination Component
 import {PaginationModule} from 'ngx-bootstrap/pagination';
-import {PaginationsComponent} from './paginations.component';
+import {PaginationComponent} from './pagination.component';
 
 // Popovers Component
 import {PopoverModule} from 'ngx-bootstrap/popover';
@@ -91,10 +91,10 @@ const routes: Routes = [
     }
   },
   {
-    path: 'paginations',
-    component: PaginationsComponent,
+    path: 'pagination',
+    component: PaginationComponent,
     data: {
-      title: 'Paginations',
+      title: 'Pagination',
     }
   },
   {
@@ -158,7 +158,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CardsComponent, ChartsComponent, CollapsesComponent, PaginationsComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
+  declarations: [CardsComponent, ChartsComponent, CollapsesComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
 })
 export class ComponentsModule {
 }

@@ -63,7 +63,7 @@ export class AppModule extends InceptionAppModule {
         new NavigationItem('icon-puzzle', 'Cards', '/inception/components/cards', []),
         new NavigationItem('icon-puzzle', 'Charts', '/inception/components/charts', []),
         new NavigationItem('icon-puzzle', 'Collapses', '/inception/components/collapses', []),
-        new NavigationItem('icon-puzzle', 'Paginations', '/inception/components/paginations', []),
+        new NavigationItem('icon-puzzle', 'Pagination', '/inception/components/pagination', []),
         new NavigationItem('icon-puzzle', 'Popovers', '/inception/components/popovers', []),
         new NavigationItem('icon-puzzle', 'Progress', '/inception/components/progress', []),
         new NavigationItem('icon-puzzle', 'Switches', '/inception/components/switches', []),
