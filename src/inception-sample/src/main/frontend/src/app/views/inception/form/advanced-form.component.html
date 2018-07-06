@@ -2,9 +2,10 @@
   <div class="card-header">
     <i class="fa fa-edit"></i>Advanced Form
   </div>
-  <div class="card-body">
 
-    <form [formGroup]="advancedForm" (ngSubmit)="onSubmit()" validatedForm>
+  <form [formGroup]="advancedForm" (submit)="onSubmit()" validatedForm>
+
+    <div class="card-body">
 
       <div class="row">
         <div class="col-sm">
@@ -37,8 +38,8 @@
           <div class="form-group">
             <label for="firstName">First Name</label>
             <input id="firstName" name="firstName" formControlName="firstName" type="text" class="form-control" placeholder="Enter a first name" autofocus>
-            <div *ngIf="testForm.controls['firstName'].errors && !testForm.controls['firstName'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['firstName'].errors?.required">A first name is required.</div>
+            <div *ngIf="advancedForm.controls['firstName'].errors && !advancedForm.controls['firstName'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['firstName'].errors?.required">A first name is required.</div>
             </div>
           </div>
         </div>
@@ -46,8 +47,8 @@
           <div class="form-group">
             <label for="lastName">Last Name</label>
             <input id="lastName" name="lastName" formControlName="lastName" type="text" class="form-control" placeholder="Enter a last name">
-            <div *ngIf="testForm.controls['lastName'].errors && !testForm.controls['lastName'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['lastName'].errors?.required">A last name is required.</div>
+            <div *ngIf="advancedForm.controls['lastName'].errors && !advancedForm.controls['lastName'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['lastName'].errors?.required">A last name is required.</div>
             </div>
           </div>
         </div>
@@ -60,8 +61,8 @@
             <ng-select
               id="title" name="title" formControlName="title" class="bootstrap" placeholder="Select a title" [items]="titles" >
             </ng-select>
-            <div *ngIf="testForm.controls['title'].errors && !testForm.controls['title'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['title'].errors?.required">A title is required.</div>
+            <div *ngIf="advancedForm.controls['title'].errors && !advancedForm.controls['title'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['title'].errors?.required">A title is required.</div>
             </div>
           </div>
         </div>
@@ -74,8 +75,8 @@
                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
               </div>
             </div>
-            <div *ngIf="testForm.controls['dateOfBirth'].errors && !testForm.controls['dateOfBirth'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['dateOfBirth'].errors?.required">A date of birth is required.</div>
+            <div *ngIf="advancedForm.controls['dateOfBirth'].errors && !advancedForm.controls['dateOfBirth'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['dateOfBirth'].errors?.required">A date of birth is required.</div>
             </div>
           </div>
         </div>
@@ -86,8 +87,8 @@
           <div class="form-group">
             <label for="password">Password</label>
             <input id="password" name="password" formControlName="password" type="password" class="form-control" placeholder="Enter a password">
-            <div *ngIf="testForm.controls['password'].errors && !testForm.controls['password'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['password'].errors?.required">A password is required.</div>
+            <div *ngIf="advancedForm.controls['password'].errors && !advancedForm.controls['password'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['password'].errors?.required">A password is required.</div>
             </div>
           </div>
         </div>
@@ -95,8 +96,8 @@
           <div class="form-group">
             <label for="confirmPassword">Confirm Password</label>
             <input id="confirmPassword" name="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Confirm the password">
-            <div *ngIf="testForm.controls['confirmPassword'].errors && !testForm.controls['confirmPassword'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['confirmPassword'].errors?.required">Password confirmation is required.</div>
+            <div *ngIf="advancedForm.controls['confirmPassword'].errors && !advancedForm.controls['confirmPassword'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['confirmPassword'].errors?.required">Password confirmation is required.</div>
             </div>
           </div>
         </div>
@@ -107,8 +108,8 @@
           <div class="form-group">
             <label for="employmentPeriod">Employment Period</label>
             <input id="employmentPeriod" name="employmentPeriod" formControlName="employmentPeriod" class="form-control" #drp="bsDaterangepicker" bsDaterangepicker>
-            <div *ngIf="testForm.controls['employmentPeriod'].errors && !testForm.controls['employmentPeriod'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['employmentPeriod'].errors?.required">An employment period is required.</div>
+            <div *ngIf="advancedForm.controls['employmentPeriod'].errors && !advancedForm.controls['employmentPeriod'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['employmentPeriod'].errors?.required">An employment period is required.</div>
             </div>
           </div>
         </div>
@@ -121,8 +122,8 @@
               <option value="1">Cat</option>
               <option value="2">Hamster</option>
             </select>
-            <div *ngIf="testForm.controls['favouritePet'].errors && !testForm.controls['favouritePet'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['favouritePet'].errors?.required">A password is required.</div>
+            <div *ngIf="advancedForm.controls['favouritePet'].errors && !advancedForm.controls['favouritePet'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['favouritePet'].errors?.required">A password is required.</div>
             </div>
           </div>
         </div>
@@ -146,8 +147,8 @@
                 <label for="inlineRadio3" class="form-check-label">Three</label>
               </div>
             </div>
-            <div *ngIf="testForm.controls['inlineRadio'].errors && !testForm.controls['inlineRadio'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['inlineRadio'].errors?.required">Please select an option.</div>
+            <div *ngIf="advancedForm.controls['inlineRadio'].errors && !advancedForm.controls['inlineRadio'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['inlineRadio'].errors?.required">Please select an option.</div>
             </div>
           </div>
         </div>
@@ -175,8 +176,8 @@
           <div class="form-group">
             <label for="notes">Notes</label>
             <textarea id="notes" name="notes" formControlName="notes" rows="4" cols="5" placeholder="Enter the notes" class="form-control"></textarea>
-            <div *ngIf="testForm.controls['notes'].errors && !testForm.controls['notes'].untouched" class="form-control-error">
-              <div *ngIf="testForm.controls['notes'].errors?.required">Please enter the required notes.</div>
+            <div *ngIf="advancedForm.controls['notes'].errors && !advancedForm.controls['notes'].untouched" class="form-control-error">
+              <div *ngIf="advancedForm.controls['notes'].errors?.required">Please enter the required notes.</div>
             </div>
           </div>
         </div>
@@ -208,8 +209,8 @@
               <label for="radio3" class="form-check-label">Option 3</label>
             </div>
           </div>
-          <div *ngIf="testForm.controls['radio'].errors && !testForm.controls['radio'].untouched" class="form-control-error">
-            <div *ngIf="testForm.controls['radio'].errors?.required">Please select an option.</div>
+          <div *ngIf="advancedForm.controls['radio'].errors && !advancedForm.controls['radio'].untouched" class="form-control-error">
+            <div *ngIf="advancedForm.controls['radio'].errors?.required">Please select an option.</div>
           </div>
         </div>
         <div class="col-sm">
@@ -230,13 +231,14 @@
           </div>
         </div>
       </div>
-
-      <div class="form-group-separator"></div>
-
+    </div>
+    <div class="card-footer" style="overflow:auto;">
       <div class="form-buttons">
         <button type="submit" class="btn btn-primary px-4 float-right ml-2">Submit</button>
         <button type="button" class="btn btn-secondary px-4 float-right">Cancel</button>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
+
+
 </div>
