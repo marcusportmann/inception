@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {
-  AppContainerComponent,
+  AdminContainerComponent,
   NotFoundComponent,
   SimpleContainerComponent
 } from './inception/components/layout';
@@ -16,7 +16,7 @@ export const routes: Routes = [
 
   {
     path: '',
-    component: AppContainerComponent,
+    component: AdminContainerComponent,
     children: [
       {
         path: 'dashboard',
@@ -31,10 +31,10 @@ export const routes: Routes = [
       },
 
       {
-        path: 'components',
-        loadChildren: './views/components/components.module#ComponentsModule',
+        path: 'inception',
+        loadChildren: './views/inception/inception.module#InceptionModule',
         data: {
-          title: 'Components'
+          title: 'Inception'
         },
       },
       {

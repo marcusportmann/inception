@@ -32,20 +32,20 @@ import {DirectivesModule} from "./directives/directives.module";
 
 // Import Inception components
 import {
-  AppBreadcrumbsComponent,
-  AppContainerComponent,
-  AppFooterComponent,
-  AppHeaderComponent,
-  AppSidebarComponent,
-  AppSidebarFooterComponent,
-  AppSidebarFormComponent,
-  AppSidebarHeaderComponent,
-  AppSidebarMinimizerComponent,
-  AppSidebarNavComponent,
-  AppSidebarNavDropdownComponent,
-  AppSidebarNavItemComponent,
-  AppSidebarNavLinkComponent,
-  AppSidebarNavTitleComponent,
+  BreadcrumbsComponent,
+  AdminContainerComponent,
+  AdminFooterComponent,
+  AdminHeaderComponent,
+  SidebarComponent,
+  SidebarFooterComponent,
+  SidebarFormComponent,
+  SidebarHeaderComponent,
+  SidebarMinimizerComponent,
+  SidebarNavComponent,
+  SidebarNavDropdownComponent,
+  SidebarNavItemComponent,
+  SidebarNavLinkComponent,
+  SidebarNavTitleComponent,
   NotFoundComponent,
   SimpleContainerComponent, SpinnerComponent
 } from './components/layout';
@@ -137,27 +137,27 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DirectivesModule,
 
     // Inception  components
-    AppContainerComponent,
+    AdminContainerComponent,
     NotFoundComponent,
     SimpleContainerComponent,
     SpinnerComponent
   ],
   declarations: [
     // Inception layout components
-    AppBreadcrumbsComponent,
-    AppContainerComponent,
-    AppFooterComponent,
-    AppHeaderComponent,
-    AppSidebarComponent,
-    AppSidebarFooterComponent,
-    AppSidebarFormComponent,
-    AppSidebarHeaderComponent,
-    AppSidebarMinimizerComponent,
-    AppSidebarNavComponent,
-    AppSidebarNavDropdownComponent,
-    AppSidebarNavItemComponent,
-    AppSidebarNavLinkComponent,
-    AppSidebarNavTitleComponent,
+    BreadcrumbsComponent,
+    AdminContainerComponent,
+    AdminFooterComponent,
+    AdminHeaderComponent,
+    SidebarComponent,
+    SidebarFooterComponent,
+    SidebarFormComponent,
+    SidebarHeaderComponent,
+    SidebarMinimizerComponent,
+    SidebarNavComponent,
+    SidebarNavDropdownComponent,
+    SidebarNavItemComponent,
+    SidebarNavLinkComponent,
+    SidebarNavTitleComponent,
     NotFoundComponent,
     SimpleContainerComponent,
     SpinnerComponent,
@@ -165,7 +165,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // Inception error components
     ErrorReportModalComponent
   ],
-  bootstrap: [AppContainerComponent, ErrorReportModalComponent, SimpleContainerComponent]
+  bootstrap: [AdminContainerComponent, ErrorReportModalComponent, SimpleContainerComponent]
 })
 export class InceptionModule {
 

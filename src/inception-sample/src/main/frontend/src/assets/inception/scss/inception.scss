@@ -15,9 +15,7 @@
 @import "vendors";
 
 // Components
-@import "app-header";
-@import "app-sidebar";
-
+@import "admin";
 @import "badge";
 @import "breadcrumb";
 @import "buttons";
@@ -25,7 +23,6 @@
 @import "card";
 @import "charts";
 @import "dropdown";
-@import "footer";
 @import "form";
 @import "grid";
 @import "input-group";
@@ -35,6 +32,7 @@
 @import "nav";
 @import "progress";
 @import "progress-group";
+@import "sidebar";
 @import "spinner";
 @import "switches";
 @import "tables";

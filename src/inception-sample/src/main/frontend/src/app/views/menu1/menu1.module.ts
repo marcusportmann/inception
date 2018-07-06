@@ -33,7 +33,7 @@ const routes: Routes = [
 
 /**
  * The Menu1Module class implements a module that contains a single component that is loaded into
- * the AppContainerComponent component when the corresponding menu option is selected.
+ * the AdminContainerComponent component when the corresponding menu option is selected.
  *
  * @author Marcus Portmann
  */

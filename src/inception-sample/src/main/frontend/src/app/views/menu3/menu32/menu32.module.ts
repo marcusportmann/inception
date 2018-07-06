@@ -47,7 +47,7 @@ const routes: Routes = [
 
 /**
  * The Menu32Module class implements a module that contains two components that can be loaded into
- * the AppContainerComponent component when the corresponding menu option is selected.
+ * the AdminContainerComponent component when the corresponding menu option is selected.
  *
  * @author Marcus Portmann
  */

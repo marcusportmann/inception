@@ -5,11 +5,11 @@ import {
   AppBrandMinimizerDirective,
   AppMobileSidebarTogglerDirective,
 
-  AppSidebarMinimizerDirective,
-  AppSidebarNavDropdownDirective,
-  AppSidebarNavDropdownTogglerDirective,
-  AppSidebarOffCanvasCloseDirective,
-  AppSidebarTogglerDirective,
+  SidebarMinimizerDirective,
+  SidebarNavDropdownDirective,
+  SidebarNavDropdownTogglerDirective,
+  SidebarOffCanvasCloseDirective,
+  SidebarTogglerDirective,
 
   AutofocusDirective,
 
@@ -28,11 +28,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     AppBrandMinimizerDirective,
     AppMobileSidebarTogglerDirective,
 
-    AppSidebarMinimizerDirective,
-    AppSidebarNavDropdownDirective,
-    AppSidebarNavDropdownTogglerDirective,
-    AppSidebarOffCanvasCloseDirective,
-    AppSidebarTogglerDirective,
+    SidebarMinimizerDirective,
+    SidebarNavDropdownDirective,
+    SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective,
 
     AutofocusDirective,
 
@@ -42,11 +42,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     AppBrandMinimizerDirective,
     AppMobileSidebarTogglerDirective,
 
-    AppSidebarMinimizerDirective,
-    AppSidebarNavDropdownDirective,
-    AppSidebarNavDropdownTogglerDirective,
-    AppSidebarOffCanvasCloseDirective,
-    AppSidebarTogglerDirective,
+    SidebarMinimizerDirective,
+    SidebarNavDropdownDirective,
+    SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective,
 
     AutofocusDirective,
 

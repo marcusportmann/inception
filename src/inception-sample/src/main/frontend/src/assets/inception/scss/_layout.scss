@@ -7,50 +7,50 @@
 }
 
 // stylelint-disable selector-type-no-unknown, no-duplicate-selectors, selector-no-qualifying-type
-// app-dashboard and app-root are Angular2+ selectors. You can add here your own selectors if you need.
+// admin-dashboard and admin-root are Angular2+ selectors. You can add here your own selectors if you need.
 .app,
-app-container,
-app-root {
+admin-container,
+admin-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-.app-header {
+.admin-header {
   flex: 0 0 $navbar-height;
 }
 
-.app-footer {
+.admin-footer {
   flex: 0 0 $footer-height;
 }
 
-.app-body {
+.admin-body {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
   overflow-x: hidden;
 
-  .app-main {
+  .admin-main {
     flex: 1;
     min-width: 0;
   }
 
-  .app-sidebar {
-    // $app-sidebar-width is the width of the columns
-    flex: 0 0 $app-sidebar-width;
+  .sidebar {
+    // $sidebar-width is the width of the columns
+    flex: 0 0 $sidebar-width;
     // put the nav on the left
     order: -1;
   }
 }
 
 html:not([dir="rtl"]) {
-  .app-sidebar {
-    margin-left: - $app-sidebar-width;
+  .sidebar {
+    margin-left: - $sidebar-width;
   }
 }
 html[dir="rtl"] {
-  .app-sidebar {
-    margin-right: - $app-sidebar-width;
+  .sidebar {
+    margin-right: - $sidebar-width;
   }
 }
 
@@ -58,95 +58,95 @@ html[dir="rtl"] {
   //
   // Header
   //
-  .app-header-fixed {
-    .app-header {
+  .admin-header-fixed {
+    .admin-header {
       position: fixed;
       z-index: $zindex-sticky;
       width: 100%;
     }
-    .app-body {
+    .admin-body {
       margin-top: $navbar-height;
     }
   }
   //
   // Sidebar
   //
-  .app-sidebar-fixed {
-    .app-sidebar {
+  .sidebar-fixed {
+    .sidebar {
       position: fixed;
       z-index: $zindex-sticky - 1;
-      width: $app-sidebar-width;
+      width: $sidebar-width;
       height: 100vh;
     }
   }
-  .app-sidebar-fixed {
-    .app-header + .app-body .app-sidebar {
+  .sidebar-fixed {
+    .admin-header + .admin-body .sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
 
-  .app-sidebar-compact {
-    .app-sidebar {
-      flex: 0 0 $app-sidebar-compact-width;
+  .sidebar-compact {
+    .sidebar {
+      flex: 0 0 $sidebar-compact-width;
     }
 
-    &.app-sidebar-fixed {
-      .app-sidebar {
-        width: $app-sidebar-compact-width;
+    &.sidebar-fixed {
+      .sidebar {
+        width: $sidebar-compact-width;
       }
     }
-    .app-sidebar-minimizer {
+    .sidebar-minimizer {
       display: none;
     }
   }
 
-  .app-sidebar-minimized {
-    .app-sidebar {
-      flex: 0 0 $app-sidebar-minimized-width;
+  .sidebar-minimized {
+    .sidebar {
+      flex: 0 0 $sidebar-minimized-width;
     }
 
-    &.app-sidebar-fixed {
-      .app-sidebar {
-        width: $app-sidebar-minimized-width;
+    &.sidebar-fixed {
+      .sidebar {
+        width: $sidebar-minimized-width;
       }
     }
   }
 
-  .app-sidebar-off-canvas {
-    .app-sidebar {
+  .sidebar-off-canvas {
+    .sidebar {
       position: fixed;
       z-index: $zindex-sticky - 1;
       height: 100%;
     }
   }
 
-  .app-sidebar-off-canvas {
-    .app-header + .app-body .app-sidebar {
+  .sidebar-off-canvas {
+    .admin-header + .admin-body .sidebar {
       height: calc(100vh - #{$navbar-height});
     }
   }
 
   html:not([dir="rtl"]) {
-    .app-sidebar-compact {
-      .app-sidebar {
-        margin-left: - $app-sidebar-compact-width;
+    .sidebar-compact {
+      .sidebar {
+        margin-left: - $sidebar-compact-width;
       }
     }
-    .app-sidebar-minimized {
-      .app-sidebar {
-        margin-left: - $app-sidebar-minimized-width;
+    .sidebar-minimized {
+      .sidebar {
+        margin-left: - $sidebar-minimized-width;
       }
     }
   }
   html[dir="rtl"] {
-    .app-sidebar-compact {
-      .app-sidebar {
-        margin-right: - $app-sidebar-compact-width;
+    .sidebar-compact {
+      .sidebar {
+        margin-right: - $sidebar-compact-width;
       }
     }
-    .app-sidebar-minimized {
-      .app-sidebar {
-        margin-right: - $app-sidebar-minimized-width;
+    .sidebar-minimized {
+      .sidebar {
+        margin-right: - $sidebar-minimized-width;
       }
     }
   }
@@ -155,8 +155,8 @@ html[dir="rtl"] {
 //
 // Breadcrumb
 //
-.app-breadcrumbs-fixed {
-  .app-main {
+.breadcrumbs-fixed {
+  .admin-main {
     $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 * $spacer;
     padding-top: $breadcrumb-height;
   }
@@ -174,41 +174,41 @@ html[dir="rtl"] {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
     html:not([dir="rtl"]) {
-      .app-sidebar#{$infix}-show {
-        .app-sidebar {
+      .sidebar#{$infix}-show {
+        .sidebar {
           margin-left: 0;
         }
         @include media-breakpoint-up(sm) {
-          &.app-sidebar-fixed {
-            .app-main,
-            .app-footer {
-              margin-left: $app-sidebar-width;
+          &.sidebar-fixed {
+            .admin-main,
+            .admin-footer {
+              margin-left: $sidebar-width;
             }
-            &.app-sidebar-compact {
-              .app-main,
-              .app-footer {
-                margin-left: $app-sidebar-compact-width;
+            &.sidebar-compact {
+              .admin-main,
+              .admin-footer {
+                margin-left: $sidebar-compact-width;
               }
             }
-            &.app-sidebar-minimized {
-              .app-main,
-              .app-footer {
-                margin-left: $app-sidebar-minimized-width;
+            &.sidebar-minimized {
+              .admin-main,
+              .admin-footer {
+                margin-left: $sidebar-minimized-width;
               }
             }
           }
-          &.app-breadcrumbs-fixed {
+          &.breadcrumbs-fixed {
             .breadcrumb {
-              left: $app-sidebar-width;
+              left: $sidebar-width;
             }
-            &.app-sidebar-compact {
+            &.sidebar-compact {
               .breadcrumb {
-                left: $app-sidebar-compact-width;
+                left: $sidebar-compact-width;
               }
             }
-            &.app-sidebar-minimized {
+            &.sidebar-minimized {
               .breadcrumb {
-                left: $app-sidebar-minimized-width;
+                left: $sidebar-minimized-width;
               }
             }
           }
@@ -217,41 +217,41 @@ html[dir="rtl"] {
     }
 
     html[dir="rtl"] {
-      .app-sidebar#{$infix}-show {
-        .app-sidebar {
+      .sidebar#{$infix}-show {
+        .sidebar {
           margin-right: 0;
         }
         @include media-breakpoint-up(sm) {
-          &.app-sidebar-fixed {
-            .app-main,
-            .app-footer {
-              margin-right: $app-sidebar-width;
+          &.sidebar-fixed {
+            .admin-main,
+            .admin-footer {
+              margin-right: $sidebar-width;
             }
-            &.app-sidebar-compact {
-              .app-main,
-              .app-footer {
-                margin-right: $app-sidebar-compact-width;
+            &.sidebar-compact {
+              .admin-main,
+              .admin-footer {
+                margin-right: $sidebar-compact-width;
               }
             }
-            &.app-sidebar-minimized {
-              .app-main,
-              .app-footer {
-                margin-right: $app-sidebar-minimized-width;
+            &.sidebar-minimized {
+              .admin-main,
+              .admin-footer {
+                margin-right: $sidebar-minimized-width;
               }
             }
           }
-          &.app-breadcrumbs-fixed {
+          &.breadcrumbs-fixed {
             .breadcrumb {
-              right: $app-sidebar-width;
+              right: $sidebar-width;
             }
-            &.app-sidebar-compact {
+            &.sidebar-compact {
               .breadcrumb {
-                right: $app-sidebar-compact-width;
+                right: $sidebar-compact-width;
               }
             }
-            &.app-sidebar-minimized {
+            &.sidebar-minimized {
               .breadcrumb {
-                right: $app-sidebar-minimized-width;
+                right: $sidebar-minimized-width;
               }
             }
           }
@@ -260,14 +260,14 @@ html[dir="rtl"] {
 
 
     }
-    .app-sidebar#{$infix}-show {
+    .sidebar#{$infix}-show {
       @keyframes opacity {
         0%   { opacity: 0; }
         100% { opacity: 1; }
       }
 
       @include media-breakpoint-down(xs) {
-        .app-main {
+        .admin-main {
           position: relative;
           &::before {
             position: absolute;
@@ -289,8 +289,8 @@ html[dir="rtl"] {
 //
 // Footer
 //
-.app-footer-fixed {
-  .app-footer {
+.admin-footer-fixed {
+  .admin-footer {
     position: fixed;
     right: 0;
     bottom: 0;
@@ -299,7 +299,7 @@ html[dir="rtl"] {
     height: $footer-height;
   }
 
-  .app-body {
+  .admin-body {
     margin-bottom: $footer-height;
   }
 }
@@ -307,13 +307,13 @@ html[dir="rtl"] {
 //
 // Animations
 //
-.app-header,
-.app-footer,
-.app-sidebar,
-.app-main {
+.admin-header,
+.admin-footer,
+.sidebar,
+.admin-main {
   transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
 }
-.app-sidebar-nav {
+.sidebar-nav {
   transition: width $layout-transition-speed;
 }
 .breadcrumb {
@@ -325,7 +325,7 @@ html[dir="rtl"] {
 //
 
 @include media-breakpoint-down(md) {
-  .app-header {
+  .admin-header {
     position: fixed;
     z-index: $zindex-sticky;
     width: 100%;
@@ -352,18 +352,18 @@ html[dir="rtl"] {
     }
   }
 
-  .app-body {
+  .admin-body {
     margin-top: $navbar-height;
   }
 
-  .app-sidebar {
+  .sidebar {
     position: fixed;
     z-index: $zindex-sticky - 1;
-    width: $app-sidebar-width;
+    width: $sidebar-width;
     height: calc(100vh - #{$navbar-height});
   }
 
-  .app-sidebar-minimizer {
+  .sidebar-minimizer {
     display: none;
   }
 }

@@ -8,7 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { InceptionModule } from './inception/inception.module';
 import {InceptionAppModule} from "./inception/inception-app.module";
 import {NavigationItem} from "./inception/services/navigation/navigation-item";
-import {NavigationService} from "./inception/services/navigation/navigation.service";
 import {NavigationBadge} from "./inception/services/navigation/navigation-badge";
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
 
@@ -52,23 +51,37 @@ export class AppModule extends InceptionAppModule {
 
     //navigation.push(new NavigationTitle('Theme'));
 
-    navigation.push(new NavigationItem('icon-puzzle', 'Components', '/components', [], [
-      new NavigationItem('icon-puzzle', 'Buttons', '/components/buttons', []),
-      new NavigationItem('icon-puzzle', 'Cards', '/components/cards', []),
-      new NavigationItem('icon-puzzle', 'Charts', '/components/charts', []),
-      new NavigationItem('icon-puzzle', 'Collapses', '/components/collapses', []),
-      new NavigationItem('icon-puzzle', 'Colors', '/components/colors', []),
-      new NavigationItem('icon-puzzle', 'Dropdowns', '/components/dropdowns', []),
-      new NavigationItem('icon-puzzle', 'Form', '/components/form', []),
-      new NavigationItem('icon-puzzle', 'Loading Buttons', '/components/loading-buttons', []),
-      new NavigationItem('icon-puzzle', 'Paginations', '/components/paginations', []),
-      new NavigationItem('icon-puzzle', 'Popovers', '/components/popovers', []),
-      new NavigationItem('icon-puzzle', 'Progress', '/components/progress', []),
-      new NavigationItem('icon-puzzle', 'Switches', '/components/switches', []),
-      new NavigationItem('icon-puzzle', 'Tabs', '/components/tabs', []),
-      new NavigationItem('icon-puzzle', 'Text Editors', '/components/text-editors', []),
-      new NavigationItem('icon-puzzle', 'Tooltips', '/components/tooltips', []),
-      new NavigationItem('icon-puzzle', 'Typography', '/components/typography', [])
+    navigation.push(new NavigationItem('icon-layers', 'Inception', '/inception', [], [
+
+      new NavigationItem('icon-cursor', 'Buttons', '/inception/buttons', [], [
+        new NavigationItem('icon-cursor', 'Basic Buttons', '/inception/buttons/basic-buttons', []),
+        new NavigationItem('icon-cursor', 'Dropdown Buttons', '/inception/buttons/dropdown-buttons', []),
+        new NavigationItem('icon-cursor', 'Loading Buttons', '/inception/buttons/loading-buttons', [])
+      ]),
+
+      new NavigationItem('icon-puzzle', 'Components', '/inception/components', [], [
+        new NavigationItem('icon-puzzle', 'Cards', '/inception/components/cards', []),
+        new NavigationItem('icon-puzzle', 'Charts', '/inception/components/charts', []),
+        new NavigationItem('icon-puzzle', 'Collapses', '/inception/components/collapses', []),
+        new NavigationItem('icon-puzzle', 'Paginations', '/inception/components/paginations', []),
+        new NavigationItem('icon-puzzle', 'Popovers', '/inception/components/popovers', []),
+        new NavigationItem('icon-puzzle', 'Progress', '/inception/components/progress', []),
+        new NavigationItem('icon-puzzle', 'Switches', '/inception/components/switches', []),
+        new NavigationItem('icon-puzzle', 'Tabs', '/inception/components/tabs', []),
+        new NavigationItem('icon-puzzle', 'Text Editors', '/inception/components/text-editors', []),
+        new NavigationItem('icon-puzzle', 'Tooltips', '/inception/components/tooltips', [])
+      ]),
+
+      new NavigationItem('icon-note', 'Form', '/inception/form', [], [
+        new NavigationItem('icon-note', 'Basic Forms', '/inception/form/basic-forms', []),
+        new NavigationItem('icon-note', 'Advanced Form', '/inception/form/advanced-form', [])
+      ]),
+
+      new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [
+        new NavigationItem('icon-drop', 'Colors', '/inception/theme/colors', []),
+        new NavigationItem('icon-drop', 'Typography', '/inception/theme/typography', [])
+      ])
+
     ]));
 
     navigation.push(new NavigationTitle('Menus'));
