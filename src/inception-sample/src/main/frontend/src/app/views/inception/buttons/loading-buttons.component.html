@@ -1,0 +1,103 @@
+<div class="animated fadeIn">
+  <div class="card">
+    <div class="card-header">
+      <i class="icon-cursor"></i> Loading buttons - Ladda
+      <div class="card-header-actions">
+        <a href="https://github.com/hakimel/Ladda" class="card-header-action"><small class="text-muted">docs</small></a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <button class="btn btn-primary" (click)="reset()">Reset</button>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="row text-center">
+
+        <div class="col-md-3 py-4">
+          <h6>expand-down</h6>
+          <button class="btn btn-success btn-ladda" data-style="expand-down" [ladda]="expandDown" (click)="toggleExpandDown()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>expand-left</h6>
+          <button class="btn btn-success btn-ladda" data-style="expand-left" [ladda]="expandLeft" (click)="toggleExpandLeft()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>expand-right</h6>
+          <button class="btn btn-success btn-ladda" data-style="expand-right" [ladda]="expandRight" (click)="toggleExpandRight()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>expand-up</h6>
+          <button class="btn btn-success btn-ladda" data-style="expand-up" [ladda]="expandUp" (click)="toggleExpandUp()">Submit</button>
+        </div>
+
+
+        <div class="col-md-3 py-4">
+          <h6>contract</h6>
+          <button class="btn btn-danger btn-ladda" data-style="contract" [ladda]="contract" (click)="toggleContract()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>contract-overlay</h6>
+          <button class="btn btn-danger btn-ladda" data-style="contract-overlay" style="z-index: 10;" [ladda]="contractOverlay" (click)="toggleContractOverlay()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>zoom-in</h6>
+          <button class="btn btn-danger btn-ladda" data-style="zoom-in" [ladda]="zoomIn" (click)="toggleZoomIn()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>zoom-out</h6>
+          <button class="btn btn-danger btn-ladda" data-style="zoom-out" [ladda]="zoomOut" (click)="toggleZoomOut()">Submit</button>
+        </div>
+
+
+        <div class="col-md-3 py-4">
+          <h6>slide-down</h6>
+          <button class="btn btn-info btn-ladda" data-style="slide-down" [ladda]="slideDown" (click)="toggleSlideDown()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>slide-left</h6>
+          <button class="btn btn-info btn-ladda" data-style="slide-left" [ladda]="slideLeft" (click)="toggleSlideLeft()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>slide-right</h6>
+          <button class="btn btn-info btn-ladda" data-style="slide-right" [ladda]="slideRight" (click)="toggleSlideRight()">Submit</button>
+        </div>
+
+        <div class="col-md-3 py-4">
+          <h6>slide-up</h6>
+          <button class="btn btn-info btn-ladda" data-style="slide-up" [ladda]="slideUp" (click)="toggleSlideUp()">Submit</button>
+        </div>
+
+      </div>
+
+      <hr class="my-4">
+
+      <h4 class="text-center">Sizes</h4>
+      <div class="row text-center">
+        <div class="col-md-4 py-4">
+          <h6>Small</h6>
+          <button class="btn btn-sm btn-primary btn-ladda" data-style="expand-right" [ladda]="expandRightSizes" (click)="toggleExpandRightSizes()">Submit</button>
+        </div>
+
+        <div class="col-md-4 py-4">
+          <h6>Normall</h6>
+          <button class="btn btn-primary btn-ladda" data-style="expand-right" [ladda]="expandRightSizes" (click)="toggleExpandRightSizes()">Submit</button>
+        </div>
+
+        <div class="col-md-4 py-4">
+          <h6>Large</h6>
+          <button class="btn btn-lg btn-primary btn-ladda" data-style="expand-right" [ladda]="expandRightSizes" (click)="toggleExpandRightSizes()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

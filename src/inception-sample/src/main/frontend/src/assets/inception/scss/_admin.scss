@@ -1,0 +1,210 @@
+.admin-header {
+  position: relative;
+  flex-direction: row;
+  height: $navbar-height;
+  padding: 0;
+  margin: 0;
+  background-color: $navbar-bg;
+  @include borders($navbar-border);
+
+  .navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $navbar-brand-width;
+    height: $navbar-height;
+    padding: 0;
+    margin-right: 0;
+    background-color: $navbar-brand-bg;
+    @include borders($navbar-brand-border);
+
+    .navbar-brand-minimized {
+      display: none;
+    }
+  }
+
+  .navbar-toggler {
+    min-width: 50px;
+    padding: $navbar-toggler-padding-y 0;
+
+    &:hover .navbar-toggler-icon {
+      background-image: $navbar-toggler-icon-hover;
+    }
+  }
+
+  .navbar-toggler:focus {
+    outline: none!important;
+  }
+
+  .navbar-toggler-icon {
+    height: 1.2em;
+    width: 1.2em;
+    background-image: $navbar-toggler-icon;
+  }
+
+  .nav-link
+  {
+    .navbar-login-icon {
+      display: inline-block;
+      width: 1.3em;
+      height: 1.3em;
+      vertical-align: middle;
+      background-size: 100% 100%;
+      background-image: $navbar-login-icon;
+      content: "";
+    }
+
+    .navbar-login {
+      display: inline-block;
+      line-height: 1.3em;
+      color: $navbar-color;
+      padding-left: 6px;
+      padding-right: 15px;
+    }
+
+    &:hover .navbar-login-icon {
+      background-image: $navbar-login-icon-hover;
+      cursor: pointer;
+    }
+
+    &:hover .navbar-login {
+      color: $navbar-hover-color;
+      cursor: pointer;
+    }
+
+    .navbar-user-icon  {
+      display: inline-block;
+      width: 1.5em;
+      height: 1.5em;
+      vertical-align: middle;
+      background-size: 100% 100%;
+      background-image: $navbar-user-icon;
+      content: "";
+    }
+
+    .navbar-user-full-name {
+      display: inline-block;
+      line-height: 1.5em;
+      color: $navbar-color;
+      padding-left: 6px;
+    }
+
+    &:hover .navbar-user-icon {
+      background-image: $navbar-user-icon-hover;
+      cursor: pointer;
+    }
+
+    &:hover .navbar-user-full-name {
+      color: $navbar-hover-color;
+      cursor: pointer;
+    }
+  }
+
+  .navbar-nav {
+    flex-direction: row;
+    align-items: center;
+    padding-right: 15px;
+  }
+
+  .nav-item {
+    position: relative;
+    min-width: 50px;
+    margin: 0;
+    text-align: center;
+
+    button {
+      margin: 0 auto;
+    }
+
+    .nav-link {
+      padding-top: 0;
+      padding-bottom: 0;
+      background: 0;
+      border: 0;
+
+      .badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -16px;
+        margin-left: 0;
+      }
+
+      > .img-avatar {
+        height: $navbar-height - 20px;
+        margin: 0 10px;
+      }
+    }
+  }
+
+  .dropdown-menu {
+    padding-bottom: 0;
+    line-height: $line-height-base;
+    border-radius: 0px;
+    border-top: none;
+    margin: 0;
+  }
+
+  .dropdown-menu-user {
+    position: fixed !important;
+    right: 0;
+    top: 55px !important;
+  }
+
+  .dropdown-item {
+    min-width: 180px;
+  }
+}
+
+.navbar-nav {
+  .nav-link {
+    color: $navbar-color;
+
+    @include hover-focus {
+      color: $navbar-hover-color;
+    }
+  }
+
+  .open > .nav-link,
+  .active > .nav-link,
+  .nav-link.open,
+  .nav-link.active {
+    @include plain-hover-focus {
+      color: $navbar-active-color;
+    }
+  }
+}
+
+.navbar-divider {
+  background-color: rgba(0, 0, 0, .075);
+}
+
+@include media-breakpoint-up(lg) {
+  .admin-brand-minimized {
+    .admin-header {
+      .navbar-brand {
+        width: $navbar-brand-minimized-width;
+        background-color: $navbar-brand-minimized-bg;
+        @include borders($navbar-brand-minimized-border);
+
+        .navbar-brand-full {
+          display: none;
+        }
+
+        .navbar-brand-minimized {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.admin-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 $spacer;
+  color: $footer-color;
+  background: $footer-bg;
+  @include borders($footer-borders);
+}
