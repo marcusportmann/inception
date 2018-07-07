@@ -1,12 +1,11 @@
-<div class="card">
-  <div class="card-header">
-    <i class="fa fa-edit"></i>Advanced Form
-  </div>
+<form [formGroup]="advancedForm" (submit)="onSubmit()" validatedForm>
+  <div class="card">
 
-  <form [formGroup]="advancedForm" (submit)="onSubmit()" validatedForm>
+    <div class="card-header">
+      <i class="fa fa-edit"></i>Advanced Form
+    </div>
 
     <div class="card-body">
-
       <div class="row">
         <div class="col-sm">
           <div class="form-group">
@@ -188,9 +187,6 @@
           <div class="form-group">
             <label for="favouriteTime">Favourite Time</label>
             <timepicker id="favouriteTime" name="favouriteTime" formControlName="favouriteTime"></timepicker>
-            <!--
-            [(ngModel)]="favouriteTime" (change)="changed()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="ismeridian" [readonlyInput]="!isEnabled"
-            -->
           </div>
         </div>
         <div class="col-sm">
@@ -232,13 +228,11 @@
         </div>
       </div>
     </div>
-    <div class="card-footer" style="overflow:auto;">
-      <div class="form-buttons">
+    <div class="card-footer">
+      <div class="form-buttons" style="overflow:auto;">
         <button type="submit" class="btn btn-primary px-4 float-right ml-2">Submit</button>
         <button type="button" class="btn btn-secondary px-4 float-right">Cancel</button>
       </div>
     </div>
-  </form>
-
-
-</div>
+  </div>
+</form>
