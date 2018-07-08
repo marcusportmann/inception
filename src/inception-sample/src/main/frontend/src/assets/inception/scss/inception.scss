@@ -2,52 +2,115 @@
 @import "bootstrap-variables";
 
 // Import Bootstrap source files
-@import "node_modules/bootstrap/scss/bootstrap";
+//@import "node_modules/bootstrap/scss/bootstrap";
+
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/dropdown";
+
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/breadcrumb";
+
+@import "~bootstrap/scss/utilities";
+
+
+
+//@import "~bootstrap/scss/bootstrap-reboot";
+//@import "~bootstrap/scss/bootstrap-grid";
+
+
+
+/*@import "functions";*/
+/*@import "variables";*/
+/*@import "mixins";*/
+/*@import "root";*/
+/*@import "reboot";*/
+/*@import "type";*/
+//@import "images";
+//@import "code";
+/*@import "grid";*/
+//@import "tables";
+//@import "forms";
+/*@import "buttons";*/
+//@import "transitions";
+/*@import "dropdown";*/
+//@import "button-group";
+//@import "input-group";
+//@import "custom-forms";
+/*@import "nav";*/
+/*@import "navbar";*/
+/*@import "card";*/
+/*@import "breadcrumb";*/
+//@import "pagination";
+//@import "badge";
+//@import "jumbotron";
+//@import "alert";
+//@import "progress";
+//@import "media";
+//@import "list-group";
+//@import "close";
+//@import "modal";
+//@import "tooltip";
+//@import "popover";
+//@import "carousel";
+/*@import "utilities";*/
+//@import "print";
+
 
 // Import core styles
 @import "variables";
 @import "mixins";
 
 // Animations
-@import "animate";
+//@import "animate";
 
 // Vendors
 @import "vendors";
 
 // Components
 @import "admin";
-@import "badge";
+//@import "badge";
 @import "breadcrumb";
-@import "buttons";
-@import "callout";
-@import "card";
-@import "charts";
+//@import "buttons";
+//@import "callout";
+//@import "card";
+//@import "charts";
 @import "dropdown";
-@import "form";
-@import "grid";
-@import "input-group";
-@import "images";
-@import "list-group";
-@import "modal";
-@import "nav";
-@import "progress";
-@import "progress-group";
+//@import "form";
+//@import "grid";
+//@import "input-group";
+//@import "images";
+//@import "list-group";
+//@import "modal";
+//@import "nav";
+//@import "progress";
+//@import "progress-group";
 @import "sidebar";
-@import "spinner";
+//@import "spinner";
 @import "switches";
-@import "tables";
-@import "widgets";
+//@import "tables";
+//@import "widgets";
 
 // Layout Options
 @import "layout";
 
-@import "others";
+//@import "others";
 
 // Utility classes
-@import "utilities";
+//@import "utilities";
 
 // Right-to-left
-@import "rtl";
+//@import "rtl";
 
 // Custom Properties support for Internet Explorer
 @import "ie-custom-properties";

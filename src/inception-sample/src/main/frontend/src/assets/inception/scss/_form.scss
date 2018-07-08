@@ -40,6 +40,9 @@
   }
 }
 
+.ng-select.ng-invalid > .ng-select-container {
+  border-left: 3px solid $red !important;
+}
 
 .ng-select {
   &.ng-select-focused {
