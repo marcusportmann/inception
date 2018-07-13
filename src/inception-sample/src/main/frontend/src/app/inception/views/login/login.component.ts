@@ -33,6 +33,7 @@ import {Observable} from "../../../../../node_modules/rxjs";
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
 import {Router} from "@angular/router";
+import {Error} from "../../errors/error";
 
 
 
@@ -68,7 +69,13 @@ export class LoginComponent {
 
   public onCancel() {
 
-    this.router.navigate(['/']);
+    //this.router.navigate(['/']);
+
+    let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
+
+    this.errorService.showErrorReport(error);
+
+
 
     //this.errorService.showConfirm('This is a title', 'This is a message');
 

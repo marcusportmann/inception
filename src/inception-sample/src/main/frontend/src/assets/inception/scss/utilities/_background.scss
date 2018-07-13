@@ -7,10 +7,6 @@
   color: #fff;
 }
 
-@each $color, $value in $brands-colors {
-  @include bg-variant(".bg-#{$color}", $value);
-}
-
 @each $color, $value in $colors {
   @include bg-variant(".bg-#{$color}", $value);
 }

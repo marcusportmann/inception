@@ -8,70 +8,58 @@ import {Session} from "../../services/session/session";
 @Component({
   selector: 'admin-header',
   template: `
-    <header class="admin-header navbar">
+    <header class="admin-header">
       <ng-template [ngIf]="mobileSidebarToggler != false">
-        <button class="navbar-toggler d-lg-none" type="button" sidebarToggler>
-          <span class="navbar-toggler-icon"></span>
+        <button class="toggler d-lg-none" type="button" sidebarToggler>
+          <span class="toggler-icon"></span>
         </button>
       </ng-template>
-      <ng-template [ngIf]="navbarBrand || navbarBrandFull || navbarBrandMinimized">
-        <a class="navbar-brand" href="#">
-          <img *ngIf="navbarBrand"
-               [src]="imgSrc(navbarBrand)"
-               [attr.width]="imgWidth(navbarBrand)"
-               [attr.height]="imgHeight(navbarBrand)"
-               [attr.alt]="imgAlt(navbarBrand)"
-               class="navbar-brand">
+      
+      <ng-template [ngIf]="navbarBrandFull || navbarBrandMinimized">
+        <a class="brand" href="#">
           <img *ngIf="navbarBrandFull"
                [src]="imgSrc(navbarBrandFull)"
                [attr.width]="imgWidth(navbarBrandFull)"
                [attr.height]="imgHeight(navbarBrandFull)"
                [attr.alt]="imgAlt(navbarBrandFull)"
-               class="navbar-brand-full">
+               class="brand-full">
           <img *ngIf="navbarBrandMinimized"
                [src]="imgSrc(navbarBrandMinimized)"
                [attr.width]="imgWidth(navbarBrandMinimized)"
                [attr.height]="imgHeight(navbarBrandMinimized)"
                [attr.alt]="imgAlt(navbarBrandMinimized)"
-               class="navbar-brand-minimized">
+               class="brand-minimized">
         </a>
       </ng-template>
       <ng-template [ngIf]="sidebarToggler != false">
-        <button class="navbar-toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
-          <span class="navbar-toggler-icon"></span>
+        <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
+          <span class="toggler-icon"></span>
         </button>
       </ng-template>
       
-      <ul class="nav navbar-nav ml-auto">
+      <ul class="nav ml-auto">
         <!--
         <li class="nav-item d-md-down-none">
-          <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a>
-        </li>
-        <li class="nav-item d-md-down-none">
-          <a class="nav-link" href="#"><i class="icon-list"></i></a>
-        </li>
-        <li class="nav-item d-md-down-none">
-          <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
+          <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        
-        <li *ngIf="isLoggedIn() | async" class="nav-item dropdown" dropdown>
-          <a href="#" class="nav-link" dropdownToggle (click)="false" aria-controls="basic-link-dropdown">
-            <span class="navbar-user-full-name float-right d-md-down-none">{{ userFullName() | async}}</span>
-            <span class="navbar-user-icon float-right"></span>
+        <li *ngIf="isLoggedIn() | async" class="nav-item" [matMenuTriggerFor]="userMenu">
+          <a href="#" class="nav-link" (click)="false">
+            <span class="user-icon"></span>
+            <span class="user-full-name d-md-down-none">{{ userFullName() | async}}</span>
           </a>
-
-          <div id="basic-link-dropdown" class="dropdown-menu dropdown-menu-right dropdown-menu-user" *dropdownMenu aria-labelledby="simple-dropdown">
-            <a class="dropdown-item" href="#"><i class="fas fa-user-circle"></i> Profile</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-cogs"></i> Settings</a>
-            <a class="dropdown-item" href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </div>
         </li>
 
+        <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
+          <a mat-menu-item href="#"><i class="fas fa-user-circle"></i> Profile</a>
+          <a mat-menu-item href="#"><i class="fas fa-cogs"></i> Settings</a>
+          <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </mat-menu>
+        
         <li *ngIf="!(isLoggedIn() | async)" class="nav-item">
           <a class="nav-link" (click)="login()">
-            <span class="navbar-login float-right d-md-down-none">Login</span>
-            <span class="navbar-login-icon float-right"></span>
+            <span class="login-icon"></span>
+            <span class="login d-md-down-none">Login</span>
           </a>
         </li>
       </ul>
@@ -82,7 +70,6 @@ export class AdminHeaderComponent implements OnInit {
 
   @Input() fixed: boolean;
 
-  @Input() navbarBrand: any;
   @Input() navbarBrandFull: any;
   @Input() navbarBrandMinimized: any;
 

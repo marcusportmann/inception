@@ -1,197 +1,141 @@
 .admin-header {
   position: relative;
+  display: flex;
   flex-direction: row;
-  height: $navbar-height;
+  flex-wrap: wrap;
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
+
+  height: $admin-header-height;;
   padding: 0;
   margin: 0;
-  background-color: $navbar-bg;
-  @include borders($navbar-border);
+  background-color: $admin-header-bg;
+  @include borders($admin-header-border);
 
-  .navbar-brand {
+  .brand {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: $navbar-brand-width;
-    height: $navbar-height;
+    width: $admin-header-brand-width;
+    height: $admin-header-height;
     padding: 0;
     margin-right: 0;
-    background-color: $navbar-brand-bg;
-    @include borders($navbar-brand-border);
+    background-color: $admin-header-brand-bg;
+    @include borders($admin-header-brand-border);
 
-    .navbar-brand-minimized {
+    .brand-minimized {
       display: none;
     }
   }
 
-  .navbar-toggler {
-    min-width: 50px;
-    padding: $navbar-toggler-padding-y 0;
-
-    &:hover .navbar-toggler-icon {
-      background-image: $navbar-toggler-icon-hover;
-    }
-  }
-
-  .navbar-toggler:focus {
-    outline: none!important;
-  }
-
-  .navbar-toggler-icon {
-    height: 1.2em;
-    width: 1.2em;
-    background-image: $navbar-toggler-icon;
-  }
-
-  .nav-link
-  {
-    .navbar-login-icon {
-      display: inline-block;
-      width: 1.3em;
-      height: 1.3em;
-      vertical-align: middle;
-      background-size: 100% 100%;
-      background-image: $navbar-login-icon;
-      content: "";
-    }
-
-    .navbar-login {
-      display: inline-block;
-      line-height: 1.3em;
-      color: $navbar-color;
-      padding-left: 6px;
-      padding-right: 15px;
-    }
-
-    &:hover .navbar-login-icon {
-      background-image: $navbar-login-icon-hover;
-      cursor: pointer;
-    }
-
-    &:hover .navbar-login {
-      color: $navbar-hover-color;
-      cursor: pointer;
-    }
-
-    .navbar-user-icon  {
-      display: inline-block;
-      width: 1.5em;
-      height: 1.5em;
-      vertical-align: middle;
-      background-size: 100% 100%;
-      background-image: $navbar-user-icon;
-      content: "";
-    }
-
-    .navbar-user-full-name {
-      display: inline-block;
-      line-height: 1.5em;
-      color: $navbar-color;
-      padding-left: 6px;
-    }
-
-    &:hover .navbar-user-icon {
-      background-image: $navbar-user-icon-hover;
-      cursor: pointer;
-    }
-
-    &:hover .navbar-user-full-name {
-      color: $navbar-hover-color;
-      cursor: pointer;
-    }
-  }
-
-  .navbar-nav {
-    flex-direction: row;
+  .toggler {
+    display: inline-flex;
     align-items: center;
-    padding-right: 15px;
-  }
+    justify-content: center;
 
-  .nav-item {
-    position: relative;
-    min-width: 50px;
-    margin: 0;
-    text-align: center;
+    background-color: transparent;
+    border: none;
 
-    button {
-      margin: 0 auto;
-    }
+    .toggler-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-size: 100% 100%;
+      background-image: $admin-header-toggler-icon;
 
-    .nav-link {
-      padding-top: 0;
-      padding-bottom: 0;
-      background: 0;
-      border: 0;
-
-      .badge {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -16px;
-        margin-left: 0;
-      }
-
-      > .img-avatar {
-        height: $navbar-height - 20px;
-        margin: 0 10px;
+      &:hover {
+        background-image: $admin-header-toggler-icon-hover;
       }
     }
+
+    &:focus {
+      outline: none!important;
+    }
   }
 
-  .dropdown-menu {
-    padding-bottom: 0;
-    line-height: $line-height-base;
-    border-radius: 0px;
-    border-top: none;
+  .nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    align-items: center;
+    list-style: none;
+
     margin: 0;
-  }
+    padding: 0;
 
-  .dropdown-menu-user {
-    position: fixed !important;
-    right: 0;
-    top: 55px !important;
-  }
+    .nav-item {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
 
-  .dropdown-item {
-    min-width: 180px;
-  }
-}
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: $admin-header-height;
 
-.navbar-nav {
-  .nav-link {
-    color: $navbar-color;
+        color: $admin-header-color;
 
-    @include hover-focus {
-      color: $navbar-hover-color;
+        > i {
+          font-size: 16px;
+        }
+
+        .user-icon  {
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          background-size: 100% 100%;
+          background-image: $admin-header-user-icon;
+        }
+
+        .user-full-name {
+          display: inline-block;
+          color: $admin-header-color;
+          padding-left: 6px;
+          height: 24px;
+          line-height: 24px;
+        }
+
+        &:hover .user-icon {
+          background-image: $admin-header-user-icon-hover;
+          cursor: pointer;
+        }
+
+        &:hover .user-full-name {
+          color: $admin-header-hover-color;
+          cursor: pointer;
+        }
+
+        .badge {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -16px;
+          margin-left: 0px;
+          border-radius: 10rem;
+          padding-right: 0.6em;
+          padding-left: 0.6em;
+        }
+      }
     }
   }
-
-  .open > .nav-link,
-  .active > .nav-link,
-  .nav-link.open,
-  .nav-link.active {
-    @include plain-hover-focus {
-      color: $navbar-active-color;
-    }
-  }
-}
-
-.navbar-divider {
-  background-color: rgba(0, 0, 0, .075);
 }
 
 @include media-breakpoint-up(lg) {
   .admin-brand-minimized {
     .admin-header {
-      .navbar-brand {
-        width: $navbar-brand-minimized-width;
-        background-color: $navbar-brand-minimized-bg;
-        @include borders($navbar-brand-minimized-border);
+      .brand {
+        width: $admin-header-brand-minimized-width;
+        background-color: $admin-header-brand-minimized-bg;
+        @include borders($admin-header-brand-minimized-border);
 
-        .navbar-brand-full {
+        .brand-full {
           display: none;
         }
 
-        .navbar-brand-minimized {
+        .brand-minimized {
           display: block;
         }
       }
@@ -204,7 +148,22 @@
   flex-wrap: wrap;
   align-items: center;
   padding: 0 $spacer;
-  color: $footer-color;
-  background: $footer-bg;
-  @include borders($footer-borders);
+  color: $admin-footer-color;
+  background: $admin-footer-bg;
+  @include borders($admin-footer-borders);
+}
+
+.mat-menu-panel.user-menu {
+
+  position: absolute !important;
+  right: 0px !important;
+  top: 0 !important;
+
+  border-top: none !important;
+  border-right: none !important;
+
+  border-top-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+
+  min-width: 150px;
 }

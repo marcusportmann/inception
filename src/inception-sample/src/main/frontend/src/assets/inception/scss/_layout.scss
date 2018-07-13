@@ -17,11 +17,11 @@ admin-root {
 }
 
 .admin-header {
-  flex: 0 0 $navbar-height;
+  flex: 0 0 $admin-header-height;
 }
 
 .admin-footer {
-  flex: 0 0 $footer-height;
+  flex: 0 0 $admin-footer-height;
 }
 
 .admin-body {
@@ -65,7 +65,7 @@ html[dir="rtl"] {
       width: 100%;
     }
     .admin-body {
-      margin-top: $navbar-height;
+      margin-top: $admin-header-height;
     }
   }
   //
@@ -81,7 +81,7 @@ html[dir="rtl"] {
   }
   .sidebar-fixed {
     .admin-header + .admin-body .sidebar {
-      height: calc(100vh - #{$navbar-height});
+      height: calc(100vh - #{$admin-header-height});
     }
   }
 
@@ -122,7 +122,7 @@ html[dir="rtl"] {
 
   .sidebar-off-canvas {
     .admin-header + .admin-body .sidebar {
-      height: calc(100vh - #{$navbar-height});
+      height: calc(100vh - #{$admin-header-height});
     }
   }
 
@@ -163,7 +163,7 @@ html[dir="rtl"] {
 
   .breadcrumb {
     position: fixed;
-    top: $navbar-height;
+    top: $admin-header-height;
     right: 0;
     left: 0;
     z-index: $zindex-sticky - 3;
@@ -296,11 +296,11 @@ html[dir="rtl"] {
     bottom: 0;
     left: 0;
     z-index: $zindex-sticky;
-    height: $footer-height;
+    height: $admin-footer-height;
   }
 
   .admin-body {
-    margin-bottom: $footer-height;
+    margin-bottom: $admin-footer-height;
   }
 }
 
@@ -330,16 +330,16 @@ html[dir="rtl"] {
     z-index: $zindex-sticky;
     width: 100%;
     text-align: center;
-    @if $navbar-brand-bg == transparent {
-      background-color: $navbar-bg;
+    @if $admin-header-brand-bg == transparent {
+      background-color: $admin-header-bg;
     } @else {
-      background-color: $navbar-brand-bg;
+      background-color: $admin-header-brand-bg;
     }
-    @include borders($navbar-brand-border);
+    @include borders($admin-header-brand-border);
 
     .navbar-toggler {
-      @if (lightness( $navbar-brand-bg ) > 40) {
-        color: $navbar-color;
+      @if (lightness( $admin-header-brand-bg ) > 40) {
+        color: $admin-header-color;
       } @else {
         color: #fff;
       }
@@ -348,19 +348,19 @@ html[dir="rtl"] {
     .navbar-brand {
       position: absolute;
       left: 50%;
-      margin-left: - (($navbar-brand-width / 2) + 24);
+      margin-left: - (($admin-header-brand-width / 2) + 24);
     }
   }
 
   .admin-body {
-    margin-top: $navbar-height;
+    margin-top: $admin-header-height;
   }
 
   .sidebar {
     position: fixed;
     z-index: $zindex-sticky - 1;
     width: $sidebar-width;
-    height: calc(100vh - #{$navbar-height});
+    height: calc(100vh - #{$admin-header-height});
   }
 
   .sidebar-minimizer {

@@ -158,16 +158,3 @@
   }
 }
 
-//
-// Pill Style
-//
-
-.switch-pill {
-  .switch-slider {
-    border-radius: 50em;
-
-    &::before {
-      border-radius: 50em;
-    }
-  }
-}

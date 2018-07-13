@@ -29,7 +29,7 @@ import {InceptionModule} from '../../../inception/inception.module';
 import {BasicButtonsComponent} from './basic-buttons.component';
 
 // Dropdown Buttons component
-import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+//import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {DropdownButtonsComponent} from '../buttons/dropdown-buttons.component';
 
 // Loading Buttons component
@@ -70,7 +70,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
 
-    BsDropdownModule.forRoot(),
+    //BsDropdownModule.forRoot(),
 
     InceptionModule,
 

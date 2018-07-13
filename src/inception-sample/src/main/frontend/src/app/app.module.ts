@@ -1,4 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+
+//import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+
+//import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 
@@ -15,7 +19,10 @@ import {NavigationTitle} from "./inception/services/navigation/navigation-title"
   imports: [
     AppRoutingModule,
 
-    BrowserModule,
+    BrowserAnimationsModule,
+    //NoopAnimationsModule,
+
+    //BrowserModule,
 
     InceptionModule.forRoot()
   ],

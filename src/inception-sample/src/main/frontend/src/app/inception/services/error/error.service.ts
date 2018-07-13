@@ -16,9 +16,12 @@
 
 import { Injectable } from "@angular/core";
 
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+//import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
-import { ErrorReportModalComponent } from "../../components/error/index";
+import { ErrorReportDialog } from "../../components/error/index";
+
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+
 import {Error} from "../../errors/error";
 
 /**
@@ -35,7 +38,7 @@ export class ErrorService {
    *
    * @param {BsModalService} bsModalService The Bootstrap Modal Service.
    */
-  constructor(private bsModalService: BsModalService) {
+  constructor(public dialog: MatDialog) {
   }
 
   /**
@@ -47,17 +50,28 @@ export class ErrorService {
 
     console.log('Error: ', error);
 
-    let bsModalRef:BsModalRef = this.bsModalService.show(ErrorReportModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
+    const dialogRef = this.dialog.open(ErrorReportDialog, {
+      width: '250px',
+      data: error
+    });
 
-    (<ErrorReportModalComponent>bsModalRef.content).timestamp = error.timestamp;
-    (<ErrorReportModalComponent>bsModalRef.content).message = error.message;
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      //this.animal = result;
+    });
 
-    if (error.detail) {
-      (<ErrorReportModalComponent>bsModalRef.content).detail = error.detail;
-    }
 
-    if (error.stackTrace) {
-      (<ErrorReportModalComponent>bsModalRef.content).stackTrace = error.stackTrace;
-    }
+    // let bsModalRef:BsModalRef = this.bsModalService.show(ErrorReportModalComponent, { animated: true, keyboard: true, backdrop: true, ignoreBackdropClick: false });
+    //
+    // (<ErrorReportModalComponent>bsModalRef.content).timestamp = error.timestamp;
+    // (<ErrorReportModalComponent>bsModalRef.content).message = error.message;
+    //
+    // if (error.detail) {
+    //   (<ErrorReportModalComponent>bsModalRef.content).detail = error.detail;
+    // }
+    //
+    // if (error.stackTrace) {
+    //   (<ErrorReportModalComponent>bsModalRef.content).stackTrace = error.stackTrace;
+    // }
   }
 }

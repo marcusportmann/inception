@@ -13,15 +13,36 @@
 @import "~bootstrap/scss/type";
 
 @import "~bootstrap/scss/grid";
-@import "~bootstrap/scss/buttons";
-@import "~bootstrap/scss/dropdown";
+
+
+
+//@import "~bootstrap/scss/buttons";
+//@import "~bootstrap/scss/dropdown";
 
 @import "~bootstrap/scss/nav";
 @import "~bootstrap/scss/navbar";
-@import "~bootstrap/scss/card";
+//@import "~bootstrap/scss/card";
 @import "~bootstrap/scss/breadcrumb";
 
 @import "~bootstrap/scss/utilities";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -79,13 +100,16 @@
 
 // Components
 @import "admin";
-//@import "badge";
+@import "badge";
 @import "breadcrumb";
 //@import "buttons";
 //@import "callout";
 //@import "card";
 //@import "charts";
-@import "dropdown";
+
+
+
+//@import "dropdown";
 //@import "form";
 //@import "grid";
 //@import "input-group";
@@ -107,6 +131,12 @@
 //@import "others";
 
 // Utility classes
+@import "display";
+
+
+@import "typography";
+
+
 //@import "utilities";
 
 // Right-to-left
@@ -115,6 +145,10 @@
 // Custom Properties support for Internet Explorer
 @import "ie-custom-properties";
 
+// Material
+@import "material";
+
+
 // Import Ladda source files
-@import "node_modules/ladda/css/ladda";
+@import "~ladda/css/ladda";
 

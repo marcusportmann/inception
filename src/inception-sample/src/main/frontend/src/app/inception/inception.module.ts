@@ -49,7 +49,7 @@ import {
   NotFoundComponent,
   SimpleContainerComponent, SpinnerComponent
 } from './components/layout';
-import { ErrorReportModalComponent } from './components/error';
+import { ErrorReportDialog } from './components/error';
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
@@ -59,19 +59,18 @@ import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
 
 // Import 3rd party modules
-import {BsDatepickerModule} from 'ngx-bootstrap';
-import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+//import {BsDatepickerModule} from 'ngx-bootstrap';
+//import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
 import {LaddaModule} from 'angular2-ladda';
-import {ModalModule} from 'ngx-bootstrap/modal';
-import {NgSelectModule} from '@ng-select/ng-select';
+//import {ModalModule} from 'ngx-bootstrap/modal';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {StorageServiceModule} from "angular-webstorage-service";
-import {TabsModule} from 'ngx-bootstrap/tabs';
-import {TimepickerModule} from 'ngx-bootstrap';
+//import {TabsModule} from 'ngx-bootstrap/tabs';
+//import {TimepickerModule} from 'ngx-bootstrap';
 
 // Import 3rd party components
-import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
+//import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
 import {SessionInterceptor} from "./services/session/session.interceptor";
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 import {setInceptionInjector} from "./inception-injector";
@@ -83,6 +82,14 @@ import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+
+// Import Material modules
+import {MatDialogModule} from "@angular/material";
+import {MatFormFieldModule} from "@angular/material";
+import {MatIconModule} from "@angular/material";
+import {MatInputModule} from "@angular/material";
+import {MatMenuModule} from "@angular/material";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -98,17 +105,26 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule,
 
     // 3rd party modules
-    BsDatepickerModule.forRoot(),
-    BsDropdownModule.forRoot(),
+    //BsDatepickerModule.forRoot(),
+    //BsDropdownModule.forRoot(),
     ChartsModule,
     LaddaModule.forRoot({
     }),
-    ModalModule.forRoot(),
-    NgSelectModule,
+    //ModalModule.forRoot(),
+    //NgSelectModule,
     PerfectScrollbarModule,
     StorageServiceModule,
-    TabsModule.forRoot(),
-    TimepickerModule.forRoot(),
+    //TabsModule.forRoot(),
+    //TimepickerModule.forRoot(),
+
+
+    // Material modules
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+
 
     // Inception modules
     DirectivesModule
@@ -122,16 +138,28 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RouterModule,
 
     // 3rd party modules
-    BsDatepickerModule,
-    BsDropdownModule,
+    //BsDatepickerModule,
+    //BsDropdownModule,
     ChartsModule,
     LaddaModule,
-    ModalModule,
-    NgSelectModule,
+    //ModalModule,
+    //NgSelectModule,
     PerfectScrollbarModule,
     StorageServiceModule,
-    TabsModule,
-    TimepickerModule,
+    //TabsModule,
+    //TimepickerModule,
+
+
+    // Material modules
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+
+
+
+
 
     // Inception modules
     DirectivesModule,
@@ -163,9 +191,9 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SpinnerComponent,
 
     // Inception error components
-    ErrorReportModalComponent
+    ErrorReportDialog
   ],
-  bootstrap: [AdminContainerComponent, ErrorReportModalComponent, SimpleContainerComponent]
+  bootstrap: [AdminContainerComponent, ErrorReportDialog, SimpleContainerComponent]
 })
 export class InceptionModule {
 
@@ -173,12 +201,18 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  constructor(injector: Injector, bsDatepickerConfig: BsDatepickerConfig, bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  // constructor(injector: Injector, bsDatepickerConfig: BsDatepickerConfig, bsDaterangepickerConfig: BsDaterangepickerConfig) {
+  //   console.log('Initialising the Inception Module');
+  //   setInceptionInjector(injector);
+  //   bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
+  //   bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
+  // }
+
+  constructor(injector: Injector) {
     console.log('Initialising the Inception Module');
     setInceptionInjector(injector);
-    bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
-    bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
   }
+
 
   static forRoot(): ModuleWithProviders
   {
