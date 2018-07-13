@@ -1,0 +1,105 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$custom-primary: mat-palette($mat-gray);
+$custom-accent:  mat-palette($mat-blue);
+
+$inception-theme: mat-light-theme($custom-primary, $custom-accent);
+
+@include angular-material-theme($inception-theme);
+
+
+
+$inception-typography: mat-typography-config(
+  $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+);
+
+@include angular-material-typography($inception-typography);
+
+
+
+
+
+
+@mixin mat-menu-typography($config) {
+  .mat-menu-item {
+    font: {
+      family: mat-font-family($config, subheading-2);
+      size: mat-font-size($config, subheading-2);
+      weight: mat-font-weight($config, subheading-2);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+* {
+  &:active,
+  :focus {
+    outline: none !important;  // 1
+  }
+}
+
+label {
+  margin-bottom: 0; // 2
+}
+
+/*
+a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not([mat-list-item]) {
+  color: #3f51b5; // 3
+}
+*/
+
+.cdk-overlay-container {
+  z-index: 10000;
+}
+
+
+.mat-menu-panel {
+  border-radius: 0;
+
+  border-top: 1px solid $gray-300;
+  border-left: 1px solid $gray-300;
+  border-right: 1px solid $gray-300;
+
+  .mat-menu-content {
+
+    padding: 0;
+
+    .mat-menu-item {
+
+      color: $gray-600;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      text-decoration: none;
+
+      height: auto;
+
+      line-height: 48px;
+
+      padding-right: 20px;
+      padding-left: 20px;
+
+      border-bottom: 1px solid $gray-300;
+
+      i {
+        display: inline-block;
+        width: 20px;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      &:hover {
+        color: $admin-header-hover-color;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
