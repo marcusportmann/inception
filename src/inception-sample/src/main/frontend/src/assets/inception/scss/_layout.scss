@@ -16,12 +16,188 @@ admin-root {
   min-height: 100vh;
 }
 
+
 .admin-header {
+  position: relative;
+  display: flex;
   flex: 0 0 $admin-header-height;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /*align-items: center;*/
+  /*justify-content: space-between;*/
+
+  height: $admin-header-height;;
+  padding: 0;
+  margin: 0;
+  background-color: $admin-header-bg;
+  @include borders($admin-header-border);
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $admin-header-brand-width;
+    height: $admin-header-height;
+    padding: 0;
+    margin-right: 0;
+    background-color: $admin-header-brand-bg;
+    @include borders($admin-header-brand-border);
+
+    .brand-minimized {
+      display: none;
+    }
+  }
+
+  .toggler {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    border: none;
+
+    .toggler-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-size: 100% 100%;
+      background-image: $admin-header-toggler-icon;
+
+      &:hover {
+        background-image: $admin-header-toggler-icon-hover;
+      }
+    }
+
+    &:focus {
+      outline: none!important;
+    }
+  }
+
+  .nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    align-items: center;
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    .nav-item {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: $admin-header-height;
+
+        color: $admin-header-color;
+
+        > i {
+          font-size: 16px;
+        }
+
+        .login-icon {
+          display: inline-block;
+          width: 22px;
+          height: 22px;
+          background-size: 100% 100%;
+          background-image: $admin-header-login-icon;
+        }
+
+        .login {
+          display: inline-block;
+          color: $admin-header-color;
+          padding-left: 6px;
+          height: 24px;
+          line-height: 24px;
+        }
+
+        &:hover .login-icon {
+          background-image: $admin-header-login-icon-hover;
+          cursor: pointer;
+        }
+
+        &:hover .login {
+          color: $admin-header-hover-color;
+          cursor: pointer;
+        }
+
+        .user-icon  {
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          background-size: 100% 100%;
+          background-image: $admin-header-user-icon;
+        }
+
+        .user-full-name {
+          display: inline-block;
+          color: $admin-header-color;
+          padding-left: 6px;
+          height: 24px;
+          line-height: 24px;
+        }
+
+        &:hover .user-icon {
+          background-image: $admin-header-user-icon-hover;
+          cursor: pointer;
+        }
+
+        &:hover .user-full-name {
+          color: $admin-header-hover-color;
+          cursor: pointer;
+        }
+
+        .badge {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -16px;
+          margin-left: 0px;
+          border-radius: 10rem;
+          padding-right: 0.6em;
+          padding-left: 0.6em;
+        }
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .admin-brand-minimized {
+    .admin-header {
+      .brand {
+        width: $admin-header-brand-minimized-width;
+        background-color: $admin-header-brand-minimized-bg;
+        @include borders($admin-header-brand-minimized-border);
+
+        .brand-full {
+          display: none;
+        }
+
+        .brand-minimized {
+          display: block;
+        }
+      }
+    }
+  }
 }
 
 .admin-footer {
+  display: flex;
   flex: 0 0 $admin-footer-height;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 $spacer;
+  color: $admin-footer-color;
+  background: $admin-footer-bg;
+  @include borders($admin-footer-borders);
 }
 
 .admin-body {
@@ -366,4 +542,21 @@ html[dir="rtl"] {
   .sidebar-minimizer {
     display: none;
   }
+}
+
+
+
+.mat-menu-panel.user-menu {
+
+  position: absolute !important;
+  right: 0px !important;
+  top: 0 !important;
+
+  border-top: none !important;
+  border-right: none !important;
+
+  border-top-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+
+  min-width: 150px;
 }

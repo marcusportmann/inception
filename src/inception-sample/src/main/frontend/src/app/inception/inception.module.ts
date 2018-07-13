@@ -62,6 +62,7 @@ import {SessionService} from './services/session/session.service';
 //import {BsDatepickerModule} from 'ngx-bootstrap';
 //import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
+import {FlexLayoutModule} from "@angular/flex-layout";
 import {LaddaModule} from 'angular2-ladda';
 //import {ModalModule} from 'ngx-bootstrap/modal';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
@@ -85,11 +86,13 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 
 // Import Material modules
+import {MatCardModule} from "@angular/material";
 import {MatDialogModule} from "@angular/material";
 import {MatFormFieldModule} from "@angular/material";
 import {MatIconModule} from "@angular/material";
 import {MatInputModule} from "@angular/material";
 import {MatMenuModule} from "@angular/material";
+import {MatToolbarModule} from "@angular/material";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -108,6 +111,7 @@ import {MatMenuModule} from "@angular/material";
     //BsDatepickerModule.forRoot(),
     //BsDropdownModule.forRoot(),
     ChartsModule,
+    FlexLayoutModule,
     LaddaModule.forRoot({
     }),
     //ModalModule.forRoot(),
@@ -119,11 +123,13 @@ import {MatMenuModule} from "@angular/material";
 
 
     // Material modules
+    MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatToolbarModule,
 
 
     // Inception modules
@@ -141,6 +147,7 @@ import {MatMenuModule} from "@angular/material";
     //BsDatepickerModule,
     //BsDropdownModule,
     ChartsModule,
+    FlexLayoutModule,
     LaddaModule,
     //ModalModule,
     //NgSelectModule,
@@ -151,12 +158,13 @@ import {MatMenuModule} from "@angular/material";
 
 
     // Material modules
+    MatCardModule,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
-
+    MatToolbarModule,
 
 
 
