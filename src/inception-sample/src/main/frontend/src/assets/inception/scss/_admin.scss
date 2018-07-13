@@ -82,6 +82,34 @@
           font-size: 16px;
         }
 
+        .login-icon {
+          display: inline-block;
+          width: 24px;
+          height: 24px;
+          background-size: 100% 100%;
+          background-image: $navbar-login-icon;
+        }
+
+        .navbar-login {
+          display: inline-block;
+          color: $navbar-color;
+          padding-left: 6px;
+        }
+
+        &:hover .navbar-login-icon {
+          background-image: $navbar-login-icon-hover;
+          cursor: pointer;
+        }
+
+        &:hover .navbar-login {
+          color: $navbar-hover-color;
+          cursor: pointer;
+        }
+
+
+
+
+
         .user-icon  {
           display: inline-block;
           width: 24px;
