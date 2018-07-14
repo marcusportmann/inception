@@ -23,8 +23,6 @@ admin-root {
   flex: 0 0 $admin-header-height;
   flex-direction: row;
   flex-wrap: wrap;
-  /*align-items: center;*/
-  /*justify-content: space-between;*/
 
   height: $admin-header-height;;
   padding: 0;
@@ -97,6 +95,8 @@ admin-root {
         height: $admin-header-height;
 
         color: $admin-header-color;
+
+        padding: 0.5rem 1rem;
 
         > i {
           font-size: 16px;

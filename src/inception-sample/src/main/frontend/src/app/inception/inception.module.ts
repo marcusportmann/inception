@@ -62,7 +62,6 @@ import {SessionService} from './services/session/session.service';
 //import {BsDatepickerModule} from 'ngx-bootstrap';
 //import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {ChartsModule} from 'ng2-charts/ng2-charts';
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {LaddaModule} from 'angular2-ladda';
 //import {ModalModule} from 'ngx-bootstrap/modal';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
@@ -111,7 +110,6 @@ import {MatToolbarModule} from "@angular/material";
     //BsDatepickerModule.forRoot(),
     //BsDropdownModule.forRoot(),
     ChartsModule,
-    FlexLayoutModule,
     LaddaModule.forRoot({
     }),
     //ModalModule.forRoot(),
@@ -147,7 +145,6 @@ import {MatToolbarModule} from "@angular/material";
     //BsDatepickerModule,
     //BsDropdownModule,
     ChartsModule,
-    FlexLayoutModule,
     LaddaModule,
     //ModalModule,
     //NgSelectModule,

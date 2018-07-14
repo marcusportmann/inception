@@ -16,30 +16,13 @@
 
 
 
-//@import "~bootstrap/scss/buttons";
-//@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/card";
 
-@import "~bootstrap/scss/nav";
-@import "~bootstrap/scss/navbar";
-//@import "~bootstrap/scss/card";
+
+
 @import "~bootstrap/scss/breadcrumb";
 
 @import "~bootstrap/scss/utilities";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -51,27 +34,27 @@
 
 
 
-/*@import "functions";*/
-/*@import "variables";*/
-/*@import "mixins";*/
-/*@import "root";*/
-/*@import "reboot";*/
-/*@import "type";*/
+/*@import "functions";*/ // ADDED
+/*@import "variables";*/ // ADDED
+/*@import "mixins";*/ // ADDED
+/*@import "root";*/ // ADDED
+/*@import "reboot";*/ // ADDED
+/*@import "type";*/ // ADDED
 //@import "images";
 //@import "code";
-/*@import "grid";*/
+/*@import "grid";*/  // ADDED
 //@import "tables";
 //@import "forms";
-/*@import "buttons";*/
+/*@import "buttons";*/ // TO DELETE
 //@import "transitions";
-/*@import "dropdown";*/
+/*@import "dropdown";*/ // TO DELETE
 //@import "button-group";
 //@import "input-group";
 //@import "custom-forms";
-/*@import "nav";*/
-/*@import "navbar";*/
+///*@import "nav";*/ // TO DELETE
+///*@import "navbar";*/ // TO DELETE
 /*@import "card";*/
-/*@import "breadcrumb";*/
+/*@import "breadcrumb";*/ // ADDED
 //@import "pagination";
 //@import "badge";
 //@import "jumbotron";
@@ -84,7 +67,7 @@
 //@import "tooltip";
 //@import "popover";
 //@import "carousel";
-/*@import "utilities";*/
+/*@import "utilities";*/ // ADDED
 //@import "print";
 
 

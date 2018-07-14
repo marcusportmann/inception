@@ -1,77 +1,52 @@
-<spinner [shown]="loggingIn"></spinner>
+<spinner [shown]="true"></spinner>
 <div class="app flex-row align-items-center">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
 
-        <mat-card>
-          <mat-card-header>
-          </mat-card-header>
-          <mat-card-content>
-            <h1>Login</h1>
-            <p class="text-muted">Sign in to your account</p>
-
-
-
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" inceptionValidatedForm>
-
-
-
-              <div class="formGroup mb-3">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-user"></i></span>
-                  </div>
-                  <input id="username" name="username" formControlName="username" type="text" class="form-control" placeholder="Username" inceptionAutofocus>
-                </div>
-                <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched" class="form-control-error">
-                  <div *ngIf="loginForm.controls['username'].errors?.required">A username is required.</div>
-                  <div *ngIf="loginForm.controls['username'].errors?.patternInvalid">A valid username is required.</div>
-                </div>
-              </div>
-
-              <div class="formGroup mb-4">
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="icon-lock"></i></span>
-                  </div>
-                  <input id="password" name="password" formControlName="password" type="password" class="form-control" placeholder="Password">
-                </div>
-                <div *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched" class="form-control-error">
-                  <div *ngIf="loginForm.controls['password'].errors?.required">A password is required.</div>
-                </div>
-              </div>
-
-              <mat-card-actions>
-                <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
-                <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
-                <button *ngIf="isForgottenPasswordEnabled()" type="button" class="btn btn-link px-0">Forgot password?</button>
-              </mat-card-actions>
-            </form>
-
-
-
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-          </mat-card-actions>
-        </mat-card>
-
-
-
-
-
-
         <div class="card-group">
           <div class="card p-4">
             <div class="card-body">
               <h1>Login</h1>
+              <p class="text-muted">Sign in to your account</p>
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" inceptionValidatedForm>
 
+                <div class="formGroup mb-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input id="username" name="username" formControlName="username" type="text" class="form-control" placeholder="Username" inceptionAutofocus>
+                  </div>
+                  <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched" class="form-control-error">
+                    <div *ngIf="loginForm.controls['username'].errors?.required">A username is required.</div>
+                    <div *ngIf="loginForm.controls['username'].errors?.patternInvalid">A valid username is required.</div>
+                  </div>
+                </div>
 
+                <div class="formGroup mb-4">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input id="password" name="password" formControlName="password" type="password" class="form-control" placeholder="Password">
+                  </div>
+                  <div *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched" class="form-control-error">
+                    <div *ngIf="loginForm.controls['password'].errors?.required">A password is required.</div>
+                  </div>
+                </div>
+
+                <!--
+                <div class="form-buttons">
+                  <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
+                  <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
+                  <button *ngIf="isForgottenPasswordEnabled()" type="button" class="btn btn-link px-0">Forgot password?</button>
+                </div>
+                -->
+              </form>
             </div>
           </div>
-          <div *ngIf="isRegistrationEnabled()" class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+          <div *ngIf="isRegistrationEnabled() || true" class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
             <div class="card-body text-center">
               <div>
                 <h2>Sign up</h2>
