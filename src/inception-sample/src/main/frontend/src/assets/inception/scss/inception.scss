@@ -1,28 +1,44 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Override Boostrap variables
-@import "bootstrap-variables";
+//@import "bootstrap-variables";
 
 // Import Bootstrap source files
 //@import "node_modules/bootstrap/scss/bootstrap";
 
 
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/root";
-@import "~bootstrap/scss/reboot";
-@import "~bootstrap/scss/type";
+//@import "~bootstrap/scss/functions";
+//@import "~bootstrap/scss/variables";
+//@import "~bootstrap/scss/mixins";
+//@import "~bootstrap/scss/root";
+//@import "~bootstrap/scss/reboot";
+//@import "~bootstrap/scss/type";
 
-@import "~bootstrap/scss/grid";
-
-
-
-@import "~bootstrap/scss/card";
+//@import "~bootstrap/scss/grid";
 
 
 
-@import "~bootstrap/scss/breadcrumb";
+//@import "~bootstrap/scss/card";
 
-@import "~bootstrap/scss/utilities";
+
+
+//@import "~bootstrap/scss/breadcrumb";
+
+//@import "~bootstrap/scss/utilities";
 
 
 
@@ -72,8 +88,55 @@
 
 
 // Import core styles
+@import "functions";
 @import "variables";
 @import "mixins";
+@import "reboot";
+
+
+
+
+
+
+
+:root {
+  // Custom variable values only support SassScript inside `#{}`.
+  @each $color, $value in $colors {
+    --#{$color}: #{$value};
+  }
+
+  @each $color, $value in $theme-colors {
+    --#{$color}: #{$value};
+  }
+
+  @each $bp, $value in $grid-breakpoints {
+    --breakpoint-#{$bp}: #{$value};
+  }
+
+  // Use `inspect` for lists so that quoted items keep the quotes.
+  // See https://github.com/sass/sass/issues/2383#issuecomment-336349172
+  --font-family-sans-serif: #{inspect($font-family-sans-serif)};
+  --font-family-monospace: #{inspect($font-family-monospace)};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Animations
 //@import "animate";
@@ -90,18 +153,22 @@
 //@import "charts";
 
 
+@import "clearfix";
+
+
 
 
 //@import "form";
-//@import "grid";
+@import "grid";
 //@import "input-group";
 //@import "images";
 //@import "list-group";
 //@import "modal";
-//@import "nav";
+@import "nav";
 //@import "progress";
 //@import "progress-group";
 @import "sidebar";
+@import "spacing";
 //@import "spinner";
 @import "switches";
 //@import "tables";
@@ -132,5 +199,7 @@
 
 
 // Import Ladda source files
-@import "~ladda/css/ladda";
+//@import "~ladda/css/ladda";
+
+
 
