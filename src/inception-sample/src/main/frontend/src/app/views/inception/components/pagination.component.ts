@@ -14,39 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, Input, ViewEncapsulation  } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  templateUrl: 'pagination.component.html',
-  styles: ['.pager li.btn:active { box-shadow: none; }'],
-  encapsulation: ViewEncapsulation.None
+  templateUrl: 'pagination.component.html'
 })
 export class PaginationComponent {
 
-  bigCurrentPage: number = 1;
-
-  bigTotalItems: number = 675;
-
-  currentPage: number   = 4;
-
-  currentPager: number   = 4;
-
-  maxSize: number = 5;
-
-  numPages: number = 0;
-
-  smallnumPages: number = 0;
-
-  totalItems: number = 64;
-
-  constructor() { }
-
-  pageChanged(event: any): void {
-    console.log('Page changed to: ' + event.page);
-    console.log('Number items per page: ' + event.itemsPerPage);
-  }
-
-  setPage(pageNo: number): void {
-    this.currentPage = pageNo;
-  }
 }

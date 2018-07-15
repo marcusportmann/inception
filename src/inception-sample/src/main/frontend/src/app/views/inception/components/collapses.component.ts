@@ -21,17 +21,4 @@ import {Component} from '@angular/core';
 })
 export class CollapsesComponent {
 
-  isCollapsed: boolean = false;
-
-  constructor() {
-  }
-
-  collapsed(event: any): void {
-    // console.log(event);
-  }
-
-  expanded(event: any): void {
-    // console.log(event);
-  }
-
 }

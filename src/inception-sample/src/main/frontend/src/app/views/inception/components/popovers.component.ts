@@ -14,22 +14,11 @@
  * limitations under the License.
  */
 
-import {Component, SecurityContext} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-
+import {Component} from '@angular/core';
 
 @Component({
   templateUrl: 'popovers.component.html'
 })
 export class PopoversComponent {
 
-  content: string = 'Vivamus sagittis lacus vel augue laoreet rutrum faucibus.';
-
-  html: string = `<span class="btn btn-warning">Never trust not sanitized <code>HTML</code>!!!</span>`;
-
-  title: string = 'Welcome word';
-
-  constructor(sanitizer: DomSanitizer) {
-    this.html = sanitizer.sanitize(SecurityContext.HTML, this.html)
-  }
 }

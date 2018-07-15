@@ -32,26 +32,21 @@ import {CardsComponent} from './cards.component';
 import {ChartsComponent} from './charts.component';
 
 // Collapse Component
-//import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {CollapsesComponent} from './collapses.component';
 
 // Pagination Component
-//import {PaginationModule} from 'ngx-bootstrap/pagination';
 import {PaginationComponent} from './pagination.component';
 
 // Popovers Component
-//import {PopoverModule} from 'ngx-bootstrap/popover';
 import {PopoversComponent} from './popovers.component';
 
 // Progress Component
-//import {ProgressbarModule} from 'ngx-bootstrap/progressbar';
 import {ProgressComponent} from './progress.component';
 
 // Switches Component
 import {SwitchesComponent} from './switches.component';
 
 // Tabs Component
-//import {TabsModule} from 'ngx-bootstrap/tabs';
 import {TabsComponent} from './tabs.component';
 
 // Text Editors Components
@@ -59,7 +54,6 @@ import {QuillModule} from 'ngx-quill';
 import {TextEditorsComponent} from './text-editors.component';
 
 // Tooltips Component
-//import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {TooltipsComponent} from './tooltips.component';
 
 

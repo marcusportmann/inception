@@ -25,7 +25,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { DashboardComponent } from './dashboard.component';
 
 // Import 3rd party modules
-import { ChartsModule } from 'ng2-charts/ng2-charts';
+//import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 const routes: Routes = [
   {
@@ -38,7 +38,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
 
-    ChartsModule,
+    //ChartsModule,
 
     RouterModule.forChild(routes)
   ],

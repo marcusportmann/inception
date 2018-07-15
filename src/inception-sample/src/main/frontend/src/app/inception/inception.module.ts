@@ -61,8 +61,7 @@ import {SessionService} from './services/session/session.service';
 // Import 3rd party modules
 //import {BsDatepickerModule} from 'ngx-bootstrap';
 //import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
-import {ChartsModule} from 'ng2-charts/ng2-charts';
-import {LaddaModule} from 'angular2-ladda';
+//import {LaddaModule} from 'angular2-ladda';
 //import {ModalModule} from 'ngx-bootstrap/modal';
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {StorageServiceModule} from "angular-webstorage-service";
@@ -109,9 +108,8 @@ import {MatToolbarModule} from "@angular/material";
     // 3rd party modules
     //BsDatepickerModule.forRoot(),
     //BsDropdownModule.forRoot(),
-    ChartsModule,
-    LaddaModule.forRoot({
-    }),
+    //ChartsModule,
+    //LaddaModule.forRoot({}),
     //ModalModule.forRoot(),
     //NgSelectModule,
     PerfectScrollbarModule,
@@ -144,8 +142,8 @@ import {MatToolbarModule} from "@angular/material";
     // 3rd party modules
     //BsDatepickerModule,
     //BsDropdownModule,
-    ChartsModule,
-    LaddaModule,
+    //ChartsModule,
+    //LaddaModule,
     //ModalModule,
     //NgSelectModule,
     PerfectScrollbarModule,
