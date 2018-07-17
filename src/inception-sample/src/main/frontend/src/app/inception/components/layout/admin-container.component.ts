@@ -29,7 +29,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
       <!-- Main content -->
-      <main class="admin-main">
+      <main class="main">
         <breadcrumbs></breadcrumbs>
         <div class="container-fluid">
           <router-outlet></router-outlet>

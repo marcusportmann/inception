@@ -206,7 +206,7 @@ admin-root {
   flex-grow: 1;
   overflow-x: hidden;
 
-  .admin-main {
+  .main {
     flex: 1;
     min-width: 0;
   }
@@ -332,7 +332,7 @@ html[dir="rtl"] {
 // Breadcrumb
 //
 .breadcrumbs-fixed {
-  .admin-main {
+  .main {
     $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 * $spacer;
     padding-top: $breadcrumb-height;
   }
@@ -356,18 +356,18 @@ html[dir="rtl"] {
         }
         @include media-breakpoint-up(sm) {
           &.sidebar-fixed {
-            .admin-main,
+            .main,
             .admin-footer {
               margin-left: $sidebar-width;
             }
             &.sidebar-compact {
-              .admin-main,
+              .main,
               .admin-footer {
                 margin-left: $sidebar-compact-width;
               }
             }
             &.sidebar-minimized {
-              .admin-main,
+              .main,
               .admin-footer {
                 margin-left: $sidebar-minimized-width;
               }
@@ -399,18 +399,18 @@ html[dir="rtl"] {
         }
         @include media-breakpoint-up(sm) {
           &.sidebar-fixed {
-            .admin-main,
+            .main,
             .admin-footer {
               margin-right: $sidebar-width;
             }
             &.sidebar-compact {
-              .admin-main,
+              .main,
               .admin-footer {
                 margin-right: $sidebar-compact-width;
               }
             }
             &.sidebar-minimized {
-              .admin-main,
+              .main,
               .admin-footer {
                 margin-right: $sidebar-minimized-width;
               }
@@ -443,7 +443,7 @@ html[dir="rtl"] {
       }
 
       @include media-breakpoint-down(xs) {
-        .admin-main {
+        .main {
           position: relative;
           &::before {
             position: absolute;
@@ -486,7 +486,7 @@ html[dir="rtl"] {
 .admin-header,
 .admin-footer,
 .sidebar,
-.admin-main {
+.main {
   transition: margin-left $layout-transition-speed, margin-right $layout-transition-speed, width $layout-transition-speed, flex $layout-transition-speed;
 }
 .sidebar-nav {
