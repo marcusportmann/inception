@@ -60,13 +60,8 @@ export class AppModule extends InceptionAppModule {
 
     navigation.push(new NavigationItem('icon-layers', 'Inception', '/inception', [], [
 
-      new NavigationItem('icon-cursor', 'Buttons', '/inception/buttons', [], [
-        new NavigationItem('icon-cursor', 'Basic Buttons', '/inception/buttons/basic-buttons', []),
-        new NavigationItem('icon-cursor', 'Dropdown Buttons', '/inception/buttons/dropdown-buttons', []),
-        new NavigationItem('icon-cursor', 'Loading Buttons', '/inception/buttons/loading-buttons', [])
-      ]),
-
       new NavigationItem('icon-puzzle', 'Components', '/inception/components', [], [
+        new NavigationItem('icon-puzzle', 'Buttons', '/inception/components/buttons', []),
         new NavigationItem('icon-puzzle', 'Cards', '/inception/components/cards', []),
         new NavigationItem('icon-puzzle', 'Charts', '/inception/components/charts', []),
         new NavigationItem('icon-puzzle', 'Collapses', '/inception/components/collapses', []),

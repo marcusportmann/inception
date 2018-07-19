@@ -25,6 +25,9 @@ import {RouterModule, Routes} from "@angular/router";
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
 
+// Buttons component
+import {ButtonsComponent} from './buttons.component';
+
 // Cards component
 import {CardsComponent} from './cards.component';
 
@@ -60,8 +63,15 @@ import {TooltipsComponent} from './tooltips.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'cards',
+    redirectTo: 'buttons',
     pathMatch: 'full',
+  },
+  {
+    path: 'buttons',
+    component: ButtonsComponent,
+    data: {
+      title: 'Buttons',
+    }
   },
   {
     path: 'cards',
@@ -152,7 +162,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CardsComponent, ChartsComponent, CollapsesComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, CollapsesComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
 })
 export class ComponentsModule {
 }

@@ -70,6 +70,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   -webkit-box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.05)!important;
   padding: 0px!important;
   border-radius: $card-border-radius;
+  margin-bottom: 1.5rem;
 
   .mat-card-content {
     line-height: 19px;
@@ -131,6 +132,10 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
 }
 
+.mat-card-avatar > img {
+  width: 40px;
+  height: 40px;
+}
 
 
 
