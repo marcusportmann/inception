@@ -87,11 +87,14 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 import {MatButtonModule} from "@angular/material";
 import {MatButtonToggleModule} from "@angular/material";
 import {MatCardModule} from "@angular/material";
+import {MatExpansionModule} from "@angular/material";
+import {MatDatepickerModule} from "@angular/material";
 import {MatDialogModule} from "@angular/material";
 import {MatFormFieldModule} from "@angular/material";
 import {MatIconModule} from "@angular/material";
 import {MatInputModule} from "@angular/material";
 import {MatMenuModule} from "@angular/material";
+import {MatNativeDateModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 
 /**
@@ -124,11 +127,14 @@ import {MatToolbarModule} from "@angular/material";
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatToolbarModule,
 
 
@@ -160,11 +166,14 @@ import {MatToolbarModule} from "@angular/material";
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatDatepickerModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatToolbarModule,
 
 

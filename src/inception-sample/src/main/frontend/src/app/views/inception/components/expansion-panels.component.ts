@@ -17,8 +17,8 @@
 import {Component} from '@angular/core';
 
 @Component({
-  templateUrl: 'collapses.component.html'
+  templateUrl: 'expansion-panels.component.html'
 })
-export class CollapsesComponent {
+export class ExpansionPanelsComponent {
 
 }

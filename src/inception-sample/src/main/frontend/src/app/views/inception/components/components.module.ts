@@ -34,8 +34,8 @@ import {CardsComponent} from './cards.component';
 // Charts Component
 import {ChartsComponent} from './charts.component';
 
-// Collapse Component
-import {CollapsesComponent} from './collapses.component';
+// Expansion Panels Component
+import {ExpansionPanelsComponent} from './expansion-panels.component';
 
 // Pagination Component
 import {PaginationComponent} from './pagination.component';
@@ -88,10 +88,10 @@ const routes: Routes = [
     }
   },
   {
-    path: 'collapses',
-    component: CollapsesComponent,
+    path: 'expansion-panels',
+    component: ExpansionPanelsComponent,
     data: {
-      title: 'Collapses',
+      title: 'Expansion Panels',
     }
   },
   {
@@ -162,7 +162,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, CollapsesComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
 })
 export class ComponentsModule {
 }
