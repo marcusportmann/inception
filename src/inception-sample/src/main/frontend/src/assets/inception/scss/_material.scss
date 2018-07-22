@@ -269,3 +269,14 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   justify-content: space-between;
   align-items: center;
 }
+
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-input-element, .mat-form-field-label {
+  //padding-bottom: 5px;
+
+  line-height: 1.25em !important;
+}
