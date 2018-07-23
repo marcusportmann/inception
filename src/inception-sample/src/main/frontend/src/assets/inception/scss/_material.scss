@@ -139,12 +139,12 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     border-radius: $card-border-radius $card-border-radius 0 0;
     .mat-card-title {
       margin-bottom: 0px;
-      font-size: 16px;
+      font-size: 1rem;
     }
     .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
       margin-bottom: 0px;
       margin-top: -4px;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
     &.text-white {
       .mat-card-title {
@@ -156,7 +156,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     }
   }
   .mat-card-title {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
     margin-bottom: 0;
   }
@@ -276,7 +276,19 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 }
 
 .mat-input-element, .mat-form-field-label {
-  //padding-bottom: 5px;
-
   line-height: 1.25em !important;
 }
+
+.mat-radio-button {
+  margin-right: 0.875rem;
+}
+
+.mat-radio-button:last-child {
+  margin-right: 0 !important;
+}
+
+
+.mat-radio-label-content {
+  padding-left: 0.4rem !important;
+}
+

@@ -211,7 +211,7 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
-$font-size-base:              .875rem !default;
+$font-size-base:              0.875rem !default; // Assumes the browser default, typically `16px`
 $font-size-lg:                ($font-size-base * 1.25) !default;
 $font-size-sm:                ($font-size-base * .875) !default;
 
@@ -235,9 +235,44 @@ $headings-font-weight:        500 !default;
 $headings-line-height:        1.2 !default;
 $headings-color:              inherit !default;
 
+$display1-font-size:          6rem !default;
+$display2-font-size:          5.5rem !default;
+$display3-font-size:          4.5rem !default;
+$display4-font-size:          3.5rem !default;
+
+$display1-font-weight:        300 !default;
+$display2-font-weight:        300 !default;
+$display3-font-weight:        300 !default;
+$display4-font-weight:        300 !default;
+$display-line-height:         $headings-line-height !default;
+
+$lead-font-size:              ($font-size-base * 1.25) !default;
+$lead-font-weight:            300 !default;
+
+$small-font-size:             80% !default;
+
+$code-font-size:              0.75rem;
+
 $text-muted:                  $gray-600 !default;
 
+$blockquote-small-color:      $gray-600 !default;
+$blockquote-font-size:        ($font-size-base * 1.25) !default;
+
+$hr-border-color:             rgba($black, .1) !default;
+$hr-border-width:             $border-width !default;
+
+$mark-padding:                .2em !default;
+
 $dt-font-weight:              $font-weight-bold !default;
+
+$kbd-box-shadow:              inset 0 -.1rem 0 rgba($black, .25) !default;
+$nested-kbd-font-weight:      $font-weight-bold !default;
+
+$list-inline-padding:         .5rem !default;
+
+$mark-bg:                     #fcf8e3 !default;
+
+$hr-margin-y:                 $spacer !default;
 
 
 

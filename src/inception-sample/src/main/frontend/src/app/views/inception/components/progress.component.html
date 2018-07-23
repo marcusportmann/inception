@@ -1,0 +1,126 @@
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Determinate Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="determinate"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Indeterminate Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="indeterminate"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-bar mode="indeterminate" value="40"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Buffer Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="buffer"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-bar mode="buffer"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Query Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="query"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Colored Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="determinate"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <mat-progress-bar mode="determinate" value="40" color="primary"></mat-progress-bar><br/>
+        <mat-progress-bar mode="determinate" value="80" color="accent"></mat-progress-bar><br/>
+        <mat-progress-bar mode="determinate" value="20" color="warn"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <mat-card>
+      <mat-card-title>Configurable Progress Bar</mat-card-title>
+      <mat-card-subtitle><code>&lt;mat-progress-bar mode="query"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
+      <mat-card-content>
+        <table>
+          <tr>
+            <td style="min-width: 80px;"><label>Color:</label></td>
+            <td>
+              <mat-radio-group [(ngModel)]="color">
+                <mat-radio-button class="example-margin" value="primary">
+                  Primary
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="accent">
+                  Accent
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="warn">
+                  Warn
+                </mat-radio-button>
+              </mat-radio-group>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Mode:</label></td>
+            <td>
+              <mat-radio-group [(ngModel)]="mode">
+                <mat-radio-button class="example-margin" value="determinate">
+                  Determinate
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="indeterminate">
+                  Indeterminate
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="buffer">
+                  Buffer
+                </mat-radio-button>
+                <mat-radio-button class="example-margin" value="query">
+                  Query
+                </mat-radio-button>
+              </mat-radio-group>
+            </td>
+          </tr>
+          <tr *ngIf="mode == 'determinate' || mode == 'buffer'">
+            <td><label>Progress:</label></td>
+            <td>
+              <mat-slider [(ngModel)]="value"></mat-slider>
+            </td>
+          </tr>
+          <tr *ngIf="mode == 'buffer'">
+            <td><label>Buffer:</label></td>
+            <td>
+              <mat-slider [(ngModel)]="bufferValue"></mat-slider>
+            </td>
+          </tr>
+        </table>
+      </mat-card-content>
+      <mat-card-content>
+        <h6>Result</h6>
+        <mat-progress-bar
+          class="mb-2"
+          [color]="color"
+          [mode]="mode"
+          [value]="value"
+          [bufferValue]="bufferValue">
+        </mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

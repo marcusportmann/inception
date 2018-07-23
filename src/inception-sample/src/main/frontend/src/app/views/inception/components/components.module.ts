@@ -37,11 +37,11 @@ import {ChartsComponent} from './charts.component';
 // Expansion Panels Component
 import {ExpansionPanelsComponent} from './expansion-panels.component';
 
-// Pagination Component
-import {PaginationComponent} from './pagination.component';
+// Grid List Component
+import {GridListComponent} from './grid-list.component';
 
-// Popovers Component
-import {PopoversComponent} from './popovers.component';
+// List Component
+import {ListsComponent} from './lists.component';
 
 // Progress Component
 import {ProgressComponent} from './progress.component';
@@ -95,17 +95,17 @@ const routes: Routes = [
     }
   },
   {
-    path: 'pagination',
-    component: PaginationComponent,
+    path: 'grid-list',
+    component: GridListComponent,
     data: {
-      title: 'Pagination',
+      title: 'Grid List',
     }
   },
   {
-    path: 'popovers',
-    component: PopoversComponent,
+    path: 'lists',
+    component: ListsComponent,
     data: {
-      title: 'Popovers',
+      title: 'Lists',
     }
   },
   {
@@ -162,7 +162,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent, PaginationComponent, PopoversComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
 })
 export class ComponentsModule {
 }

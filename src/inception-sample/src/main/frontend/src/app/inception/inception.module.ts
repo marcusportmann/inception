@@ -91,10 +91,15 @@ import {MatExpansionModule} from "@angular/material";
 import {MatDatepickerModule} from "@angular/material";
 import {MatDialogModule} from "@angular/material";
 import {MatFormFieldModule} from "@angular/material";
+import {MatGridListModule} from "@angular/material";
 import {MatIconModule} from "@angular/material";
 import {MatInputModule} from "@angular/material";
+import {MatListModule} from "@angular/material";
 import {MatMenuModule} from "@angular/material";
 import {MatNativeDateModule} from "@angular/material";
+import {MatProgressBarModule} from "@angular/material";
+import {MatRadioModule} from "@angular/material";
+import {MatSliderModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 
 /**
@@ -131,10 +136,15 @@ import {MatToolbarModule} from "@angular/material";
     MatDialogModule,
     MatExpansionModule,
     MatFormFieldModule,
+    MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSliderModule,
     MatToolbarModule,
 
 
@@ -170,14 +180,16 @@ import {MatToolbarModule} from "@angular/material";
     MatDialogModule,
     MatExpansionModule,
     MatFormFieldModule,
+    MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatNativeDateModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSliderModule,
     MatToolbarModule,
-
-
-
 
     // Inception modules
     DirectivesModule,
