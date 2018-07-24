@@ -61,58 +61,63 @@
       <mat-card-title>Configurable Progress Bar</mat-card-title>
       <mat-card-subtitle><code>&lt;mat-progress-bar mode="query"&gt;</code> is a horizontal progress-bar for indicating progress and activity.</mat-card-subtitle>
       <mat-card-content>
-        <table>
-          <tr>
-            <td style="min-width: 80px;"><label>Color:</label></td>
-            <td>
-              <mat-radio-group [(ngModel)]="color">
-                <mat-radio-button class="example-margin" value="primary">
-                  Primary
-                </mat-radio-button>
-                <mat-radio-button class="example-margin" value="accent">
-                  Accent
-                </mat-radio-button>
-                <mat-radio-button class="example-margin" value="warn">
-                  Warn
-                </mat-radio-button>
-              </mat-radio-group>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Mode:</label></td>
-            <td>
-              <mat-radio-group [(ngModel)]="mode">
-                <mat-radio-button class="example-margin" value="determinate">
-                  Determinate
-                </mat-radio-button>
-                <mat-radio-button class="example-margin" value="indeterminate">
-                  Indeterminate
-                </mat-radio-button>
-                <mat-radio-button class="example-margin" value="buffer">
-                  Buffer
-                </mat-radio-button>
-                <mat-radio-button class="example-margin" value="query">
-                  Query
-                </mat-radio-button>
-              </mat-radio-group>
-            </td>
-          </tr>
-          <tr *ngIf="mode == 'determinate' || mode == 'buffer'">
-            <td><label>Progress:</label></td>
-            <td>
-              <mat-slider [(ngModel)]="value"></mat-slider>
-            </td>
-          </tr>
-          <tr *ngIf="mode == 'buffer'">
-            <td><label>Buffer:</label></td>
-            <td>
-              <mat-slider [(ngModel)]="bufferValue"></mat-slider>
-            </td>
-          </tr>
-        </table>
-      </mat-card-content>
-      <mat-card-content>
-        <h6>Result</h6>
+        <div class="row pt-3 pb-3">
+          <div class="col" style="max-width: 80px;">
+            <label>Color:</label>
+          </div>
+          <div class="col">
+            <mat-radio-group [(ngModel)]="color">
+              <mat-radio-button value="primary">
+                Primary
+              </mat-radio-button>
+              <mat-radio-button value="accent">
+                Accent
+              </mat-radio-button>
+              <mat-radio-button value="warn">
+                Warn
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="row pt-3 pb-3">
+          <div class="col center" style="max-width: 80px;">
+            <label>Mode:</label>
+          </div>
+          <div class="col">
+            <mat-radio-group [(ngModel)]="mode">
+              <mat-radio-button value="determinate">
+                Determinate
+              </mat-radio-button>
+              <mat-radio-button value="indeterminate">
+                Indeterminate
+              </mat-radio-button>
+              <mat-radio-button value="buffer">
+                Buffer
+              </mat-radio-button>
+              <mat-radio-button value="query">
+                Query
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="row" *ngIf="mode == 'determinate' || mode == 'buffer'">
+          <div class="col" style="line-height: 48px; max-width: 80px;">
+            <label>Progress:</label>
+          </div>
+          <div class="col">
+            <mat-slider [(ngModel)]="value"></mat-slider>
+          </div>
+        </div>
+        <div class="row" *ngIf="mode == 'buffer'">
+          <div class="col" style="line-height: 48px; max-width: 80px;">
+            <label>Buffer:</label>
+          </div>
+          <div class="col">
+            <mat-slider [(ngModel)]="bufferValue"></mat-slider>
+          </div>
+        </div>
+
+        <h6 class="pt-2">Result</h6>
         <mat-progress-bar
           class="mb-2"
           [color]="color"
