@@ -94,21 +94,15 @@
       <div class="row">
         <div class="col-sm">
           <radio-group-form-field>
-            <mat-label>Gender</mat-label>
-            <mat-radio-group formControlName="gender" required="true">
-              <mat-radio-button value="1">
-                Male
-              </mat-radio-button>
-              <mat-radio-button value="2">
-                Female
-              </mat-radio-button>
-              <mat-radio-button value="3">
-                Other
-              </mat-radio-button>
+            <mat-label>Favorite Color</mat-label>
+            <mat-radio-group formControlName="favoriteColor" required="true">
+              <mat-radio-button value="1">Red</mat-radio-button>
+              <mat-radio-button value="2">Green</mat-radio-button>
+              <mat-radio-button value="3">Blue</mat-radio-button>
             </mat-radio-group>
             <mat-hint>The gender hint</mat-hint>
-            <mat-error *ngIf="advancedForm.controls['gender'].errors && !advancedForm.controls['gender'].untouched">
-              <span *ngIf="advancedForm.controls['gender'].errors?.required">A gender is required.</span>
+            <mat-error *ngIf="advancedForm.controls['favoriteColor'].errors && !advancedForm.controls['favoriteColor'].untouched">
+              <span *ngIf="advancedForm.controls['favoriteColor'].errors?.required">A favorite colour is required.</span>
             </mat-error>
           </radio-group-form-field>
 

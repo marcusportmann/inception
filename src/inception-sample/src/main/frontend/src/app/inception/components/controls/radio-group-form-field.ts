@@ -19,51 +19,32 @@ import {
   AfterContentInit, AfterViewInit, ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild, ContentChildren,
-  ElementRef, Inject,
-  Input,
-  Optional, QueryList,
+  ContentChild,
+  ElementRef,
+  Inject,
+  NgZone,
+  Optional,
   ViewEncapsulation
 } from '@angular/core';
 import {
   CanColor,
-  FloatLabelType,
   LabelOptions,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_LABEL_GLOBAL_OPTIONS,
-  MatError,
+  MatFormField,
   matFormFieldAnimations,
-  MatFormFieldAppearance,
   MatFormFieldDefaultOptions,
-  MatHint,
-  MatLabel,
-  MatRadioGroup,
-  mixinColor
+  MatRadioGroup
 } from "@angular/material";
 import {ANIMATION_MODULE_TYPE} from "@angular/platform-browser/animations";
 import {startWith} from "rxjs/operators";
+import {Directionality} from "@angular/cdk/bidi";
+import {Platform} from "@angular/cdk/platform";
 
 
 export function getMatRadioGroupMissingControlError(): Error {
   return Error('radio-group-form-field must contain a MatRadioGroup.');
 }
-
-
-/**
- * Boilerplate for applying mixins to RadioGroupFormField.
- * @docs-private
- */
-export class MatRadioGroupFormFieldBase {
-  constructor(public _elementRef: ElementRef) {
-  }
-}
-
-/**
- * Base class to which we're applying the radio group form field mixins.
- * @docs-private
- */
-export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFieldBase, 'primary');
-
 
 @Component({
   selector: 'radio-group-form-field',
@@ -76,8 +57,11 @@ export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFiel
             <label class="mat-form-field-label"
                    [class.mat-accent]="color == 'accent'"
                    [class.mat-warn]="color == 'warn'"
-                   #label
-                   *ngIf="hasLabel"><ng-content select="mat-label"></ng-content><span class="mat-placeholder-required mat-form-field-required-marker" aria-hidden="true" *ngIf="!hideRequiredMarker && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
+                   #label *ngIf="_hasLabel">
+              <ng-content select="mat-label"></ng-content>
+              <span class="mat-placeholder-required mat-form-field-required-marker" 
+                    aria-hidden="true" 
+                    *ngIf="!hideRequiredMarker && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
               <!-- @deletion-target 8.0.0 remove \`mat-placeholder-required\` class -->
             </label>
           </span>
@@ -85,12 +69,12 @@ export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFiel
       </div>
 
       <div class="mat-form-field-subscript-wrapper">
-        <div *ngIf="hasError" [@transitionMessages]="subscriptAnimationState">
+        <div *ngIf="hasError" [@transitionMessages]="_subscriptAnimationState">
           <ng-content select="mat-error"></ng-content>
         </div>
 
         <div class="mat-form-field-hint-wrapper" *ngIf="!hasError"
-             [@transitionMessages]="subscriptAnimationState">
+             [@transitionMessages]="_subscriptAnimationState">
           <ng-content select="mat-hint:not([align='end'])"></ng-content>
           <div class="mat-form-field-hint-spacer"></div>
           <ng-content select="mat-hint[align='end']"></ng-content>
@@ -98,9 +82,21 @@ export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFiel
       </div>
     </div>
   `,
-  styleUrls: [
-    'radio-group-form-field.css',
-  ],
+  styles: [`
+
+    .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
+      border-color: #f44336;
+    }
+
+    .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-label-content {
+      color: #f44336;
+    }
+
+    .mat-form-field.radio-group-form-field .mat-radio-group {
+      position: relative;
+      top: 4px;
+    }
+  `],
   animations: [matFormFieldAnimations.transitionMessages],
   host: {
     'class': 'mat-form-field radio-group-form-field',
@@ -109,7 +105,7 @@ export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFiel
     '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
     '[class.mat-form-field-appearance-legacy]': 'appearance == "legacy"',
     '[class.mat-form-field-invalid]': 'hasError',
-    '[class.mat-form-field-can-float]': 'canLabelFloat',
+    '[class.mat-form-field-can-float]': '_canLabelFloat',
     '[class.mat-form-field-should-float]': 'shouldLabelFloat',
     '[class.mat-form-field-disabled]': 'radioGroup.disabled',
     '[class.mat-accent]': 'color == "accent"',
@@ -120,37 +116,8 @@ export const _MatRadioGroupFormFieldMixinBase = mixinColor(MatRadioGroupFormFiel
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RadioGroupFormField extends _MatRadioGroupFormFieldMixinBase
+export class RadioGroupFormField extends MatFormField
   implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
-
-  private _animationsEnabled: boolean;
-
-  private _appearance: MatFormFieldAppearance;
-
-  @ContentChildren(MatError)
-  private _errorChildren: QueryList<MatError>;
-
-  private _floatLabel: FloatLabelType;
-
-  private readonly _formFieldDefaultOptions: MatFormFieldDefaultOptions;
-
-  @ContentChildren(MatHint)
-  private _hintChildren: QueryList<MatHint>;
-
-  @ContentChild(MatLabel)
-  private _labelChild: MatLabel;
-
-  private _labelOptions: LabelOptions;
-
-  // Override for the logic that disables the label animation in certain cases.
-  private _showAlwaysAnimate: boolean = false;
-
-  /**
-   * Hide the required marker.
-   *
-   * @type {boolean}
-   */
-  hideRequiredMarker: boolean = false;
 
   /**
    * The radio group associated with the radio group form field.
@@ -158,84 +125,28 @@ export class RadioGroupFormField extends _MatRadioGroupFormFieldMixinBase
   @ContentChild(MatRadioGroup)
   radioGroup: MatRadioGroup;
 
-  /**
-   * The state of the mat-hint and mat-error animations.
-   *
-   * @type {string}
-   */
-  subscriptAnimationState: string = '';
-
-  /**
-   * Constructs a new RadioGroupFormField.
-   *
-   * @param {ElementRef} _elementRef
-   * @param {ChangeDetectorRef} _changeDetectorRef
-   * @param {LabelOptions} labelOptions
-   * @param {MatFormFieldDefaultOptions} formFieldDefaultOptions
-   * @param {string} _animationMode
-   */
   constructor(public _elementRef: ElementRef,
-              private _changeDetectorRef: ChangeDetectorRef,
+              private _newChangeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) private labelOptions: LabelOptions,
-              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions: MatFormFieldDefaultOptions,
+              @Optional() private _newDir: Directionality,
+              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions:
+                MatFormFieldDefaultOptions,
+              // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
+              private _newPlatform?: Platform,
+              private _newNgZone?: NgZone,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string) {
-    super(_elementRef);
+    super(_elementRef, _newChangeDetectorRef, labelOptions, _newDir, formFieldDefaultOptions,
+          _newPlatform, _newNgZone, _animationMode);
 
-    this._labelOptions = labelOptions ? labelOptions : {};
-
-    this._formFieldDefaultOptions = formFieldDefaultOptions ? formFieldDefaultOptions : {};
-
-    this._floatLabel = this._labelOptions.float || 'always';
-
-    this._animationsEnabled = _animationMode !== 'NoopAnimations';
-  }
-
-  /**
-   * The form field appearance style.
-   *
-   * @returns {MatFormFieldAppearance} The form field appearance style.
-   */
-  @Input()
-  get appearance(): MatFormFieldAppearance {
-    return this._appearance || this._formFieldDefaultOptions && this._formFieldDefaultOptions.appearance || 'legacy';
-  }
-
-  set appearance(value: MatFormFieldAppearance) {
-    this._appearance = value;
-  }
-
-  /**
-   * Whether the label can float or not.
-   *
-   * @returns {boolean} True if the label can fault or false otherwise.
-   */
-  get canLabelFloat(): boolean {
-    return this.floatLabel !== 'never';
-  }
-
-  /**
-   * Whether the label should always float, never float or float as the user types.
-   *
-   * @returns {FloatLabelType} the label should always float, never float or float as the user types.
-   */
-  @Input()
-  get floatLabel(): FloatLabelType {
-    return this.appearance !== 'legacy' && this._floatLabel === 'never' ? 'auto' : this._floatLabel;
-  }
-
-  set floatLabel(value: FloatLabelType) {
-    if (value !== this._floatLabel) {
-      this._floatLabel = value || this._labelOptions.float || 'auto';
-      this._changeDetectorRef.markForCheck();
+    if (labelOptions) {
+      this.floatLabel = labelOptions.float;
+    }
+    else {
+      this.floatLabel = 'always';
     }
   }
 
-  /**
-   * Whether there are one or more errors associated with the radio group form field.
-   *
-   * @returns {boolean} True if there are one or more errors associated with the radio group form
-   *                    field or false otherwise.
-   */
+  /** Whether there are one or more errors associated with the radio group form field. */
   get hasError(): boolean {
     if (this._errorChildren) {
       if (this._errorChildren.length > 0) {
@@ -246,58 +157,36 @@ export class RadioGroupFormField extends _MatRadioGroupFormFieldMixinBase
     return false;
   }
 
-  /**
-   * Whether the radio group form field has a label.
-   *
-   * @returns {boolean} True if the radio group form field has a label or false otherwise.
-   */
-  get hasLabel(): boolean {
-    return !!this._labelChild;
-  }
-
-  /**
-   * Whether the floating label should always float or not.
-   *
-   * @returns {boolean} True if the label should always float or false otherwise.
-   */
-  get shouldLabelAlwaysFloat(): boolean {
-    return this.floatLabel === 'always' && !this._showAlwaysAnimate;
-  }
-
-  /**
-   * Returns whether the label should float or not.
-   *
-   * @returns {boolean} True if the label should float or false otherwise.
-   */
+  /** Returns whether the label should float or not. */
   get shouldLabelFloat(): boolean {
-    return this.canLabelFloat && this.shouldLabelAlwaysFloat;
+    return this._canLabelFloat && this._shouldAlwaysFloat;
   }
 
   ngAfterContentChecked() {
-    this._validateControlChild();
+    this._validateRadioGroupChild();
   }
 
   ngAfterContentInit() {
-    this._validateControlChild();
+    this._validateRadioGroupChild();
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._changeDetectorRef.markForCheck();
+      this._newChangeDetectorRef.markForCheck();
     });
 
-    // Update the aria-described by when the number of errors changes.
+    // Re-validate when the number of errors changes.
     this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._changeDetectorRef.markForCheck();
+      this._newChangeDetectorRef.markForCheck();
     });
   }
 
   ngAfterViewInit() {
     // Avoid animations on load.
-    this.subscriptAnimationState = 'enter';
-    this._changeDetectorRef.detectChanges();
+    this._subscriptAnimationState = 'enter';
+    this._newChangeDetectorRef.detectChanges();
   }
 
-  private _validateControlChild() {
+  protected _validateRadioGroupChild() {
     if (!this.radioGroup) {
       throw getMatRadioGroupMissingControlError();
     }

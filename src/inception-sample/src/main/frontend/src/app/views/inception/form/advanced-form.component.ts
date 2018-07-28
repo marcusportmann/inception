@@ -41,15 +41,13 @@ export class AdvancedFormComponent {
       //hideRequired: false,
       //floatLabel: 'auto',
       // tslint:disable-next-line
-      //firstName: this.formBuilder.control(['', Validators.required]),
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       title: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
-      favouritePet: ['', Validators.required],
-      gender: ['', Validators.required],
+      favoriteColor: ['', Validators.required],
       inlineCheckbox1: [''],
       inlineCheckbox2: [''],
       inlineCheckbox3: [''],
@@ -66,7 +64,7 @@ export class AdvancedFormComponent {
 
 
 
-    console.log('gender = ', this.advancedForm.get('gender').value);
+    console.log('favorite color = ', this.advancedForm.get('favoriteColor').value);
 
   }
 }
