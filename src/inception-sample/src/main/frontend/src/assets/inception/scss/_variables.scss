@@ -92,6 +92,9 @@ $theme-colors: map-merge((
 ), $theme-colors);
 // stylelint-enable
 
+// Set a specific jump point for requesting color jumps
+$theme-color-interval:      8% !default;
+
 // The yiq lightness value that determines when the lightness of color changes from "dark" to "light". Acceptable values are between 0 and 255.
 $yiq-contrasted-threshold:  150 !default;
 
@@ -265,9 +268,6 @@ $mark-padding:                .2em !default;
 
 $dt-font-weight:              $font-weight-bold !default;
 
-$kbd-box-shadow:              inset 0 -.1rem 0 rgba($black, .25) !default;
-$nested-kbd-font-weight:      $font-weight-bold !default;
-
 $list-inline-padding:         .5rem !default;
 
 $mark-bg:                     #fcf8e3 !default;
@@ -280,7 +280,29 @@ $hr-margin-y:                 $spacer !default;
 // Tables
 // -------------------------------------------------------------------------------------------------
 $table-cell-padding:          .75rem !default;
+$table-cell-padding-sm:       .3rem !default;
+
+$table-bg:                    transparent !default;
+$table-accent-bg:             rgba($black, .05) !default;
+$table-hover-bg:              rgba($black, .075) !default;
+$table-active-bg:             $table-hover-bg !default;
+
+$table-border-width:          $border-width !default;
+$table-border-color:          $gray-300 !default;
+
+$table-head-bg:               $gray-200 !default;
+$table-head-color:            $gray-700 !default;
+
+$table-dark-bg:               $gray-900 !default;
+$table-dark-accent-bg:        rgba($white, .05) !default;
+$table-dark-hover-bg:         rgba($white, .075) !default;
+$table-dark-border-color:     lighten($gray-900, 7.5%) !default;
+$table-dark-color:            $body-bg !default;
+
+$table-striped-order:         odd !default;
+
 $table-caption-color:         $text-muted !default;
+
 
 
 

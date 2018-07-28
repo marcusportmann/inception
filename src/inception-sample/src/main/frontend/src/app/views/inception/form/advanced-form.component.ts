@@ -27,7 +27,7 @@ export class AdvancedFormComponent {
   public static readonly MIN_DATE = new Date(1900, 1, 1);
   public static readonly MAX_DATE = Date.now();
 
-  private advancedForm: FormGroup;
+  advancedForm: FormGroup;
 
   public titles: Array<any> = [
     {label: 'Mr', value: 'Mr'},
@@ -38,7 +38,10 @@ export class AdvancedFormComponent {
   constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
 
     this.advancedForm = this.formBuilder.group({
+      //hideRequired: false,
+      //floatLabel: 'auto',
       // tslint:disable-next-line
+      //firstName: this.formBuilder.control(['', Validators.required]),
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       title: ['', Validators.required],
@@ -46,8 +49,7 @@ export class AdvancedFormComponent {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       favouritePet: ['', Validators.required],
-      employmentPeriod: ['', Validators.required],
-      inlineRadio: ['', Validators.required],
+      gender: ['', Validators.required],
       inlineCheckbox1: [''],
       inlineCheckbox2: [''],
       inlineCheckbox3: [''],
@@ -61,6 +63,10 @@ export class AdvancedFormComponent {
   }
 
   public onSubmit() {
+
+
+
+    console.log('gender = ', this.advancedForm.get('gender').value);
 
   }
 }

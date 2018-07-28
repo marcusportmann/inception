@@ -30,7 +30,10 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
 
-// Import Inception components
+// /Import Inception controls components
+import {RadioGroupFormField} from "./components/controls";
+
+// Import Inception layout components
 import {
   BreadcrumbsComponent,
   AdminContainerComponent,
@@ -84,7 +87,11 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 
 // Import Material modules
-import {MatButtonModule} from "@angular/material";
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MAT_LABEL_GLOBAL_OPTIONS,
+  MatButtonModule, MatFormFieldAppearance
+} from "@angular/material";
 import {MatButtonToggleModule} from "@angular/material";
 import {MatCardModule} from "@angular/material";
 import {MatExpansionModule} from "@angular/material";
@@ -99,8 +106,11 @@ import {MatMenuModule} from "@angular/material";
 import {MatNativeDateModule} from "@angular/material";
 import {MatProgressBarModule} from "@angular/material";
 import {MatRadioModule} from "@angular/material";
+import {MatSelectModule} from "@angular/material";
 import {MatSliderModule} from "@angular/material";
+import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
+
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -144,7 +154,9 @@ import {MatToolbarModule} from "@angular/material";
     MatNativeDateModule,
     MatProgressBarModule,
     MatRadioModule,
+    MatSelectModule,
     MatSliderModule,
+    MatTabsModule,
     MatToolbarModule,
 
 
@@ -188,19 +200,27 @@ import {MatToolbarModule} from "@angular/material";
     MatNativeDateModule,
     MatProgressBarModule,
     MatRadioModule,
+    MatSelectModule,
     MatSliderModule,
+    MatTabsModule,
     MatToolbarModule,
 
     // Inception modules
     DirectivesModule,
 
-    // Inception  components
+    // Inception control components
+    RadioGroupFormField,
+
+    // Inception layout components
     AdminContainerComponent,
     NotFoundComponent,
     SimpleContainerComponent,
     SpinnerComponent
   ],
   declarations: [
+    // Inception control components
+    RadioGroupFormField,
+
     // Inception layout components
     BreadcrumbsComponent,
     AdminContainerComponent,
@@ -263,6 +283,11 @@ export class InceptionModule {
         {
           provide: PERFECT_SCROLLBAR_CONFIG,
           useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
+        },
+
+        {
+          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+          useValue: {appearance: 'standard'}
         },
 
         CanActivateFunctionGuard,

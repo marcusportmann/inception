@@ -4,31 +4,142 @@
     <mat-card-content>
       <div class="row">
         <div class="col-sm">
-          <mat-form-field>
-            <input matInput placeholder="Static Value" disabled value="XXX">
+          <mat-form-field class="static">
+            <mat-label>Static</mat-label>
+            <input matInput value="Static Value" disabled>
           </mat-form-field>
         </div>
         <div class="col-sm">
-          <div class="form-group">
-            <label for="disabledInput">Disabled Input</label>
-            <input type="text" id="disabledInput" name="disabledInput" class="form-control" placeholder="Disabled" disabled>
-          </div>
+          <mat-form-field>
+            <mat-label>Disabled Input</mat-label>
+            <input matInput disabled>
+          </mat-form-field>
         </div>
         <div class="col-sm">
-          <div class="form-group">
-            <label for="disabledSelect">Disabled Select</label>
-            <select id="disabledSelect" class="form-control" disabled>
-              <option value="0">Please select</option>
-              <option value="1">Option #1</option>
-              <option value="2">Option #2</option>
-              <option value="3">Option #3</option>
-            </select>
-          </div>
+          <mat-form-field>
+            <mat-label>Disabled Select</mat-label>
+            <mat-select disabled>
+              <mat-option value="1">Option #1</mat-option>
+              <mat-option value="2">Option #2</mat-option>
+              <mat-option value="3">Option #3</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" required="true" autofocus>
+            <mat-error *ngIf="advancedForm.controls['firstName'].errors && !advancedForm.controls['firstName'].untouched">
+              <span *ngIf="advancedForm.controls['firstName'].errors?.required">A first name is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" required="true">
+            <mat-error *ngIf="advancedForm.controls['lastName'].errors && !advancedForm.controls['lastName'].untouched">
+              <span *ngIf="advancedForm.controls['lastName'].errors?.required">A last name is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" (focus)="picker.open()"  formControlName="dateOfBirth" required="true" readonly>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="advancedForm.controls['dateOfBirth'].errors && !advancedForm.controls['dateOfBirth'].untouched">
+              <span *ngIf="advancedForm.controls['dateOfBirth'].errors?.required">A date of birth is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <mat-select formControlName="title" required="true">
+              <mat-option value="Mr">Mr</mat-option>
+              <mat-option value="Ms">Ms</mat-option>
+            </mat-select>
+            <mat-error *ngIf="advancedForm.controls['title'].errors && !advancedForm.controls['title'].untouched">
+              <span *ngIf="advancedForm.controls['title'].errors?.required">A title is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" required="true">
+            <mat-error *ngIf="advancedForm.controls['password'].errors && !advancedForm.controls['password'].untouched">
+              <span *ngIf="advancedForm.controls['password'].errors?.required">A password is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input matInput formControlName="confirmPassword" required="true">
+            <mat-error *ngIf="advancedForm.controls['confirmPassword'].errors && !advancedForm.controls['confirmPassword'].untouched">
+              <span *ngIf="advancedForm.controls['confirmPassword'].errors?.required">Password confirmation is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <radio-group-form-field>
+            <mat-label>Gender</mat-label>
+            <mat-radio-group formControlName="gender" required="true">
+              <mat-radio-button value="1">
+                Male
+              </mat-radio-button>
+              <mat-radio-button value="2">
+                Female
+              </mat-radio-button>
+              <mat-radio-button value="3">
+                Other
+              </mat-radio-button>
+            </mat-radio-group>
+            <mat-hint>The gender hint</mat-hint>
+            <mat-error *ngIf="advancedForm.controls['gender'].errors && !advancedForm.controls['gender'].untouched">
+              <span *ngIf="advancedForm.controls['gender'].errors?.required">A gender is required.</span>
+            </mat-error>
+          </radio-group-form-field>
+
+
+
+        </div>
+        <div class="col-sm">
+
+
         </div>
       </div>
 
+
     </mat-card-content>
+    <mat-card-actions align="right">
+      <button mat-button>Cancel</button>
+      <button type="submit" mat-button>OK</button>
+    </mat-card-actions>
+
   </mat-card>
 </form>
 
+
+<!--
+
+        <div class="col-sm">
+          <mat-form-field>
+            <input matInput type="password" placeholder="Password Input" value="Password Value">
+          </mat-form-field>
+        </div>
+
+
+-->
 
