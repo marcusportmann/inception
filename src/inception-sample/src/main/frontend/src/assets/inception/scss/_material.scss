@@ -354,6 +354,12 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   }
 }
 
+.mat-form-field input::-webkit-outer-spin-button,
+.mat-form-field input::-webkit-inner-spin-button {
+  display: none;
+}
+
+
 .mat-form-field-infix {
   min-height: 3.2em !important;
 }
@@ -387,3 +393,5 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: $gray-700;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+

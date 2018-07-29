@@ -19,21 +19,37 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {patternValidator} from '../../../inception/validators/pattern-validator';
 import {NavigationService} from "../../../inception/services/navigation/navigation.service";
 
+
+import * as moment from 'moment';
+import {Observable} from "rxjs/Observable";
+import {map, startWith} from 'rxjs/operators';
+
+
+export interface StateGroup {
+  letter: string;
+  names: string[];
+}
+
+
 @Component({
   templateUrl: 'advanced-form.component.html'
 })
-export class AdvancedFormComponent {
+export class AdvancedFormComponent implements OnInit {
 
-  public static readonly MIN_DATE = new Date(1900, 1, 1);
-  public static readonly MAX_DATE = Date.now();
+  static readonly MIN_DATE = new Date(1900, 1, 1);
+  static readonly MAX_DATE = Date.now();
 
   advancedForm: FormGroup;
 
-  public titles: Array<any> = [
-    {label: 'Mr', value: 'Mr'},
-    {label: 'Mrs', value: 'Mrs'},
-    {label: 'Ms', value: 'Ms'}
+  titles: Array<any> = [
+    {name: 'Mr', value: 'Mr'},
+    {name: 'Mrs', value: 'Mrs'},
+    {name: 'Ms', value: 'Ms'}
   ];
+
+  countryOptions: string[] = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland', 'Zimbabwe'];
+
+  filteredCountryOptions: Observable<string[]>;
 
   constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
 
@@ -44,22 +60,38 @@ export class AdvancedFormComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       title: ['', Validators.required],
+      //dateOfBirth: [moment(), Validators.required],
       dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
+      favoriteCountry: ['', Validators.required],
+      grossIncome: ['', Validators.required],
       favoriteColor: ['', Validators.required],
       favoritePetDog: [''],
       favoritePetCat: ['true'],
       favoritePetFish: [''],
-      notes: ['', Validators.required]
+      notes: ['']
     });
   }
 
-  public onSubmit() {
+  ngOnInit() {
+    this.filteredCountryOptions = this.advancedForm.get('favoriteCountry').valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  onSubmit() {
 
 
 
     console.log('favorite color = ', this.advancedForm.get('favoriteColor').value);
 
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.countryOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 }

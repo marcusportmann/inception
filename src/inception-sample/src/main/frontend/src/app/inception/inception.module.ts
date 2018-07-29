@@ -98,12 +98,9 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 
 // Import Material modules
-import {
-  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MAT_LABEL_GLOBAL_OPTIONS,
-  MatButtonModule, MatFormFieldAppearance
-} from "@angular/material";
+import {DateAdapter} from "@angular/material";
+import {MatAutocompleteModule} from "@angular/material";
+import {MatButtonModule} from "@angular/material";
 import {MatButtonToggleModule} from "@angular/material";
 import {MatCardModule} from "@angular/material";
 import {MatCheckboxModule} from "@angular/material";
@@ -123,9 +120,16 @@ import {MatSliderModule} from "@angular/material";
 import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 
+import {MAT_DATE_FORMATS} from "@angular/material";
+import {MAT_DATE_LOCALE} from "@angular/material";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material";
 
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
 
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS} from "@angular/material-moment-adapter";
 
+// See the Moment.js docs for the meaning of these formats:
+// https://momentjs.com/docs/#/displaying/format/
 export const INCEPTION_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -137,12 +141,6 @@ export const INCEPTION_DATE_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
-
-
-import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-adapter";
-
-
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -169,8 +167,8 @@ import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-
     //TabsModule.forRoot(),
     //TimepickerModule.forRoot(),
 
-
     // Material modules
+    MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -184,7 +182,6 @@ import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatMomentDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
@@ -218,6 +215,7 @@ import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-
 
 
     // Material modules
+    MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -231,7 +229,6 @@ import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatMomentDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
@@ -287,18 +284,10 @@ export class InceptionModule {
 
   public static registrationEnabled = false;
 
-  // constructor(injector: Injector, bsDatepickerConfig: BsDatepickerConfig, bsDaterangepickerConfig: BsDaterangepickerConfig) {
-  //   console.log('Initialising the Inception Module');
-  //   setInceptionInjector(injector);
-  //   bsDatepickerConfig.dateInputFormat = 'YYYY-MM-DD';
-  //   bsDaterangepickerConfig.rangeInputFormat = 'YYYY-MM-DD';
-  // }
-
   constructor(injector: Injector) {
     console.log('Initialising the Inception Module');
     setInceptionInjector(injector);
   }
-
 
   static forRoot(): ModuleWithProviders
   {
@@ -328,12 +317,18 @@ export class InceptionModule {
 
         {
           provide: DateAdapter,
-          useClass: MomentDateAdapter
+          useClass: MomentDateAdapter,
+          deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
         },
 
         {
           provide: MAT_DATE_FORMATS,
           useValue: INCEPTION_DATE_FORMATS
+        },
+
+        {
+          provide: MAT_DATE_LOCALE,
+          useValue: 'en-GB'
         },
 
         CanActivateFunctionGuard,

@@ -31,7 +31,6 @@ import {BasicFormsComponent} from "./basic-forms.component";
 // Advanced Form component
 import {AdvancedFormComponent} from "./advanced-form.component";
 
-
 const routes: Routes = [
   {
     path: '',
@@ -63,7 +62,9 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [BasicFormsComponent, AdvancedFormComponent]
+  declarations: [BasicFormsComponent, AdvancedFormComponent],
+  providers: [
+  ]
 })
 export class FormModule {
 }

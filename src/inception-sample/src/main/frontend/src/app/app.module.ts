@@ -1,28 +1,22 @@
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
-//import {NoopAnimationsModule} from "@angular/platform-browser/animations";
+import {NgModule} from '@angular/core';
 
-//import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app-routing.module';
 
-
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-
-import { InceptionModule } from './inception/inception.module';
+import {InceptionModule} from './inception/inception.module';
 import {InceptionAppModule} from "./inception/inception-app.module";
 import {NavigationItem} from "./inception/services/navigation/navigation-item";
 import {NavigationBadge} from "./inception/services/navigation/navigation-badge";
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
+
 
 @NgModule({
   imports: [
     AppRoutingModule,
 
     BrowserAnimationsModule,
-    //NoopAnimationsModule,
-
-    //BrowserModule,
 
     InceptionModule.forRoot()
   ],
@@ -32,7 +26,8 @@ import {NavigationTitle} from "./inception/services/navigation/navigation-title"
   declarations: [
     AppComponent
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule extends InceptionAppModule {
