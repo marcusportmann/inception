@@ -3,6 +3,11 @@
     <mat-card-title>Advanced Form</mat-card-title>
     <mat-card-content>
       <div class="row">
+        <div class="col">
+          <h6 class="mb-0">Disabled Form Fields</h6>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm">
           <mat-form-field class="static">
             <mat-label>Static</mat-label>
@@ -27,10 +32,16 @@
         </div>
       </div>
       <div class="row">
+        <div class="col">
+          <h6 class="mb-0 mt-2">Personal Information</h6>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm">
           <mat-form-field>
             <mat-label>First Name</mat-label>
             <input matInput formControlName="firstName" required="true" autofocus>
+            <mat-hint>Please enter a first name.</mat-hint>
             <mat-error *ngIf="advancedForm.controls['firstName'].errors && !advancedForm.controls['firstName'].untouched">
               <span *ngIf="advancedForm.controls['firstName'].errors?.required">A first name is required.</span>
             </mat-error>
@@ -92,6 +103,11 @@
         </div>
       </div>
       <div class="row">
+        <div class="col">
+          <h6 class="mb-0 mt-2">Other Information</h6>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm">
           <radio-group-form-field>
             <mat-label>Favorite Color</mat-label>
@@ -100,18 +116,28 @@
               <mat-radio-button value="2">Green</mat-radio-button>
               <mat-radio-button value="3">Blue</mat-radio-button>
             </mat-radio-group>
-            <mat-hint>The gender hint</mat-hint>
+            <mat-hint>Please select a favorite color.</mat-hint>
             <mat-error *ngIf="advancedForm.controls['favoriteColor'].errors && !advancedForm.controls['favoriteColor'].untouched">
               <span *ngIf="advancedForm.controls['favoriteColor'].errors?.required">A favorite colour is required.</span>
             </mat-error>
           </radio-group-form-field>
-
-
-
         </div>
         <div class="col-sm">
-
-
+          <checkbox-form-field>
+            <mat-label>Favorite Pet</mat-label>
+            <mat-checkbox formControlName="favoritePetDog">Dog</mat-checkbox>
+            <mat-checkbox formControlName="favoritePetCat">Cat</mat-checkbox>
+            <mat-checkbox formControlName="favoritePetFish">Fish</mat-checkbox>
+            <mat-hint>Please select a favorite pet.</mat-hint>
+          </checkbox-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
         </div>
       </div>
 

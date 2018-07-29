@@ -84,6 +84,14 @@ export function getMatRadioGroupMissingControlError(): Error {
   `,
   styles: [`
 
+    .mat-form-field.radio-group-form-field .mat-radio-button {
+      margin-right: 0.875em !important;
+    }
+
+    .mat-form-field.radio-group-form-field .mat-radio-button:last-child {
+      margin-right: 0 !important;
+    }
+    
     .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
       border-color: #f44336;
     }
@@ -92,9 +100,15 @@ export function getMatRadioGroupMissingControlError(): Error {
       color: #f44336;
     }
 
+    /*
     .mat-form-field.radio-group-form-field .mat-radio-group {
       position: relative;
       top: 4px;
+    }
+    */
+
+    .mat-form-field.radio-group-form-field .mat-form-field-infix {
+      padding-bottom: 0 !important;
     }
   `],
   animations: [matFormFieldAnimations.transitionMessages],

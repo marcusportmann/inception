@@ -128,6 +128,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   .mat-card-content {
     line-height: 19px;
     padding: 1rem;
+    margin-bottom: 0;
   }
 
   .mat-card-image {
@@ -292,20 +293,15 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   line-height: 1.25em !important;
 }
 
-.mat-radio-button {
-  margin-right: 0.875rem;
-}
 
-.mat-radio-button:last-child {
-  margin-right: 0 !important;
-}
+
 
 .mat-radio-label-content {
-  padding-left: 0.4rem !important;
+  padding-left: 0.4em !important;
 }
 
 .mat-tab-body-content {
-  padding: 1rem;
+  padding: 1em;
 }
 
 
@@ -329,7 +325,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   &.mat-form-field-should-float {
 
     .mat-form-field-label {
-      /*font-weight: 600;*/
+      font-weight: 600;
     }
   }
 
@@ -358,4 +354,36 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   }
 }
 
+.mat-form-field-infix {
+  min-height: 3.2em !important;
+}
 
+.mat-form-field-appearance-standard .mat-form-field-ripple {
+  height: 1px !important;
+}
+
+
+/*
+.col-sm {
+  border: 1px solid green;
+}
+*/
+
+
+
+
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  color:  $gray-700;
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: $gray-700;
+  transition: background-color 5000s ease-in-out 0s;
+}

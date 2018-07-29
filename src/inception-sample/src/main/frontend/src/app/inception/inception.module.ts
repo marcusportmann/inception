@@ -31,6 +31,7 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {DirectivesModule} from "./directives/directives.module";
 
 // /Import Inception controls components
+import {CheckboxFormField} from "./components/controls";
 import {RadioGroupFormField} from "./components/controls";
 
 // Import Inception layout components
@@ -86,14 +87,26 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 
 
+
+
+
+
+
+
+
+
+
+
 // Import Material modules
 import {
+  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
   MAT_LABEL_GLOBAL_OPTIONS,
   MatButtonModule, MatFormFieldAppearance
 } from "@angular/material";
 import {MatButtonToggleModule} from "@angular/material";
 import {MatCardModule} from "@angular/material";
+import {MatCheckboxModule} from "@angular/material";
 import {MatExpansionModule} from "@angular/material";
 import {MatDatepickerModule} from "@angular/material";
 import {MatDialogModule} from "@angular/material";
@@ -103,13 +116,32 @@ import {MatIconModule} from "@angular/material";
 import {MatInputModule} from "@angular/material";
 import {MatListModule} from "@angular/material";
 import {MatMenuModule} from "@angular/material";
-import {MatNativeDateModule} from "@angular/material";
 import {MatProgressBarModule} from "@angular/material";
 import {MatRadioModule} from "@angular/material";
 import {MatSelectModule} from "@angular/material";
 import {MatSliderModule} from "@angular/material";
 import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
+
+
+
+
+export const INCEPTION_DATE_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'LL',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+
+
+import { MatMomentDateModule, MomentDateAdapter} from "@angular/material-moment-adapter";
+
 
 
 /**
@@ -142,6 +174,7 @@ import {MatToolbarModule} from "@angular/material";
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
     MatExpansionModule,
@@ -151,7 +184,7 @@ import {MatToolbarModule} from "@angular/material";
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
@@ -188,6 +221,7 @@ import {MatToolbarModule} from "@angular/material";
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatDialogModule,
     MatExpansionModule,
@@ -197,7 +231,7 @@ import {MatToolbarModule} from "@angular/material";
     MatInputModule,
     MatListModule,
     MatMenuModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
@@ -209,6 +243,7 @@ import {MatToolbarModule} from "@angular/material";
     DirectivesModule,
 
     // Inception control components
+    CheckboxFormField,
     RadioGroupFormField,
 
     // Inception layout components
@@ -219,6 +254,7 @@ import {MatToolbarModule} from "@angular/material";
   ],
   declarations: [
     // Inception control components
+    CheckboxFormField,
     RadioGroupFormField,
 
     // Inception layout components
@@ -288,6 +324,16 @@ export class InceptionModule {
         {
           provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
           useValue: {appearance: 'standard'}
+        },
+
+        {
+          provide: DateAdapter,
+          useClass: MomentDateAdapter
+        },
+
+        {
+          provide: MAT_DATE_FORMATS,
+          useValue: INCEPTION_DATE_FORMATS
         },
 
         CanActivateFunctionGuard,

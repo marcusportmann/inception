@@ -48,14 +48,9 @@ export class AdvancedFormComponent {
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       favoriteColor: ['', Validators.required],
-      inlineCheckbox1: [''],
-      inlineCheckbox2: [''],
-      inlineCheckbox3: [''],
-      radio: ['', Validators.required],
-      checkbox1: [''],
-      checkbox2: [''],
-      checkbox3: [''],
-      favouriteTime: ['', Validators.required],
+      favoritePetDog: [''],
+      favoritePetCat: ['true'],
+      favoritePetFish: [''],
       notes: ['', Validators.required]
     });
   }
