@@ -73,6 +73,10 @@ export class AppModule extends InceptionAppModule {
         new NavigationItem('icon-note', 'Example Form', '/inception/form/example-form', [])
       ]),
 
+      new NavigationItem('icon-table', 'Tables', '/inception/tables', [], [
+        new NavigationItem('icon-table', 'Basic Table', '/inception/tables/basic-table', [])
+      ]),
+
       new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [
         new NavigationItem('icon-drop', 'Colors', '/inception/theme/colors', []),
         new NavigationItem('icon-drop', 'Typography', '/inception/theme/typography', [])

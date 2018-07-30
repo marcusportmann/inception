@@ -28,13 +28,6 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'buttons',
-    loadChildren: './buttons/buttons.module#ButtonsModule',
-    data: {
-      title: 'Components',
-    }
-  },
-  {
     path: 'components',
     loadChildren: './components/components.module#ComponentsModule',
     data: {
@@ -46,6 +39,13 @@ const routes: Routes = [
     loadChildren: './form/form.module#FormModule',
     data: {
       title: 'Form',
+    }
+  },
+  {
+    path: 'tables',
+    loadChildren: './tables/tables.module#TablesModule',
+    data: {
+      title: 'Tables',
     }
   },
   {

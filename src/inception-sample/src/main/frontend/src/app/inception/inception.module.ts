@@ -117,6 +117,7 @@ import {MatProgressBarModule} from "@angular/material";
 import {MatRadioModule} from "@angular/material";
 import {MatSelectModule} from "@angular/material";
 import {MatSliderModule} from "@angular/material";
+import {MatTableModule} from "@angular/material";
 import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 
@@ -186,6 +187,7 @@ export const INCEPTION_DATE_FORMATS = {
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
 
@@ -233,6 +235,7 @@ export const INCEPTION_DATE_FORMATS = {
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
 
