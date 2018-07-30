@@ -25,30 +25,20 @@ import {RouterModule, Routes} from "@angular/router";
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
 
-// Basic Forms Component
-import {BasicFormsComponent} from "./basic-forms.component";
-
-// Advanced Form component
-import {AdvancedFormComponent} from "./advanced-form.component";
+// Example Form component
+import {ExampleFormComponent} from "./example-form.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'basic-forms',
+    redirectTo: 'example-form',
     pathMatch: 'full',
   },
   {
-    path: 'basic-forms',
-    component: BasicFormsComponent,
+    path: 'example-form',
+    component: ExampleFormComponent,
     data: {
-      title: 'Basic Forms',
-    }
-  },
-  {
-    path: 'advanced-form',
-    component: AdvancedFormComponent,
-    data: {
-      title: 'Advanced Form',
+      title: 'Example Form',
     }
   }
 ];
@@ -62,7 +52,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [BasicFormsComponent, AdvancedFormComponent],
+  declarations: [ExampleFormComponent],
   providers: [
   ]
 })

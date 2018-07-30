@@ -70,8 +70,7 @@ export class AppModule extends InceptionAppModule {
       ]),
 
       new NavigationItem('icon-note', 'Form', '/inception/form', [], [
-        new NavigationItem('icon-note', 'Basic Forms', '/inception/form/basic-forms', []),
-        new NavigationItem('icon-note', 'Advanced Form', '/inception/form/advanced-form', [])
+        new NavigationItem('icon-note', 'Example Form', '/inception/form/example-form', [])
       ]),
 
       new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [
