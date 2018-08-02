@@ -28,6 +28,9 @@ import {InceptionModule} from '../../../inception/inception.module';
 // Basic Table component
 import {BasicTableComponent} from "./basic-table.component";
 
+// Filterable Table component
+import {FilterableTableComponent} from "./filterable-table.component";
+
 const routes: Routes = [
   {
     path: '',
@@ -39,6 +42,13 @@ const routes: Routes = [
     component: BasicTableComponent,
     data: {
       title: 'Basic Table',
+    }
+  },
+  {
+    path: 'filterable-table',
+    component: FilterableTableComponent,
+    data: {
+      title: 'Filterable Table',
     }
   }
 ];
@@ -52,7 +62,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [BasicTableComponent],
+  declarations: [BasicTableComponent, FilterableTableComponent],
   providers: [
   ]
 })

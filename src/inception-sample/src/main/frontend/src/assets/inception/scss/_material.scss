@@ -373,6 +373,41 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 }
 
 
+
+
+
+.mat-form-field.mat-form-field-slim {
+
+  .mat-form-field-wrapper {
+
+    padding-bottom: 0;
+
+    .mat-form-field-flex
+    {
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+
+      .mat-form-field-infix
+      {
+        border-top: 0;
+        min-height: 0 !important;
+        padding: 0;
+      }
+    }
+
+    .mat-form-field-underline {
+      bottom: 0 !important;
+    }
+
+    .mat-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+}
+
+
+
+
 /*
 .col-sm {
   border: 1px solid green;
