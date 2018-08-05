@@ -28,8 +28,17 @@ import {InceptionModule} from '../../../inception/inception.module';
 // Basic Table component
 import {BasicTableComponent} from "./basic-table.component";
 
+// Complex Table component
+import {ComplexTableComponent} from "./complex-table.component";
+
 // Filterable Table component
 import {FilterableTableComponent} from "./filterable-table.component";
+
+// Pagination Table component
+import {PaginationTableComponent} from "./pagination-table.component";
+
+// Sortable Table component
+import {SortableTableComponent} from "./sortable-table.component";
 
 const routes: Routes = [
   {
@@ -45,10 +54,31 @@ const routes: Routes = [
     }
   },
   {
+    path: 'complex-table',
+    component: ComplexTableComponent,
+    data: {
+      title: 'Complex Table',
+    }
+  },
+  {
     path: 'filterable-table',
     component: FilterableTableComponent,
     data: {
       title: 'Filterable Table',
+    }
+  },
+  {
+    path: 'pagination-table',
+    component: PaginationTableComponent,
+    data: {
+      title: 'Pagination Table',
+    }
+  },
+  {
+    path: 'sortable-table',
+    component: SortableTableComponent,
+    data: {
+      title: 'Sortable Table',
     }
   }
 ];
@@ -62,7 +92,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [BasicTableComponent, FilterableTableComponent],
+  declarations: [BasicTableComponent, ComplexTableComponent, FilterableTableComponent, PaginationTableComponent, SortableTableComponent],
   providers: [
   ]
 })

@@ -75,7 +75,10 @@ export class AppModule extends InceptionAppModule {
 
       new NavigationItem('icon-table', 'Tables', '/inception/tables', [], [
         new NavigationItem('icon-table', 'Basic Table', '/inception/tables/basic-table', []),
-        new NavigationItem('icon-table', 'Filterable Table', '/inception/tables/filterable-table', [])
+        new NavigationItem('icon-table', 'Complex Table', '/inception/tables/complex-table', []),
+        new NavigationItem('icon-table', 'Filterable Table', '/inception/tables/filterable-table', []),
+        new NavigationItem('icon-table', 'Pagination Table', '/inception/tables/pagination-table', []),
+        new NavigationItem('icon-table', 'Sortable Table', '/inception/tables/sortable-table', [])
       ]),
 
       new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [

@@ -113,10 +113,12 @@ import {MatIconModule} from "@angular/material";
 import {MatInputModule} from "@angular/material";
 import {MatListModule} from "@angular/material";
 import {MatMenuModule} from "@angular/material";
+import {MatPaginatorModule} from "@angular/material";
 import {MatProgressBarModule} from "@angular/material";
 import {MatRadioModule} from "@angular/material";
 import {MatSelectModule} from "@angular/material";
 import {MatSliderModule} from "@angular/material";
+import {MatSortModule} from "@angular/material";
 import {MatTableModule} from "@angular/material";
 import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
@@ -183,14 +185,15 @@ export const INCEPTION_DATE_FORMATS = {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-
 
     // Inception modules
     DirectivesModule
@@ -231,10 +234,12 @@ export const INCEPTION_DATE_FORMATS = {
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatSliderModule,
+    MatSortModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
