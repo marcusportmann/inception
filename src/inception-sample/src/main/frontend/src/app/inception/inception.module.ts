@@ -122,6 +122,8 @@ import {MatSortModule} from "@angular/material";
 import {MatTableModule} from "@angular/material";
 import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
+import {MatTooltipModule} from "@angular/material";
+
 
 import {MAT_DATE_FORMATS} from "@angular/material";
 import {MAT_DATE_LOCALE} from "@angular/material";
@@ -194,6 +196,7 @@ export const INCEPTION_DATE_FORMATS = {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
 
     // Inception modules
     DirectivesModule
@@ -243,6 +246,7 @@ export const INCEPTION_DATE_FORMATS = {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
 
     // Inception modules
     DirectivesModule,
