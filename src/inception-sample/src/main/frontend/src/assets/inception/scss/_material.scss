@@ -406,15 +406,59 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 }
 
 
+.mat-paginator  {
+  .mat-paginator-container {
+    .mat-paginator-page-size {
 
+      margin-right: 32px !important;
+
+      .mat-paginator-page-size-select {
+        width: 45px;
+        .mat-form-field-infix {
+          min-height: 0;
+        }
+      }
+    }
+
+    .mat-paginator-range-label {
+      margin-left: 0 !important;
+    }
+  }
+}
 
 /*
-.col-sm {
-  border: 1px solid green;
+@include media-breakpoint-down(xs){
+
+  .mat-paginator  {
+    .mat-paginator-container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+
+      justify-content: space-between;
+
+      .mat-paginator-page-size {
+        margin-right: 0 !important;
+
+        .mat-paginator-page-size-label {
+          margin-right: 0;
+        }
+
+        .mat-paginator-page-size-select {
+          .mat-form-field-infix {
+            min-height: 0;
+          }
+        }
+      }
+
+      .mat-paginator-range-label {
+        margin-left: 0 !important;
+        margin-right: 5px !important;
+      }
+
+    }
+  }
 }
 */
-
-
 
 
 /* Change Autocomplete styles in Chrome*/
@@ -432,5 +476,7 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: $gray-700;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+
 
 
