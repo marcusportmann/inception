@@ -426,6 +426,58 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   }
 }
 
+
+/*
+.mat-table {
+  overflow: auto;
+
+  .mat-header-cell, .mat-cell {
+
+    min-width: 0;
+    border: 1px solid green;
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width: 100px !important;
+    max-width: 100px !important;
+    flex-basis: 50%;
+  }
+}
+*/
+
+/*
+.table-responsivex {
+  display: flex;
+  flex-direction: column;
+}
+*/
+
+
+
+.mat-header-cell, .mat-cell {
+  display: inline-block;
+
+  padding-right: 12px !important;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  min-height: 0;
+}
+
+
+
+.mat-cell-actions {
+  max-width: 100px;
+}
+
+
+
+
+
+
+
 /*
 @include media-breakpoint-down(xs){
 
