@@ -453,6 +453,10 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 */
 
 
+mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
+  padding-left: 12px !important;
+}
+
 
 .mat-header-cell, .mat-cell {
   display: inline-block;
@@ -466,16 +470,94 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   min-height: 0;
 }
 
+/*
+.mat-sort-header-arrow, [dir=rtl] .mat-sort-header-position-before .mat-sort-header-arrow {
+  margin: 0 0 0 3px !important;
+}
+*/
 
-
-.mat-cell-actions {
-  max-width: 100px;
+.mat-sort-header-container {
+  display: inline-flex !important;
 }
 
 
 
 
 
+.mat-cell-one-action {
+  min-width: 64px;
+  max-width: 64px;
+  text-align: center;
+}
+
+.mat-cell-two-actions {
+  min-width: 64px;
+  max-width: 64px;
+  text-align: center;
+}
+
+.mat-cell-three-actions {
+  min-width: 90px;
+  max-width: 90px;
+  text-align: center;
+}
+
+.mat-cell-four-actions {
+  min-width: 116px;
+  max-width: 116px;
+  text-align: center;
+}
+
+.mat-cell-five-actions {
+  min-width: 142px;
+  max-width: 142px;
+  text-align: center;
+}
+
+.mat-cell-one-action, .mat-cell-two-actions, .mat-cell-three-actions, .mat-cell-four-actions, .mat-cell-five-actions {
+  .mat-icon-button {
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    vertical-align: middle;
+
+    .mat-icon {
+      color: rgba(0, 0, 0, 0.68);
+      width: 20px !important;
+      height: 20px !important;
+      line-height: 20px !important;
+      font-size: 20px !important;
+    }
+
+    i.fa {
+      color: rgba(0, 0, 0, 0.68);
+      width: 20px !important;
+      height: 20px !important;
+      line-height: 18px !important;
+      font-size: 14px !important;
+    }
+  }
+}
+
+
+
+
+
+.mat-menu-panel.mat-action-menu {
+
+  .mat-menu-content:not(:empty) {
+    padding: 0 !important;
+
+    .mat-menu-item:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+
+/*
+.mat-button:focus .mat-button-focus-overlay { background-color: transparent; }
+*/
 
 
 /*

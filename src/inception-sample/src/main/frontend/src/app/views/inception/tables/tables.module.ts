@@ -25,11 +25,14 @@ import {RouterModule, Routes} from "@angular/router";
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
 
+// Action List Table component
+import {ActionListTableComponent} from "./action-list-table.component";
+
+// Action Menu Table component
+import {ActionMenuTableComponent} from "./action-menu-table.component";
+
 // Basic Table component
 import {BasicTableComponent} from "./basic-table.component";
-
-// Complex Table component
-import {ComplexTableComponent} from "./complex-table.component";
 
 // Filterable Table component
 import {FilterableTableComponent} from "./filterable-table.component";
@@ -43,21 +46,28 @@ import {SortableTableComponent} from "./sortable-table.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'basic-table',
+    redirectTo: 'action-list-table',
     pathMatch: 'full',
+  },
+  {
+    path: 'action-list-table',
+    component: ActionListTableComponent,
+    data: {
+      title: 'Action List Table',
+    }
+  },
+  {
+    path: 'action-menu-table',
+    component: ActionMenuTableComponent,
+    data: {
+      title: 'Action Menu Table',
+    }
   },
   {
     path: 'basic-table',
     component: BasicTableComponent,
     data: {
       title: 'Basic Table',
-    }
-  },
-  {
-    path: 'complex-table',
-    component: ComplexTableComponent,
-    data: {
-      title: 'Complex Table',
     }
   },
   {
@@ -92,7 +102,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [BasicTableComponent, ComplexTableComponent, FilterableTableComponent, PaginationTableComponent, SortableTableComponent],
+  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent, FilterableTableComponent, PaginationTableComponent, SortableTableComponent],
   providers: [
   ]
 })

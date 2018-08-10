@@ -12,6 +12,8 @@ import {NavigationBadge} from "./inception/services/navigation/navigation-badge"
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
 
 
+import 'hammerjs';
+
 @NgModule({
   imports: [
     AppRoutingModule,
@@ -74,8 +76,9 @@ export class AppModule extends InceptionAppModule {
       ]),
 
       new NavigationItem('icon-table', 'Tables', '/inception/tables', [], [
+        new NavigationItem('icon-table', 'Action List Table', '/inception/tables/action-list-table', []),
+        new NavigationItem('icon-table', 'Action Menu Table', '/inception/tables/action-menu-table', []),
         new NavigationItem('icon-table', 'Basic Table', '/inception/tables/basic-table', []),
-        new NavigationItem('icon-table', 'Complex Table', '/inception/tables/complex-table', []),
         new NavigationItem('icon-table', 'Filterable Table', '/inception/tables/filterable-table', []),
         new NavigationItem('icon-table', 'Pagination Table', '/inception/tables/pagination-table', []),
         new NavigationItem('icon-table', 'Sortable Table', '/inception/tables/sortable-table', [])

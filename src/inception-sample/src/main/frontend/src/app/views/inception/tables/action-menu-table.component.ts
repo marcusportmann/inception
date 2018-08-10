@@ -472,9 +472,10 @@ const USER_DATA: User[] = [
 ];
 
 @Component({
-  templateUrl: 'complex-table.component.html'
+  templateUrl: 'action-menu-table.component.html',
+  styleUrls: ['action-menu-table.component.css']
 })
-export class ComplexTableComponent implements AfterViewInit {
+export class ActionMenuTableComponent implements AfterViewInit {
   displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
   dataSource = new MatTableDataSource<User>(USER_DATA);
 
@@ -491,6 +492,10 @@ export class ComplexTableComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  edit(name: string) {
+    console.log('Editing: ', name);
   }
 }
 
