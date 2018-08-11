@@ -9,33 +9,29 @@ import {Session} from "../../services/session/session";
   selector: 'admin-header',
   template: `
     <header class="admin-header">
-      <ng-template [ngIf]="mobileSidebarToggler != false">
-        <button class="toggler d-lg-none" type="button" sidebarToggler>
-          <span class="toggler-icon"></span>
-        </button>
-      </ng-template>
-      
-      <ng-template [ngIf]="navbarBrandFull || navbarBrandMinimized">
+      <button class="toggler d-lg-none" type="button" sidebarToggler>
+        <span class="toggler-icon"></span>
+      </button>
+      <ng-template [ngIf]="brandFull || brandMinimized">
         <a class="brand" href="#">
-          <img *ngIf="navbarBrandFull"
-               [src]="imgSrc(navbarBrandFull)"
-               [attr.width]="imgWidth(navbarBrandFull)"
-               [attr.height]="imgHeight(navbarBrandFull)"
-               [attr.alt]="imgAlt(navbarBrandFull)"
+          <img *ngIf="brandFull"
+               [src]="imgSrc(brandFull)"
+               [attr.width]="imgWidth(brandFull)"
+               [attr.height]="imgHeight(brandFull)"
+               [attr.alt]="imgAlt(brandFull)"
                class="brand-full">
-          <img *ngIf="navbarBrandMinimized"
-               [src]="imgSrc(navbarBrandMinimized)"
-               [attr.width]="imgWidth(navbarBrandMinimized)"
-               [attr.height]="imgHeight(navbarBrandMinimized)"
-               [attr.alt]="imgAlt(navbarBrandMinimized)"
+          <img *ngIf="brandMinimized"
+               [src]="imgSrc(brandMinimized)"
+               [attr.width]="imgWidth(brandMinimized)"
+               [attr.height]="imgHeight(brandMinimized)"
+               [attr.alt]="imgAlt(brandMinimized)"
                class="brand-minimized">
         </a>
       </ng-template>
-      <ng-template [ngIf]="sidebarToggler != false">
-        <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
-          <span class="toggler-icon"></span>
-        </button>
-      </ng-template>
+
+      <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
+        <span class="toggler-icon"></span>
+      </button>
       
       <ul class="nav ml-auto">
         <!--
@@ -70,11 +66,10 @@ export class AdminHeaderComponent implements OnInit {
 
   @Input() fixed: boolean;
 
-  @Input() navbarBrandFull: any;
-  @Input() navbarBrandMinimized: any;
+  @Input() brandFull: any;
+  @Input() brandMinimized: any;
 
   @Input() sidebarToggler: any;
-  @Input() mobileSidebarToggler: any;
 
   constructor(private el: ElementRef, private router: Router, private sessionService: SessionService) {}
 

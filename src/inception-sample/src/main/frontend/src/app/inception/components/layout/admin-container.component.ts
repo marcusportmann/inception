@@ -19,8 +19,8 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     <div class="spinner"></div>
     <admin-header
       [fixed]="true"
-      [navbarBrandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
-      [navbarBrandMinimized]="{src: 'assets/images/logo-symbol.png', width: 30, height: 30, alt: 'Logo'}"
+      [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
+      [brandMinimized]="{src: 'assets/images/logo-symbol.png', width: 30, height: 30, alt: 'Logo'}"
       [sidebarToggler]="'lg'">
     </admin-header>
     <div class="admin-body">
