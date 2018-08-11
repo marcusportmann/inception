@@ -2,12 +2,34 @@
   <mat-card-title>Action Menu Table</mat-card-title>
   <mat-card-content>
 
-    <div class="bg-light pt-0 pb-2 pl-2 pr-2">
-      <mat-form-field class="mat-form-field-slim">
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search (Filter)" autocomplete="off">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button mat-button="">Add User</button>
+
+
+      <div style="display: flex; align-items: center; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 2px;">
+        <div style="display: flex; align-items: center; color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; justify-content: center; border: none;">
+          <i class="fa fa-search"></i>
+        </div>
+        <input style="width: 12em; height: 28px; line-height: 28px; padding-left: 2px; padding-top: 0px; padding-bottom: 0px; border: none; background-color: transparent;" matInput #searchInput (keyup)="applyFilter($event.target.value)" placeholder="Search..." autocomplete="off">
+
+
+        <button mat-button *ngIf="searchInput.value" style="color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; line-height: 28px; min-width: 28px; padding: 0; border: none !important; border-bottom-left-radius: 0; border-top-left-radius: 0;" (click)="searchInput.value = ''">
+          <i class="fa fa-times"></i>
+        </button>
+
+      </div>
+
     </div>
+
+
+
+
+
+
+    <!--
+    <div class="bg-light pt-0 pb-2 pl-2 pr-2">
+    </div>
+    -->
 
     <mat-table [dataSource]="dataSource" matSort>
 
