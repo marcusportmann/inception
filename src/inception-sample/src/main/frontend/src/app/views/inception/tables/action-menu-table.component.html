@@ -10,13 +10,10 @@
         <div style="display: flex; align-items: center; color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; justify-content: center; border: none;">
           <i class="fa fa-search"></i>
         </div>
-        <input style="width: 12em; height: 28px; line-height: 28px; padding-left: 2px; padding-top: 0px; padding-bottom: 0px; border: none; background-color: transparent;" matInput #searchInput (keyup)="applyFilter($event.target.value)" placeholder="Search..." autocomplete="off">
-
-
-        <button mat-button *ngIf="searchInput.value" style="color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; line-height: 28px; min-width: 28px; padding: 0; border: none !important; border-bottom-left-radius: 0; border-top-left-radius: 0;" (click)="searchInput.value = ''">
+        <input style="width: 13em; height: 28px; line-height: 28px; padding-left: 2px; padding-right: 2px; padding-top: 0px; padding-bottom: 0px; border: none; background-color: transparent;" matInput #searchInput (keyup)="applyFilter($event.target.value)" placeholder="Search..." autocomplete="off">
+        <button mat-icon-button *ngIf="searchInput.value" style="position: absolute; right: 16px; color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; line-height: 28px; min-width: 28px; padding: 0; border: none !important;" (click)="searchInput.value = ''">
           <i class="fa fa-times"></i>
         </button>
-
       </div>
 
     </div>
