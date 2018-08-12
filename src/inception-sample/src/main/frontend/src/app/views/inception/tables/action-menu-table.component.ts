@@ -83,8 +83,17 @@ export class ActionMenuTableComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  edit(name: string) {
-    console.log('Editing: ', name);
+  editUser(id: string) {
+    console.log('Editing user: ', id);
   }
+
+  manageUserGroups(id: string) {
+    console.log('Managing groups for user: ', id);
+  }
+
+  deleteUser(id: string) {
+    console.log('Deleting user: ', id);
+  }
+
 }
 

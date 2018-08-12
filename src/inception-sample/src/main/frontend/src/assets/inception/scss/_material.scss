@@ -177,6 +177,14 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     padding-right: 1rem;
   }
 
+  .mat-card-actions {
+
+    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
+      margin-right: 10px;
+    }
+
+  }
+
   > .mat-card-actions:last-child {
     margin: 0px!important;
     padding-left: 1rem !important;
@@ -454,14 +462,15 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
 
 mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
-  padding-left: 12px !important;
+  /*padding-left: 12px !important;*/
 }
+
 
 
 .mat-header-cell, .mat-cell {
   display: inline-block;
 
-  padding-right: 12px !important;
+
 
   white-space: nowrap;
   overflow: hidden;
@@ -469,6 +478,12 @@ mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
 
   min-height: 0;
 }
+
+
+mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not(:last-child) {
+  padding-right: 12px !important;
+}
+
 
 /*
 .mat-sort-header-arrow, [dir=rtl] .mat-sort-header-position-before .mat-sort-header-arrow {
@@ -485,32 +500,32 @@ mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
 
 
 .mat-cell-one-action {
-  min-width: 64px;
-  max-width: 64px;
+  min-width: 76px;
+  max-width: 76px;
   text-align: center;
 }
 
 .mat-cell-two-actions {
-  min-width: 64px;
-  max-width: 64px;
+  min-width: 76px;
+  max-width: 76px;
   text-align: center;
 }
 
 .mat-cell-three-actions {
-  min-width: 90px;
-  max-width: 90px;
+  min-width: 102px;
+  max-width: 102px;
   text-align: center;
 }
 
 .mat-cell-four-actions {
-  min-width: 116px;
-  max-width: 116px;
+  min-width: 128px;
+  max-width: 128px;
   text-align: center;
 }
 
 .mat-cell-five-actions {
-  min-width: 142px;
-  max-width: 142px;
+  min-width: 154px;
+  max-width: 154px;
   text-align: center;
 }
 
@@ -552,6 +567,55 @@ mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
       border-bottom: none;
     }
   }
+}
+
+
+.mat-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: 1px solid $gray-200;
+
+
+  /*color: #fff;*/
+  /*background-color: rgb(58, 66, 72);*/
+  background-color: $gray-100;
+  padding: 8px !important;
+
+  color: $gray-800;
+
+  .mat-button, .mat-flat-button {
+    /*
+    line-height: 28px !important;
+    font-size: 12px !important;
+    padding: 0 10px !important;
+    min-width: 0 !important;
+    */
+
+    /*color: $gray-800;*/
+
+    /*background-color: #fff !important;*/
+
+    /*border-color: #fff !important;*/
+
+    /*border-color: $gray-700 !important;*/
+  }
+
+  .table-filter-container {
+    border: none !important;
+    border-left: 1px solid $gray-400 !important;
+    border-radius: 0 !important;
+
+    color: $gray-700 !important;
+
+    .table-filter-input {
+
+    }
+  }
+
+
+
 }
 
 

@@ -1,6 +1,5 @@
 <form [formGroup]="advancedForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
   <mat-card>
-    <mat-card-title>Advanced Form</mat-card-title>
     <mat-card-content>
       <div class="row">
         <div class="col">
@@ -170,8 +169,8 @@
       </div>
     </mat-card-content>
     <mat-card-actions align="right">
-      <button mat-button>Cancel</button>
-      <button type="submit" [disabled]="!advancedForm.valid" mat-button>OK</button>
+      <button mat-flat-button color="link">Cancel</button>
+      <button type="submit" [disabled]="!advancedForm.valid" mat-flat-button>OK</button>
     </mat-card-actions>
 
   </mat-card>

@@ -1,62 +1,61 @@
 <mat-card style="height: 100%;">
-  <mat-card-title>Action Menu Table</mat-card-title>
-  <mat-card-content>
+  <div class="mat-table-header">
+    <button mat-flat-button color="primary">Add User</button>
+    <table-filter (changed)="applyFilter($event)"></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" matSort>
 
-    <div class="d-flex justify-content-between align-items-center">
-      <button mat-button="">Add User</button>
-      <table-filter (changed)="applyFilter($event)"></table-filter>
-    </div>
+    <!-- First Name(s) Column -->
+    <ng-container matColumnDef="firstNames">
+      <mat-header-cell class="first-names-column" *matHeaderCellDef mat-sort-header>First&nbsp;Name</mat-header-cell>
+      <mat-cell class="first-names-column" *matCellDef="let row">{{row.firstNames}}</mat-cell>
+    </ng-container>
 
-    <mat-table [dataSource]="dataSource" matSort>
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+      <mat-header-cell class="last-name-column" *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+      <mat-cell class="last-name-column" *matCellDef="let row">{{row.lastName}}</mat-cell>
+    </ng-container>
 
-      <!-- First Name(s) Column -->
-      <ng-container matColumnDef="firstNames">
-        <mat-header-cell class="first-names-column" *matHeaderCellDef mat-sort-header>First&nbsp;Name</mat-header-cell>
-        <mat-cell class="first-names-column" *matCellDef="let row">{{row.firstNames}}</mat-cell>
-      </ng-container>
+    <!-- E-Mail Column -->
+    <ng-container matColumnDef="email">
+      <mat-header-cell class="email-column d-none d-sm-inline-block" *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>
+      <mat-cell class="email-column d-none d-sm-inline-block" *matCellDef="let row">{{row.email}}</mat-cell>
+    </ng-container>
 
-      <!-- Last Name Column -->
-      <ng-container matColumnDef="lastName">
-        <mat-header-cell class="last-name-column" *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
-        <mat-cell class="last-name-column" *matCellDef="let row">{{row.lastName}}</mat-cell>
-      </ng-container>
-
-      <!-- E-Mail Column -->
-      <ng-container matColumnDef="email">
-        <mat-header-cell class="email-column d-none d-sm-inline-block" *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>
-        <mat-cell class="email-column d-none d-sm-inline-block" *matCellDef="let row">{{row.email}}</mat-cell>
-      </ng-container>
-
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
-        <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{name: row.firstNames + ' ' + row.lastName}">
-          <i class="fa fa-ellipsis-v"></i>
-        </mat-cell>
-      </ng-container>
-
-      <!-- Header and Row Declarations -->
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-    </mat-table>
-
-    <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
-
-    <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-      <ng-template matMenuContent let-name="name">
-        <button mat-menu-item (click)="edit(name)">
-          <mat-icon>edit</mat-icon>
-          <span>Edit</span>
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
+        <button mat-icon-button>
+          <mat-icon>arrow_drop_down</mat-icon>
         </button>
-        <button mat-menu-item>
-          <mat-icon>group</mat-icon>
-          <span>Groups</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </ng-template>
-    </mat-menu>
-  </mat-card-content>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-id="id">
+      <button mat-menu-item (click)="editUser(id)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="manageUserGroups(id)">
+        <mat-icon>group</mat-icon>
+        <span>Groups</span>
+      </button>
+      <button mat-menu-item (click)="deleteUser(id)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+
 </mat-card>

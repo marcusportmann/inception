@@ -39,17 +39,17 @@ import {
 
     .table-filter-container {
       display: flex; 
-      align-items: center; 
+      align-items: center;
+      color: rgba(0, 0, 0, 0.42);
       border: 1px solid rgba(0, 0, 0, 0.12); 
-      border-radius: 2px;  
+      border-radius: 2px; 
     }
     
     .table-filter-icon {
       display: flex;
       width: 28px;
       height: 28px;
-      align-items: center; 
-      color: rgba(0, 0, 0, 0.42); 
+      align-items: center;
       justify-content: center; 
       border: none;
     }
@@ -57,18 +57,18 @@ import {
     .table-filter-input {
       -webkit-appearance: none; 
       border-radius: 0; 
-      width: 12em; 
+      width: 14em; 
       height: 28px; 
       padding-left: 2px; 
       padding-right: 28px; 
       border: none; 
+      color: inherit;
       background-color: transparent;
     }
     
     .table-filter-reset {
       position: absolute; 
       right: 16px; 
-      color: rgba(0, 0, 0, 0.42); 
       width: 28px; height: 28px; 
       line-height: 28px; 
       min-width: 28px; 
