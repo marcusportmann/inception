@@ -2,11 +2,9 @@
   <mat-card-title>Action List Table</mat-card-title>
   <mat-card-content>
 
-    <div class="bg-light pt-0 pb-2 pl-2 pr-2">
-      <mat-form-field class="mat-form-field-slim">
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search (Filter)" autocomplete="off">
-        <mat-icon matSuffix>search</mat-icon>
-      </mat-form-field>
+    <div class="d-flex justify-content-between align-items-center">
+      <button mat-button="">Add User</button>
+      <table-filter (changed)="applyFilter($event)"></table-filter>
     </div>
 
     <mat-table [dataSource]="dataSource" matSort>
