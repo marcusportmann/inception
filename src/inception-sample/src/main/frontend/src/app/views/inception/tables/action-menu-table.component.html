@@ -4,29 +4,8 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <button mat-button="">Add User</button>
-
-
-      <div style="display: flex; align-items: center; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: 2px;">
-        <div style="display: flex; align-items: center; color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; justify-content: center; border: none;">
-          <i class="fa fa-search"></i>
-        </div>
-        <input style="-webkit-appearance: none; border-radius: 0; width: 12em; height: 28px; padding-left: 2px; border: none; background-color: transparent;" matInput #searchInput (keyup)="applyFilter($event.target.value)" placeholder="Search..." autocomplete="off">
-        <button mat-icon-button *ngIf="searchInput.value" style="position: absolute; right: 16px; color: rgba(0, 0, 0, 0.42); width: 28px; height: 28px; line-height: 28px; min-width: 28px; padding: 0; border: none !important;" (click)="searchInput.value = ''; applyFilter(searchInput.value);">
-          <i class="fa fa-times"></i>
-        </button>
-      </div>
-
+      <table-filter (changed)="applyFilter($event)"></table-filter>
     </div>
-
-
-
-
-
-
-    <!--
-    <div class="bg-light pt-0 pb-2 pl-2 pr-2">
-    </div>
-    -->
 
     <mat-table [dataSource]="dataSource" matSort>
 

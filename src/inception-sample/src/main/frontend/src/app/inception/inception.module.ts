@@ -30,9 +30,10 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
 
-// /Import Inception controls components
+// Import Inception controls components
 import {CheckboxFormField} from "./components/controls";
 import {RadioGroupFormField} from "./components/controls";
+import {TableFilter} from "./components/controls";
 
 // Import Inception layout components
 import {
@@ -254,6 +255,7 @@ export const INCEPTION_DATE_FORMATS = {
     // Inception control components
     CheckboxFormField,
     RadioGroupFormField,
+    TableFilter,
 
     // Inception layout components
     AdminContainerComponent,
@@ -265,6 +267,7 @@ export const INCEPTION_DATE_FORMATS = {
     // Inception control components
     CheckboxFormField,
     RadioGroupFormField,
+    TableFilter,
 
     // Inception layout components
     BreadcrumbsComponent,
