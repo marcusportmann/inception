@@ -57,7 +57,7 @@ import {
     .table-filter-input {
       -webkit-appearance: none; 
       border-radius: 0; 
-      width: 14em; 
+      width: 12em; 
       height: 28px; 
       padding-left: 2px; 
       padding-right: 28px; 
