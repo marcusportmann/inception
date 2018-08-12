@@ -1,56 +1,43 @@
-<spinner [shown]="true"></spinner>
+
 <div class="app flex-row align-items-center" >
   <div class="container">
     <div class="row justify-content-center">
-      <div class="card p-2" style="min-width: 400px;">
-        <div class="card-body">
-          <h1>Login</h1>
-          <p class="text-muted">Sign in to your account</p>
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" inceptionValidatedForm>
+      <form [formGroup]="loginForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
+        <mat-card style="min-width: 300px; margin-bottom: 0;">
+          <mat-card-header class="justify-content-center pt-4 pb-0">
+            <div class="logo-login"></div>
+          </mat-card-header>
+          <mat-card-content>
 
-            <mat-form-field>
-              <input matInput placeholder="Username" type="text">
-              <span matSuffix><i class="icon-user"></i></span>
-            </mat-form-field>
-
-            <div class="formGroup mb-3">
-
-
-
-
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-user"></i></span>
-                </div>
-                <input id="username" name="username" formControlName="username" type="text" class="form-control" placeholder="Username" inceptionAutofocus>
-              </div>
-              <div *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched" class="form-control-error">
-                <div *ngIf="loginForm.controls['username'].errors?.required">A username is required.</div>
-                <div *ngIf="loginForm.controls['username'].errors?.patternInvalid">A valid username is required.</div>
+            <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Username</mat-label>
+                  <input type="text" matInput formControlName="username" autofocus>
+                  <mat-error *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched">
+                    <span *ngIf="loginForm.controls['username'].errors?.required">A username is required.</span>
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-
-            <div class="formGroup mb-4">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="icon-lock"></i></span>
-                </div>
-                <input id="password" name="password" formControlName="password" type="password" class="form-control" placeholder="Password">
-              </div>
-              <div *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched" class="form-control-error">
-                <div *ngIf="loginForm.controls['password'].errors?.required">A password is required.</div>
+            <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Password</mat-label>
+                  <input type="password" matInput formControlName="password">
+                  <mat-error *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched">
+                    <span *ngIf="loginForm.controls['password'].errors?.required">A password is required.</span>
+                  </mat-error>
+                </mat-form-field>
               </div>
             </div>
-
-            <div class="form-buttons">
-              <button type="submit" class="btn btn-primary px-4 float-right ml-2">Login</button>
-              <button type="button" class="btn btn-secondary px-4 float-right" (click)="onCancel()">Cancel</button>
-              <button *ngIf="isForgottenPasswordEnabled()" type="button" class="btn btn-link px-0">Forgot password?</button>
-            </div>
-
-          </form>
-        </div>
-      </div>
+          </mat-card-content>
+          <mat-card-actions align="right">
+            <button mat-flat-button color="link">Forgot password?</button>
+            <button type="submit" [disabled]="!loginForm.valid" mat-flat-button>Login</button>
+          </mat-card-actions>
+        </mat-card>
+      </form>
     </div>
   </div>
 </div>

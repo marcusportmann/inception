@@ -86,6 +86,13 @@ public class SecurityServiceAuthenticationManager
   {
     try
     {
+      Thread.sleep(10000L);
+    }
+    catch (Throwable e)
+    {}
+
+    try
+    {
       UUID userDirectoryId = securityService.authenticate(authentication.getPrincipal().toString(),
           authentication.getCredentials().toString());
 

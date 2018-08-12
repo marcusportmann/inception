@@ -38,7 +38,7 @@ export class ExampleFormComponent implements OnInit {
   static readonly MIN_DATE = new Date(1900, 1, 1);
   static readonly MAX_DATE = Date.now();
 
-  advancedForm: FormGroup;
+  exampleForm: FormGroup;
 
   titles: Array<any> = [
     {name: 'Mr', value: 'Mr'},
@@ -52,7 +52,7 @@ export class ExampleFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
 
-    this.advancedForm = this.formBuilder.group({
+    this.exampleForm = this.formBuilder.group({
       //hideRequired: false,
       //floatLabel: 'auto',
       // tslint:disable-next-line
@@ -73,7 +73,7 @@ export class ExampleFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.filteredCountryOptions = this.advancedForm.get('favoriteCountry').valueChanges.pipe(
+    this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
     );
@@ -83,7 +83,7 @@ export class ExampleFormComponent implements OnInit {
 
 
 
-    console.log('favorite color = ', this.advancedForm.get('favoriteColor').value);
+    console.log('favorite color = ', this.exampleForm.get('favoriteColor').value);
 
   }
 
