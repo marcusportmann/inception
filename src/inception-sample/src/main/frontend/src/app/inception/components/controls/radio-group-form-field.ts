@@ -83,14 +83,6 @@ export function getMatRadioGroupMissingControlError(): Error {
     </div>
   `,
   styles: [`
-
-    .mat-form-field.radio-group-form-field .mat-radio-button {
-      margin-right: 0.875em !important;
-    }
-
-    .mat-form-field.radio-group-form-field .mat-radio-button:last-child {
-      margin-right: 0 !important;
-    }
     
     .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
       border-color: #f44336;
