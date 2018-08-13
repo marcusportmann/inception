@@ -180,6 +180,13 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
   .mat-card-actions {
 
+    &.align-right {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-content: center;
+    }
+
     .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
       margin-right: 10px;
     }
@@ -299,7 +306,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
 
 .mat-input-element, .mat-form-field-label {
-  line-height: 1.25em !important;
+  line-height: 1.25rem !important;
 }
 
 
@@ -313,7 +320,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   padding: 1em;
 }
 
-
+/*
 .mat-radio-group {
   .mat-radio-button:not(:last-child) {
     .mat-radio-label-content {
@@ -321,7 +328,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     }
   }
 }
-
+*/
 
 
 .mat-form-field {
@@ -382,7 +389,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
 
 .mat-form-field-infix {
-  min-height: 3.2em !important;
+  /*min-height: 3.2em !important;*/
 }
 
 .mat-form-field-appearance-standard .mat-form-field-ripple {
