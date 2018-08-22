@@ -15,7 +15,8 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {Error} from "../../errors/error";
 
 @Component({
   selector: 'error-report-dialog',
@@ -28,7 +29,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
     </div>
     <div mat-dialog-actions>
       <button mat-button (click)="onCancelClick()">Cancel</button>
-      <button mat-button (click)="onSendClick()" cdkFocusInitial>Send</button>
+      <button mat-button (click)="onSendClick()" autofocus>Send</button>
     </div>    
   `,
 })

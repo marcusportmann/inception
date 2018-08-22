@@ -16,11 +16,9 @@
 
 import { Injectable } from "@angular/core";
 
-//import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
 import { ErrorReportDialog } from "../../components/error/index";
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog} from '@angular/material';
 
 import {Error} from "../../errors/error";
 
@@ -36,13 +34,13 @@ export class ErrorService {
   /**
    * Constructs a new ErrorService.
    *
-   * @param {BsModalService} bsModalService The Bootstrap Modal Service.
+   * @param {dialog} dialog The material dialog.
    */
   constructor(public dialog: MatDialog) {
   }
 
   /**
-   * Show the specified error using the error report modal
+   * Show the specified error using the error report modal.
    * .
    * @param {Error} error The error.
    */

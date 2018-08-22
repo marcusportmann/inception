@@ -52,9 +52,13 @@ import {
   SidebarNavLinkComponent,
   SidebarNavTitleComponent,
   NotFoundComponent,
-  SimpleContainerComponent, SpinnerComponent
+  SimpleContainerComponent,
+  SpinnerComponent
 } from './components/layout';
 import { ErrorReportDialog } from './components/error';
+
+// Import Inception interceptors
+import {SessionInterceptor} from "./services/session/session.interceptor";
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
@@ -62,22 +66,17 @@ import {ErrorService} from './services/error/error.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
+import {SpinnerService} from './services/layout/spinner.service';
 
-// Import 3rd party modules
-//import {BsDatepickerModule} from 'ngx-bootstrap';
-//import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
-//import {LaddaModule} from 'angular2-ladda';
-//import {ModalModule} from 'ngx-bootstrap/modal';
-import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {StorageServiceModule} from "angular-webstorage-service";
-//import {TabsModule} from 'ngx-bootstrap/tabs';
-//import {TimepickerModule} from 'ngx-bootstrap';
-
-// Import 3rd party components
-//import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
-import {SessionInterceptor} from "./services/session/session.interceptor";
+// Import Inception miscellaneous
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 import {setInceptionInjector} from "./inception-injector";
+
+// Import 3rd party modules
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+import {StorageServiceModule} from "angular-webstorage-service";
+
+// Import 3rd party components
 
 // Import perfect scrollbar dependencies
 import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
@@ -86,17 +85,6 @@ import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
-
-
-
-
-
-
-
-
-
-
 
 // Import Material modules
 import {DateAdapter} from "@angular/material";
@@ -125,13 +113,11 @@ import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 import {MatTooltipModule} from "@angular/material";
 
-
+// Import Material miscellaneous
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
 import {MAT_DATE_FORMATS} from "@angular/material";
 import {MAT_DATE_LOCALE} from "@angular/material";
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material";
-
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
-
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS} from "@angular/material-moment-adapter";
 
 // See the Moment.js docs for the meaning of these formats:
@@ -291,6 +277,7 @@ export const INCEPTION_DATE_FORMATS = {
     // Inception error components
     ErrorReportDialog
   ],
+  entryComponents: [SpinnerComponent],
   bootstrap: [AdminContainerComponent, ErrorReportDialog, SimpleContainerComponent]
 })
 export class InceptionModule {
@@ -352,7 +339,8 @@ export class InceptionModule {
         ErrorService,
         NavigationService,
         SecurityService,
-        SessionService
+        SessionService,
+        SpinnerService
       ]
     }
   }

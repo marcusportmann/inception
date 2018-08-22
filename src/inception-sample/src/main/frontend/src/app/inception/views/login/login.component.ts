@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewContainerRef} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -34,6 +34,7 @@ import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
 import {Router} from "@angular/router";
 import {Error} from "../../errors/error";
+import {SpinnerService} from "../../services/layout/spinner.service";
 
 
 
@@ -43,11 +44,9 @@ import {Error} from "../../errors/error";
 })
 export class LoginComponent {
 
-  loggingIn: boolean = false;
-
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -88,7 +87,7 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
-      this.loggingIn = true;
+      this.spinnerService.show();
 
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
@@ -98,11 +97,13 @@ export class LoginComponent {
 
             console.log('organizations = ', organizations);
 
+            this.spinnerService.hide();
+
             this.router.navigate(['/']);
 
           }, error => {
 
-            this.loggingIn = false;
+            this.spinnerService.hide();
 
             this.errorService.showErrorReport(error);
 
@@ -110,7 +111,8 @@ export class LoginComponent {
 
         },error => {
 
-          this.loggingIn = false;
+
+          this.spinnerService.hide();
 
           this.errorService.showErrorReport(error);
 
