@@ -85,10 +85,10 @@ export class SessionService {
         if (httpErrorResponse.error && httpErrorResponse.error.error) {
           let oauthError: OAuthError = httpErrorResponse.error;
 
-          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
+          return Observable.throwError(new LoginError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
         }
         else {
-          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          return Observable.throwError(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
         }
       }));
   }

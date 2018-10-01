@@ -65,7 +65,23 @@ $inception-theme: mat-light-theme($custom-primary, $custom-accent);
 
 
 $inception-typography: mat-typography-config(
-  $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
+  $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+  $display-4:     mat-typography-level(112px, 112px, 300),
+  $display-3:     mat-typography-level(56px, 56px, 400),
+  $display-2:     mat-typography-level(45px, 48px, 400),
+  $display-1:     mat-typography-level(34px, 40px, 400),
+  $headline:      mat-typography-level(1rem, 32px, 500),
+  $title:         mat-typography-level(20px, 32px, 500),
+  $subheading-2:  mat-typography-level(16px, 28px, 400),
+  $subheading-1:  mat-typography-level(15px, 24px, 400),
+  $body-2:        mat-typography-level(1rem, 24px, 500),
+  $body-1:        mat-typography-level(1rem, 20px, 400),
+  $caption:       mat-typography-level(12px, 20px, 400),
+  $button:        mat-typography-level(1rem, 14px, 500),
+    // Line-height must be unit-less fraction of the font-size.
+  $input:         mat-typography-level(1rem, 1.125, 400)
+
+
 );
 
 @include angular-material-typography($inception-typography);
@@ -74,17 +90,21 @@ $inception-typography: mat-typography-config(
 
 
 
-
-@mixin mat-menu-typography($config) {
-  .mat-menu-item {
-    font: {
-      family: mat-font-family($config, subheading-2);
-      size: mat-font-size($config, subheading-2);
-      weight: mat-font-weight($config, subheading-2);
-    }
-  }
-}
-
+//
+//@mixin mat-menu-typography($config) {
+//
+//  .mat-menu-item {
+//    font: {
+//      family: mat-font-family($config, subheading-2);
+//      size: 1rem;
+//      /*size: mat-font-size($config, subheading-2);*/
+//      /*weight: mat-font-weight($config, subheading-2);*/
+//    }
+//
+//    color: red;
+//  }
+//}
+//
 
 
 
@@ -130,6 +150,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     line-height: 19px;
     padding: 1rem;
     margin-bottom: 0;
+    /*font-size: $font-size-base;*/
   }
 
   .mat-card-image {
@@ -141,12 +162,12 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     border-radius: $card-border-radius $card-border-radius 0 0;
     .mat-card-title {
       margin-bottom: 0px;
-      font-size: 1rem;
+      /*font-size: $font-size-base;*/
     }
     .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
       margin-bottom: 0px;
       margin-top: -4px;
-      font-size: 0.875rem;
+      /*font-size: $font-size-base;*/
     }
     &.text-white {
       .mat-card-title {
@@ -158,7 +179,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     }
   }
   .mat-card-title {
-    font-size: 1rem;
+    /*font-size: 1rem;*/
     font-weight: 500;
     margin-bottom: 0;
   }
@@ -226,7 +247,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     .mat-menu-item {
 
       color: $gray-600;
-      font-size: 0.875rem;
+      /*font-size: 0.875rem;*/
       white-space: nowrap;
       text-decoration: none;
 
@@ -276,15 +297,26 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 
 }
 
+.mat-expansion-panel
+{
 
-.mat-expansion-panel-header-title,
-.mat-expansion-panel-header-description {
-  flex-basis: 0;
-}
+  .mat-expansion-panel-header
+  {
+    font-size: 1rem;
+    font-weight: 500;
 
-.mat-expansion-panel-header-description {
-  justify-content: space-between;
-  align-items: center;
+    .mat-expansion-panel-header-title,
+    .mat-expansion-panel-header-description
+    {
+      flex-basis: 0;
+    }
+
+    .mat-expansion-panel-header-description
+    {
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
 }
 
 
@@ -295,7 +327,9 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 .mat-form-field.static {
 
   .mat-input-element {
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.87);
     color: rgba(0, 0, 0, 0.87);
+    opacity: 1;
   }
 
   .mat-form-field-underline {
@@ -475,6 +509,11 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
 */
 
 
+
+
+
+
+
 mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
   /*padding-left: 12px !important;*/
 }
@@ -484,7 +523,7 @@ mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
 .mat-header-cell, .mat-cell {
   display: inline-block;
 
-
+  font-size: 1rem;
 
   white-space: nowrap;
   overflow: hidden;
@@ -674,21 +713,86 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 */
 
 
-/* Change Autocomplete styles in Chrome*/
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  color:  $gray-700;
-  -webkit-box-shadow: 0 0 0 30px white inset;
-  -webkit-text-fill-color: $gray-700;
-  transition: background-color 5000s ease-in-out 0s;
+
+
+.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab {
+  /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+  /*font-size: $font-size-base;*/
+  font-weight: 500;
 }
+
+
+.mat-dialog-container {
+
+  .mat-dialog-title {
+    margin: 0 0 10px;
+  }
+
+  .mat-form-field-wrapper {
+
+    padding-bottom: 0;
+
+    .mat-form-field-flex
+    {
+      padding-top: 2em;
+      /*padding-bottom: 1em;*/
+
+      .mat-form-field-infix
+      {
+        border-top: 0;
+        min-height: 0 !important;
+        padding: 0;
+
+        .mat-input-element {
+          margin-top: 0.5em;
+          /*font-size: 0.875em;*/
+        }
+
+        input.mat-input-element {
+          line-height: unset;
+          height: 25px;
+        }
+
+        textarea.mat-input-element {
+
+          padding: 0;
+          margin-bottom: 4px;
+
+        }
+      }
+    }
+
+    .mat-form-field-underline {
+      bottom: 0 !important;
+    }
+
+    .mat-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+
+  .mat-dialog-actions {
+    float: right;
+    padding-top: 20px;
+
+    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+
+
+
+.mat-menu-item {
+  font-size: 1rem;
+}
+
+
+.mat-list .mat-list-item, .mat-nav-list .mat-list-item, .mat-selection-list .mat-list-item {
+  font-size: 1rem;
+}
+
+
 
 
 

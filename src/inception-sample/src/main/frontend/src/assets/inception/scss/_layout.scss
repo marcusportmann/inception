@@ -228,6 +228,9 @@ admin-root {
   }
 }
 
+
+
+
 html:not([dir="rtl"]) {
   .sidebar {
     margin-left: - $sidebar-width;
@@ -238,6 +241,10 @@ html[dir="rtl"] {
     margin-right: - $sidebar-width;
   }
 }
+
+
+
+
 
 @include media-breakpoint-up(lg) {
   //
@@ -336,6 +343,9 @@ html[dir="rtl"] {
     }
   }
 }
+
+
+
 
 //
 // Breadcrumb
@@ -552,6 +562,34 @@ html[dir="rtl"] {
     display: none;
   }
 }
+
+
+/*
+
+TODO GET THIS TO WORK - SIDEBAR NEEDS TO BE BIGGER ON SMALLER SCREEN WITH BIG FONT
+*/
+
+@include media-breakpoint-down(xs) {
+  .sidebar {
+    flex: 0 0 $sidebar-width * 1.5 !important;
+  }
+
+  html:not([dir="rtl"]) {
+    .sidebar {
+      margin-left: - $sidebar-width * 1.5;
+    }
+  }
+  html[dir="rtl"] {
+    .sidebar {
+      margin-right: - $sidebar-width * 1.5;
+    }
+  }
+
+}
+
+
+
+
 
 
 

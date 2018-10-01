@@ -23,10 +23,7 @@ import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
 import digital.inception.validation.ValidationError;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +49,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Marcus Portmann
  */
+@Api(tags="Sample API", description = "Sample Service Controller")
 @RestController
 @RequestMapping(value = "/api/sample")
 @WebService(serviceName = "SampleService", name = "ISampleService",

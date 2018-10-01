@@ -16,29 +16,45 @@
 
 import { Injectable } from "@angular/core";
 
+import { ErrorReportDialog } from "../../components/dialogs/index";
+
+import {MatDialog, MatDialogRef} from '@angular/material';
+
 import {Error} from "../../errors/error";
 
 /**
- * The ErrorService class provides the capability to process an application error or back-end error
- * and submit an error report.
+ * The DialogService class provides the capability to show different standard dialogs.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class ErrorService {
+export class DialogService {
 
   /**
-   * Constructs a new ErrorService.
+   * Constructs a new DialogService.
+   *
+   * @param {dialog} dialog The material dialog.
    */
-  constructor() {
+  constructor(public dialog: MatDialog) {
   }
 
   /**
-   * Submit the error report for the error.
-   *
+   * Show the specified error using the error report dialog.
+   * .
    * @param {Error} error The error.
    */
-  submitErrorReport(error: Error) {
+  showErrorReportDialog(error: Error): MatDialogRef<ErrorReportDialog> {
 
+    const dialogRef = this.dialog.open(ErrorReportDialog, {
+      width: '300px',
+      data: error
+    });
+
+    return dialogRef;
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed = ', result);
+    //   //this.animal = result;
+    // });
   }
 }

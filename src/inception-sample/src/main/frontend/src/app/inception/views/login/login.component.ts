@@ -35,6 +35,8 @@ import {SessionService} from "../../services/session/session.service";
 import {Router} from "@angular/router";
 import {Error} from "../../errors/error";
 import {SpinnerService} from "../../services/layout/spinner.service";
+import {LoginError} from "../../services/session/session.service.errors";
+import {DialogService} from "../../services/dialog/dialog.service";
 
 
 
@@ -46,7 +48,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private dialogService: DialogService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -72,7 +74,7 @@ export class LoginComponent {
 
     let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    this.errorService.showErrorReport(error);
+    this.dialogService.showErrorReportDialog(error);
 
 
 
@@ -105,16 +107,20 @@ export class LoginComponent {
 
             this.spinnerService.hide();
 
-            this.errorService.showErrorReport(error);
+            this.dialogService.showErrorReportDialog(error);
 
           });
 
         },error => {
 
+          if (error instanceof LoginError) {
+            console.log('LOGIN ERROR!!!!');
+          }
+
 
           this.spinnerService.hide();
 
-          this.errorService.showErrorReport(error);
+          this.dialogService.showErrorReportDialog(error);
 
         });
     }

@@ -58,10 +58,10 @@ export class SecurityService {
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
         if (httpErrorResponse.error && httpErrorResponse.error.exception) {
-          return Observable.throw(new SecurityServiceError(httpErrorResponse));
+          return Observable.throwError(new SecurityServiceError(httpErrorResponse));
         }
         else {
-          return Observable.throw(new CommunicationError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          return Observable.throwError(new CommunicationError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
         }
 
       }));

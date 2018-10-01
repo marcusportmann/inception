@@ -20,16 +20,17 @@ package digital.inception.transaction;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 import com.atomikos.icatch.jta.UserTransactionManager;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ApplicationTransactionManager</code> class implements a Spring component that
@@ -157,20 +158,10 @@ public class TransactionManagementConfigurer
 
             userTransaction = (UserTransactionImp) enhancerClassCreateMethod.invoke(
                 userTransactionEnhancer);
-
-            Method setTransactionTimeoutMethod = UserTransactionImp.class.getMethod(
-                "setTransactionTimeout", Integer.TYPE);
-
-            setTransactionTimeoutMethod.invoke(userTransaction, 300);
           }
           else
           {
             userTransaction = new UserTransactionImp();
-
-            Method setTransactionTimeoutMethod = UserTransactionImp.class.getMethod(
-                "setTransactionTimeout", Integer.TYPE);
-
-            setTransactionTimeoutMethod.invoke(userTransaction, 300);
           }
         }
         catch (Throwable e)

@@ -30,10 +30,13 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
 
-// Import Inception controls components
+// Import Inception controls
 import {CheckboxFormField} from "./components/controls";
 import {RadioGroupFormField} from "./components/controls";
 import {TableFilter} from "./components/controls";
+
+// Import Inception dialogs
+import {ErrorReportDialog} from "./components/dialogs";
 
 // Import Inception layout components
 import {
@@ -55,13 +58,13 @@ import {
   SimpleContainerComponent,
   SpinnerComponent
 } from './components/layout';
-import { ErrorReportDialog } from './components/error';
 
 // Import Inception interceptors
 import {SessionInterceptor} from "./services/session/session.interceptor";
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
+import {DialogService} from "./services/dialog/dialog.service";
 import {ErrorService} from './services/error/error.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
@@ -148,16 +151,9 @@ export const INCEPTION_DATE_FORMATS = {
     RouterModule,
 
     // 3rd party modules
-    //BsDatepickerModule.forRoot(),
-    //BsDropdownModule.forRoot(),
     //ChartsModule,
-    //LaddaModule.forRoot({}),
-    //ModalModule.forRoot(),
-    //NgSelectModule,
     PerfectScrollbarModule,
     StorageServiceModule,
-    //TabsModule.forRoot(),
-    //TimepickerModule.forRoot(),
 
     // Material modules
     MatAutocompleteModule,
@@ -197,17 +193,9 @@ export const INCEPTION_DATE_FORMATS = {
     RouterModule,
 
     // 3rd party modules
-    //BsDatepickerModule,
-    //BsDropdownModule,
     //ChartsModule,
-    //LaddaModule,
-    //ModalModule,
-    //NgSelectModule,
     PerfectScrollbarModule,
     StorageServiceModule,
-    //TabsModule,
-    //TimepickerModule,
-
 
     // Material modules
     MatAutocompleteModule,
@@ -274,7 +262,7 @@ export const INCEPTION_DATE_FORMATS = {
     SimpleContainerComponent,
     SpinnerComponent,
 
-    // Inception error components
+    // Inception dialogs
     ErrorReportDialog
   ],
   entryComponents: [SpinnerComponent],
@@ -336,6 +324,7 @@ export class InceptionModule {
         CanActivateFunctionGuard,
 
         BreadcrumbsService,
+        DialogService,
         ErrorService,
         NavigationService,
         SecurityService,

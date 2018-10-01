@@ -144,8 +144,7 @@ public class SampleApplication extends Application
   {
     ApiInfo apiInfo = new ApiInfo("Sample", "REST API documentation for the Sample application",
         Version.PROJECT_VERSION, "", new Contact("Marcus Portmann", "", ""), "Apache 2.0",
-        "http://www.apache.org/licensm" +
-          "es/LICENSE-2.0.html", new ArrayList<>());
+        "http://www.apache.org/licenses/LICENSE-2.0.html", new ArrayList<>());
 
     // Versioned API path selector: /v[0-9]*/.*
     return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())

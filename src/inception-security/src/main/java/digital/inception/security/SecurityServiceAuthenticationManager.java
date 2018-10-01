@@ -86,13 +86,6 @@ public class SecurityServiceAuthenticationManager
   {
     try
     {
-      Thread.sleep(10000L);
-    }
-    catch (Throwable e)
-    {}
-
-    try
-    {
       UUID userDirectoryId = securityService.authenticate(authentication.getPrincipal().toString(),
           authentication.getCredentials().toString());
 
@@ -134,7 +127,7 @@ public class SecurityServiceAuthenticationManager
     }
     catch (UserNotFoundException e)
     {
-      throw new UsernameNotFoundException("Failed to authenticate the user ("
+      throw new BadCredentialsException("Failed to authenticate the user ("
           + authentication.getPrincipal() + ")");
     }
     catch (Throwable e)
