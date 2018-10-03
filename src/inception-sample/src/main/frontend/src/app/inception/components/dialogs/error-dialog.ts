@@ -1,0 +1,75 @@
+/*
+ * Copyright 2018 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {Component, Inject} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {Error} from "../../errors/error";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ErrorService} from "../../services/error/error.service";
+import {DialogData} from "./dialog-data";
+
+@Component({
+  selector: 'error-dialog',
+  template: `
+    <div mat-dialog-content>
+      <div class="row">
+        <div class="col text-center align-middle bg-danger p-2">
+          <i class="material-icons md-48">error_outline</i>
+        </div>
+      </div>
+      <div class="row pt-4 pb-2 text-center">
+        <div class="col font-weight-bold">
+          {{data.title}}
+        </div>
+      </div>
+      <div class="row pt-2 pb-4 text-center">
+        <div class="col">
+        {{data.description}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <button mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText ? data.buttonText : 'Ok'}}</button>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`    
+    .mat-dialog-content {
+      padding: 0;
+      margin-top: -24px;
+    }
+    
+    .material-icons {
+      line-height: unset;
+    }
+
+    .mat-flat-button {
+      background-color: #f44336;
+    }
+  `]
+})
+export class ErrorDialog {
+
+  constructor(
+    private dialogRef: MatDialogRef<ErrorDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  onButtonClick(): void {
+    this.dialogRef.close();
+  }
+}

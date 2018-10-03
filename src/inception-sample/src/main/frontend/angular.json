@@ -21,7 +21,6 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/simple-line-icons/css/simple-line-icons.css",
               "node_modules/material-design-icons/iconfont/material-icons.css",
               "src/assets/inception/scss/inception.scss",

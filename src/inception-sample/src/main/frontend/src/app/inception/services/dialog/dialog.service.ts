@@ -16,11 +16,12 @@
 
 import { Injectable } from "@angular/core";
 
-import { ErrorReportDialog } from "../../components/dialogs/index";
+import {ErrorDialog, ErrorReportDialog, WarningDialog} from "../../components/dialogs/index";
 
 import {MatDialog, MatDialogRef} from '@angular/material';
 
 import {Error} from "../../errors/error";
+import {DialogData} from "../../components/dialogs/dialog-data";
 
 /**
  * The DialogService class provides the capability to show different standard dialogs.
@@ -39,8 +40,23 @@ export class DialogService {
   }
 
   /**
+   * Show an error using the error dialog.
+   *
+   * @param {DialogData} data The data.
+   */
+  showErrorDialog(data: DialogData): MatDialogRef<ErrorDialog> {
+
+    const dialogRef = this.dialog.open(ErrorDialog, {
+      width: '300px',
+      data: data
+    });
+
+    return dialogRef;
+  }
+
+  /**
    * Show the specified error using the error report dialog.
-   * .
+   *
    * @param {Error} error The error.
    */
   showErrorReportDialog(error: Error): MatDialogRef<ErrorReportDialog> {
@@ -56,5 +72,20 @@ export class DialogService {
     //   console.log('The dialog was closed = ', result);
     //   //this.animal = result;
     // });
+  }
+
+  /**
+   * Show a warning using the warning dialog.
+   *
+   * @param {DialogData} data The data.
+   */
+  showWarningDialog(data: DialogData): MatDialogRef<WarningDialog> {
+
+    const dialogRef = this.dialog.open(WarningDialog, {
+      width: '300px',
+      data: data
+    });
+
+    return dialogRef;
   }
 }

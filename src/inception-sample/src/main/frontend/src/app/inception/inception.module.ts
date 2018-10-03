@@ -36,7 +36,9 @@ import {RadioGroupFormField} from "./components/controls";
 import {TableFilter} from "./components/controls";
 
 // Import Inception dialogs
+import {ErrorDialog} from "./components/dialogs";
 import {ErrorReportDialog} from "./components/dialogs";
+import {WarningDialog} from "./components/dialogs";
 
 // Import Inception layout components
 import {
@@ -263,10 +265,12 @@ export const INCEPTION_DATE_FORMATS = {
     SpinnerComponent,
 
     // Inception dialogs
-    ErrorReportDialog
+    ErrorDialog,
+    ErrorReportDialog,
+    WarningDialog
   ],
   entryComponents: [SpinnerComponent],
-  bootstrap: [AdminContainerComponent, ErrorReportDialog, SimpleContainerComponent]
+  bootstrap: [AdminContainerComponent, ErrorDialog, ErrorReportDialog, SimpleContainerComponent, WarningDialog]
 })
 export class InceptionModule {
 

@@ -68,13 +68,17 @@ export class LoginComponent {
     return InceptionModule.registrationEnabled;
   }
 
-  public onCancel() {
+  public onForgotPassword() {
 
     //this.router.navigate(['/']);
 
-    let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
+    //let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    this.dialogService.showErrorReportDialog(error);
+    //this.dialogService.showErrorReportDialog(error);
+
+    this.dialogService.showErrorDialog({title: 'Error', description: 'This is an error.'});
+
+    //this.dialogService.showWarningDialog({title: 'Warning', description: 'This is a warning.'});
 
 
 

@@ -150,23 +150,3 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card>
-  <mat-card-title>Button toggle (Font Awesome)</mat-card-title>
-  <mat-card-content>
-    <mat-button-toggle-group #group2="matButtonToggleGroup">
-      <mat-button-toggle value="left">
-        <i class="fas fa-align-left"></i>
-      </mat-button-toggle>
-      <mat-button-toggle value="center">
-        <i class="fas fa-align-center"></i>
-      </mat-button-toggle>
-      <mat-button-toggle value="right">
-        <i class="fas fa-align-right"></i>
-      </mat-button-toggle>
-      <mat-button-toggle value="justify" disabled>
-        <i class="fas fa-align-justify"></i>
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-    <div class="mt-3">Selected value: {{group2.value}}</div>
-  </mat-card-content>
-</mat-card>

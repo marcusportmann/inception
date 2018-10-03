@@ -31,7 +31,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button mat-flat-button color="link">Forgot password?</button>
+            <button type="button" mat-flat-button color="link" (click)="onForgotPassword()">Forgot password?</button>
             <button type="submit" [disabled]="!loginForm.valid" mat-flat-button>Login</button>
           </mat-card-actions>
         </mat-card>
