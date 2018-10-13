@@ -15,6 +15,7 @@
  */
 
 import {Error} from "./error";
+import {HttpErrorResponse} from "@angular/common/http";
 
 /**
  * The CommunicationError class holds the information for a communication error.
@@ -24,13 +25,67 @@ import {Error} from "./error";
 export class CommunicationError extends Error {
 
   /**
-   * Constructs a new CommunicationError.
+   *  The HTTP status-code for the error.
+   */
+  status: number;
+
+  /**
+   * The HTTP reason-phrase for the HTTP status-code for the error.
+   */
+  statusText: string;
+
+  /**
+   * The URL for the HTTP request that resulted in the error.
+   */
+  url?: string;
+
+  /**
+   * Constructs a new Error.
    *
    * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param {string} message The error message.
+   * @param {number} status The HTTP status-code for the error.
+   * @param {string} statusText The HTTP reason-phrase for the HTTP status-code for the error.
+   * @param {string} uri The URL for the HTTP request that resulted in the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
+  constructor(timestamp: Date, message: string, status: number, statusText: string, url?: string) {
+    super(timestamp, message);
+
+    this.status = status;
+    this.statusText = statusText;
+    this.url = url;
+  }
+
+  /**
+   * Constructs a new CommunicationError from the HTTP error response.
+   *
+   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response.
+   *
+   * @return the new CommunicationError
+   */
+  static fromHttpErrorResponse(httpErrorResponse: HttpErrorResponse) : CommunicationError {
+
+    return new CommunicationError(new Date(), httpErrorResponse.status, httpErrorResponse.statusText, httpErrorResponse.url)
+  }
+
+  /**
+   * Returns whether the specified HTTP error response is as a result of a communication error.
+   *
+   * @param httpErrorResponse The HTTP error response.
+   *
+   * @return {boolean} True if the HTTP error response is as a result of a communication error or
+   *                   false otherwise.
+   */
+  static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
+    if ((httpErrorResponse.name === 'HttpErrorResponse')
+      && (httpErrorResponse.status == 0)
+      && httpErrorResponse.error
+      && (httpErrorResponse.error instanceof ProgressEvent)
+      && (httpErrorResponse.error.type === 'error')) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

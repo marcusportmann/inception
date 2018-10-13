@@ -16,7 +16,12 @@
 
 import { Injectable } from "@angular/core";
 
-import {ErrorDialog, ErrorReportDialog, WarningDialog} from "../../components/dialogs/index";
+import {
+  ErrorDialog,
+  ErrorReportDialog,
+  InformationDialog,
+  WarningDialog
+} from "../../components/dialogs/index";
 
 import {MatDialog, MatDialogRef} from '@angular/material';
 
@@ -72,6 +77,21 @@ export class DialogService {
     //   console.log('The dialog was closed = ', result);
     //   //this.animal = result;
     // });
+  }
+
+  /**
+   * Show an informational message using the information dialog.
+   *
+   * @param {DialogData} data The data.
+   */
+  showInformationDialog(data: DialogData): MatDialogRef<InformationDialog> {
+
+    const dialogRef = this.dialog.open(InformationDialog, {
+      width: '300px',
+      data: data
+    });
+
+    return dialogRef;
   }
 
   /**

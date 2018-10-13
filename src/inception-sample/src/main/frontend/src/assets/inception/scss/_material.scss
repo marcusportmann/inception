@@ -812,3 +812,84 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
+
+
+
+
+
+
+
+.mat-dialog-container {
+
+  .error-dialog, .information-dialog, .warning-dialog {
+    display: block;
+    padding: 0;
+    margin: -24px;
+
+    .header {
+      text-align: center;
+      padding: 0.5rem;
+      color: $white;
+
+      .material-icons {
+        line-height: unset;
+      }
+    }
+
+    .message {
+      text-align: center;
+      font-weight: bold;
+      padding-top: 1.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .description-holder {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 1.75rem 1.5rem;
+
+      max-width: 300px;
+
+      .description {
+        display: inline-block;
+        text-align: left;
+      }
+    }
+
+    .button {
+      text-align: center;
+      padding-top: 0.5rem;
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  .error-dialog {
+    .header {
+      background-color: $danger;
+    }
+
+    .mat-flat-button {
+      background-color: $danger;
+    }
+  }
+
+  .information-dialog {
+    .header {
+      background-color: $info;
+    }
+
+    .mat-flat-button {
+      background-color: $info;
+    }
+  }
+
+  .warning-dialog {
+    .header {
+      background-color: $warning;
+    }
+
+    .mat-flat-button {
+      background-color: $warning;
+    }
+  }
+}

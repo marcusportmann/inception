@@ -22,11 +22,11 @@ import {ErrorService} from "../../services/error/error.service";
 import {DialogData} from "./dialog-data";
 
 @Component({
-  selector: 'warning-dialog',
+  selector: 'information-dialog',
   template: `
 
     <div class="header">
-      <i class="material-icons md-48">warning</i>
+      <i class="material-icons md-48">announcement</i>
     </div>
     <div class="message">
       {{data.title}}
@@ -41,13 +41,13 @@ import {DialogData} from "./dialog-data";
     </div>
   `,
   host: {
-    'class': 'warning-dialog'
+    'class': 'information-dialog'
   }
 })
-export class WarningDialog {
+export class InformationDialog {
 
   constructor(
-    private dialogRef: MatDialogRef<WarningDialog>,
+    private dialogRef: MatDialogRef<InformationDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 

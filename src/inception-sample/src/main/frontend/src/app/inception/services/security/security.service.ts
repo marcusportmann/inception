@@ -50,7 +50,7 @@ export class SecurityService {
    */
   public getOrganizations(): Observable<Organization[]> {
 
-    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations').pipe(
+    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations', {reportProgress: true}).pipe(
       map((organizations: Organization[]) => {
 
         return organizations;
@@ -61,7 +61,7 @@ export class SecurityService {
           return Observable.throwError(new SecurityServiceError(httpErrorResponse));
         }
         else {
-          return Observable.throwError(new CommunicationError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          return Observable.throwError(new CommunicationError(httpErrorResponse));
         }
 
       }));

@@ -18,9 +18,7 @@ import {Injectable} from "@angular/core";
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 
-import {Session} from "./session";
 import {SessionService} from "./session.service";
-import {map} from "rxjs/operators";
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
@@ -62,5 +60,4 @@ export class SessionInterceptor implements HttpInterceptor {
       return nextHttpHandler.handle(httpRequest);
     }
   }
-
 }

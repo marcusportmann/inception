@@ -30,9 +30,10 @@ import {
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
 import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
-import {LoginError, SessionError} from "./session.service.errors";
+import {LoginError, SessionError, SessionServiceError} from "./session.service.errors";
 import {OAuthError} from "../../errors/oauth-error";
 import { JwtHelperService } from '@auth0/angular-jwt';
+import {CommunicationError} from "../../errors/communication-error";
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -63,9 +64,10 @@ export class SessionService {
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
-    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}, reportProgress: true};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/x/oauth/token', body.toString(), options)
+      .pipe(
       map((tokenResponse: TokenResponse) => {
 
         const helper = new JwtHelperService();
@@ -82,14 +84,18 @@ export class SessionService {
 
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        if (httpErrorResponse.error && httpErrorResponse.error.error) {
-          let oauthError: OAuthError = httpErrorResponse.error;
-
-          return Observable.throwError(new LoginError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
+        if (LoginError.isLoginError(httpErrorResponse)) {
+          return Observable.throwError(LoginError.fromHttpErrorResponse(httpErrorResponse));
+        }
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return Observable.throwError(new CommunicationError.fromHttpErrorResponse(httpErrorResponse));
         }
         else {
-          return Observable.throwError(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
+          return Observable.throwError(SessionServiceError.fromHttpErrorResponse(httpErrorResponse));
         }
+
+
+
       }));
   }
 

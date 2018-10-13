@@ -37,6 +37,7 @@ import {Error} from "../../errors/error";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {LoginError} from "../../services/session/session.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
+import {CommunicationError} from "../../errors/communication-error";
 
 
 
@@ -76,9 +77,11 @@ export class LoginComponent {
 
     //this.dialogService.showErrorReportDialog(error);
 
-    this.dialogService.showErrorDialog({title: 'Error', description: 'This is an error.'});
+    //this.dialogService.showErrorDialog({title: 'Error Title', description: 'This is an error message.'});
 
-    //this.dialogService.showWarningDialog({title: 'Warning', description: 'This is a warning.'});
+    //this.dialogService.showInformationDialog({title: 'Information Title', description: 'This is an information message.'});
+
+    this.dialogService.showWarningDialog({title: 'Warning Title', description: 'This is a warning message.'});
 
 
 
@@ -115,17 +118,19 @@ export class LoginComponent {
 
           });
 
-        },error => {
-
-          if (error instanceof LoginError) {
-            console.log('LOGIN ERROR!!!!');
-          }
-
+        },(error: Error) => {
 
           this.spinnerService.hide();
 
-          this.dialogService.showErrorReportDialog(error);
-
+          if (error instanceof LoginError) {
+            this.dialogService.showErrorDialog({title: 'Login Failed', description: 'Incorrect username or password.'});
+          }
+          else if (error instanceof CommunicationError) {
+            this.dialogService.showErrorDialog({title: 'Communication Error', description: 'A communication error occurred.'});
+          }
+          else {
+            this.dialogService.showErrorReportDialog(error);
+          }
         });
     }
   }

@@ -29,17 +29,17 @@ export class Error {
   timestamp: Date;
 
   /**
-   * The message.
+   * The error message.
    */
   message: string;
 
   /**
-   * The optional detail.
+   * The optional error detail.
    */
   detail?: string;
 
   /**
-   * The optional stack trace.
+   * The optional error stack trace.
    */
   stackTrace?: string;
 
@@ -47,8 +47,9 @@ export class Error {
    * Constructs a new Error.
    *
    * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param {string} message The error message.
+   * @param {string} detail  The optional error detail.
+   * @param {string} stackTrace The optional error stack trace.
    */
   constructor(timestamp: Date, message: string, detail?: string, stackTrace?: string) {
     this.timestamp = timestamp;

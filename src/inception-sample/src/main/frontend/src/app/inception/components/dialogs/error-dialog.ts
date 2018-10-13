@@ -24,43 +24,25 @@ import {DialogData} from "./dialog-data";
 @Component({
   selector: 'error-dialog',
   template: `
-    <div mat-dialog-content>
-      <div class="row">
-        <div class="col text-center align-middle bg-danger p-2">
-          <i class="material-icons md-48">error_outline</i>
-        </div>
-      </div>
-      <div class="row pt-4 pb-2 text-center">
-        <div class="col font-weight-bold">
-          {{data.title}}
-        </div>
-      </div>
-      <div class="row pt-2 pb-4 text-center">
-        <div class="col">
+
+    <div class="header">
+      <i class="material-icons md-48">error_outline</i>
+    </div>
+    <div class="message">
+      {{data.title}}
+    </div>
+    <div class="description-holder">
+      <span class="description">
         {{data.description}}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center">
-          <button mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText ? data.buttonText : 'Ok'}}</button>
-        </div>
-      </div>
+      </span>
+    </div>
+    <div class="button">
+      <button mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText ? data.buttonText : 'Ok'}}</button>
     </div>
   `,
-  styles: [`    
-    .mat-dialog-content {
-      padding: 0;
-      margin-top: -24px;
-    }
-    
-    .material-icons {
-      line-height: unset;
-    }
-
-    .mat-flat-button {
-      background-color: #f44336;
-    }
-  `]
+  host: {
+    'class': 'error-dialog'
+  }
 })
 export class ErrorDialog {
 
