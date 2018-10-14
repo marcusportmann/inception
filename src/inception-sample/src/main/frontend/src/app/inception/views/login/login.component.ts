@@ -123,10 +123,10 @@ export class LoginComponent {
           this.spinnerService.hide();
 
           if (error instanceof LoginError) {
-            this.dialogService.showErrorDialog({title: 'Login Failed', description: 'Incorrect username or password.'});
+            this.dialogService.showErrorDialog({title: 'Login Failed', description: error.message});
           }
           else if (error instanceof CommunicationError) {
-            this.dialogService.showErrorDialog({title: 'Communication Error', description: 'A communication error occurred.'});
+            this.dialogService.showErrorDialog({title: 'Communication Error', description: error.message});
           }
           else {
             this.dialogService.showErrorReportDialog(error);

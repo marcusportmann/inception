@@ -21,20 +21,26 @@ package digital.inception.rs;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.util.StringUtil;
+
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.servlet.http.HttpServletRequest;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
+
 import java.time.LocalDateTime;
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>RestControllerError</code> class holds the information for an error returned by a
@@ -52,16 +58,35 @@ public class RestControllerError
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The URI for the HTTP request that resulted in the error.
+   * The optional detail.
    */
   @JsonProperty
-  private String uri;
+  private String detail;
 
   /**
-   * The date and time the error occurred.
+   * The optional fully qualified name of the exception associated with the error.
    */
   @JsonProperty
-  private LocalDateTime timestamp;
+  private String exception;
+
+  /**
+   * The message.
+   */
+  @JsonProperty
+  private String message;
+
+  /**
+   * The optional name of the entity associated with the error e.g. the name of the argument or
+   * parameter.
+   */
+  @JsonProperty
+  private String name;
+
+  /**
+   * The optional stack trace associated with the error.
+   */
+  @JsonProperty
+  private String stackTrace;
 
   /**
    * The HTTP status-code for the error.
@@ -76,35 +101,16 @@ public class RestControllerError
   private String statusText;
 
   /**
-   * The message.
+   * The date and time the error occurred.
    */
   @JsonProperty
-  private String message;
+  private LocalDateTime timestamp;
 
   /**
-   * The optional detail.
+   * The URI for the HTTP request that resulted in the error.
    */
   @JsonProperty
-  private String detail;
-
-  /**
-   * The optional fully qualified name of the exception associated with the error.
-   */
-  @JsonProperty
-  private String exception;
-
-  /**
-   * The optional stack trace associated with the error.
-   */
-  @JsonProperty
-  private String stackTrace;
-
-  /**
-   * The optional name of the entity associated with the error e.g. the name of the argument or
-   * parameter.
-   */
-  @JsonProperty
-  private String name;
+  private String uri;
 
   /**
    * The optional validation errors associated with the error.
@@ -115,7 +121,9 @@ public class RestControllerError
   /**
    * Constructs a new <code>ApplicationError</code>.
    *
-   * @param cause the exception
+   * @param request        the HTTP servlet request
+   * @param responseStatus the HTTP response status
+   * @param cause          the exception
    */
   @SuppressWarnings("unchecked")
   public RestControllerError(HttpServletRequest request, HttpStatus responseStatus, Throwable cause)

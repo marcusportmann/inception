@@ -64,9 +64,9 @@ export class SessionService {
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
-    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}, reportProgress: true};
+    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/x/oauth/token', body.toString(), options)
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options)
       .pipe(
       map((tokenResponse: TokenResponse) => {
 
@@ -85,17 +85,14 @@ export class SessionService {
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
         if (LoginError.isLoginError(httpErrorResponse)) {
-          return Observable.throwError(LoginError.fromHttpErrorResponse(httpErrorResponse));
+          return Observable.throwError(new LoginError(httpErrorResponse));
         }
         else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return Observable.throwError(new CommunicationError.fromHttpErrorResponse(httpErrorResponse));
+          return Observable.throwError(new CommunicationError(httpErrorResponse));
         }
         else {
-          return Observable.throwError(SessionServiceError.fromHttpErrorResponse(httpErrorResponse));
+          return Observable.throwError(new SessionServiceError(httpErrorResponse.message));
         }
-
-
-
       }));
   }
 

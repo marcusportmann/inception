@@ -16,6 +16,7 @@
 
 import {Error} from "../../errors/error";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ApiError} from "../../errors/api-error";
 
 /**
  * The LoginError class holds the information for a login error.
@@ -25,26 +26,19 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class LoginError extends Error {
 
   /**
-   * Constructs a new LoginError.
-   *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * The optional error detail.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
-  }
+  detail?: string;
 
   /**
-   * Constructs a new LoginError from the HTTP error response.
+   * Constructs a new LoginError.
    *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response.
-   *
-   * @return the new LoginError
+   * @param httpErrorResponse The HTTP error response containing the error information.
    */
-  static fromHttpErrorResponse(httpErrorResponse: HttpErrorResponse) : LoginError {
+  constructor(httpErrorResponse: HttpErrorResponse) {
+    super(httpErrorResponse.message);
 
-    return new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.error.error_description)
+    this.detail = httpErrorResponse.error.error_description;
   }
 
   /**
@@ -52,8 +46,7 @@ export class LoginError extends Error {
    *
    * @param httpErrorResponse The HTTP error response.
    *
-   * @return {boolean} True if the HTTP error response is as a result of a login error or false
-   *                   otherwise.
+   * @return True if the HTTP error response is as a result of a login error or false otherwise.
    */
   static isLoginError(httpErrorResponse: HttpErrorResponse): boolean {
     if ((httpErrorResponse.name === 'HttpErrorResponse')
@@ -66,7 +59,6 @@ export class LoginError extends Error {
       return false;
     }
   }
-
 }
 
 /**
@@ -79,12 +71,11 @@ export class SessionError extends Error {
   /**
    * Constructs a new SessionError.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param message  The error message.
+   * @param apiError The optional API error associated with the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
+  constructor(message: string, apiError?: ApiError) {
+    super(message, apiError);
   }
 }
 
@@ -98,26 +89,10 @@ export class SessionServiceError extends Error {
   /**
    * Constructs a new SessionServiceError.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param message  The error message.
+   * @param apiError The optional API error associated with the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
-  }
-
-  /**
-   * Constructs a new SessionServiceError from the HTTP error response.
-   *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response.
-   *
-   * @return the new SessionServiceError
-   */
-  static fromHttpErrorResponse(httpErrorResponse: HttpErrorResponse) : SessionServiceError {
-
-    // TODO: FIX THE ERROR BELOW AND ADD THE CORRECT DETAILS -- MARCUS
-
-    return new SessionServiceError(new Date(), httpErrorResponse.statusText);
-
+  constructor(message: string, apiError?: ApiError) {
+    super(message, apiError);
   }
 }

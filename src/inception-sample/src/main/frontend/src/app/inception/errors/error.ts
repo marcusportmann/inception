@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {st} from "@angular/core/src/render3";
+import {ApiError} from "./api-error";
 
 /**
  * The Error class provides the base class that all error classes should be derived from.
@@ -24,9 +24,9 @@ import {st} from "@angular/core/src/render3";
 export class Error {
 
   /**
-   * The date and time the error occurred.
+   * The optional API error associated with the error.
    */
-  timestamp: Date;
+  apiError?: ApiError;
 
   /**
    * The error message.
@@ -34,28 +34,25 @@ export class Error {
   message: string;
 
   /**
-   * The optional error detail.
+   * The date and time the error occurred.
    */
-  detail?: string;
-
-  /**
-   * The optional error stack trace.
-   */
-  stackTrace?: string;
+  timestamp: Date;
 
   /**
    * Constructs a new Error.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The error message.
-   * @param {string} detail  The optional error detail.
-   * @param {string} stackTrace The optional error stack trace.
+   * @param message  The error message.
+   * @param apiError The optional API error associated with the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string, stackTrace?: string) {
-    this.timestamp = timestamp;
+  constructor(message: string, apiError?: ApiError) {
+    if (apiError) {
+      this.timestamp = apiError.timestamp;
+    }
+    else {
+      this.timestamp = new Date();
+    }
+
     this.message = message;
-    this.detail = detail;
-    this.stackTrace = stackTrace;
   }
 }
 

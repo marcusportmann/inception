@@ -25,6 +25,7 @@ import {Organization} from "./organization";
 import {SessionError} from "../session/session.service.errors";
 import {SecurityServiceError} from "./security.service.errors";
 import {CommunicationError} from "../../errors/communication-error";
+import {ApiError} from "../../errors/api-error";
 
 /**
  * The SecurityService class provides the Security Service implementation.
@@ -57,8 +58,10 @@ export class SecurityService {
 
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        if (httpErrorResponse.error && httpErrorResponse.error.exception) {
-          return Observable.throwError(new SecurityServiceError(httpErrorResponse));
+        if (ApiError.isApiError(httpErrorResponse)) {
+          let apiError: ApiError = new ApiError(httpErrorResponse);
+
+          return Observable.throwError(new SecurityServiceError(apiError.message, apiError));
         }
         else {
           return Observable.throwError(new CommunicationError(httpErrorResponse));

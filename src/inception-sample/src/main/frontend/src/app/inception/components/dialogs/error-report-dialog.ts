@@ -31,15 +31,11 @@ import {ErrorService} from "../../services/error/error.service";
       </mat-form-field>
       <mat-form-field class="static">
         <mat-label>Message</mat-label>
-        <input matInput disabled value="{{data.message}}">
+        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" disabled value="{{data.message}}"></textarea>
       </mat-form-field>
       <mat-form-field class="static">
-        <mat-label>Detail</mat-label>
-        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" disabled value="{{data.detail}}"></textarea>
-      </mat-form-field>
-      <mat-form-field class="static">
-        <mat-label>Additional Details</mat-label>
-        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5" [(ngModel)]="additionalDetail" autofocus></textarea>
+        <mat-label>Additional Feedback</mat-label>
+        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5" [(ngModel)]="additionalFeedback" autofocus></textarea>
       </mat-form-field>
     </div>
     <div mat-dialog-actions>
@@ -50,7 +46,7 @@ import {ErrorService} from "../../services/error/error.service";
 })
 export class ErrorReportDialog {
 
-  additionalDetail: string;
+  additionalFeedback: string;
 
   constructor(
     private errorService: ErrorService,
@@ -67,7 +63,7 @@ export class ErrorReportDialog {
 
   onSendClick(): void {
 
-    console.log('this.additionalDetail = ', this.additionalDetail);
+    console.log('this.feedback = ', this.additionalFeedback);
 
     this.dialogRef.close();
   }
