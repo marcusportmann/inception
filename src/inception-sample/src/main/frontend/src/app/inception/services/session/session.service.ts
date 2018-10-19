@@ -1,0 +1,185 @@
+/*
+ * Copyright 2018 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {Inject, Injectable} from '@angular/core';
+import {Observable, of, pipe, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+
+
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse
+} from '@angular/common/http';
+import {Session} from "./session";
+import {TokenResponse} from "./token-response";
+import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
+import {LoginError, SessionError, SessionServiceError} from "./session.service.errors";
+import {OAuthError} from "../../errors/oauth-error";
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+
+
+import {CommunicationError} from "../../errors/communication-error";
+import {Error} from "../../errors/error";
+
+/**
+ * The SessionService class provides the Session Service implementation.
+ *
+ * @author Marcus Portmann
+ */
+@Injectable()
+export class SessionService {
+
+  /**
+   * Constructs a new SessionService.
+   *
+   * @param {HttpClient} httpClient            The HTTP client.
+   * @param {WebStorageService} sessionStorage The session storage service.
+   */
+  constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
+    console.log('Initializing the Session Service');
+  }
+
+  login(username: string, password: string): Observable<Session> {
+
+    this.sessionStorageService.remove("session");
+
+    let body = new HttpParams()
+      .set('grant_type', 'password')
+      .set('username', username)
+      .set('password', password)
+      .set('scope', 'inception-sample')
+      .set('client_id', 'inception-sample');
+
+    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options)
+      .pipe(
+      map((tokenResponse: TokenResponse) => {
+
+        const helper = new JwtHelperService();
+
+        const token: any = helper.decodeToken(tokenResponse.access_token);
+
+        const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
+
+        let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+
+        this.sessionStorageService.set('session', session);
+
+        return session;
+
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+        if (LoginError.isLoginError(httpErrorResponse)) {
+          return throwError(new LoginError(httpErrorResponse));
+        }
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+        else {
+          return throwError(new SessionServiceError(httpErrorResponse.message));
+        }
+      }));
+  }
+
+  /**
+   * Returns the current active session if one exists.
+   *
+   * @return {Session} The current active session if one exists or null.
+   */
+  getSession(): Observable<Session | null> {
+
+    let session: Session = this.sessionStorageService.get("session");
+
+    // If the access token has expired then obtain a new one using the refresh token
+    if (session) {
+      if (session.accessTokenExpiry) {
+        if (Date.now() > parseInt(session.accessTokenExpiry)) {
+
+            this.sessionStorageService.remove("session");
+
+            if (session.refreshToken) {
+
+              let body = new HttpParams()
+                .set('grant_type', 'refresh_token')
+                .set('refresh_token', session.refreshToken)
+                .set('scope', 'inception-sample')
+                .set('client_id', 'inception-sample');
+              ;
+
+              let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+              return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+                map((tokenResponse: TokenResponse) => {
+
+                  const helper = new JwtHelperService();
+
+                  const token: any = helper.decodeToken(tokenResponse.access_token);
+
+                  const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
+
+                  //const helper = new JwtHelperService();
+
+                  //const token: any = helper.decodeToken(tokenResponse.access_token);
+
+                  // const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
+
+                  let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+
+                  this.sessionStorageService.set('session', session);
+
+                  return session;
+
+                }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+                  if (httpErrorResponse.error && httpErrorResponse.error.error) {
+
+                    let oauthError: OAuthError = httpErrorResponse.error;
+
+                    console.error('Failed to refresh the access token: ', oauthError);
+
+                    return of(null);
+                  }
+                  else {
+
+                    console.error('Failed to refresh the access token: ', httpErrorResponse.error);
+
+                    return of(null);
+                  }
+                }));
+            }
+        }
+        else {
+
+          return of(session);
+        }
+      }
+    }
+
+    return of(null);
+  }
+
+  /**
+   * Logout the current active session if one exists.
+   */
+  logout() {
+    this.sessionStorageService.remove("session");
+  }
+}
