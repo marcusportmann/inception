@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the service is unable to process the request at this time.")
+    reason = "An error has occurred and the service is unable to process the request at this time")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SecurityServiceException extends Exception
 {
