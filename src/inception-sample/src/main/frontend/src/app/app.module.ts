@@ -15,19 +15,20 @@ import {NavigationBadge} from "./inception/services/navigation/navigation-badge"
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
 
 
-import {LOCALE_ID} from '@angular/core';
+
 
 
 // TODO: Remove the lines below when Angular provides support for I18N in source natively -- MARCUS
-//import {I18n} from '@ngx-translate/i18n-polyfill';
-//import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+//import {LOCALE_ID} from '@angular/core';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
 
 // Use the require method provided by webpack
-//declare const require;
+declare const require;
 
 // We use the webpack raw-loader to return the content as a string
-//const translations = require('raw-loader!../locale/messages.en.xlf');
-//// TODO: Remove the lines above when Angular provides support for I18N in source natively -- MARCUS
+const translations = require('raw-loader!../locale/messages.en.xlf');
+// TODO: Remove the lines above when Angular provides support for I18N in source natively -- MARCUS
 
 
 
@@ -47,10 +48,11 @@ import {LOCALE_ID} from '@angular/core';
     InceptionModule.forRoot()
   ],
   providers: [
-//    { provide: LOCALE_ID, useValue: 'en' },
-//    { provide: TRANSLATIONS, useValue: translations },
-//    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
-//    I18n
+    //{ provide: LOCALE_ID, useValue: 'en' },
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
+    { provide: TRANSLATIONS, useValue: translations },
+
+    I18n
   ],
   bootstrap: [AppComponent]
 })

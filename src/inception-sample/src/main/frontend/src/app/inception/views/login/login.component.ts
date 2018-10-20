@@ -41,7 +41,7 @@ import {CommunicationError} from "../../errors/communication-error";
 
 
 
-//import {I18n} from "@ngx-translate/i18n-polyfill";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 
 
@@ -53,7 +53,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private dialogService: DialogService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private dialogService: DialogService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router, private i18n: I18n) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -87,7 +87,7 @@ export class LoginComponent {
 
     //this.dialogService.showWarningDialog({title: 'Warning Title', description: 'This is a warning message.'});
 
-    //this.dialogService.showInformationDialog({title: 'Information Title', description: this.i18n("This is a test {{myVar}} !", {myVar: "^_^"})});
+    this.dialogService.showInformationDialog({title: 'Information Title', description: this.i18n("This is a test {{myVar}} !", {myVar: "^_^"})});
 
 
     //this.errorService.showConfirm('This is a title', 'This is a message');
