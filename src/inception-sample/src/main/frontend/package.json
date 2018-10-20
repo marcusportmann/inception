@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "compodoc": "compodoc -p tsconfig.json",
-    "extract-i18n": "ng xi18n --i18n-format=xlf2 --output-path locale && xliffmerge --profile xliffmerge.json en"
+    "extract-i18n": "ng xi18n --i18n-format=xlf2 --output-path locale && xliffmerge --profile xliffmerge.json en de"
   },
   "private": true,
   "dependencies": {
