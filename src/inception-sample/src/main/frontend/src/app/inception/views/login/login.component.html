@@ -1,7 +1,5 @@
 <div class="app flex-row align-items-center" >
   <div class="container">
-    <h1 i18n="@@test_title">Test Title</h1>
-
     <div class="row justify-content-center">
       <form [formGroup]="loginForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
         <mat-card style="min-width: 350px; margin-bottom: 0;">
@@ -12,10 +10,10 @@
             <div class="row">
               <div class="col">
                 <mat-form-field>
-                  <mat-label i18n="@@login_username">Username</mat-label>
+                  <mat-label i18n="@@login_component_label_username">Username</mat-label>
                   <input type="text" matInput formControlName="username" autofocus>
                   <mat-error *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched">
-                    <span *ngIf="loginForm.controls['username'].errors?.required">A username is required.</span>
+                    <span *ngIf="loginForm.controls['username'].errors?.required" i18n="@@login_component_error_a_username_is_required">A username is required.</span>
                   </mat-error>
                 </mat-form-field>
               </div>

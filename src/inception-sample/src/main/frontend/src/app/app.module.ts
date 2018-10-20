@@ -13,8 +13,17 @@ import {NavigationItem} from "./inception/services/navigation/navigation-item";
 import {NavigationBadge} from "./inception/services/navigation/navigation-badge";
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
 
-
 import {LOCALE_ID} from '@angular/core';
+import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+
+
+// Use the require method provided by webpack
+declare const require;
+
+// We use the webpack raw-loader to return the content as a string
+const translations = require('raw-loader!../locale/messages.en.xlf');
+
 
 @NgModule({
   declarations: [
@@ -32,7 +41,10 @@ import {LOCALE_ID} from '@angular/core';
     InceptionModule.forRoot()
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'en' }
+    { provide: LOCALE_ID, useValue: 'en' },
+    { provide: TRANSLATIONS, useValue: translations },
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
+    I18n
   ],
   bootstrap: [AppComponent]
 })
