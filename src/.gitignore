@@ -3,6 +3,7 @@
 /**/desktop.ini
 
 # Mac-specific files
+/.DS_Store
 /**/.DS_Store/
 /**/.Spotlight-V100
 /**/.Trashes
