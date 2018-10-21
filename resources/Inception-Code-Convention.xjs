@@ -2446,7 +2446,7 @@
           <object class="jindent.settings.sorter.OptionalSorterElement">
            <string>Sort by Initialized</string>
            <int>9</int>
-           <boolean>true</boolean>
+           <boolean>false</boolean>
            <void method="add">
             <object class="jindent.settings.sorter.SorterElement">
              <string>Initialized</string>
@@ -8829,7 +8829,7 @@
     <string>environment.systemVariables</string>
     <object class="jindent.settings.SystemVariablesSetting" id="SystemVariablesSetting0">
      <string>environment.systemVariables</string>
-     <void property="variablesMap">
+     <void id="HashMap14" property="variablesMap">
       <void method="remove">
        <string>jbre.popupwindow.settype</string>
       </void>
@@ -8844,6 +8844,12 @@
       </void>
       <void method="remove">
        <string>apple.awt.UIElement</string>
+      </void>
+      <void method="get">
+       <string>com.jetbrains.suppressWindowRaise</string>
+       <void property="value">
+        <string>true</string>
+       </void>
       </void>
      </void>
     </object>
@@ -9071,7 +9077,7 @@
     <string>java.blockBraceStyle</string>
     <object class="jindent.settings.BracesSetting" id="BracesSetting14">
      <string>java.blockBraceStyle</string>
-     <void id="HashMap14" property="settingsMap">
+     <void id="HashMap15" property="settingsMap">
       <void method="get">
        <string>rightBraceNewLine</string>
        <void property="value">
@@ -10406,7 +10412,7 @@
     <string>java.switchCaseBraceStyle</string>
     <object class="jindent.settings.BracesSetting" id="BracesSetting15">
      <string>java.switchCaseBraceStyle</string>
-     <void id="HashMap15" property="settingsMap">
+     <void id="HashMap16" property="settingsMap">
       <void method="get">
        <string>rightBraceNewLine</string>
        <void property="value">
@@ -10574,7 +10580,7 @@
     <object class="jindent.settings.NumberSetting">
      <string>java.maxLineLength</string>
      <void property="value">
-      <int>100</int>
+      <int>120</int>
      </void>
     </object>
    </void>
@@ -10725,7 +10731,7 @@
     <string>cpp.blockBraceStyle</string>
     <object class="jindent.settings.BracesSetting" id="BracesSetting16">
      <string>cpp.blockBraceStyle</string>
-     <void id="HashMap16" property="settingsMap">
+     <void id="HashMap17" property="settingsMap">
       <void method="get">
        <string>rightBraceNewLine</string>
        <void property="value">

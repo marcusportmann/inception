@@ -156,7 +156,6 @@ public abstract class Application extends ApplicationBase
    * Destroy.
    */
   public void destroy()
-    throws Exception
   {
     shutdownInMemoryApplicationDatabase();
   }
@@ -175,8 +174,7 @@ public abstract class Application extends ApplicationBase
     {
       DataSource dataSource = dataSource();
 
-      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-          new LocalContainerEntityManagerFactoryBean();
+      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
@@ -231,8 +229,7 @@ public abstract class Application extends ApplicationBase
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException(
-          "Failed to initialize the application entity manager factory bean", e);
+      throw new FatalBeanException("Failed to initialize the application entity manager factory bean", e);
     }
   }
 
@@ -301,8 +298,8 @@ public abstract class Application extends ApplicationBase
       }
       else
       {
-        Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
-            .loadClass(databaseDataSourceClass).asSubclass(DataSource.class);
+        Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader().loadClass(
+            databaseDataSourceClass).asSubclass(DataSource.class);
 
         dataSource = DataSourceBuilder.create().type(dataSourceClass).url(databaseUrl).build();
       }
@@ -313,8 +310,8 @@ public abstract class Application extends ApplicationBase
       {
         DatabaseMetaData metaData = connection.getMetaData();
 
-        logger.info("Connected to the " + metaData.getDatabaseProductName()
-            + " application database with version " + metaData.getDatabaseProductVersion());
+        logger.info("Connected to the " + metaData.getDatabaseProductName() + " application database with version "
+            + metaData.getDatabaseProductVersion());
 
         switch (metaData.getDatabaseProductName())
         {
@@ -359,8 +356,7 @@ public abstract class Application extends ApplicationBase
             {
               for (String sqlStatement : sqlStatements)
               {
-                LoggerFactory.getLogger(Application.class).debug("Executing SQL statement: "
-                    + sqlStatement);
+                LoggerFactory.getLogger(Application.class).debug("Executing SQL statement: " + sqlStatement);
 
                 try (Statement statement = connection.createStatement())
                 {

@@ -68,7 +68,7 @@ import java.security.SecureRandom;
 
 import java.text.SimpleDateFormat;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -284,10 +284,10 @@ public abstract class ApplicationBase
       CorsConfiguration config = new CorsConfiguration();
       config.applyPermitDefaultValues();
       config.setAllowCredentials(true);
-      config.setAllowedOrigins(Arrays.asList("*"));
-      config.setAllowedHeaders(Arrays.asList("*"));
-      config.setAllowedMethods(Arrays.asList("*"));
-      config.setExposedHeaders(Arrays.asList("content-length"));
+      config.setAllowedOrigins(Collections.singletonList("*"));
+      config.setAllowedHeaders(Collections.singletonList("*"));
+      config.setAllowedMethods(Collections.singletonList("*"));
+      config.setExposedHeaders(Collections.singletonList("content-length"));
       config.setMaxAge(3600L);
       source.registerCorsConfiguration("/**", config);
     }
@@ -316,20 +316,17 @@ public abstract class ApplicationBase
       {
         if (StringUtil.isNullOrEmpty(applicationKeyStoreType))
         {
-          throw new ConfigurationException(
-              "The type was not specified for the application key store");
+          throw new ConfigurationException("The type was not specified for the application key store");
         }
 
         if (StringUtil.isNullOrEmpty(applicationKeyStorePath))
         {
-          throw new ConfigurationException(
-              "The path was not specified for the application key store");
+          throw new ConfigurationException("The path was not specified for the application key store");
         }
 
         if (StringUtil.isNullOrEmpty(applicationKeyStorePassword))
         {
-          throw new ConfigurationException(
-              "The password was not specified for the application key store");
+          throw new ConfigurationException("The password was not specified for the application key store");
         }
 
         KeyStore keyStore;
@@ -352,22 +349,20 @@ public abstract class ApplicationBase
         {
           if (StringUtil.isNullOrEmpty(applicationTrustStoreType))
           {
-            throw new ConfigurationException(
-                "The type was not specified for the application trust store");
+            throw new ConfigurationException("The type was not specified for the application trust store");
           }
 
           if (StringUtil.isNullOrEmpty(applicationTrustStorePath))
           {
-            throw new ConfigurationException(
-                "The path was not specified for the application trust store");
+            throw new ConfigurationException("The path was not specified for the application trust store");
           }
 
           applicationTrustStorePassword = StringUtil.notNull(applicationTrustStorePassword);
 
           try
           {
-            trustStore = CryptoUtil.loadTrustStore(applicationTrustStoreType,
-                applicationTrustStorePath, applicationTrustStorePassword);
+            trustStore = CryptoUtil.loadTrustStore(applicationTrustStoreType, applicationTrustStorePath,
+                applicationTrustStorePassword);
           }
           catch (Throwable e)
           {
@@ -376,8 +371,7 @@ public abstract class ApplicationBase
         }
 
         // Setup the key manager factory
-        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
-            KeyManagerFactory.getDefaultAlgorithm());
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
         keyManagerFactory.init(keyStore, applicationKeyStorePassword.toCharArray());
 
@@ -391,30 +385,25 @@ public abstract class ApplicationBase
         }
 
         SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
-            new SecureRandom());
+        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), new SecureRandom());
 
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-            sslContext);
+        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext);
 
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-            RegistryBuilder.<ConnectionSocketFactory>create().register("https",
-            sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory())
-            .build();
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+            .register("https", sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory()).build();
 
-        PoolingHttpClientConnectionManager connectionManager =
-            new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+            socketFactoryRegistry);
 
         httpClientBuilder.setConnectionManager(connectionManager);
       }
       else
       {
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-            RegistryBuilder.<ConnectionSocketFactory>create().register("http",
-            new PlainConnectionSocketFactory()).build();
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+            .register("http", new PlainConnectionSocketFactory()).build();
 
-        PoolingHttpClientConnectionManager connectionManager =
-            new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+            socketFactoryRegistry);
 
         // Increase max total connection to 200
         connectionManager.setMaxTotal(200);
@@ -461,12 +450,10 @@ public abstract class ApplicationBase
   {
     try
     {
-      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread()
-          .getContextClassLoader().loadClass("org.springframework.web.servlet.DispatcherServlet")
-          .asSubclass(Servlet.class);
+      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.springframework.web.servlet.DispatcherServlet").asSubclass(Servlet.class);
 
-      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet",
-          (dispatcherServletClass));
+      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet", (dispatcherServletClass));
       dispatcherServlet.addMapping("/*");
 
       dispatcherServlet.setInitParameter("contextClass",
@@ -478,8 +465,8 @@ public abstract class ApplicationBase
 
     try
     {
-      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
-          .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
+      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
 
       ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
       cxfServlet.addMapping("/service/*");
@@ -499,8 +486,7 @@ public abstract class ApplicationBase
   {
     try
     {
-      HttpComponentsClientHttpRequestFactory requestFactory =
-          new HttpComponentsClientHttpRequestFactory();
+      HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 
       requestFactory.setHttpClient(httpClient());
 
@@ -540,35 +526,30 @@ public abstract class ApplicationBase
             {
               if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreType))
               {
-                throw new ConfigurationException(
-                    "The type was not specified for the server security key store");
+                throw new ConfigurationException("The type was not specified for the server security key store");
               }
 
               if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePath))
               {
-                throw new ConfigurationException(
-                    "The path was not specified for the server security key store");
+                throw new ConfigurationException("The path was not specified for the server security key store");
               }
 
               if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePassword))
               {
-                throw new ConfigurationException(
-                    "The password was not specified for the server security key store");
+                throw new ConfigurationException("The password was not specified for the server security key store");
               }
 
               if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreAlias))
               {
-                throw new ConfigurationException(
-                    "The alias was not specified for the server security key store");
+                throw new ConfigurationException("The alias was not specified for the server security key store");
               }
 
               KeyStore keyStore;
 
               try
               {
-                keyStore = CryptoUtil.loadKeyStore(serverSecurityKeyStoreType,
-                    serverSecurityKeyStorePath, serverSecurityKeyStorePassword,
-                    serverSecurityKeyStoreAlias);
+                keyStore = CryptoUtil.loadKeyStore(serverSecurityKeyStoreType, serverSecurityKeyStorePath,
+                    serverSecurityKeyStorePassword, serverSecurityKeyStoreAlias);
               }
               catch (Throwable e)
               {
@@ -583,14 +564,12 @@ public abstract class ApplicationBase
               {
                 if (StringUtil.isNullOrEmpty(serverSecurityTrustStoreType))
                 {
-                  throw new ConfigurationException(
-                      "The type was not specified for the server security trust store");
+                  throw new ConfigurationException("The type was not specified for the server security trust store");
                 }
 
                 if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePath))
                 {
-                  throw new ConfigurationException(
-                      "The path was not specified for the server security trust store");
+                  throw new ConfigurationException("The path was not specified for the server security trust store");
                 }
 
                 if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePassword))
@@ -601,13 +580,12 @@ public abstract class ApplicationBase
 
                 try
                 {
-                  trustStore = CryptoUtil.loadTrustStore(serverSecurityTrustStoreType,
-                      serverSecurityTrustStorePath, serverSecurityTrustStorePassword);
+                  trustStore = CryptoUtil.loadTrustStore(serverSecurityTrustStoreType, serverSecurityTrustStorePath,
+                      serverSecurityTrustStorePassword);
                 }
                 catch (Throwable e)
                 {
-                  throw new ApplicationException("Failed to initialize the server SSL key store",
-                      e);
+                  throw new ApplicationException("Failed to initialize the server SSL key store", e);
                 }
               }
 
@@ -624,8 +602,8 @@ public abstract class ApplicationBase
               trustManagerFactory.init(trustStore);
 
               SSLContext sslContext = SSLContext.getInstance("TLS");
-              sslContext.init(keyManagerFactory.getKeyManagers(),
-                  trustManagerFactory.getTrustManagers(), new SecureRandom());
+              sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
+                  new SecureRandom());
 
               builder.addHttpsListener(serverSSLHttpListenerPort, "0.0.0.0", sslContext);
 
@@ -637,25 +615,21 @@ public abstract class ApplicationBase
                 }
                 else if (serverSecurityClientAuthMode.equalsIgnoreCase("requested"))
                 {
-                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
-                      .REQUESTED);
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.REQUESTED);
                 }
                 else
                 {
-                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
-                      .NOT_REQUESTED);
+                  builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.NOT_REQUESTED);
                 }
               }
               else
               {
-                builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
-                    .NOT_REQUESTED);
+                builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.NOT_REQUESTED);
               }
             }
             catch (Throwable e)
             {
-              logger.error("Failed to initialize the server SSL HTTP listener on port "
-                  + serverSSLHttpListenerPort, e);
+              logger.error("Failed to initialize the server SSL HTTP listener on port " + serverSSLHttpListenerPort, e);
             }
           }
           );
@@ -688,8 +662,7 @@ public abstract class ApplicationBase
           catch (ClassNotFoundException ignored) {}
           catch (Throwable e)
           {
-            throw new FatalBeanException(
-                "Failed to initialize the org.apache.cxf.bus.spring.SpringBus bean", e);
+            throw new FatalBeanException("Failed to initialize the org.apache.cxf.bus.spring.SpringBus bean", e);
           }
         }
         ;
@@ -713,19 +686,17 @@ public abstract class ApplicationBase
   {
     try
     {
-      Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
-          .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
+      Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader().loadClass(
+          "org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
 
-      Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass(
-          "org.apache.cxf.Bus");
+      Class<?> busClass = Thread.currentThread().getContextClassLoader().loadClass("org.apache.cxf.Bus");
 
       Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
           "org.apache.cxf.bus.spring.SpringBus");
 
       Object springBus = applicationContext.getBean(springBusClass);
 
-      Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass,
-          Object.class);
+      Constructor<? extends Endpoint> constructor = endpointImplClass.getConstructor(busClass, Object.class);
 
       Endpoint endpoint = constructor.newInstance(springBus, implementation);
 
@@ -741,26 +712,22 @@ public abstract class ApplicationBase
         {
           if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreType))
           {
-            throw new ConfigurationException(
-                "The type was not specified for the server SSL key store");
+            throw new ConfigurationException("The type was not specified for the server SSL key store");
           }
 
           if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePath))
           {
-            throw new ConfigurationException(
-                "The path was not specified for the server SSL key store");
+            throw new ConfigurationException("The path was not specified for the server SSL key store");
           }
 
           if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePassword))
           {
-            throw new ConfigurationException(
-                "The password was not specified for the server SSL key store");
+            throw new ConfigurationException("The password was not specified for the server SSL key store");
           }
 
           if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
           {
-            throw new ConfigurationException(
-                "The alias was not specified for the server SSL key store");
+            throw new ConfigurationException("The alias was not specified for the server SSL key store");
           }
 
           KeyStore keyStore;
@@ -768,15 +735,13 @@ public abstract class ApplicationBase
           try
           {
             keyStore = CryptoUtil.loadKeyStore(wssX509CertificateTokenProfileKeyStoreType,
-                wssX509CertificateTokenProfileKeyStorePath,
-                wssX509CertificateTokenProfileKeyStorePassword,
+                wssX509CertificateTokenProfileKeyStorePath, wssX509CertificateTokenProfileKeyStorePassword,
                 wssX509CertificateTokenProfileKeyStoreAlias);
           }
           catch (Throwable e)
           {
             throw new ApplicationException(
-                "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
-                e);
+                "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store", e);
           }
 
           KeyStore trustStore = keyStore;
@@ -787,33 +752,31 @@ public abstract class ApplicationBase
           {
             if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
             {
-              throw new ConfigurationException(
-                  "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+              throw new ConfigurationException("The type was not specified for the Web Services Security X.509 "
+                  + "Certificate Token Profile trust store");
             }
 
             if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
             {
-              throw new ConfigurationException(
-                  "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+              throw new ConfigurationException("The path was not specified for the Web Services Security X.509 "
+                  + "Certificate Token Profile trust store");
             }
 
             if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword))
             {
-              throw new ConfigurationException(
-                  "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
+              throw new ConfigurationException("The password was not specified for the Web Services Security X.509 "
+                  + "Certificate Token Profile trust store");
             }
 
             try
             {
               trustStore = CryptoUtil.loadTrustStore(wssX509CertificateTokenProfileTrustStoreType,
-                  wssX509CertificateTokenProfileTrustStorePath,
-                  wssX509CertificateTokenProfileTrustStorePassword);
+                  wssX509CertificateTokenProfileTrustStorePath, wssX509CertificateTokenProfileTrustStorePassword);
             }
             catch (Throwable e)
             {
               throw new ApplicationException(
-                  "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
-                  e);
+                  "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store", e);
             }
           }
 
@@ -821,25 +784,23 @@ public abstract class ApplicationBase
               .getContextClassLoader().loadClass(
               "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
 
-          Method configureEndpointMethod =
-              cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod("configureEndpoint",
-              Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
+          Method configureEndpointMethod = cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod(
+              "configureEndpoint", Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
 
-          configureEndpointMethod.invoke(null, endpoint, keyStore,
-              wssX509CertificateTokenProfileKeyStorePassword,
+          configureEndpointMethod.invoke(null, endpoint, keyStore, wssX509CertificateTokenProfileKeyStorePassword,
               wssX509CertificateTokenProfileKeyStoreAlias, trustStore);
         }
         catch (ClassNotFoundException e)
         {
           throw new ApplicationException(
-              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-              + name + "): The inception-ws library could not be found", e);
+              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service (" + name
+              + "): The inception-ws library could not be found", e);
         }
         catch (Throwable e)
         {
           throw new ApplicationException(
-              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-              + name + ")", e);
+              "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service (" + name
+              + ")", e);
         }
       }
 
@@ -852,8 +813,7 @@ public abstract class ApplicationBase
     }
     catch (Throwable e)
     {
-      throw new ApplicationException("Failed to create the endpoint for the service (" + name
-          + ")", e);
+      throw new ApplicationException("Failed to create the endpoint for the service (" + name + ")", e);
     }
   }
 }
