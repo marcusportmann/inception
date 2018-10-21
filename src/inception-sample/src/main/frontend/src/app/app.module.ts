@@ -19,7 +19,6 @@ import {NavigationTitle} from "./inception/services/navigation/navigation-title"
 
 
 // TODO: Remove the lines below when Angular provides support for I18N in source natively -- MARCUS
-//import {LOCALE_ID} from '@angular/core';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
 
@@ -28,15 +27,17 @@ declare const require;
 
 // We use the webpack raw-loader to return the content as a string
 const translations = require('raw-loader!../locale/messages.en.xlf');
+export {translations};
 // TODO: Remove the lines above when Angular provides support for I18N in source natively -- MARCUS
 
 
 
 @NgModule({
+
   declarations: [
     AppComponent
   ],
-  exports: [ 
+  exports: [
     InceptionModule 
   ],
   imports: [
@@ -48,12 +49,11 @@ const translations = require('raw-loader!../locale/messages.en.xlf');
     InceptionModule.forRoot()
   ],
   providers: [
-    //{ provide: LOCALE_ID, useValue: 'en' },
-    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
     { provide: TRANSLATIONS, useValue: translations },
-
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
     I18n
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule extends InceptionAppModule {

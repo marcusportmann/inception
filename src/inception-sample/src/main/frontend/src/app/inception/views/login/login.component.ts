@@ -87,7 +87,7 @@ export class LoginComponent {
 
     //this.dialogService.showWarningDialog({title: 'Warning Title', description: 'This is a warning message.'});
 
-    this.dialogService.showInformationDialog({title: 'Information Title', description: this.i18n("This is a test {{myVar}} !", {myVar: "^_^"})});
+    this.dialogService.showInformationDialog({title: 'Information Title', description: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
 
     //this.errorService.showConfirm('This is a title', 'This is a message');

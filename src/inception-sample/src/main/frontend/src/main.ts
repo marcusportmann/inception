@@ -27,7 +27,7 @@ if (environment.production) {
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
   providers: [
-    {provide: TRANSLATIONS_FORMAT, useValue: 'xlf2'},
-    {provide: TRANSLATIONS, useValue: translations}
+    {provide: TRANSLATIONS, useValue: translations},
+    {provide: TRANSLATIONS_FORMAT, useValue: 'xlf2'}
     ]
 }).catch(err => console.log(err));
