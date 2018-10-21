@@ -21,16 +21,20 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>Code</code> class holds the information for a code.
@@ -53,8 +57,8 @@ public class Code
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
    * is associated with.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category the code is associated with",
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category the "
+      + "code is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)
