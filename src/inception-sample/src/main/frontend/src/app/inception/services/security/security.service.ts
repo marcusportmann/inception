@@ -62,10 +62,12 @@ export class SecurityService {
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations', value: 'Failed to retrieve the organizations.'}), apiError));
+          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations',
+            value: 'Failed to retrieve the organizations.'}), apiError));
         }
         else {
-          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations', value: 'Failed to retrieve the organizations.'}), new CommunicationError(httpErrorResponse)));
+          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations',
+            value: 'Failed to retrieve the organizations.'}), new CommunicationError(httpErrorResponse)));
         }
       }));
   }
