@@ -1,5 +1,14 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Windows-specific files
+/**/Thumbs.db
+/**/desktop.ini
+
+# Mac-specific files
+/**/.DS_Store/
+/**/.Spotlight-V100
+/**/.Trashes
+
 # compiled output
 /dist
 /tmp
