@@ -47,11 +47,13 @@ export class SessionInterceptor implements HttpInterceptor {
       let httpRequestHandler = this.sessionService.getSession().pipe(
         flatMap(session => {
 
-          httpRequest = httpRequest.clone({
-            setHeaders: {
-              Authorization: `Bearer ${session.accessToken}`
-            }
-          });
+          if (session) {
+            httpRequest = httpRequest.clone({
+              setHeaders: {
+                Authorization: `Bearer ${session.accessToken}`
+              }
+            });
+          }
 
           return nextHttpHandler.handle(httpRequest);
         }));

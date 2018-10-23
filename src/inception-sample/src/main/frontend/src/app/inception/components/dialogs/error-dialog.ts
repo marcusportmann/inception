@@ -18,7 +18,7 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {Error} from "../../errors/error";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ErrorService} from "../../services/error/error.service";
+import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
 import {DialogData} from "./dialog-data";
 
 @Component({

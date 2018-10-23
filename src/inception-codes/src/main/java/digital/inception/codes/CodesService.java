@@ -22,28 +22,38 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.sql.DataSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Constructor;
+
 import java.net.URL;
+
 import java.sql.*;
+
 import java.time.LocalDateTime;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.
@@ -70,6 +80,12 @@ public class CodesService
   @Autowired
   private ApplicationContext applicationContext;
 
+  /**
+   * The configuration information for the code providers read from the code provider configuration
+   * files (META-INF/code-providers.xml) on the classpath.
+   */
+  private List<CodeProviderConfig> codeProviderConfigs;
+
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
 
@@ -79,12 +95,6 @@ public class CodesService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
-
-  /**
-   * The configuration information for the code providers read from the code provider configuration
-   * files (META-INF/code-providers.xml) on the classpath.
-   */
-  private List<CodeProviderConfig> codeProviderConfigs;
 
   /**
    * Constructs a new <code>CodesService</code>.
@@ -134,8 +144,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to check whether the code category (%s) exists", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to check whether the code category (%s) exists",
+          codeCategoryId), e);
     }
   }
 
@@ -159,8 +169,7 @@ public class CodesService
     catch (Throwable e)
     {
       throw new CodesServiceException(String.format(
-          "Failed to check whether the code (%s) exists for the code category (%s)", codeId,
-          codeCategoryId), e);
+          "Failed to check whether the code (%s) exists for the code category (%s)", codeId, codeCategoryId), e);
     }
   }
 
@@ -174,8 +183,7 @@ public class CodesService
   public void createCode(Code code)
     throws DuplicateCodeException, CodeCategoryNotFoundException, CodesServiceException
   {
-    String createCodeSQL =
-        "INSERT INTO codes.codes (id, code_category_id, name, value) VALUES (?, ?, ?, ?)";
+    String createCodeSQL = "INSERT INTO codes.codes (id, code_category_id, name, value) VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCodeSQL))
@@ -206,8 +214,7 @@ public class CodesService
       if (statement.executeUpdate() != 1)
       {
         throw new CodesServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createCodeSQL));
+            "No rows were affected as a result of executing the SQL statement (%s)", createCodeSQL));
       }
     }
     catch (DuplicateCodeException | CodeCategoryNotFoundException e)
@@ -216,9 +223,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to create the code (%s) for the code category (%s)", code.getName(),
-          code.getCodeCategoryId()), e);
+      throw new CodesServiceException(String.format("Failed to create the code (%s) for the code category (%s)",
+          code.getName(), code.getCodeCategoryId()), e);
     }
   }
 
@@ -233,8 +239,7 @@ public class CodesService
   public void createCodeCategory(CodeCategory codeCategory)
     throws DuplicateCodeCategoryException, CodesServiceException
   {
-    String createCodeCategorySQL =
-        "INSERT INTO codes.code_categories (id, name, updated) VALUES (?, ?, ?)";
+    String createCodeCategorySQL = "INSERT INTO codes.code_categories (id, name, updated) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
@@ -263,8 +268,7 @@ public class CodesService
       if (statement.executeUpdate() != 1)
       {
         throw new CodesServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createCodeCategorySQL));
+            "No rows were affected as a result of executing the SQL statement (%s)", createCodeCategorySQL));
       }
     }
     catch (DuplicateCodeCategoryException e)
@@ -273,8 +277,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to create the code category (%s)",
-          codeCategory.getId()), e);
+      throw new CodesServiceException(String.format("Failed to create the code category (%s)", codeCategory.getId()),
+          e);
     }
   }
 
@@ -309,8 +313,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to delete the code (%s) for the code category (%s)", codeId, codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to delete the code (%s) for the code category (%s)",
+          codeId, codeCategoryId), e);
     }
   }
 
@@ -343,8 +347,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to delete the code category (%s)",
-          codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to delete the code category (%s)", codeCategoryId), e);
     }
 
   }
@@ -398,9 +401,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the code (%s) for the code category (%s)", codeId, codeCategoryId),
-          e);
+      throw new CodesServiceException(String.format("Failed to retrieve the code (%s) for the code category (%s)",
+          codeId, codeCategoryId), e);
     }
 
   }
@@ -414,8 +416,7 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
-    String getCodeCategoriesSQL =
-        "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
+    String getCodeCategoriesSQL = "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategoriesSQL))
@@ -484,8 +485,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)",
-          codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)", codeCategoryId), e);
     }
   }
 
@@ -529,8 +529,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the codes for the code category (%s)",
+          codeCategoryId), e);
     }
   }
 
@@ -548,8 +548,7 @@ public class CodesService
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodeCategoryCodesWithParameters(UUID codeCategoryId, Map<String,
-      String> parameters)
+  public List<Code> getCodeCategoryCodesWithParameters(UUID codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -576,8 +575,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the codes for the code category (%s)",
+          codeCategoryId), e);
     }
   }
 
@@ -629,8 +628,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the data for the code category (%s)",
+          codeCategoryId), e);
     }
   }
 
@@ -648,8 +647,7 @@ public class CodesService
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getCodeCategoryDataWithParameters(UUID codeCategoryId, Map<String,
-      String> parameters)
+  public String getCodeCategoryDataWithParameters(UUID codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getCodeCategorySQL = "SELECT data FROM codes.code_categories WHERE id=?";
@@ -684,8 +682,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to retrieve the data for the code category (%s)",
+          codeCategoryId), e);
     }
   }
 
@@ -738,8 +736,7 @@ public class CodesService
     catch (Throwable e)
     {
       throw new CodesServiceException(String.format(
-          "Failed to retrieve the date and time the code category (%s) was last updated",
-          codeCategoryId), e);
+          "Failed to retrieve the date and time the code category (%s) was last updated", codeCategoryId), e);
     }
   }
 
@@ -789,8 +786,7 @@ public class CodesService
   public int getNumberOfCodesForCodeCategory(UUID codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getNumberOfCodesForCodeCategorySQL =
-        "SELECT COUNT(ID) FROM codes.codes WHERE code_category_id=?";
+    String getNumberOfCodesForCodeCategorySQL = "SELECT COUNT(ID) FROM codes.codes WHERE code_category_id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL))
@@ -861,8 +857,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to update the code (%s)",
-          code.getId()), e);
+      throw new CodesServiceException(String.format("Failed to update the code (%s)", code.getId()), e);
     }
 
   }
@@ -905,8 +900,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to update the code category (%s)",
-          codeCategory.getId()), e);
+      throw new CodesServiceException(String.format("Failed to update the code category (%s)", codeCategory.getId()),
+          e);
     }
   }
 
@@ -921,8 +916,7 @@ public class CodesService
   public void updateCodeCategoryData(UUID codeCategoryId, String data)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String updateCodeCategoryDataSQL =
-        "UPDATE codes.code_categories SET data=?, updated=? WHERE id=?";
+    String updateCodeCategoryDataSQL = "UPDATE codes.code_categories SET data=?, updated=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeCategoryDataSQL))
@@ -944,8 +938,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to update the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(String.format("Failed to update the data for the code category (%s)",
+          codeCategoryId), e);
     }
   }
 
@@ -968,8 +962,7 @@ public class CodesService
   private boolean codeExists(Connection connection, UUID codeCategoryId, String codeId)
     throws SQLException
   {
-    String codeExistsSQL =
-        "SELECT code_category_id, id FROM codes.codes WHERE code_category_id=? AND id=?";
+    String codeExistsSQL = "SELECT code_category_id, id FROM codes.codes WHERE code_category_id=? AND id=?";
 
     try (PreparedStatement statement = connection.prepareStatement(codeExistsSQL))
     {
@@ -986,8 +979,7 @@ public class CodesService
   private Code getCode(ResultSet rs)
     throws SQLException
   {
-    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3),
-        rs.getString(4));
+    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3), rs.getString(4));
   }
 
   private CodeCategory getCodeCategory(ResultSet rs)
@@ -1018,8 +1010,7 @@ public class CodesService
   private List<Code> getCodesForCodeCategory(Connection connection, UUID codeCategoryId)
     throws SQLException
   {
-    String getCodesForCodeCategorySQL =
-        "SELECT id, code_category_id, name, value FROM codes.codes "
+    String getCodesForCodeCategorySQL = "SELECT id, code_category_id, name, value FROM codes.codes "
         + "WHERE code_category_id=? ORDER BY name";
 
     try (PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
@@ -1040,11 +1031,10 @@ public class CodesService
     {
       try
       {
-        logger.info(String.format("Initializing the code provider (%s) with class (%s)",
-            codeProviderConfig.getName(), codeProviderConfig.getClassName()));
+        logger.info(String.format("Initializing the code provider (%s) with class (%s)", codeProviderConfig.getName(),
+            codeProviderConfig.getClassName()));
 
-        Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            codeProviderConfig.getClassName());
+        Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(codeProviderConfig.getClassName());
 
         Constructor<?> constructor = clazz.getConstructor(CodeProviderConfig.class);
 
@@ -1087,8 +1077,7 @@ public class CodesService
       ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
       // Load the code provider configuration files from the classpath
-      Enumeration<URL> codeProviderConfigurationFiles = classLoader.getResources(
-          CODE_PROVIDERS_CONFIGURATION_PATH);
+      Enumeration<URL> codeProviderConfigurationFiles = classLoader.getResources(CODE_PROVIDERS_CONFIGURATION_PATH);
 
       while (codeProviderConfigurationFiles.hasMoreElements())
       {
@@ -1108,8 +1097,7 @@ public class CodesService
         // builderFactory.setNamespaceAware(true);
         DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-        builder.setEntityResolver(new DtdJarResolver("code-providers.dtd",
-            "META-INF/code-providers.dtd"));
+        builder.setEntityResolver(new DtdJarResolver("code-providers.dtd", "META-INF/code-providers.dtd"));
         builder.setErrorHandler(new XmlParserErrorHandler());
 
         // Parse the code providers configuration file using the document builder

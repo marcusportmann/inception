@@ -1,0 +1,49 @@
+<mat-card style="height: 100%;">
+  <div class="mat-table-header">
+    <button mat-flat-button color="primary">New Code Category</button>
+    <table-filter (changed)="applyFilter($event)"></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell class="name-column" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell class="name-column" *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-id="id">
+      <button mat-menu-item (click)="editCodeCategory(id)">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="codeAdministration(id)">
+        <mat-icon>group</mat-icon>
+        <span>Codes</span>
+      </button>
+      <button mat-menu-item (click)="deleteCodeCategory(id)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+
+</mat-card>

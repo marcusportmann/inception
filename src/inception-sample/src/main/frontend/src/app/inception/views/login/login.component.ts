@@ -26,7 +26,7 @@ import {SecurityService} from '../../services/security/security.service';
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
-import {ErrorService} from "../../services/error/error.service";
+import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
 import {catchError, map} from "rxjs/operators";
 import {Observable} from "../../../../../node_modules/rxjs";
 
@@ -57,9 +57,9 @@ export class LoginComponent {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      username: ['', Validators.required],
+      username: ['Administrator', Validators.required],
       //username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      password: ['', Validators.required]
+      password: ['Password1', Validators.required]
     });
   }
 

@@ -27,10 +27,10 @@ export class SecurityServiceError extends Error {
   /**
    * Constructs a new SecurityServiceError.
    *
-   * @param message  The error message.
-   * @param apiError The optional API error associated with the error.
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  constructor(message: string, apiError?: ApiError) {
-    super(message, apiError);
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
 }

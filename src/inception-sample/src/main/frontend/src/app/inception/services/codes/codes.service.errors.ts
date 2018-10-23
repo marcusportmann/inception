@@ -14,47 +14,23 @@
  * limitations under the License.
  */
 
-import {ApiError} from "./api-error";
+import {Error} from "../../errors/error";
+import {ApiError} from "../../errors/api-error";
 
 /**
- * The Error class provides the base class that all error classes should be derived from.
+ * The CodesServiceError class holds the information for a Codes Service error.
  *
  * @author Marcus Portmann
  */
-export class Error {
+export class CodesServiceError extends Error {
 
   /**
-   * The optional cause of the error.
-   */
-  cause?: any;
-
-  /**
-   * The error message.
-   */
-  message: string;
-
-  /**
-   * The date and time the error occurred.
-   */
-  timestamp: Date;
-
-  /**
-   * Constructs a new Error.
+   * Constructs a new CodesServiceError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
   constructor(message: string, cause?: any) {
-    if ((cause) && (cause instanceof ApiError)) {
-      this.timestamp = (<ApiError>cause).timestamp;
-    }
-    else {
-      this.timestamp = new Date();
-    }
-
-    this.message = message;
-    this.cause = cause;
+    super(message, cause);
   }
 }
-
-

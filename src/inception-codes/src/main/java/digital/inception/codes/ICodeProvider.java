@@ -19,6 +19,7 @@ package digital.inception.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -125,8 +126,7 @@ public interface ICodeProvider
    *
    * @return the codes for the code category
    */
-  List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String,
-      String> parameters)
+  List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**

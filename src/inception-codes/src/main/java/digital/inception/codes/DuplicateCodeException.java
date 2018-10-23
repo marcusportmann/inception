@@ -19,15 +19,17 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DuplicateCodeException</code> exception is thrown to indicate an error condition as a
@@ -56,7 +58,6 @@ public class DuplicateCodeException extends ServiceException
    */
   public DuplicateCodeException(UUID codeCategoryId, String codeId)
   {
-    super("The code wih ID (" + codeId + ") already exists for the code category with ID ("
-        + codeCategoryId + ")");
+    super("The code wih ID (" + codeId + ") already exists for the code category with ID (" + codeCategoryId + ")");
   }
 }

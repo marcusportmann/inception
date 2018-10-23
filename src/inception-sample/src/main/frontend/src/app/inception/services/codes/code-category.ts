@@ -14,40 +14,38 @@
  * limitations under the License.
  */
 
-import {OrganizationStatus} from "./organization-status";
-
 /**
- * The Organization class stores the information for an organization.
+ * The CodeCategory class stores the information for a code category.
  *
  * @author Marcus Portmann
  */
-export class Organization {
+export class CodeCategory {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
   id: string;
 
   /**
-   * The name of the organization.
+   * The name of the code category.
    */
   name: string;
 
   /**
-   * The status for the organization.
+   * The date and time the code category was updated.
    */
-  status: OrganizationStatus;
+  updated: Date;
 
   /**
    * Constructs a new Organization.
    *
-   * @param {string} id     The Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   * @param {string} name   The name of the organization.
-   * @param {string} status The status for the organization.
+   * @param {string} id      The Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * @param {string} name    The name of the code category.
+   * @param {string} updated The date and time the code category was updated.
    */
-  constructor(id: string, name: string, status: OrganizationStatus) {
+  constructor(id: string, name: string, updated: Date) {
     this.id = id;
     this.name = name;
-    this.status = status;
+    this.updated = this.updated;
   }
 }

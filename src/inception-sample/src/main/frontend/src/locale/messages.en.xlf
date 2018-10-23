@@ -15,6 +15,22 @@
       <segment state="final">
         <source>A username is required.</source>
       <target>A username is required.</target></segment>
+    </unit><unit id="@@codes_service_failed_to_retrieve_the_code_categories">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to retrieve the code categories.</source>
+      <target>Failed to retrieve the code categories.</target></segment>
+    </unit><unit id="@@security_service_failed_to_retrieve_the_organizations">
+      <notes>
+        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to retrieve the organizations.</source>
+      <target>Failed to retrieve the organizations.</target></segment>
     </unit><unit id="@@xxx">
       <notes>
         <note category="location">src/app/inception/views/login/login.component.ts:1</note>

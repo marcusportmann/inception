@@ -19,16 +19,16 @@ import { Injectable } from "@angular/core";
 import {Error} from "../../errors/error";
 
 /**
- * The ErrorService class provides the capability to process an application error or back-end error
+ * The ErrorReportingService class provides the capability to process an application error or back-end error
  * and submit an error report.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class ErrorService {
+export class ErrorReportingService {
 
   /**
-   * Constructs a new ErrorService.
+   * Constructs a new ErrorReportingService.
    */
   constructor() {
   }

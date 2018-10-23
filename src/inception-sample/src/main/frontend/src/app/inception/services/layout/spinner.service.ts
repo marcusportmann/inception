@@ -34,7 +34,7 @@ export class SpinnerService {
 
 
   /**
-   * Constructs a new ErrorService.
+   * Constructs a new ErrorReportingService.
    *
    * @param {dialog} dialog The material dialog.
    */

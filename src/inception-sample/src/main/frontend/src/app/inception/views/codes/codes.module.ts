@@ -16,26 +16,30 @@
 
 // Import Angular modules
 import {CommonModule} from '@angular/common';
+import {FormsModule} from "@angular/forms";
 import {NgModule} from '@angular/core';
+
+// Import Inception module
+import {InceptionModule} from '../../../inception/inception.module';
 
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
 // Import Inception components
-import {OverviewComponent} from "./overview.component";
+import {CodeCategoryAdministrationComponent} from "./code-category-administration.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'overview',
+    redirectTo: 'code-category-administration',
     pathMatch: 'full',
   },
   {
-    path: 'overview',
-    component: OverviewComponent,
+    path: 'code-category-administration',
+    component: CodeCategoryAdministrationComponent,
     data: {
-      title: 'Overview',
-      icon: 'fa fa-shield-alt',
+      title: 'Code Category Administration',
+      icon: 'fa fa-list',
       sidebarNav: true
     }
   }
@@ -44,10 +48,12 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [OverviewComponent]
+  declarations: [CodeCategoryAdministrationComponent]
 })
-export class SecurityModule {
+export class CodesModule {
 }

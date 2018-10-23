@@ -67,8 +67,9 @@ import {SessionInterceptor} from "./services/session/session.interceptor";
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
+import {CodesService} from "./services/codes/codes.service";
 import {DialogService} from "./services/dialog/dialog.service";
-import {ErrorService} from './services/error/error.service';
+import {ErrorReportingService} from './services/error-reporting/error-reporting.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
@@ -330,8 +331,9 @@ export class InceptionModule {
         CanActivateFunctionGuard,
 
         BreadcrumbsService,
+        CodesService,
         DialogService,
-        ErrorService,
+        ErrorReportingService,
         NavigationService,
         SecurityService,
         SessionService,

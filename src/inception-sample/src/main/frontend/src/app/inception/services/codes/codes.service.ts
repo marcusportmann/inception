@@ -20,52 +20,51 @@ import {catchError, map} from 'rxjs/operators';
 
 
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Organization} from "./organization";
+import {CodeCategory} from "./code-category";
 import {SessionError} from "../session/session.service.errors";
-import {SecurityServiceError} from "./security.service.errors";
+import {CodesServiceError} from "./codes.service.errors";
 import {CommunicationError} from "../../errors/communication-error";
 import {ApiError} from "../../errors/api-error";
-import {Router} from "@angular/router";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
- * The SecurityService class provides the Security Service implementation.
+ * The CodesService class provides the Codes Service implementation.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class SecurityService {
+export class CodesService {
 
   /**
-   * Constructs a new SecurityService.
+   * Constructs a new CodesService.
    *
    * @param {HttpClient} httpClient The HTTP client.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
-    console.log('Initializing the Security Service');
+    console.log('Initializing the Codes Service');
   }
 
   /**
-   * Retrieve the organizations.
+   * Retrieve the code categories.
    *
-   * @return {Observable<Organization[]>} The list of organizations.
+   * @return {Observable<CodeCategory[]>} The list of code categories.
    */
-  public getOrganizations(): Observable<Organization[]> {
+  public getCodeCategories(): Observable<CodeCategory[]> {
 
-    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations', {reportProgress: true}).pipe(
-      map((organizations: Organization[]) => {
+    return this.httpClient.get<CodeCategory[]>('http://localhost:20000/api/codeCategories', {reportProgress: true}).pipe(
+      map((codeCategories: CodeCategory[]) => {
 
-        return organizations;
+        return codeCategories;
 
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations', value: 'Failed to retrieve the organizations.'}), apiError));
+          return throwError(new CodesServiceError(this.i18n({id: '@@codes_service_failed_to_retrieve_the_code_categories', value: 'Failed to retrieve the code categories.'}), apiError));
         }
         else {
-          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations', value: 'Failed to retrieve the organizations.'}), new CommunicationError(httpErrorResponse)));
+          return throwError(new CodesServiceError(this.i18n({id: '@@codes_service_failed_to_retrieve_the_code_categories', value: 'Failed to retrieve the code categories.'}), new CommunicationError(httpErrorResponse)));
         }
       }));
   }

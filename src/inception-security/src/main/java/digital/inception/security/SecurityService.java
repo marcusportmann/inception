@@ -1442,7 +1442,7 @@ public class SecurityService
   public List<Organization> getOrganizations()
     throws SecurityServiceException
   {
-    if (true)
+    if (false)
     {
       throw new SecurityServiceException("Testing 1.. 2.. 3..");
     }

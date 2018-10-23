@@ -71,6 +71,11 @@ export class ApiError {
   uri: string;
 
   /**
+   * The URL for the HTTP request that result in the error.
+   */
+  url: string;
+
+  /**
    * The optional validation errors associated with the error.
    */
   validationErrors?: ValidationError[];
@@ -91,6 +96,7 @@ export class ApiError {
     this.stackTrace = httpErrorResponse.error.stackTrace;
     this.name = httpErrorResponse.error.name;
     this.validationErrors = httpErrorResponse.error.validationErrors;
+    this.url = httpErrorResponse.url;
   }
 
   /**

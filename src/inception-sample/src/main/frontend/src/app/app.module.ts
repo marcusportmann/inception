@@ -72,42 +72,50 @@ export class AppModule extends InceptionAppModule {
 
     var navigation: NavigationItem[] = [];
 
-    navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, new NavigationBadge('info', 'NEW')));
+    navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, new NavigationBadge('info', 'NEW')));
 
-    navigation.push(new NavigationItem('icon-layers', 'Inception', '/inception', [], [
+    navigation.push(new NavigationItem('fa fa-layer-group', 'Inception', '/inception', [], [
 
-      new NavigationItem('icon-puzzle', 'Components', '/inception/components', [], [
-        new NavigationItem('icon-puzzle', 'Buttons', '/inception/components/buttons', []),
-        new NavigationItem('icon-puzzle', 'Cards', '/inception/components/cards', []),
-        new NavigationItem('icon-puzzle', 'Charts', '/inception/components/charts', []),
-        new NavigationItem('icon-puzzle', 'Expansion Panels', '/inception/components/expansion-panels', []),
-        new NavigationItem('icon-puzzle', 'Grid List', '/inception/components/grid-list', []),
-        new NavigationItem('icon-puzzle', 'Lists', '/inception/components/lists', []),
-        new NavigationItem('icon-puzzle', 'Progress', '/inception/components/progress', []),
-        new NavigationItem('icon-puzzle', 'Switches', '/inception/components/switches', []),
-        new NavigationItem('icon-puzzle', 'Tabs', '/inception/components/tabs', []),
-        new NavigationItem('icon-puzzle', 'Tooltips', '/inception/components/tooltips', [])
+      new NavigationItem('fa fa-puzzle-piece', 'Components', '/inception/components', [], [
+        new NavigationItem('fa fa-puzzle-piece', 'Buttons', '/inception/components/buttons', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Cards', '/inception/components/cards', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Charts', '/inception/components/charts', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Expansion Panels', '/inception/components/expansion-panels', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Grid List', '/inception/components/grid-list', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Lists', '/inception/components/lists', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Progress', '/inception/components/progress', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Switches', '/inception/components/switches', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Tabs', '/inception/components/tabs', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Tooltips', '/inception/components/tooltips', [])
       ]),
 
-      new NavigationItem('icon-note', 'Form', '/inception/form', [], [
-        new NavigationItem('icon-note', 'Example Form', '/inception/form/example-form', [])
+      new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [], [
+        new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form', [])
       ]),
 
-      new NavigationItem('icon-table', 'Tables', '/inception/tables', [], [
-        new NavigationItem('icon-table', 'Action List Table', '/inception/tables/action-list-table', []),
-        new NavigationItem('icon-table', 'Action Menu Table', '/inception/tables/action-menu-table', []),
-        new NavigationItem('icon-table', 'Basic Table', '/inception/tables/basic-table', []),
-        new NavigationItem('icon-table', 'Filterable Table', '/inception/tables/filterable-table', []),
-        new NavigationItem('icon-table', 'Pagination Table', '/inception/tables/pagination-table', []),
-        new NavigationItem('icon-table', 'Sortable Table', '/inception/tables/sortable-table', [])
+      new NavigationItem('fa fa-table', 'Tables', '/inception/tables', [], [
+        new NavigationItem('fa fa-table', 'Action List Table', '/inception/tables/action-list-table', []),
+        new NavigationItem('fa fa-table', 'Action Menu Table', '/inception/tables/action-menu-table', []),
+        new NavigationItem('fa fa-table', 'Basic Table', '/inception/tables/basic-table', []),
+        new NavigationItem('fa fa-table', 'Filterable Table', '/inception/tables/filterable-table', []),
+        new NavigationItem('fa fa-table', 'Pagination Table', '/inception/tables/pagination-table', []),
+        new NavigationItem('fa fa-table', 'Sortable Table', '/inception/tables/sortable-table', [])
       ]),
 
-      new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [
-        new NavigationItem('icon-drop', 'Colors', '/inception/theme/colors', []),
-        new NavigationItem('icon-drop', 'Typography', '/inception/theme/typography', [])
+      new NavigationItem('fa fa-tint', 'Theme', '/inception/theme', [], [
+        new NavigationItem('fa fa-palette', 'Colors', '/inception/theme/colors', []),
+        new NavigationItem('fa fa-font', 'Typography', '/inception/theme/typography', [])
       ])
 
     ]));
+
+
+    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', [], [
+      new NavigationItem('fa fa-list', 'Codes', '/administration/codes', []),
+      new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', [])
+    ]));
+
+
 
     navigation.push(new NavigationTitle('Menus'));
 

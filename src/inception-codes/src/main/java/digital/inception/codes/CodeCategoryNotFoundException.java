@@ -19,15 +19,17 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryNotFoundException</code> exception is thrown to indicate an error condition
@@ -38,8 +40,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The code category could not be found")
-@WebFault(name = "CodeCategoryNotFoundException",
-    targetNamespace = "http://codes.inception.digital",
+@WebFault(name = "CodeCategoryNotFoundException", targetNamespace = "http://codes.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CodeCategoryNotFoundException extends ServiceException
