@@ -18,7 +18,6 @@ import { Injectable } from "@angular/core";
 
 import {
   ErrorDialog,
-  ErrorReportDialog,
   InformationDialog,
   WarningDialog
 } from "../../components/dialogs/index";
@@ -47,37 +46,38 @@ export class DialogService {
   /**
    * Show an error using the error dialog.
    *
-   * @param {DialogData} data The data.
+   * @param {Error} error The error.
    */
-  showErrorDialog(data: DialogData): MatDialogRef<ErrorDialog> {
+  showErrorDialog(error: Error): MatDialogRef<ErrorDialog> {
 
     const dialogRef = this.dialog.open(ErrorDialog, {
       width: '300px',
-      data: data
+      data: {error: error}
     });
 
     return dialogRef;
   }
 
-  /**
-   * Show the specified error using the error report dialog.
-   *
-   * @param {Error} error The error.
-   */
-  showErrorReportDialog(error: Error): MatDialogRef<ErrorReportDialog> {
-
-    const dialogRef = this.dialog.open(ErrorReportDialog, {
-      width: '300px',
-      data: error
-    });
-
-    return dialogRef;
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed = ', result);
-    //   //this.animal = result;
-    // });
-  }
+  // TODO: REMOVE ME AND ADD ERROR REPORTING TO  ERROR DIALOG -- MARCUS
+  // /**
+  //  * Show the specified error using the error report dialog.
+  //  *
+  //  * @param {Error} error The error.
+  //  */
+  // showErrorReportDialog(error: Error): MatDialogRef<ErrorReportDialog> {
+  //
+  //   const dialogRef = this.dialog.open(ErrorReportDialog, {
+  //     width: '300px',
+  //     data: error
+  //   });
+  //
+  //   return dialogRef;
+  //
+  //   // dialogRef.afterClosed().subscribe(result => {
+  //   //   console.log('The dialog was closed = ', result);
+  //   //   //this.animal = result;
+  //   // });
+  // }
 
   /**
    * Show an informational message using the information dialog.

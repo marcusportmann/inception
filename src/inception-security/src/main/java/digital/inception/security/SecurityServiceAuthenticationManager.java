@@ -113,22 +113,22 @@ public class SecurityServiceAuthenticationManager
     catch (AuthenticationFailedException e)
     {
       throw new BadCredentialsException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + ")");
+          + authentication.getPrincipal() + "): Bad credentials");
     }
     catch (UserLockedException e)
     {
       throw new LockedException("Failed to authenticate the user (" + authentication.getPrincipal()
-          + "): The user is locked");
+          + "): User locked");
     }
     catch (ExpiredPasswordException e)
     {
       throw new CredentialsExpiredException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): The password has expired");
+          + authentication.getPrincipal() + "): Credentials expired");
     }
     catch (UserNotFoundException e)
     {
       throw new BadCredentialsException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + ")");
+          + authentication.getPrincipal() + "): Bad credentials");
     }
     catch (Throwable e)
     {

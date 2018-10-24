@@ -21,11 +21,11 @@ import {catchError, map} from 'rxjs/operators';
 
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {CodeCategory} from "./code-category";
-import {SessionError} from "../session/session.service.errors";
 import {CodesServiceError} from "./codes.service.errors";
 import {CommunicationError} from "../../errors/communication-error";
 import {ApiError} from "../../errors/api-error";
 import {I18n} from "@ngx-translate/i18n-polyfill";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The CodesService class provides the Codes Service implementation.
@@ -61,10 +61,15 @@ export class CodesService {
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError(this.i18n({id: '@@codes_service_failed_to_retrieve_the_code_categories', value: 'Failed to retrieve the code categories.'}), apiError));
+          return throwError(new CodesServiceError(this.i18n({id: '@@codes_service_failed_to_retrieve_the_code_categories',
+            value: 'Failed to retrieve the code categories.'}), apiError));
+        }
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
         }
         else {
-          return throwError(new CodesServiceError(this.i18n({id: '@@codes_service_failed_to_retrieve_the_code_categories', value: 'Failed to retrieve the code categories.'}), new CommunicationError(httpErrorResponse)));
+          return throwError(new SystemUnavailableError(this.i18n({id: '@@system_unavailable_error',
+            value: 'An error has occurred and the system is unable to process your request at this time.'}), httpErrorResponse));
         }
       }));
   }

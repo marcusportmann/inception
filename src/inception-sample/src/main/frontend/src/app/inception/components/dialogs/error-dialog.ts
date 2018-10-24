@@ -17,9 +17,19 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {Error} from "../../errors/error";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
-import {DialogData} from "./dialog-data";
+
+/**
+ * The ErrorDialogData interface defines the data that is displayed by an error dialog.
+ *
+ * @author Marcus Portmann
+ */
+export interface ErrorDialogData {
+
+  /**
+   * The error.
+   */
+  error: Error;
+}
 
 @Component({
   selector: 'error-dialog',
@@ -28,16 +38,13 @@ import {DialogData} from "./dialog-data";
     <div class="header">
       <i class="material-icons md-48">error_outline</i>
     </div>
-    <div class="message">
-      {{data.title}}
-    </div>
-    <div class="description-holder">
-      <span class="description">
-        {{data.description}}
+    <div class="message-holder">
+      <span class="message">
+        {{message}}
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText ? data.buttonText : 'Ok'}}</button>
+      <button mat-flat-button (click)="onOkButtonClick()" tabindex="-1">Ok</button>
     </div>
   `,
   host: {
@@ -46,12 +53,18 @@ import {DialogData} from "./dialog-data";
 })
 export class ErrorDialog {
 
-  constructor(
-    private dialogRef: MatDialogRef<ErrorDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  get message():string {
+    return this.data.error.message;
   }
 
-  onButtonClick(): void {
+  constructor(
+    private dialogRef: MatDialogRef<ErrorDialog>,
+    @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
+  }
+
+  onOkButtonClick(): void {
     this.dialogRef.close();
   }
 }
+
+// TODO: Show submit button if we are dealing with anything that is not a CommunicationError or SystemUnavailableError? -- MARCUS

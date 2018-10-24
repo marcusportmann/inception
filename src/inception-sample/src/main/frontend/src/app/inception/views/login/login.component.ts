@@ -53,7 +53,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private dialogService: DialogService, private securityService: SecurityService, private sessionService: SessionService, private spinnerService: SpinnerService, private router: Router, private i18n: I18n) {
+  constructor(private formBuilder: FormBuilder, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -79,15 +79,16 @@ export class LoginComponent {
 
     //let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    //this.dialogService.showErrorReportDialog(error);
+    this.dialogService.showInformationDialog({message: 'This is an information message.'});
 
-    //this.dialogService.showErrorDialog({title: 'Error Title', description: 'This is an error message.'});
+    //this.dialogService.showWarningDialog({message: 'This is a warning message.'});
 
-    //this.dialogService.showInformationDialog({title: 'Information Title', description: 'This is an information message.'});
+    //this.dialogService.showErrorDialog(new Error('This is an error message.'));
 
-    //this.dialogService.showWarningDialog({title: 'Warning Title', description: 'This is a warning message.'});
 
-    this.dialogService.showInformationDialog({title: 'Information Title', description: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
+
+
+    //this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
 
     //this.errorService.showConfirm('This is a title', 'This is a message');
@@ -119,7 +120,7 @@ export class LoginComponent {
 
             this.spinnerService.hide();
 
-            this.dialogService.showErrorReportDialog(error);
+            this.dialogService.showErrorDialog(error);
 
           });
 
@@ -127,16 +128,8 @@ export class LoginComponent {
 
           this.spinnerService.hide();
 
-          if (error instanceof LoginError) {
-            this.dialogService.showErrorDialog({title: 'Login Failed', description: error.message});
-          }
-          else if (error instanceof CommunicationError) {
-            this.dialogService.showErrorDialog({title: 'Communication Error', description: error.message});
-          }
-          else {
-            this.dialogService.showErrorReportDialog(error);
-          }
-        });
+          this.dialogService.showErrorDialog(error);
+       });
     }
   }
 }

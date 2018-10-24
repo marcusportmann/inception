@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
+import {Error} from "./error";
+
 /**
- * The DialogData interface defines the data that is displayed by a dialog.
+ * The SystemUnavailableError class holds the information for a system unavailable error.
  *
  * @author Marcus Portmann
  */
-export interface DialogData {
+export class SystemUnavailableError extends Error {
 
   /**
-   * The message.
+   * Constructs a new SystemUnavailableError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  message: string;
-
-  /**
-   * The optional button text.
-   */
-  buttonText?: string;
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
 }

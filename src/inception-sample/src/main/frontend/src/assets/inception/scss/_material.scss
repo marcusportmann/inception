@@ -836,21 +836,17 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
       }
     }
 
-    .message {
-      text-align: center;
-      font-weight: bold;
-      padding-top: 1.5rem;
-      padding-bottom: 0.5rem;
-    }
-
-    .description-holder {
+    .message-holder {
       display: flex;
       justify-content: space-around;
-      padding: 0.5rem 1.75rem 1.5rem;
+      padding-top: 2.5rem;
+      padding-right: 1.75rem;
+      padding-left: 1.75rem;
+      padding-bottom: 2rem;
 
       max-width: 300px;
 
-      .description {
+      .message {
         display: inline-block;
         text-align: left;
       }
@@ -869,6 +865,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
     }
 
     .mat-flat-button {
+      color: #ffffff;
       background-color: $danger;
     }
   }
@@ -879,6 +876,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
     }
 
     .mat-flat-button {
+      color: #ffffff;
       background-color: $info;
     }
   }
@@ -889,6 +887,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
     }
 
     .mat-flat-button {
+      color: #ffffff;
       background-color: $warning;
     }
   }

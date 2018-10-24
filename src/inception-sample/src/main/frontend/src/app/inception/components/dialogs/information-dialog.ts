@@ -16,9 +16,6 @@
 
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {Error} from "../../errors/error";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
 import {DialogData} from "./dialog-data";
 
 @Component({
@@ -28,12 +25,9 @@ import {DialogData} from "./dialog-data";
     <div class="header">
       <i class="material-icons md-48">announcement</i>
     </div>
-    <div class="message">
-      {{data.title}}
-    </div>
-    <div class="description-holder">
-      <span class="description">
-        {{data.description}}
+    <div class="message-holder">
+      <span class="message">
+        {{data.message}}
       </span>
     </div>
     <div class="button">

@@ -416,6 +416,11 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
+    if (true)
+    {
+      throw new CodesServiceException("Testing 1.. 2.. 3..");
+    }
+
     String getCodeCategoriesSQL = "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();

@@ -37,7 +37,6 @@ import {TableFilter} from "./components/controls";
 
 // Import Inception dialogs
 import {ErrorDialog} from "./components/dialogs";
-import {ErrorReportDialog} from "./components/dialogs";
 import {InformationDialog} from "./components/dialogs";
 import {WarningDialog} from "./components/dialogs";
 
@@ -81,7 +80,7 @@ import {setInceptionInjector} from "./inception-injector";
 
 // Import 3rd party modules
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {StorageServiceModule} from "angular-webstorage-service";
+import {StorageServiceModule} from "ngx-webstorage-service";
 
 // Import 3rd party components
 
@@ -268,12 +267,11 @@ export const INCEPTION_DATE_FORMATS = {
 
     // Inception dialogs
     ErrorDialog,
-    ErrorReportDialog,
     InformationDialog,
     WarningDialog
   ],
   entryComponents: [SpinnerComponent],
-  bootstrap: [AdminContainerComponent, ErrorDialog, ErrorReportDialog, InformationDialog, SimpleContainerComponent, WarningDialog]
+  bootstrap: [AdminContainerComponent, ErrorDialog, InformationDialog, SimpleContainerComponent, WarningDialog]
 })
 export class InceptionModule {
 

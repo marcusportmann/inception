@@ -17,8 +17,8 @@
 import {Organization} from "../security/organization";
 
 /**
- * The Session class holds the information for an active user session associated with an
- * authenticated user.
+ * The Session class holds the information for an active user session associated with an authenticated user. All values
+ * are stored as strings to support the serialization of the user session.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ export class Session {
   accessToken: string;
 
   /**
-   * The ISO8601 format string giving the date and time the OAuth2 JWT access token for the user
+   * The string representation of the epoch timestamp giving the date and time the OAuth2 JWT access token for the user
    * session will expire.
    */
   accessTokenExpiry: string;
@@ -72,12 +72,13 @@ export class Session {
    *                                       associated with.
    * @param {string} accessToken           The base-64 encoded OAuth2 JWT access token for the user
    *                                       session.
-   * @param {number} accessTokenExpiry     The ISO8601 format string giving the date and time the
-   *                                       OAuth2 JWT access token for the user session will expire.
+   * @param {number} accessTokenExpiry     The string representation of the epoch timestamp giving the date and time
+   *                                       the OAuth2 JWT access token for the user session will expire.
    * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
    *                                       session.
    */
-  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
+  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[],
+              accessToken: string, accessTokenExpiry: string, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functionCodes = functionCodes;

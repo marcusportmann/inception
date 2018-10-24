@@ -26,38 +26,31 @@ import {ApiError} from "../../errors/api-error";
 export class LoginError extends Error {
 
   /**
-   * The optional error detail.
-   */
-  detail?: string;
-
-  /**
    * Constructs a new LoginError.
    *
-   * @param httpErrorResponse The HTTP error response containing the error information.
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  constructor(httpErrorResponse: HttpErrorResponse) {
-    super(httpErrorResponse.message);
-
-    this.detail = httpErrorResponse.error.error_description;
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
+}
+
+/**
+ * The PasswordExpiredError class holds the information for a password expired error.
+ *
+ * @author Marcus Portmann
+ */
+export class PasswordExpiredError extends Error {
 
   /**
-   * Returns whether the specified HTTP error response is as a result of a login error.
+   * Constructs a new PasswordExpiredError.
    *
-   * @param httpErrorResponse The HTTP error response.
-   *
-   * @return True if the HTTP error response is as a result of a login error or false otherwise.
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  static isLoginError(httpErrorResponse: HttpErrorResponse): boolean {
-    if ((httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status == 0)
-      && httpErrorResponse.error
-      && (httpErrorResponse.error.error)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
 }
 
@@ -88,6 +81,24 @@ export class SessionServiceError extends Error {
 
   /**
    * Constructs a new SessionServiceError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The UserLockedError class holds the information for a user locked error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserLockedError extends Error {
+
+  /**
+   * Constructs a new UserLockedError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

@@ -27,6 +27,7 @@ import {CommunicationError} from "../../errors/communication-error";
 import {ApiError} from "../../errors/api-error";
 import {Router} from "@angular/router";
 import {I18n} from "@ngx-translate/i18n-polyfill";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The SecurityService class provides the Security Service implementation.
@@ -65,10 +66,13 @@ export class SecurityService {
           return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations',
             value: 'Failed to retrieve the organizations.'}), apiError));
         }
-        else {
-          return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations',
-            value: 'Failed to retrieve the organizations.'}), new CommunicationError(httpErrorResponse)));
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
         }
+        else {
+          return throwError(new SystemUnavailableError(this.i18n({id: '@@system_unavailable_error',
+            value: 'An error has occurred and the system is unable to process your request at this time.'}), httpErrorResponse));
+         }
       }));
   }
 }

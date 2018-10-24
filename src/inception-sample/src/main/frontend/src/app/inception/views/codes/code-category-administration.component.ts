@@ -21,6 +21,10 @@ import {Observable} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
 import {catchError, map} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {DialogService} from "../../services/dialog/dialog.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Error} from "../../errors/error";
 
 @Component({
   templateUrl: 'code-category-administration.component.html',
@@ -36,7 +40,7 @@ export class CodeCategoryAdministrationComponent implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
 
-  constructor(private codesService: CodesService)
+  constructor(private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService)
   {
 
   }
@@ -49,16 +53,21 @@ export class CodeCategoryAdministrationComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+
+    this.spinnerService.show();
+
     this.codesService.getCodeCategories().subscribe((codeCategories: CodeCategory[]) => {
+
+      this.spinnerService.hide();
 
       this.dataSource.data = codeCategories;
 
-    }, (error: CodesServiceError) => {
+    }, (error: Error) => {
 
-      console.log('Error: ', error);
+      this.spinnerService.hide();
 
+      this.dialogService.showErrorDialog(error);
     });
-
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

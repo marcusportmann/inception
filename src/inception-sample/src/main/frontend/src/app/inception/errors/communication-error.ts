@@ -45,7 +45,9 @@ export class CommunicationError extends Error {
    * @param httpErrorResponse The HTTP error response containing the error information.
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
-    super("A communication error occurred");
+
+    // TODO: INTERNATIONALIZE THIS MESSAGE -- MARCUS
+    super("A communication error occurred.", httpErrorResponse);
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
