@@ -3,9 +3,9 @@
     <div class="row justify-content-center">
       <form [formGroup]="loginForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
         <mat-card style="min-width: 350px; margin-bottom: 0;">
-          <mat-card-header class="justify-content-center pt-4 pb-0">
+          <div class="d-flex justify-content-center pt-5 pb-3">
             <div class="logo-login"></div>
-          </mat-card-header>
+          </div>
           <mat-card-content>
             <div class="row">
               <div class="col">
@@ -24,7 +24,7 @@
                   <mat-label>Password</mat-label>
                   <input type="password" matInput formControlName="password">
                   <mat-error *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched">
-                    <span *ngIf="loginForm.controls['password'].errors?.required">A password is required.</span>
+                    <span *ngIf="loginForm.controls['password'].errors?.required" i18n="@@login_component_error_a_password_is_required">A password is required.</span>
                   </mat-error>
                 </mat-form-field>
               </div>

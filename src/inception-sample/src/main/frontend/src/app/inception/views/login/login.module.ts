@@ -27,6 +27,7 @@ import {InceptionModule} from "../../inception.module";
 
 // Import Inception components
 import {LoginComponent} from './login.component';
+import {SelectOrganizationComponent} from "./select-organization.component";
 
 const routes: Routes = [
   {
@@ -35,7 +36,15 @@ const routes: Routes = [
     data: {
       title: 'Login'
     }
+  },
+  {
+    path: 'select-organization',
+    component: SelectOrganizationComponent,
+    data: {
+      title: 'Select Organization'
+    }
   }
+
 ];
 
 @NgModule({
@@ -54,7 +63,7 @@ const routes: Routes = [
     ReactiveFormsModule
   ],
   declarations: [
-    LoginComponent
+    LoginComponent, SelectOrganizationComponent
   ]
 })
 export class LoginModule { }

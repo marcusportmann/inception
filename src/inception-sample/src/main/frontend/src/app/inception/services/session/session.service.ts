@@ -85,8 +85,6 @@ export class SessionService {
 
         let accessTokenExpiry: string = helper.getTokenExpirationDate(tokenResponse.access_token).getTime().toString();
 
-        accessTokenExpiry = "0";
-
         let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry, tokenResponse.refresh_token);
 
         this.sessionStorageService.set('session', session);

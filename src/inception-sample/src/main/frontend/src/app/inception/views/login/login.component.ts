@@ -32,7 +32,7 @@ import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Error} from "../../errors/error";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {LoginError} from "../../services/session/session.service.errors";
@@ -53,7 +53,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private securityService: SecurityService, private sessionService: SessionService, private router: Router, private route: ActivatedRoute) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -106,23 +106,32 @@ export class LoginComponent {
 
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
 
-          console.log('session = ', session);
+        this.spinnerService.hide();
 
-          this.securityService.getOrganizations().subscribe(organizations => {
+        if (session.organizations.length == 1) {
+          this.router.navigate(['/']);
+        }
+        else {
+          this.router.navigate(['select-organization'], {relativeTo: this.route});
+        }
 
-            console.log('organizations = ', organizations);
 
-            this.spinnerService.hide();
 
-            this.router.navigate(['/']);
-
-          }, error => {
-
-            this.spinnerService.hide();
-
-            this.dialogService.showErrorDialog(error);
-
-          });
+          // this.securityService.getOrganizations().subscribe(organizations => {
+          //
+          //   console.log('organizations = ', organizations);
+          //
+          //   this.spinnerService.hide();
+          //
+          //   this.router.navigate(['/']);
+          //
+          // }, error => {
+          //
+          //   this.spinnerService.hide();
+          //
+          //   this.dialogService.showErrorDialog(error);
+          //
+          // });
 
         },(error: Error) => {
 

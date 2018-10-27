@@ -41,7 +41,7 @@ import {Session} from "../../services/session/session";
           <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        <li *ngIf="isLoggedIn() | async" class="nav-item" [matMenuTriggerFor]="userMenu">
+        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
             <span class="user-full-name d-md-down-none">{{ userFullName() | async}}</span>
@@ -54,12 +54,14 @@ import {Session} from "../../services/session/session";
           <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </mat-menu>
         
-        <li *ngIf="!(isLoggedIn() | async)" class="nav-item">
-          <a class="nav-link" (click)="login()">
-            <span class="login-icon"></span>
-            <span class="login d-md-down-none">Login</span>
-          </a>
-        </li>
+        <ng-template #login_link> 
+          <li class="nav-item">
+            <a class="nav-link" (click)="login()">
+              <span class="login-icon"></span>
+              <span class="login d-md-down-none">Login</span>
+            </a>
+          </li>
+        </ng-template>
       </ul>
     </header>
   `

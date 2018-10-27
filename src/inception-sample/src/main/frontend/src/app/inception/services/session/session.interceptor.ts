@@ -21,6 +21,7 @@ import {Observable} from "rxjs";
 import {flatMap} from "rxjs/operators";
 
 import {SessionService} from "./session.service";
+import {Session} from "./session";
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
@@ -45,7 +46,7 @@ export class SessionInterceptor implements HttpInterceptor {
     if (!httpRequest.url.endsWith('/oauth/token')) {
 
       let httpRequestHandler = this.sessionService.getSession().pipe(
-        flatMap(session => {
+        flatMap((session: Session) => {
 
           if (session) {
             httpRequest = httpRequest.clone({
