@@ -113,9 +113,8 @@ export class AdminContainerComponent {
 
   ngOnInit() {
 
-    // Retrieve and filter the navigation items
-    this.sessionService.getSession().pipe(map((session: Session) => {
-      this.navItems = this.filterNavigationItems(this.navigationService.getNavigation(), session);
-    })).subscribe();
+    let session: Session = this.sessionService.getSession();
+
+    this.navItems = this.filterNavigationItems(this.navigationService.getNavigation(), session);
   }
 }

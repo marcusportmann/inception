@@ -90,11 +90,9 @@ export class SelectOrganizationComponent implements OnInit{
   private _filterOrganizations(value: string): Observable<Organization[]> {
     const filterValue = value.toLowerCase();
 
-    return this.sessionService.getSession().pipe(
-      map((session: Session) => {
-        return session.organizations.filter(
-          organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
-      })
-    )
+    let session: Session = this.sessionService.getSession();
+
+    return of(session.organizations.filter(
+      organization => organization.name.toLowerCase().indexOf(filterValue) === 0));
   }
 }

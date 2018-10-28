@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {Inject, Injectable, OnInit} from '@angular/core';
+import {interval, Observable, of, throwError, timer} from 'rxjs';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 
 
 import {
@@ -49,6 +49,8 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 @Injectable()
 export class SessionService {
 
+  private _session: Session;
+
   /**
    * Constructs a new SessionService.
    *
@@ -58,10 +60,27 @@ export class SessionService {
    */
   constructor(private httpClient: HttpClient, private i18n: I18n, @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
     console.log('Initializing the Session Service');
+
+    // Start the session refresher
+    timer(0, 5000).pipe(
+      switchMap(_ => this._refreshSession())).subscribe((session: Session) => {
+
+        console.log('Refreshed session: ', session);
+
+    });
   }
 
+  /**
+   * Logon.
+   *
+   * @param {string} username The username.
+   * @param {string} password The password.
+   *
+   * @return {Observable<Session>} The current active session.
+   */
   login(username: string, password: string): Observable<Session> {
 
+    // Remove the existing session
     this.sessionStorageService.remove("session");
 
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
@@ -128,59 +147,11 @@ export class SessionService {
    *
    * @return {Session} The current active session if one exists or null.
    */
-  getSession(): Observable<Session | null> {
+  getSession(): Session {
 
     let session: Session = this.sessionStorageService.get("session");
 
-    // If the access token has expired then obtain a new one using the refresh token
-    if (session) {
-      if (session.accessTokenExpiry) {
-        if (Date.now() > parseInt(session.accessTokenExpiry)) {
-
-            this.sessionStorageService.remove("session");
-
-            if (session.refreshToken) {
-
-              let body = new HttpParams()
-                .set('grant_type', 'refresh_token')
-                .set('refresh_token', session.refreshToken)
-                .set('scope', 'inception-sample')
-                .set('client_id', 'inception-sample');
-              ;
-
-              let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
-
-              return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-                map((tokenResponse: TokenResponse) => {
-
-                  const helper = new JwtHelperService();
-
-                  const token: any = helper.decodeToken(tokenResponse.access_token);
-
-                  const accessTokenExpiry: string = helper.getTokenExpirationDate(tokenResponse.access_token).getTime().toString();
-
-                  let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry, tokenResponse.refresh_token);
-
-                  this.sessionStorageService.set('session', session);
-
-                  return session;
-
-                }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
-                  return throwError(new SessionServiceError(this.i18n({id: '@@session_service_failed_to_refresh_the_user_session',
-                    value: 'Failed to refresh the user session.'}), httpErrorResponse));
-
-                }));
-            }
-        }
-        else {
-
-          return of(session);
-        }
-      }
-    }
-
-    return of(null);
+    return session;
   }
 
   /**
@@ -188,5 +159,59 @@ export class SessionService {
    */
   logout() {
     this.sessionStorageService.remove("session");
+  }
+
+  private _refreshSession(): Observable<Session |  null> {
+
+    let session: Session = this.sessionStorageService.get("session");
+
+    // If the access token has expired then obtain a new one using the refresh token if it exists
+    if (session) {
+      if (session.accessTokenExpiry) {
+        if (Date.now() > parseInt(session.accessTokenExpiry)) {
+
+          this.sessionStorageService.remove("session");
+
+          session = null;
+
+          if (session.refreshToken) {
+
+            let body = new HttpParams()
+              .set('grant_type', 'refresh_token')
+              .set('refresh_token', session.refreshToken)
+              .set('scope', 'inception-sample')
+              .set('client_id', 'inception-sample');
+
+            let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+            return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
+              map((tokenResponse: TokenResponse) => {
+
+                const helper = new JwtHelperService();
+
+                const token: any = helper.decodeToken(tokenResponse.access_token);
+
+                const accessTokenExpiry: string = helper.getTokenExpirationDate(tokenResponse.access_token).getTime().toString();
+
+                session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry, tokenResponse.refresh_token);
+
+                if (session) {
+                   this.sessionStorageService.set('session', session);
+                }
+
+                return session;
+
+              }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+                return throwError(new SessionServiceError(this.i18n({id: '@@session_service_failed_to_refresh_the_user_session',
+                  value: 'Failed to refresh the user session.'}), httpErrorResponse));
+
+              }));
+          }
+        }
+      }
+    }
+
+    return of(session);
   }
 }
