@@ -126,7 +126,8 @@ public interface ICodeProvider
    *
    * @return the codes for the code category
    */
-  List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String, String> parameters)
+  List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String,
+      String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**

@@ -39,47 +39,49 @@ export class CanActivateFunctionGuard implements CanActivate {
   constructor(private sessionService: SessionService, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    return this.sessionService.session.pipe(
+      map((session: Session) => {
 
-    let session: Session = this.sessionService.getSession();
+        if (route) {
+          if (route.data) {
+            if (route.data.functionCodes) {
 
-    if (route) {
-      if (route.data) {
-        if (route.data.functionCodes) {
+              // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
 
-          // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
-
-          if (session) {
-            for (var i = 0; i < route.data.functionCodes.length; i++) {
-              for (var j = 0; j < session.functionCodes.length; j++) {
-                if (route.data.functionCodes[i] == session.functionCodes[j]) {
-                  return true;
+              if (session) {
+                for (var i = 0; i < route.data.functionCodes.length; i++) {
+                  for (var j = 0; j < session.functionCodes.length; j++) {
+                    if (route.data.functionCodes[i] == session.functionCodes[j]) {
+                      return true;
+                    }
+                  }
                 }
+
+                this.router.navigate(['/login']);
+
+                return false;
+              }
+              else {
+                this.router.navigate(['/login']);
+
+                return false;
               }
             }
-
-            this.router.navigate(['/login']);
-
-            return false;
+            else {
+              return true;
+            }
           }
           else {
-            this.router.navigate(['/login']);
-
-            return false;
+            return true;
           }
         }
         else {
-          return true;
-        }
-      }
-      else {
-        return true;
-      }
-    }
-    else {
-      this.router.navigate(['/login']);
+          this.router.navigate(['/login']);
 
-      return false;
-    }
+          return false;
+        }
+      })
+    );
   }
 }

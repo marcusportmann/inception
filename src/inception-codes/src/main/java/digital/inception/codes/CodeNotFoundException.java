@@ -56,6 +56,7 @@ public class CodeNotFoundException extends ServiceException
    */
   public CodeNotFoundException(UUID codeCategoryId, String codeId)
   {
-    super("The code with ID (" + codeId + ") for the code category wih ID (" + codeCategoryId + ") could not be found");
+    super("The code with ID (" + codeId + ") for the code category wih ID (" + codeCategoryId
+        + ") could not be found");
   }
 }

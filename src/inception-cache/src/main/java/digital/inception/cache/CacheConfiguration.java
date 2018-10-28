@@ -128,16 +128,19 @@ public class CacheConfiguration
     {
       MapConfig mapConfig = config.getMapConfig(cacheConfig.getName());
 
-      mapConfig.setInMemoryFormat(Enum.valueOf(InMemoryFormat.class, cacheConfig.getInMemoryFormat()));
+      mapConfig.setInMemoryFormat(Enum.valueOf(InMemoryFormat.class,
+          cacheConfig.getInMemoryFormat()));
 
-      mapConfig.setEvictionPolicy(Enum.valueOf(EvictionPolicy.class, cacheConfig.getEvictionPolicy()));
+      mapConfig.setEvictionPolicy(Enum.valueOf(EvictionPolicy.class,
+          cacheConfig.getEvictionPolicy()));
 
       mapConfig.setStatisticsEnabled(cacheConfig.getStatisticsEnabled());
 
       mapConfig.setMaxIdleSeconds(cacheConfig.getMaxIdleSeconds());
 
       MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
-      maxSizeConfig.setMaxSizePolicy(Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class, cacheConfig.getMaxSizePolicy()));
+      maxSizeConfig.setMaxSizePolicy(Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class,
+          cacheConfig.getMaxSizePolicy()));
       maxSizeConfig.setSize(cacheConfig.getMaxSize());
 
       mapConfig.setMaxSizeConfig(maxSizeConfig);

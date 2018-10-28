@@ -27,7 +27,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
-import {catchError, map} from "rxjs/operators";
+import {catchError, map, first} from "rxjs/operators";
 import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
@@ -104,7 +104,8 @@ export class LoginComponent {
 
       this.spinnerService.show();
 
-      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
+      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
+        first()).subscribe(session => {
 
         this.spinnerService.hide();
 

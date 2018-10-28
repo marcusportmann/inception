@@ -45,17 +45,21 @@ export class SessionInterceptor implements HttpInterceptor {
 
     if (!httpRequest.url.endsWith('/oauth/token')) {
 
-      let session: Session = this.sessionService.getSession();
+      let httpRequestHandler = this.sessionService.session.pipe(
+        flatMap(session => {
 
-      if (session) {
-        httpRequest = httpRequest.clone({
-          setHeaders: {
-            Authorization: `Bearer ${session.accessToken}`
+          if (session) {
+            httpRequest = httpRequest.clone({
+              setHeaders: {
+                Authorization: `Bearer ${session.accessToken}`
+              }
+            });
           }
-        });
-      }
 
-      return nextHttpHandler.handle(httpRequest);
+          return nextHttpHandler.handle(httpRequest);
+        }));
+
+      return httpRequestHandler;
     }
     else {
       return nextHttpHandler.handle(httpRequest);

@@ -50,7 +50,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "updated" })
 @XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
-@XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital", propOrder = { "id", "name", "updated" })
+@XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital",
+    propOrder = { "id", "name", "updated" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CodeCategory
   implements Serializable
@@ -60,7 +61,8 @@ public class CodeCategory
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify "
+    + "the code category",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)

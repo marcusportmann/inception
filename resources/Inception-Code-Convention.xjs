@@ -10580,7 +10580,7 @@
     <object class="jindent.settings.NumberSetting">
      <string>java.maxLineLength</string>
      <void property="value">
-      <int>120</int>
+      <int>100</int>
      </void>
     </object>
    </void>

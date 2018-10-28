@@ -57,8 +57,8 @@ public class Code
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
    * is associated with.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category the "
-      + "code is associated with",
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify "
+      + "the code category the code is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)

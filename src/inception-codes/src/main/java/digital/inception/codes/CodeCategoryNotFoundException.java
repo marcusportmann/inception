@@ -40,7 +40,8 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The code category could not be found")
-@WebFault(name = "CodeCategoryNotFoundException", targetNamespace = "http://codes.inception.digital",
+@WebFault(name = "CodeCategoryNotFoundException",
+    targetNamespace = "http://codes.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class CodeCategoryNotFoundException extends ServiceException

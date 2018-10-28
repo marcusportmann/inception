@@ -45,10 +45,9 @@ export class Session {
   accessToken: string;
 
   /**
-   * The string representation of the epoch timestamp giving the date and time the OAuth2 JWT access token for the user
-   * session will expire.
+   * The date and time the OAuth2 JWT access token for the user session will expire.
    */
-  accessTokenExpiry: string;
+  accessTokenExpiry: Date;
 
   /**
    * The base-64 encoded OAuth2 refresh token for the user session.
@@ -78,7 +77,7 @@ export class Session {
    *                                       session.
    */
   constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[],
-              accessToken: string, accessTokenExpiry: string, refreshToken: string) {
+              accessToken: string, accessTokenExpiry: Date, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functionCodes = functionCodes;

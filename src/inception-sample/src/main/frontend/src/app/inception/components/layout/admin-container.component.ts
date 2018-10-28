@@ -6,7 +6,7 @@ import {Session} from "../../services/session/session";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
 
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 
 import {map} from "rxjs/operators";
 
@@ -29,7 +29,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-header>
     <div class="admin-body">
       <sidebar [fixed]="true" [display]="'lg'">
-        <sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
+        <sidebar-nav [navItems]="navItems | async" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
       <!-- Main content -->
@@ -47,7 +47,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 export class AdminContainerComponent {
 
-  navItems: NavigationItem[] = [];
+  navItems: BehaviorSubject<NavigationItem[]> = new BehaviorSubject([]);
 
   sidebarMinimized = true;
 
@@ -112,9 +112,10 @@ export class AdminContainerComponent {
   }
 
   ngOnInit() {
-
-    let session: Session = this.sessionService.getSession();
-
-    this.navItems = this.filterNavigationItems(this.navigationService.getNavigation(), session);
+    this.sessionService.session.pipe(
+      map((session: Session) => {
+        this.navItems.next(this.filterNavigationItems(this.navigationService.getNavigation(), session));
+      })
+    ).subscribe();
   }
 }

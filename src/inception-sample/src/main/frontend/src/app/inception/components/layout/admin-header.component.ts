@@ -41,10 +41,10 @@ import {Session} from "../../services/session/session";
           <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        <li *ngIf="isLoggedIn(); else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
+        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-full-name d-md-down-none">{{ userFullName() }}</span>
+            <span class="user-full-name d-md-down-none">{{ userFullName() | async }}</span>
           </a>
         </li>
 
@@ -107,9 +107,12 @@ export class AdminHeaderComponent implements OnInit {
     return breakpoint ? breakpoint : '';
   }
 
-  isLoggedIn(): boolean {
-
-    return this.sessionService.getSession() != null;
+  isLoggedIn(): Observable<boolean> {
+    return this.sessionService.session.pipe(
+      map((session: Session) => {
+        return (session != null);
+      })
+    );
   }
 
   login() {
@@ -122,15 +125,16 @@ export class AdminHeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  userFullName(): string {
-
-    let session: Session = this.sessionService.getSession();
-
-    if (session) {
-      return session.username;
-    }
-    else {
-      return '';
-    }
+  userFullName(): Observable<string> {
+    return this.sessionService.session.pipe(
+      map((session: Session) => {
+        if (session) {
+          return session.username;
+        }
+        else {
+          return '';
+        }
+      })
+    );
   }
 }

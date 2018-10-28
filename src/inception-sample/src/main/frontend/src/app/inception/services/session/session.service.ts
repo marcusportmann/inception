@@ -15,8 +15,8 @@
  */
 
 import {Inject, Injectable, OnInit} from '@angular/core';
-import {interval, Observable, of, throwError, timer} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {BehaviorSubject, interval, Observable, of, throwError, timer} from 'rxjs';
+import {catchError, flatMap, map, startWith, switchMap} from 'rxjs/operators';
 
 
 import {
@@ -33,8 +33,7 @@ import {
   SessionServiceError,
   UserLockedError
 } from "./session.service.errors";
-import { JwtHelperService } from '@auth0/angular-jwt';
-
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 
 import {CommunicationError} from "../../errors/communication-error";
@@ -49,7 +48,16 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 @Injectable()
 export class SessionService {
 
-  private _session: Session;
+  private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+
+  /**
+   * Returns the current active session if one exists.
+   *
+   * @return {Session} The current active session if one exists or null.
+   */
+  get session(): Observable<Session> {
+    return this._session;
+  }
 
   /**
    * Constructs a new SessionService.
@@ -58,15 +66,13 @@ export class SessionService {
    * @param {I18n} i18n                        The internationalisation service.
    * @param {WebStorageService} sessionStorage The session storage service.
    */
-  constructor(private httpClient: HttpClient, private i18n: I18n, @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
+  constructor(private httpClient: HttpClient, private i18n: I18n,
+              @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
     console.log('Initializing the Session Service');
 
     // Start the session refresher
     timer(0, 5000).pipe(
       switchMap(_ => this._refreshSession())).subscribe((session: Session) => {
-
-        console.log('Refreshed session: ', session);
-
     });
   }
 
@@ -80,8 +86,8 @@ export class SessionService {
    */
   login(username: string, password: string): Observable<Session> {
 
-    // Remove the existing session
-    this.sessionStorageService.remove("session");
+    // Remove the existing session if it exists
+    //this.sessionStorageService.remove("session");
 
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
@@ -94,124 +100,143 @@ export class SessionService {
 
     let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options)
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
+      body.toString(), options)
       .pipe(
-      map((tokenResponse: TokenResponse) => {
+        flatMap((tokenResponse: TokenResponse) => {
 
-        const helper = new JwtHelperService();
+          const helper = new JwtHelperService();
 
-        const token: any = helper.decodeToken(tokenResponse.access_token);
+          const token: any = helper.decodeToken(tokenResponse.access_token);
 
-        let accessTokenExpiry: string = helper.getTokenExpirationDate(tokenResponse.access_token).getTime().toString();
+          let accessTokenExpiry: Date = helper.getTokenExpirationDate(
+            tokenResponse.access_token);
 
-        let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry, tokenResponse.refresh_token);
+          let session: Session = new Session(token.user_name, token.scope, token.authorities,
+            token.organizations, tokenResponse.access_token, accessTokenExpiry,
+            tokenResponse.refresh_token);
 
-        this.sessionStorageService.set('session', session);
+          this._session.next(session);
 
-        return session;
+          //this.sessionStorageService.set('session', session);
 
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+          return this._session;
 
-        if (httpErrorResponse.status == 400) {
+        }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-          if (httpErrorResponse.error && (httpErrorResponse.error.error == 'invalid_grant') && httpErrorResponse.error.error_description) {
-            if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
-              return throwError(new LoginError(this.i18n({id: '@@session_service_incorrect_username_or_password',
-                value: 'Incorrect username or password.'}), httpErrorResponse));
+          if (httpErrorResponse.status == 400) {
+
+            if (httpErrorResponse.error && (httpErrorResponse.error.error == 'invalid_grant') && httpErrorResponse.error.error_description) {
+              if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+                return throwError(new LoginError(this.i18n({
+                  id: '@@session_service_incorrect_username_or_password',
+                  value: 'Incorrect username or password.'
+                }), httpErrorResponse));
+              }
+              else if (httpErrorResponse.error.error_description.includes('User locked')) {
+                return throwError(new UserLockedError(this.i18n({
+                  id: '@@session_service_the_user_is_locked',
+                  value: 'The user is locked.'
+                }), httpErrorResponse));
+              }
+              else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+                return throwError(new PasswordExpiredError(this.i18n({
+                  id: '@@session_service_the_password_has_expired',
+                  value: 'The password has expired.'
+                }), httpErrorResponse));
+              }
             }
-            else if (httpErrorResponse.error.error_description.includes('User locked')) {
-              return throwError(new UserLockedError(this.i18n({id: '@@session_service_the_user_is_locked',
-                value: 'The user is locked.'}), httpErrorResponse));
-            }
-            else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
-              return throwError(new PasswordExpiredError(this.i18n({id: '@@session_service_the_password_has_expired',
-                value: 'The password has expired.'}), httpErrorResponse));
-            }
+
+            return throwError(new LoginError(this.i18n({
+              id: '@@session_service_incorrect_username_or_password',
+              value: 'Incorrect username or password.'
+            }), httpErrorResponse));
           }
-
-          return throwError(new LoginError(this.i18n({id: '@@session_service_incorrect_username_or_password',
-            value: 'Incorrect username or password.'}), httpErrorResponse));
-        }
-        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        }
-        else {
-          return throwError(new SystemUnavailableError(this.i18n({id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'}), httpErrorResponse));
-        }
-      }));
-  }
-
-  /**
-   * Returns the current active session if one exists.
-   *
-   * @return {Session} The current active session if one exists or null.
-   */
-  getSession(): Session {
-
-    let session: Session = this.sessionStorageService.get("session");
-
-    return session;
+          else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+            return throwError(new CommunicationError(httpErrorResponse));
+          }
+          else {
+            return throwError(new SystemUnavailableError(this.i18n({
+              id: '@@system_unavailable_error',
+              value: 'An error has occurred and the system is unable to process your request at this time.'
+            }), httpErrorResponse));
+          }
+        }));
   }
 
   /**
    * Logout the current active session if one exists.
    */
   logout() {
-    this.sessionStorageService.remove("session");
+    this._session.next(null);
   }
 
-  private _refreshSession(): Observable<Session |  null> {
+  private _refreshSession(): Observable<Session | null> {
 
-    let session: Session = this.sessionStorageService.get("session");
 
-    // If the access token has expired then obtain a new one using the refresh token if it exists
-    if (session) {
-      if (session.accessTokenExpiry) {
-        if (Date.now() > parseInt(session.accessTokenExpiry)) {
+    return of(null);
 
-          this.sessionStorageService.remove("session");
 
-          session = null;
 
-          if (session.refreshToken) {
 
-            let body = new HttpParams()
-              .set('grant_type', 'refresh_token')
-              .set('refresh_token', session.refreshToken)
-              .set('scope', 'inception-sample')
-              .set('client_id', 'inception-sample');
-
-            let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
-
-            return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-              map((tokenResponse: TokenResponse) => {
-
-                const helper = new JwtHelperService();
-
-                const token: any = helper.decodeToken(tokenResponse.access_token);
-
-                const accessTokenExpiry: string = helper.getTokenExpirationDate(tokenResponse.access_token).getTime().toString();
-
-                session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry, tokenResponse.refresh_token);
-
-                if (session) {
-                   this.sessionStorageService.set('session', session);
-                }
-
-                return session;
-
-              }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
-                return throwError(new SessionServiceError(this.i18n({id: '@@session_service_failed_to_refresh_the_user_session',
-                  value: 'Failed to refresh the user session.'}), httpErrorResponse));
-
-              }));
-          }
-        }
-      }
-    }
-
-    return of(session);
+    // let session: Session = this.sessionStorageService.get("session");
+    //
+    // /*
+    //  * If the access token will expire with 60 seconds then obtain a new one using the refresh token
+    //  * if it exists.
+    //  */
+    // if (session) {
+    //   if (session.accessTokenExpiry && session.refreshToken) {
+    //     if (Date.now() > (parseInt(session.accessTokenExpiry) - 60000)) {
+    //
+    //       //this.sessionStorageService.remove("session");
+    //
+    //       //session = null;
+    //
+    //       // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
+    //
+    //       let body = new HttpParams()
+    //         .set('grant_type', 'refresh_token')
+    //         .set('refresh_token', session.refreshToken)
+    //         .set('scope', 'inception-sample')
+    //         .set('client_id', 'inception-sample');
+    //
+    //       let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+    //
+    //       return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
+    //         body.toString(), options).pipe(
+    //         map((tokenResponse: TokenResponse) => {
+    //
+    //           const helper = new JwtHelperService();
+    //
+    //           const token: any = helper.decodeToken(tokenResponse.access_token);
+    //
+    //           const accessTokenExpiry: Date = helper.getTokenExpirationDate(
+    //             tokenResponse.access_token);
+    //
+    //           session = new Session(token.user_name, token.scope, token.authorities,
+    //             token.organizations, tokenResponse.access_token, accessTokenExpiry,
+    //             tokenResponse.refresh_token);
+    //
+    //           console.log('Saving refreshed session: ', session);
+    //
+    //           this.sessionStorageService.set('session', session);
+    //
+    //           return session;
+    //
+    //         }), catchError((httpErrorResponse: HttpErrorResponse) => {
+    //
+    // DONT THROW SET THE SESSION TO NULL IF REFRESH FAILS?????
+    //           return throwError(new SessionServiceError(this.i18n({
+    //             id: '@@session_service_failed_to_refresh_the_user_session',
+    //             value: 'Failed to refresh the user session.'
+    //           }), httpErrorResponse));
+    //
+    //         }));
+    //     }
+    //   }
+    // }
+    //
+    // return of(session);
   }
 }

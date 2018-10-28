@@ -40,8 +40,10 @@ import javax.xml.ws.WebFault;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "A code category with the specified ID already exists")
-@WebFault(name = "DuplicateCodeCategoryException", targetNamespace = "http://codes.inception.digital",
+@ResponseStatus(value = HttpStatus.CONFLICT,
+    reason = "A code category with the specified ID already exists")
+@WebFault(name = "DuplicateCodeCategoryException",
+    targetNamespace = "http://codes.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class DuplicateCodeCategoryException extends ServiceException
