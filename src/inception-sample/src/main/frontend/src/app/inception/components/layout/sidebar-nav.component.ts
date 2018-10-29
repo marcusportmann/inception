@@ -15,10 +15,11 @@
  */
 
 import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   HostBinding,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Renderer2,
 } from '@angular/core';
@@ -28,7 +29,7 @@ import {Replace} from '../../shared/index';
   selector: 'sidebar-nav',
   template: `
     <ul class="nav">
-      <ng-template ngFor let-navitem [ngForOf]="navItems">
+      <ng-template ngFor let-navitem [ngForOf]="navItems | async">
         <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
         <ng-template [ngIf]="isTitle(navitem)">
           <sidebar-nav-title [title]='navitem'></sidebar-nav-title>
@@ -37,15 +38,16 @@ import {Replace} from '../../shared/index';
           <sidebar-nav-item [item]='navitem'></sidebar-nav-item>
         </ng-template>
       </ng-template>
-    </ul>`
+    </ul>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarNavComponent {
-  @Input() navItems: NavigationItem[];
+export class SidebarNavComponent implements OnInit, OnDestroy {
+  @Input() navItems: Observable<NavigationItem[]>;
 
   @HostBinding('class.sidebar-nav') true;
   @HostBinding('attr.role') role = 'nav';
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
   }
 
   isDivider(item): boolean {
@@ -55,6 +57,28 @@ export class SidebarNavComponent {
   isTitle(item): boolean {
     return item.title ? true : false;
   }
+
+  subscription: Subscription;
+
+  ngOnInit() {
+    if (this.navItems) {
+      this.subscription = this.navItems.subscribe((navigationItems: NavigationItem[]) =>
+      {
+        console.log('Detected navigation item changes');
+        //this.changeDetectorRef.detectChanges();
+        //this.changeDetectorRef.markForCheck();
+        //this.changeDetectorRef.detach();
+        //this.changeDetectorRef.reattach();
+
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
 
 import {Router} from '@angular/router';
@@ -62,6 +86,7 @@ import {NavigationService} from "../../services/navigation/navigation.service";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
 import {Session} from "../../services/session/session";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'sidebar-nav-item',

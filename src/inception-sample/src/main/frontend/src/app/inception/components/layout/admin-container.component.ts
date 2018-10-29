@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
@@ -6,7 +6,7 @@ import {Session} from "../../services/session/session";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
 
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
 
 import {map} from "rxjs/operators";
 
@@ -29,7 +29,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-header>
     <div class="admin-body">
       <sidebar [fixed]="true" [display]="'lg'">
-        <sidebar-nav [navItems]="navItems | async" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
+        <sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
       <!-- Main content -->
@@ -45,9 +45,9 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-footer>
   `
 })
-export class AdminContainerComponent {
+export class AdminContainerComponent implements OnInit, OnDestroy{
 
-  navItems: BehaviorSubject<NavigationItem[]> = new BehaviorSubject([]);
+  navItems: Observable<NavigationItem[]>;
 
   sidebarMinimized = true;
 
@@ -111,11 +111,31 @@ export class AdminContainerComponent {
     return filteredNavigationItems;
   }
 
+  subscription: Subscription;
+
   ngOnInit() {
-    this.sessionService.session.pipe(
+    // Filter the navigation items according to the current active session
+    this.navItems = this.sessionService.session.pipe(
       map((session: Session) => {
-        this.navItems.next(this.filterNavigationItems(this.navigationService.getNavigation(), session));
+        return this.filterNavigationItems(this.navigationService.getNavigation(), session);
       })
-    ).subscribe();
+    );
+
+    // this.subscription = this.navItems.subscribe((navigationItems: NavigationItem[]) => {
+    //
+    //   console.log('Detecting changes...');
+    //
+    //   this.changeDetectorRef.markForCheck();
+    //
+    //   //this.changeDetectorRef.detectChanges();
+    //
+    // });
+  }
+
+  ngOnDestroy() {
+    // if (this.subscription) {
+    //   this.subscription.unsubscribe();
+    // }
+
   }
 }
