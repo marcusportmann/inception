@@ -47,7 +47,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 export class AdminContainerComponent implements OnInit, OnDestroy{
 
-  navItems: Observable<NavigationItem[]>;
+  navItems: NavigationItem[] = [];
 
   sidebarMinimized = true;
 
@@ -113,13 +113,46 @@ export class AdminContainerComponent implements OnInit, OnDestroy{
 
   subscription: Subscription;
 
+  xxx: number;
+
   ngOnInit() {
-    // Filter the navigation items according to the current active session
-    this.navItems = this.sessionService.session.pipe(
+
+    this.xxx = Date.now();
+
+    console.log('Initializing this.xxx = ', this.xxx);
+
+    this.subscription = this.sessionService.session.pipe(
       map((session: Session) => {
-        return this.filterNavigationItems(this.navigationService.getNavigation(), session);
+
+
+
+        console.log('Session changed this.xxx = ', this.xxx);
+
+
+        let filteredNavigationItems: NavigationItem[] = this.filterNavigationItems(this.navigationService.getNavigation(), session);
+
+        this.navItems.length = 0;
+
+
+        for (var i = 0; i < this.filterNavigationItems.length; i++) {
+          this.navItems.push(this.filterNavigationItems[i]);
+        }
+
+
+        console.log('this.navItems = ', this.navItems);
+
+
       })
-    );
+    ).subscribe();
+
+
+
+    // // Filter the navigation items according to the current active session
+    // this.navItems = this.sessionService.session.pipe(
+    //   map((session: Session) => {
+    //     return this.filterNavigationItems(this.navigationService.getNavigation(), session);
+    //   })
+    // );
 
     // this.subscription = this.navItems.subscribe((navigationItems: NavigationItem[]) => {
     //
@@ -133,9 +166,9 @@ export class AdminContainerComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    // if (this.subscription) {
-    //   this.subscription.unsubscribe();
-    // }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
 
   }
 }

@@ -29,7 +29,7 @@ import {Replace} from '../../shared/index';
   selector: 'sidebar-nav',
   template: `
     <ul class="nav">
-      <ng-template ngFor let-navitem [ngForOf]="navItems | async">
+      <ng-container *ngFor="let navitem of navItems">
         <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
         <ng-template [ngIf]="isTitle(navitem)">
           <sidebar-nav-title [title]='navitem'></sidebar-nav-title>
@@ -37,47 +37,30 @@ import {Replace} from '../../shared/index';
         <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
           <sidebar-nav-item [item]='navitem'></sidebar-nav-item>
         </ng-template>
-      </ng-template>
-    </ul>`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+      </ng-container>
+    </ul>`
 })
-export class SidebarNavComponent implements OnInit, OnDestroy {
-  @Input() navItems: Observable<NavigationItem[]>;
+export class SidebarNavComponent {
+  @Input() navItems: NavigationItem;
 
   @HostBinding('class.sidebar-nav') true;
   @HostBinding('attr.role') role = 'nav';
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor() {
   }
 
   isDivider(item): boolean {
+
+    console.log('isDivider item = ', item);
+
     return item.divider ? true : false;
   }
 
   isTitle(item): boolean {
+
+
+
     return item.title ? true : false;
-  }
-
-  subscription: Subscription;
-
-  ngOnInit() {
-    if (this.navItems) {
-      this.subscription = this.navItems.subscribe((navigationItems: NavigationItem[]) =>
-      {
-        console.log('Detected navigation item changes');
-        //this.changeDetectorRef.detectChanges();
-        //this.changeDetectorRef.markForCheck();
-        //this.changeDetectorRef.detach();
-        //this.changeDetectorRef.reattach();
-
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }
 
