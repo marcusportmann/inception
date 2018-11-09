@@ -182,21 +182,28 @@
     @if $enable-sidebar-nav-rounded {
       border-radius: $border-radius;
     }
-    > .nav-dropdown-items {
-      max-height: 1500px;
-    }
 
-    .nav-link {
-      color: $sidebar-nav-dropdown-color;
-      border-left: 0;
-    }
+    > sidebar-nav-dropdown {
+      > .nav-dropdown-items
+      {
+        max-height: 1500px;
+      }
 
-    > .nav-dropdown-toggle::before {
-      transform: rotate(-90deg);
-    }
+      .nav-link
+      {
+        color: $sidebar-nav-dropdown-color;
+        border-left: 0;
+      }
 
-    .nav-dropdown.open {
-      border-left: 0;
+      > .nav-dropdown-toggle::before
+      {
+        transform: rotate(-90deg);
+      }
+
+      .nav-dropdown.open
+      {
+        border-left: 0;
+      }
     }
   }
 
@@ -400,6 +407,7 @@
       }
 
       .nav-dropdown-items {
+
         .nav-item {
           width: $sidebar-width;
 
@@ -409,21 +417,35 @@
         }
       }
 
-      .nav > .nav-dropdown {
-        > .nav-dropdown-items {
-          display: none;
-          max-height: 1000px;
-          background: $sidebar-bg;
-        }
+      .nav > sidebar-nav-item > .nav-dropdown {
 
-        &:hover {
-          background: $sidebar-nav-link-hover-bg;
-          > .nav-dropdown-items {
-            position: absolute;
-            left: $sidebar-minimized-width;
-            display: inline;
+
+
+        > sidebar-nav-dropdown
+        {
+          > .nav-dropdown-items
+          {
+            display: none;
+            max-height: 1000px;
+            background: $sidebar-bg;
           }
         }
+
+          &:hover
+          {
+            background: $sidebar-nav-link-hover-bg;
+
+            > sidebar-nav-dropdown {
+
+              > .nav-dropdown-items
+              {
+                position: absolute;
+                left: $sidebar-minimized-width;
+                display: inline;
+              }
+            }
+          }
+
       }
     }
   }
@@ -468,9 +490,11 @@
         }
       }
       .nav-dropdown:hover {
-        > .nav-dropdown-items {
-          right: $sidebar-minimized-width;
-          left: 0;
+        > sidebar-nav-dropdown {
+          > .nav-dropdown-items {
+            right: $sidebar-minimized-width;
+            left: 0;
+          }
         }
       }
     }

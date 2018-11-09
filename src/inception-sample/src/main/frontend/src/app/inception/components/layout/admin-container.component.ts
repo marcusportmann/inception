@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input, NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Router} from "@angular/router";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
@@ -9,6 +17,7 @@ import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
 import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
 
 import {map} from "rxjs/operators";
+import {SidebarNavComponent} from "./sidebar-nav.component";
 
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -29,7 +38,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-header>
     <div class="admin-body">
       <sidebar [fixed]="true" [display]="'lg'">
-        <sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
+        <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
       <!-- Main content -->
@@ -47,128 +56,25 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 export class AdminContainerComponent implements OnInit, OnDestroy{
 
-  navItems: NavigationItem[] = [];
+  element: HTMLElement = document.body;
 
   sidebarMinimized = true;
 
-  private changes: MutationObserver;
+  private _changes: MutationObserver;
 
-  public element: HTMLElement = document.body;
-
-  constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService) {
-
-    this.changes = new MutationObserver((mutations) => {
+  constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService, private changeDetectorRef: ChangeDetectorRef, private zone: NgZone) {
+    this._changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized')
     });
 
-    this.changes.observe(<Element>this.element, {
+    this._changes.observe(<Element>this.element, {
       attributes: true
     });
   }
 
-  filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
-
-    if (!navigationItems) {
-      return navigationItems;
-    }
-
-    var filteredNavigationItems: NavigationItem[] = [];
-
-    for (var i = 0; i < navigationItems.length; i++) {
-
-      var navigationItem: NavigationItem = navigationItems[i];
-
-      var functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
-
-      if (functionCodes.length > 0) {
-
-        if (session) {
-
-          for (var j = 0; j < functionCodes.length; j++) {
-            for (var k = 0; k < session.functionCodes.length; k++) {
-              if (functionCodes[j] == session.functionCodes[k]) {
-
-                var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
-
-                filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-                  navigationItem.badge, navigationItem.divider, navigationItem.title));
-              }
-            }
-          }
-        }
-      }
-      else {
-
-        var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
-
-        filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-          navigationItem.badge, navigationItem.divider, navigationItem.title));
-      }
-    }
-
-    return filteredNavigationItems;
-  }
-
-  subscription: Subscription;
-
-  xxx: number;
-
   ngOnInit() {
-
-    this.xxx = Date.now();
-
-    console.log('Initializing this.xxx = ', this.xxx);
-
-    this.subscription = this.sessionService.session.pipe(
-      map((session: Session) => {
-
-
-
-        console.log('Session changed this.xxx = ', this.xxx);
-
-
-        let filteredNavigationItems: NavigationItem[] = this.filterNavigationItems(this.navigationService.getNavigation(), session);
-
-        this.navItems.length = 0;
-
-
-        for (var i = 0; i < this.filterNavigationItems.length; i++) {
-          this.navItems.push(this.filterNavigationItems[i]);
-        }
-
-
-        console.log('this.navItems = ', this.navItems);
-
-
-      })
-    ).subscribe();
-
-
-
-    // // Filter the navigation items according to the current active session
-    // this.navItems = this.sessionService.session.pipe(
-    //   map((session: Session) => {
-    //     return this.filterNavigationItems(this.navigationService.getNavigation(), session);
-    //   })
-    // );
-
-    // this.subscription = this.navItems.subscribe((navigationItems: NavigationItem[]) => {
-    //
-    //   console.log('Detecting changes...');
-    //
-    //   this.changeDetectorRef.markForCheck();
-    //
-    //   //this.changeDetectorRef.detectChanges();
-    //
-    // });
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-
   }
 }

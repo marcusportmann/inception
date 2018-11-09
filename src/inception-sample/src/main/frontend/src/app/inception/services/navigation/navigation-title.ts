@@ -30,6 +30,6 @@ export class NavigationTitle extends NavigationItem {
    * @param {string} name The name of navigation title.
    */
   constructor(name: string) {
-    super(null, name, null, [], null, null, null, false, true);
+    super(null, name, null, [], null, null, null, null, false, true);
   }
 }
