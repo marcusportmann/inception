@@ -87,7 +87,7 @@ INSERT INTO sample.data (id, name, string_value) VALUES (7, 'Sample Name 7', 'Sa
 INSERT INTO sample.data (id, name, string_value) VALUES (8, 'Sample Name 8', 'Sample Value 8');
 INSERT INTO sample.data (id, name, string_value) VALUES (9, 'Sample Name 9', 'Sample Value 9');
 
-INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Category', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category', NOW(), '<codes><code name="name1" value="value1"/></codes>');
 
 INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID1', '54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 1', 'Test Code Value 1');
 INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID2', '54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 2', 'Test Code Value 2');
