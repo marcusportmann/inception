@@ -10,6 +10,29 @@
 
   <packaging>pom</packaging>
 
+  <repositories>
+    <repository>
+      <id>apache-snapshots</id>
+      <name>Apache SNAPSHOT Repository</name>
+      <url>http://repository.apache.org/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>apache-snapshots</id>
+      <name>Apache SNAPSHOT Repository</name>
+      <url>http://repository.apache.org/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+
   <!--
   <repositories>
     <repository> 
@@ -42,34 +65,23 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.4.RELEASE</version>
+    <version>2.1.0.RELEASE</version>
   </parent>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.10</java.version>
+    <java.version>1.11</java.version>
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
     <apache-avro.version>1.8.2</apache-avro.version>
-    <atomikos.version>4.0.6</atomikos.version>
     <cglib.version>3.2.9</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.2.7</cxf.version>
-    <glassfish-el.version>3.0.1-b08</glassfish-el.version>
-    <groovy.version>2.4.15</groovy.version>
-    <hazelcast.version>3.10.6</hazelcast.version>
+    <cxf.version>3.3.0-SNAPSHOT</cxf.version>
+    <glassfish-jaxb-runtime.version>2.3.1</glassfish-jaxb-runtime.version>
     <hibernate-validator.version>6.0.13.Final</hibernate-validator.version>
-    <jackson.version>2.9.7</jackson.version>
     <jasperreports.version>6.5.1</jasperreports.version>
-    <java-jaxb.version>2.3.0</java-jaxb.version>
-    <json-api.version>1.1</json-api.version>
-    <javax-activation.version>1.1.1</javax-activation.version>
-    <javax-annotation-api.version>1.3.2</javax-annotation-api.version>
-    <javax-transaction.version>1.3</javax-transaction.version>
     <jaxb-xew-plugin.version>1.10</jaxb-xew-plugin.version>
-    <jaxws-api.version>2.3.0</jaxws-api.version>
-    <jaxws-maven-plugin.version>2.5</jaxws-maven-plugin.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <mssql-jdbc.version>7.0.0.jre10</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.9.RELEASE</spring-security-jwt.version>
@@ -89,29 +101,9 @@
         <version>${cglib.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.hazelcast</groupId>
-        <artifactId>hazelcast</artifactId>
-        <version>${hazelcast.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-annotations</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
         <artifactId>mssql-jdbc</artifactId>
         <version>${mssql-jdbc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-core</artifactId>
-        <version>${java-jaxb.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>${java-jaxb.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -134,29 +126,9 @@
         <version>${swagger-annotations.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.activation</groupId>
-        <artifactId>activation</artifactId>
-        <version>${javax-activation.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.annotation</groupId>
-        <artifactId>javax.annotation-api</artifactId>
-        <version>${javax-annotation-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.json</groupId>
-        <artifactId>javax.json-api</artifactId>
-        <version>${json-api.version}</version>
-      </dependency>
-      <dependency>
         <groupId>javax.jws</groupId>
         <artifactId>jsr181-api</artifactId>
         <version>${jsr181-api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.xml.ws</groupId>
-        <artifactId>jaxws-api</artifactId>
-        <version>${jaxws-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.avro</groupId>
@@ -182,11 +154,6 @@
         <groupId>org.apache.wss4j</groupId>
         <artifactId>wss4j-ws-security-common</artifactId>
         <version>${wss4j-ws-security-common.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.glassfish</groupId>
-        <artifactId>javax.json</artifactId>
-        <version>${json-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -451,32 +418,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <!-- Set wsimport for Windows/Linux -->
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os>
-          <family>windows</family>
-        </os>
-      </activation>
-      <properties>
-        <tool.wsimport>${java.home}/bin/wsimport.exe</tool.wsimport>
-      </properties>
-    </profile>
-    <profile>
-      <id>unix</id>
-      <activation>
-        <os>
-          <family>!windows</family>
-        </os>
-      </activation>
-      <properties>
-        <tool.wsimport>${java.home}/bin/wsimport</tool.wsimport>
-      </properties>
-    </profile>
-  </profiles>
-
 </project>
 

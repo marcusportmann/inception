@@ -229,18 +229,11 @@ admin-root {
 }
 
 
+.sidebar {
+  margin-left: - $sidebar-width;
+}
 
 
-html:not([dir="rtl"]) {
-  .sidebar {
-    margin-left: - $sidebar-width;
-  }
-}
-html[dir="rtl"] {
-  .sidebar {
-    margin-right: - $sidebar-width;
-  }
-}
 
 
 
@@ -318,28 +311,14 @@ html[dir="rtl"] {
     }
   }
 
-  html:not([dir="rtl"]) {
-    .sidebar-compact {
-      .sidebar {
-        margin-left: - $sidebar-compact-width;
-      }
-    }
-    .sidebar-minimized {
-      .sidebar {
-        margin-left: - $sidebar-minimized-width;
-      }
+  .sidebar-compact {
+    .sidebar {
+      margin-left: - $sidebar-compact-width;
     }
   }
-  html[dir="rtl"] {
-    .sidebar-compact {
-      .sidebar {
-        margin-right: - $sidebar-compact-width;
-      }
-    }
-    .sidebar-minimized {
-      .sidebar {
-        margin-right: - $sidebar-minimized-width;
-      }
+  .sidebar-minimized {
+    .sidebar {
+      margin-left: - $sidebar-minimized-width;
     }
   }
 }
@@ -368,93 +347,47 @@ html[dir="rtl"] {
 @each $breakpoint in map-keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
-    html:not([dir="rtl"]) {
-      .sidebar#{$infix}-show {
-        .sidebar {
-          margin-left: 0;
-        }
-        @include media-breakpoint-up(sm) {
-          &.sidebar-fixed {
+    .sidebar#{$infix}-show {
+      .sidebar {
+        margin-left: 0;
+      }
+      @include media-breakpoint-up(sm) {
+        &.sidebar-fixed {
+          .main,
+          .admin-footer {
+            margin-left: $sidebar-width;
+          }
+          &.sidebar-compact {
             .main,
             .admin-footer {
-              margin-left: $sidebar-width;
-            }
-            &.sidebar-compact {
-              .main,
-              .admin-footer {
-                margin-left: $sidebar-compact-width;
-              }
-            }
-            &.sidebar-minimized {
-              .main,
-              .admin-footer {
-                margin-left: $sidebar-minimized-width;
-              }
+              margin-left: $sidebar-compact-width;
             }
           }
-          &.breadcrumbs-fixed {
+          &.sidebar-minimized {
+            .main,
+            .admin-footer {
+              margin-left: $sidebar-minimized-width;
+            }
+          }
+        }
+        &.breadcrumbs-fixed {
+          .breadcrumb {
+            left: $sidebar-width;
+          }
+          &.sidebar-compact {
             .breadcrumb {
-              left: $sidebar-width;
+              left: $sidebar-compact-width;
             }
-            &.sidebar-compact {
-              .breadcrumb {
-                left: $sidebar-compact-width;
-              }
-            }
-            &.sidebar-minimized {
-              .breadcrumb {
-                left: $sidebar-minimized-width;
-              }
+          }
+          &.sidebar-minimized {
+            .breadcrumb {
+              left: $sidebar-minimized-width;
             }
           }
         }
       }
     }
 
-    html[dir="rtl"] {
-      .sidebar#{$infix}-show {
-        .sidebar {
-          margin-right: 0;
-        }
-        @include media-breakpoint-up(sm) {
-          &.sidebar-fixed {
-            .main,
-            .admin-footer {
-              margin-right: $sidebar-width;
-            }
-            &.sidebar-compact {
-              .main,
-              .admin-footer {
-                margin-right: $sidebar-compact-width;
-              }
-            }
-            &.sidebar-minimized {
-              .main,
-              .admin-footer {
-                margin-right: $sidebar-minimized-width;
-              }
-            }
-          }
-          &.breadcrumbs-fixed {
-            .breadcrumb {
-              right: $sidebar-width;
-            }
-            &.sidebar-compact {
-              .breadcrumb {
-                right: $sidebar-compact-width;
-              }
-            }
-            &.sidebar-minimized {
-              .breadcrumb {
-                right: $sidebar-minimized-width;
-              }
-            }
-          }
-        }
-      }
-
-
-    }
     .sidebar#{$infix}-show {
       @keyframes opacity {
         0%   { opacity: 0; }
@@ -572,19 +505,8 @@ TODO GET THIS TO WORK - SIDEBAR NEEDS TO BE BIGGER ON SMALLER SCREEN WITH BIG FO
 @include media-breakpoint-down(xs) {
   .sidebar {
     flex: 0 0 $sidebar-width * 1.5 !important;
+    margin-left: - $sidebar-width * 1.5;
   }
-
-  html:not([dir="rtl"]) {
-    .sidebar {
-      margin-left: - $sidebar-width * 1.5;
-    }
-  }
-  html[dir="rtl"] {
-    .sidebar {
-      margin-right: - $sidebar-width * 1.5;
-    }
-  }
-
 }
 
 

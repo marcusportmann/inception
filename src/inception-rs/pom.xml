@@ -4,7 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>inception-rs</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <name>inception-rs</name>
 
   <parent>
@@ -41,10 +40,12 @@
       <groupId>javax.json</groupId>
       <artifactId>javax.json-api</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>

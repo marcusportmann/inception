@@ -538,11 +538,6 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 }
 
 
-/*
-.mat-sort-header-arrow, [dir=rtl] .mat-sort-header-position-before .mat-sort-header-arrow {
-  margin: 0 0 0 3px !important;
-}
-*/
 
 .mat-sort-header-container {
   display: inline-flex !important;

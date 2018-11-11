@@ -1,7 +1,6 @@
-// Framework grid generation
+// Framework grid generation.
 //
-// Used only by Bootstrap to generate the correct number of grid classes given
-// any value of `$grid-columns`.
+// Used to generate the correct number of grid classes given any value of `$grid-columns`.
 
 @mixin make-grid-columns($columns: $grid-columns, $gutter: $grid-gutter-width, $breakpoints: $grid-breakpoints) {
   // Common properties for all breakpoints

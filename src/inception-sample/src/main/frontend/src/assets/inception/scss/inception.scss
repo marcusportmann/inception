@@ -1,104 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Override Boostrap variables
-//@import "bootstrap-variables";
-
-// Import Bootstrap source files
-//@import "node_modules/bootstrap/scss/bootstrap";
-
-
-//@import "~bootstrap/scss/functions";
-//@import "~bootstrap/scss/variables";
-//@import "~bootstrap/scss/mixins";
-//@import "~bootstrap/scss/root";
-//@import "~bootstrap/scss/reboot";
-//@import "~bootstrap/scss/type";
-
-//@import "~bootstrap/scss/grid";
-
-
-
-//@import "~bootstrap/scss/card";
-
-
-
-//@import "~bootstrap/scss/breadcrumb";
-
-//@import "~bootstrap/scss/utilities";
-
-
-
-
-
-
-//@import "~bootstrap/scss/bootstrap-reboot";
-//@import "~bootstrap/scss/bootstrap-grid";
-
-
-
-/*@import "functions";*/ // ADDED
-/*@import "variables";*/ // ADDED
-/*@import "mixins";*/ // ADDED
-/*@import "root";*/ // ADDED
-/*@import "reboot";*/ // ADDED
-/*@import "type";*/ // ADDED
-//@import "images";
-//@import "code";
-/*@import "grid";*/  // ADDED
-//@import "tables";
-//@import "forms";
-/*@import "buttons";*/ // TO DELETE
-//@import "transitions";
-/*@import "dropdown";*/ // TO DELETE
-//@import "button-group";
-//@import "input-group";
-//@import "custom-forms";
-///*@import "nav";*/ // TO DELETE
-///*@import "navbar";*/ // TO DELETE
-/*@import "card";*/
-/*@import "breadcrumb";*/ // ADDED
-//@import "pagination";
-//@import "badge";
-//@import "jumbotron";
-//@import "alert";
-//@import "progress";
-//@import "media";
-//@import "list-group";
-//@import "close";
-//@import "modal";
-//@import "tooltip";
-//@import "popover";
-//@import "carousel";
-/*@import "utilities";*/ // ADDED
-//@import "print";
-
-
-// Import core styles
 @import "functions";
 @import "variables";
 @import "mixins";
 @import "reboot";
-
-
-
-
-
-
-
 
 :root {
   // Custom variable values only support SassScript inside `#{}`.
@@ -120,139 +23,34 @@
   --font-family-monospace: #{inspect($font-family-monospace)};
 }
 
-
-
-
-
-
-
 .bg-theme {
   background-color: $white;
 }
 
-/*
-.bg-primary {
-  background-color: $primary !important;
-}
-
-.bg-secondary {
-  background-color: $secondary !important;
-}
-
-.bg-success {
-  background-color: $success !important;
-}
-
-.bg-info {
-  background-color: $info !important;
-}
-
-.bg-warning {
-  background-color: $warning !important;
-}
-
-.bg-danger {
-  background-color: $danger !important;
-}
-
-.bg-light {
-  background-color: $light;
-}
-
-.bg-dark {
-  background-color: $dark;
-}
-
-.bg-white {
-  background-color: $white;
-}
-
-*/
-
-
-
-
-
-@import "background";
-
-
-
-// Animations
-//@import "animate";
-
-// Vendors
+// Vendors (Import first so we can override)
 @import "vendors";
 
 // Components
 @import "align";
+@import "background";
 @import "badge";
+@import "borders";
 @import "breadcrumb";
-//@import "buttons";
-//@import "callout";
-//@import "card";
-//@import "charts";
-
-
 @import "clearfix";
-
-
 @import "display";
-
-
-
-
-//@import "form";
-
 @import "flex";
 @import "float";
-
 @import "grid";
-//@import "input-group";
-//@import "images";
-
+@import "layout";
 @import "logo";
-
-//@import "list-group";
-//@import "modal";
+@import "material";
 @import "nav";
-//@import "progress";
-//@import "progress-group";
 @import "sidebar";
 @import "spacing";
 @import "spinner";
 @import "switches";
-//@import "tables";
 @import "text";
-
-
-//@import "widgets";
-
-// Layout Options
-@import "layout";
-
-//@import "others";
-
-// Utility classes
-@import "display";
-
-
 @import "typography";
-
-
-//@import "utilities";
-
-// Right-to-left
-//@import "rtl";
 
 // Custom Properties support for Internet Explorer
 @import "ie-custom-properties";
-
-// Material
-@import "material";
-
-
-// Import Ladda source files
-//@import "~ladda/css/ladda";
-
-
-

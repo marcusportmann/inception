@@ -424,7 +424,7 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
-    if (true)
+    if (false)
     {
       throw new CodesServiceException("Testing 1.. 2.. 3..");
     }
