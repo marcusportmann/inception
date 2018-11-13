@@ -80,7 +80,6 @@ import {setInceptionInjector} from "./inception-injector";
 
 // Import 3rd party modules
 import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {StorageServiceModule} from "ngx-webstorage-service";
 
 // Import 3rd party components
 
@@ -156,7 +155,6 @@ export const INCEPTION_DATE_FORMATS = {
     // 3rd party modules
     //ChartsModule,
     PerfectScrollbarModule,
-    StorageServiceModule,
 
     // Material modules
     MatAutocompleteModule,
@@ -198,7 +196,6 @@ export const INCEPTION_DATE_FORMATS = {
     // 3rd party modules
     //ChartsModule,
     PerfectScrollbarModule,
-    StorageServiceModule,
 
     // Material modules
     MatAutocompleteModule,

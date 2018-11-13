@@ -36,7 +36,7 @@ export interface ErrorDialogData {
   template: `
 
     <div class="header">
-      <i class="material-icons md-48">error_outline</i>
+      <i class="far fa-3x fa-times-circle"></i>
     </div>
     <div class="message-holder">
       <span class="message">

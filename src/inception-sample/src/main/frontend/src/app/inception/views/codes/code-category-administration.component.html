@@ -16,7 +16,7 @@
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
         <button mat-icon-button>
-          <mat-icon>more_vert</mat-icon>
+          <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
     </ng-container>
@@ -31,15 +31,15 @@
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-id="id">
       <button mat-menu-item (click)="editCodeCategory(id)">
-        <mat-icon>edit</mat-icon>
+        <i class="fas fa-edit"></i>
         <span>Edit</span>
       </button>
       <button mat-menu-item (click)="codeAdministration(id)">
-        <mat-icon>group</mat-icon>
+        <i class="fas fa-list-ul"></i>
         <span>Codes</span>
       </button>
       <button mat-menu-item (click)="deleteCodeCategory(id)">
-        <mat-icon>delete</mat-icon>
+        <i class="fas fa-times"></i>
         <span>Delete</span>
       </button>
     </ng-template>

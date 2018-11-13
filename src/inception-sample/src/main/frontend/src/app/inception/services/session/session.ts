@@ -60,6 +60,11 @@ export class Session {
   organizations: Organization[];
 
   /**
+   * The selected organization for the user session.
+   */
+  organization: Organization;
+
+  /**
    * Constructs a new Session.
    *
    * @param {string} username              The username for the user the user session is associated
@@ -85,5 +90,6 @@ export class Session {
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
+    this.organization = null;
   }
 }

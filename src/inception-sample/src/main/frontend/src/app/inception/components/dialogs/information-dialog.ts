@@ -23,7 +23,7 @@ import {DialogData} from "./dialog-data";
   template: `
 
     <div class="header">
-      <i class="material-icons md-48">announcement</i>
+      <i class="fas fa-3x fa-exclamation-circle"></i>
     </div>
     <div class="message-holder">
       <span class="message">

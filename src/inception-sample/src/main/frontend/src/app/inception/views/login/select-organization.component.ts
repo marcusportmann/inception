@@ -14,43 +14,20 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {FormGroup, Validators, FormBuilder} from '@angular/forms';
-
-import {InceptionModule} from '../../inception.module';
-
-
-import {patternValidator} from "../../validators/pattern-validator";
-import {SecurityService} from '../../services/security/security.service';
-
-
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-
-import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
-import {catchError, flatMap, map, startWith} from "rxjs/operators";
-import {Observable, of} from "../../../../../node_modules/rxjs";
-
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {first, flatMap, map, startWith} from "rxjs/operators";
+import {Observable} from "../../../../../node_modules/rxjs";
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Error} from "../../errors/error";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {LoginError} from "../../services/session/session.service.errors";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {CommunicationError} from "../../errors/communication-error";
-
-
-
+import {Router} from "@angular/router";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Session} from "../../services/session/session";
-
-
-
 
 @Component({
   templateUrl: 'select-organization.component.html'
 })
-export class SelectOrganizationComponent implements OnInit{
+export class SelectOrganizationComponent implements OnInit {
 
   selectOrganizationForm: FormGroup;
 
@@ -63,38 +40,56 @@ export class SelectOrganizationComponent implements OnInit{
     });
   }
 
-  displayOrganization(organizationId: string): string {
-    return organizationId ? organizationId: undefined;
+  displayOrganization(organization: Organization): string {
+    return organization.name;
+  }
+
+  isOrganizationSelected(): boolean {
+    return this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object');
   }
 
   ngOnInit() {
-
     this.filteredOrganizations = this.selectOrganizationForm.get('organization').valueChanges.pipe(
       startWith(''),
       flatMap((value) => this._filterOrganizations(value))
     );
   }
 
-  public onSubmit() {
+  onSubmit() {
 
-    if (this.selectOrganizationForm.valid) {
+    if (this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object')) {
 
-      console.log('this.selectOrganizationForm.get(\'organization\').value = ', this.selectOrganizationForm.get('organization').value);
+      const selectedOrganization: Organization = <Organization>this.selectOrganizationForm.get('organization').value;
 
-      // TODO: Save the selected organization in the session.
+      this.sessionService.session.pipe(first()).subscribe((session: Session) => {
 
-      this.router.navigate(['/']);
+        session.organization = selectedOrganization;
+
+        this.router.navigate(['/']);
+      });
     }
   }
 
-  private _filterOrganizations(value: string): Observable<Organization[]> {
-    const filterValue = value.toLowerCase();
+  private _filterOrganizations(value: string | object): Observable<Organization[]> {
+    let filterValue = '';
+
+    if (typeof value === "string") {
+      filterValue = (<string>value).toLowerCase();
+    }
+    else if (typeof value === 'object') {
+      filterValue = (<Organization>value).name.toLowerCase();
+    }
 
     return this.sessionService.session.pipe(
       map((session: Session) => {
-
-        return session.organizations.filter(
-          organization => organization.name.toLowerCase().indexOf(filterValue) === 0)
+        if (session) {
+          return session.organizations.filter(
+            organization => organization.name.toLowerCase().indexOf(filterValue) === 0)
+        }
+        else {
+          this.router.navigate(['/login']);
+          return [];
+        }
       })
     );
   }

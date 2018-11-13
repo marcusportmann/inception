@@ -140,13 +140,13 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
            routerLinkActive="active"
            [routerLink]="[navItem.url]"
            (click)="hideMobile()">
-          <i *ngIf="hasIcon()" class="nav-icon material-icons">{{ navItem.icon }}</i>
+          <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
           {{ navItem.name }}
           <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
         </a>
         <ng-template #externalLink>
           <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
-            <i *ngIf="hasIcon()" class="nav-icon material-icons">{{ navItem.icon }}</i>
+            <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
             {{ navItem.name }}
             <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
           </a>
@@ -223,7 +223,7 @@ export class SidebarNavItemComponent {
   selector: 'sidebar-nav-dropdown',
   template: `
     <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-      <i *ngIf="hasIcon()" class="nav-icon material-icons">{{ navItem.icon }}</i>
+      <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
       {{ navItem.name }}
       <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
     </a>

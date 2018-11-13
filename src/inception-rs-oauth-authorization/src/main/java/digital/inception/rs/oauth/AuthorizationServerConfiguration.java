@@ -79,9 +79,9 @@ import java.util.Arrays;
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {
   /**
-   * The access token validity in seconds.
+   * The access token validity in seconds (10 minutes).
    */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 1 * 60;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 10 * 60;
 
   /**
    * The refresh token validity in seconds.

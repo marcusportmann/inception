@@ -72,9 +72,9 @@ export class AppModule extends InceptionAppModule {
 
     var navigation: NavigationItem[] = [];
 
-    navigation.push(new NavigationItem('dashboard', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, null, new NavigationBadge('info', 'NEW')));
+    navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, null, new NavigationBadge('info', 'NEW')));
 
-    navigation.push(new NavigationItem('layers', 'Inception', '/inception', [], [
+    navigation.push(new NavigationItem('fa fa-layer-group', 'Inception', '/inception', [], [
 
       new NavigationItem('fa fa-puzzle-piece', 'Components', '/inception/components', [], [
         new NavigationItem('fa fa-puzzle-piece', 'Buttons', '/inception/components/buttons', []),

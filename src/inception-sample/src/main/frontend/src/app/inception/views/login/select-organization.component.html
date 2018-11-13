@@ -14,7 +14,7 @@
 
                   <input type="text" matInput [formControl]="selectOrganizationForm.get('organization')" [matAutocomplete]="auto" i18n-placeholder="@@select_organization_component_placeholder_organization" placeholder="Select an organization">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayOrganization">
-                    <mat-option *ngFor="let filteredOrganization of filteredOrganizations | async" [value]="filteredOrganization.id">
+                    <mat-option *ngFor="let filteredOrganization of filteredOrganizations | async" [value]="filteredOrganization">
                       {{filteredOrganization.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -26,7 +26,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="submit" [disabled]="!selectOrganizationForm.valid" mat-flat-button>Ok</button>
+            <button type="submit" [disabled]="!isOrganizationSelected()" mat-flat-button>Ok</button>
           </mat-card-actions>
         </mat-card>
       </form>
