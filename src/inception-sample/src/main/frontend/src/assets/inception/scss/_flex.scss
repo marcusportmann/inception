@@ -49,3 +49,7 @@
     .align-self#{$infix}-stretch  { align-self: stretch !important; }
   }
 }
+
+.flex {
+  display: flex !important;
+}

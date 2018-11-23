@@ -29,7 +29,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @Component({
   selector: 'admin-container',
   template: `
-    <div class="spinner"></div>
+    <!--<div class="spinner"></div>-->
     <admin-header
       [fixed]="true"
       [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
@@ -46,7 +46,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         <breadcrumbs></breadcrumbs>
         <div class="container-fluid">
           <router-outlet></router-outlet>
-        </div><!-- /.container-fluid -->
+        </div>
       </main>
     </div>
     <admin-footer>

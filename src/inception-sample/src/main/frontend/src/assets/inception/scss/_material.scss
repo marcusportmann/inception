@@ -162,6 +162,7 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     border-radius: $card-border-radius $card-border-radius 0 0;
     .mat-card-title {
       margin-bottom: 0px;
+      font-size: 18px;
       /*font-size: $font-size-base;*/
     }
     .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
@@ -460,6 +461,21 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     }
   }
 }
+
+
+.mat-datepicker-toggle {
+  button {
+    display: inline-block !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    margin-right: 5px;
+  }
+}
+
+
+
+
+
 
 
 .mat-paginator  {
@@ -887,3 +903,6 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
     }
   }
 }
+
+
+

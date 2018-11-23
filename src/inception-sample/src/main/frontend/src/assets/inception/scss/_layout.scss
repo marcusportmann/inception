@@ -268,6 +268,10 @@ admin-root {
     .admin-header + .admin-body .sidebar {
       height: calc(100vh - #{$admin-header-height});
     }
+
+    .admin-header + .admin-body {
+      min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
+    }
   }
 
   .sidebar-compact {

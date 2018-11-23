@@ -28,7 +28,10 @@ import {Error} from "../../errors/error";
 
 @Component({
   templateUrl: 'code-category-administration.component.html',
-  styleUrls: ['code-category-administration.component.css']
+  styleUrls: ['code-category-administration.component.css'],
+  host: {
+    'class': 'flex flex-column flex-fill',
+  }
 })
 export class CodeCategoryAdministrationComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'actions'];
@@ -39,17 +42,31 @@ export class CodeCategoryAdministrationComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-
   constructor(private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService)
   {
 
   }
 
-
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  codeAdministration(id: string) {
+    console.log('Administering codes for code category: ', id);
+  }
+
+  deleteCodeCategory(id: string) {
+    console.log('Deleting code category: ', id);
+  }
+
+  editCodeCategory(id: string) {
+    console.log('Editing code category: ', id);
+  }
+
+  newCodeCategory() {
+    console.log('New code category');
   }
 
   ngAfterViewInit() {
@@ -72,18 +89,5 @@ export class CodeCategoryAdministrationComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
-
-  editCodeCategory(id: string) {
-    console.log('Editing code category: ', id);
-  }
-
-  codeAdministration(id: string) {
-    console.log('Administering codes for code category: ', id);
-  }
-
-  deleteCodeCategory(id: string) {
-    console.log('Deleting code category: ', id);
-  }
-
 }
 

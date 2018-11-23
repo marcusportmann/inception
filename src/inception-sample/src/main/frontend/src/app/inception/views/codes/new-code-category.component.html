@@ -1,9 +1,9 @@
-<mat-card class="flex flex-column flex-fill">
+<mat-card style="height: 100%;">
   <div class="mat-table-header">
     <button mat-flat-button color="primary" (click)="newCodeCategory()">New Code Category</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" matSort>
+  <mat-table [dataSource]="dataSource" matSort>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
@@ -46,5 +46,3 @@
   </mat-menu>
 
 </mat-card>
-
-

@@ -15,7 +15,6 @@
  */
 
 import {Error} from "../../errors/error";
-import {ApiError} from "../../errors/api-error";
 
 /**
  * The CodesServiceError class holds the information for a Codes Service error.
