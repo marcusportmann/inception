@@ -28,7 +28,7 @@
 
         }
 
-        
+
 
         .admin-body {
 
@@ -510,14 +510,12 @@ admin-root {
           }
 
           &.sidebar-compact {
-            .main,
-            .admin-footer {
+            .main {
               margin-left: $sidebar-compact-width;
             }
           }
           &.sidebar-minimized {
-            .main,
-            .admin-footer {
+            .main {
               margin-left: $sidebar-minimized-width;
             }
           }
