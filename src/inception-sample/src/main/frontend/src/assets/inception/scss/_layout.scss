@@ -3,6 +3,146 @@
   html {
     display: flex;
     flex-direction: column;
+
+    body {
+
+      /* No display. */
+
+      admin-container {
+
+        /*
+          display: flex;
+          flex-direction: column;
+        */
+
+        .admin-header {
+
+          /*
+            display: flex;
+            flex-basis: 55px;
+            flex-direction: row;
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+           */
+
+        }
+
+        
+
+        .admin-body {
+
+          /*
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+           */
+
+          /*height: 100vh;*/
+
+          .sidebar {
+
+            /*
+              display: flex;
+              flex-basis: 200;
+              flex-direction: column;
+              flex-grow: 0;
+              flex-shrink: 0;
+             */
+
+          }
+
+          .main {
+
+            /*
+              display: block;
+              flex-basis: 0px;
+              flex-grow: 1;
+              flex-shrink: 1;
+             */
+
+
+            /* START OF ADDED */
+
+            /*
+            display: flex;
+            flex-direction: column;
+            */
+
+            /* END OF ADDED */
+
+
+
+
+            .breadcrumb {
+
+              /*
+                display: flex;
+                flex-wrap: wrap;
+                line-height: 21px;
+               */
+
+              /* START OF ADDED */
+
+              /*
+              flex-basis: 21px;
+              flex-grow: 0;
+              flex-shrink: 0;
+              */
+
+              /* END OF ADDED */
+
+            }
+
+
+
+            .container-fluid {
+
+              /*
+                No display, no flex.
+               */
+
+              /* START OF ADDED */
+
+              /*
+              flex-basis: 0px;
+              flex-grow: 1;
+              flex-shrink: 1;
+              */
+
+              /* END OF ADDED */
+
+
+
+
+
+
+            }
+
+
+          }
+        }
+
+        .admin-footer {
+
+          /*
+            display: flex;
+            flex-basis: 50px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+           */
+
+        }
+      }
+    }
+  }
+
+  .sidebar-fixed {
+    .admin-header + .admin-body {
+      /*min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
+      height: calc(100vh - #{$admin-header-height});
+    }
   }
 }
 
@@ -202,6 +342,7 @@ admin-root {
   display: flex;
   flex: 0 0 $admin-footer-height;
   flex-wrap: wrap;
+  height: $admin-footer-height;
   align-items: center;
   padding: 0 $spacer;
   color: $admin-footer-color;
@@ -270,7 +411,8 @@ admin-root {
     }
 
     .admin-header + .admin-body {
-      min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
+      /*min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
+      min-height: calc(100vh - #{$admin-header-height});
     }
   }
 
@@ -357,10 +499,16 @@ admin-root {
       }
       @include media-breakpoint-up(sm) {
         &.sidebar-fixed {
+          /*
           .main,
           .admin-footer {
             margin-left: $sidebar-width;
+          }*/
+
+          .main {
+            margin-left: $sidebar-width;
           }
+
           &.sidebar-compact {
             .main,
             .admin-footer {

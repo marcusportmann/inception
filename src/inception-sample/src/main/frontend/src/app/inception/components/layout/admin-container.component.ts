@@ -41,17 +41,17 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
-      <!-- Main content -->
       <main class="main">
         <breadcrumbs></breadcrumbs>
         <div class="container-fluid">
           <router-outlet></router-outlet>
         </div>
+        <admin-footer>
+          <span>2018 &copy; <span class="copyright-name"></span></span>
+        </admin-footer>
+        
       </main>
     </div>
-    <admin-footer>
-      <span>2018 &copy; <span class="copyright-name"></span></span>
-    </admin-footer>
   `
 })
 export class AdminContainerComponent implements OnInit, OnDestroy{
