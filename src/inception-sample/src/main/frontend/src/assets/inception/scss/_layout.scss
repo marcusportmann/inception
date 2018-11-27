@@ -6,9 +6,19 @@
 
     body {
 
+      height: 100%;
+
+
+      /*-ms-overflow-style: none;*/
+
+
       /* No display. */
 
       admin-container {
+
+        /*-ms-overflow-style: none;*/
+
+        /*-ms-overflow-y: visible;*/
 
         /*
           display: flex;
@@ -31,6 +41,8 @@
 
 
         .admin-body {
+
+          -ms-overflow-style: none;
 
           /*
             display: flex;
@@ -138,12 +150,69 @@
     }
   }
 
-  .sidebar-fixed {
-    .admin-header + .admin-body {
-      /*min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
-      height: calc(100vh - #{$admin-header-height});
+  /*
+  .main {
+    display: flex;
+    flex-direction: column;
+
+    .container-fluid {
+      flex: 1;
+
+
     }
   }
+  */
+
+
+  body.admin-header-fixed.sidebar-fixed {
+
+    /*-ms-overflow-style: none;*/
+
+    /*
+    .admin-body {
+      -ms-overflow-style: auto;
+    }
+
+    .admin-header + .admin-body {
+      height: calc(100vh - #{$admin-header-height});
+    }
+    */
+
+
+    admin-container {
+      /*border: 1px solid red;*/
+      /*-ms-overflow-style: auto;*/
+      /*height: 100%;*/
+    }
+
+
+    .admin-header + .admin-body {
+      /*height: calc(100vh - #{$admin-header-height} - #{$admin-header-height});*/
+      /*height: 100%;*/
+    }
+
+
+
+    .admin-body {
+      /*-ms-overflow-style: none;*/
+    }
+
+  }
+
+
+  body.admin-header-fixed.sidebar-fixed.admin-footer-fixed {
+
+    .admin-body {
+
+      /*height: calc(100vh - (#{$admin-header-height} + #{$admin-footer-height} + 100px));*/
+
+      /*height: 100px;*/
+
+      /*border: 1px solid green;*/
+
+    }
+  }
+
 }
 
 // stylelint-disable selector-type-no-unknown, no-duplicate-selectors, selector-no-qualifying-type
@@ -416,6 +485,22 @@ admin-root {
     }
   }
 
+  .sidebar-fixed.admin-footer-fixed {
+
+    .admin-header + .admin-body .sidebar {
+      /* TODO: REMOVE THIS */
+      /*height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
+    }
+
+
+    .admin-header + .admin-body {
+      min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
+
+      /* TODO: REMOVE THIS */
+      /*border: 1px solid red;*/
+    }
+  }
+
   .sidebar-compact {
     .sidebar {
       flex: 0 0 $sidebar-compact-width;
@@ -499,23 +584,20 @@ admin-root {
       }
       @include media-breakpoint-up(sm) {
         &.sidebar-fixed {
-          /*
           .main,
           .admin-footer {
-            margin-left: $sidebar-width;
-          }*/
-
-          .main {
             margin-left: $sidebar-width;
           }
 
           &.sidebar-compact {
-            .main {
+            .main,
+            .admin-footer {
               margin-left: $sidebar-compact-width;
             }
           }
           &.sidebar-minimized {
-            .main {
+            .main,
+            .admin-footer {
               margin-left: $sidebar-minimized-width;
             }
           }
