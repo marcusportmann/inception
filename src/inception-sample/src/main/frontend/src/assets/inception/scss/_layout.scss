@@ -7,6 +7,11 @@
     body {
 
       height: 100%;
+      /*-ms-overflow-style: none;*/
+      -ms-overflow-x: hidden;
+      overflow-x: hidden;
+      -ms-overflow-y: scroll;
+      overflow-y: scroll;
 
 
       /*-ms-overflow-style: none;*/
@@ -43,6 +48,9 @@
         .admin-body {
 
           -ms-overflow-style: none;
+          -ms-overflow-y: hidden;
+          min-height: calc(100vh - #{$admin-header-height} - #{$admin-header-height});
+
 
           /*
             display: flex;
@@ -377,6 +385,66 @@ admin-root {
     }
   }
 }
+
+/*
+.admin-body {
+
+  .main {
+
+    .container-fluid {
+
+      min-height: calc(100% - (2 * #{$breadcrumb-padding-y} + #{$font-size-base} + 1.5 * #{$spacer}));
+
+    }
+
+  }
+
+
+}
+*/
+
+
+
+.admin-body {
+  .main {
+
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+
+    .breadcrumb {
+
+      /*flex: 0 0 42px;*/
+
+    }
+
+    .container-fluid {
+
+      border: 1px solid red;
+
+      display: flex;
+      flex-direction: column;
+      flex: auto;
+
+      ng-component {
+
+        border: 1px solid green;
+
+        display: flex;
+        flex-direction: column;
+        flex: auto;
+
+      }
+
+      /*
+      -ms-overflow-y: visible;
+      -ms-overflow-style: auto;
+      overflow-y: visible;
+      */
+    }
+  }
+}
+
 
 @include media-breakpoint-down(md) {
   .admin-header {
