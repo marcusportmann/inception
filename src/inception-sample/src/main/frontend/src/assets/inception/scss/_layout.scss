@@ -7,43 +7,16 @@
     body {
 
       height: 100%;
-      /*-ms-overflow-style: none;*/
       -ms-overflow-x: hidden;
       overflow-x: hidden;
       -ms-overflow-y: scroll;
       overflow-y: scroll;
 
-
-      /*-ms-overflow-style: none;*/
-
-
-      /* No display. */
-
       admin-container {
-
-        /*-ms-overflow-style: none;*/
-
-        /*-ms-overflow-y: visible;*/
-
-        /*
-          display: flex;
-          flex-direction: column;
-        */
 
         .admin-header {
 
-          /*
-            display: flex;
-            flex-basis: 55px;
-            flex-direction: row;
-            flex-grow: 0;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-           */
-
         }
-
-
 
         .admin-body {
 
@@ -51,125 +24,28 @@
           -ms-overflow-y: hidden;
           min-height: calc(100vh - #{$admin-header-height} - #{$admin-header-height});
 
-
-          /*
-            display: flex;
-            flex-direction: row;
-            flex-grow: 1;
-           */
-
-          /*height: 100vh;*/
-
           .sidebar {
-
-            /*
-              display: flex;
-              flex-basis: 200;
-              flex-direction: column;
-              flex-grow: 0;
-              flex-shrink: 0;
-             */
 
           }
 
           .main {
 
-            /*
-              display: block;
-              flex-basis: 0px;
-              flex-grow: 1;
-              flex-shrink: 1;
-             */
-
-
-            /* START OF ADDED */
-
-            /*
-            display: flex;
-            flex-direction: column;
-            */
-
-            /* END OF ADDED */
-
-
-
-
             .breadcrumb {
 
-              /*
-                display: flex;
-                flex-wrap: wrap;
-                line-height: 21px;
-               */
-
-              /* START OF ADDED */
-
-              /*
-              flex-basis: 21px;
-              flex-grow: 0;
-              flex-shrink: 0;
-              */
-
-              /* END OF ADDED */
-
             }
-
-
 
             .container-fluid {
 
-              /*
-                No display, no flex.
-               */
-
-              /* START OF ADDED */
-
-              /*
-              flex-basis: 0px;
-              flex-grow: 1;
-              flex-shrink: 1;
-              */
-
-              /* END OF ADDED */
-
-
-
-
-
-
             }
-
-
           }
         }
 
         .admin-footer {
 
-          /*
-            display: flex;
-            flex-basis: 50px;
-            flex-grow: 0;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-           */
-
         }
       }
     }
   }
-
-  /*
-  .main {
-    display: flex;
-    flex-direction: column;
-
-    .container-fluid {
-      flex: 1;
-
-
-    }
-  }
-  */
 
 
   body.admin-header-fixed.sidebar-fixed {
