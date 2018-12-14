@@ -19,7 +19,6 @@ $inception-palette-A200:  #b8e2ff !default;
 $inception-palette-A400:  #85cdff !default;
 $inception-palette-A700:  #6bc3ff !default;
 
-
 $inception-palette: (
   50: $inception-palette-50,
   100: $inception-palette-100,
@@ -53,8 +52,6 @@ $inception-palette: (
   )
 );
 
-
-
 $custom-primary: mat-palette($inception-palette);
 $custom-accent:  mat-palette($mat-grey);
 
@@ -74,8 +71,8 @@ $inception-typography: mat-typography-config(
   $title:         mat-typography-level(20px, 32px, 500),
   $subheading-2:  mat-typography-level(16px, 28px, 400),
   $subheading-1:  mat-typography-level(15px, 24px, 400),
-  $body-2:        mat-typography-level(0.875rem, 24px, 500),
-  $body-1:        mat-typography-level(0.875rem, 20px, 400),
+  $body-2:        mat-typography-level(1rem, 24px, 500),
+  $body-1:        mat-typography-level(1rem, 20px, 400),
   $caption:       mat-typography-level(12px, 20px, 400),
   $button:        mat-typography-level(1rem, 14px, 500),
     // Line-height must be unit-less fraction of the font-size.
@@ -85,32 +82,6 @@ $inception-typography: mat-typography-config(
 );
 
 @include angular-material-typography($inception-typography);
-
-
-
-
-
-
-@mixin mat-menu-typography($config) {
-
-  .mat-menu-item {
-    font: {
-      family: mat-font-family($config, subheading-2);
-      size: 1rem;
-      /*size: mat-font-size($config, subheading-2);*/
-      /*weight: mat-font-weight($config, subheading-2);*/
-    }
-
-    color: red !important;
-  }
-}
-
-
-
-
-
-
-
 
 * {
   &:active,
@@ -123,18 +94,9 @@ label {
   margin-bottom: 0; // 2
 }
 
-/*
-a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not([mat-list-item]) {
-  color: #3f51b5; // 3
-}
-*/
-
 .cdk-overlay-container {
   z-index: 10000;
 }
-
-
-
 
 
 
@@ -150,68 +112,10 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
   border-radius: $card-border-radius;
   margin-bottom: 1rem;
 
-  .mat-card-content {
-    line-height: 19px;
-    padding: 1rem;
-    margin-bottom: 0;
-    /*font-size: $font-size-base;*/
-  }
-
-  .mat-card-image {
-
-    flex: 1;
-    max-width: 100%;
-    max-height: 100%;
-
-    /*
-    width: calc(100% + 0px);
-    margin: 0 0px 0px 0px;
-    */
-  }
-  .mat-card-header {
-    padding: 12px;
-    border-radius: $card-border-radius $card-border-radius 0 0;
-    .mat-card-title {
-      margin-bottom: 0px;
-      font-size: 18px;
-      /*font-size: $font-size-base;*/
-    }
-    .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
-      margin-bottom: 0px;
-      margin-top: -4px;
-      /*font-size: $font-size-base;*/
-    }
-    &.text-white {
-      .mat-card-title {
-        color:$white;
-      }
-      .mat-card-subtitle {
-        color:rgba(255, 255, 255, 0.7);
-      }
-    }
-  }
-  .mat-card-title {
-    /*font-size: 1rem;*/
-    font-weight: 500;
-    margin-bottom: 0;
-  }
-  .mat-card-subtitle {
-    margin-top: -4px;
-    margin-bottom: 0px;
-  }
-
-  > .mat-card-title {
-    padding-top: 0.75rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  > .mat-card-subtitle {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
   .mat-card-actions {
+    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
+      margin-right: 10px;
+    }
 
     &.align-right {
       display: flex;
@@ -219,11 +123,6 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
       justify-content: flex-end;
       align-content: center;
     }
-
-    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
-      margin-right: 10px;
-    }
-
   }
 
   > .mat-card-actions:last-child {
@@ -233,12 +132,65 @@ a:not(.mat-button):not(.mat-raised-button):not(.mat-fab):not(.mat-mini-fab):not(
     padding-bottom: 1rem !important;
   }
 
+  .mat-card-avatar > img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .mat-card-content {
+    line-height: 19px;
+    padding: 1rem;
+    margin-bottom: 0;
+  }
+
+  .mat-card-header {
+    padding: 12px;
+    border-radius: $card-border-radius $card-border-radius 0 0;
+
+    .mat-card-subtitle, .mat-card-subtitle:not(:first-child) {
+      margin-bottom: 0px;
+      margin-top: -4px;
+    }
+
+    .mat-card-title {
+      margin-bottom: 0px;
+      font-size: 18px; /* TODO: Use the correct variable here -- MARCUS */
+    }
+
+    &.text-white {
+      .mat-card-subtitle {
+        color:rgba(255, 255, 255, 0.7);
+      }
+
+      .mat-card-title {
+        color:$white;
+      }
+    }
+  }
+
+  .mat-card-subtitle {
+    margin-top: -4px;
+    margin-bottom: 0px;
+  }
+
+  > .mat-card-subtitle {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mat-card-title {
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  > .mat-card-title {
+    padding-top: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
 }
 
-.mat-card-avatar > img {
-  width: 40px;
-  height: 40px;
-}
 
 
 
@@ -934,4 +886,20 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
 .mat-form-field {
   border: 1px solid green;
+}
+
+
+.mat-menu-panel.user-menu {
+
+  position: absolute !important;
+  right: 0px !important;
+  top: 0 !important;
+
+  border-top: none !important;
+  border-right: none !important;
+
+  border-top-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+
+  min-width: 150px;
 }

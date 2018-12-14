@@ -687,21 +687,27 @@ TODO GET THIS TO WORK - SIDEBAR NEEDS TO BE BIGGER ON SMALLER SCREEN WITH BIG FO
 
 
 
+.background-image-container {
 
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
 
+  .background-image {
 
-
-.mat-menu-panel.user-menu {
-
-  position: absolute !important;
-  right: 0px !important;
-  top: 0 !important;
-
-  border-top: none !important;
-  border-right: none !important;
-
-  border-top-left-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-
-  min-width: 150px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
 }
+
+
+
+
+
+
+
