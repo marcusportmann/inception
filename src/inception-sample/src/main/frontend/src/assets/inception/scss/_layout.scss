@@ -296,7 +296,7 @@ admin-root {
 
     .container-fluid {
 
-      border: 1px solid red;
+      /*border: 1px solid red;*/
 
       display: flex;
       flex-direction: column;
@@ -304,7 +304,7 @@ admin-root {
 
       ng-component {
 
-        border: 1px solid green;
+        /*border: 1px solid green;*/
 
         display: flex;
         flex-direction: column;
