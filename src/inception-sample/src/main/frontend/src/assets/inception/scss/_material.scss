@@ -530,14 +530,14 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
 
 .mat-cell-one-action {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 82px;
+  max-width: 82px;
   text-align: center;
 }
 
 .mat-cell-two-actions {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 82px;
+  max-width: 82px;
   text-align: center;
 }
 
@@ -616,6 +616,8 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   color: $gray-800;
 
   .mat-button, .mat-flat-button, .mat-raised-button, .mat-icon-button {
+
+    font-size: 0.875rem !important;
 
     /*
     line-height: 30px !important;
@@ -957,3 +959,5 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
   }
 }
+
+
