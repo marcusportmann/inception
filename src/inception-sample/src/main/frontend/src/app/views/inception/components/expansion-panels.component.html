@@ -33,18 +33,21 @@
               </mat-panel-title>
               <mat-panel-description class="d-sm-down-none">
                 Type your name and age
-                <mat-icon>account_circle</mat-icon>
+                <i class="fa fa-user-circle"></i>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row">
               <div class="col-sm">
                 <mat-form-field>
-                  <input matInput placeholder="First name">
+                  <mat-label>Full Name</mat-label>
+                  <input matInput type="text" required="true">
+                  <mat-hint>Your full name.</mat-hint>
                 </mat-form-field>
               </div>
               <div class="col-sm">
                 <mat-form-field>
-                  <input matInput type="number" min="1" placeholder="Age">
+                  <mat-label>Age</mat-label>
+                  <input matInput type="number" min="1">
                 </mat-form-field>
               </div>
             </div>
@@ -60,12 +63,13 @@
               </mat-panel-title>
               <mat-panel-description class="d-sm-down-none">
                 Type the country name
-                <mat-icon>map</mat-icon>
+                <i class="fa fa-map"></i>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row">
               <div class="col-sm">
                 <mat-form-field>
+                  <mat-label>Country</mat-label>
                   <input matInput placeholder="Country">
                 </mat-form-field>
               </div>
@@ -83,12 +87,13 @@
               </mat-panel-title>
               <mat-panel-description class="d-sm-down-none">
                 Inform the date you wish to travel
-                <mat-icon>date_range</mat-icon>
+                <i class="fa fa-calendar"></i>
               </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row">
               <div class="col-sm">
                 <mat-form-field>
+                  <mat-label>Date</mat-label>
                   <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
                 </mat-form-field>
                 <mat-datepicker #picker></mat-datepicker>

@@ -136,7 +136,7 @@ label {
     width: 40px;
     height: 40px;
   }
-  
+
   .mat-card-content {
     line-height: 19px;
     padding: 1rem;
@@ -530,14 +530,14 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
 
 .mat-cell-one-action {
-  min-width: 76px;
-  max-width: 76px;
+  min-width: 80px;
+  max-width: 80px;
   text-align: center;
 }
 
 .mat-cell-two-actions {
-  min-width: 76px;
-  max-width: 76px;
+  min-width: 80px;
+  max-width: 80px;
   text-align: center;
 }
 
@@ -902,4 +902,58 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   border-bottom-right-radius: 0 !important;
 
   min-width: 150px;
+}
+
+/*
+.flex-fill + .mat-paginator {
+  flex: 0;
+}
+*/
+
+.mat-paginator  {
+  .mat-paginator-container {
+    .mat-paginator-page-size {
+      .mat-paginator-page-size-select {
+        margin: 0;
+
+        .mat-form-field-wrapper {
+          padding-bottom: 0;
+
+          .mat-form-field-flex {
+            padding-top: 0;
+
+            .mat-form-field-infix {
+              min-height: 0;
+              padding: 0;
+              padding-bottom: 2px;
+              border-top: none;
+
+              .mat-select:not(.mat-select-empty) {
+                .mat-select-arrow-wrapper {
+                  transform: translateY(-10%);
+                }
+              }
+
+              .mat-form-field-label-wrapper {
+                top: 0;
+                padding-top: 0;
+              }
+
+            }
+          }
+
+          .mat-form-field-underline {
+            bottom: 0;
+          }
+        }
+      }
+    }
+
+    .mat-paginator-range-actions {
+      .mat-button-wrapper {
+        /*height: 28px;*/
+      }
+    }
+
+  }
 }

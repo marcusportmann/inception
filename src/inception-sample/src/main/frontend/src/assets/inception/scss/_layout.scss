@@ -22,7 +22,7 @@
 
           -ms-overflow-style: none;
           -ms-overflow-y: hidden;
-          min-height: calc(100vh - #{$admin-header-height} - #{$admin-header-height});
+          min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
 
           .sidebar {
 
@@ -367,7 +367,7 @@ admin-root {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
 
   .main {
     flex: 1;
@@ -425,7 +425,7 @@ admin-root {
 
     .admin-header + .admin-body {
       /*min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
-      min-height: calc(100vh - #{$admin-header-height});
+      min-height: calc(100vh - #{$admin-header-height}  - #{$admin-footer-height});
     }
   }
 

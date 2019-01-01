@@ -1,9 +1,9 @@
-<mat-card>
+<mat-card class="flex flex-column flex-fill">
   <div class="mat-table-header">
     <div></div>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="dataSource" class="flex-fill">
     <!-- Position Column -->
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef>Position</mat-header-cell>

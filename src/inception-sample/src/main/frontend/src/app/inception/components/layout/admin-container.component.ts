@@ -31,13 +31,13 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   template: `
     <!--<div class="spinner"></div>-->
     <admin-header
-      [fixed]="true"
+      [fixed]="false"
       [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
       [brandMinimized]="{src: 'assets/images/logo-symbol.png', width: 30, height: 30, alt: 'Logo'}"
       [sidebarToggler]="'lg'">
     </admin-header>
     <div class="admin-body">
-      <sidebar [fixed]="true" [display]="'lg'">
+      <sidebar [fixed]="false" [display]="'lg'">
         <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
