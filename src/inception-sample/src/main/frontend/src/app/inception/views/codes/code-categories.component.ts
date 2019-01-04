@@ -27,13 +27,13 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 
 @Component({
-  templateUrl: 'code-category-administration.component.html',
-  styleUrls: ['code-category-administration.component.css'],
+  templateUrl: 'code-categories.component.html',
+  styleUrls: ['code-categories.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodeCategoryAdministrationComponent implements AfterViewInit {
+export class CodeCategoriesComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'actions'];
 
   dataSource = new MatTableDataSource<CodeCategory>();

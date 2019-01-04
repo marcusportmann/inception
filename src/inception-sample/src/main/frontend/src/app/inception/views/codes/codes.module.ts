@@ -26,19 +26,19 @@ import {InceptionModule} from '../../../inception/inception.module';
 import {RouterModule, Routes} from "@angular/router";
 
 // Import Inception components
-import {CodeCategoryAdministrationComponent} from "./code-category-administration.component";
+import {CodeCategoriesComponent} from "./code-categories.component";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'code-category-administration',
+    redirectTo: 'code-categories',
     pathMatch: 'full',
   },
   {
-    path: 'code-category-administration',
-    component: CodeCategoryAdministrationComponent,
+    path: 'code-categories',
+    component: CodeCategoriesComponent,
     data: {
-      title: 'Code Category Administration',
+      title: 'Code Categories',
       icon: 'fa fa-list',
       sidebarNav: true
     }
@@ -53,7 +53,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoryAdministrationComponent]
+  declarations: [CodeCategoriesComponent]
 })
 export class CodesModule {
 }

@@ -56,7 +56,7 @@
 //@import "nav"; TODO: CONFIRM IF THIS IS NEEDED...
 @import "sidebar";
 @import "switches";
-///@import "typography"; T|ODO: CONFIRM IF THIS IS NEEDED...
+@import "typography";
 
 
 
@@ -91,9 +91,14 @@
 //@import "flex";
 
 
-html, body {
-  /*font-size: 14px !important;*/
+/*
+@supports not (-webkit-overflow-scrolling: touch) {
+  html, body {
+    font-size: 14px !important;
+  }
 }
+*/
+
 
 /*
 .mat-form-field-infix {

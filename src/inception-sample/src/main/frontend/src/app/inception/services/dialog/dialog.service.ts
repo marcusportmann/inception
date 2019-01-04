@@ -51,33 +51,12 @@ export class DialogService {
   showErrorDialog(error: Error): MatDialogRef<ErrorDialog> {
 
     const dialogRef = this.dialog.open(ErrorDialog, {
-      width: '300px',
+      width: '360px',
       data: {error: error}
     });
 
     return dialogRef;
   }
-
-  // TODO: REMOVE ME AND ADD ERROR REPORTING TO  ERROR DIALOG -- MARCUS
-  // /**
-  //  * Show the specified error using the error report dialog.
-  //  *
-  //  * @param {Error} error The error.
-  //  */
-  // showErrorReportDialog(error: Error): MatDialogRef<ErrorReportDialog> {
-  //
-  //   const dialogRef = this.dialog.open(ErrorReportDialog, {
-  //     width: '300px',
-  //     data: error
-  //   });
-  //
-  //   return dialogRef;
-  //
-  //   // dialogRef.afterClosed().subscribe(result => {
-  //   //   console.log('The dialog was closed = ', result);
-  //   //   //this.animal = result;
-  //   // });
-  // }
 
   /**
    * Show an informational message using the information dialog.
@@ -87,7 +66,7 @@ export class DialogService {
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialog> {
 
     const dialogRef = this.dialog.open(InformationDialog, {
-      width: '300px',
+      width: '360px',
       data: data
     });
 
@@ -102,7 +81,7 @@ export class DialogService {
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialog> {
 
     const dialogRef = this.dialog.open(WarningDialog, {
-      width: '300px',
+      width: '360px',
       data: data
     });
 
