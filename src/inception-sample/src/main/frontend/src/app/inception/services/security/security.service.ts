@@ -28,6 +28,7 @@ import {ApiError} from "../../errors/api-error";
 import {Router} from "@angular/router";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {environment} from "../../../../environments/environment";
 
 /**
  * The SecurityService class provides the Security Service implementation.
@@ -53,7 +54,7 @@ export class SecurityService {
    */
   public getOrganizations(): Observable<Organization[]> {
 
-    return this.httpClient.get<Organization[]>('http://localhost:20000/api/organizations', {reportProgress: true}).pipe(
+    return this.httpClient.get<Organization[]>(environment.securityServiceUrlPrefix + '/organizations', {reportProgress: true}).pipe(
       map((organizations: Organization[]) => {
 
         return organizations;

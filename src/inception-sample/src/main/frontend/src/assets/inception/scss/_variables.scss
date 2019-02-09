@@ -131,6 +131,7 @@ $sidebar-compact-height:              $sidebar-compact-width !default;
 $sidebar-color:                       #fff !default;
 $sidebar-bg:                          $gray-800 !default;
 $sidebar-borders:                     none !default;
+$sidebar-font-size:                   0.9375rem;
 $mobile-sidebar-width:                220px !default;
 
 // Sidebar Header
@@ -812,9 +813,12 @@ $hr-margin-y:                 $spacer !default;
 //
 //
 //
-//// -------------------------------------------------------------------------------------------------
-//// Breadcrumbs
-//// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// Breadcrumbs
+// -------------------------------------------------------------------------------------------------
+$breadcrumb-font-size:              0.9375rem;
+
+
 //$breadcrumb-padding-y:              .75rem !default;
 //$breadcrumb-padding-x:              1rem !default;
 //$breadcrumb-item-padding:           .5rem !default;

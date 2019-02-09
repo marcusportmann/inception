@@ -8837,9 +8837,6 @@
        <string>java.rmi.server.disableHttp</string>
       </void>
       <void method="remove">
-       <string>java.util.Arrays.useLegacyMergeSort</string>
-      </void>
-      <void method="remove">
        <string>java.rmi.server.hostname</string>
       </void>
       <void method="remove">

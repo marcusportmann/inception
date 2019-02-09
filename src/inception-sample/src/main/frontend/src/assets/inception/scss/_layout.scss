@@ -289,6 +289,7 @@ admin-root {
     flex: auto;
 
     .breadcrumb {
+      font-size: $breadcrumb-font-size;
 
       /*flex: 0 0 42px;*/
 
@@ -382,10 +383,17 @@ admin-root {
   }
 }
 
-
 .sidebar {
   margin-left: - $sidebar-width;
+
+  sidebar-nav-item {
+    font-size: $sidebar-font-size;
+  }
 }
+
+//body > admin-container > div > main > ol > li.breadcrumb-item.active.ng-star-inserted > span
+
+
 
 
 
@@ -706,6 +714,15 @@ TODO GET THIS TO WORK - SIDEBAR NEEDS TO BE BIGGER ON SMALLER SCREEN WITH BIG FO
 }
 
 
+simple-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ng-component {
+    display: flex;
+  }
+}
 
 
 

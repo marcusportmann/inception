@@ -16,7 +16,7 @@
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {CodeCategory} from "../../services/codes/code-category";
+import {Code} from "../../services/codes/code";
 import {Observable} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
 import {catchError, map} from "rxjs/operators";
@@ -27,17 +27,17 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 
 @Component({
-  templateUrl: 'code-categories.component.html',
-  styleUrls: ['code-categories.component.css'],
+  templateUrl: 'codes.component.html',
+  styleUrls: ['codes.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodeCategoriesComponent implements AfterViewInit {
+export class CodesComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['name', 'actions'];
 
-  dataSource = new MatTableDataSource<CodeCategory>();
+  dataSource = new MatTableDataSource<Code>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -54,31 +54,28 @@ export class CodeCategoriesComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  codeAdministration(id: string) {
-    console.log('Administering codes for code category: ', id);
+  deleteCode(id: string) {
+    console.log('Deleting code: ', id);
   }
 
-  deleteCodeCategory(id: string) {
-    console.log('Deleting code category: ', id);
+  editCode(id: string) {
+    console.log('Editing code: ', id);
   }
 
-  editCodeCategory(id: string) {
-    console.log('Editing code category: ', id);
-  }
-
-  newCodeCategory() {
-    console.log('New code category');
+  newCode() {
+    console.log('New code');
   }
 
   ngAfterViewInit() {
 
+    /*
     this.spinnerService.show();
 
-    this.codesService.getCodeCategories().subscribe((codeCategories: CodeCategory[]) => {
+    this.codesSubscription = this.codesService.getCodes().subscribe((codes: Code[]) => {
 
       this.spinnerService.hide();
 
-      this.dataSource.data = codeCategories;
+      this.dataSource.data = codes;
 
     }, (error: Error) => {
 
@@ -86,6 +83,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
       this.dialogService.showErrorDialog(error);
     });
+    */
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

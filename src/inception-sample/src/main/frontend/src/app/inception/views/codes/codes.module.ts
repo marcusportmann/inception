@@ -27,6 +27,7 @@ import {RouterModule, Routes} from "@angular/router";
 
 // Import Inception components
 import {CodeCategoriesComponent} from "./code-categories.component";
+import {CodesComponent} from "./codes.component";
 
 const routes: Routes = [
   {
@@ -42,6 +43,15 @@ const routes: Routes = [
       icon: 'fa fa-list',
       sidebarNav: true
     }
+  },
+  {
+    path: 'code-categories/:id',
+    component: CodeCategoriesComponent,
+    data: {
+      title: 'TODO FIX THIS',
+      icon: 'fa fa-list',
+      sidebarNav: false
+    }
   }
 ];
 
@@ -53,7 +63,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent]
 })
 export class CodesModule {
 }

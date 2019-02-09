@@ -32,7 +32,7 @@ import javax.validation.Validator;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/sms")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SMSRestController
 {

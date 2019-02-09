@@ -47,7 +47,7 @@ import java.util.*;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/reporting")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportingRestController
 {
@@ -80,7 +80,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.POST,
+  @RequestMapping(value = "/reportDefinitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createReportDefinition(@ApiParam(name = "reportDefinition",
@@ -120,7 +120,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}",
+  @RequestMapping(value = "/reportDefinitions/{reportDefinitionId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
@@ -153,7 +153,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/generateReport", method = RequestMethod.POST,
+  @RequestMapping(value = "/generateReport", method = RequestMethod.POST,
       produces = "application/pdf")
   public ResponseEntity<byte[]> generateReport(
       @RequestBody GenerateReportRequest generateReportRequest)
@@ -223,7 +223,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitionSummaries", method = RequestMethod.GET,
+  @RequestMapping(value = "/reportDefinitionSummaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
@@ -243,7 +243,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.GET,
+  @RequestMapping(value = "/reportDefinitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<ReportDefinition> getReportDefinitions()
@@ -268,7 +268,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
+  @RequestMapping(value = "/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",

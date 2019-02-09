@@ -43,7 +43,7 @@ import java.util.Set;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/configuration")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ConfigurationRestController
 {
@@ -71,7 +71,7 @@ public class ConfigurationRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/configuration/{key}", method = RequestMethod.DELETE,
+  @RequestMapping(value = "/configurations/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteConfiguration(@ApiParam(name = "key",
@@ -102,7 +102,7 @@ public class ConfigurationRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/configuration/{key}", method = RequestMethod.GET,
+  @RequestMapping(value = "/configurations/{key}", method = RequestMethod.GET,
       produces = "application/json")
   public Configuration getConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
@@ -133,7 +133,7 @@ public class ConfigurationRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/configuration/{key}/value", method = RequestMethod.GET)
+  @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET)
   @ResponseBody
   public String getConfigurationValue(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
@@ -159,7 +159,7 @@ public class ConfigurationRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/configuration", method = RequestMethod.GET,
+  @RequestMapping(value = "/configurations", method = RequestMethod.GET,
       produces = "application/json")
   public List<Configuration> getConfigurations()
     throws ConfigurationServiceException
@@ -179,7 +179,7 @@ public class ConfigurationRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/configuration", method = RequestMethod.POST,
+  @RequestMapping(value = "/configurations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void setConfiguration(@ApiParam(name = "configuration", value = "The configuration",

@@ -51,10 +51,13 @@ export class BreadcrumbsService {
 
             if (routeSnapshot.url.length > 0) {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
-              breadcrumbs.push({
-                label: route.snapshot.data,
-                url: url
-              });
+
+              if (routeSnapshot.data.title) {
+                breadcrumbs.push({
+                  label: routeSnapshot.data.title,
+                  url: url
+                });
+              }
             }
             currentRoute = route;
           }

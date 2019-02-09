@@ -24,10 +24,10 @@ import {BreadcrumbsService} from "../../services/breadcrumbs/breadcrumbs.service
     <ol class="breadcrumb">
       <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
         <li class="breadcrumb-item"
-            *ngIf="(breadcrumb.label.title&&(!last)) || (breadcrumb.label.title&&last)"
+            *ngIf="(breadcrumb.label && (!last)) || (breadcrumb.label && last)"
             [ngClass]="{active: last}">
-          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</a>
-          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label.title}}</span>
+          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
         </li>
       </ng-template>
     </ol>

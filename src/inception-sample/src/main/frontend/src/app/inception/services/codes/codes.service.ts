@@ -18,6 +18,7 @@ import {Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Code} from "./code";
 import {CodeCategory} from "./code-category";
 import {CodesServiceError} from "./codes.service.errors";
 import {CommunicationError} from "../../errors/communication-error";
@@ -50,7 +51,7 @@ export class CodesService {
    */
   public getCodeCategories(): Observable<CodeCategory[]> {
 
-    return this.httpClient.get<CodeCategory[]>(environment.codesServiceGetCodeCategoriesUrl, {reportProgress: true}).pipe(
+    return this.httpClient.get<CodeCategory[]>(environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
       map((codeCategories: CodeCategory[]) => {
 
         return codeCategories;
@@ -63,6 +64,43 @@ export class CodesService {
           return throwError(new CodesServiceError(this.i18n({
             id: '@@codes_service_failed_to_retrieve_the_code_categories',
             value: 'Failed to retrieve the code categories.'
+          }), apiError));
+        }
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+        else {
+          return throwError(new SystemUnavailableError(this.i18n({
+            id: '@@system_unavailable_error',
+            value: 'An error has occurred and the system is unable to process your request at this time.'
+          }), httpErrorResponse));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the codes for the code category.
+   *
+   * @param {string} codeCategoryId The Universally Unique Identifier (UUID) used to uniquely
+   *                                identify the code category.
+   *
+   * @return the codes for the code category
+   */
+  public getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
+
+    return this.httpClient.get<Code[]>(environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId  + '/codes', {reportProgress: true}).pipe(
+      map((codes: Code[]) => {
+
+        return codes;
+
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+        if (ApiError.isApiError(httpErrorResponse)) {
+          let apiError: ApiError = new ApiError(httpErrorResponse);
+
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_retrieve_the_codes',
+            value: 'Failed to retrieve the codes.'
           }), apiError));
         }
         else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
