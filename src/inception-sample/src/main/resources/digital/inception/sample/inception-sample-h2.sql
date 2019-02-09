@@ -87,11 +87,72 @@ INSERT INTO sample.data (id, name, string_value) VALUES (7, 'Sample Name 7', 'Sa
 INSERT INTO sample.data (id, name, string_value) VALUES (8, 'Sample Name 8', 'Sample Value 8');
 INSERT INTO sample.data (id, name, string_value) VALUES (9, 'Sample Name 9', 'Sample Value 9');
 
-INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('01a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 01', NOW(), '<codes><code name="name1" value="value1"/></codes>');
 
-INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID1', '54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 1', 'Test Code Value 1');
-INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID2', '54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 2', 'Test Code Value 2');
-INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID3', '54a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 3', 'Test Code Value 3');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID011', '01a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 1.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID012', '01a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 1.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID013', '01a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 1.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('02a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 02', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID021', '02a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 2.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID022', '02a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 2.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID023', '02a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 2.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('03a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 03', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID031', '03a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 3.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID032', '03a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 3.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID033', '03a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 3.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('04a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 04', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID041', '04a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 4.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID042', '04a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 4.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID043', '04a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 4.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('05a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 05', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID051', '05a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 5.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID052', '05a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 5.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID053', '05a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 5.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('06a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 06', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID061', '06a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 6.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID062', '06a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 6.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID063', '06a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 6.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('07a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 07', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID071', '07a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 7.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID072', '07a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 7.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID073', '07a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 7.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('08a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 08', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID081', '08a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 8.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID082', '08a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 8.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID083', '08a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 8.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('09a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 09', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID091', '09a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 9.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID092', '09a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 9.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID093', '09a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 9.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('10a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 10', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID101', '10a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 10.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID102', '10a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 10.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID103', '10a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 10.3', 'Test Code Value 3');
+
+INSERT INTO codes.code_categories (id, name, updated, data) VALUES ('11a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Category 11', NOW(), '<codes><code name="name1" value="value1"/></codes>');
+
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID111', '11a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 11.1', 'Test Code Value 1');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID112', '11a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 11.2', 'Test Code Value 2');
+INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCodeID113', '11a40e0a-829a-485f-8482-9629ca3d0a18', 'Test Code Name 11.3', 'Test Code Value 3');
+
 
 --INSERT INTO configuration.configuration (key, value, description) VALUES ('TestKey', 'TestValue', 'TestDescription');
 
