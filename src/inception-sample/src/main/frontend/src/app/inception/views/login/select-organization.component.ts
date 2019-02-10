@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ export class SelectOrganizationComponent implements OnInit {
 
   filteredOrganizations: Observable<Organization[]>;
 
-  constructor(private formBuilder: FormBuilder, private i18n: I18n, private sessionService: SessionService, private router: Router) {
+  constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n, private sessionService: SessionService) {
 
     this.selectOrganizationForm = this.formBuilder.group({
       organization: ['', Validators.required]

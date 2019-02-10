@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import {RouterModule, Routes} from "@angular/router";
 // Import Inception components
 import {CodeCategoriesComponent} from "./code-categories.component";
 import {CodesComponent} from "./codes.component";
+import {NewCodeCategoryComponent} from "./new-code-category.component";
 
 const routes: Routes = [
   {
@@ -52,7 +53,16 @@ const routes: Routes = [
       icon: 'fa fa-list',
       sidebarNav: false
     }
+  },
+  {
+    path: 'new-code-category',
+    component: NewCodeCategoryComponent,
+    data: {
+      title: 'New Code Category',
+      sidebarNav: false
+    }
   }
+
 ];
 
 @NgModule({
@@ -63,7 +73,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent, NewCodeCategoryComponent]
 })
 export class CodesModule {
 }

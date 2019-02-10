@@ -1,6 +1,6 @@
 // TODO: REMOVE ME AND ADD ERROR REPORTING TO  ERROR DIALOG -- MARCUS
 // /*
-//  * Copyright 2018 Marcus Portmann
+//  * Copyright 2019 Marcus Portmann
 //  *
 //  * Licensed under the Apache License, Version 2.0 (the "License");
 //  * you may not use this file except in compliance with the License.

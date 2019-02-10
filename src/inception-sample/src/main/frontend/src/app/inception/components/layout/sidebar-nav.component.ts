@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -158,7 +158,7 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
 export class SidebarNavItemComponent {
   @Input() navItem: NavigationItem;
 
-  constructor(private router: Router, private el: ElementRef) {
+  constructor(private el: ElementRef, private router: Router) {
   }
 
   hasBadge(): boolean {

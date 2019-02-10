@@ -49,7 +49,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       </main>
     </div>
     <admin-footer [fixed]="false">
-      <span>2018 &copy; <span class="copyright-name"></span></span>
+      <span>2019 &copy; <span class="copyright-name"></span></span>
     </admin-footer>
   `
 })

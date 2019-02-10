@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,10 @@ export class CanActivateFunctionGuard implements CanActivate {
   /**
    * Constructs a new CanActivateFunctionGuard.
    *
-   * @param {SessionService} sessionService The Session Service.
    * @param {Router}         router         The router.
+   * @param {SessionService} sessionService The Session Service.
    */
-  constructor(private sessionService: SessionService, private router: Router) {
+  constructor(private router: Router, private sessionService: SessionService) {
   }
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

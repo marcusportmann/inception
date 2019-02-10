@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   templateUrl: 'code-categories.component.html',
@@ -43,7 +44,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService)
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService)
   {
 
   }
@@ -67,7 +68,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   newCodeCategory() {
-    console.log('New code category');
+    this.router.navigate(['../new-code-category'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit() {
