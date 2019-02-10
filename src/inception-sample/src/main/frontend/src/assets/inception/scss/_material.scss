@@ -623,7 +623,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
     color: $gray-700 !important;
 
     .table-filter-input {
-
+      width: 7em;
     }
   }
 
@@ -939,4 +939,13 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   }
 }
 
+/*
+.mat-header-row {
+  min-height: 48px !important;
+}
+
+.mat-footer-row, mat-row {
+  min-height: 42px !important;
+}
+*/
 

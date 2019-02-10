@@ -71,7 +71,7 @@ public class ReportingRestController
    *
    * @param reportDefinition the report definition to create
    */
-  @ApiOperation(value = "Create a report definition", notes = "Create the report definition")
+  @ApiOperation(value = "Create a report definition", notes = "Create a report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was created successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -111,7 +111,7 @@ public class ReportingRestController
    * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the report definition
    */
-  @ApiOperation(value = "Delete a report definition", notes = "Delete the report definition")
+  @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was deleted successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -144,7 +144,7 @@ public class ReportingRestController
    *
    * @return the PDF report
    */
-  @ApiOperation(value = "Generate a PDF report", notes = "Generate the PDF report")
+  @ApiOperation(value = "Generate the PDF report", notes = "Generate the PDF report")
   @ApiResponses(value = { @ApiResponse(code = 200,
       message = "The PDF report was generated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -259,7 +259,7 @@ public class ReportingRestController
    *                           the report definition
    * @param reportDefinition   the report definition
    */
-  @ApiOperation(value = "Update a report definition", notes = "Update the report definition")
+  @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was updated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,

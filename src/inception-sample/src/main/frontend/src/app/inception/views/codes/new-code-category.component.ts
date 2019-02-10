@@ -38,8 +38,8 @@ export class NewCodeCategoryComponent implements OnInit {
       //hideRequired: false,
       //floatLabel: 'auto',
       // tslint:disable-next-line
-      //firstName: ['', Validators.required],
-      //lastName: ['', Validators.required],
+      id: ['', Validators.required],
+      name: ['', Validators.required],
       //title: ['', Validators.required],
       //dateOfBirth: [moment(), Validators.required],
     });

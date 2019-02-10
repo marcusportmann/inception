@@ -1,11 +1,28 @@
 <form [formGroup]="newCodeCategoryForm" (submit)="onSubmit()" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
   <mat-card class="flex flex-column flex-fill">
     <mat-card-content class="d-flex flex-column flex-fill">
-
-
-XXX
-
-
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input type="text" matInput formControlName="id" required="true" autofocus>
+            <mat-error *ngIf="newCodeCategoryForm.controls['id'].errors && !newCodeCategoryForm.controls['id'].untouched">
+              <span *ngIf="newCodeCategoryForm.controls['id'].errors?.required">An ID is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="name" required="true">
+            <mat-error *ngIf="newCodeCategoryForm.controls['name'].errors && !newCodeCategoryForm.controls['name'].untouched">
+              <span *ngIf="newCodeCategoryForm.controls['name'].errors?.required">A name is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link">Cancel</button>

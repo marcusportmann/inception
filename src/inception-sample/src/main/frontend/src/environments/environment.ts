@@ -6,7 +6,7 @@ export const environment = {
   production: false,
 
   // Inception API URLs
-  codesServiceUrlPrefix: 'http://localhost:20000/api/codes',
+  codesServiceUrlPrefix: 'http://192.168.0.10:8080/api/codes',
   securityServiceUrlPrefix: 'http://localhost:20000/api/security'
 
 

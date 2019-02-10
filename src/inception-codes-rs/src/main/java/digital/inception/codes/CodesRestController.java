@@ -71,7 +71,7 @@ public class CodesRestController
    *                       code category
    * @param code           the code to create
    */
-  @ApiOperation(value = "Create a code", notes = "Create the code")
+  @ApiOperation(value = "Create a code", notes = "Create a code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was created successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
       @ApiResponse(code = 409, message = "A code with the specified ID already exists",
@@ -118,7 +118,7 @@ public class CodesRestController
    *
    * @param codeCategory the code category to create
    */
-  @ApiOperation(value = "Create a code category", notes = "Create the code category")
+  @ApiOperation(value = "Create a code category", notes = "Create a code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was created successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -157,7 +157,7 @@ public class CodesRestController
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
    */
-  @ApiOperation(value = "Delete a code", notes = "Delete the code")
+  @ApiOperation(value = "Delete the code", notes = "Delete the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was deleted successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
       @ApiResponse(code = 404, message = "The code could not be found",
@@ -195,7 +195,7 @@ public class CodesRestController
    * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       code category
    */
-  @ApiOperation(value = "Delete a code category", notes = "Delete the code category")
+  @ApiOperation(value = "Delete the code category", notes = "Delete the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was deleted successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -354,7 +354,7 @@ public class CodesRestController
    * @param codeId         the ID used to uniquely identify the code
    * @param code           the code to create
    */
-  @ApiOperation(value = "Update a code", notes = "Update the code")
+  @ApiOperation(value = "Update the code", notes = "Update the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was updated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
       @ApiResponse(code = 409, message = "A code with the specified ID already exists",
@@ -409,7 +409,7 @@ public class CodesRestController
    *                       code category
    * @param codeCategory   the code category
    */
-  @ApiOperation(value = "Update a code category", notes = "Update the code category")
+  @ApiOperation(value = "Update the code category", notes = "Update the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The code category was updated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
