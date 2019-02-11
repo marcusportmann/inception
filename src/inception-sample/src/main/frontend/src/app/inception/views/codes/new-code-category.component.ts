@@ -22,6 +22,7 @@ import {NavigationService} from "../../../inception/services/navigation/navigati
 import * as moment from 'moment';
 import {Observable} from "rxjs";
 import {map, startWith} from 'rxjs/operators';
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -32,7 +33,7 @@ export class NewCodeCategoryComponent implements OnInit {
 
   newCodeCategoryForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private navigationService: NavigationService) {
 
     this.newCodeCategoryForm = this.formBuilder.group({
       //hideRequired: false,
@@ -48,6 +49,10 @@ export class NewCodeCategoryComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit() {
+  onCancel() {
+    this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
+  }
+
+  onOK() {
   }
 }

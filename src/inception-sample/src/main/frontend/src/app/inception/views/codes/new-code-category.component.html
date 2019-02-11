@@ -25,7 +25,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link">Cancel</button>
+      <button type="button" mat-flat-button color="link" (click)="onCancel()">Cancel</button>
       <button type="submit" [disabled]="!newCodeCategoryForm.valid" mat-flat-button>OK</button>
     </mat-card-actions>
   </mat-card>
