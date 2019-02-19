@@ -15,12 +15,12 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable, of, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Code} from "./code";
 import {CodeCategory} from "./code-category";
-import {CodesServiceError} from "./codes.service.errors";
+import {CodesServiceError, DuplicateCodeCategoryError} from "./codes.service.errors";
 import {CommunicationError} from "../../errors/communication-error";
 import {ApiError} from "../../errors/api-error";
 import {I18n} from "@ngx-translate/i18n-polyfill";
@@ -43,6 +43,51 @@ export class CodesService {
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Codes Service');
   }
+
+  /**
+   * Create a code category.
+   *
+   * @param {CodeCategory} codeCategory The code category to create.
+   */
+  public createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
+
+    return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories', codeCategory,{observe: "response"}).pipe(
+      map((httpResponse: HttpResponse<any>) => {
+
+        return true;
+
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+        if (ApiError.isApiError(httpErrorResponse)) {
+          let apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status == 409) {
+            return throwError(new DuplicateCodeCategoryError(this.i18n({
+              id: '@@codes_service_the_code_category_already_exists',
+              value: 'The code category already exists.'
+            }), apiError));
+          }
+          else {
+            return throwError(new CodesServiceError(this.i18n({
+              id: '@@codes_service_failed_to_create_the_code_category',
+              value: 'Failed to create the code category.'
+            }), apiError));
+          }
+        }
+        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse));
+        }
+        else {
+          return throwError(new SystemUnavailableError(this.i18n({
+            id: '@@system_unavailable_error',
+            value: 'An error has occurred and the system is unable to process your request at this time.'
+          }), httpErrorResponse));
+        }
+      }));
+  }
+
+
+
 
   /**
    * Retrieve the code categories.

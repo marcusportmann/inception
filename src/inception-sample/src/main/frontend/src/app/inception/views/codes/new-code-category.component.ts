@@ -16,14 +16,14 @@
 
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {patternValidator} from '../../../inception/validators/pattern-validator';
-import {NavigationService} from "../../../inception/services/navigation/navigation.service";
-
-import * as moment from 'moment';
-import {Observable} from "rxjs";
-import {map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from "@angular/router";
-
+import {DialogService} from "../../services/dialog/dialog.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
+import {CodesService} from "../../services/codes/codes.service";
+import {Error} from "../../errors/error";
+import {CodeCategory} from "../../services/codes/code-category";
+import {v4 as uuid} from "uuid";
 
 @Component({
   templateUrl: 'new-code-category.component.html',
@@ -33,13 +33,13 @@ export class NewCodeCategoryComponent implements OnInit {
 
   newCodeCategoryForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private navigationService: NavigationService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService) {
 
     this.newCodeCategoryForm = this.formBuilder.group({
       //hideRequired: false,
       //floatLabel: 'auto',
       // tslint:disable-next-line
-      id: ['', Validators.required],
+      id: [uuid(), Validators.required],
       name: ['', Validators.required],
       //title: ['', Validators.required],
       //dateOfBirth: [moment(), Validators.required],
@@ -54,5 +54,23 @@ export class NewCodeCategoryComponent implements OnInit {
   }
 
   onOK() {
+
+    let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
+      this.newCodeCategoryForm.get('name').value, null);
+
+    this.spinnerService.show();
+
+    this.codesService.createCodeCategory(codeCategory).subscribe((result: boolean) => {
+
+      this.spinnerService.hide();
+
+      this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
+
+    }, (error: Error) => {
+
+      this.spinnerService.hide();
+
+      this.dialogService.showErrorDialog(error);
+    });
   }
 }

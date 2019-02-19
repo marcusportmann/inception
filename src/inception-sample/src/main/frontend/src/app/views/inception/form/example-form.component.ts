@@ -22,6 +22,7 @@ import {NavigationService} from "../../../inception/services/navigation/navigati
 import * as moment from 'moment';
 import {Observable} from "rxjs";
 import {map, startWith} from 'rxjs/operators';
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 export interface StateGroup {
@@ -50,7 +51,7 @@ export class ExampleFormComponent implements OnInit {
 
   filteredCountryOptions: Observable<string[]>;
 
-  constructor(private formBuilder: FormBuilder, private navigationService: NavigationService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
 
     this.exampleForm = this.formBuilder.group({
       //hideRequired: false,

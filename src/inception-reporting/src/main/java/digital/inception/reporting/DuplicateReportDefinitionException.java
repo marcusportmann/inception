@@ -56,6 +56,6 @@ public class DuplicateReportDefinitionException extends ServiceException
    */
   public DuplicateReportDefinitionException(UUID reportDefinitionId)
   {
-    super("The report definition wih ID (" + reportDefinitionId + ") already exists");
+    super("The report definition with ID (" + reportDefinitionId + ") already exists");
   }
 }

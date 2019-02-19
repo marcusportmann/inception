@@ -58,7 +58,7 @@ public class DuplicateCodeException extends ServiceException
    */
   public DuplicateCodeException(UUID codeCategoryId, String codeId)
   {
-    super("The code wih ID (" + codeId + ") already exists for the code category with ID ("
+    super("The code with ID (" + codeId + ") already exists for the code category with ID ("
         + codeCategoryId + ")");
   }
 }

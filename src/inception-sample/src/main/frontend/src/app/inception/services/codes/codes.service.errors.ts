@@ -33,3 +33,21 @@ export class CodesServiceError extends Error {
     super(message, cause);
   }
 }
+
+/**
+ * The DuplicateCodeCategory class holds the information for a duplicate code category error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateCodeCategoryError extends Error {
+
+  /**
+   * Constructs a new DuplicateCodeCategoryError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
