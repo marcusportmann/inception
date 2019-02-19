@@ -19,11 +19,14 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+
 import digital.inception.core.support.MergedMessageSource;
 import digital.inception.core.util.JDBCUtil;
 import digital.inception.core.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +53,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +67,8 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
 
 /**
  * The <code>Application</code> class provides the class that all application-specific application
@@ -89,6 +94,17 @@ public abstract class Application extends ApplicationBase
   Map<String, Map> caches = new ConcurrentHashMap<>();
 
   /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
+
+  /**
+   * The application data source.
+   */
+  private DataSource dataSource;
+
+  /**
    * The fully qualified name of the data source class used to connect to the application
    * database.
    */
@@ -96,10 +112,10 @@ public abstract class Application extends ApplicationBase
   private String databaseDataSourceClass;
 
   /**
-   * The URL used to connect to the application database.
+   * The maximum size of the database connection pool used to connect to the application database.
    */
-  @Value("${application.database.url:#{null}}")
-  private String databaseUrl;
+  @Value("${application.database.maxPoolSize:#{5}}")
+  private int databaseMaxPoolSize;
 
   /**
    * The minimum size of the database connection pool used to connect to the application database.
@@ -108,10 +124,16 @@ public abstract class Application extends ApplicationBase
   private int databaseMinPoolSize;
 
   /**
-   * The maximum size of the database connection pool used to connect to the application database.
+   * The URL used to connect to the application database.
    */
-  @Value("${application.database.maxPoolSize:#{5}}")
-  private int databaseMaxPoolSize;
+  @Value("${application.database.url:#{null}}")
+  private String databaseUrl;
+
+  /**
+   * The XA password for the application database.
+   */
+  @Value("${application.database.xaPassword:#{null}}")
+  private String databaseXaPassword;
 
   /**
    * The XA server name for the application database.
@@ -126,23 +148,6 @@ public abstract class Application extends ApplicationBase
   private String databaseXaUsername;
 
   /**
-   * The XA password for the application database.
-   */
-  @Value("${application.database.xaPassword:#{null}}")
-  private String databaseXaPassword;
-
-  /**
-   * The Spring application context.
-   */
-  @Autowired
-  private ApplicationContext applicationContext;
-
-  /**
-   * The application data source.
-   */
-  private DataSource dataSource;
-
-  /**
    * Constructs a new <code>Application</code>.
    */
   public Application() {}
@@ -154,117 +159,6 @@ public abstract class Application extends ApplicationBase
     throws Exception
   {
     shutdownInMemoryApplicationDatabase();
-  }
-
-  /**
-   * Returns the application entity manager factory bean associated with the application data
-   * source.
-   *
-   * @return the application entity manager factory bean associated with the application data source
-   */
-  @Bean(name = "applicationPersistenceUnit")
-  @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
-  {
-    try
-    {
-      DataSource dataSource = dataSource();
-
-      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
-          new LocalContainerEntityManagerFactoryBean();
-
-      HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
-      jpaVendorAdapter.setGenerateDdl(false);
-
-      try (Connection connection = dataSource.getConnection())
-      {
-        DatabaseMetaData metaData = connection.getMetaData();
-
-        switch (metaData.getDatabaseProductName())
-        {
-          case "H2":
-
-            jpaVendorAdapter.setDatabase(Database.H2);
-            jpaVendorAdapter.setShowSql(true);
-
-            break;
-
-          case "Microsoft SQL Server":
-
-            jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
-            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
-            jpaVendorAdapter.setShowSql(false);
-
-            break;
-
-          default:
-
-            jpaVendorAdapter.setDatabase(Database.DEFAULT);
-            jpaVendorAdapter.setShowSql(false);
-
-            break;
-        }
-      }
-
-      entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-      entityManagerFactoryBean.setJtaDataSource(dataSource);
-      entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(getJpaPackagesToScan()));
-      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
-
-      PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
-          PlatformTransactionManager.class);
-
-      if (platformTransactionManager instanceof JtaTransactionManager)
-      {
-        Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-            ((JtaTransactionManager) platformTransactionManager)));
-      }
-
-      return entityManagerFactoryBean;
-    }
-    catch (Throwable e)
-    {
-      throw new FatalBeanException(
-          "Failed to initialize the application entity manager factory bean", e);
-    }
-  }
-
-  /**
-   * Returns the application message source.
-   *
-   * @return the application message source
-   */
-  @Bean
-  public MessageSource messageSource()
-  {
-    MergedMessageSource messageSource = new MergedMessageSource();
-    messageSource.setBasename("classpath*:messages");
-
-    return messageSource;
-  }
-
-  /**
-   * Returns the Spring task executor to use for @Async method invocations.
-   *
-   * @return the Spring task executor to use for @Async method invocations
-   */
-  @Bean
-  public Executor taskExecutor()
-  {
-    return new SimpleAsyncTaskExecutor();
-  }
-
-  /**
-   * Returns the Spring task scheduler.
-   *
-   * @return the Spring task scheduler
-   */
-  @Bean
-  public TaskScheduler taskScheduler()
-  {
-    return new ConcurrentTaskScheduler();
   }
 
   /**
@@ -297,7 +191,7 @@ public abstract class Application extends ApplicationBase
       else
       {
         Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
-          .loadClass(databaseDataSourceClass).asSubclass(DataSource.class);
+            .loadClass(databaseDataSourceClass).asSubclass(DataSource.class);
 
         dataSource = DataSourceBuilder.create().type(dataSourceClass).url(databaseUrl).build();
       }
@@ -397,8 +291,8 @@ public abstract class Application extends ApplicationBase
           // Set the XA properties if they are available
           // See: https://www.atomikos.com/Documentation/ConfiguringSQLServer
           if ((!StringUtil.isNullOrEmpty(databaseXaServerName))
-            && (!StringUtil.isNullOrEmpty(databaseXaUsername))
-            && (!StringUtil.isNullOrEmpty(databaseXaPassword)))
+              && (!StringUtil.isNullOrEmpty(databaseXaUsername))
+              && (!StringUtil.isNullOrEmpty(databaseXaPassword)))
           {
             Properties p = new Properties();
             p.setProperty("serverName", databaseXaServerName);
@@ -410,7 +304,7 @@ public abstract class Application extends ApplicationBase
           else
           {
             throw new FatalBeanException(
-              "No XA properties specified for the AtomikosDataSourceBean for Microsoft SQL Server");
+                "No XA properties specified for the AtomikosDataSourceBean for Microsoft SQL Server");
           }
         }
 
@@ -442,6 +336,81 @@ public abstract class Application extends ApplicationBase
     catch (Throwable e)
     {
       throw new FatalBeanException("Failed to initialize the application data source", e);
+    }
+  }
+
+  /**
+   * Returns the application entity manager factory bean associated with the application data
+   * source.
+   *
+   * @return the application entity manager factory bean associated with the application data source
+   */
+  @Bean(name = "applicationPersistenceUnit")
+  @DependsOn("applicationDataSource")
+  protected LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
+  {
+    try
+    {
+      DataSource dataSource = dataSource();
+
+      LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
+          new LocalContainerEntityManagerFactoryBean();
+
+      HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+      jpaVendorAdapter.setGenerateDdl(false);
+
+      try (Connection connection = dataSource.getConnection())
+      {
+        DatabaseMetaData metaData = connection.getMetaData();
+
+        switch (metaData.getDatabaseProductName())
+        {
+          case "H2":
+
+            jpaVendorAdapter.setDatabase(Database.H2);
+            jpaVendorAdapter.setShowSql(true);
+
+            break;
+
+          case "Microsoft SQL Server":
+
+            jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
+            jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
+            jpaVendorAdapter.setShowSql(false);
+
+            break;
+
+          default:
+
+            jpaVendorAdapter.setDatabase(Database.DEFAULT);
+            jpaVendorAdapter.setShowSql(false);
+
+            break;
+        }
+      }
+
+      entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+      entityManagerFactoryBean.setJtaDataSource(dataSource);
+      entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(getJpaPackagesToScan()));
+      entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+      PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
+          PlatformTransactionManager.class);
+
+      if (platformTransactionManager instanceof JtaTransactionManager)
+      {
+        Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
+        jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+            ((JtaTransactionManager) platformTransactionManager)));
+      }
+
+      return entityManagerFactoryBean;
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException(
+          "Failed to initialize the application entity manager factory bean", e);
     }
   }
 
@@ -529,6 +498,20 @@ public abstract class Application extends ApplicationBase
   }
 
   /**
+   * Returns the application message source.
+   *
+   * @return the application message source
+   */
+  @Bean
+  protected MessageSource messageSource()
+  {
+    MergedMessageSource messageSource = new MergedMessageSource();
+    messageSource.setBasename("classpath*:messages");
+
+    return messageSource;
+  }
+
+  /**
    * Shutdown the in-memory application database if required.
    */
   protected void shutdownInMemoryApplicationDatabase()
@@ -565,5 +548,27 @@ public abstract class Application extends ApplicationBase
         logger.error("Failed to shutdown the in-memory application database", e);
       }
     }
+  }
+
+  /**
+   * Returns the Spring task executor to use for @Async method invocations.
+   *
+   * @return the Spring task executor to use for @Async method invocations
+   */
+  @Bean
+  protected Executor taskExecutor()
+  {
+    return new SimpleAsyncTaskExecutor();
+  }
+
+  /**
+   * Returns the Spring task scheduler.
+   *
+   * @return the Spring task scheduler
+   */
+  @Bean
+  protected TaskScheduler taskScheduler()
+  {
+    return new ConcurrentTaskScheduler();
   }
 }
