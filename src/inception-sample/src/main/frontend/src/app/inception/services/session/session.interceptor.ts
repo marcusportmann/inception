@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 import {Injectable} from "@angular/core";
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 
-import {Session} from "./session";
+import {flatMap} from "rxjs/operators";
+
 import {SessionService} from "./session.service";
-import {map} from "rxjs/operators";
+import {Session} from "./session";
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
@@ -44,17 +45,19 @@ export class SessionInterceptor implements HttpInterceptor {
 
     if (!httpRequest.url.endsWith('/oauth/token')) {
 
-      let httpRequestHandler = this.sessionService.getSession()
-        .flatMap(session => {
+      let httpRequestHandler = this.sessionService.session.pipe(
+        flatMap(session => {
 
-          httpRequest = httpRequest.clone({
-            setHeaders: {
-              Authorization: `Bearer ${session.accessToken}`
-            }
-          });
+          if (session) {
+            httpRequest = httpRequest.clone({
+              setHeaders: {
+                Authorization: `Bearer ${session.accessToken}`
+              }
+            });
+          }
 
           return nextHttpHandler.handle(httpRequest);
-        });
+        }));
 
       return httpRequestHandler;
     }
@@ -62,5 +65,4 @@ export class SessionInterceptor implements HttpInterceptor {
       return nextHttpHandler.handle(httpRequest);
     }
   }
-
 }

@@ -1,7 +1,9 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Replace } from './../../shared';
 import {SessionService} from "../../services/session/session.service";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
+
 import {Router} from "@angular/router";
 import {Session} from "../../services/session/session";
 
@@ -39,10 +41,10 @@ import {Session} from "../../services/session/session";
           <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        <li *ngIf="isLoggedIn() | async" class="nav-item" [matMenuTriggerFor]="userMenu">
+        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-full-name d-md-down-none">{{ userFullName() | async}}</span>
+            <span class="user-full-name d-md-down-none">{{ userFullName() | async }}</span>
           </a>
         </li>
 
@@ -52,12 +54,14 @@ import {Session} from "../../services/session/session";
           <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </mat-menu>
         
-        <li *ngIf="!(isLoggedIn() | async)" class="nav-item">
-          <a class="nav-link" (click)="login()">
-            <span class="login-icon"></span>
-            <span class="login d-md-down-none">Login</span>
-          </a>
-        </li>
+        <ng-template #login_link> 
+          <li class="nav-item">
+            <a class="nav-link" (click)="login()">
+              <span class="login-icon"></span>
+              <span class="login d-md-down-none">Login</span>
+            </a>
+          </li>
+        </ng-template>
       </ul>
     </header>
   `
@@ -104,16 +108,11 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   isLoggedIn(): Observable<boolean> {
-
-    return this.sessionService.getSession().map((session : (Session | null)) => {
-
-      if (session) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    });
+    return this.sessionService.session.pipe(
+      map((session: Session) => {
+        return (session != null);
+      })
+    );
   }
 
   login() {
@@ -127,14 +126,15 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   userFullName(): Observable<string> {
-    return this.sessionService.getSession().map((session: Session) => {
-
-      if (session) {
-        return session.username;
-      }
-      else {
-        return '';
-      }
-    });
+    return this.sessionService.session.pipe(
+      map((session: Session) => {
+        if (session) {
+          return session.username;
+        }
+        else {
+          return '';
+        }
+      })
+    );
   }
 }

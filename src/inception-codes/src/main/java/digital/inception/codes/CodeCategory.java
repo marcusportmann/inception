@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,25 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.xml.LocalDateTimeAdapter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.time.LocalDateTime;
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>CodeCategory</code> class holds the information for a code category.
@@ -55,8 +61,8 @@ public class CodeCategory
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify "
+    + "the code category",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)

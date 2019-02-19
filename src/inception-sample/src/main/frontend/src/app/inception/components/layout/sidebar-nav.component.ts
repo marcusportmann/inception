@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,79 +18,173 @@ import {
   Component,
   ElementRef,
   HostBinding,
-  Input,
+  Input, 
+  OnDestroy,
   OnInit,
-  Renderer2,
 } from '@angular/core';
-import {Replace} from '../../shared/index';
-
-@Component({
-  selector: 'sidebar-nav',
-  template: `
-    <ul class="nav">
-      <ng-template ngFor let-navitem [ngForOf]="navItems">
-        <li *ngIf="isDivider(navitem)" class="nav-divider"></li>
-        <ng-template [ngIf]="isTitle(navitem)">
-          <sidebar-nav-title [title]='navitem'></sidebar-nav-title>
-        </ng-template>
-        <ng-template [ngIf]="!isDivider(navitem)&&!isTitle(navitem)">
-          <sidebar-nav-item [item]='navitem'></sidebar-nav-item>
-        </ng-template>
-      </ng-template>
-    </ul>`
-})
-export class SidebarNavComponent {
-  @Input() navItems: NavigationItem[];
-
-  @HostBinding('class.sidebar-nav') true;
-  @HostBinding('attr.role') role = 'nav';
-
-  constructor() {
-  }
-
-  isDivider(item): boolean {
-    return item.divider ? true : false;
-  }
-
-  isTitle(item): boolean {
-    return item.title ? true : false;
-  }
-}
 
 import {Router} from '@angular/router';
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
 import {Session} from "../../services/session/session";
+import {Subscription} from "rxjs";
+import {map} from "rxjs/operators";
+
+@Component({
+  selector: 'sidebar-nav',
+  template: `
+    <ul class="nav">
+      <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
+    </ul>`
+})
+export class SidebarNavComponent implements  OnInit, OnDestroy {
+
+  navItems: NavigationItem[];
+
+  private _sessionSubscription: Subscription;
+
+  @HostBinding('class.sidebar-nav') true;
+
+  @HostBinding('attr.role') role = 'nav';
+
+  constructor(private navigationService: NavigationService, private sessionService: SessionService) {
+    this.navItems = new Array<NavigationItem>();
+  }
+
+  ngOnDestroy() {
+    if (this._sessionSubscription) {
+      this._sessionSubscription.unsubscribe();
+    }
+  }
+
+  ngOnInit(): void {
+    this._sessionSubscription = this.sessionService.session.pipe(
+      map((session: Session) => {
+        this.navItems = this._filterNavigationItems(this.navigationService.getNavigation(), session);
+      })
+    ).subscribe();
+  }
+
+  private _filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
+
+    if (!navigationItems) {
+      return navigationItems;
+    }
+
+    var filteredNavigationItems: NavigationItem[] = [];
+
+    for (var i = 0; i < navigationItems.length; i++) {
+
+      var navigationItem: NavigationItem = navigationItems[i];
+
+      var functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
+
+      if (functionCodes.length > 0) {
+
+        if (session) {
+
+          for (var j = 0; j < functionCodes.length; j++) {
+            for (var k = 0; k < session.functionCodes.length; k++) {
+              if (functionCodes[j] == session.functionCodes[k]) {
+
+                var filteredChildNavigationItems: NavigationItem[] =  this._filterNavigationItems(navigationItem.children, session);
+
+                filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
+                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+                  navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
+              }
+            }
+          }
+        }
+      }
+      else {
+
+        var filteredChildNavigationItems: NavigationItem[] =  this._filterNavigationItems(navigationItem.children, session);
+
+        filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
+          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+          navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
+      }
+    }
+
+    return filteredNavigationItems;
+  }
+}
 
 @Component({
   selector: 'sidebar-nav-item',
   template: `
-    <li *ngIf="!isDropdown(); else dropdown" [ngClass]="hasClass() ? 'nav-item ' + item.cssClass : 'nav-item'">
-      <sidebar-nav-link [link]='item'></sidebar-nav-link>
-    </li>
-    <ng-template #dropdown>
-      <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + item.cssClass : 'nav-item nav-dropdown'"
-          [class.open]="isActive()"
-          routerLinkActive="open"
-          sidebarNavDropdown>
-        <sidebar-nav-dropdown [link]='item'></sidebar-nav-dropdown>
+    <ng-container *ngIf="isDivider(); else checkForTitle">
+      <li class="nav-divider"></li>
+    </ng-container>
+    <ng-template #checkForTitle>
+      <ng-container *ngIf="isTitle(); else checkForDropdown">
+        <li class="nav-title">{{navItem.name}}</li>
+      </ng-container>
+    </ng-template>
+    <ng-template #checkForDropdown>
+      <ng-container *ngIf="isDropdown(); else sidebarNavLink">
+        <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
+            [class.open]="isActive()"
+            routerLinkActive="open"
+            sidebarNavDropdown>
+          <sidebar-nav-dropdown [navItem]='navItem'></sidebar-nav-dropdown>
+        </li>
+      </ng-container>
+    </ng-template>
+    <ng-template #sidebarNavLink>
+      <li [ngClass]="hasClass() ? 'nav-item ' + navItem.cssClass : 'nav-item'">
+        <a *ngIf="!isExternalLink(); else externalLink"
+           [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'"
+           routerLinkActive="active"
+           [routerLink]="[navItem.url]"
+           (click)="hideMobile()">
+          <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
+          {{ navItem.name }}
+          <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
+        </a>
+        <ng-template #externalLink>
+          <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
+            <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
+            {{ navItem.name }}
+            <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
+          </a>
+        </ng-template>
       </li>
     </ng-template>
   `
 })
-export class SidebarNavItemComponent implements OnInit {
-  @Input() item: NavigationItem;
+export class SidebarNavItemComponent {
+  @Input() navItem: NavigationItem;
 
-  constructor(private router: Router, private el: ElementRef) {
+  constructor(private el: ElementRef, private router: Router) {
+  }
+
+  hasBadge(): boolean {
+    return this.navItem.badge ? true : false;
   }
 
   hasClass(): boolean {
-    return this.item.cssClass ? true : false;
+    return this.navItem.cssClass ? true : false;
+  }
+
+  hasIcon(): boolean {
+    return this.navItem.icon ? true : false;
+  }
+
+  hasVariant(): boolean {
+    return this.navItem.variant ? true : false;
+  }
+
+  hideMobile() {
+    if (document.body.classList.contains('sidebar-show')) {
+      document.body.classList.toggle('sidebar-show');
+    }
   }
 
   isActive(): boolean {
-    if (this.item.url) {
+    if (this.navItem.url) {
       return this.router.isActive(this.thisUrl(), false);
     }
     else {
@@ -98,77 +192,30 @@ export class SidebarNavItemComponent implements OnInit {
     }
   }
 
+  isDivider(): boolean {
+    return this.navItem.divider ? true : false;
+  }
+
   isDropdown(): boolean {
-    return this.item.children ? true : false;
+    return this.navItem.children ? true : false;
   }
 
-  ngOnInit() {
-    Replace(this.el);
-  }
-
-  thisUrl(): string {
-    return this.item.url;
-  }
-}
-
-@Component({
-  selector: 'sidebar-nav-link',
-  template: `
-    <a *ngIf="!isExternalLink(); else external"
-       [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'"
-       routerLinkActive="active"
-       [routerLink]="[link.url]"
-       (click)="hideMobile()">
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-    </a>
-    <ng-template #external>
-      <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + link.variant : 'nav-link'" href="{{link.url}}">
-        <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-        {{ link.name }}
-        <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
-      </a>
-    </ng-template>
-  `
-})
-export class SidebarNavLinkComponent implements OnInit {
-  @Input() link: any;
-
-  public hasVariant() {
-    return this.link.variant ? true : false;
-  }
-
-  public isBadge() {
-    return this.link.badge ? true : false;
-  }
-
-  public isExternalLink() {
-
-    if (this.link) {
-      if (this.link.url) {
-        return this.link.url.substring(0, 4) === 'http' ? true : false;
+  isExternalLink(): boolean {
+    if (this.navItem) {
+      if (this.navItem.url) {
+        return this.navItem.url.substring(0, 4) === 'http' ? true : false;
       }
     }
 
     return false;
   }
 
-  public isIcon() {
-    return this.link.icon ? true : false;
+  isTitle(): boolean {
+    return this.navItem.title ? true : false;
   }
 
-  public hideMobile() {
-    if (document.body.classList.contains('sidebar-show')) {
-      document.body.classList.toggle('sidebar-show');
-    }
-  }
-
-  constructor(private router: Router, private el: ElementRef) {
-  }
-
-  ngOnInit() {
-    Replace(this.el);
+  thisUrl(): string {
+    return this.navItem.url;
   }
 }
 
@@ -176,68 +223,28 @@ export class SidebarNavLinkComponent implements OnInit {
   selector: 'sidebar-nav-dropdown',
   template: `
     <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-      <i *ngIf="isIcon()" class="nav-icon {{ link.icon }}"></i>
-      {{ link.name }}
-      <span *ngIf="isBadge()" [ngClass]="'badge badge-' + link.badge.variant">{{ link.badge.text }}</span>
+      <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
+      {{ navItem.name }}
+      <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
     </a>
     <ul class="nav-dropdown-items">
-      <ng-template ngFor let-child [ngForOf]="link.children">
-        <sidebar-nav-item [item]='child'></sidebar-nav-item>
-      </ng-template>
+      <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
     </ul>
   `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }']
 })
-export class SidebarNavDropdownComponent implements OnInit {
-  @Input() link: any;
+export class SidebarNavDropdownComponent {
+  @Input() navItem: NavigationItem;
 
-  public isBadge() {
-    return this.link.badge ? true : false;
+  public hasBadge() {
+    return this.navItem.badge ? true : false;
   }
 
-  public isIcon() {
-    return this.link.icon ? true : false;
+  public hasIcon() {
+    return this.navItem.icon ? true : false;
   }
 
-  constructor(private router: Router, private el: ElementRef) {
-  }
-
-  ngOnInit() {
-    Replace(this.el);
+  constructor(private router: Router) {
   }
 }
 
-@Component({
-  selector: 'sidebar-nav-title',
-  template: ''
-})
-export class SidebarNavTitleComponent implements OnInit {
-  @Input() title: any;
-
-  constructor(private el: ElementRef, private renderer: Renderer2) {
-  }
-
-  ngOnInit() {
-    const nativeElement: HTMLElement = this.el.nativeElement;
-    const li = this.renderer.createElement('li');
-    const name = this.renderer.createText(this.title.name);
-
-    this.renderer.addClass(li, 'nav-title');
-
-    if (this.title.class) {
-      const classes = this.title.class;
-      this.renderer.addClass(li, classes);
-    }
-
-    if (this.title.wrapper) {
-      const wrapper = this.renderer.createElement(this.title.wrapper.element);
-
-      this.renderer.appendChild(wrapper, name);
-      this.renderer.appendChild(li, wrapper);
-    } else {
-      this.renderer.appendChild(li, name);
-    }
-    this.renderer.appendChild(nativeElement, li);
-    Replace(this.el);
-  }
-}

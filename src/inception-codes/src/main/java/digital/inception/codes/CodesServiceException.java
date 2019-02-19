@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,15 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesServiceException</code> exception is thrown to indicate an error condition when

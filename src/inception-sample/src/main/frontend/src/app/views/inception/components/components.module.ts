@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +51,6 @@ import {SwitchesComponent} from './switches.component';
 
 // Tabs Component
 import {TabsComponent} from './tabs.component';
-
-// Text Editors Components
-import {QuillModule} from 'ngx-quill';
-import {TextEditorsComponent} from './text-editors.component';
 
 // Tooltips Component
 import {TooltipsComponent} from './tooltips.component';
@@ -130,13 +126,6 @@ const routes: Routes = [
     }
   },
   {
-    path: 'text-editors',
-    component: TextEditorsComponent,
-    data: {
-      title: 'Text Editors',
-    }
-  },
-  {
     path: 'tooltips',
     component: TooltipsComponent,
     data: {
@@ -154,7 +143,6 @@ const routes: Routes = [
     // PaginationModule.forRoot(),
     // PopoverModule.forRoot(),
     // ProgressbarModule.forRoot(),
-    QuillModule,
     // TabsModule.forRoot(),
     // TooltipModule.forRoot(),
 
@@ -162,7 +150,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent, SwitchesComponent, TabsComponent, TextEditorsComponent, TooltipsComponent]
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent, SwitchesComponent, TabsComponent, TooltipsComponent]
 })
 export class ComponentsModule {
 }

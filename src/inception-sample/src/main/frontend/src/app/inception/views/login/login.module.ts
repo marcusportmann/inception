@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import {InceptionModule} from "../../inception.module";
 
 // Import Inception components
 import {LoginComponent} from './login.component';
+import {SelectOrganizationComponent} from "./select-organization.component";
 
 const routes: Routes = [
   {
@@ -35,7 +36,15 @@ const routes: Routes = [
     data: {
       title: 'Login'
     }
+  },
+  {
+    path: 'select-organization',
+    component: SelectOrganizationComponent,
+    data: {
+      title: 'Select Organization'
+    }
   }
+
 ];
 
 @NgModule({
@@ -54,7 +63,7 @@ const routes: Routes = [
     ReactiveFormsModule
   ],
   declarations: [
-    LoginComponent
+    LoginComponent, SelectOrganizationComponent
   ]
 })
 export class LoginModule { }

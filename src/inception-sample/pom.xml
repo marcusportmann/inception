@@ -13,7 +13,6 @@
   -->
 
   <artifactId>inception-sample</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <name>inception-sample</name>
 
   <parent>
@@ -63,10 +62,6 @@
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs-oauth-authorization</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-rs-oauth-resource</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>

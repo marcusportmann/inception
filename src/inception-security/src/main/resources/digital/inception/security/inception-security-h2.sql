@@ -387,8 +387,7 @@ INSERT INTO security.user_directory_to_organization_map (user_directory_id, orga
 INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
 VALUES
   ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator',
-    1,
-    'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', NULL, NULL);
+    1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, NULL);
 
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description) VALUES
   ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators',

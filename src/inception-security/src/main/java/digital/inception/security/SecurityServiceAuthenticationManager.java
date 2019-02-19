@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,13 +86,6 @@ public class SecurityServiceAuthenticationManager
   {
     try
     {
-      Thread.sleep(10000L);
-    }
-    catch (Throwable e)
-    {}
-
-    try
-    {
       UUID userDirectoryId = securityService.authenticate(authentication.getPrincipal().toString(),
           authentication.getCredentials().toString());
 
@@ -120,22 +113,22 @@ public class SecurityServiceAuthenticationManager
     catch (AuthenticationFailedException e)
     {
       throw new BadCredentialsException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + ")");
+          + authentication.getPrincipal() + "): Bad credentials");
     }
     catch (UserLockedException e)
     {
       throw new LockedException("Failed to authenticate the user (" + authentication.getPrincipal()
-          + "): The user is locked");
+          + "): User locked");
     }
     catch (ExpiredPasswordException e)
     {
       throw new CredentialsExpiredException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): The password has expired");
+          + authentication.getPrincipal() + "): Credentials expired");
     }
     catch (UserNotFoundException e)
     {
-      throw new UsernameNotFoundException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + ")");
+      throw new BadCredentialsException("Failed to authenticate the user ("
+          + authentication.getPrincipal() + "): Bad credentials");
     }
     catch (Throwable e)
     {

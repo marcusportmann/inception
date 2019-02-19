@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,16 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Rx';
-import {catchError} from 'rxjs/operators';
-import {map} from 'rxjs/operators';
-
-
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpParams,
-  HttpResponse
-} from '@angular/common/http';
+import {BehaviorSubject, Observable, of, throwError, timer} from 'rxjs';
+import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Session} from "./session";
 import {TokenResponse} from "./token-response";
-import {SESSION_STORAGE, WebStorageService} from "angular-webstorage-service";
-import {LoginError, SessionError} from "./session.service.errors";
-import {OAuthError} from "../../errors/oauth-error";
-import { JwtHelperService } from '@auth0/angular-jwt';
+import {LoginError, PasswordExpiredError, UserLockedError} from "./session.service.errors";
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {CommunicationError} from "../../errors/communication-error";
+import {I18n} from "@ngx-translate/i18n-polyfill";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The SessionService class provides the Session Service implementation.
@@ -42,19 +34,49 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 @Injectable()
 export class SessionService {
 
+  private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+
+  /**
+   * Returns the current active session if one exists.
+   *
+   * @return {Session} The current active session if one exists or null.
+   */
+  get session(): Observable<Session> {
+    return this._session;
+  }
+
   /**
    * Constructs a new SessionService.
    *
    * @param {HttpClient} httpClient            The HTTP client.
+   * @param {I18n} i18n                        The internationalisation service.
    * @param {WebStorageService} sessionStorage The session storage service.
    */
-  constructor(private httpClient: HttpClient, @Inject(SESSION_STORAGE) private sessionStorageService: WebStorageService) {
+  constructor(private httpClient: HttpClient, private i18n: I18n) {
+
     console.log('Initializing the Session Service');
+
+    // Start the session refresher
+    timer(0, 10000).pipe(
+      switchMap(_ => this._refreshSession())).subscribe((refreshedSession: Session) => {
+
+        if (refreshedSession != null) {
+          console.log('Successfully refreshed session: ', refreshedSession);
+        }
+    });
   }
 
+  /**
+   * Logon.
+   *
+   * @param {string} username The username.
+   * @param {string} password The password.
+   *
+   * @return {Observable<Session>} The current active session.
+   */
   login(username: string, password: string): Observable<Session> {
 
-    this.sessionStorageService.remove("session");
+    // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
     let body = new HttpParams()
       .set('grant_type', 'password')
@@ -65,109 +87,138 @@ export class SessionService {
 
     let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-      map((tokenResponse: TokenResponse) => {
+    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
+      body.toString(), options)
+      .pipe(
+        flatMap((tokenResponse: TokenResponse) => {
 
-        const helper = new JwtHelperService();
+          const helper = new JwtHelperService();
 
-        const token: any = helper.decodeToken(tokenResponse.access_token);
+          const token: any = helper.decodeToken(tokenResponse.access_token);
 
-        const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
+          let accessTokenExpiry: Date = helper.getTokenExpirationDate(
+            tokenResponse.access_token);
 
-        let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
+          let session: Session = new Session(token.user_name, token.scope, token.authorities,
+            token.organizations, tokenResponse.access_token, accessTokenExpiry,
+            tokenResponse.refresh_token);
 
-        this.sessionStorageService.set('session', session);
+          this._session.next(session);
 
-        return session;
+          return this._session;
 
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        if (httpErrorResponse.error && httpErrorResponse.error.error) {
-          let oauthError: OAuthError = httpErrorResponse.error;
+          if (httpErrorResponse.status == 400) {
 
-          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, oauthError.error_description));
-        }
-        else {
-          return Observable.throw(new LoginError(new Date(), httpErrorResponse.statusText, httpErrorResponse.message));
-        }
-      }));
-  }
-
-  /**
-   * Returns the current active session if one exists.
-   *
-   * @return {Session} The current active session if one exists or null.
-   */
-  getSession(): Observable<Session | null> {
-
-    let session: Session = this.sessionStorageService.get("session");
-
-    // If the access token has expired then obtain a new one using the refresh token
-    if (session) {
-      if (session.accessTokenExpiry) {
-        if (Date.now() > parseInt(session.accessTokenExpiry)) {
-
-            this.sessionStorageService.remove("session");
-
-            if (session.refreshToken) {
-
-              let body = new HttpParams()
-                .set('grant_type', 'refresh_token')
-                .set('refresh_token', session.refreshToken)
-                .set('scope', 'inception-sample')
-                .set('client_id', 'inception-sample');
-              ;
-
-              let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
-
-              return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token', body.toString(), options).pipe(
-                map((tokenResponse: TokenResponse) => {
-
-                  const helper = new JwtHelperService();
-
-                  const token: any = helper.decodeToken(tokenResponse.access_token);
-
-                  const accessTokenExpiry = helper.getTokenExpirationDate(tokenResponse.access_token);
-
-                  let session: Session = new Session(token.user_name, token.scope, token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry.toString(), tokenResponse.refresh_token);
-
-                  this.sessionStorageService.set('session', session);
-
-                  return session;
-
-                }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
-                  if (httpErrorResponse.error && httpErrorResponse.error.error) {
-
-                    let oauthError: OAuthError = httpErrorResponse.error;
-
-                    console.error('Failed to refresh the access token: ', oauthError);
-
-                    return Observable.of(null);
-                  }
-                  else {
-
-                    console.error('Failed to refresh the access token: ', httpErrorResponse.error);
-
-                    return Observable.of(null);
-                  }
-                }));
+            if (httpErrorResponse.error && (httpErrorResponse.error.error == 'invalid_grant') && httpErrorResponse.error.error_description) {
+              if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+                return throwError(new LoginError(this.i18n({
+                  id: '@@session_service_incorrect_username_or_password',
+                  value: 'Incorrect username or password.'
+                }), httpErrorResponse));
+              }
+              else if (httpErrorResponse.error.error_description.includes('User locked')) {
+                return throwError(new UserLockedError(this.i18n({
+                  id: '@@session_service_the_user_is_locked',
+                  value: 'The user is locked.'
+                }), httpErrorResponse));
+              }
+              else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+                return throwError(new PasswordExpiredError(this.i18n({
+                  id: '@@session_service_the_password_has_expired',
+                  value: 'The password has expired.'
+                }), httpErrorResponse));
+              }
             }
-        }
-        else {
 
-          return Observable.of(session);
-        }
-      }
-    }
-
-    return Observable.of(null);
+            return throwError(new LoginError(this.i18n({
+              id: '@@session_service_incorrect_username_or_password',
+              value: 'Incorrect username or password.'
+            }), httpErrorResponse));
+          }
+          else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+            return throwError(new CommunicationError(httpErrorResponse));
+          }
+          else {
+            return throwError(new SystemUnavailableError(this.i18n({
+              id: '@@system_unavailable_error',
+              value: 'An error has occurred and the system is unable to process your request at this time.'
+            }), httpErrorResponse));
+          }
+        }));
   }
 
   /**
    * Logout the current active session if one exists.
    */
   logout() {
-    this.sessionStorageService.remove("session");
+    this._session.next(null);
+  }
+
+  private _refreshSession(): Observable<Session | null> {
+
+    return this.session.pipe(mergeMap((currentSession: Session) => {
+
+      if (currentSession) {
+
+        const selectedOrganization = currentSession.organization;
+
+        /*
+         * If the access token will expire with 60 seconds then obtain a new one using the refresh token
+         * if it exists.
+         */
+        if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
+          if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
+
+            let body = new HttpParams()
+              .set('grant_type', 'refresh_token')
+              .set('refresh_token', currentSession.refreshToken)
+              .set('scope', 'inception-sample')
+              .set('client_id', 'inception-sample');
+
+            let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+            return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
+              body.toString(), options).pipe(
+              map((tokenResponse: TokenResponse) => {
+
+                const helper = new JwtHelperService();
+
+                const token: any = helper.decodeToken(tokenResponse.access_token);
+
+                const accessTokenExpiry: Date = helper.getTokenExpirationDate(
+                  tokenResponse.access_token);
+
+                const refreshedSession:Session = new Session(token.user_name, token.scope, token.authorities,
+                  token.organizations, tokenResponse.access_token, accessTokenExpiry,
+                  tokenResponse.refresh_token);
+
+                refreshedSession.organization = selectedOrganization;
+
+                this._session.next(refreshedSession);
+
+                return refreshedSession;
+
+              }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
+                console.log(this.i18n({
+                  id: '@@session_service_failed_to_refresh_the_user_session',
+                  value: 'Failed to refresh the user session.'
+                }), httpErrorResponse);
+
+                if (httpErrorResponse.status == 401) {
+                  this._session.next(null);
+                }
+
+                return of(null);
+
+              }));
+          }
+        }
+      }
+
+      return of(null);
+    }));
   }
 }

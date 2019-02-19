@@ -1,9 +1,12 @@
+import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
+import 'hammerjs';
 
 import {InceptionModule} from './inception/inception.module';
 import {InceptionAppModule} from "./inception/inception-app.module";
@@ -12,34 +15,52 @@ import {NavigationBadge} from "./inception/services/navigation/navigation-badge"
 import {NavigationTitle} from "./inception/services/navigation/navigation-title";
 
 
-import 'hammerjs';
+
+
+
+// TODO: Remove the lines below when Angular provides support for I18N in source natively -- MARCUS
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+
+// Use the require method provided by webpack
+declare const require;
+
+// We use the webpack raw-loader to return the content as a string
+const translations = require('raw-loader!../locale/messages.en.xlf');
+export {translations};
+// TODO: Remove the lines above when Angular provides support for I18N in source natively -- MARCUS
+
+
 
 @NgModule({
+
+  declarations: [
+    AppComponent
+  ],
+  exports: [
+    InceptionModule 
+  ],
   imports: [
     AppRoutingModule,
 
+    BrowserModule,
     BrowserAnimationsModule,
 
     InceptionModule.forRoot()
   ],
-  exports: [
-    InceptionModule
-  ],
-  declarations: [
-    AppComponent
-  ],
   providers: [
+    { provide: TRANSLATIONS, useValue: translations },
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf2' },
+    I18n
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule extends InceptionAppModule {
 
   constructor() {
-
     super();
-
     console.log('Initialising the Application Module');
-    //console.log('Registration enabled = ' + InceptionModule.registrationEnabled);
   }
 
   /**
@@ -51,412 +72,71 @@ export class AppModule extends InceptionAppModule {
 
     var navigation: NavigationItem[] = [];
 
-    navigation.push(new NavigationItem('icon-speedometer', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, new NavigationBadge('info', 'NEW')));
+    navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard', ['Application.Dashboard'], null, null, null, new NavigationBadge('info', 'NEW')));
 
-    //navigation.push(new NavigationTitle('Theme'));
+    navigation.push(new NavigationItem('fa fa-layer-group', 'Inception', '/inception', [], [
 
-    navigation.push(new NavigationItem('icon-layers', 'Inception', '/inception', [], [
-
-      new NavigationItem('icon-puzzle', 'Components', '/inception/components', [], [
-        new NavigationItem('icon-puzzle', 'Buttons', '/inception/components/buttons', []),
-        new NavigationItem('icon-puzzle', 'Cards', '/inception/components/cards', []),
-        new NavigationItem('icon-puzzle', 'Charts', '/inception/components/charts', []),
-        new NavigationItem('icon-puzzle', 'Expansion Panels', '/inception/components/expansion-panels', []),
-        new NavigationItem('icon-puzzle', 'Grid List', '/inception/components/grid-list', []),
-        new NavigationItem('icon-puzzle', 'Lists', '/inception/components/lists', []),
-        new NavigationItem('icon-puzzle', 'Progress', '/inception/components/progress', []),
-        new NavigationItem('icon-puzzle', 'Switches', '/inception/components/switches', []),
-        new NavigationItem('icon-puzzle', 'Tabs', '/inception/components/tabs', []),
-        new NavigationItem('icon-puzzle', 'Text Editors', '/inception/components/text-editors', []),
-        new NavigationItem('icon-puzzle', 'Tooltips', '/inception/components/tooltips', [])
+      new NavigationItem('fa fa-puzzle-piece', 'Components', '/inception/components', [], [
+        new NavigationItem('fa fa-puzzle-piece', 'Buttons', '/inception/components/buttons', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Cards', '/inception/components/cards', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Charts', '/inception/components/charts', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Expansion Panels', '/inception/components/expansion-panels', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Grid List', '/inception/components/grid-list', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Lists', '/inception/components/lists', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Progress', '/inception/components/progress', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Switches', '/inception/components/switches', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Tabs', '/inception/components/tabs', []),
+        new NavigationItem('fa fa-puzzle-piece', 'Tooltips', '/inception/components/tooltips', [])
       ]),
 
-      new NavigationItem('icon-note', 'Form', '/inception/form', [], [
-        new NavigationItem('icon-note', 'Example Form', '/inception/form/example-form', [])
+      new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [], [
+        new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form', [])
       ]),
 
-      new NavigationItem('icon-table', 'Tables', '/inception/tables', [], [
-        new NavigationItem('icon-table', 'Action List Table', '/inception/tables/action-list-table', []),
-        new NavigationItem('icon-table', 'Action Menu Table', '/inception/tables/action-menu-table', []),
-        new NavigationItem('icon-table', 'Basic Table', '/inception/tables/basic-table', []),
-        new NavigationItem('icon-table', 'Filterable Table', '/inception/tables/filterable-table', []),
-        new NavigationItem('icon-table', 'Pagination Table', '/inception/tables/pagination-table', []),
-        new NavigationItem('icon-table', 'Sortable Table', '/inception/tables/sortable-table', [])
+      new NavigationItem('fa fa-table', 'Tables', '/inception/tables', [], [
+        new NavigationItem('fa fa-table', 'Action List Table', '/inception/tables/action-list-table', []),
+        new NavigationItem('fa fa-table', 'Action Menu Table', '/inception/tables/action-menu-table', []),
+        new NavigationItem('fa fa-table', 'Basic Table', '/inception/tables/basic-table', []),
+        new NavigationItem('fa fa-table', 'Filterable Table', '/inception/tables/filterable-table', []),
+        new NavigationItem('fa fa-table', 'Pagination Table', '/inception/tables/pagination-table', []),
+        new NavigationItem('fa fa-table', 'Sortable Table', '/inception/tables/sortable-table', [])
       ]),
 
-      new NavigationItem('icon-drop', 'Theme', '/inception/theme', [], [
-        new NavigationItem('icon-drop', 'Colors', '/inception/theme/colors', []),
-        new NavigationItem('icon-drop', 'Typography', '/inception/theme/typography', [])
+      new NavigationItem('fa fa-tint', 'Theme', '/inception/theme', [], [
+        new NavigationItem('fa fa-palette', 'Colors', '/inception/theme/colors', []),
+        new NavigationItem('fa fa-font', 'Typography', '/inception/theme/typography', [])
       ])
 
     ]));
+
+
+    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', [], [
+      new NavigationItem('fa fa-list', 'Codes', '/administration/codes', []),
+      new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', [])
+    ]));
+
+
 
     navigation.push(new NavigationTitle('Menus'));
 
-    navigation.push(new NavigationItem('icon-doc', 'Menu 1', '/menu1', []));
+    navigation.push(new NavigationItem('far fa-file', 'Menu 1', '/menu1', []));
 
-    navigation.push(new NavigationItem('icon-doc', 'Menu 2', '/menu2', [], [
-      new NavigationItem('icon-doc', 'Menu 2.1', '/menu2/menu21', []),
-      new NavigationItem('icon-doc', 'Menu 2.2', '/menu2/menu22', [])
+    navigation.push(new NavigationItem('far fa-file', 'Menu 2', '/menu2', [], [
+      new NavigationItem('far fa-file', 'Menu 2.1', '/menu2/menu21', []),
+      new NavigationItem('far fa-file', 'Menu 2.2', '/menu2/menu22', [])
     ]));
 
-    navigation.push(new NavigationItem('icon-doc', 'Menu 3', '/menu3', [], [
-      new NavigationItem('icon-doc', 'Menu 3.1', '/menu3/menu31', [], [
-        new NavigationItem('icon-doc', 'Menu 3.1.1', '/menu3/menu31/menu311', []),
-        new NavigationItem('icon-doc', 'Menu 3.1.2', '/menu3/menu31/menu312', [])
+    navigation.push(new NavigationItem('far fa-file', 'Menu 3', '/menu3', [], [
+      new NavigationItem('far fa-file', 'Menu 3.1', '/menu3/menu31', [], [
+        new NavigationItem('far fa-file', 'Menu 3.1.1', '/menu3/menu31/menu311', []),
+        new NavigationItem('far fa-file', 'Menu 3.1.2', '/menu3/menu31/menu312', [])
       ]),
-      new NavigationItem('icon-doc', 'Menu 3.2', '/menu3/menu32', [], [
-        new NavigationItem('icon-doc', 'Menu 3.2.1', '/menu3/menu32/menu321', []),
-        new NavigationItem('icon-doc', 'Menu 3.2.2', '/menu3/menu32/menu322', [])
+      new NavigationItem('far fa-file', 'Menu 3.2', '/menu3/menu32', [], [
+        new NavigationItem('far fa-file', 'Menu 3.2.1', '/menu3/menu32/menu321', []),
+        new NavigationItem('far fa-file', 'Menu 3.2.2', '/menu3/menu32/menu322', [])
       ])
     ]));
-
-    // icon-login
 
     return navigation;
   }
 }
-
-
-
-
-
-/*
-
-export const navigation = [
-  {
-    name: 'Dashboard',
-    url: '/dashboard',
-    icon: 'icon-speedometer',
-    badge: {
-      variant: 'info',
-      text: 'NEW'
-    }
-  },
-  {
-    title: true,
-    name: 'Theme'
-  },
-  {
-    name: 'Colors',
-    url: '/theme/colors',
-    icon: 'icon-drop'
-  },
-  {
-    name: 'Typography',
-    url: '/theme/typography',
-    icon: 'icon-pencil'
-  },
-  {
-    title: true,
-    name: 'Components'
-  },
-  {
-    name: 'Base',
-    url: '/base',
-    icon: 'icon-puzzle',
-    children: [
-      {
-        name: 'Cards',
-        url: '/base/cards',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Carousels',
-        url: '/base/carousels',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Collapses',
-        url: '/base/collapses',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Pagination',
-        url: '/base/paginations',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Popovers',
-        url: '/base/popovers',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Progress',
-        url: '/base/progress',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Switches',
-        url: '/base/switches',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Tabs',
-        url: '/base/tabs',
-        icon: 'icon-puzzle'
-      },
-      {
-        name: 'Tooltips',
-        url: '/base/tooltips',
-        icon: 'icon-puzzle'
-      }
-    ]
-  },
-  {
-    name: 'Buttons',
-    url: '/buttons',
-    icon: 'icon-cursor',
-    children: [
-      {
-        name: 'Buttons',
-        url: '/buttons/buttons',
-        icon: 'icon-cursor'
-      },
-      {
-        name: 'Dropdowns',
-        url: '/buttons/dropdowns',
-        icon: 'icon-cursor'
-      },
-      {
-        name: 'Loading Buttons',
-        url: '/buttons/loading-buttons',
-        icon: 'icon-cursor'
-      },
-      {
-        name: 'Social Buttons',
-        url: '/buttons/social-buttons',
-        icon: 'icon-cursor'
-      }
-    ]
-  },
-  {
-    name: 'Charts',
-    url: '/charts',
-    icon: 'icon-pie-chart'
-  },
-  {
-    name: 'Editors',
-    url: '/editors',
-    icon: 'fa fa-code',
-    children: [
-      {
-        name: 'Text Editors',
-        url: '/editors/text-editors',
-        icon: 'icon-note'
-      },
-      {
-        name: 'Code Editors',
-        url: '/editors/code-editors',
-        icon: 'fa fa-code'
-      }
-    ]
-  },
-  {
-    name: 'Forms',
-    url: '/forms',
-    icon: 'icon-note',
-    children: [
-      {
-        name: 'Basic Forms',
-        url: '/forms/basic-forms',
-        icon: 'icon-note'
-      },
-      {
-        name: 'Advanced Forms',
-        url: '/forms/advanced-forms',
-        icon: 'icon-note'
-      },
-    ]
-  },
-  {
-    name: 'Google Maps',
-    url: '/google-maps',
-    icon: 'icon-map',
-    badge: {
-      variant: 'info',
-      text: 'NEW'
-    }
-  },
-  {
-    name: 'Icons',
-    url: '/icons',
-    icon: 'icon-star',
-    children: [
-      {
-        name: 'Flags',
-        url: '/icons/flags',
-        icon: 'icon-star',
-        badge: {
-          variant: 'success',
-          text: 'NEW'
-        }
-      },
-      {
-        name: 'Font Awesome',
-        url: '/icons/font-awesome',
-        icon: 'icon-star',
-        badge: {
-          variant: 'secondary',
-          text: '4.7'
-        }
-      },
-      {
-        name: 'Simple Line Icons',
-        url: '/icons/simple-line-icons',
-        icon: 'icon-star'
-      }
-    ]
-  },
-  {
-    name: 'Notifications',
-    url: '/notifications',
-    icon: 'icon-bell',
-    children: [
-      {
-        name: 'Alerts',
-        url: '/notifications/alerts',
-        icon: 'icon-bell'
-      },
-      {
-        name: 'Modals',
-        url: '/notifications/modals',
-        icon: 'icon-bell'
-      },
-      {
-        name: 'Toastr',
-        url: '/notifications/toastr',
-        icon: 'icon-bell'
-      }
-    ]
-  },
-  {
-    name: 'Plugins',
-    url: '/plugins',
-    icon: 'icon-energy',
-    children: [
-      {
-        name: 'Calendar',
-        url: '/plugins/calendar',
-        icon: 'icon-calendar'
-      },
-
-      {
-        name: 'Draggable Cards',
-        url: '/plugins/draggable-cards',
-        icon: 'icon-cursor-move'
-      },
-      {
-        name: 'Spinners',
-        url: '/plugins/spinners',
-        icon: 'fa fa-spinner'
-      }
-    ]
-  },
-  {
-    name: 'Tables',
-    url: '/tables',
-    icon: 'icon-list',
-    children: [
-      {
-        name: 'DataTable',
-        url: '/tables/datatable',
-        icon: 'icon-list'
-      },
-      {
-        name: 'Standard Tables',
-        url: '/tables/tables',
-        icon: 'icon-list'
-      },
-    ]
-  },
-  {
-    name: 'Widgets',
-    url: '/widgets',
-    icon: 'icon-calculator',
-    badge: {
-      variant: 'info',
-      text: 'NEW'
-    }
-  },
-  {
-    divider: true
-  },
-  {
-    title: true,
-    name: 'Extras',
-  },
-  {
-    name: 'Pages',
-    url: '/pages',
-    icon: 'icon-star',
-    children: [
-      {
-        name: 'Login',
-        url: '/pages/login',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Register',
-        url: '/pages/register',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Error 404',
-        url: '/pages/404',
-        icon: 'icon-star'
-      },
-      {
-        name: 'Error 500',
-        url: '/pages/500',
-        icon: 'icon-star'
-      }
-    ]
-  },
-  {
-    name: 'UI Kits',
-    url: '/uikits',
-    icon: 'icon-layers',
-    children: [
-      {
-        name: 'Invoicing',
-        url: '/uikits/invoicing',
-        icon: 'icon-speech',
-        children: [
-          {
-            name: 'Invoice',
-            url: '/uikits/invoicing/invoice',
-            icon: 'icon-speech'
-          }
-        ]
-      },
-      {
-        name: 'Email',
-        url: '/uikits/email',
-        icon: 'icon-speech',
-        children: [
-          {
-            name: 'Inbox',
-            url: '/uikits/email/inbox',
-            icon: 'icon-speech'
-          },
-          {
-            name: 'Message',
-            url: '/uikits/email/message',
-            icon: 'icon-speech'
-          },
-          {
-            name: 'Compose',
-            url: '/uikits/email/compose',
-            icon: 'icon-speech'
-          }
-        ]
-      }
-    ]
-  }
-];
-
-
-
-
- */

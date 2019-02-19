@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,15 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
 
-// Import Inception controls components
+// Import Inception controls
 import {CheckboxFormField} from "./components/controls";
 import {RadioGroupFormField} from "./components/controls";
 import {TableFilter} from "./components/controls";
+
+// Import Inception dialogs
+import {ErrorDialog} from "./components/dialogs";
+import {InformationDialog} from "./components/dialogs";
+import {WarningDialog} from "./components/dialogs";
 
 // Import Inception layout components
 import {
@@ -41,6 +46,7 @@ import {
   AdminContainerComponent,
   AdminFooterComponent,
   AdminHeaderComponent,
+  NotFoundComponent,
   SidebarComponent,
   SidebarFooterComponent,
   SidebarFormComponent,
@@ -49,35 +55,33 @@ import {
   SidebarNavComponent,
   SidebarNavDropdownComponent,
   SidebarNavItemComponent,
-  SidebarNavLinkComponent,
-  SidebarNavTitleComponent,
-  NotFoundComponent,
-  SimpleContainerComponent, SpinnerComponent
+//  SidebarNavLinkComponent,
+//  SidebarNavTitleComponent,
+  SimpleContainerComponent,
+  SpinnerComponent
 } from './components/layout';
-import { ErrorReportDialog } from './components/error';
+
+// Import Inception interceptors
+import {SessionInterceptor} from "./services/session/session.interceptor";
 
 // Import Inception services
 import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
-import {ErrorService} from './services/error/error.service';
+import {CodesService} from "./services/codes/codes.service";
+import {DialogService} from "./services/dialog/dialog.service";
+import {ErrorReportingService} from './services/error-reporting/error-reporting.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
+import {SpinnerService} from './services/layout/spinner.service';
 
-// Import 3rd party modules
-//import {BsDatepickerModule} from 'ngx-bootstrap';
-//import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
-//import {LaddaModule} from 'angular2-ladda';
-//import {ModalModule} from 'ngx-bootstrap/modal';
-import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {StorageServiceModule} from "angular-webstorage-service";
-//import {TabsModule} from 'ngx-bootstrap/tabs';
-//import {TimepickerModule} from 'ngx-bootstrap';
-
-// Import 3rd party components
-//import {BsDatepickerConfig, BsDaterangepickerConfig} from 'ngx-bootstrap';
-import {SessionInterceptor} from "./services/session/session.interceptor";
+// Import Inception miscellaneous
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 import {setInceptionInjector} from "./inception-injector";
+
+// Import 3rd party modules
+import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+
+// Import 3rd party components
 
 // Import perfect scrollbar dependencies
 import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
@@ -86,17 +90,6 @@ import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
-
-
-
-
-
-
-
-
-
-
 
 // Import Material modules
 import {DateAdapter} from "@angular/material";
@@ -125,13 +118,11 @@ import {MatTabsModule} from "@angular/material";
 import {MatToolbarModule} from "@angular/material";
 import {MatTooltipModule} from "@angular/material";
 
-
+// Import Material miscellaneous
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
 import {MAT_DATE_FORMATS} from "@angular/material";
 import {MAT_DATE_LOCALE} from "@angular/material";
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material";
-
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
-
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS} from "@angular/material-moment-adapter";
 
 // See the Moment.js docs for the meaning of these formats:
@@ -162,16 +153,8 @@ export const INCEPTION_DATE_FORMATS = {
     RouterModule,
 
     // 3rd party modules
-    //BsDatepickerModule.forRoot(),
-    //BsDropdownModule.forRoot(),
     //ChartsModule,
-    //LaddaModule.forRoot({}),
-    //ModalModule.forRoot(),
-    //NgSelectModule,
     PerfectScrollbarModule,
-    StorageServiceModule,
-    //TabsModule.forRoot(),
-    //TimepickerModule.forRoot(),
 
     // Material modules
     MatAutocompleteModule,
@@ -211,17 +194,8 @@ export const INCEPTION_DATE_FORMATS = {
     RouterModule,
 
     // 3rd party modules
-    //BsDatepickerModule,
-    //BsDropdownModule,
     //ChartsModule,
-    //LaddaModule,
-    //ModalModule,
-    //NgSelectModule,
     PerfectScrollbarModule,
-    StorageServiceModule,
-    //TabsModule,
-    //TimepickerModule,
-
 
     // Material modules
     MatAutocompleteModule,
@@ -274,6 +248,7 @@ export const INCEPTION_DATE_FORMATS = {
     AdminContainerComponent,
     AdminFooterComponent,
     AdminHeaderComponent,
+    NotFoundComponent,
     SidebarComponent,
     SidebarFooterComponent,
     SidebarFormComponent,
@@ -282,16 +257,18 @@ export const INCEPTION_DATE_FORMATS = {
     SidebarNavComponent,
     SidebarNavDropdownComponent,
     SidebarNavItemComponent,
-    SidebarNavLinkComponent,
-    SidebarNavTitleComponent,
-    NotFoundComponent,
+//    SidebarNavLinkComponent,
+//    SidebarNavTitleComponent,
     SimpleContainerComponent,
     SpinnerComponent,
 
-    // Inception error components
-    ErrorReportDialog
+    // Inception dialogs
+    ErrorDialog,
+    InformationDialog,
+    WarningDialog
   ],
-  bootstrap: [AdminContainerComponent, ErrorReportDialog, SimpleContainerComponent]
+  entryComponents: [SpinnerComponent],
+  bootstrap: [AdminContainerComponent, ErrorDialog, InformationDialog, SimpleContainerComponent, WarningDialog]
 })
 export class InceptionModule {
 
@@ -349,10 +326,13 @@ export class InceptionModule {
         CanActivateFunctionGuard,
 
         BreadcrumbsService,
-        ErrorService,
+        CodesService,
+        DialogService,
+        ErrorReportingService,
         NavigationService,
         SecurityService,
-        SessionService
+        SessionService,
+        SpinnerService
       ]
     }
   }

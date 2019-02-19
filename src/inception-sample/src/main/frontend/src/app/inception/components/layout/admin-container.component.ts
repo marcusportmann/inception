@@ -1,10 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input, NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Router} from "@angular/router";
 import {SessionService} from "../../services/session/session.service";
 import {NavigationItem} from "../../services/navigation/navigation-item";
 import {Session} from "../../services/session/session";
 import {NavigationService} from "../../services/navigation/navigation.service";
 import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
+
+import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
+
+import {map} from "rxjs/operators";
+import {SidebarNavComponent} from "./sidebar-nav.component";
 
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -16,7 +29,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @Component({
   selector: 'admin-container',
   template: `
-    <div class="spinner"></div>
+    <!--<div class="spinner"></div>-->
     <admin-header
       [fixed]="true"
       [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
@@ -25,93 +38,42 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-header>
     <div class="admin-body">
       <sidebar [fixed]="true" [display]="'lg'">
-        <sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
+        <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
-      <!-- Main content -->
       <main class="main">
         <breadcrumbs></breadcrumbs>
         <div class="container-fluid">
           <router-outlet></router-outlet>
-        </div><!-- /.container-fluid -->
+        </div>
       </main>
     </div>
-    <admin-footer>
-      <span>2018 &copy; <span class="copyright-name"></span></span>
+    <admin-footer [fixed]="false">
+      <span>2019 &copy; <span class="copyright-name"></span></span>
     </admin-footer>
   `
 })
-export class AdminContainerComponent {
+export class AdminContainerComponent implements OnInit, OnDestroy{
 
-  navItems: NavigationItem[] = [];
+  element: HTMLElement = document.body;
 
   sidebarMinimized = true;
 
-  private changes: MutationObserver;
+  private _changes: MutationObserver;
 
-  public element: HTMLElement = document.body;
-
-  constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService) {
-
-    this.changes = new MutationObserver((mutations) => {
+  constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService, private changeDetectorRef: ChangeDetectorRef, private zone: NgZone) {
+    this._changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized')
     });
 
-    this.changes.observe(<Element>this.element, {
+    this._changes.observe(<Element>this.element, {
       attributes: true
     });
   }
 
-  filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
-
-    if (!navigationItems) {
-      return navigationItems;
-    }
-
-    var filteredNavigationItems: NavigationItem[] = [];
-
-    for (var i = 0; i < navigationItems.length; i++) {
-
-      var navigationItem: NavigationItem = navigationItems[i];
-
-      var functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
-
-      if (functionCodes.length > 0) {
-
-        if (session) {
-
-          for (var j = 0; j < functionCodes.length; j++) {
-            for (var k = 0; k < session.functionCodes.length; k++) {
-              if (functionCodes[j] == session.functionCodes[k]) {
-
-                var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
-
-                filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-                  navigationItem.badge, navigationItem.divider, navigationItem.title));
-              }
-            }
-          }
-        }
-      }
-      else {
-
-        var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
-
-        filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-          navigationItem.badge, navigationItem.divider, navigationItem.title));
-      }
-    }
-
-    return filteredNavigationItems;
+  ngOnInit() {
   }
 
-  ngOnInit() {
-
-    // Retrieve and filter the navigation items
-    this.sessionService.getSession().map((session: Session) => {
-      this.navItems = this.filterNavigationItems(this.navigationService.getNavigation(), session);
-    }).subscribe();
+  ngOnDestroy() {
   }
 }

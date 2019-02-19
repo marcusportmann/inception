@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import java.util.*;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/reporting")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportingRestController
 {
@@ -71,7 +71,7 @@ public class ReportingRestController
    *
    * @param reportDefinition the report definition to create
    */
-  @ApiOperation(value = "Create a report definition", notes = "Create the report definition")
+  @ApiOperation(value = "Create a report definition", notes = "Create a report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was created successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -80,7 +80,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.POST,
+  @RequestMapping(value = "/reportDefinitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createReportDefinition(@ApiParam(name = "reportDefinition",
@@ -111,7 +111,7 @@ public class ReportingRestController
    * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the report definition
    */
-  @ApiOperation(value = "Delete a report definition", notes = "Delete the report definition")
+  @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was deleted successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -120,7 +120,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}",
+  @RequestMapping(value = "/reportDefinitions/{reportDefinitionId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
@@ -144,7 +144,7 @@ public class ReportingRestController
    *
    * @return the PDF report
    */
-  @ApiOperation(value = "Generate a PDF report", notes = "Generate the PDF report")
+  @ApiOperation(value = "Generate the PDF report", notes = "Generate the PDF report")
   @ApiResponses(value = { @ApiResponse(code = 200,
       message = "The PDF report was generated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -153,7 +153,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/generateReport", method = RequestMethod.POST,
+  @RequestMapping(value = "/generateReport", method = RequestMethod.POST,
       produces = "application/pdf")
   public ResponseEntity<byte[]> generateReport(
       @RequestBody GenerateReportRequest generateReportRequest)
@@ -223,7 +223,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitionSummaries", method = RequestMethod.GET,
+  @RequestMapping(value = "/reportDefinitionSummaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
@@ -243,7 +243,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions", method = RequestMethod.GET,
+  @RequestMapping(value = "/reportDefinitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<ReportDefinition> getReportDefinitions()
@@ -259,7 +259,7 @@ public class ReportingRestController
    *                           the report definition
    * @param reportDefinition   the report definition
    */
-  @ApiOperation(value = "Update a report definition", notes = "Update the report definition")
+  @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was updated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
@@ -268,7 +268,7 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/api/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
+  @RequestMapping(value = "/reportDefinitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",

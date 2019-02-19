@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, ViewContainerRef} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -26,14 +26,22 @@ import {SecurityService} from '../../services/security/security.service';
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
-import {ErrorService} from "../../services/error/error.service";
-import {catchError, map} from "rxjs/operators";
+import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
+import {catchError, map, first} from "rxjs/operators";
 import {Observable} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Error} from "../../errors/error";
+import {SpinnerService} from "../../services/layout/spinner.service";
+import {LoginError} from "../../services/session/session.service.errors";
+import {DialogService} from "../../services/dialog/dialog.service";
+import {CommunicationError} from "../../errors/communication-error";
+
+
+
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 
 
@@ -43,17 +51,15 @@ import {Error} from "../../errors/error";
 })
 export class LoginComponent {
 
-  loggingIn: boolean = false;
-
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private httpClient: HttpClient, private errorService: ErrorService, private securityService: SecurityService, private sessionService: SessionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private securityService: SecurityService, private sessionService: SessionService, private router: Router, private route: ActivatedRoute) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      username: ['', Validators.required],
+      username: ['Administrator', Validators.required],
       //username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      password: ['', Validators.required]
+      password: ['Password1', Validators.required]
     });
   }
 
@@ -67,14 +73,22 @@ export class LoginComponent {
     return InceptionModule.registrationEnabled;
   }
 
-  public onCancel() {
+  public onForgotPassword() {
 
     //this.router.navigate(['/']);
 
-    let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
+    //let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    this.errorService.showErrorReport(error);
+    this.dialogService.showInformationDialog({message: 'This is an information message.'});
 
+    //this.dialogService.showWarningDialog({message: 'This is a warning message.'});
+
+    //this.dialogService.showErrorDialog(new Error('This is an error message.'));
+
+
+
+
+    //this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
 
     //this.errorService.showConfirm('This is a title', 'This is a message');
@@ -88,33 +102,44 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
 
-      this.loggingIn = true;
+      this.spinnerService.show();
 
-      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).subscribe(session => {
+      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
+        first()).subscribe(session => {
 
-          console.log('session = ', session);
+        this.spinnerService.hide();
 
-          this.securityService.getOrganizations().subscribe(organizations => {
+        if (session.organizations.length == 1) {
+          this.router.navigate(['/']);
+        }
+        else {
+          this.router.navigate(['select-organization'], {relativeTo: this.route});
+        }
 
-            console.log('organizations = ', organizations);
 
-            this.router.navigate(['/']);
 
-          }, error => {
+          // this.securityService.getOrganizations().subscribe(organizations => {
+          //
+          //   console.log('organizations = ', organizations);
+          //
+          //   this.spinnerService.hide();
+          //
+          //   this.router.navigate(['/']);
+          //
+          // }, error => {
+          //
+          //   this.spinnerService.hide();
+          //
+          //   this.dialogService.showErrorDialog(error);
+          //
+          // });
 
-            this.loggingIn = false;
+        },(error: Error) => {
 
-            this.errorService.showErrorReport(error);
+          this.spinnerService.hide();
 
-          });
-
-        },error => {
-
-          this.loggingIn = false;
-
-          this.errorService.showErrorReport(error);
-
-        });
+          this.dialogService.showErrorDialog(error);
+       });
     }
   }
 }

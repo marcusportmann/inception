@@ -22,6 +22,7 @@ import com.codahale.metrics.MetricRegistry;
 
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
+import digital.inception.core.util.NetworkUtil;
 import digital.inception.core.util.StringUtil;
 import digital.inception.json.databind.DateTimeModule;
 
@@ -101,6 +102,16 @@ public abstract class ApplicationBase
   static
   {
     System.setProperty("com.atomikos.icatch.registered", "true");
+
+    try
+    {
+      System.setProperty("com.atomikos.icatch.tm_unique_name", NetworkUtil.getLocalHostLANAddress()
+          .getHostAddress());
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to set the Atomikos transaction manager unique name", e);
+    }
   }
 
   /**

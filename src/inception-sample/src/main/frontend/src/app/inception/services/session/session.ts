@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {Organization} from "../security/organization";
 
 /**
- * The Session class holds the information for an active user session associated with an
- * authenticated user.
+ * The Session class holds the information for an active user session associated with an authenticated user. All values
+ * are stored as strings to support the serialization of the user session.
  *
  * @author Marcus Portmann
  */
@@ -45,10 +45,9 @@ export class Session {
   accessToken: string;
 
   /**
-   * The ISO8601 format string giving the date and time the OAuth2 JWT access token for the user
-   * session will expire.
+   * The date and time the OAuth2 JWT access token for the user session will expire.
    */
-  accessTokenExpiry: string;
+  accessTokenExpiry: Date;
 
   /**
    * The base-64 encoded OAuth2 refresh token for the user session.
@@ -59,6 +58,11 @@ export class Session {
    * The organizations for the user, the user session is associated with.
    */
   organizations: Organization[];
+
+  /**
+   * The selected organization for the user session.
+   */
+  organization: Organization;
 
   /**
    * Constructs a new Session.
@@ -72,12 +76,13 @@ export class Session {
    *                                       associated with.
    * @param {string} accessToken           The base-64 encoded OAuth2 JWT access token for the user
    *                                       session.
-   * @param {number} accessTokenExpiry     The ISO8601 format string giving the date and time the
-   *                                       OAuth2 JWT access token for the user session will expire.
+   * @param {number} accessTokenExpiry     The string representation of the epoch timestamp giving the date and time
+   *                                       the OAuth2 JWT access token for the user session will expire.
    * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
    *                                       session.
    */
-  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[], accessToken: string, accessTokenExpiry: string, refreshToken: string) {
+  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[],
+              accessToken: string, accessTokenExpiry: Date, refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functionCodes = functionCodes;
@@ -85,5 +90,6 @@ export class Session {
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
+    this.organization = null;
   }
 }

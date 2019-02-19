@@ -1,13 +1,18 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Windows-specific files
+/**/Thumbs.db
+/**/desktop.ini
+
+# Mac-specific files
+/**/.DS_Store/
+/**/.Spotlight-V100
+/**/.Trashes
+
 # compiled output
 /dist
-/dist-server
 /tmp
 /out-tsc
-
-# documentation output
-/doc
 /documentation
 
 # dependencies
@@ -38,10 +43,6 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
-# e2e
-/e2e/*.js
-/e2e/*.map
 
 # System Files
 .DS_Store

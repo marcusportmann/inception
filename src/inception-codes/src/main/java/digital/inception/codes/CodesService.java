@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,28 +22,38 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.sql.DataSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Constructor;
+
 import java.net.URL;
+
 import java.sql.*;
+
 import java.time.LocalDateTime;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.
@@ -70,6 +80,12 @@ public class CodesService
   @Autowired
   private ApplicationContext applicationContext;
 
+  /**
+   * The configuration information for the code providers read from the code provider configuration
+   * files (META-INF/code-providers.xml) on the classpath.
+   */
+  private List<CodeProviderConfig> codeProviderConfigs;
+
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
 
@@ -79,12 +95,6 @@ public class CodesService
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
-
-  /**
-   * The configuration information for the code providers read from the code provider configuration
-   * files (META-INF/code-providers.xml) on the classpath.
-   */
-  private List<CodeProviderConfig> codeProviderConfigs;
 
   /**
    * Constructs a new <code>CodesService</code>.
@@ -414,6 +424,11 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
+    if (false)
+    {
+      throw new CodesServiceException("Testing 1.. 2.. 3..");
+    }
+
     String getCodeCategoriesSQL =
         "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
 
@@ -1060,8 +1075,8 @@ public class CodesService
         }
         else
         {
-          logger.error(String.format("Failed to register the code provider (%s): "
-              + "The code provider class does not provide a constructor with the required signature",
+          logger.error(String.format("Failed to register the code provider (%s): The code provider "
+              + "class does not provide a constructor with the required signature",
               codeProviderConfig.getClassName()));
         }
       }

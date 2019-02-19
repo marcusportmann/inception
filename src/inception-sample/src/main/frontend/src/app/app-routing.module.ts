@@ -69,6 +69,13 @@ export const routes: Routes = [
         },
         children: [
           {
+            path: 'codes',
+            loadChildren: './inception/views/codes/codes.module#CodesModule',
+            data: {
+              title: 'Codes'
+            }
+          },
+          {
             path: 'security',
             loadChildren: './inception/views/security/security.module#SecurityModule',
             data: {
@@ -98,7 +105,8 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  // Tracing should only be enabled for DEBUG purposes
+  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

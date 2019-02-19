@@ -6,15 +6,17 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md">
-    <mat-card>
+  <div class="col-md d-flex flex-column">
+    <mat-card class="flex-grow-1">
       <mat-card-header>
         <div mat-card-avatar><img src="assets/images/planets/1.png" class="img-fluid img-circle"/></div>
         <mat-card-title>Jupiter</mat-card-title>
         <mat-card-subtitle>Fifth planet</mat-card-subtitle>
       </mat-card-header>
-      <img mat-card-image src="assets/images/planets/1.jpg" alt="Photo of Jupiter">
-      <mat-card-content>
+      <div class="background-image-container">
+        <div class="background-image" style="background-image: url('assets/images/planets/1.jpg');"></div>
+      </div>
+      <mat-card-content class="flex-grow-1">
         <p>
           Jupiter is the fifth planet from the Sun and the largest in the Solar System.
           The Romans named it after their god Jupiter. Jupiter is primarily composed of hydrogen.
@@ -26,15 +28,17 @@
       </mat-card-actions>
     </mat-card>
   </div>
-  <div class="col-md">
-    <mat-card>
+  <div class="col-md d-flex flex-column">
+    <mat-card class="flex-grow-1">
       <mat-card-header>
         <div mat-card-avatar><img src="assets/images/planets/2.png" class="img-fluid img-circle"/></div>
         <mat-card-title>Venus</mat-card-title>
         <mat-card-subtitle>Second planet</mat-card-subtitle>
       </mat-card-header>
-      <img mat-card-image src="assets/images/planets/2.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
+      <div class="background-image-container">
+        <div class="background-image" style="background-image: url('assets/images/planets/2.jpg');"></div>
+      </div>
+      <mat-card-content class="flex-grow-1">
         <p>
           Venus is the second planet from the Sun, orbiting it every 224.7 Earth days. It has the
           longest rotation period (243 days) of any planet in the Solar System.
@@ -46,15 +50,17 @@
       </mat-card-actions>
     </mat-card>
   </div>
-  <div class="col-md">
-    <mat-card>
+  <div class="col-md d-flex flex-column">
+    <mat-card class="flex-grow-1">
       <mat-card-header>
         <div mat-card-avatar><img src="assets/images/planets/3.png" class="img-fluid img-circle"/></div>
         <mat-card-title>Mars</mat-card-title>
         <mat-card-subtitle>Fourth planet</mat-card-subtitle>
       </mat-card-header>
-      <img mat-card-image src="assets/images/planets/3.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
+      <div class="background-image-container">
+        <div class="background-image" style="background-image: url('assets/images/planets/3.jpg');"></div>
+      </div>
+      <mat-card-content class="flex-grow-1">
         <p>
           Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System
           after Mercury. In English, Mars carries a name of the Roman god of war.
@@ -83,8 +89,8 @@
         </p>
       </mat-card-content>
       <mat-card-actions align="right">
-        <button mat-icon-button color="accent"><mat-icon>favorite</mat-icon></button>
-        <button mat-icon-button><mat-icon>share</mat-icon></button>
+        <button mat-icon-button color="accent"><i class="fa fa-heart"></i></button>
+        <button mat-icon-button><i class="fa fa-share"></i></button>
       </mat-card-actions>
     </mat-card>
   </div>

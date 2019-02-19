@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,12 +117,12 @@ export class ColorsComponent implements OnInit {
       table.innerHTML = `
         <table class="w-100">
           <tr>
-            <td class="text-muted">HEX:</td>
-            <td class="font-weight-bold">${this.rgbToHex(background)}</td>
+            <td class="text-muted" style="font-size: 10px;">HEX:</td>
+            <td class="font-weight-bold" style="font-size: 10px;">${this.rgbToHex(background)}</td>
           </tr>
           <tr>
-            <td class="text-muted">RGB:</td>
-            <td class="font-weight-bold">${background}</td>
+            <td class="text-muted" style="font-size: 10px;">RGB:</td>
+            <td class="font-weight-bold" style="font-size: 10px;">${background}</td>
           </tr>
         </table>
       `;

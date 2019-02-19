@@ -1,9 +1,9 @@
-<mat-card style="height: 100%;">
+<mat-card class="flex flex-column flex-fill">
   <div class="mat-table-header">
-    <button mat-flat-button color="primary">Add User</button>
+    <button mat-flat-button color="primary">New User</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" matSort>
+  <mat-table [dataSource]="dataSource" class="flex-fill" matSort>
 
     <!-- First Name(s) Column -->
     <ng-container matColumnDef="firstNames">
@@ -28,15 +28,14 @@
       <mat-header-cell class="mat-cell-three-actions" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-cell-three-actions" *matCellDef="let row">
         <button mat-icon-button>
-          <i class="fa fa-edit"></i>
+          <i class="fas fa-user-edit"></i>
         </button>
         <button mat-icon-button>
-          <i class="fa fa-users"></i>
+          <i class="fas fa-users"></i>
         </button>
         <button mat-icon-button>
-          <i class="fa fa-times"></i>
+          <i class="fas fa-user-times"></i>
         </button>
-
       </mat-cell>
     </ng-container>
 

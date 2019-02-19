@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="de">
+  <file original="ng.template" id="ngi18n">
+    <unit id="login_component_label_username">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:13</note>
+      </notes>
+      <segment state="initial">
+        <source>Username</source>
+      <target>Username</target></segment>
+    </unit><unit id="login_component_error_a_username_is_required">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:16</note>
+      </notes>
+      <segment state="initial">
+        <source>A username is required.</source>
+      <target>A username is required.</target></segment>
+    </unit><unit id="login_component_error_a_password_is_required">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:27</note>
+      </notes>
+      <segment state="initial">
+        <source>A password is required.</source>
+      <target>A password is required.</target></segment>
+    </unit><unit id="select_organization_component_explanation">
+      <notes>
+        <note category="location">app/inception/views/login/select-organization.component.html:12</note>
+      </notes>
+      <segment state="initial">
+        <source>Your user account is associated with multiple organizations. To proceed, please select the organization you wish to login with.</source>
+      <target>Your user account is associated with multiple organizations. To proceed, please select the organization you wish to login with.</target></segment>
+    </unit><unit id="select_organization_component_placeholder_organization">
+      <notes>
+        <note category="location">app/inception/views/login/select-organization.component.html:15</note>
+      </notes>
+      <segment state="initial">
+        <source>Select an organization</source>
+      <target>Select an organization</target></segment>
+    </unit><unit id="select_organization_component_error_please_select_an_organization">
+      <notes>
+        <note category="location">app/inception/views/login/select-organization.component.html:22</note>
+      </notes>
+      <segment state="initial">
+        <source>Please select an organization.</source>
+      <target>Please select an organization.</target></segment>
+    </unit><unit id="@@codes_service_failed_to_retrieve_the_code_categories">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>Failed to retrieve the code categories.</source>
+      <target>Failed to retrieve the code categories.</target></segment>
+    </unit><unit id="@@system_unavailable_error">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>An error has occurred and the system is unable to process your request at this time.</source>
+      <target>An error has occurred and the system is unable to process your request at this time.</target></segment>
+    </unit><unit id="@@security_service_failed_to_retrieve_the_organizations">
+      <notes>
+        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>Failed to retrieve the organizations.</source>
+      <target>Failed to retrieve the organizations.</target></segment>
+    </unit><unit id="@@session_service_incorrect_username_or_password">
+      <notes>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>Incorrect username or password.</source>
+      <target>Incorrect username or password.</target></segment>
+    </unit><unit id="@@session_service_the_user_is_locked">
+      <notes>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>The user is locked.</source>
+      <target>The user is locked.</target></segment>
+    </unit><unit id="@@session_service_the_password_has_expired">
+      <notes>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>The password has expired.</source>
+      <target>The password has expired.</target></segment>
+    </unit><unit id="@@session_service_failed_to_refresh_the_user_session">
+      <notes>
+        <note category="location">src/app/inception/services/session/session.service.ts:1</note>
+      </notes>
+      <segment state="initial">
+        <source>Failed to refresh the user session.</source>
+      <target>Failed to refresh the user session.</target></segment>
+    </unit>
+  </file>
+</xliff>

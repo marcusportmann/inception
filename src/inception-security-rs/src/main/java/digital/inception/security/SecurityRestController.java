@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/security")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SecurityRestController
 {
@@ -67,7 +67,7 @@ public class SecurityRestController
     @ApiResponse(code = 500,
       message = "An error has occurred and the service is unable to process the request at this time",
       response = RestControllerError.class) })
-  @RequestMapping(value = "/api/organizations", method = RequestMethod.GET,
+  @RequestMapping(value = "/organizations", method = RequestMethod.GET,
     produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,6 @@ export class NavigationTitle extends NavigationItem {
    * @param {string} name The name of navigation title.
    */
   constructor(name: string) {
-    super(null, name, null, [], null, null, null, false, true);
+    super(null, name, null, [], null, null, null, null, false, true);
   }
 }

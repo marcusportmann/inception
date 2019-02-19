@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.springframework.security.config.annotation.method.configuration
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration
   .AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration
@@ -78,9 +79,9 @@ import java.util.Arrays;
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {
   /**
-   * The access token validity in seconds.
+   * The access token validity in seconds (10 minutes).
    */
-  public static final Integer ACCESS_TOKEN_VALIDITY = 1 * 60;
+  public static final Integer ACCESS_TOKEN_VALIDITY = 10 * 60;
 
   /**
    * The refresh token validity in seconds.
@@ -142,14 +143,17 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   }
 
   /**
-   * Returns the client details service.
+   * Configure the ClientDetailsService, e.g. declaring individual clients and their properties. Note that password
+   * grant is not enabled (even if some clients are allowed it) unless an AuthenticationManager is supplied to the
+   * configure(AuthorizationServerEndpointsConfigurer). At least one client, or a fully formed custom
+   * ClientDetailsService must be declared or the server will not start.
    *
-   * @return the client details service
+   * @param clients the client details service configurer
    */
-  @Bean
-  public ClientDetailsService clientDetailsService()
+  @Override
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception
   {
-    return new ClientDetailsService();
+    clients.withClientDetails(new ClientDetailsService());
   }
 
   /**
@@ -233,7 +237,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
     defaultTokenServices.setTokenStore(tokenStore());
     defaultTokenServices.setSupportRefreshToken(true);
-    defaultTokenServices.setClientDetailsService(clientDetailsService());
+    //defaultTokenServices.setClientDetailsService(clientDetailsService());
     defaultTokenServices.setAccessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY);
     defaultTokenServices.setRefreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY);
 

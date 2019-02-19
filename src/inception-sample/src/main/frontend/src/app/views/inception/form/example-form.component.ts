@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import {patternValidator} from '../../../inception/validators/pattern-validator'
 import {NavigationService} from "../../../inception/services/navigation/navigation.service";
 
 import * as moment from 'moment';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {map, startWith} from 'rxjs/operators';
 
 
@@ -59,7 +59,8 @@ export class ExampleFormComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       title: ['', Validators.required],
-      dateOfBirth: [moment(), Validators.required],
+      //dateOfBirth: [moment(), Validators.required],
+      dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
       favoriteCountry: ['', Validators.required],

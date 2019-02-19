@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,14 +83,6 @@ export function getMatRadioGroupMissingControlError(): Error {
     </div>
   `,
   styles: [`
-
-    .mat-form-field.radio-group-form-field .mat-radio-button {
-      margin-right: 0.875em !important;
-    }
-
-    .mat-form-field.radio-group-form-field .mat-radio-button:last-child {
-      margin-right: 0 !important;
-    }
     
     .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
       border-color: #f44336;

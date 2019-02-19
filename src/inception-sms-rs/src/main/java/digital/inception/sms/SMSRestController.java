@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import javax.validation.Validator;
  * @author Marcus Portmann
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/sms")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SMSRestController
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,7 @@ export class Organization {
   /**
    * Constructs a new Organization.
    *
-   * @param {string} id     The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         organization.
+   * @param {string} id     The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    * @param {string} name   The name of the organization.
    * @param {string} status The status for the organization.
    */

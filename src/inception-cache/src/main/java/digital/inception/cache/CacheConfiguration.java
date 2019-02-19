@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,17 @@
 
 package digital.inception.cache;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.hazelcast.config.*;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
@@ -30,13 +35,12 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@ConditionalOnProperty(value="application.cache.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "application.cache.enabled", havingValue = "true")
 @Configuration
 @EnableCaching
 @ConfigurationProperties("application.cache")
 public class CacheConfiguration
 {
-
   /**
    * The distributed in-memory caches.
    */
@@ -68,6 +72,90 @@ public class CacheConfiguration
   }
 
   /**
+   * Returns the Hazelcast configuration.
+   *
+   * @return the Hazelcast configuration
+   */
+  @Bean
+  public Config hazelCastConfig()
+  {
+    Config config = new Config();
+
+    config.setInstanceName(getCluster().getName());
+
+    config.setProperty("hazelcast.logging.type", "slf4j");
+    config.setProperty("hazelcast.rest.enabled", "false");
+
+    NetworkConfig networkConfig = config.getNetworkConfig();
+
+    networkConfig.setPort(getCluster().getPort());
+    networkConfig.setPortAutoIncrement(false);
+    networkConfig.setReuseAddress(true);
+
+    JoinConfig joinConfig = networkConfig.getJoin();
+
+    MulticastConfig multicastConfig = joinConfig.getMulticastConfig();
+    multicastConfig.setEnabled(false);
+
+    AwsConfig awsConfig = joinConfig.getAwsConfig();
+    awsConfig.setEnabled(false);
+
+    TcpIpConfig tcpIpConfig = joinConfig.getTcpIpConfig();
+    tcpIpConfig.setEnabled(true);
+
+    // Add the cache members
+    String[] members = { "127.0.0.1" };
+
+    if ((getCluster().getMembers() != null) && (getCluster().getMembers().trim().length() > 0))
+    {
+      members = getCluster().getMembers().trim().split(",");
+    }
+
+    if (members.length > 0)
+    {
+      for (String member : members)
+      {
+        tcpIpConfig.addMember(member);
+      }
+    }
+
+    GroupConfig groupConfig = config.getGroupConfig();
+    groupConfig.setName(getCluster().getName());
+    groupConfig.setPassword(getCluster().getPassword());
+
+    // Initialise the caches
+    for (CacheConfig cacheConfig : getCaches())
+    {
+      MapConfig mapConfig = config.getMapConfig(cacheConfig.getName());
+
+      mapConfig.setInMemoryFormat(Enum.valueOf(InMemoryFormat.class,
+          cacheConfig.getInMemoryFormat()));
+
+      mapConfig.setEvictionPolicy(Enum.valueOf(EvictionPolicy.class,
+          cacheConfig.getEvictionPolicy()));
+
+      mapConfig.setStatisticsEnabled(cacheConfig.getStatisticsEnabled());
+
+      mapConfig.setMaxIdleSeconds(cacheConfig.getMaxIdleSeconds());
+
+      MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
+      maxSizeConfig.setMaxSizePolicy(Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class,
+          cacheConfig.getMaxSizePolicy()));
+      maxSizeConfig.setSize(cacheConfig.getMaxSize());
+
+      mapConfig.setMaxSizeConfig(maxSizeConfig);
+
+      mapConfig.setBackupCount(cacheConfig.getBackupCount());
+
+      mapConfig.setAsyncBackupCount(cacheConfig.getAsyncBackupCount());
+
+      mapConfig.setReadBackupData(cacheConfig.getReadBackupData());
+    }
+
+    return config;
+  }
+
+  /**
    * Set the distributed in-memory caches.
    *
    * @param caches the distributed in-memory caches
@@ -88,158 +176,20 @@ public class CacheConfiguration
   }
 
   /**
-   * The <code>ClusterConfig</code> class provides access to the distributed in-memory
-   * cache cluster  configuration.
-   */
-  public static class ClusterConfig
-  {
-    /**
-     * The port for the distributed in-memory cache cluster.
-     */
-    private int port;
-
-    /**
-     * The password used to connect to the distributed in-memory cache cluster.
-     */
-    private String password;
-
-    /**
-     * The comma-delimited list of IP addresses or hostnames for the members of the distributed
-     * in-memory cache cluster.
-     */
-    private String members;
-
-    /**
-     * The name of the distributed in-memory cache cluster.
-     */
-    private String name;
-
-    /**
-     * Returns the comma-delimited list of IP addresses or hostnames for the members of the
-     * distributed in-memory cache cluster.
-     *
-     * @return the comma-delimited list of IP addresses or hostnames for the members of the
-     *         distributed in-memory cache cluster
-     */
-    public String getMembers()
-    {
-      return members;
-    }
-
-    /**
-     * Returns the name of the distributed in-memory cache cluster.
-     *
-     * @return the name of the distributed in-memory cache cluster
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Returns the password used to connect to the distributed in-memory cache cluster.
-     *
-     * @return the password used to connect to the distributed in-memory cache cluster
-     */
-    public String getPassword()
-    {
-      return password;
-    }
-
-    /**
-     * Returns the port for the distributed in-memory cache cluster.
-     *
-     * @return the port for the distributed in-memory cache cluster
-     */
-    public int getPort()
-    {
-      return port;
-    }
-
-    /**
-     * Set the comma-delimited list of IP addresses or hostnames for the members of the distributed
-     * in-memory cache cluster.
-     *
-     * @param members the comma-delimited list of IP addresses or hostnames for the members of the
-     *                distributed in-memory cache cluster
-     */
-    public void setMembers(String members)
-    {
-      this.members = members;
-    }
-
-    /**
-     * Set the name of the distributed in-memory cache cluster.
-     *
-     * @param name the name of the distributed in-memory cache cluster
-     */
-    public void setName(String name)
-    {
-      this.name = name;
-    }
-
-    /**
-     * Set the password used to connect to the distributed in-memory cache cluster.
-     *
-     * @param password the password used to connect to the distributed in-memory cache cluster
-     */
-    public void setPassword(String password)
-    {
-      this.password = password;
-    }
-
-    /**
-     * Set the port for the distributed in-memory cache cluster.
-     *
-     * @param port the port for the distributed in-memory cache cluster
-     */
-    public void setPort(int port)
-    {
-      this.port = port;
-    }
-  }
-
-
-  /**
    * The <code>CacheConfig</code> class provides access to the distributed in-memory cache
    * configuration.
    */
   public static class CacheConfig
   {
     /**
-     * The name of the distributed in-memory cache.
-     */
-    private String name;
-
-    /**
-     * The maximum size policy for the distributed in-memory cache.
-     */
-    private String maxSizePolicy;
-
-    /**
-     * The maximum size for the distributed in-memory cache.
-     */
-    private int maxSize;
-
-    /**
-     * The in-memory format for the distributed in-memory cache.
-     */
-    private String inMemoryFormat;
-
-    /**
-     * The eviction policy for the distributed in-memory cache.
-     */
-    private String evictionPolicy;
-
-    /**
      * Are statistics enabled for the distributed in-memory cache?
      */
     boolean statisticsEnabled;
 
     /**
-     * The maximum idle seconds for the distributed in-memory cache.
+     * The number of asynchronous backups for the distributed in-memory cache.
      */
-    private int maxIdleSeconds;
+    private int asyncBackupCount;
 
     /**
      * The number of synchronous backups for the distributed in-memory cache.
@@ -247,9 +197,34 @@ public class CacheConfiguration
     private int backupCount;
 
     /**
-     * The number of asynchronous backups for the distributed in-memory cache.
+     * The eviction policy for the distributed in-memory cache.
      */
-    private int asyncBackupCount;
+    private String evictionPolicy;
+
+    /**
+     * The in-memory format for the distributed in-memory cache.
+     */
+    private String inMemoryFormat;
+
+    /**
+     * The maximum idle seconds for the distributed in-memory cache.
+     */
+    private int maxIdleSeconds;
+
+    /**
+     * The maximum size for the distributed in-memory cache.
+     */
+    private int maxSize;
+
+    /**
+     * The maximum size policy for the distributed in-memory cache.
+     */
+    private String maxSizePolicy;
+
+    /**
+     * The name of the distributed in-memory cache.
+     */
+    private String name;
 
     /**
      * Is read-backup-data enabled for the distributed in-memory cache.
@@ -464,88 +439,114 @@ public class CacheConfiguration
 
 
   /**
-   * Returns the Hazelcast configuration.
-   *
-   * @return the Hazelcast configuration
+   * The <code>ClusterConfig</code> class provides access to the distributed in-memory
+   * cache cluster  configuration.
    */
-  @Bean
-  public Config hazelCastConfig()
+  public static class ClusterConfig
   {
-    Config config = new Config();
+    /**
+     * The comma-delimited list of IP addresses or hostnames for the members of the distributed
+     * in-memory cache cluster.
+     */
+    private String members;
 
-    config.setInstanceName(getCluster().getName());
+    /**
+     * The name of the distributed in-memory cache cluster.
+     */
+    private String name;
 
-    config.setProperty("hazelcast.logging.type", "slf4j");
-    config.setProperty("hazelcast.rest.enabled", "false");
+    /**
+     * The password used to connect to the distributed in-memory cache cluster.
+     */
+    private String password;
 
-    NetworkConfig networkConfig = config.getNetworkConfig();
+    /**
+     * The port for the distributed in-memory cache cluster.
+     */
+    private int port;
 
-    networkConfig.setPort(getCluster().getPort());
-    networkConfig.setPortAutoIncrement(false);
-    networkConfig.setReuseAddress(true);
-
-    JoinConfig joinConfig = networkConfig.getJoin();
-
-    MulticastConfig multicastConfig = joinConfig.getMulticastConfig();
-    multicastConfig.setEnabled(false);
-
-    AwsConfig awsConfig = joinConfig.getAwsConfig();
-    awsConfig.setEnabled(false);
-
-    TcpIpConfig tcpIpConfig = joinConfig.getTcpIpConfig();
-    tcpIpConfig.setEnabled(true);
-
-    // Add the cache members
-    String[] members = { "127.0.0.1" };
-
-    if ((getCluster().getMembers() != null)
-      && (getCluster().getMembers().trim().length() > 0))
+    /**
+     * Returns the comma-delimited list of IP addresses or hostnames for the members of the
+     * distributed in-memory cache cluster.
+     *
+     * @return the comma-delimited list of IP addresses or hostnames for the members of the
+     *         distributed in-memory cache cluster
+     */
+    public String getMembers()
     {
-      members = getCluster().getMembers().trim().split(",");
+      return members;
     }
 
-    if (members.length > 0)
+    /**
+     * Returns the name of the distributed in-memory cache cluster.
+     *
+     * @return the name of the distributed in-memory cache cluster
+     */
+    public String getName()
     {
-      for (String member : members)
-      {
-        tcpIpConfig.addMember(member);
-      }
+      return name;
     }
 
-    GroupConfig groupConfig = config.getGroupConfig();
-    groupConfig.setName(getCluster().getName());
-    groupConfig.setPassword(getCluster().getPassword());
-
-    // Initialise the caches
-    for (CacheConfig cacheConfig :
-      getCaches())
+    /**
+     * Returns the password used to connect to the distributed in-memory cache cluster.
+     *
+     * @return the password used to connect to the distributed in-memory cache cluster
+     */
+    public String getPassword()
     {
-      MapConfig mapConfig = config.getMapConfig(cacheConfig.getName());
-
-      mapConfig.setInMemoryFormat(Enum.valueOf(InMemoryFormat.class,
-        cacheConfig.getInMemoryFormat()));
-
-      mapConfig.setEvictionPolicy(Enum.valueOf(EvictionPolicy.class,
-        cacheConfig.getEvictionPolicy()));
-
-      mapConfig.setStatisticsEnabled(cacheConfig.getStatisticsEnabled());
-
-      mapConfig.setMaxIdleSeconds(cacheConfig.getMaxIdleSeconds());
-
-      MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
-      maxSizeConfig.setMaxSizePolicy(Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class,
-        cacheConfig.getMaxSizePolicy()));
-      maxSizeConfig.setSize(cacheConfig.getMaxSize());
-
-      mapConfig.setMaxSizeConfig(maxSizeConfig);
-
-      mapConfig.setBackupCount(cacheConfig.getBackupCount());
-
-      mapConfig.setAsyncBackupCount(cacheConfig.getAsyncBackupCount());
-
-      mapConfig.setReadBackupData(cacheConfig.getReadBackupData());
+      return password;
     }
 
-    return config;
+    /**
+     * Returns the port for the distributed in-memory cache cluster.
+     *
+     * @return the port for the distributed in-memory cache cluster
+     */
+    public int getPort()
+    {
+      return port;
+    }
+
+    /**
+     * Set the comma-delimited list of IP addresses or hostnames for the members of the distributed
+     * in-memory cache cluster.
+     *
+     * @param members the comma-delimited list of IP addresses or hostnames for the members of the
+     *                distributed in-memory cache cluster
+     */
+    public void setMembers(String members)
+    {
+      this.members = members;
+    }
+
+    /**
+     * Set the name of the distributed in-memory cache cluster.
+     *
+     * @param name the name of the distributed in-memory cache cluster
+     */
+    public void setName(String name)
+    {
+      this.name = name;
+    }
+
+    /**
+     * Set the password used to connect to the distributed in-memory cache cluster.
+     *
+     * @param password the password used to connect to the distributed in-memory cache cluster
+     */
+    public void setPassword(String password)
+    {
+      this.password = password;
+    }
+
+    /**
+     * Set the port for the distributed in-memory cache cluster.
+     *
+     * @param port the port for the distributed in-memory cache cluster
+     */
+    public void setPort(int port)
+    {
+      this.port = port;
+    }
   }
 }

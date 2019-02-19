@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import {Error} from "./error";
+import {HttpErrorResponse} from "@angular/common/http";
 
 /**
  * The CommunicationError class holds the information for a communication error.
@@ -24,13 +25,53 @@ import {Error} from "./error";
 export class CommunicationError extends Error {
 
   /**
+   *  The HTTP status-code for the error.
+   */
+  status: number;
+
+  /**
+   * The HTTP reason-phrase for the HTTP status-code for the error.
+   */
+  statusText: string;
+
+  /**
+   * The optional URL for the HTTP request that resulted in the error.
+   */
+  url?: string;
+
+  /**
    * Constructs a new CommunicationError.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param httpErrorResponse The HTTP error response containing the error information.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
+  constructor(httpErrorResponse: HttpErrorResponse) {
+
+    // TODO: INTERNATIONALIZE THIS MESSAGE -- MARCUS
+    super("A communication error occurred.", httpErrorResponse);
+
+    this.status = httpErrorResponse.status;
+    this.statusText = httpErrorResponse.statusText;
+    this.url = httpErrorResponse.url;
+  }
+
+  /**
+   * Returns whether the specified HTTP error response is as a result of a communication error.
+   *
+   * @param httpErrorResponse The HTTP error response.
+   *
+   * @return True if the HTTP error response is as a result of a communication error or false
+   *         otherwise.
+   */
+  static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
+    if ((httpErrorResponse.name === 'HttpErrorResponse')
+      && (httpErrorResponse.status == 0)
+      && httpErrorResponse.error
+      && (httpErrorResponse.error instanceof ProgressEvent)
+      && (httpErrorResponse.error.type === 'error')) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }

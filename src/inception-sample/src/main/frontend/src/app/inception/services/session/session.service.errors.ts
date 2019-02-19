@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 import {Error} from "../../errors/error";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ApiError} from "../../errors/api-error";
 
 /**
  * The LoginError class holds the information for a login error.
@@ -26,12 +28,29 @@ export class LoginError extends Error {
   /**
    * Constructs a new LoginError.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The PasswordExpiredError class holds the information for a password expired error.
+ *
+ * @author Marcus Portmann
+ */
+export class PasswordExpiredError extends Error {
+
+  /**
+   * Constructs a new PasswordExpiredError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
 }
 
@@ -43,13 +62,48 @@ export class LoginError extends Error {
 export class SessionError extends Error {
 
   /**
-   * Constructs a new SessionError.
+   * Constructs a new SecurityServiceError.
    *
-   * @param {Date} timestamp The date and time the error occurred.
-   * @param {string} message The message.
-   * @param {string} detail  The optional detail.
+   * @param message The error SessionError.
+   * @param cause   The optional cause of the error.
    */
-  constructor(timestamp: Date, message: string, detail?: string) {
-    super(timestamp, message, detail);
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The SessionServiceError class holds the information for a Session Service error.
+ *
+ * @author Marcus Portmann
+ */
+export class SessionServiceError extends Error {
+
+  /**
+   * Constructs a new SessionServiceError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The UserLockedError class holds the information for a user locked error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserLockedError extends Error {
+
+  /**
+   * Constructs a new UserLockedError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from "@angular/common/http";
-import {RestControllerError} from "../../errors/rest-controller-error";
+import {Error} from "../../errors/error";
+import {ApiError} from "../../errors/api-error";
 
 /**
  * The SecurityServiceError class holds the information for a Security Service error.
  *
  * @author Marcus Portmann
  */
-export class SecurityServiceError extends RestControllerError {
+export class SecurityServiceError extends Error {
 
   /**
    * Constructs a new SecurityServiceError.
    *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
-   *                                              information returned by the Security Service.
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
    */
-  constructor(httpErrorResponse: HttpErrorResponse) {
-    super(httpErrorResponse);
+  constructor(message: string, cause?: any) {
+    super(message, cause);
   }
 }

@@ -1,257 +1,107 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Override Boostrap variables
-//@import "bootstrap-variables";
+@import "bootstrap-variables";
 
-// Import Bootstrap source files
-//@import "node_modules/bootstrap/scss/bootstrap";
+// Bootstrap imports
+@import "~node_modules/bootstrap/scss/functions";
+@import "~node_modules/bootstrap/scss/variables";
+@import "~node_modules/bootstrap/scss/mixins";
+@import "~node_modules/bootstrap/scss/root";
+@import "~node_modules/bootstrap/scss/reboot";
+@import "~node_modules/bootstrap/scss/type";
+@import "~node_modules/bootstrap/scss/images";
+@import "~node_modules/bootstrap/scss/code";
+@import "~node_modules/bootstrap/scss/grid";
+@import "~node_modules/bootstrap/scss/tables";
+@import "~node_modules/bootstrap/scss/forms";
+@import "~node_modules/bootstrap/scss/buttons";
+@import "~node_modules/bootstrap/scss/transitions";
+@import "~node_modules/bootstrap/scss/dropdown";
+@import "~node_modules/bootstrap/scss/button-group";
+@import "~node_modules/bootstrap/scss/input-group";
+@import "~node_modules/bootstrap/scss/custom-forms";
+@import "~node_modules/bootstrap/scss/nav";
+@import "~node_modules/bootstrap/scss/navbar";
+@import "~node_modules/bootstrap/scss/card";
+@import "~node_modules/bootstrap/scss/breadcrumb";
+@import "~node_modules/bootstrap/scss/pagination";
+@import "~node_modules/bootstrap/scss/badge";
+@import "~node_modules/bootstrap/scss/jumbotron";
+@import "~node_modules/bootstrap/scss/alert";
+@import "~node_modules/bootstrap/scss/progress";
+@import "~node_modules/bootstrap/scss/media";
+@import "~node_modules/bootstrap/scss/list-group";
+@import "~node_modules/bootstrap/scss/close";
+@import "~node_modules/bootstrap/scss/modal";
+@import "~node_modules/bootstrap/scss/tooltip";
+@import "~node_modules/bootstrap/scss/popover";
+@import "~node_modules/bootstrap/scss/carousel";
+@import "~node_modules/bootstrap/scss/utilities";
+@import "~node_modules/bootstrap/scss/print";
 
+//@import "~node_modules/bootstrap/scss/bootstrap";
 
-//@import "~bootstrap/scss/functions";
-//@import "~bootstrap/scss/variables";
-//@import "~bootstrap/scss/mixins";
-//@import "~bootstrap/scss/root";
-//@import "~bootstrap/scss/reboot";
-//@import "~bootstrap/scss/type";
-
-//@import "~bootstrap/scss/grid";
-
-
-
-//@import "~bootstrap/scss/card";
-
-
-
-//@import "~bootstrap/scss/breadcrumb";
-
-//@import "~bootstrap/scss/utilities";
-
-
-
-
-
-
-//@import "~bootstrap/scss/bootstrap-reboot";
-//@import "~bootstrap/scss/bootstrap-grid";
-
-
-
-/*@import "functions";*/ // ADDED
-/*@import "variables";*/ // ADDED
-/*@import "mixins";*/ // ADDED
-/*@import "root";*/ // ADDED
-/*@import "reboot";*/ // ADDED
-/*@import "type";*/ // ADDED
-//@import "images";
-//@import "code";
-/*@import "grid";*/  // ADDED
-//@import "tables";
-//@import "forms";
-/*@import "buttons";*/ // TO DELETE
-//@import "transitions";
-/*@import "dropdown";*/ // TO DELETE
-//@import "button-group";
-//@import "input-group";
-//@import "custom-forms";
-///*@import "nav";*/ // TO DELETE
-///*@import "navbar";*/ // TO DELETE
-/*@import "card";*/
-/*@import "breadcrumb";*/ // ADDED
-//@import "pagination";
-//@import "badge";
-//@import "jumbotron";
-//@import "alert";
-//@import "progress";
-//@import "media";
-//@import "list-group";
-//@import "close";
-//@import "modal";
-//@import "tooltip";
-//@import "popover";
-//@import "carousel";
-/*@import "utilities";*/ // ADDED
-//@import "print";
-
-
-// Import core styles
-@import "functions";
+// Variables
 @import "variables";
 @import "mixins";
-@import "reboot";
 
-
-
-
-
-
-
-:root {
-  // Custom variable values only support SassScript inside `#{}`.
-  @each $color, $value in $colors {
-    --#{$color}: #{$value};
-  }
-
-  @each $color, $value in $theme-colors {
-    --#{$color}: #{$value};
-  }
-
-  @each $bp, $value in $grid-breakpoints {
-    --breakpoint-#{$bp}: #{$value};
-  }
-
-  // Use `inspect` for lists so that quoted items keep the quotes.
-  // See https://github.com/sass/sass/issues/2383#issuecomment-336349172
-  --font-family-sans-serif: #{inspect($font-family-sans-serif)};
-  --font-family-monospace: #{inspect($font-family-monospace)};
-}
-
-
-
-
-
-
-
-.bg-theme {
-  background-color: $white;
-}
-
-/*
-.bg-primary {
-  background-color: $primary !important;
-}
-
-.bg-secondary {
-  background-color: $secondary !important;
-}
-
-.bg-success {
-  background-color: $success !important;
-}
-
-.bg-info {
-  background-color: $info !important;
-}
-
-.bg-warning {
-  background-color: $warning !important;
-}
-
-.bg-danger {
-  background-color: $danger !important;
-}
-
-.bg-light {
-  background-color: $light;
-}
-
-.bg-dark {
-  background-color: $dark;
-}
-
-.bg-white {
-  background-color: $white;
-}
-
-*/
-
-
-
-
-
-@import "background";
-
-
-
-// Animations
-//@import "animate";
-
-// Vendors
+// Vendors (Import first so we can override)
 @import "vendors";
 
-// Components
-@import "align";
-@import "badge";
-@import "breadcrumb";
-//@import "buttons";
-//@import "callout";
-//@import "card";
-//@import "charts";
-
-
-@import "clearfix";
 
 
 @import "display";
-
-
-
-
-//@import "form";
-
-@import "flex";
-@import "float";
-
-@import "grid";
-//@import "input-group";
-//@import "images";
-
-@import "logo";
-
-//@import "list-group";
-//@import "modal";
-@import "nav";
-//@import "progress";
-//@import "progress-group";
-@import "sidebar";
-@import "spacing";
-@import "spinner";
-@import "switches";
-//@import "tables";
-@import "text";
-
-
-//@import "widgets";
-
-// Layout Options
 @import "layout";
-
-//@import "others";
-
-// Utility classes
-@import "display";
-
-
+@import "logo";
+@import "material";
+//@import "nav"; TODO: CONFIRM IF THIS IS NEEDED...
+@import "sidebar";
+@import "switches";
 @import "typography";
 
 
-//@import "utilities";
 
-// Right-to-left
-//@import "rtl";
+//
+//
+//// Components
+////@import "align";
+////@import "background";
+////@import "badge";
+//@import "borders";
+//@import "breadcrumb";
+//@import "clearfix";
+//@import "display";
+//
+//@import "float";
+//
+//@import "nav";
+//@import "sidebar";
+//@import "spacing";
+//@import "spinner";
+//@import "switches";
+//@import "text";
+//@import "typography";
+//
+//// Custom Properties support for Internet Explorer
+//@import "ie-custom-properties";
+//
+//
+//
+//
+//@import "grid";
+//@import "flex";
 
-// Custom Properties support for Internet Explorer
-@import "ie-custom-properties";
 
-// Material
-@import "material";
-
-
-// Import Ladda source files
-//@import "~ladda/css/ladda";
-
+/*
+@supports not (-webkit-overflow-scrolling: touch) {
+  html, body {
+    font-size: 14px !important;
+  }
+}
+*/
 
 
+/*
+.mat-form-field-infix {
+  min-height: 3rem;
+}
+*/
