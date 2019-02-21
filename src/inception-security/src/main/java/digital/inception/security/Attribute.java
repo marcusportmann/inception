@@ -18,21 +18,41 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.BinaryBuffer;
 
-import java.math.BigDecimal;
-import java.util.List;
+import io.swagger.annotations.ApiModel;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.math.BigDecimal;
+
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * The <code>Attribute</code> class stores an attribute for a security entity as name-value pair.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "Attribute")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "name", "value" })
+@XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")
+@XmlType(name = "Code", namespace = "http://security.inception.digital",
+    propOrder = { "name", "value" })
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Attribute
-  implements java.io.Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -45,6 +65,11 @@ public class Attribute
    * The value for the attribute.
    */
   private String value;
+
+  /**
+   * Constructs a new <code>Attribute</code>.
+   */
+  public Attribute() {}
 
   /**
    * Constructs a new <code>Attribute</code>.

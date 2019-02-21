@@ -15,8 +15,8 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable, of, throwError} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Code} from "./code";
 import {CodeCategory} from "./code-category";
@@ -51,7 +51,8 @@ export class CodesService {
    */
   public createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
 
-    return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories', codeCategory,{observe: "response"}).pipe(
+    return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories',
+      codeCategory, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
 
         return true;
@@ -66,18 +67,15 @@ export class CodesService {
               id: '@@codes_service_the_code_category_already_exists',
               value: 'The code category already exists.'
             }), apiError));
-          }
-          else {
+          } else {
             return throwError(new CodesServiceError(this.i18n({
               id: '@@codes_service_failed_to_create_the_code_category',
               value: 'Failed to create the code category.'
             }), apiError));
           }
-        }
-        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
-        }
-        else {
+        } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
             value: 'An error has occurred and the system is unable to process your request at this time.'
@@ -86,9 +84,6 @@ export class CodesService {
       }));
   }
 
-
-
-
   /**
    * Retrieve the code categories.
    *
@@ -96,7 +91,8 @@ export class CodesService {
    */
   public getCodeCategories(): Observable<CodeCategory[]> {
 
-    return this.httpClient.get<CodeCategory[]>(environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
+    return this.httpClient.get<CodeCategory[]>(
+      environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
       map((codeCategories: CodeCategory[]) => {
 
         return codeCategories;
@@ -110,11 +106,9 @@ export class CodesService {
             id: '@@codes_service_failed_to_retrieve_the_code_categories',
             value: 'Failed to retrieve the code categories.'
           }), apiError));
-        }
-        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
-        }
-        else {
+        } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
             value: 'An error has occurred and the system is unable to process your request at this time.'
@@ -133,7 +127,9 @@ export class CodesService {
    */
   public getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
 
-    return this.httpClient.get<Code[]>(environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId  + '/codes', {reportProgress: true}).pipe(
+    return this.httpClient.get<Code[]>(
+      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes',
+      {reportProgress: true}).pipe(
       map((codes: Code[]) => {
 
         return codes;
@@ -147,11 +143,9 @@ export class CodesService {
             id: '@@codes_service_failed_to_retrieve_the_codes',
             value: 'Failed to retrieve the codes.'
           }), apiError));
-        }
-        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
-        }
-        else {
+        } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
             value: 'An error has occurred and the system is unable to process your request at this time.'
