@@ -38,13 +38,32 @@ const routes: Routes = [
   },
   {
     path: 'code-categories',
-    component: CodeCategoriesComponent,
     data: {
-      title: 'Code Categories',
-      icon: 'fa fa-list',
-      sidebarNav: true
-    }
+      title: 'Code Categories'
+    },
+    children: [
+      {
+        path: '',
+        component: CodeCategoriesComponent,
+        data: {
+          title: 'Code Categories',
+          icon: 'fa fa-list',
+          sidebarNav: true
+        },
+      },
+      {
+        path: ':id/codes',
+        component: CodesComponent,
+        data: {
+          title: 'Test Code Category 01',
+          icon: 'fa fa-list',
+          sidebarNav: true
+        }
+      }
+    ]
   },
+
+  /*
   {
     path: 'code-categories/:id',
     component: CodeCategoriesComponent,
@@ -54,6 +73,7 @@ const routes: Routes = [
       sidebarNav: false
     }
   },
+  */
   {
     path: 'new-code-category',
     component: NewCodeCategoryComponent,
@@ -62,7 +82,6 @@ const routes: Routes = [
       sidebarNav: false
     }
   }
-
 ];
 
 @NgModule({

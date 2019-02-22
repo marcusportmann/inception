@@ -1,0 +1,52 @@
+<mat-card class="flex flex-column flex-auto">
+  <div class="mat-table-header">
+    <button mat-flat-button color="primary" (click)="newCode()">New Code</button>
+    <table-filter (changed)="applyFilter($event)"></table-filter>
+  </div>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort>
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell class="id-column" *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell class="id-column" *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell class="name-column" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell class="name-column" *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
+        <button mat-icon-button>
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+
+  <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
+    <ng-template matMenuContent let-id="id">
+      <button mat-menu-item (click)="editCode(id)">
+        <i class="fas fa-edit"></i>
+        <span>Edit</span>
+      </button>
+      <button mat-menu-item (click)="deleteCode(id)">
+        <i class="far fa-trash-alt"></i>
+        <span>Delete</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+
+</mat-card>
+
+

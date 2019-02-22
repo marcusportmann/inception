@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Code} from "../../services/codes/code";
-import {Observable} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
-import {catchError, map} from "rxjs/operators";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   templateUrl: 'codes.component.html',
@@ -33,9 +31,11 @@ import {Error} from "../../errors/error";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit {
+export class CodesComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['name', 'actions'];
+  codeCategoryId: string;
+
+  displayedColumns: string[] = ['id', 'name', 'actions'];
 
   dataSource = new MatTableDataSource<Code>();
 
@@ -43,9 +43,9 @@ export class CodesComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private dialogService: DialogService, private spinnerService: SpinnerService, private i18n: I18n, private codesService: CodesService)
-  {
-
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private dialogService: DialogService, private spinnerService: SpinnerService,
+              private i18n: I18n, private codesService: CodesService) {
   }
 
   applyFilter(filterValue: string) {
@@ -66,12 +66,15 @@ export class CodesComponent implements AfterViewInit {
     console.log('New code');
   }
 
+  ngOnInit() {
+    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+  }
+
   ngAfterViewInit() {
 
-    /*
     this.spinnerService.show();
 
-    this.codesSubscription = this.codesService.getCodes().subscribe((codes: Code[]) => {
+    this.codesService.getCodeCategoryCodes(this.codeCategoryId).subscribe((codes: Code[]) => {
 
       this.spinnerService.hide();
 
@@ -83,7 +86,6 @@ export class CodesComponent implements AfterViewInit {
 
       this.dialogService.showErrorDialog(error);
     });
-    */
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

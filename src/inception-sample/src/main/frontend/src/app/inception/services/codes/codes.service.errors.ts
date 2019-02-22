@@ -17,6 +17,60 @@
 import {Error} from "../../errors/error";
 
 /**
+ * The CodeCategoryNotFoundError class holds the information for a code category not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class CodeCategoryNotFoundError extends Error {
+
+  /**
+   * Constructs a new CodeCategoryNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The CodeNotFoundError class holds the information for a code not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class CodeNotFoundError extends Error {
+
+  /**
+   * Constructs a new CodeNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The CodeProviderError class holds the information for a code provider error.
+ *
+ * @author Marcus Portmann
+ */
+export class CodeProviderError extends Error {
+
+  /**
+   * Constructs a new CodeProviderError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
  * The CodesServiceError class holds the information for a Codes Service error.
  *
  * @author Marcus Portmann
@@ -35,7 +89,7 @@ export class CodesServiceError extends Error {
 }
 
 /**
- * The DuplicateCodeCategory class holds the information for a duplicate code category error.
+ * The DuplicateCodeCategoryError class holds the information for a duplicate code category error.
  *
  * @author Marcus Portmann
  */
@@ -43,6 +97,24 @@ export class DuplicateCodeCategoryError extends Error {
 
   /**
    * Constructs a new DuplicateCodeCategoryError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The DuplicateCodeError class holds the information for a duplicate code error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateCodeError extends Error {
+
+  /**
+   * Constructs a new DuplicateCodeError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

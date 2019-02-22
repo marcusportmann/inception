@@ -357,8 +357,6 @@ public class CodesRestController
   @ApiOperation(value = "Update the code", notes = "Update the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was updated successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-      @ApiResponse(code = 409, message = "A code with the specified ID already exists",
-          response = RestControllerError.class) ,
       @ApiResponse(code = 404, message = "The code could not be found",
           response = RestControllerError.class) ,
       @ApiResponse(code = 500,

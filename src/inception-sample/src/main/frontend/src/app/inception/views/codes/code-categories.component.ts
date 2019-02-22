@@ -55,8 +55,8 @@ export class CodeCategoriesComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  codeAdministration(id: string) {
-    console.log('Administering codes for code category: ', id);
+  codesAdministration(id: string) {
+    this.router.navigate([id + '/codes'], {relativeTo: this.activatedRoute});
   }
 
   deleteCodeCategory(id: string) {
