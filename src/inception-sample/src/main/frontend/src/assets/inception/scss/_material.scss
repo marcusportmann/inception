@@ -495,11 +495,15 @@ label {
 
 
 
-
+/*
 mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
-  /*padding-left: 12px !important;*/
+  padding-left: 12px !important;
 }
+*/
 
+mat-cell, mat-footer-cell, mat-header-cell {
+  padding-left: 12px !important;
+}
 
 
 .mat-header-cell, .mat-cell {
@@ -515,10 +519,16 @@ mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
 }
 
 
-mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not(:last-child) {
+mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
   padding-right: 12px !important;
 }
 
+
+/*
+mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not(:last-child) {
+  padding-right: 12px !important;
+}
+*/
 
 
 .mat-sort-header-container {

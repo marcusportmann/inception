@@ -18,13 +18,12 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.codes.Code;
-import digital.inception.codes.CodeCategory;
-import digital.inception.codes.ICodesService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -32,13 +31,15 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.*;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * The <code>CodesServiceTest</code> class contains the implementation of the JUnit
@@ -131,8 +132,7 @@ public class CodesServiceTest
   public void codeProviderTest()
     throws Exception
   {
-    CodeCategory retrievedCodeCategory = codesService.getCodeCategory(UUID.fromString(
-        "887d7963-284e-400c-b5ae-e10b3d5297f0"));
+    CodeCategory retrievedCodeCategory = codesService.getCodeCategory("TestCodeCategory");
 
     assertNotNull("The code category is null", retrievedCodeCategory);
 
@@ -292,14 +292,14 @@ public class CodesServiceTest
 
     CodeCategory codeCategory = new CodeCategory();
 
-    codeCategory.setId(UUID.randomUUID());
+    codeCategory.setId("TestCodeCategory" + codeCategoryCount);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
     codeCategory.setUpdated(null);
 
     return codeCategory;
   }
 
-  private static synchronized Code getTestCodeDetails(UUID codeCategoryId)
+  private static synchronized Code getTestCodeDetails(String codeCategoryId)
   {
     codeCount++;
 
@@ -312,7 +312,7 @@ public class CodesServiceTest
     return code;
   }
 
-  private static synchronized Code getTestCodeWithoutIdDetails(UUID codeCategoryId)
+  private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId)
   {
     codeCount++;
 

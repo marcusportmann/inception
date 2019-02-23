@@ -127,52 +127,52 @@ CREATE SCHEMA test;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE codes.code_categories (
-  codecategoryid UUID NOT NULL,
-  name           TEXT NOT NULL,
-  data           TEXT,
-  updated        TIMESTAMP,
+  id      TEXT NOT NULL,
+  name    TEXT NOT NULL,
+  data    TEXT,
+  updated TIMESTAMP,
 
   PRIMARY KEY (codecategoryid)
 );
 
 COMMENT ON COLUMN codes.code_categories.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the code category';
+  IS 'The ID used to uniquely identify the code category';
 
 COMMENT ON COLUMN codes.code_categories.name
-IS 'The name of the code category';
+  IS 'The name of the code category';
 
 COMMENT ON COLUMN codes.code_categories.data
-IS 'The code data for the code category';
+  IS 'The code data for the code category';
 
 COMMENT ON COLUMN codes.code_categories.updated
-IS 'The date and time the code category was updated';
+  IS 'The date and time the code category was updated';
 
 
 CREATE TABLE codes.codes (
-  codecategoryid   TEXT NOT NULL,
-  code_category_id UUID NOT NULL,
+  id               TEXT NOT NULL,
+  code_category_id TEXT NOT NULL,
   name             TEXT NOT NULL,
   value            TEXT NOT NULL,
 
   PRIMARY KEY (codecategoryid, code_category_id),
-  CONSTRAINT codes_code_category_fk FOREIGN KEY (code_category_id) REFERENCES codes.code_categories (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT codes_code_category_fk FOREIGN KEY (code_category_id) REFERENCES codes.code_categories(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX codes_code_category_id_ix
   ON codes.codes
-  (code_category_id);
+    (code_category_id);
 
 COMMENT ON COLUMN codes.codes.codecategoryid
-IS 'The ID used to uniquely identify the code';
+  IS 'The ID used to uniquely identify the code';
 
 COMMENT ON COLUMN codes.codes.code_category_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the code category the code is associated with';
+  IS 'The ID used to uniquely identify the code category the code is associated with';
 
 COMMENT ON COLUMN codes.codes.name
-IS 'The name of the code';
+  IS 'The name of the code';
 
 COMMENT ON COLUMN codes.codes.value
-IS 'The value for the code';
+  IS 'The value for the code';
 
 
 CREATE TABLE configuration.configuration (
@@ -184,13 +184,13 @@ CREATE TABLE configuration.configuration (
 );
 
 COMMENT ON COLUMN configuration.configuration.key
-IS 'The key used to uniquely identify the configuration value';
+  IS 'The key used to uniquely identify the configuration value';
 
 COMMENT ON COLUMN configuration.configuration.value
-IS 'The value for the configuration value';
+  IS 'The value for the configuration value';
 
 COMMENT ON COLUMN configuration.configuration.description
-IS 'The description for the configuration value';
+  IS 'The description for the configuration value';
 
 
 CREATE TABLE idgenerator.idgenerator (
@@ -201,10 +201,10 @@ CREATE TABLE idgenerator.idgenerator (
 );
 
 COMMENT ON COLUMN idgenerator.idgenerator.name
-IS 'The name giving the type of entity associated with the generated ID';
+  IS 'The name giving the type of entity associated with the generated ID';
 
 COMMENT ON COLUMN idgenerator.idgenerator.current
-IS 'The current ID for the type';
+  IS 'The current ID for the type';
 
 
 CREATE TABLE messaging.message_types (
@@ -215,10 +215,10 @@ CREATE TABLE messaging.message_types (
 );
 
 COMMENT ON COLUMN messaging.message_types.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message type';
 
 COMMENT ON COLUMN messaging.message_types.name
-IS 'The name of the message type';
+  IS 'The name of the message type';
 
 
 CREATE TABLE messaging.message_statuses (
@@ -229,10 +229,10 @@ CREATE TABLE messaging.message_statuses (
 );
 
 COMMENT ON COLUMN messaging.message_statuses.code
-IS 'The code identifying the message status';
+  IS 'The code identifying the message status';
 
 COMMENT ON COLUMN messaging.message_statuses.name
-IS 'The name of the message status';
+  IS 'The name of the message status';
 
 
 CREATE TABLE messaging.messages (
@@ -254,81 +254,81 @@ CREATE TABLE messaging.messages (
   data              BYTEA,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types (codecategoryid),
-  CONSTRAINT messages_message_status_fk FOREIGN KEY (status) REFERENCES messaging.message_statuses (code)
+  CONSTRAINT messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types(codecategoryid),
+  CONSTRAINT messages_message_status_fk FOREIGN KEY (status) REFERENCES messaging.message_statuses(code)
 );
 
 CREATE INDEX messages_username_ix
   ON messaging.messages
-  (username);
+    (username);
 
 CREATE INDEX messages_device_id_ix
   ON messaging.messages
-  (device_id);
+    (device_id);
 
 CREATE INDEX messages_type_id_ix
   ON messaging.messages
-  (type_id);
+    (type_id);
 
 CREATE INDEX messages_priority_ix
   ON messaging.messages
-  (priority);
+    (priority);
 
 CREATE INDEX messages_status_ix
   ON messaging.messages
-  (status);
+    (status);
 
 CREATE INDEX messages_lock_name_ix
   ON messaging.messages
-  (lock_name);
+    (lock_name);
 
 COMMENT ON COLUMN messaging.messages.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.messages.username
-IS 'The username identifying the user associated with the message';
+  IS 'The username identifying the user associated with the message';
 
 COMMENT ON COLUMN messaging.messages.device_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
 
 COMMENT ON COLUMN messaging.messages.type_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
 
 COMMENT ON COLUMN messaging.messages.correlation_id
-IS 'The Universally Unique Identifier (UUID) used to correlate the message';
+  IS 'The Universally Unique Identifier (UUID) used to correlate the message';
 
 COMMENT ON COLUMN messaging.messages.priority
-IS 'The message priority';
+  IS 'The message priority';
 
 COMMENT ON COLUMN messaging.messages.status
-IS 'The message status e.g. Initialised, QueuedForSending, etc';
+  IS 'The message status e.g. Initialised, QueuedForSending, etc';
 
 COMMENT ON COLUMN messaging.messages.created
-IS 'The date and time the message was created';
+  IS 'The date and time the message was created';
 
 COMMENT ON COLUMN messaging.messages.persisted
-IS 'The date and time the message was persisted';
+  IS 'The date and time the message was persisted';
 
 COMMENT ON COLUMN messaging.messages.updated
-IS 'The date and time the message was last updated';
+  IS 'The date and time the message was last updated';
 
 COMMENT ON COLUMN messaging.messages.send_attempts
-IS 'The number of times that the sending of the message was attempted';
+  IS 'The number of times that the sending of the message was attempted';
 
 COMMENT ON COLUMN messaging.messages.process_attempts
-IS 'The number of times that the processing of the message was attempted';
+  IS 'The number of times that the processing of the message was attempted';
 
 COMMENT ON COLUMN messaging.messages.download_attempts
-IS 'The number of times that an attempt was made to download the message';
+  IS 'The number of times that an attempt was made to download the message';
 
 COMMENT ON COLUMN messaging.messages.lock_name
-IS 'The name of the entity that has locked the message for processing';
+  IS 'The name of the entity that has locked the message for processing';
 
 COMMENT ON COLUMN messaging.messages.last_processed
-IS 'The date and time the last attempt was made to process the message';
+  IS 'The date and time the last attempt was made to process the message';
 
 COMMENT ON COLUMN messaging.messages.data
-IS 'The data for the message';
+  IS 'The data for the message';
 
 
 CREATE TABLE messaging.message_parts (
@@ -354,88 +354,88 @@ CREATE TABLE messaging.message_parts (
   data               BYTEA,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (msg_type_id) REFERENCES messaging.message_types (codecategoryid)
+  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (msg_type_id) REFERENCES messaging.message_types(codecategoryid)
 );
 
 CREATE INDEX message_parts_status_ix
   ON messaging.message_parts
-  (status);
+    (status);
 
 CREATE INDEX message_parts_msg_id_ix
   ON messaging.message_parts
-  (msg_id);
+    (msg_id);
 
 CREATE INDEX message_parts_msg_device_id_ix
   ON messaging.message_parts
-  (msg_device_id);
+    (msg_device_id);
 
 CREATE INDEX message_parts_msg_type_id_ix
   ON messaging.message_parts
-  (msg_type_id);
+    (msg_type_id);
 
 CREATE INDEX message_parts_lock_name_ix
   ON messaging.message_parts
-  (lock_name);
+    (lock_name);
 
 COMMENT ON COLUMN messaging.message_parts.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message part';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message part';
 
 COMMENT ON COLUMN messaging.message_parts.part_no
-IS 'The number of the message part in the set of message parts for the original message';
+  IS 'The number of the message part in the set of message parts for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.total_parts
-IS 'The total number of parts in the set of message parts for the original message';
+  IS 'The total number of parts in the set of message parts for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.send_attempts
-IS 'The number of times that the sending of the message part was attempted';
+  IS 'The number of times that the sending of the message part was attempted';
 
 COMMENT ON COLUMN messaging.message_parts.download_attempts
-IS 'The number of times that an attempt was made to download the message part';
+  IS 'The number of times that an attempt was made to download the message part';
 
 COMMENT ON COLUMN messaging.message_parts.status
-IS 'The message part status e.g. Initialised, QueuedForSending, etc';
+  IS 'The message part status e.g. Initialised, QueuedForSending, etc';
 
 COMMENT ON COLUMN messaging.message_parts.persisted
-IS 'The date and time the message part was persisted';
+  IS 'The date and time the message part was persisted';
 
 COMMENT ON COLUMN messaging.message_parts.updated
-IS 'The date and time the message part was last updated';
+  IS 'The date and time the message part was last updated';
 
 COMMENT ON COLUMN messaging.message_parts.msg_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_username
-IS 'The username identifying the user associated with the original message';
+  IS 'The username identifying the user associated with the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_device_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
 
 COMMENT ON COLUMN messaging.message_parts.msg_type_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_correlation_id
-IS 'The Universally Unique Identifier (UUID) used to correlate the original message';
+  IS 'The Universally Unique Identifier (UUID) used to correlate the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_priority
-IS 'The priority for the original message';
+  IS 'The priority for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_created
-IS 'The date and time the original message was created';
+  IS 'The date and time the original message was created';
 
 COMMENT ON COLUMN messaging.message_parts.msg_data_hash
-IS 'The hash of the unencrypted data for the original message';
+  IS 'The hash of the unencrypted data for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_encryption_iv
-IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
+  IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_checksum
-IS 'The checksum for the original message';
+  IS 'The checksum for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.lock_name
-IS 'The name of the entity that has locked the message part for processing';
+  IS 'The name of the entity that has locked the message part for processing';
 
 COMMENT ON COLUMN messaging.message_parts.data
-IS 'The data for the message part';
+  IS 'The data for the message part';
 
 
 CREATE TABLE messaging.archived_messages (
@@ -449,44 +449,44 @@ CREATE TABLE messaging.archived_messages (
   data           BYTEA,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT archived_messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types (codecategoryid)
+  CONSTRAINT archived_messages_message_type_fk FOREIGN KEY (type_id) REFERENCES messaging.message_types(codecategoryid)
 );
 
 CREATE INDEX archived_messages_username_ix
   ON messaging.archived_messages
-  (username);
+    (username);
 
 CREATE INDEX archived_messages_device_id_ix
   ON messaging.archived_messages
-  (device_id);
+    (device_id);
 
 CREATE INDEX archived_messages_type_id_ix
   ON messaging.archived_messages
-  (type_id);
+    (type_id);
 
 COMMENT ON COLUMN messaging.archived_messages.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.archived_messages.username
-IS 'The username identifying the user associated with the message';
+  IS 'The username identifying the user associated with the message';
 
 COMMENT ON COLUMN messaging.archived_messages.device_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
 
 COMMENT ON COLUMN messaging.archived_messages.type_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
 
 COMMENT ON COLUMN messaging.archived_messages.correlation_id
-IS 'The Universally Unique Identifier (UUID) used to correlate the message';
+  IS 'The Universally Unique Identifier (UUID) used to correlate the message';
 
 COMMENT ON COLUMN messaging.archived_messages.created
-IS 'The date and time the message was created';
+  IS 'The date and time the message was created';
 
 COMMENT ON COLUMN messaging.archived_messages.archived
-IS 'The date and time the message was archived';
+  IS 'The date and time the message was archived';
 
 COMMENT ON COLUMN messaging.archived_messages.data
-IS 'The data for the message';
+  IS 'The data for the message';
 
 
 CREATE TABLE messaging.error_reports (
@@ -506,45 +506,45 @@ CREATE TABLE messaging.error_reports (
 
 CREATE INDEX error_reports_application_id_ix
   ON messaging.error_reports
-  (application_id);
+    (application_id);
 
 CREATE INDEX error_reports_created_ix
   ON messaging.error_reports
-  (created);
+    (created);
 
 CREATE INDEX error_reports_who_ix
   ON messaging.error_reports
-  (who);
+    (who);
 
 COMMENT ON COLUMN messaging.error_reports.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
 
 COMMENT ON COLUMN messaging.error_reports.application_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the application that generated the error report';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the application that generated the error report';
 
 COMMENT ON COLUMN messaging.error_reports.application_version
-IS 'The version of the application that generated the error report';
+  IS 'The version of the application that generated the error report';
 
 COMMENT ON COLUMN messaging.error_reports.description
-IS 'The description of the error';
+  IS 'The description of the error';
 
 COMMENT ON COLUMN messaging.error_reports.detail
-IS 'The error detail e.g. a stack trace';
+  IS 'The error detail e.g. a stack trace';
 
 COMMENT ON COLUMN messaging.error_reports.feedback
-IS 'The feedback provided by the user for the error';
+  IS 'The feedback provided by the user for the error';
 
 COMMENT ON COLUMN messaging.error_reports.created
-IS 'The date and time the error report was created';
+  IS 'The date and time the error report was created';
 
 COMMENT ON COLUMN messaging.error_reports.who
-IS 'The username identifying the user associated with the error report';
+  IS 'The username identifying the user associated with the error report';
 
 COMMENT ON COLUMN messaging.error_reports.device_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
 
 COMMENT ON COLUMN messaging.error_reports.data
-IS 'The data associated with the error report';
+  IS 'The data associated with the error report';
 
 
 CREATE TABLE reporting.report_definitions (
@@ -556,13 +556,13 @@ CREATE TABLE reporting.report_definitions (
 );
 
 COMMENT ON COLUMN reporting.report_definitions.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the report definition';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.name
-IS 'The name of the report definition';
+  IS 'The name of the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.template
-IS 'The JasperReports template for the report definition';
+  IS 'The JasperReports template for the report definition';
 
 
 CREATE TABLE scheduler.jobs (
@@ -582,37 +582,37 @@ CREATE TABLE scheduler.jobs (
 );
 
 COMMENT ON COLUMN scheduler.jobs.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.jobs.name
-IS 'The name of the job';
+  IS 'The name of the job';
 
 COMMENT ON COLUMN scheduler.jobs.scheduling_pattern
-IS 'The cron-style scheduling pattern for the job';
+  IS 'The cron-style scheduling pattern for the job';
 
 COMMENT ON COLUMN scheduler.jobs.job_class
-IS 'The fully qualified name of the Java class that implements the job';
+  IS 'The fully qualified name of the Java class that implements the job';
 
 COMMENT ON COLUMN scheduler.jobs.is_enabled
-IS 'Is the job enabled for execution';
+  IS 'Is the job enabled for execution';
 
 COMMENT ON COLUMN scheduler.jobs.status
-IS 'The status of the job';
+  IS 'The status of the job';
 
 COMMENT ON COLUMN scheduler.jobs.execution_attempts
-IS 'The number of times the current execution of the job has been attempted';
+  IS 'The number of times the current execution of the job has been attempted';
 
 COMMENT ON COLUMN scheduler.jobs.lock_name
-IS 'The name of the entity that has locked the job for execution';
+  IS 'The name of the entity that has locked the job for execution';
 
 COMMENT ON COLUMN scheduler.jobs.last_executed
-IS 'The date and time the job was last executed';
+  IS 'The date and time the job was last executed';
 
 COMMENT ON COLUMN scheduler.jobs.next_execution
-IS 'The date and time when the job will next be executed';
+  IS 'The date and time when the job will next be executed';
 
 COMMENT ON COLUMN scheduler.jobs.updated
-IS 'The date and time the job was updated';
+  IS 'The date and time the job was updated';
 
 
 CREATE TABLE scheduler.job_parameters (
@@ -622,28 +622,28 @@ CREATE TABLE scheduler.job_parameters (
   value          TEXT NOT NULL,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES scheduler.jobs (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES scheduler.jobs(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX job_parameters_job_id_ix
   ON scheduler.job_parameters
-  (job_id);
+    (job_id);
 
 CREATE INDEX job_parameters_name_ix
   ON scheduler.job_parameters
-  (name);
+    (name);
 
 COMMENT ON COLUMN scheduler.job_parameters.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter';
 
 COMMENT ON COLUMN scheduler.job_parameters.job_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.job_parameters.name
-IS 'The name of the job parameter';
+  IS 'The name of the job parameter';
 
 COMMENT ON COLUMN scheduler.job_parameters.value
-IS 'The value of the job parameter';
+  IS 'The value of the job parameter';
 
 
 CREATE TABLE security.organizations (
@@ -656,16 +656,16 @@ CREATE TABLE security.organizations (
 
 CREATE INDEX organizations_name_ix
   ON security.organizations
-  (name);
+    (name);
 
 COMMENT ON COLUMN security.organizations.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 COMMENT ON COLUMN security.organizations.name
-IS 'The name of the organization';
+  IS 'The name of the organization';
 
 COMMENT ON COLUMN security.organizations.status
-IS 'The status for the organization';
+  IS 'The status for the organization';
 
 
 CREATE TABLE security.user_directory_types (
@@ -677,13 +677,13 @@ CREATE TABLE security.user_directory_types (
 );
 
 COMMENT ON COLUMN security.user_directory_types.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directory_types.name
-IS 'The name of the user directory type';
+  IS 'The name of the user directory type';
 
 COMMENT ON COLUMN security.user_directory_types.user_directory_class
-IS 'The fully qualified name of the Java class that implements the user directory type';
+  IS 'The fully qualified name of the Java class that implements the user directory type';
 
 
 CREATE TABLE security.user_directories (
@@ -693,24 +693,24 @@ CREATE TABLE security.user_directories (
   configuration  TEXT NOT NULL,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type_id) REFERENCES security.user_directory_types (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type_id) REFERENCES security.user_directory_types(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX user_directories_name_ix
   ON security.user_directories
-  (name);
+    (name);
 
 COMMENT ON COLUMN security.user_directories.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
 COMMENT ON COLUMN security.user_directories.type_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directories.name
-IS 'The name of the user directory';
+  IS 'The name of the user directory';
 
 COMMENT ON COLUMN security.user_directories.configuration
-IS 'The XML configuration data for the user directory';
+  IS 'The XML configuration data for the user directory';
 
 
 CREATE TABLE security.user_directory_to_organization_map (
@@ -718,23 +718,23 @@ CREATE TABLE security.user_directory_to_organization_map (
   organization_id   UUID NOT NULL,
 
   PRIMARY KEY (user_directory_id, organization_id),
-  CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories (codecategoryid) ON DELETE CASCADE,
-  CONSTRAINT user_directory_to_organization_map_organization_fk FOREIGN KEY (organization_id) REFERENCES security.organizations (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(codecategoryid) ON DELETE CASCADE,
+  CONSTRAINT user_directory_to_organization_map_organization_fk FOREIGN KEY (organization_id) REFERENCES security.organizations(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX user_directory_to_organization_map_user_directory_id_ix
   ON security.user_directory_to_organization_map
-  (user_directory_id);
+    (user_directory_id);
 
 CREATE INDEX user_directory_to_organization_map_organization_id_ix
   ON security.user_directory_to_organization_map
-  (organization_id);
+    (organization_id);
 
 COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
 COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 
 CREATE TABLE security.internal_users (
@@ -752,52 +752,52 @@ CREATE TABLE security.internal_users (
   password_expiry   TIMESTAMP,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT internal_users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT internal_users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX internal_users_user_directory_id_ix
   ON security.internal_users
-  (user_directory_id);
+    (user_directory_id);
 
 CREATE UNIQUE INDEX internal_users_username_ix
   ON security.internal_users
-  (username);
+    (username);
 
 COMMENT ON COLUMN security.internal_users.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
 
 COMMENT ON COLUMN security.internal_users.user_directory_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal user is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal user is associated with';
 
 COMMENT ON COLUMN security.internal_users.username
-IS 'The username for the internal user';
+  IS 'The username for the internal user';
 
 COMMENT ON COLUMN security.internal_users.status
-IS 'The status for the internal user';
+  IS 'The status for the internal user';
 
 COMMENT ON COLUMN security.internal_users.first_name
-IS 'The first name for the internal user';
+  IS 'The first name for the internal user';
 
 COMMENT ON COLUMN security.internal_users.last_name
-IS 'The last name for the internal user';
+  IS 'The last name for the internal user';
 
 COMMENT ON COLUMN security.internal_users.phone
-IS 'The phone number for the internal user';
+  IS 'The phone number for the internal user';
 
 COMMENT ON COLUMN security.internal_users.mobile
-IS 'The mobile number for the internal user';
+  IS 'The mobile number for the internal user';
 
 COMMENT ON COLUMN security.internal_users.email
-IS 'The e-mail address for the internal user';
+  IS 'The e-mail address for the internal user';
 
 COMMENT ON COLUMN security.internal_users.password
-IS 'The password for the internal user';
+  IS 'The password for the internal user';
 
 COMMENT ON COLUMN security.internal_users.password_attempts
-IS 'The number of failed attempts to authenticate the internal user';
+  IS 'The number of failed attempts to authenticate the internal user';
 
 COMMENT ON COLUMN security.internal_users.password_expiry
-IS 'The date and time that the internal user''s password expires';
+  IS 'The date and time that the internal user''s password expires';
 
 
 CREATE TABLE security.internal_users_password_history (
@@ -807,28 +807,28 @@ CREATE TABLE security.internal_users_password_history (
   password         TEXT,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT internal_users_password_history_internal_user_id_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT internal_users_password_history_internal_user_id_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX internal_users_password_history_internal_user_id_ix
   ON security.internal_users_password_history
-  (internal_user_id);
+    (internal_user_id);
 
 CREATE INDEX internal_users_password_history_changed_ix
   ON security.internal_users_password_history
-  (changed);
+    (changed);
 
 COMMENT ON COLUMN security.internal_users_password_history.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
 
 COMMENT ON COLUMN security.internal_users_password_history.internal_user_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
 
 COMMENT ON COLUMN security.internal_users_password_history.changed
-IS 'When the password change took place for the internal user';
+  IS 'When the password change took place for the internal user';
 
 COMMENT ON COLUMN security.internal_users_password_history.password
-IS 'The password for the internal user';
+  IS 'The password for the internal user';
 
 
 CREATE TABLE security.internal_groups (
@@ -838,28 +838,28 @@ CREATE TABLE security.internal_groups (
   description       TEXT,
 
   PRIMARY KEY (codecategoryid),
-  CONSTRAINT internal_groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT internal_groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX internal_groups_user_directory_id_ix
   ON security.internal_groups
-  (user_directory_id);
+    (user_directory_id);
 
 CREATE INDEX internal_groups_groupname_ix
   ON security.internal_groups
-  (groupname);
+    (groupname);
 
 COMMENT ON COLUMN security.internal_groups.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
 
 COMMENT ON COLUMN security.internal_groups.user_directory_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal group is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal group is associated with';
 
 COMMENT ON COLUMN security.internal_groups.groupname
-IS 'The group name for the internal group';
+  IS 'The group name for the internal group';
 
 COMMENT ON COLUMN security.internal_groups.description
-IS 'A description for the internal group';
+  IS 'A description for the internal group';
 
 
 CREATE TABLE security.internal_user_to_internal_group_map (
@@ -867,23 +867,23 @@ CREATE TABLE security.internal_user_to_internal_group_map (
   internal_group_id UUID NOT NULL,
 
   PRIMARY KEY (internal_user_id, internal_group_id),
-  CONSTRAINT internal_user_to_internal_group_map_internal_user_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users (codecategoryid) ON DELETE CASCADE,
-  CONSTRAINT internal_user_to_internal_group_map_internal_group_fk FOREIGN KEY (internal_group_id) REFERENCES security.internal_groups (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT internal_user_to_internal_group_map_internal_user_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(codecategoryid) ON DELETE CASCADE,
+  CONSTRAINT internal_user_to_internal_group_map_internal_group_fk FOREIGN KEY (internal_group_id) REFERENCES security.internal_groups(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX internal_user_to_internal_group_map_internal_user_id_ix
   ON security.internal_user_to_internal_group_map
-  (internal_user_id);
+    (internal_user_id);
 
 CREATE INDEX internal_user_to_internal_group_map_internal_group_id_ix
   ON security.internal_user_to_internal_group_map
-  (internal_group_id);
+    (internal_group_id);
 
 COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_user_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
 
 COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_group_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
 
 
 CREATE TABLE security.groups (
@@ -896,20 +896,20 @@ CREATE TABLE security.groups (
 
 CREATE INDEX groups_user_directory_id_ix
   ON security.groups
-  (user_directory_id);
+    (user_directory_id);
 
 CREATE INDEX groups_groupname_ix
   ON security.groups
-  (groupname);
+    (groupname);
 
 COMMENT ON COLUMN security.groups.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 COMMENT ON COLUMN security.groups.user_directory_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN security.groups.groupname
-IS 'The group name for the group';
+  IS 'The group name for the group';
 
 
 CREATE TABLE security.functions (
@@ -923,19 +923,19 @@ CREATE TABLE security.functions (
 
 CREATE UNIQUE INDEX functions_code_ix
   ON security.functions
-  (code);
+    (code);
 
 COMMENT ON COLUMN security.functions.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
 
 COMMENT ON COLUMN security.functions.code
-IS 'The unique code used to identify the function';
+  IS 'The unique code used to identify the function';
 
 COMMENT ON COLUMN security.functions.name
-IS 'The name of the function';
+  IS 'The name of the function';
 
 COMMENT ON COLUMN security.functions.description
-IS 'A description for the function';
+  IS 'A description for the function';
 
 
 CREATE TABLE security.roles (
@@ -947,13 +947,13 @@ CREATE TABLE security.roles (
 );
 
 COMMENT ON COLUMN security.roles.codecategoryid
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
 
 COMMENT ON COLUMN security.roles.name
-IS 'The name of the role';
+  IS 'The name of the role';
 
 COMMENT ON COLUMN security.roles.description
-IS 'A description for the role';
+  IS 'A description for the role';
 
 
 CREATE TABLE security.function_to_role_map (
@@ -961,23 +961,23 @@ CREATE TABLE security.function_to_role_map (
   role_id     UUID NOT NULL,
 
   PRIMARY KEY (function_id, role_id),
-  CONSTRAINT function_to_role_map_function_fk FOREIGN KEY (function_id) REFERENCES security.functions (codecategoryid) ON DELETE CASCADE,
-  CONSTRAINT function_to_role_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT function_to_role_map_function_fk FOREIGN KEY (function_id) REFERENCES security.functions(codecategoryid) ON DELETE CASCADE,
+  CONSTRAINT function_to_role_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX function_to_role_map_function_id_ix
   ON security.function_to_role_map
-  (function_id);
+    (function_id);
 
 CREATE INDEX function_to_role_map_role_id_ix
   ON security.function_to_role_map
-  (role_id);
+    (role_id);
 
 COMMENT ON COLUMN security.function_to_role_map.function_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
 
 COMMENT ON COLUMN security.function_to_role_map.role_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
 
 
 CREATE TABLE security.role_to_group_map (
@@ -985,23 +985,23 @@ CREATE TABLE security.role_to_group_map (
   group_id UUID NOT NULL,
 
   PRIMARY KEY (role_id, group_id),
-  CONSTRAINT role_to_group_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles (codecategoryid) ON DELETE CASCADE,
-  CONSTRAINT role_to_group_map_group_fk FOREIGN KEY (group_id) REFERENCES security.groups (codecategoryid) ON DELETE CASCADE
+  CONSTRAINT role_to_group_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles(codecategoryid) ON DELETE CASCADE,
+  CONSTRAINT role_to_group_map_group_fk FOREIGN KEY (group_id) REFERENCES security.groups(codecategoryid) ON DELETE CASCADE
 );
 
 CREATE INDEX role_to_group_map_role_id_ix
   ON security.role_to_group_map
-  (role_id);
+    (role_id);
 
 CREATE INDEX role_to_group_map_group_id_ix
   ON security.role_to_group_map
-  (group_id);
+    (group_id);
 
 COMMENT ON COLUMN security.role_to_group_map.role_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
 
 COMMENT ON COLUMN security.role_to_group_map.group_id
-IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
+  IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 CREATE TABLE service_registry.service_registry (
@@ -1018,28 +1018,28 @@ CREATE TABLE service_registry.service_registry (
 );
 
 COMMENT ON COLUMN service_registry.service_registry.name
-IS 'The name used to uniquely identify the web service';
+  IS 'The name used to uniquely identify the web service';
 
 COMMENT ON COLUMN service_registry.service_registry.security_type
-IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
+  IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
 
 COMMENT ON COLUMN service_registry.service_registry.supports_compression
-IS 'Does the web service support compression';
+  IS 'Does the web service support compression';
 
 COMMENT ON COLUMN service_registry.service_registry.endpoint
-IS 'The endpoint for the web service';
+  IS 'The endpoint for the web service';
 
 COMMENT ON COLUMN service_registry.service_registry.service_class
-IS 'The fully qualified name of the Java service class';
+  IS 'The fully qualified name of the Java service class';
 
 COMMENT ON COLUMN service_registry.service_registry.wsdl_location
-IS 'The location of the WSDL defining the web service on the classpath';
+  IS 'The location of the WSDL defining the web service on the classpath';
 
 COMMENT ON COLUMN service_registry.service_registry.username
-IS 'The username to use when accessing a web service with username-password security enabled';
+  IS 'The username to use when accessing a web service with username-password security enabled';
 
 COMMENT ON COLUMN service_registry.service_registry.password
-IS 'The password to use when accessing a web service with username-password security enabled';
+  IS 'The password to use when accessing a web service with username-password security enabled';
 
 
 CREATE TABLE sms.sms (
@@ -1056,28 +1056,28 @@ CREATE TABLE sms.sms (
 
 CREATE INDEX sms_mobile_number_ix
   ON sms.sms
-  (mobile_number);
+    (mobile_number);
 
 COMMENT ON COLUMN sms.sms.codecategoryid
-IS 'The ID used to uniquely identify the SMS';
+  IS 'The ID used to uniquely identify the SMS';
 
 COMMENT ON COLUMN sms.sms.mobile_number
-IS 'The mobile number to send the SMS to';
+  IS 'The mobile number to send the SMS to';
 
 COMMENT ON COLUMN sms.sms.message
-IS 'The message to send';
+  IS 'The message to send';
 
 COMMENT ON COLUMN sms.sms.status
-IS 'The status of the SMS';
+  IS 'The status of the SMS';
 
 COMMENT ON COLUMN sms.sms.send_attempts
-IS 'The number of times that the sending of the SMS was attempted';
+  IS 'The number of times that the sending of the SMS was attempted';
 
 COMMENT ON COLUMN sms.sms.lock_name
-IS 'The name of the entity that has locked the SMS for sending';
+  IS 'The name of the entity that has locked the SMS for sending';
 
 COMMENT ON COLUMN sms.sms.last_processed
-IS 'The date and time the last attempt was made to send the SMS';
+  IS 'The date and time the last attempt was made to send the SMS';
 
 
 CREATE TABLE test.test_data (
@@ -1089,190 +1089,197 @@ CREATE TABLE test.test_data (
 );
 
 COMMENT ON COLUMN test.test_data.codecategoryid
-IS 'The ID used to uniquely identify the test data';
+  IS 'The ID used to uniquely identify the test data';
 
 COMMENT ON COLUMN test.test_data.name
-IS 'The name for the test data';
+  IS 'The name for the test data';
 
 COMMENT ON COLUMN test.test_data.value
-IS 'The value for the test data';
+  IS 'The value for the test data';
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO security.organizations (codecategoryid, name, status) VALUES
-  ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
+INSERT INTO security.organizations (codecategoryid, name, status)
+VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
 
-INSERT INTO security.user_directory_types (codecategoryid, name, user_directory_class) VALUES
-  ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory',
-   'digital.inception.security.InternalUserDirectory');
-INSERT INTO security.user_directory_types (codecategoryid, name, user_directory_class) VALUES
-  ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory',
-   'digital.inception.security.LDAPUserDirectory');
+INSERT INTO security.user_directory_types (codecategoryid, name, user_directory_class)
+VALUES ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory',
+        'digital.inception.security.InternalUserDirectory');
+INSERT INTO security.user_directory_types (codecategoryid, name, user_directory_class)
+VALUES ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory',
+        'digital.inception.security.LDAPUserDirectory');
 
-INSERT INTO security.user_directories (codecategoryid, type_id, name, configuration) VALUES
-  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f',
-   'Internal User Directory',
-   '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+INSERT INTO security.user_directories (codecategoryid, type_id, name, configuration)
+VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f',
+        'Internal User Directory',
+        '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
-INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id) VALUES
-  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
+INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (codecategoryid, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-VALUES
-  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator',
-    1, '', '',
-    '', '', '',
-    'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', NULL, NULL);
+INSERT INTO security.internal_users (codecategoryid, user_directory_id, username, status,
+                                     first_name, last_name, phone, mobile, email, password,
+                                     password_attempts, password_expiry)
+VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
+        'Administrator',
+        1, '', '',
+        '', '', '',
+        'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', NULL, NULL);
 
 INSERT INTO security.internal_groups (codecategoryid, user_directory_id, groupname, description)
-VALUES
-  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators',
-   'Administrators');
+VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
+        'Administrators',
+        'Administrators');
 INSERT INTO security.internal_groups (codecategoryid, user_directory_id, groupname, description)
-VALUES
-  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organization Administrators', 'Organization Administrators');
+VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
+        'Organization Administrators', 'Organization Administrators');
 
 INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
-VALUES
-  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
+VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 
-INSERT INTO security.groups (codecategoryid, user_directory_id, groupname) VALUES
-  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Administrators');
-INSERT INTO security.groups (codecategoryid, user_directory_id, groupname) VALUES
-  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organization Administrators');
+INSERT INTO security.groups (codecategoryid, user_directory_id, groupname)
+VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
+        'Administrators');
+INSERT INTO security.groups (codecategoryid, user_directory_id, groupname)
+VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
+        'Organization Administrators');
 
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganizationAdministration',
-   'Organization Administration', 'Organization Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration',
-   'User Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration',
-   'Group Administration', 'Group Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups', 'User Groups');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('0623bc3f-9a1b-4f19-8438-236660d789c5', 'Application.CodeCategoryAdministration',
-   'Code Category Administration', 'Code Category Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration', 'Code Administration',
-   'Code Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword', 'Reset User Password',
-   'Reset User Password');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Application.SecurityAdministration',
-   'Security Administration', 'Security Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Application.ConfigurationAdministration',
-   'Configuration Administration', 'Configuration Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home',
+        'Secure Home');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganizationAdministration',
+        'Organization Administration', 'Organization Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration',
+        'User Administration',
+        'User Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration',
+        'Group Administration', 'Group Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups',
+        'User Groups');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('0623bc3f-9a1b-4f19-8438-236660d789c5', 'Application.CodeCategoryAdministration',
+        'Code Category Administration', 'Code Category Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration',
+        'Code Administration',
+        'Code Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword',
+        'Reset User Password',
+        'Reset User Password');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Application.SecurityAdministration',
+        'Security Administration', 'Security Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Application.ConfigurationAdministration',
+        'Configuration Administration', 'Configuration Administration');
 
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Application.ErrorReports', 'ApplicationError Reports',
-   'ApplicationError Reports');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Application.ErrorReports',
+        'ApplicationError Reports',
+        'ApplicationError Reports');
 
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration',
-   'Report Definition Administration', 'Report Definition Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report', 'View Report');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration',
+        'Report Definition Administration', 'Report Definition Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report',
+        'View Report');
 
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration',
-   'Process Definition Administration', 'Process Definition Administration');
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process',
-   'View Process');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration',
+        'Process Definition Administration', 'Process Definition Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process',
+        'View Process');
 
-INSERT INTO security.functions (codecategoryid, code, name, description) VALUES
-  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Application.SchedulerAdministration',
-   'Scheduler Administration', 'Scheduler Administration');
+INSERT INTO security.functions (codecategoryid, code, name, description)
+VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Application.SchedulerAdministration',
+        'Scheduler Administration', 'Scheduler Administration');
 
-INSERT INTO security.roles (codecategoryid, name, description) VALUES
-  ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
-INSERT INTO security.roles (codecategoryid, name, description) VALUES
-  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator',
-   'Organization Administrator');
+INSERT INTO security.roles (codecategoryid, name, description)
+VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
+INSERT INTO security.roles (codecategoryid, name, description)
+VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator',
+        'Organization Administrator');
 
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecureHome
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganizationAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('ef03f384-24f7-43eb-a29c-f5c5b838698d',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.GroupAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserGroups
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('0623bc3f-9a1b-4f19-8438-236660d789c5',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeCategoryAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ResetUserPassword
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('9105fb6d-1629-4014-bf4c-1990a92db276',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecurityAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ConfigurationAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('97f0f870-a871-48de-a3e0-a32a95770f12',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ErrorReports
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ReportDefinitionAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewReport
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('180c84f9-9816-48d0-9762-dc753b2228b1',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ProcessDefinitionAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('d2854c65-9a59-40b8-9dc7-a882c64b2610',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewProcess
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SchedulerAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecureHome
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganizationAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.GroupAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('7a54a71e-3680-4d49-b87d-29604a247413',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserGroups
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('0623bc3f-9a1b-4f19-8438-236660d789c5',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeCategoryAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ResetUserPassword
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecurityAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ConfigurationAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ErrorReports
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ReportDefinitionAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewReport
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ProcessDefinitionAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewProcess
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a',
+        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SchedulerAdministration
 
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.SecureHome
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.Dashboard
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserAdministration
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserGroups
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ResetUserPassword
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ViewReport
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.SecureHome
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.Dashboard
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserAdministration
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('7a54a71e-3680-4d49-b87d-29604a247413',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserGroups
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ResetUserPassword
+INSERT INTO security.function_to_role_map (function_id, role_id)
+VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03',
+        '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ViewReport
 
 INSERT INTO security.role_to_group_map (role_id, group_id)
 VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
@@ -1308,16 +1315,26 @@ VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
 INSERT INTO messaging.message_types (codecategoryid, name)
 VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
 
-INSERT INTO messaging.message_statuses (code, name) VALUES (0, 'Initialised');
-INSERT INTO messaging.message_statuses (code, name) VALUES (1, 'QueuedForSending');
-INSERT INTO messaging.message_statuses (code, name) VALUES (2, 'QueuedForProcessing');
-INSERT INTO messaging.message_statuses (code, name) VALUES (3, 'Aborted');
-INSERT INTO messaging.message_statuses (code, name) VALUES (4, 'Failed');
-INSERT INTO messaging.message_statuses (code, name) VALUES (5, 'Processing');
-INSERT INTO messaging.message_statuses (code, name) VALUES (6, 'Sending');
-INSERT INTO messaging.message_statuses (code, name) VALUES (7, 'QueuedForDownload');
-INSERT INTO messaging.message_statuses (code, name) VALUES (8, 'Downloading');
-INSERT INTO messaging.message_statuses (code, name) VALUES (10, 'Processed');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (0, 'Initialised');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (1, 'QueuedForSending');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (2, 'QueuedForProcessing');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (3, 'Aborted');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (4, 'Failed');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (5, 'Processing');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (6, 'Sending');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (7, 'QueuedForDownload');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (8, 'Downloading');
+INSERT INTO messaging.message_statuses (code, name)
+VALUES (10, 'Processed');
 
 INSERT INTO test.test_data (codecategoryid, name, value)
 VALUES (1, 'Sample Name 1', 'Sample Value 1');

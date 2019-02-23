@@ -33,8 +33,6 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -59,15 +57,14 @@ public class CodeCategory
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * The ID used to uniquely identify the code category.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify "
-    + "the code category",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  @Size(min = 1, max = 100)
+  private String id;
 
   /**
    * The name of the code category.
@@ -76,7 +73,7 @@ public class CodeCategory
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(max = 100)
   private String name;
 
   /**
@@ -97,11 +94,10 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the code
-   *             category
+   * @param id   the ID used to uniquely identify the code category
    * @param name the name of the code category
    */
-  public CodeCategory(UUID id, String name)
+  public CodeCategory(String id, String name)
   {
     this.id = id;
     this.name = name;
@@ -110,12 +106,11 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id      the Universally Unique Identifier (UUID) used to uniquely identify the code
-   *                category
+   * @param id      the ID used to uniquely identify the code category
    * @param name    the name of the code category
    * @param updated the date and time the code category was updated
    */
-  public CodeCategory(UUID id, String name, LocalDateTime updated)
+  public CodeCategory(String id, String name, LocalDateTime updated)
   {
     this.id = id;
     this.name = name;
@@ -123,11 +118,11 @@ public class CodeCategory
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * Returns the ID used to uniquely identify the code category.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @return the ID used to uniquely identify the code category
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -153,11 +148,11 @@ public class CodeCategory
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * Set the ID used to uniquely identify the code category.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @param id the ID used to uniquely identify the code category
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

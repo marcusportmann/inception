@@ -48,7 +48,10 @@ import java.sql.*;
 
 import java.time.LocalDateTime;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -128,13 +131,12 @@ public class CodesService
   /**
    * Check whether the code category exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
   @Override
-  public boolean codeCategoryExists(UUID codeCategoryId)
+  public boolean codeCategoryExists(String codeCategoryId)
     throws CodesServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -152,14 +154,14 @@ public class CodesService
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID used to uniquely identify the code
    *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   @Override
-  public boolean codeExists(UUID codeCategoryId, String codeId)
+  public boolean codeExists(String codeCategoryId, String codeId)
     throws CodesServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -200,16 +202,8 @@ public class CodesService
         throw new CodeCategoryNotFoundException(code.getCodeCategoryId());
       }
 
-      if (StringUtil.isNullOrEmpty(code.getId()))
-      {
-        statement.setString(1, String.valueOf(UUID.randomUUID()));
-      }
-      else
-      {
-        statement.setString(1, code.getId());
-      }
-
-      statement.setObject(2, code.getCodeCategoryId());
+      statement.setString(1, code.getId());
+      statement.setString(2, code.getCodeCategoryId());
       statement.setString(3, code.getName());
       statement.setString(4, code.getValue());
 
@@ -254,7 +248,7 @@ public class CodesService
         throw new DuplicateCodeCategoryException(codeCategory.getId());
       }
 
-      statement.setObject(1, codeCategory.getId());
+      statement.setString(1, codeCategory.getId());
       statement.setString(2, codeCategory.getName());
 
       if (codeCategory.getUpdated() == null)
@@ -291,13 +285,13 @@ public class CodesService
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID uniquely identifying the code
    */
   @Override
   @Transactional
-  public void deleteCode(UUID codeCategoryId, String codeId)
+  public void deleteCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException
   {
     String deleteCodeSQL = "DELETE FROM codes.codes WHERE code_category_id=? AND id=?";
@@ -305,7 +299,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
       statement.setString(2, codeId);
 
       if (statement.executeUpdate() == 0)
@@ -327,12 +321,11 @@ public class CodesService
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @Override
   @Transactional
-  public void deleteCodeCategory(UUID codeCategoryId)
+  public void deleteCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String deleteCodeCategorySQL = "DELETE FROM codes.code_categories WHERE id=?";
@@ -340,7 +333,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteCodeCategorySQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       if (statement.executeUpdate() == 0)
       {
@@ -362,14 +355,14 @@ public class CodesService
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID uniquely identifying the code
    *
    * @return the code
    */
   @Override
-  public Code getCode(UUID codeCategoryId, String codeId)
+  public Code getCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException
   {
     String getCodeSQL = "SELECT id, code_category_id, name, VALUE FROM codes.codes "
@@ -378,7 +371,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeSQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
       statement.setString(2, codeId);
 
       try (ResultSet rs = statement.executeQuery())
@@ -456,13 +449,12 @@ public class CodesService
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the code category
    */
   @Override
-  public CodeCategory getCodeCategory(UUID codeCategoryId)
+  public CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getCodeCategorySQL = "SELECT id, name, updated FROM codes.code_categories WHERE id=?";
@@ -470,7 +462,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -511,13 +503,12 @@ public class CodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodeCategoryCodes(UUID codeCategoryId)
+  public List<Code> getCodeCategoryCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -556,14 +547,13 @@ public class CodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodeCategoryCodesWithParameters(UUID codeCategoryId, Map<String,
+  public List<Code> getCodeCategoryCodesWithParameters(String codeCategoryId, Map<String,
       String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
@@ -603,13 +593,12 @@ public class CodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getCodeCategoryData(UUID codeCategoryId)
+  public String getCodeCategoryData(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getCodeCategorySQL = "SELECT data FROM codes.code_categories WHERE id=?";
@@ -617,7 +606,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -656,14 +645,13 @@ public class CodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getCodeCategoryDataWithParameters(UUID codeCategoryId, Map<String,
+  public String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String,
       String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
@@ -672,7 +660,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -707,13 +695,12 @@ public class CodesService
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
   @Override
-  public LocalDateTime getCodeCategoryUpdated(UUID codeCategoryId)
+  public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getCodeCategoryLastUpdatedSQL = "SELECT updated FROM codes.code_categories WHERE id=?";
@@ -721,7 +708,7 @@ public class CodesService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategoryLastUpdatedSQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -795,13 +782,12 @@ public class CodesService
   /**
    * Returns the number of codes for the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the number of codes for the code category
    */
   @Override
-  public int getNumberOfCodesForCodeCategory(UUID codeCategoryId)
+  public int getNumberOfCodesForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getNumberOfCodesForCodeCategorySQL =
@@ -815,7 +801,7 @@ public class CodesService
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -903,7 +889,7 @@ public class CodesService
 
       statement.setString(1, codeCategory.getName());
       statement.setTimestamp(2, Timestamp.valueOf(updated));
-      statement.setObject(3, codeCategory.getId());
+      statement.setString(3, codeCategory.getId());
 
       if (statement.executeUpdate() == 0)
       {
@@ -928,12 +914,11 @@ public class CodesService
   /**
    * Update the XML or JSON data for the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param data           the updated XML or JSON data
    */
   @Override
-  public void updateCodeCategoryData(UUID codeCategoryId, String data)
+  public void updateCodeCategoryData(String codeCategoryId, String data)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String updateCodeCategoryDataSQL =
@@ -946,7 +931,7 @@ public class CodesService
 
       statement.setString(1, data);
       statement.setTimestamp(2, Timestamp.valueOf(updated));
-      statement.setObject(3, codeCategoryId);
+      statement.setString(3, codeCategoryId);
 
       if (statement.executeUpdate() == 0)
       {
@@ -964,14 +949,14 @@ public class CodesService
     }
   }
 
-  private boolean codeCategoryExists(Connection connection, UUID codeCategoryId)
+  private boolean codeCategoryExists(Connection connection, String codeCategoryId)
     throws SQLException
   {
     String codeCategoryExistsSQL = "SELECT id FROM codes.code_categories WHERE id=?";
 
     try (PreparedStatement statement = connection.prepareStatement(codeCategoryExistsSQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -980,7 +965,7 @@ public class CodesService
     }
   }
 
-  private boolean codeExists(Connection connection, UUID codeCategoryId, String codeId)
+  private boolean codeExists(Connection connection, String codeCategoryId, String codeId)
     throws SQLException
   {
     String codeExistsSQL =
@@ -988,7 +973,7 @@ public class CodesService
 
     try (PreparedStatement statement = connection.prepareStatement(codeExistsSQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
       statement.setString(2, codeId);
 
       try (ResultSet rs = statement.executeQuery())
@@ -1001,14 +986,13 @@ public class CodesService
   private Code getCode(ResultSet rs)
     throws SQLException
   {
-    return new Code(rs.getString(1), UUID.fromString(rs.getString(2)), rs.getString(3),
-        rs.getString(4));
+    return new Code(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
   }
 
   private CodeCategory getCodeCategory(ResultSet rs)
     throws SQLException
   {
-    return new CodeCategory(UUID.fromString(rs.getString(1)), rs.getString(2),
+    return new CodeCategory(rs.getString(1), rs.getString(2),
         (rs.getTimestamp(3) == null)
         ? null
         : rs.getTimestamp(3).toLocalDateTime());
@@ -1030,7 +1014,7 @@ public class CodesService
     }
   }
 
-  private List<Code> getCodesForCodeCategory(Connection connection, UUID codeCategoryId)
+  private List<Code> getCodesForCodeCategory(Connection connection, String codeCategoryId)
     throws SQLException
   {
     String getCodesForCodeCategorySQL =
@@ -1039,7 +1023,7 @@ public class CodesService
 
     try (PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
     {
-      statement.setObject(1, codeCategoryId);
+      statement.setString(1, codeCategoryId);
 
       return getCodes(statement);
     }
@@ -1075,7 +1059,8 @@ public class CodesService
         }
         else
         {
-          logger.error(String.format("Failed to register the code provider (%s): The code provider "
+          logger.error(String.format(
+              "Failed to register the code provider (%s): The code provider "
               + "class does not provide a constructor with the required signature",
               codeProviderConfig.getClassName()));
         }

@@ -118,8 +118,8 @@ GO
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE "CODES"."CODE_CATEGORIES" (
-  ID       UNIQUEIDENTIFIER NOT NULL,
-  NAME     NVARCHAR(256) NOT NULL,
+  ID       NVARCHAR(100) NOT NULL,
+  NAME     NVARCHAR(100) NOT NULL,
   DATA     NVARCHAR(MAX),
   UPDATED  DATETIME,
 
@@ -127,7 +127,7 @@ CREATE TABLE "CODES"."CODE_CATEGORIES" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the code category' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the code category' ,
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODE_CATEGORIES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -146,10 +146,10 @@ GO
 
 
 CREATE TABLE "CODES"."CODES" (
-  ID                NVARCHAR(256) NOT NULL,
-  CODE_CATEGORY_ID  UNIQUEIDENTIFIER NOT NULL,
-  NAME              NVARCHAR(1024) NOT NULL,
-  VALUE             NVARCHAR(2048) NOT NULL,
+  ID                NVARCHAR(100) NOT NULL,
+  CODE_CATEGORY_ID  NVARCHAR(100) NOT NULL,
+  NAME              NVARCHAR(100) NOT NULL,
+  VALUE             NVARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (ID, CODE_CATEGORY_ID),
   CONSTRAINT CODES_CODE_CATEGORY_FK FOREIGN KEY (CODE_CATEGORY_ID) REFERENCES "CODES"."CODE_CATEGORIES"(ID) ON DELETE CASCADE
@@ -164,7 +164,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the code category the code is associated with' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the code category the code is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODES', @level2type=N'COLUMN', @level2name=N'CODE_CATEGORY_ID';
 
 EXEC sys.sp_addextendedproperty

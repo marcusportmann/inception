@@ -52,6 +52,8 @@ export class BreadcrumbsService {
             if (routeSnapshot.url.length > 0) {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
+              console.log('routeSnapshot.data.title = ', routeSnapshot);
+
               if (routeSnapshot.data.title) {
                 breadcrumbs.push({
                   label: routeSnapshot.data.title,
@@ -63,6 +65,8 @@ export class BreadcrumbsService {
           }
         });
       } while (currentRoute);
+
+      console.log(breadcrumbs);
 
       this._breadcrumbs.next(Object.assign([], breadcrumbs));
 

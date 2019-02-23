@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
@@ -51,10 +49,9 @@ public class CodeCategoryNotFoundException extends ServiceException
   /**
    * Constructs a new <code>CodeCategoryNotFoundException</code>.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
-  public CodeCategoryNotFoundException(UUID codeCategoryId)
+  public CodeCategoryNotFoundException(String codeCategoryId)
   {
     super("The code category with ID (" + codeCategoryId + ") could not be found");
   }

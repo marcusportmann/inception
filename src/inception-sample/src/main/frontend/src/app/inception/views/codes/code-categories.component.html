@@ -5,6 +5,12 @@
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort>
 
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell class="id-column d-none d-md-table-cell" *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+      <mat-cell class="id-column d-none d-md-table-cell" *matCellDef="let row">{{row.id}}</mat-cell>
+    </ng-container>
+
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell class="name-column" *matHeaderCellDef mat-sort-header>Name</mat-header-cell>

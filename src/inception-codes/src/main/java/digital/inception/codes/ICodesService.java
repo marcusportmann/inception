@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * The <code>ICodesService</code> interface defines the functionality provided by a Codes Service
@@ -35,24 +34,23 @@ public interface ICodesService
   /**
    * Check whether the code category exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
-  boolean codeCategoryExists(UUID codeCategoryId)
+  boolean codeCategoryExists(String codeCategoryId)
     throws CodesServiceException;
 
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID used to uniquely identify the code
    *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
-  boolean codeExists(UUID codeCategoryId, String codeId)
+  boolean codeExists(String codeCategoryId, String codeId)
     throws CodesServiceException;
 
   /**
@@ -75,32 +73,31 @@ public interface ICodesService
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID uniquely identifying the code
    */
-  void deleteCode(UUID codeCategoryId, String codeId)
+  void deleteCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException;
 
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
-  void deleteCodeCategory(UUID codeCategoryId)
+  void deleteCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID uniquely identifying the code
    *
    * @return the code
    */
-  Code getCode(UUID codeCategoryId, String codeId)
+  Code getCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException;
 
   /**
@@ -114,12 +111,11 @@ public interface ICodesService
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the code category
    */
-  CodeCategory getCodeCategory(UUID codeCategoryId)
+  CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -129,12 +125,11 @@ public interface ICodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
-  List<Code> getCodeCategoryCodes(UUID codeCategoryId)
+  List<Code> getCodeCategoryCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -144,13 +139,13 @@ public interface ICodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the codes for the code category
    */
-  List<Code> getCodeCategoryCodesWithParameters(UUID codeCategoryId, Map<String, String> parameters)
+  List<Code> getCodeCategoryCodesWithParameters(String codeCategoryId, Map<String,
+      String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -160,12 +155,11 @@ public interface ICodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
-  String getCodeCategoryData(UUID codeCategoryId)
+  String getCodeCategoryData(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -175,24 +169,22 @@ public interface ICodesService
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the XML or JSON data for the code category
    */
-  String getCodeCategoryDataWithParameters(UUID codeCategoryId, Map<String, String> parameters)
+  String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
-  LocalDateTime getCodeCategoryUpdated(UUID codeCategoryId)
+  LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -206,12 +198,11 @@ public interface ICodesService
   /**
    * Returns the number of codes for the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the number of codes for the code category
    */
-  int getNumberOfCodesForCodeCategory(UUID codeCategoryId)
+  int getNumberOfCodesForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -238,10 +229,9 @@ public interface ICodesService
   /**
    * Update the XML or JSON data for the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param data           the updated XML or JSON data
    */
-  void updateCodeCategoryData(UUID codeCategoryId, String data)
+  void updateCodeCategoryData(String codeCategoryId, String data)
     throws CodeCategoryNotFoundException, CodesServiceException;
 }

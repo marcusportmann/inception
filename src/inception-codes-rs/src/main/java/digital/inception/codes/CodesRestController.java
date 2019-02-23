@@ -30,9 +30,6 @@ import io.swagger.annotations.ApiResponses;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -41,7 +38,6 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -67,8 +63,7 @@ public class CodesRestController
   /**
    * Create a code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param code           the code to create
    */
   @ApiOperation(value = "Create a code", notes = "Create a code")
@@ -85,9 +80,8 @@ public class CodesRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createCode(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId, @ApiParam(name = "code", value = "The code", required = true)
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId, @ApiParam(name = "code", value = "The code", required = true)
   @RequestBody Code code)
     throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
         CodesServiceException
@@ -154,8 +148,7 @@ public class CodesRestController
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @ApiOperation(value = "Delete the code", notes = "Delete the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was deleted successfully") ,
@@ -169,9 +162,8 @@ public class CodesRestController
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteCode(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId, @ApiParam(name = "codeId",
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
       value = "The ID used to uniquely identify the code", required = true)
   @PathVariable String codeId)
     throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
@@ -192,8 +184,7 @@ public class CodesRestController
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @ApiOperation(value = "Delete the code category", notes = "Delete the code category")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -208,9 +199,8 @@ public class CodesRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteCodeCategory(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId)
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -234,7 +224,8 @@ public class CodesRestController
   @RequestMapping(value = "/codeCategories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //@PreAuthorize("hasAuthority('Application.CodeCategoryAdministration')")
+
+  // @PreAuthorize("hasAuthority('Application.CodeCategoryAdministration')")
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
@@ -246,8 +237,7 @@ public class CodesRestController
   /**
    * Retrieve the codes for a code category
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
@@ -264,9 +254,8 @@ public class CodesRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<Code> getCodeCategoryCodes(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId)
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -280,8 +269,7 @@ public class CodesRestController
   /**
    * Retrieve the XML or JSON data for a code category
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
@@ -298,9 +286,8 @@ public class CodesRestController
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public String getCodeCategoryData(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId)
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -314,8 +301,7 @@ public class CodesRestController
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
@@ -328,14 +314,13 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/updated",
-      method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(value = "/codeCategories/{codeCategoryId}/updated", method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public LocalDateTime getCodeCategoryUpdated(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId)
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -349,8 +334,7 @@ public class CodesRestController
   /**
    * Update the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeId         the ID used to uniquely identify the code
    * @param code           the code to create
    */
@@ -366,9 +350,8 @@ public class CodesRestController
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateCode(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId, @ApiParam(name = "codeId",
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
       value = "The ID used to uniquely identify the code", required = true)
   @PathVariable String codeId, @ApiParam(name = "code", value = "The code", required = true)
   @RequestBody Code code)
@@ -403,8 +386,7 @@ public class CodesRestController
   /**
    * Update the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeCategory   the code category
    */
   @ApiOperation(value = "Update the code category", notes = "Update the code category")
@@ -420,9 +402,8 @@ public class CodesRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateCodeCategory(@ApiParam(name = "codeCategoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the code category",
-      required = true)
-  @PathVariable UUID codeCategoryId, @ApiParam(name = "codeCategory", value = "The code category",
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId, @ApiParam(name = "codeCategory", value = "The code category",
       required = true)
   @RequestBody CodeCategory codeCategory)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException

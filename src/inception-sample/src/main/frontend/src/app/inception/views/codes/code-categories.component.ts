@@ -36,7 +36,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class CodeCategoriesComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['name', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'actions'];
 
   dataSource = new MatTableDataSource<CodeCategory>();
 

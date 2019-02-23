@@ -35,30 +35,26 @@ const routes: Routes = [
     path: '',
     redirectTo: 'code-categories',
     pathMatch: 'full',
+    data: {
+      title: ''
+    }
   },
   {
     path: 'code-categories',
     data: {
-      title: 'Code Categories'
+      title: ''
     },
     children: [
       {
         path: '',
         component: CodeCategoriesComponent,
         data: {
-          title: 'Code Categories',
-          icon: 'fa fa-list',
-          sidebarNav: true
-        },
+          title: 'x'
+        }
       },
       {
         path: ':id/codes',
-        component: CodesComponent,
-        data: {
-          title: 'Test Code Category 01',
-          icon: 'fa fa-list',
-          sidebarNav: true
-        }
+        component: CodesComponent
       }
     ]
   },

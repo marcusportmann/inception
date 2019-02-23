@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
@@ -52,11 +50,11 @@ public class DuplicateCodeException extends ServiceException
   /**
    * Constructs a new <code>DuplicateCodeException</code>.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param codeId         the ID used to uniquely identify the code
    */
-  public DuplicateCodeException(UUID codeCategoryId, String codeId)
+  public DuplicateCodeException(String codeCategoryId, String codeId)
   {
     super("The code with ID (" + codeId + ") already exists for the code category with ID ("
         + codeCategoryId + ")");

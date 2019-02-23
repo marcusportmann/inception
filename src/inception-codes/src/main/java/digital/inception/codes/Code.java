@@ -29,8 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -54,16 +52,16 @@ public class Code
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
-   * is associated with.
+   * The ID used to uniquely identify the code category the code is associated with.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify "
-      + "the code category the code is associated with",
+  @ApiModelProperty(
+      value = "The ID used to uniquely identify the code category the code is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)
   @NotNull
-  private UUID codeCategoryId;
+  @Size(min = 1, max = 100)
+  private String codeCategoryId;
 
   /**
    * The ID used to uniquely identify the code.
@@ -72,7 +70,7 @@ public class Code
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
   private String id;
 
   /**
@@ -82,7 +80,7 @@ public class Code
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(max = 100)
   private String name;
 
   /**
@@ -103,10 +101,10 @@ public class Code
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category the code is associated with
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    */
-  public Code(UUID codeCategoryId)
+  public Code(String codeCategoryId)
   {
     this.codeCategoryId = codeCategoryId;
   }
@@ -115,12 +113,12 @@ public class Code
    * Constructs a new <code>Code</code>.
    *
    * @param id             the ID used to uniquely identify the code
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category the code is associated with
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param name           the name of the code
    * @param value          the value for the code
    */
-  public Code(String id, UUID codeCategoryId, String name, String value)
+  public Code(String id, String codeCategoryId, String name, String value)
   {
     this.id = id;
     this.codeCategoryId = codeCategoryId;
@@ -129,13 +127,11 @@ public class Code
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   * the code is associated with.
+   * Returns the ID used to uniquely identify the code category the code is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
-   * the code is associated with
+   * @return the ID used to uniquely identify the code category the code is associated with
    */
-  public UUID getCodeCategoryId()
+  public String getCodeCategoryId()
   {
     return codeCategoryId;
   }
@@ -171,13 +167,12 @@ public class Code
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the code category the
-   * code is associated with.
+   * Set the ID used to uniquely identify the code category the code is associated with.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category the code is associated with
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    */
-  public void setCodeCategoryId(UUID codeCategoryId)
+  public void setCodeCategoryId(String codeCategoryId)
   {
     this.codeCategoryId = codeCategoryId;
   }

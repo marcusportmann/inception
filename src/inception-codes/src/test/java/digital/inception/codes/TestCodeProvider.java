@@ -18,13 +18,10 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.codes.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,30 +44,29 @@ public class TestCodeProvider
    */
   public TestCodeProvider(CodeProviderConfig codeProviderConfig)
   {
-    codeCategory = new CodeCategory(UUID.fromString("887d7963-284e-400c-b5ae-e10b3d5297f0"),
+    codeCategory = new CodeCategory("TestCodeCategory",
         "Test Code Category Name", LocalDateTime.now());
 
     codes = new ArrayList<>();
 
-    codes.add(new Code(UUID.randomUUID().toString(), codeCategory.getId(), "Test Code Name 1",
+    codes.add(new Code("TestCode1", codeCategory.getId(), "Test Code Name 1",
         "Test Code Value 1"));
-    codes.add(new Code(UUID.randomUUID().toString(), codeCategory.getId(), "Test Code Name 2",
+    codes.add(new Code("TestCode2", codeCategory.getId(), "Test Code Name 2",
         "Test Code Value 2"));
-    codes.add(new Code(UUID.randomUUID().toString(), codeCategory.getId(), "Test Code Name 3",
+    codes.add(new Code("TestCode3", codeCategory.getId(), "Test Code Name 3",
         "Test Code Value 3"));
   }
 
   /**
    * Returns whether the code provider supports the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
    *         otherwise
    */
   @Override
-  public boolean codeCategoryExists(UUID codeCategoryId)
+  public boolean codeCategoryExists(String codeCategoryId)
     throws CodeProviderException
   {
     try
@@ -88,14 +84,13 @@ public class TestCodeProvider
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeId         the ID used to uniquely identify the code
    *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   @Override
-  public boolean codeExists(UUID codeCategoryId, String codeId)
+  public boolean codeExists(String codeCategoryId, String codeId)
     throws CodeProviderException
   {
     try
@@ -125,14 +120,13 @@ public class TestCodeProvider
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeId         the ID uniquely identifying the code
    *
    * @return the code
    */
   @Override
-  public Code getCode(UUID codeCategoryId, String codeId)
+  public Code getCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodeProviderException
   {
     try
@@ -185,13 +179,12 @@ public class TestCodeProvider
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the code category
    */
   @Override
-  public CodeCategory getCodeCategory(UUID codeCategoryId)
+  public CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException
   {
     try
@@ -217,13 +210,12 @@ public class TestCodeProvider
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
   @Override
-  public LocalDateTime getCodeCategoryLastUpdated(UUID codeCategoryId)
+  public LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException
   {
     try
@@ -254,13 +246,12 @@ public class TestCodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodesForCodeCategory(UUID codeCategoryId)
+  public List<Code> getCodesForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException
   {
     try
@@ -290,14 +281,13 @@ public class TestCodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String,
+  public List<Code> getCodesForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException
   {
@@ -311,12 +301,12 @@ public class TestCodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getDataForCodeCategory(UUID codeCategoryId)
+  public String getDataForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException
   {
     try
@@ -346,14 +336,13 @@ public class TestCodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getDataForCodeCategoryWithParameters(UUID codeCategoryId, Map<String,
+  public String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException
   {

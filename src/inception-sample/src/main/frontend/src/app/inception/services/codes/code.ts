@@ -22,13 +22,12 @@
 export class Code {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code.
+   * The ID used to uniquely identify the code.
    */
   id: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category the code
-   * is associated with.
+   * The ID used to uniquely identify the code category the code is associated with.
    */
   codeCategoryId: string;
 
@@ -45,10 +44,9 @@ export class Code {
   /**
    * Constructs a new Organization.
    *
-   * @param {string} id             The Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the code.
-   * @oaram {string} codeCategoryId The Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the code category the code is associated with.
+   * @param {string} id             The ID used to uniquely identify the code.
+   * @oaram {string} codeCategoryId The ID used to uniquely identify the code category the code is
+   *                                associated with.
    * @param {string} name           The name of the code category.
    * @param {string} value          The value for the code.
    */

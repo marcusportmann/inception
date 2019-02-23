@@ -141,8 +141,7 @@ export class CodesService {
   /**
    * Delete the code.
    *
-   * @param {string} codeCategoryId The Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the code category.
+   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
    * @param {string} codeId         The ID used to uniquely identify the code.
    *
    * @return True if the code was deleted or false otherwise.
@@ -186,8 +185,7 @@ export class CodesService {
   /**
    * Delete the code category.
    *
-   * @param {string} codeCategoryId The Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the code category.
+   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
    *
    * @return True if the code category was deleted or false otherwise.
    */
@@ -263,8 +261,7 @@ export class CodesService {
   /**
    * Retrieve the codes for the code category.
    *
-   * @param {string} codeCategoryId The Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the code category.
+   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
    *
    * @return the codes for the code category
    */

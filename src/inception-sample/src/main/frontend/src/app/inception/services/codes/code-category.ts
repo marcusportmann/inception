@@ -22,7 +22,7 @@
 export class CodeCategory {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * The ID used to uniquely identify the code category.
    */
   id: string;
 
@@ -39,8 +39,7 @@ export class CodeCategory {
   /**
    * Constructs a new Organization.
    *
-   * @param {string} id      The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         code category.
+   * @param {string} id      The ID used to uniquely identify the code category.
    * @param {string} name    The name of the code category.
    * @param {string} updated The date and time the code category was updated.
    */

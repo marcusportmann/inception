@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * The <code>ICodeProvider</code> interface defines the interface that must be implemented by all
@@ -35,37 +34,34 @@ public interface ICodeProvider
   /**
    * Returns whether the code provider supports the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
    *         otherwise
    */
-  boolean codeCategoryExists(UUID codeCategoryId)
+  boolean codeCategoryExists(String codeCategoryId)
     throws CodeProviderException;
 
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code ategory
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeId         the ID used to uniquely identify the code
    *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
-  boolean codeExists(UUID codeCategoryId, String codeId)
+  boolean codeExists(String codeCategoryId, String codeId)
     throws CodeProviderException;
 
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param codeId         the ID uniquely identifying the code
    *
    * @return the code
    */
-  Code getCode(UUID codeCategoryId, String codeId)
+  Code getCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodeProviderException;
 
   /**
@@ -79,23 +75,21 @@ public interface ICodeProvider
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the code category
    */
-  CodeCategory getCodeCategory(UUID codeCategoryId)
+  CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
-  LocalDateTime getCodeCategoryLastUpdated(UUID codeCategoryId)
+  LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
@@ -105,12 +99,11 @@ public interface ICodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
-  List<Code> getCodesForCodeCategory(UUID codeCategoryId)
+  List<Code> getCodesForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
@@ -120,13 +113,12 @@ public interface ICodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the codes for the code category
    */
-  List<Code> getCodesForCodeCategoryWithParameters(UUID codeCategoryId, Map<String,
+  List<Code> getCodesForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
@@ -137,12 +129,11 @@ public interface ICodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
-  String getDataForCodeCategory(UUID codeCategoryId)
+  String getDataForCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
@@ -152,12 +143,11 @@ public interface ICodeProvider
    * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    * @param parameters     the parameters
    *
    * @return the XML or JSON data for the code category
    */
-  String getDataForCodeCategoryWithParameters(UUID codeCategoryId, Map<String, String> parameters)
+  String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodeProviderException;
 }

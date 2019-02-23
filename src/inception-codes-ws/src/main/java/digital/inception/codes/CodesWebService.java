@@ -21,22 +21,26 @@ package digital.inception.codes;
 import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.xml.bind.annotation.XmlElement;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>CodesWebService</code> class.
@@ -114,12 +118,11 @@ public class CodesWebService
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @WebMethod(operationName = "DeleteCode")
   public void deleteCode(@WebParam(name = "CodeCategoryId")
-  @XmlElement(required = true) UUID codeCategoryId, @WebParam(name = "CodeId")
+  @XmlElement(required = true) String codeCategoryId, @WebParam(name = "CodeId")
   @XmlElement(required = true) String codeId)
     throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
   {
@@ -139,12 +142,11 @@ public class CodesWebService
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @WebMethod(operationName = "DeleteCodeCategory")
   public void deleteCodeCategory(@WebParam(name = "CodeCategoryId")
-  @XmlElement(required = true) UUID codeCategoryId)
+  @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -171,15 +173,14 @@ public class CodesWebService
   /**
    * Retrieve the codes for a code category
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the codes for the code category
    */
   @WebMethod(operationName = "GetCodeCategoryCodes")
   @WebResult(name = "Code")
   public List<Code> getCodeCategoryCodes(@WebParam(name = "CodeCategoryId")
-  @XmlElement(required = true) UUID codeCategoryId)
+  @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -193,15 +194,14 @@ public class CodesWebService
   /**
    * Retrieve the XML or JSON data for a code category
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the XML or JSON data for the code category
    */
   @WebMethod(operationName = "GetCodeCategoryData")
   @WebResult(name = "CodeCategoryData")
   public String getCodeCategoryData(@WebParam(name = "CodeCategoryId")
-  @XmlElement(required = true) UUID codeCategoryId)
+  @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
@@ -215,15 +215,14 @@ public class CodesWebService
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       code category
+   * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return the date and time the code category was last updated
    */
   @WebMethod(operationName = "GetCodeCategoryUpdated")
   @WebResult(name = "CodeCategoryUpdated")
   public LocalDateTime getCodeCategoryUpdated(@WebParam(name = "CodeCategoryId")
-  @XmlElement(required = true) UUID codeCategoryId)
+  @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
     if (codeCategoryId == null)
