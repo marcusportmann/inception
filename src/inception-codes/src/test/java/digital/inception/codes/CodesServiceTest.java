@@ -155,10 +155,6 @@ public class CodesServiceTest
 
     compareCodeCategories(codeCategory, retrievedCodeCategory);
 
-    Code codeWithoutId = getTestCodeWithoutIdDetails(codeCategory.getId());
-
-    codesService.createCode(codeWithoutId);
-
     Code code = getTestCodeDetails(codeCategory.getId());
 
     codesService.createCode(code);
@@ -178,7 +174,7 @@ public class CodesServiceTest
 
     compareCodes(code, retrievedCode);
 
-    assertEquals("The correct number of codes (2) was not retrieved", 2,
+    assertEquals("The correct number of codes (1) was not retrieved", 1,
         codesService.getNumberOfCodesForCodeCategory(codeCategory.getId()));
 
     codesService.deleteCode(codeCategory.getId(), code.getId());
