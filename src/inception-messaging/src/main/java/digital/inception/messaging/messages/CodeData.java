@@ -22,10 +22,9 @@ import digital.inception.codes.Code;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Element;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
 
 /**
  * The <code>CodeData</code> class stores the information for a code.
@@ -38,10 +37,9 @@ public class CodeData
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the category the code is
-   * associated with.
+   * The ID used to uniquely identify the category the code is associated with.
    */
-  private UUID codeCategoryId;
+  private String codeCategoryId;
 
   /**
    * The ID used to uniquely identify the code.
@@ -81,7 +79,7 @@ public class CodeData
     try
     {
       this.id = element.getChildText("Id");
-      this.codeCategoryId = UUID.fromString(element.getChildText("CodeCategoryId"));
+      this.codeCategoryId = element.getChildText("CodeCategoryId");
       this.name = StringUtil.notNull(element.getChildText("Name"));
       this.value = StringUtil.notNull(element.getChildText("Value"));
     }
@@ -92,13 +90,11 @@ public class CodeData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   * code is associated with.
+   * Returns the ID used to uniquely identify the category the code is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the category the
-   *         code is associated with
+   * @return the ID used to uniquely identify the category the code is associated with
    */
-  public UUID getCodeCategoryId()
+  public String getCodeCategoryId()
   {
     return codeCategoryId;
   }

@@ -23,8 +23,10 @@ import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
 import digital.inception.messaging.messages.*;
 import digital.inception.test.TestClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
@@ -34,13 +36,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import java.util.*;
 
 /**
  * The <code>SystemMessageTest</code> class contains the implementation of the JUnit
@@ -57,16 +60,16 @@ import static org.junit.Assert.*;
 public class SystemMessageTest
 {
   private static final UUID DEVICE_ID = UUID.randomUUID();
-  private static final String USERNAME = "Administrator";
   private static final String PASSWORD = "Password1";
-
-  /* Messaging Service */
-  @Autowired
-  private IMessagingService messagingService;
+  private static final String USERNAME = "Administrator";
 
   /* Codes Service */
   @Autowired
   private ICodesService codesService;
+
+  /* Messaging Service */
+  @Autowired
+  private IMessagingService messagingService;
 
   /**
    * Test the "Another Test" request and response message functionality.
@@ -166,8 +169,8 @@ public class SystemMessageTest
   public void getGetCodeCategoryTest()
     throws Exception
   {
-    CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+    CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory1",
+        "Test Standard Code Category 1", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -235,8 +238,8 @@ public class SystemMessageTest
       }
     }
 
-    CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+    CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory2",
+        "Test Custom Code Category 2", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {
@@ -277,8 +280,8 @@ public class SystemMessageTest
     parameters.put("Parameter Name 1", "Parameter Value 1");
     parameters.put("Parameter Name 2", "Parameter Value 2");
 
-    CodeCategory testStandardCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Standard Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+    CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory2",
+        "Test Standard Code Category 2", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -346,8 +349,8 @@ public class SystemMessageTest
       }
     }
 
-    CodeCategory testCustomCodeCategory = new CodeCategory(UUID.randomUUID(),
-        "Test Custom Code Category", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+    CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory1",
+        "Test Custom Code Category 1", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {

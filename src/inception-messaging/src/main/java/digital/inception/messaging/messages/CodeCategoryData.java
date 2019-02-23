@@ -24,16 +24,17 @@ import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Element;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryData</code> class stores the information for a code category.
@@ -56,9 +57,9 @@ public class CodeCategoryData
   private List<CodeData> codes;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * The ID used to uniquely identify the code category.
    */
-  private UUID id;
+  private String id;
 
   /**
    * The date and time the code category was last updated.
@@ -77,7 +78,7 @@ public class CodeCategoryData
    */
   CodeCategoryData(Element element)
   {
-    this.id = UUID.fromString(element.getChildText("Id"));
+    this.id = element.getChildText("Id");
     this.name = element.getChildText("Name");
 
     String lastUpdatedValue = element.getChildText("LastUpdated");
@@ -161,11 +162,11 @@ public class CodeCategoryData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the code category.
+   * Returns the ID used to uniquely identify the code category.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the code category
+   * @return the ID used to uniquely identify the code category
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }

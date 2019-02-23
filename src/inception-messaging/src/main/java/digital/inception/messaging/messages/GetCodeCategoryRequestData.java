@@ -26,15 +26,16 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a
@@ -53,10 +54,9 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
       "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the code category to
-   * retrieve.
+   * The ID used to uniquely identify the code category to retrieve.
    */
-  private UUID codeCategoryId;
+  private String codeCategoryId;
 
   /**
    * The date and time the code category was last retrieved.
@@ -84,13 +84,12 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId       the Universally Unique Identifier (UUID) used to uniquely identify
-   *                             the code category to retrieve
+   * @param codeCategoryId       the ID used to uniquely identify the code category to retrieve
    * @param lastRetrieved        the date and time the code category was last retrieved
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryRequestData(UUID codeCategoryId, LocalDateTime lastRetrieved,
+  public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved,
       boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -104,14 +103,13 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId       the Universally Unique Identifier (UUID) used to uniquely identify
-   *                             the code category to retrieve
+   * @param codeCategoryId       the ID used to uniquely identify the code category to retrieve
    * @param lastRetrieved        the date and time the code category was last retrieved
    * @param parameters           the parameters
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *                             category is current
    */
-  public GetCodeCategoryRequestData(UUID codeCategoryId, LocalDateTime lastRetrieved, Map<String,
+  public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved, Map<String,
       String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -147,7 +145,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
       return false;
     }
 
-    this.codeCategoryId = UUID.fromString(rootElement.getChildText("CodeCategoryId"));
+    this.codeCategoryId = rootElement.getChildText("CodeCategoryId");
 
     String lastRetrievedValue = rootElement.getChildText("LastRetrieved");
 
@@ -188,13 +186,11 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the code category
-   * to retrieve.
+   * Returns the ID uniquely identifying the code category to retrieve.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identify the code category to
-   *         retrieve
+   * @return the ID uniquely identify the code category to retrieve
    */
-  public UUID getCodeCategoryId()
+  public String getCodeCategoryId()
   {
     return codeCategoryId;
   }
