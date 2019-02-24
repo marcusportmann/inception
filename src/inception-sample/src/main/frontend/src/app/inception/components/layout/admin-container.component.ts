@@ -29,7 +29,6 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @Component({
   selector: 'admin-container',
   template: `
-    <!--<div class="spinner"></div>-->
     <admin-header
       [fixed]="true"
       [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"

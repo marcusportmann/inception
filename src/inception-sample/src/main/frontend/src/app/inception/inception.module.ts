@@ -69,10 +69,11 @@ import {BreadcrumbsService} from "./services/breadcrumbs/breadcrumbs.service";
 import {CodesService} from "./services/codes/codes.service";
 import {DialogService} from "./services/dialog/dialog.service";
 import {ErrorReportingService} from './services/error-reporting/error-reporting.service';
+import {LayoutService} from './services/layout/layout.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
-import {SpinnerService} from './services/layout/spinner.service';
+
 
 // Import Inception miscellaneous
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
@@ -329,10 +330,10 @@ export class InceptionModule {
         CodesService,
         DialogService,
         ErrorReportingService,
+        LayoutService,
         NavigationService,
         SecurityService,
-        SessionService,
-        SpinnerService
+        SessionService
       ]
     }
   }

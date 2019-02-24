@@ -20,34 +20,29 @@ import {Overlay, OverlayRef} from "@angular/cdk/overlay";
 import {ComponentPortal} from "@angular/cdk/portal";
 
 /**
- * The SpinnerService class provides the capability to show and hide the spinner used to indicate
- * to a user that the application is busy processing.
+ * The LayoutService class provides the Layout Service implementation.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class SpinnerService {
+export class LayoutService {
 
   private overlayRef: OverlayRef;
 
-  private spinnerPortal: ComponentPortal<SpinnerComponent>;
-
+  private spinnerComponentPortal: ComponentPortal<SpinnerComponent>;
 
   /**
-   * Constructs a new ErrorReportingService.
+   * Constructs a new LayoutService.
    *
-   * @param {dialog} dialog The material dialog.
+   * @param {Overlay} overlay The overlay.
    */
   constructor(private overlay: Overlay) {
   }
 
   /**
    * Show the spinner.
-   *
-   * @param {ViewContainerRef} viewContainerRef The reference to the view container to associate
-   *                                            the spinner with.
    */
-  show() {
+  showSpinner() {
 
     if (!this.overlayRef) {
 
@@ -55,17 +50,17 @@ export class SpinnerService {
       this.overlayRef = this.overlay.create();
 
       // Create ComponentPortal that can be attached to a PortalHost
-      this.spinnerPortal = new ComponentPortal(SpinnerComponent);
+      this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
 
       // Attach ComponentPortal to PortalHost
-      this.overlayRef.attach(this.spinnerPortal);
+      this.overlayRef.attach(this.spinnerComponentPortal);
     }
   }
 
   /**
    * Hide the spinner.
    */
-  hide() {
+  hideSpinner() {
     if (this.overlayRef) {
       this.overlayRef.dispose();
 

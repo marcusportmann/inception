@@ -42,15 +42,12 @@ const routes: Routes = [
   {
     path: 'code-categories',
     data: {
-      title: ''
+      title: 'Code Categories'
     },
     children: [
       {
         path: '',
         component: CodeCategoriesComponent,
-        data: {
-          title: 'x'
-        }
       },
       {
         path: ':id/codes',

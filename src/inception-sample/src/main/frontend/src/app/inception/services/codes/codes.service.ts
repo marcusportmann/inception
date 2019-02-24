@@ -141,7 +141,8 @@ export class CodesService {
   /**
    * Delete the code.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
+   * @param {string} codeCategoryId The ID used to uniquely identify the code category the code is
+   *                                associated with.
    * @param {string} codeId         The ID used to uniquely identify the code.
    *
    * @return True if the code was deleted or false otherwise.

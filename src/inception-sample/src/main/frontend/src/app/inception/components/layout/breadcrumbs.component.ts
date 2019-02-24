@@ -26,8 +26,8 @@ import {BreadcrumbsService} from "../../services/breadcrumbs/breadcrumbs.service
         <li class="breadcrumb-item"
             *ngIf="(breadcrumb.label)"
             [ngClass]="{active: last}">
-          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}{{last}}</a>
-          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}{{last}}</span>
+          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
         </li>
       </ng-template>
     </ol>

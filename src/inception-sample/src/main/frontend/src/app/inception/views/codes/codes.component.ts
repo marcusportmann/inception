@@ -19,10 +19,12 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Code} from "../../services/codes/code";
 import {CodesService} from "../../services/codes/codes.service";
 import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
+import {LayoutService} from "../../services/layout/layout.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
+import {BreadcrumbTitleProvider} from "../../services/breadcrumbs/breadcrumb-title-provider";
+import {Observable, of} from "rxjs";
 
 @Component({
   templateUrl: 'codes.component.html',
@@ -31,7 +33,9 @@ import {ActivatedRoute, Router} from "@angular/router";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements OnInit, AfterViewInit {
+export class CodesComponent implements AfterViewInit, OnInit, BreadcrumbTitleProvider {
+
+  title: Observable<string> = of('Test');
 
   codeCategoryId: string;
 
@@ -44,7 +48,7 @@ export class CodesComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService, private spinnerService: SpinnerService,
+              private dialogService: DialogService, private layoutService: LayoutService,
               private i18n: I18n, private codesService: CodesService) {
   }
 
@@ -72,17 +76,17 @@ export class CodesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.spinnerService.show();
+    this.layoutService.showSpinner();
 
     this.codesService.getCodeCategoryCodes(this.codeCategoryId).subscribe((codes: Code[]) => {
 
-      this.spinnerService.hide();
+      this.layoutService.hideSpinner();
 
       this.dataSource.data = codes;
 
     }, (error: Error) => {
 
-      this.spinnerService.hide();
+      this.layoutService.hideSpinner();
 
       this.dialogService.showErrorDialog(error);
     });
