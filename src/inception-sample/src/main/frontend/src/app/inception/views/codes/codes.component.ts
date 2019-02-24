@@ -33,9 +33,11 @@ import {Observable, of} from "rxjs";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnInit, BreadcrumbTitleProvider {
+export class CodesComponent implements BreadcrumbTitleProvider, AfterViewInit, OnInit {
 
-  title: Observable<string> = of('Test');
+  getTitle(): Observable<string> {
+    return of('Test');
+  }
 
   codeCategoryId: string;
 

@@ -81,7 +81,7 @@ function canProvideBreadcrumbTitle(arg: any): arg is BreadcrumbTitleProvider {
 
   //console.log('arg = ', arg);
 
-  let result:boolean = (arg.title !== undefined);
+  let result:boolean = (arg.getTitle !== undefined);
 
   return result;
 }

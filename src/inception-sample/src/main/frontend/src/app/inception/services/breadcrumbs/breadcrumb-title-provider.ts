@@ -24,5 +24,5 @@ import {Observable} from "rxjs";
  */
 export interface BreadcrumbTitleProvider {
 
-  title: Observable<string>;
+  getTitle(): Observable<string>;
 }
