@@ -77,7 +77,7 @@ export class ExampleFormComponent implements OnInit {
   ngOnInit() {
     this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => this.filter(value))
     );
   }
 
@@ -89,7 +89,7 @@ export class ExampleFormComponent implements OnInit {
 
   }
 
-  private _filter(value: string): string[] {
+  private filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.countryOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);

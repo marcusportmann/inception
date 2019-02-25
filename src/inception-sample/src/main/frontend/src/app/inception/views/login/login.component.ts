@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ViewContainerRef} from '@angular/core';
+import {Component, OnDestroy, ViewContainerRef} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -27,8 +27,8 @@ import {SecurityService} from '../../services/security/security.service';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
-import {catchError, map, first} from "rxjs/operators";
-import {Observable} from "../../../../../node_modules/rxjs";
+import {catchError, map, first, takeUntil} from "rxjs/operators";
+import {Observable, Subject} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
@@ -49,9 +49,11 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
 
   loginForm: FormGroup;
+
+  private unsubscribe: Subject<any> = new Subject();
 
   constructor(private router: Router, private route: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -66,17 +68,22 @@ export class LoginComponent {
     });
   }
 
-  public isForgottenPasswordEnabled(): boolean {
+  isForgottenPasswordEnabled(): boolean {
 
     return InceptionModule.forgottenPasswordEnabled;
   }
 
-  public isRegistrationEnabled(): boolean {
+  isRegistrationEnabled(): boolean {
 
     return InceptionModule.registrationEnabled;
   }
 
-  public onForgotPassword() {
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  onForgotPassword() {
 
     //this.router.navigate(['/']);
 
@@ -101,42 +108,23 @@ export class LoginComponent {
     // control.disabled ? control.enable() : control.disable()
   }
 
-  public onSubmit() {
+  onSubmit() {
 
     if (this.loginForm.valid) {
 
       this.layoutService.showSpinner();
 
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
-        first()).subscribe(session => {
+        takeUntil(this.unsubscribe)).subscribe(session => {
 
-        this.layoutService.hideSpinner();
+          this.layoutService.hideSpinner();
 
-        if (session.organizations.length == 1) {
-          this.router.navigate(['/']);
-        }
-        else {
-          this.router.navigate(['select-organization'], {relativeTo: this.route});
-        }
-
-
-
-          // this.securityService.getOrganizations().subscribe(organizations => {
-          //
-          //   console.log('organizations = ', organizations);
-          //
-          //   this.layoutService.hideSpinner();
-          //
-          //   this.router.navigate(['/']);
-          //
-          // }, error => {
-          //
-          //   this.layoutService.hideSpinner();
-          //
-          //   this.dialogService.showErrorDialog(error);
-          //
-          // });
-
+          if (session.organizations.length == 1) {
+            this.router.navigate(['/']);
+          }
+          else {
+            this.router.navigate(['select-organization'], {relativeTo: this.route});
+          }
         },(error: Error) => {
 
           this.layoutService.hideSpinner();

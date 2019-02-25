@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first, flatMap, map, startWith} from "rxjs/operators";
-import {Observable} from "../../../../../node_modules/rxjs";
+import {flatMap, map, startWith, takeUntil} from "rxjs/operators";
+import {Observable, Subject} from "../../../../../node_modules/rxjs";
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
 import {Router} from "@angular/router";
@@ -27,11 +27,13 @@ import {Session} from "../../services/session/session";
 @Component({
   templateUrl: 'select-organization.component.html'
 })
-export class SelectOrganizationComponent implements OnInit {
+export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   selectOrganizationForm: FormGroup;
 
   filteredOrganizations: Observable<Organization[]>;
+
+  private unsubscribe: Subject<any> = new Subject();
 
   constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
@@ -49,20 +51,26 @@ export class SelectOrganizationComponent implements OnInit {
     return this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object');
   }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  ngOnInit(): void {
     this.filteredOrganizations = this.selectOrganizationForm.get('organization').valueChanges.pipe(
       startWith(''),
-      flatMap((value) => this._filterOrganizations(value))
+      flatMap((value) => this.filterOrganizations(value))
     );
   }
 
-  onSubmit() {
+  onSubmit(): void {
 
     if (this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object')) {
 
       const selectedOrganization: Organization = <Organization>this.selectOrganizationForm.get('organization').value;
 
-      this.sessionService.session.pipe(first()).subscribe((session: Session) => {
+      this.sessionService.session.pipe(
+        takeUntil(this.unsubscribe)).subscribe((session: Session) => {
 
         session.organization = selectedOrganization;
 
@@ -71,7 +79,7 @@ export class SelectOrganizationComponent implements OnInit {
     }
   }
 
-  private _filterOrganizations(value: string | object): Observable<Organization[]> {
+  private filterOrganizations(value: string | object): Observable<Organization[]> {
     let filterValue = '';
 
     if (typeof value === "string") {

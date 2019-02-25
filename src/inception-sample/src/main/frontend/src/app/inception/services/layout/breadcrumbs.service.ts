@@ -18,7 +18,6 @@ import {AfterViewInit, Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {combineAll, filter} from 'rxjs/operators';
-import {BreadcrumbTitleProvider} from "./breadcrumb-title-provider";
 
 /**
  * The BreadcrumbsService class provides the Breadcrumbs Service implementation.
@@ -50,10 +49,6 @@ export class BreadcrumbsService {
           if (route.outlet === 'primary') {
             const routeSnapshot = route.snapshot;
 
-            if (routeSnapshot.component && canProvideBreadcrumbTitle(routeSnapshot.component)) {
-              console.log('Found component that can provide a breadcrumb title =', routeSnapshot.component);
-            }
-
             if (routeSnapshot.url.length > 0) {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
@@ -74,16 +69,7 @@ export class BreadcrumbsService {
       return breadcrumbs;
     });
   }
-
 }
 
-function canProvideBreadcrumbTitle(arg: any): arg is BreadcrumbTitleProvider {
-
-  //console.log('arg = ', arg);
-
-  let result:boolean = (arg.getTitle !== undefined);
-
-  return result;
-}
 
 

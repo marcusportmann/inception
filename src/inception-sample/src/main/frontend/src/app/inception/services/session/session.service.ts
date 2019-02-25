@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, throwError, timer} from 'rxjs';
 import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
@@ -58,7 +58,7 @@ export class SessionService {
 
     // Start the session refresher
     timer(0, 10000).pipe(
-      switchMap(_ => this._refreshSession())).subscribe((refreshedSession: Session) => {
+      switchMap(_ => this.refreshSession())).subscribe((refreshedSession: Session) => {
 
         if (refreshedSession != null) {
           console.log('Successfully refreshed session: ', refreshedSession);
@@ -156,7 +156,7 @@ export class SessionService {
     this._session.next(null);
   }
 
-  private _refreshSession(): Observable<Session | null> {
+  private refreshSession(): Observable<Session | null> {
 
     return this.session.pipe(mergeMap((currentSession: Session) => {
 
