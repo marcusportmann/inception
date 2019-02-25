@@ -20,19 +20,19 @@ import {Overlay, OverlayRef} from "@angular/cdk/overlay";
 import {ComponentPortal} from "@angular/cdk/portal";
 
 /**
- * The LayoutService class provides the Layout Service implementation.
+ * The SpinnerService class provides the Layout Service implementation.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class LayoutService {
+export class SpinnerService {
 
   private overlayRef: OverlayRef;
 
   private spinnerComponentPortal: ComponentPortal<SpinnerComponent>;
 
   /**
-   * Constructs a new LayoutService.
+   * Constructs a new SpinnerService.
    *
    * @param {Overlay} overlay The overlay.
    */

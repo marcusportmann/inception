@@ -19,11 +19,10 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Code} from "../../services/codes/code";
 import {CodesService} from "../../services/codes/codes.service";
 import {DialogService} from "../../services/dialog/dialog.service";
-import {LayoutService} from "../../services/layout/layout.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BreadcrumbTitleProvider} from "../../services/breadcrumbs/breadcrumb-title-provider";
 import {Observable, of} from "rxjs";
 
 @Component({
@@ -33,7 +32,7 @@ import {Observable, of} from "rxjs";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements BreadcrumbTitleProvider, AfterViewInit, OnInit {
+export class CodesComponent implements AfterViewInit, OnInit {
 
   getTitle(): Observable<string> {
     return of('Test');
@@ -49,9 +48,9 @@ export class CodesComponent implements BreadcrumbTitleProvider, AfterViewInit, O
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private dialogService: DialogService, private layoutService: LayoutService,
-              private i18n: I18n, private codesService: CodesService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+              private codesService: CodesService, private dialogService: DialogService,
+              private layoutService: SpinnerService) {
   }
 
   applyFilter(filterValue: string) {

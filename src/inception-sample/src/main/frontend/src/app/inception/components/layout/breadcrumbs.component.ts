@@ -16,7 +16,7 @@
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
-import {BreadcrumbsService} from "../../services/breadcrumbs/breadcrumbs.service";
+import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
 
 @Component({
   selector: 'breadcrumbs',

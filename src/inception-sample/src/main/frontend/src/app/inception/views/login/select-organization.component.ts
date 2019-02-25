@@ -33,7 +33,8 @@ export class SelectOrganizationComponent implements OnInit {
 
   filteredOrganizations: Observable<Organization[]>;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n, private sessionService: SessionService) {
+  constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n,
+              private sessionService: SessionService) {
 
     this.selectOrganizationForm = this.formBuilder.group({
       organization: ['', Validators.required]

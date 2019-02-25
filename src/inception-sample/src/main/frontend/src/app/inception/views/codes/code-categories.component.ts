@@ -22,7 +22,7 @@ import {CodesService} from "../../services/codes/codes.service";
 import {catchError, map} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
-import {LayoutService} from "../../services/layout/layout.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -44,7 +44,9 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private dialogService: DialogService, private layoutService: LayoutService, private i18n: I18n, private codesService: CodesService)
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+              private codesService: CodesService, private dialogService: DialogService,
+              private layoutService: SpinnerService)
   {
 
   }

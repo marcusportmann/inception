@@ -14,15 +14,3 @@
  * limitations under the License.
  */
 
-import {Observable} from "rxjs";
-
-/**
- * The BreadcrumbTitleProvider interface defines the interface that must be implemented for a
- * component associated with an Angular Route that wishes to dynamically provide a title.
- *
- * @author Marcus Portmann
- */
-export interface BreadcrumbTitleProvider {
-
-  getTitle(): Observable<string>;
-}

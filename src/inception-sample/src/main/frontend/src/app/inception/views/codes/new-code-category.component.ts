@@ -18,7 +18,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
-import {LayoutService} from "../../services/layout/layout.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
@@ -33,7 +33,10 @@ export class NewCodeCategoryComponent implements OnInit {
 
   newCodeCategoryForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private dialogService: DialogService, private layoutService: LayoutService, private i18n: I18n, private codesService: CodesService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder, private i18n: I18n,
+              private codesService: CodesService, private dialogService: DialogService,
+              private layoutService: SpinnerService) {
 
     this.newCodeCategoryForm = this.formBuilder.group({
       //hideRequired: false,

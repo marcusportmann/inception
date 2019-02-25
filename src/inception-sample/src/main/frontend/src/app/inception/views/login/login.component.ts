@@ -34,7 +34,7 @@ import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Error} from "../../errors/error";
-import {LayoutService} from "../../services/layout/layout.service";
+import {SpinnerService} from "../../services/layout/spinner.service";
 import {LoginError} from "../../services/session/session.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {CommunicationError} from "../../errors/communication-error";
@@ -53,7 +53,10 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private dialogService: DialogService, private layoutService: LayoutService, private i18n: I18n, private securityService: SecurityService, private sessionService: SessionService, private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute,
+              private formBuilder: FormBuilder, private i18n: I18n,
+              private dialogService: DialogService, private securityService: SecurityService,
+              private sessionService: SessionService, private layoutService: SpinnerService) {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
