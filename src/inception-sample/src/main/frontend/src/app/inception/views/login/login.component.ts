@@ -51,11 +51,9 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
 
   loginForm: FormGroup;
-
-  private unsubscribe: Subject<any> = new Subject();
 
   constructor(private router: Router, private route: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -78,11 +76,6 @@ export class LoginComponent implements OnDestroy {
   isRegistrationEnabled(): boolean {
 
     return InceptionModule.registrationEnabled;
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
   }
 
   onForgotPassword(): void {
@@ -117,7 +110,7 @@ export class LoginComponent implements OnDestroy {
       this.layoutService.showSpinner();
 
       this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
-        takeUntil(this.unsubscribe)).subscribe(session => {
+        first()).subscribe(session => {
 
           this.layoutService.hideSpinner();
 

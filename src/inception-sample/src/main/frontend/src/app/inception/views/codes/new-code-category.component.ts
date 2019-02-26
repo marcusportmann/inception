@@ -24,6 +24,7 @@ import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
 import {v4 as uuid} from "uuid";
+import {first} from "rxjs/operators";
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -68,7 +69,7 @@ export class NewCodeCategoryComponent implements OnInit {
 
     this.layoutService.showSpinner();
 
-    this.codesService.createCodeCategory(codeCategory).subscribe((result: boolean) => {
+    this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
 
       this.layoutService.hideSpinner();
 

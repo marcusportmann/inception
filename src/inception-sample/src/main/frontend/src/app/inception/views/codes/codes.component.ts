@@ -24,6 +24,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
+import {first} from "rxjs/operators";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -80,7 +81,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
     this.layoutService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId).subscribe((codes: Code[]) => {
+    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first()).subscribe((codes: Code[]) => {
 
       this.layoutService.hideSpinner();
 

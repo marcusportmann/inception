@@ -17,9 +17,9 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CodeCategory} from "../../services/codes/code-category";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
-import {catchError, map} from "rxjs/operators";
+import {catchError, first, map, single, takeUntil} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -80,7 +80,8 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
     this.layoutService.showSpinner();
 
-    this.codesService.getCodeCategories().subscribe((codeCategories: CodeCategory[]) => {
+    this.codesService.getCodeCategories().pipe(
+      first()).subscribe((codeCategories: CodeCategory[]) => {
 
       this.layoutService.hideSpinner();
 
