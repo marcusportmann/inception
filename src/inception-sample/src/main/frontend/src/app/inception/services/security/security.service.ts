@@ -52,7 +52,7 @@ export class SecurityService {
    *
    * @return {Observable<Organization[]>} The list of organizations.
    */
-  public getOrganizations(): Observable<Organization[]> {
+  getOrganizations(): Observable<Organization[]> {
 
     return this.httpClient.get<Organization[]>(environment.securityServiceUrlPrefix + '/organizations', {reportProgress: true}).pipe(
       map((organizations: Organization[]) => {

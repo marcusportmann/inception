@@ -16,6 +16,11 @@
 
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * The ColorsComponent class implements the colors component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'colors.component.html'
 })

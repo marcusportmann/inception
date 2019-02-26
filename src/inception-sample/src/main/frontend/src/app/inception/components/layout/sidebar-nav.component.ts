@@ -31,6 +31,11 @@ import {Session} from "../../services/session/session";
 import {Subscription} from "rxjs";
 import {map} from "rxjs/operators";
 
+/**
+ * The SidebarNavComponent class implements the sidebar nav component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'sidebar-nav',
   template: `
@@ -46,13 +51,14 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
 
   @HostBinding('class.sidebar-nav') true;
 
-  @HostBinding('attr.role') role = 'nav';
+  @HostBinding('attr.role')
+  role = 'nav';
 
   constructor(private navigationService: NavigationService, private sessionService: SessionService) {
     this.navItems = new Array<NavigationItem>();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this._sessionSubscription) {
       this._sessionSubscription.unsubscribe();
     }
@@ -61,12 +67,12 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
   ngOnInit(): void {
     this._sessionSubscription = this.sessionService.session.pipe(
       map((session: Session) => {
-        this.navItems = this._filterNavigationItems(this.navigationService.getNavigation(), session);
+        this.navItems = this.filterNavigationItems(this.navigationService.getNavigation(), session);
       })
     ).subscribe();
   }
 
-  private _filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
+  private filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
 
     if (!navigationItems) {
       return navigationItems;
@@ -88,7 +94,7 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
             for (var k = 0; k < session.functionCodes.length; k++) {
               if (functionCodes[j] == session.functionCodes[k]) {
 
-                var filteredChildNavigationItems: NavigationItem[] =  this._filterNavigationItems(navigationItem.children, session);
+                var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
                 filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
                   navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
@@ -100,7 +106,7 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
       }
       else {
 
-        var filteredChildNavigationItems: NavigationItem[] =  this._filterNavigationItems(navigationItem.children, session);
+        var filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
         filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
           navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
@@ -112,139 +118,4 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
   }
 }
 
-@Component({
-  selector: 'sidebar-nav-item',
-  template: `
-    <ng-container *ngIf="isDivider(); else checkForTitle">
-      <li class="nav-divider"></li>
-    </ng-container>
-    <ng-template #checkForTitle>
-      <ng-container *ngIf="isTitle(); else checkForDropdown">
-        <li class="nav-title">{{navItem.name}}</li>
-      </ng-container>
-    </ng-template>
-    <ng-template #checkForDropdown>
-      <ng-container *ngIf="isDropdown(); else sidebarNavLink">
-        <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
-            [class.open]="isActive()"
-            routerLinkActive="open"
-            sidebarNavDropdown>
-          <sidebar-nav-dropdown [navItem]='navItem'></sidebar-nav-dropdown>
-        </li>
-      </ng-container>
-    </ng-template>
-    <ng-template #sidebarNavLink>
-      <li [ngClass]="hasClass() ? 'nav-item ' + navItem.cssClass : 'nav-item'">
-        <a *ngIf="!isExternalLink(); else externalLink"
-           [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'"
-           routerLinkActive="active"
-           [routerLink]="[navItem.url]"
-           (click)="hideMobile()">
-          <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
-          {{ navItem.name }}
-          <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
-        </a>
-        <ng-template #externalLink>
-          <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
-            <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
-            {{ navItem.name }}
-            <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
-          </a>
-        </ng-template>
-      </li>
-    </ng-template>
-  `
-})
-export class SidebarNavItemComponent {
-  @Input() navItem: NavigationItem;
-
-  constructor(private el: ElementRef, private router: Router) {
-  }
-
-  hasBadge(): boolean {
-    return this.navItem.badge ? true : false;
-  }
-
-  hasClass(): boolean {
-    return this.navItem.cssClass ? true : false;
-  }
-
-  hasIcon(): boolean {
-    return this.navItem.icon ? true : false;
-  }
-
-  hasVariant(): boolean {
-    return this.navItem.variant ? true : false;
-  }
-
-  hideMobile() {
-    if (document.body.classList.contains('sidebar-show')) {
-      document.body.classList.toggle('sidebar-show');
-    }
-  }
-
-  isActive(): boolean {
-    if (this.navItem.url) {
-      return this.router.isActive(this.thisUrl(), false);
-    }
-    else {
-      return false;
-    }
-  }
-
-  isDivider(): boolean {
-    return this.navItem.divider ? true : false;
-  }
-
-  isDropdown(): boolean {
-    return this.navItem.children ? true : false;
-  }
-
-  isExternalLink(): boolean {
-    if (this.navItem) {
-      if (this.navItem.url) {
-        return this.navItem.url.substring(0, 4) === 'http' ? true : false;
-      }
-    }
-
-    return false;
-  }
-
-  isTitle(): boolean {
-    return this.navItem.title ? true : false;
-  }
-
-  thisUrl(): string {
-    return this.navItem.url;
-  }
-}
-
-@Component({
-  selector: 'sidebar-nav-dropdown',
-  template: `
-    <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-      <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
-      {{ navItem.name }}
-      <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
-    </a>
-    <ul class="nav-dropdown-items">
-      <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
-    </ul>
-  `,
-  styles: ['.nav-dropdown-toggle { cursor: pointer; }']
-})
-export class SidebarNavDropdownComponent {
-  @Input() navItem: NavigationItem;
-
-  public hasBadge() {
-    return this.navItem.badge ? true : false;
-  }
-
-  public hasIcon() {
-    return this.navItem.icon ? true : false;
-  }
-
-  constructor(private router: Router) {
-  }
-}
 

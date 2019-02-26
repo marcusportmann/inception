@@ -60,6 +60,11 @@ const USER_DATA: User[] = [
   { id: '8e2f9430-cf23-407b-9f21-0aba45019b75', firstNames: 'Jernau', lastName: 'Gurgeh', email: 'jernau.gurgeh@culture.com'}
 ];
 
+/**
+ * The ActionListTableComponent class implements the action list table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'action-list-table.component.html',
   styleUrls: ['action-list-table.component.css']

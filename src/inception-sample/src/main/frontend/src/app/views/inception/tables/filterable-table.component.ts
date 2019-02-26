@@ -47,14 +47,21 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' }
 ];
 
+/**
+ * The FilterableTableComponent class implements the filterable table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'filterable-table.component.html'
 })
 export class FilterableTableComponent {
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;

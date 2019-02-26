@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The ProgressComponent class implements the progress component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'progress.component.html'
 })

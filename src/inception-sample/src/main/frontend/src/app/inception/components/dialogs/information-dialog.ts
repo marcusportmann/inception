@@ -18,6 +18,11 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {DialogData} from "./dialog-data";
 
+/**
+ * The InformationDialog class implements the information dialog component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'information-dialog',
   template: `

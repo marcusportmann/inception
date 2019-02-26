@@ -47,11 +47,18 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' }
 ];
 
+/**
+ * The BasicTableComponent class implements the basic table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'basic-table.component.html'
 })
 export class BasicTableComponent {
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 }
 

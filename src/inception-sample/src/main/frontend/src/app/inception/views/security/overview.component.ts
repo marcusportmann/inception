@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 
 /**
- * The OverviewComponent class.
+ * The OverviewComponent class implements the overview component.
  *
  * @author Marcus Portmann
  */

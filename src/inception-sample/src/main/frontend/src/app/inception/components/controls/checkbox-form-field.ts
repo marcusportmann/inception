@@ -82,7 +82,7 @@ export function getMatCheckboxMissingControlError(): Error {
     .mat-form-field.checkbox-form-field .mat-checkbox:last-child {
       margin-right: 0 !important;
     }
-    
+
     .mat-form-field.checkbox-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
     }
@@ -112,30 +112,25 @@ export class CheckboxFormField extends MatFormField
   /**
    * The checkboxes associated with the checkbox form field.
    */
-  @ContentChildren(MatCheckbox) private _checkboxChildren: QueryList<MatCheckbox>;
+  @ContentChildren(MatCheckbox)
+  private checkboxChildren: QueryList<MatCheckbox>;
 
-  /**
-   * The hints associated with the checkbox form field.
-   */
-  @ContentChildren(MatHint) _hintChildren: QueryList<MatHint>;
-
-  constructor(public _elementRef: ElementRef,
-              private _newChangeDetectorRef: ChangeDetectorRef,
+  constructor(private elementRef: ElementRef,
+              private newChangeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) private labelOptions: LabelOptions,
-              @Optional() private _newDir: Directionality,
+              @Optional() private newDir: Directionality,
               @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions:
                 MatFormFieldDefaultOptions,
               // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              private _newPlatform?: Platform,
-              private _newNgZone?: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string) {
-    super(_elementRef, _newChangeDetectorRef, labelOptions, _newDir, formFieldDefaultOptions,
-      _newPlatform, _newNgZone, _animationMode);
+              private newPlatform?: Platform,
+              private newNgZone?: NgZone,
+              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
+    super(elementRef, newChangeDetectorRef, labelOptions, newDir, formFieldDefaultOptions,
+      newPlatform, newNgZone, animationMode);
 
     if (labelOptions) {
       this.floatLabel = labelOptions.float;
-    }
-    else {
+    } else {
       this.floatLabel = 'always';
     }
   }
@@ -152,33 +147,33 @@ export class CheckboxFormField extends MatFormField
     return false;
   }
 
-  /** Returns whether the label should float or not. */
+  /** Whether the label should float or not. */
   get shouldLabelFloat(): boolean {
     return this._canLabelFloat && this._shouldAlwaysFloat;
   }
 
-  ngAfterContentChecked() {
-    this._validateCheckboxChildren();
+  ngAfterContentChecked(): void {
+    this.validateCheckboxChildren();
   }
 
-  ngAfterContentInit() {
-    this._validateCheckboxChildren();
+  ngAfterContentInit(): void {
+    this.validateCheckboxChildren();
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._newChangeDetectorRef.markForCheck();
+      this.newChangeDetectorRef.markForCheck();
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // Avoid animations on load.
     this._subscriptAnimationState = 'enter';
-    this._newChangeDetectorRef.detectChanges();
+    this.newChangeDetectorRef.detectChanges();
   }
 
-  protected _validateCheckboxChildren() {
-    if (this._checkboxChildren) {
-      if (this._checkboxChildren.length > 0) {
+  protected validateCheckboxChildren(): void {
+    if (this.checkboxChildren) {
+      if (this.checkboxChildren.length > 0) {
         return;
       }
     }

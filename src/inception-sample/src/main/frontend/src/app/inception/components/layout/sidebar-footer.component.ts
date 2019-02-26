@@ -17,6 +17,11 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
 
+/**
+ * The SidebarFooterComponent class implements the sidebar footer component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'sidebar-footer',
   template: `
@@ -26,9 +31,9 @@ import {Replace} from '../../shared/index';
 })
 export class SidebarFooterComponent implements OnInit {
 
-  constructor(private el: ElementRef) { }
+  constructor(private elementRef: ElementRef) { }
 
-  ngOnInit() {
-    Replace(this.el);
+  ngOnInit(): void {
+    Replace(this.elementRef);
   }
 }

@@ -27,6 +27,11 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 
+/**
+ * The CodeCategoriesComponent class implements the code categories component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'code-categories.component.html',
   styleUrls: ['code-categories.component.css'],
@@ -47,33 +52,31 @@ export class CodeCategoriesComponent implements AfterViewInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private layoutService: SpinnerService)
-  {
+  {}
 
-  }
-
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
-  codesAdministration(id: string) {
+  codesAdministration(id: string): void {
     this.router.navigate([id + '/codes'], {relativeTo: this.activatedRoute});
   }
 
-  deleteCodeCategory(id: string) {
+  deleteCodeCategory(id: string): void {
     console.log('Deleting code category: ', id);
   }
 
-  editCodeCategory(id: string) {
+  editCodeCategory(id: string): void {
     console.log('Editing code category: ', id);
   }
 
-  newCodeCategory() {
+  newCodeCategory(): void {
     this.router.navigate(['../new-code-category'], {relativeTo: this.activatedRoute});
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
     this.layoutService.showSpinner();
 

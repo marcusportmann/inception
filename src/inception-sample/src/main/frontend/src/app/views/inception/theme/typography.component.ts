@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The TypographyComponent class implements the typography component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'typography.component.html'
 })

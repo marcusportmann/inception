@@ -14,19 +14,5 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-
-/**
- * The DashboardComponent class implements the dashboard component.
- *
- * @author Marcus Portmann
- */
-@Component({
-  templateUrl: 'dashboard.component.html'
-})
-export class DashboardComponent {
-
-  constructor() {
-  }
-
-}
+export * from './autofocus.directive';
+export * from './validated-form.directive';

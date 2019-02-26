@@ -31,6 +31,11 @@ export interface ErrorDialogData {
   error: Error;
 }
 
+/**
+ * The ErrorDialog class implements the error dialog component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'error-dialog',
   template: `
@@ -53,13 +58,13 @@ export interface ErrorDialogData {
 })
 export class ErrorDialog {
 
-  get message():string {
-    return this.data.error.message;
-  }
-
   constructor(
     private dialogRef: MatDialogRef<ErrorDialog>,
     @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
+  }
+
+  get message(): string {
+    return this.data.error.message;
   }
 
   onOkButtonClick(): void {

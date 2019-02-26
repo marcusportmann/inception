@@ -152,7 +152,7 @@ export class SessionService {
   /**
    * Logout the current active session if one exists.
    */
-  logout() {
+  logout(): void {
     this._session.next(null);
   }
 

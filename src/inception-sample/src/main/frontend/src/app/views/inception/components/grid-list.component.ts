@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The GridListComponent class implements the grid list component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'grid-list.component.html'
 })

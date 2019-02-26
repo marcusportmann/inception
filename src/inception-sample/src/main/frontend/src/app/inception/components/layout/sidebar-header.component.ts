@@ -17,6 +17,11 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
 
+/**
+ * The SidebarHeaderComponent class implements the sidebar header component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'sidebar-header',
   template: `
@@ -27,9 +32,9 @@ import {Replace} from '../../shared/index';
 })
 export class SidebarHeaderComponent implements OnInit {
 
-  constructor(private el: ElementRef) { }
+  constructor(private elementRef: ElementRef) { }
 
-  ngOnInit() {
-    Replace(this.el);
+  ngOnInit(): void {
+    Replace(this.elementRef);
   }
 }

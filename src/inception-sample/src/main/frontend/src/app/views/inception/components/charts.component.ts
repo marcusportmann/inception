@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The ChartsComponent class implements the charts component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'charts.component.html'
 })

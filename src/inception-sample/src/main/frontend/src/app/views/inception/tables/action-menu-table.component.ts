@@ -60,40 +60,46 @@ const USER_DATA: User[] = [
   { id: '8e2f9430-cf23-407b-9f21-0aba45019b75', firstNames: 'Jernau', lastName: 'Gurgeh', email: 'jernau.gurgeh@culture.com'}
 ];
 
+/**
+ * The ActionMenuTableComponent class implements the action menu table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'action-menu-table.component.html',
   styleUrls: ['action-menu-table.component.css']
 })
 export class ActionMenuTableComponent implements AfterViewInit {
+
   displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
+
   dataSource = new MatTableDataSource<User>(USER_DATA);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @ViewChild(MatSort) sort: MatSort;
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
-  editUser(id: string) {
-    console.log('Editing user: ', id);
-  }
-
-  manageUserGroups(id: string) {
-    console.log('Managing groups for user: ', id);
-  }
-
-  deleteUser(id: string) {
+  deleteUser(id: string): void {
     console.log('Deleting user: ', id);
   }
 
+  editUser(id: string): void {
+    console.log('Editing user: ', id);
+  }
+
+  manageUserGroups(id: string): void {
+    console.log('Managing groups for user: ', id);
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 }
 

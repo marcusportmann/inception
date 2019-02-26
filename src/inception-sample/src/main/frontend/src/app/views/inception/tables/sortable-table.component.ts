@@ -47,16 +47,23 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' }
 ];
 
+/**
+ * The SortableTableComponent class implements the sortable table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'sortable-table.component.html'
 })
 export class SortableTableComponent implements AfterViewInit {
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
   @ViewChild(MatSort) sort: MatSort;
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
   }
 }

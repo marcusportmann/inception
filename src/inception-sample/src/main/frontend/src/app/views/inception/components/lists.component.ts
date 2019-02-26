@@ -16,12 +16,18 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The ListsComponent class implements the lists component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'lists.component.html'
 })
 export class ListsComponent {
 
   typesOfShoes = ['Dogs', 'Cats', 'Birds', 'Hamsters', 'Ponies'];
+
   planets: any[] = [{
     name: 'Jupiter',
     image: 'assets/images/planets/1.png',

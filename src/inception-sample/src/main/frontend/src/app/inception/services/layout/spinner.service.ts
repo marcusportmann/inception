@@ -42,7 +42,7 @@ export class SpinnerService {
   /**
    * Show the spinner.
    */
-  showSpinner() {
+  showSpinner(): void {
 
     if (!this.overlayRef) {
 
@@ -60,7 +60,7 @@ export class SpinnerService {
   /**
    * Hide the spinner.
    */
-  hideSpinner() {
+  hideSpinner(): void {
     if (this.overlayRef) {
       this.overlayRef.dispose();
 

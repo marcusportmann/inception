@@ -29,7 +29,7 @@ import {
       <div class="table-filter-icon">
         <i class="fa fa-search"></i>
       </div>
-      <input class="table-filter-input" matInput [value]="this.value"  #tableFilterInput (keyup)="updateValue($event.target.value)" placeholder="Search..." autocomplete="off">
+      <input class="table-filter-input" matInput [value]="this.value" #tableFilterInput (keyup)="updateValue($event.target.value)" placeholder="Search..." autocomplete="off">
       <button class="table-filter-reset" mat-icon-button *ngIf="value" (click)="resetValue()">
         <i class="fa fa-times"></i>
       </button>
@@ -38,41 +38,42 @@ import {
   styles: [`
 
     .table-filter-container {
-      display: flex; 
+      display: flex;
       align-items: center;
       color: rgba(0, 0, 0, 0.42);
-      border: 1px solid rgba(0, 0, 0, 0.12); 
-      border-radius: 2px; 
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 2px;
     }
-    
+
     .table-filter-icon {
       display: flex;
       width: 28px;
       height: 28px;
       align-items: center;
-      justify-content: center; 
+      justify-content: center;
       border: none;
     }
-    
+
     .table-filter-input {
-      -webkit-appearance: none; 
-      border-radius: 0; 
-      width: 12em; 
-      height: 28px; 
-      padding-left: 2px; 
-      padding-right: 28px; 
-      border: none; 
+      -webkit-appearance: none;
+      border-radius: 0;
+      width: 12em;
+      height: 28px;
+      padding-left: 2px;
+      padding-right: 28px;
+      border: none;
       color: inherit;
       background-color: transparent;
     }
-    
+
     .table-filter-reset {
-      position: absolute; 
-      right: 16px; 
-      width: 28px; height: 28px; 
-      line-height: 28px; 
-      min-width: 28px; 
-      padding: 0; 
+      position: absolute;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
+      min-width: 28px;
+      padding: 0;
       border: none !important;
     }
 

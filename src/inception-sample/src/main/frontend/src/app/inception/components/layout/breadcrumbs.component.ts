@@ -18,6 +18,11 @@ import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
 import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
 
+/**
+ * The BreadcrumbsComponent class implements the breadcrumbs component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'breadcrumbs',
   template: `
@@ -34,18 +39,21 @@ import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
   `
 })
 export class BreadcrumbsComponent implements OnInit {
-  @Input() fixed: boolean;
-  public breadcrumbs;
 
-  constructor(public breadcrumbsService: BreadcrumbsService, public el: ElementRef) { }
+  @Input()
+  fixed: boolean;
 
-  public ngOnInit(): void {
-    Replace(this.el);
-    this.isFixed(this.fixed);
+  breadcrumbs;
+
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) { }
+
+  ngOnInit(): void {
+    Replace(this.elementRef);
+
+    if (this.fixed) {
+      document.querySelector('body').classList.add('breadcrumbs-fixed');
+    }
+
     this.breadcrumbs = this.breadcrumbsService.breadcrumbs;
-  }
-
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('breadcrumbs-fixed'); }
   }
 }

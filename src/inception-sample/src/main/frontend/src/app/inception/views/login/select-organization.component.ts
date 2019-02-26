@@ -24,6 +24,11 @@ import {Router} from "@angular/router";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Session} from "../../services/session/session";
 
+/**
+ * The SelectOrganizationComponent class implements the select organization component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'select-organization.component.html'
 })

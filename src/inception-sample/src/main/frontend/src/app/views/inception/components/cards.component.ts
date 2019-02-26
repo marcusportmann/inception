@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The CardsComponent class implements the cards component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'cards.component.html'
 })

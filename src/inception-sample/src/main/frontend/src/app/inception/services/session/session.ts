@@ -81,8 +81,9 @@ export class Session {
    * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
    *                                       session.
    */
-  constructor(username: string, scopes: string[], functionCodes: string[], organizations: Organization[],
-              accessToken: string, accessTokenExpiry: Date, refreshToken: string) {
+  constructor(username: string, scopes: string[], functionCodes: string[],
+              organizations: Organization[], accessToken: string, accessTokenExpiry: Date,
+              refreshToken: string) {
     this.username = username;
     this.scopes = scopes;
     this.functionCodes = functionCodes;

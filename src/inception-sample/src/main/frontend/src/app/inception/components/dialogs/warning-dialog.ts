@@ -18,6 +18,11 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {DialogData} from "./dialog-data";
 
+/**
+ * The WarningDialog class implements the warning dialog component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'warning-dialog',
   template: `

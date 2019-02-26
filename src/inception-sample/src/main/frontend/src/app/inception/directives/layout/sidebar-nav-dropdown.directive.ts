@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Directive, ElementRef} from "@angular/core";
 
 /**
- * The DashboardComponent class implements the dashboard component.
+ * The SidebarNavDropdownDirective class implements the sidebar nav dropdown directive.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'dashboard.component.html'
+@Directive({
+  selector: '[sidebarNavDropdown]'
 })
-export class DashboardComponent {
+export class SidebarNavDropdownDirective {
 
-  constructor() {
+  constructor(private elementRef: ElementRef) { }
+
+  toggle(): void {
+    this.elementRef.nativeElement.classList.toggle('open');
   }
-
 }

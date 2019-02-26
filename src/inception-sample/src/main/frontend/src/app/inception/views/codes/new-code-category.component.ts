@@ -25,6 +25,11 @@ import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
 import {v4 as uuid} from "uuid";
 
+/**
+ * The NewCodeCategoryComponent class implements the new code category component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
@@ -49,14 +54,14 @@ export class NewCodeCategoryComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  onCancel() {
+  onCancel(): void {
     this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
   }
 
-  onOK() {
+  onOK(): void {
 
     let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
       this.newCodeCategoryForm.get('name').value, null);

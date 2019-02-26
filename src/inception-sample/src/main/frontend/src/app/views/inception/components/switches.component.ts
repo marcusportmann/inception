@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The SwitchesComponent class implements the switches component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'switches.component.html'
 })

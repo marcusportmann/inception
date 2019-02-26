@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The ButtonsComponent class implements the buttons component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'buttons.component.html'
 })

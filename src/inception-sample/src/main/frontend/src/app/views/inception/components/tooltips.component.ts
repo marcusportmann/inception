@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The TooltipsComponent class implements the tooltips component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'tooltips.component.html'
 })

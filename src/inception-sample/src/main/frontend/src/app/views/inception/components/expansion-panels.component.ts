@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The ExpansionPanelsComponent class implements the expansion panels component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'expansion-panels.component.html'
 })

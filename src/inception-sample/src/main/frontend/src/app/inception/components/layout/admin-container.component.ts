@@ -1,31 +1,26 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Input, NgZone,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import {Router} from "@angular/router";
-import {SessionService} from "../../services/session/session.service";
-import {NavigationItem} from "../../services/navigation/navigation-item";
-import {Session} from "../../services/session/session";
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {PerfectScrollbarConfigInterface} from "ngx-perfect-scrollbar";
+/*
+ * Copyright 2019 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {map} from "rxjs/operators";
-import {SidebarNavComponent} from "./sidebar-nav.component";
-
-
-const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true,
-  suppressScrollY: true
-};
-
-
+/**
+ * The AdminContainerComponent class implements the admin container component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'admin-container',
   template: `
@@ -52,27 +47,27 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     </admin-footer>
   `
 })
-export class AdminContainerComponent implements OnInit, OnDestroy{
+export class AdminContainerComponent implements OnInit, OnDestroy {
 
   element: HTMLElement = document.body;
 
   sidebarMinimized = true;
 
-  private _changes: MutationObserver;
+  private changes: MutationObserver;
 
-  constructor(private router: Router, private navigationService: NavigationService, private sessionService: SessionService, private changeDetectorRef: ChangeDetectorRef, private zone: NgZone) {
-    this._changes = new MutationObserver((mutations) => {
+  constructor() {
+    this.changes = new MutationObserver((mutations) => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized')
     });
 
-    this._changes.observe(<Element>this.element, {
+    this.changes.observe(<Element>this.element, {
       attributes: true
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
   }
 }

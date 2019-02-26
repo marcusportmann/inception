@@ -17,6 +17,11 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
 
+/**
+ * The SidebarMinimizerComponent class implements the sidebar minimizer component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'sidebar-minimizer',
   template: `
@@ -25,9 +30,9 @@ import {Replace} from '../../shared/index';
 })
 export class SidebarMinimizerComponent implements OnInit {
 
-  constructor(private el: ElementRef) { }
+  constructor(private elementRef: ElementRef) { }
 
-  ngOnInit() {
-    Replace(this.el);
+  ngOnInit(): void {
+    Replace(this.elementRef);
   }
 }

@@ -25,6 +25,11 @@ import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 
+/**
+ * The CodesComponent class implements the codes component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'codes.component.html',
   styleUrls: ['codes.component.css'],
@@ -33,10 +38,6 @@ import {Observable, of} from "rxjs";
   }
 })
 export class CodesComponent implements AfterViewInit, OnInit {
-
-  getTitle(): Observable<string> {
-    return of('Test');
-  }
 
   codeCategoryId: string;
 
@@ -53,29 +54,29 @@ export class CodesComponent implements AfterViewInit, OnInit {
               private layoutService: SpinnerService) {
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
-  deleteCode(id: string) {
+  deleteCode(id: string): void {
     console.log('Deleting code: ', id);
   }
 
-  editCode(id: string) {
+  editCode(id: string): void {
     console.log('Editing code: ', id);
   }
 
-  newCode() {
+  newCode(): void {
     console.log('New code');
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
     this.layoutService.showSpinner();
 

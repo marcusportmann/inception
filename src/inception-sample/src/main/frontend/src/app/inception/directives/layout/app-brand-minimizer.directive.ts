@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Directive, HostListener} from "@angular/core";
 
 /**
- * The DashboardComponent class implements the dashboard component.
+ * The AppBrandMinimizerDirective class implements the app brand minimizer directive.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'dashboard.component.html'
+@Directive({
+  selector: '[appBrandMinimizer]'
 })
-export class DashboardComponent {
+export class AppBrandMinimizerDirective {
 
   constructor() {
   }
 
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any): void {
+    $event.preventDefault();
+    document.querySelector('body').classList.toggle('admin-brand-minimized');
+  }
 }

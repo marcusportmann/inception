@@ -89,7 +89,9 @@ export class NavigationItem {
    * @param {boolean} divider           The optional divider indicator.
    * @param {boolean} title             The optional title indicator.
    */
-  constructor(icon: string, name: string, url: string, functionCodes: string[], children?: NavigationItem[], cssClass?: string, variant?: string, badge?: NavigationBadge, divider?: boolean, title?: boolean) {
+  constructor(icon: string, name: string, url: string, functionCodes: string[],
+              children?: NavigationItem[], cssClass?: string, variant?: string,
+              badge?: NavigationBadge, divider?: boolean, title?: boolean) {
     this.icon = icon;
     this.name = name;
     this.url = url;

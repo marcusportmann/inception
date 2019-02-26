@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Directive, HostListener} from "@angular/core";
 
 /**
- * The DashboardComponent class implements the dashboard component.
+ * The SidebarMinimizerDirective class implements the sidebar minimizer directive.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'dashboard.component.html'
+@Directive({
+  selector: '[sidebarMinimizer]'
 })
-export class DashboardComponent {
+export class SidebarMinimizerDirective {
 
-  constructor() {
+  constructor() { }
+
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any): void {
+    $event.preventDefault();
+    document.querySelector('body').classList.toggle('sidebar-minimized');
   }
-
 }

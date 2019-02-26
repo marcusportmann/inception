@@ -30,13 +30,18 @@ export interface StateGroup {
   names: string[];
 }
 
-
+/**
+ * The ExampleFormComponent class implements the example form component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'example-form.component.html'
 })
 export class ExampleFormComponent implements OnInit {
 
   static readonly MIN_DATE = new Date(1900, 1, 1);
+
   static readonly MAX_DATE = Date.now();
 
   exampleForm: FormGroup;
@@ -74,19 +79,16 @@ export class ExampleFormComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges.pipe(
       startWith(''),
       map(value => this.filter(value))
     );
   }
 
-  onSubmit() {
-
-
+  onSubmit(): void {
 
     console.log('favorite color = ', this.exampleForm.get('favoriteColor').value);
-
   }
 
   private filter(value: string): string[] {

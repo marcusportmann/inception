@@ -16,6 +16,11 @@
 
 import {Component} from '@angular/core';
 
+/**
+ * The TabsComponent class implements the tabs component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'tabs.component.html'
 })

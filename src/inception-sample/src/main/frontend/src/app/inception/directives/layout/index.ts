@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+export * from './app-brand-minimizer.directive';
+export * from './app-mobile-sidebar-toggler.directive';
+export * from './sidebar-minimizer.directive';
+export * from './sidebar-nav-dropdown.directive';
+export * from './sidebar-nav-dropdown-toggler.directive';
+export * from './sidebar-off-canvas-close.directive';
+export * from './sidebar-toggler.directive';
 
-/**
- * The DashboardComponent class implements the dashboard component.
- *
- * @author Marcus Portmann
- */
-@Component({
-  templateUrl: 'dashboard.component.html'
-})
-export class DashboardComponent {
-
-  constructor() {
-  }
-
-}

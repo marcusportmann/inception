@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 
 /**
- * The Menu311Component class.
+ * The Menu311Component class implements the menu 3.1.1 component.
  *
  * @author Marcus Portmann
  */

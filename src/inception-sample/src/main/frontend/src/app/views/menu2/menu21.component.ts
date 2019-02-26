@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 
 /**
- * The Menu21Component class.
+ * The Menu21Component class implements the menu 2.1 component.
  *
  * @author Marcus Portmann
  */

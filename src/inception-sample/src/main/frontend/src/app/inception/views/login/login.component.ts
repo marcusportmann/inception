@@ -43,9 +43,11 @@ import {CommunicationError} from "../../errors/communication-error";
 
 import {I18n} from "@ngx-translate/i18n-polyfill";
 
-
-
-
+/**
+ * The LoginComponent class implements the login component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'login.component.html'
 })
@@ -83,7 +85,7 @@ export class LoginComponent implements OnDestroy {
     this.unsubscribe.complete();
   }
 
-  onForgotPassword() {
+  onForgotPassword(): void {
 
     //this.router.navigate(['/']);
 
@@ -108,7 +110,7 @@ export class LoginComponent implements OnDestroy {
     // control.disabled ? control.enable() : control.disable()
   }
 
-  onSubmit() {
+  onSubmit(): void {
 
     if (this.loginForm.valid) {
 

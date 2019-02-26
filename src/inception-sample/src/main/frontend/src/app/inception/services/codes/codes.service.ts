@@ -55,7 +55,7 @@ export class CodesService {
    *
    * @return True if the code was created successfully or false otherwise.
    */
-  public createCode(code: Code): Observable<boolean> {
+  createCode(code: Code): Observable<boolean> {
 
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId,
@@ -103,7 +103,7 @@ export class CodesService {
    *
    * @return True if the code category was created successfully or false otherwise.
    */
-  public createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
+  createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
 
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories',
       codeCategory, {observe: "response"}).pipe(
@@ -147,7 +147,7 @@ export class CodesService {
    *
    * @return True if the code was deleted or false otherwise.
    */
-  public deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
+  deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
 
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/' + codeId,
@@ -190,7 +190,7 @@ export class CodesService {
    *
    * @return True if the code category was deleted or false otherwise.
    */
-  public deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
+  deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
 
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId,
@@ -231,7 +231,7 @@ export class CodesService {
    *
    * @return {Observable<CodeCategory[]>} The list of code categories.
    */
-  public getCodeCategories(): Observable<CodeCategory[]> {
+  getCodeCategories(): Observable<CodeCategory[]> {
 
     return this.httpClient.get<CodeCategory[]>(
       environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
@@ -266,7 +266,7 @@ export class CodesService {
    *
    * @return the codes for the code category
    */
-  public getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
+  getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
 
     return this.httpClient.get<Code[]>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes',
@@ -309,7 +309,7 @@ export class CodesService {
    *
    * @return True if the code was updated successfully or false otherwise.
    */
-  public updateCode(code: Code): Observable<boolean> {
+  updateCode(code: Code): Observable<boolean> {
 
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId + '/' + code.id,
@@ -352,7 +352,7 @@ export class CodesService {
    *
    * @return True if the code category was updated successfully or false otherwise.
    */
-  public updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
+  updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
 
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategory.id,
@@ -387,5 +387,4 @@ export class CodesService {
         }
       }));
   }
-
 }

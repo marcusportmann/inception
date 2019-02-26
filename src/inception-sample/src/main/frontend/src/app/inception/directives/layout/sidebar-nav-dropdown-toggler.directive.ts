@@ -14,19 +14,25 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {SidebarNavDropdownDirective} from "./sidebar-nav-dropdown.directive";
+import {Directive, HostListener} from "@angular/core";
 
 /**
- * The DashboardComponent class implements the dashboard component.
+ * The SidebarNavDropdownTogglerDirective class implements the sidebar nav dropdown toggle
+ * directive.
  *
  * @author Marcus Portmann
  */
-@Component({
-  templateUrl: 'dashboard.component.html'
+@Directive({
+  selector: '[sidebarNavDropdownToggler]'
 })
-export class DashboardComponent {
+export class SidebarNavDropdownTogglerDirective {
 
-  constructor() {
+  constructor(private dropdown: SidebarNavDropdownDirective) {}
+
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any): void {
+    $event.preventDefault();
+    this.dropdown.toggle();
   }
-
 }

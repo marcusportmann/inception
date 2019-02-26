@@ -59,8 +59,8 @@ export function getMatRadioGroupMissingControlError(): Error {
                    [class.mat-warn]="color == 'warn'"
                    #label *ngIf="_hasLabel">
               <ng-content select="mat-label"></ng-content>
-              <span class="mat-placeholder-required mat-form-field-required-marker" 
-                    aria-hidden="true" 
+              <span class="mat-placeholder-required mat-form-field-required-marker"
+                    aria-hidden="true"
                     *ngIf="!hideRequiredMarker && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
               <!-- @deletion-target 8.0.0 remove \`mat-placeholder-required\` class -->
             </label>
@@ -83,7 +83,7 @@ export function getMatRadioGroupMissingControlError(): Error {
     </div>
   `,
   styles: [`
-    
+
     .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
       border-color: #f44336;
     }
@@ -91,13 +91,6 @@ export function getMatRadioGroupMissingControlError(): Error {
     .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-label-content {
       color: #f44336;
     }
-
-    /*
-    .mat-form-field.radio-group-form-field .mat-radio-group {
-      position: relative;
-      top: 4px;
-    }
-    */
 
     .mat-form-field.radio-group-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
@@ -131,23 +124,22 @@ export class RadioGroupFormField extends MatFormField
   @ContentChild(MatRadioGroup)
   radioGroup: MatRadioGroup;
 
-  constructor(public _elementRef: ElementRef,
-              private _newChangeDetectorRef: ChangeDetectorRef,
+  constructor(private elementRef: ElementRef,
+              private newChangeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) private labelOptions: LabelOptions,
-              @Optional() private _newDir: Directionality,
+              @Optional() private newDir: Directionality,
               @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions:
                 MatFormFieldDefaultOptions,
               // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              private _newPlatform?: Platform,
-              private _newNgZone?: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) _animationMode?: string) {
-    super(_elementRef, _newChangeDetectorRef, labelOptions, _newDir, formFieldDefaultOptions,
-          _newPlatform, _newNgZone, _animationMode);
+              private newPlatform?: Platform,
+              private newNgZone?: NgZone,
+              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
+    super(elementRef, newChangeDetectorRef, labelOptions, newDir, formFieldDefaultOptions,
+      newPlatform, newNgZone, animationMode);
 
     if (labelOptions) {
       this.floatLabel = labelOptions.float;
-    }
-    else {
+    } else {
       this.floatLabel = 'always';
     }
   }
@@ -163,36 +155,36 @@ export class RadioGroupFormField extends MatFormField
     return false;
   }
 
-  /** Returns whether the label should float or not. */
+  /** Whether the label should float or not. */
   get shouldLabelFloat(): boolean {
     return this._canLabelFloat && this._shouldAlwaysFloat;
   }
 
-  ngAfterContentChecked() {
-    this._validateRadioGroupChild();
+  ngAfterContentChecked(): void {
+    this.validateRadioGroupChild();
   }
 
-  ngAfterContentInit() {
-    this._validateRadioGroupChild();
+  ngAfterContentInit(): void {
+    this.validateRadioGroupChild();
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._newChangeDetectorRef.markForCheck();
+      this.newChangeDetectorRef.markForCheck();
     });
 
     // Re-validate when the number of errors changes.
     this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this._newChangeDetectorRef.markForCheck();
+      this.newChangeDetectorRef.markForCheck();
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // Avoid animations on load.
     this._subscriptAnimationState = 'enter';
-    this._newChangeDetectorRef.detectChanges();
+    this.newChangeDetectorRef.detectChanges();
   }
 
-  protected _validateRadioGroupChild() {
+  protected validateRadioGroupChild(): void {
     if (!this.radioGroup) {
       throw getMatRadioGroupMissingControlError();
     }

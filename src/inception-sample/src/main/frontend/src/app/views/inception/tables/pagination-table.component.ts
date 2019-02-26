@@ -47,16 +47,23 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' }
 ];
 
+/**
+ * The PaginationTableComponent class implements the pagination table component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   templateUrl: 'pagination-table.component.html'
 })
 export class PaginationTableComponent implements AfterViewInit {
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 }

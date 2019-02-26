@@ -1,5 +1,21 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { Replace } from './../../shared';
+/*
+ * Copyright 2019 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Replace} from './../../shared';
 import {SessionService} from "../../services/session/session.service";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
@@ -7,6 +23,11 @@ import {map} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {Session} from "../../services/session/session";
 
+/**
+ * The AdminHeaderComponent class implements the admin header component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'admin-header',
   template: `
@@ -34,7 +55,7 @@ import {Session} from "../../services/session/session";
       <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
         <span class="toggler-icon"></span>
       </button>
-      
+
       <ul class="nav ml-auto">
         <!--
         <li class="nav-item d-md-down-none">
@@ -44,7 +65,7 @@ import {Session} from "../../services/session/session";
         <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-full-name d-md-down-none">{{ userFullName() | async }}</span>
+            <span class="user-full-name d-md-down-none">{{ username() | async }}</span>
           </a>
         </li>
 
@@ -53,8 +74,8 @@ import {Session} from "../../services/session/session";
           <a mat-menu-item href="#"><i class="fas fa-cogs"></i> Settings</a>
           <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </mat-menu>
-        
-        <ng-template #login_link> 
+
+        <ng-template #login_link>
           <li class="nav-item">
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
@@ -68,41 +89,45 @@ import {Session} from "../../services/session/session";
 })
 export class AdminHeaderComponent implements OnInit {
 
-  @Input() fixed: boolean;
+  @Input()
+  fixed: boolean;
 
-  @Input() brandFull: any;
-  @Input() brandMinimized: any;
+  @Input()
+  brandFull: any;
 
-  @Input() sidebarToggler: any;
+  @Input()
+  brandMinimized: any;
 
-  constructor(private el: ElementRef, private router: Router, private sessionService: SessionService) {}
+  @Input()
+  sidebarToggler: any;
 
-  ngOnInit() {
-    Replace(this.el);
-    this.isFixed(this.fixed);
+  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }
 
-  isFixed(fixed: boolean): void {
-    if (this.fixed) { document.querySelector('body').classList.add('admin-header-fixed'); }
+  ngOnInit(): void {
+    Replace(this.elementRef);
+    if (this.fixed) {
+      document.querySelector('body').classList.add('admin-header-fixed');
+    }
   }
 
-  imgSrc(brand: any): void {
+  imgSrc(brand: any): string {
     return brand.src ? brand.src : '';
   }
 
-  imgWidth(brand: any): void {
+  imgWidth(brand: any): number | string {
     return brand.width ? brand.width : 'auto';
   }
 
-  imgHeight(brand: any): void {
+  imgHeight(brand: any): number | string {
     return brand.height ? brand.height : 'auto';
   }
 
-  imgAlt(brand: any): void {
+  imgAlt(brand: any): string {
     return brand.alt ? brand.alt : '';
   }
 
-  breakpoint(breakpoint: any): void {
+  breakpoint(breakpoint: any): any {
     console.log(breakpoint);
     return breakpoint ? breakpoint : '';
   }
@@ -115,23 +140,22 @@ export class AdminHeaderComponent implements OnInit {
     );
   }
 
-  login() {
+  login(): void {
     this.router.navigate(['/login']);
   }
 
-  logout() {
+  logout(): void {
     this.sessionService.logout();
 
     this.router.navigate(['/']);
   }
 
-  userFullName(): Observable<string> {
+  username(): Observable<string> {
     return this.sessionService.session.pipe(
       map((session: Session) => {
         if (session) {
           return session.username;
-        }
-        else {
+        } else {
           return '';
         }
       })

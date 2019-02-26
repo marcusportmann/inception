@@ -16,6 +16,11 @@
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 
+/**
+ * The SpinnerComponent class implements the spinner component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   selector: 'spinner',
   template: `<div class="spinner spinner-oval"></div>`,
@@ -54,10 +59,10 @@ export class SpinnerComponent implements OnInit {
   constructor(private elementRef: ElementRef) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  show() {
+  show(): void {
     this.elementRef.nativeElement.focus();
   }
 }

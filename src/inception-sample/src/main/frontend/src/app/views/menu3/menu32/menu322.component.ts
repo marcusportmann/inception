@@ -17,7 +17,7 @@
 import {Component} from '@angular/core';
 
 /**
- * The Menu322Component class.
+ * The Menu322Component class implements the menu 3.2.2 component.
  *
  * @author Marcus Portmann
  */

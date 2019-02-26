@@ -16,6 +16,11 @@
 
 import {Component, OnInit} from '@angular/core';
 
+/**
+ * The NotFoundComponent class implements the not found component.
+ *
+ * @author Marcus Portmann
+ */
 @Component({
   template: `
     <div class="app flex-row align-items-center">
@@ -38,6 +43,6 @@ export class NotFoundComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 }
