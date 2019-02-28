@@ -258,8 +258,6 @@ export const INCEPTION_DATE_FORMATS = {
     SidebarNavComponent,
     SidebarNavDropdownComponent,
     SidebarNavItemComponent,
-//    SidebarNavLinkComponent,
-//    SidebarNavTitleComponent,
     SimpleContainerComponent,
     SpinnerComponent,
 

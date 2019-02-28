@@ -45,6 +45,12 @@ import {DialogData} from "./dialog-data";
 })
 export class InformationDialog {
 
+  /**
+   * Constructs a new InformationDialog.
+   *
+   * @param {MatDialogRef<InformationDialog>} dialogRef The dialog reference.
+   * @param {DialogData} data                           The dialog data.
+   */
   constructor(
     private dialogRef: MatDialogRef<InformationDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {

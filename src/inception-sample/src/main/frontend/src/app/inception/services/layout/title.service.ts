@@ -14,3 +14,34 @@
  * limitations under the License.
  */
 
+import {Injectable} from "@angular/core";
+import {BehaviorSubject, Observable} from "rxjs";
+import {Session} from "../session/session";
+
+/**
+ * The TitleService class provides the Title Service implementation.
+ *
+ * @author Marcus Portmann
+ */
+@Injectable()
+export class TitleService {
+
+  private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+
+  /**
+   * Constructs a new TitleService.
+   */
+  constructor() {
+  }
+
+  /**
+   * Returns the current title if one exists.
+   *
+   * @return {string} The current title if one exists or null.
+   */
+  get session(): Observable<Session> {
+    return this._session;
+  }
+
+
+}

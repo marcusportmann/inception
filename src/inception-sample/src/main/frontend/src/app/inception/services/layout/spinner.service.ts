@@ -20,7 +20,7 @@ import {Overlay, OverlayRef} from "@angular/cdk/overlay";
 import {ComponentPortal} from "@angular/cdk/portal";
 
 /**
- * The SpinnerService class provides the Layout Service implementation.
+ * The SpinnerService class provides the Spinner Service implementation.
  *
  * @author Marcus Portmann
  */

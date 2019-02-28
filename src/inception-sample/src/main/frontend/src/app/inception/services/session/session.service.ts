@@ -37,15 +37,6 @@ export class SessionService {
   private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
 
   /**
-   * Returns the current active session if one exists.
-   *
-   * @return {Session} The current active session if one exists or null.
-   */
-  get session(): Observable<Session> {
-    return this._session;
-  }
-
-  /**
    * Constructs a new SessionService.
    *
    * @param {HttpClient} httpClient            The HTTP client.
@@ -66,6 +57,15 @@ export class SessionService {
     });
   }
 
+  /**
+   * Returns the current active session if one exists.
+   *
+   * @return {Session} The current active session if one exists or null.
+   */
+  get session(): Observable<Session> {
+    return this._session;
+  }
+  
   /**
    * Logon.
    *

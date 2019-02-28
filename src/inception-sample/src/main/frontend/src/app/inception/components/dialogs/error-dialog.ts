@@ -58,6 +58,12 @@ export interface ErrorDialogData {
 })
 export class ErrorDialog {
 
+  /**
+   * Constructs a new ErrorDialog.
+   *
+   * @param {MatDialogRef<ErrorDialog>} dialogRef The dialog reference.
+   * @param {ErrorDialogData} data                The dialog data.
+   */
   constructor(
     private dialogRef: MatDialogRef<ErrorDialog>,
     @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
