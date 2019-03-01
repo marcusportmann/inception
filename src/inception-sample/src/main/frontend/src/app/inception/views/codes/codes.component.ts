@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Code} from "../../services/codes/code";
 import {CodesService} from "../../services/codes/codes.service";
@@ -25,6 +25,7 @@ import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {first} from "rxjs/operators";
+import {TitleService} from "../../services/layout/title.service";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -38,7 +39,7 @@ import {first} from "rxjs/operators";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnInit {
+export class CodesComponent implements AfterViewInit, OnInit, OnDestroy {
 
   codeCategoryId: string;
 
@@ -52,7 +53,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService) {
+              private layoutService: SpinnerService, private titleService: TitleService) {
   }
 
   applyFilter(filterValue: string): void {
@@ -75,6 +76,11 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.titleService.setTitle(this.codeCategoryId);
+  }
+
+  ngOnDestroy(): void {
+    this.titleService.clearTitle();
   }
 
   ngAfterViewInit(): void {

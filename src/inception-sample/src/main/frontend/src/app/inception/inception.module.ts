@@ -69,7 +69,8 @@ import {BreadcrumbsService} from "./services/layout/breadcrumbs.service";
 import {CodesService} from "./services/codes/codes.service";
 import {DialogService} from "./services/dialog/dialog.service";
 import {ErrorReportingService} from './services/error-reporting/error-reporting.service';
-import {SpinnerService} from './services/layout/spinner.service';
+import {SpinnerService} from './services/layout/spinner.service'
+import {TitleService} from './services/layout/title.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
@@ -329,6 +330,7 @@ export class InceptionModule {
         DialogService,
         ErrorReportingService,
         SpinnerService,
+        TitleService,
         NavigationService,
         SecurityService,
         SessionService

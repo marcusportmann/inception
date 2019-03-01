@@ -47,11 +47,14 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: CodeCategoriesComponent,
+        component: CodeCategoriesComponent
       },
       {
         path: ':id/codes',
-        component: CodesComponent
+        component: CodesComponent,
+        data: {
+          title: ''
+        }
       }
     ]
   },

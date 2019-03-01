@@ -60,8 +60,8 @@ export class CodeCategoriesComponent implements AfterViewInit {
     this.dataSource.filter = filterValue;
   }
 
-  codesAdministration(id: string): void {
-    this.router.navigate([id + '/codes'], {relativeTo: this.activatedRoute});
+  codesAdministration(id: string, name: string): void {
+    this.router.navigate([id + '/codes'], { queryParams: { name: name }, relativeTo: this.activatedRoute});
   }
 
   deleteCodeCategory(id: string): void {

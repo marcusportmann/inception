@@ -16,7 +16,6 @@
 
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
-import {Session} from "../session/session";
 
 /**
  * The TitleService class provides the Title Service implementation.
@@ -26,7 +25,7 @@ import {Session} from "../session/session";
 @Injectable()
 export class TitleService {
 
-  private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+  private _title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   /**
    * Constructs a new TitleService.
@@ -39,9 +38,23 @@ export class TitleService {
    *
    * @return {string} The current title if one exists or null.
    */
-  get session(): Observable<Session> {
-    return this._session;
+  get title(): Observable<string> {
+    return this._title;
   }
 
+  /**
+   * Clear the current title
+   */
+  clearTitle(): void {
+    this._title.next(null);
+  }
 
+  /**
+   * Set the current title.
+   *
+   * @param title the current title
+   */
+  setTitle(title: string): void {
+    this._title.next(title);
+  }
 }

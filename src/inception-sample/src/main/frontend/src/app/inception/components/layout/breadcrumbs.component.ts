@@ -17,6 +17,10 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../shared/index';
 import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
+import {Observable} from "rxjs";
+import {TitleService} from "../../services/layout/title.service";
+import {until} from "selenium-webdriver";
+import titleContains = until.titleContains;
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -26,16 +30,30 @@ import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
 @Component({
   selector: 'breadcrumbs',
   template: `
-    <ol class="breadcrumb">
-      <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
+    <ol *ngIf="title | async as title; else noTitle" class="breadcrumb">
+      <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async">
         <li class="breadcrumb-item"
-            *ngIf="(breadcrumb.label)"
-            [ngClass]="{active: last}">
-          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
-          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
+            *ngIf="(breadcrumb.label)">
+          <a [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
         </li>
       </ng-template>
+      <li class="breadcrumb-item" >
+        <span>{{title}}</span>
+      </li>
     </ol>
+
+    <ng-template #noTitle>
+      <ol class="breadcrumb">
+        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
+          <li class="breadcrumb-item"
+              *ngIf="(breadcrumb.label)"
+              [ngClass]="{active: last}">
+            <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+            <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
+          </li>
+        </ng-template>
+      </ol>
+    </ng-template>
   `
 })
 export class BreadcrumbsComponent implements OnInit {
@@ -45,7 +63,14 @@ export class BreadcrumbsComponent implements OnInit {
 
   breadcrumbs;
 
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) { }
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private titleService: TitleService) { }
+
+  /**
+   * The current title from the Title Service.
+   */
+  get title(): Observable<string> {
+    return this.titleService.title;
+  }
 
   ngOnInit(): void {
     Replace(this.elementRef);
