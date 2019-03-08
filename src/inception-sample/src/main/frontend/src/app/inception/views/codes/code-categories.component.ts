@@ -73,7 +73,8 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   newCodeCategory(): void {
-    this.router.navigate(['../new-code-category'], {relativeTo: this.activatedRoute});
+
+    this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {

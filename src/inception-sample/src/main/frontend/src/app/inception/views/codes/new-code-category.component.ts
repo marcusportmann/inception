@@ -23,7 +23,6 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
-import {v4 as uuid} from "uuid";
 import {first} from "rxjs/operators";
 
 /**
@@ -45,13 +44,9 @@ export class NewCodeCategoryComponent implements OnInit {
               private layoutService: SpinnerService) {
 
     this.newCodeCategoryForm = this.formBuilder.group({
-      //hideRequired: false,
-      //floatLabel: 'auto',
       // tslint:disable-next-line
-      id: [uuid(), Validators.required],
-      name: ['', Validators.required],
-      //title: ['', Validators.required],
-      //dateOfBirth: [moment(), Validators.required],
+      id: ['', Validators.required],
+      name: ['', Validators.required]
     });
   }
 
@@ -64,22 +59,25 @@ export class NewCodeCategoryComponent implements OnInit {
 
   onOK(): void {
 
-    let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
-      this.newCodeCategoryForm.get('name').value, null);
+    if (this.newCodeCategoryForm.valid) {
 
-    this.layoutService.showSpinner();
+      let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
+        this.newCodeCategoryForm.get('name').value, null);
 
-    this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
+      this.layoutService.showSpinner();
 
-      this.layoutService.hideSpinner();
+      this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
 
-      this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
+        this.layoutService.hideSpinner();
 
-    }, (error: Error) => {
+        this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
 
-      this.layoutService.hideSpinner();
+      }, (error: Error) => {
 
-      this.dialogService.showErrorDialog(error);
-    });
+        this.layoutService.hideSpinner();
+
+        this.dialogService.showErrorDialog(error);
+      });
+    }
   }
 }

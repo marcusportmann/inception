@@ -47,10 +47,12 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
         component: CodeCategoriesComponent
       },
       {
         path: ':id/codes',
+        pathMatch: 'full',
         component: CodesComponent,
         data: {
           title: ''
@@ -59,19 +61,32 @@ const routes: Routes = [
     ]
   },
 
+
+
   /*
   {
-    path: 'code-categories/:id',
+    path: 'code-categories',
+    pathMatch: 'full',
     component: CodeCategoriesComponent,
     data: {
-      title: 'TODO FIX THIS',
-      icon: 'fa fa-list',
-      sidebarNav: false
+      title: 'Code Categories'
+    }
+  },
+  {
+    path: 'code-categories/:id/codes',
+
+    component: CodesComponent,
+    data: {
+      title: ''
     }
   },
   */
+
+
+
   {
     path: 'new-code-category',
+    pathMatch: 'full',
     component: NewCodeCategoryComponent,
     data: {
       title: 'New Code Category',

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from './confirmation-dialog';
 export * from './error-dialog';
 export * from './information-dialog';
 export * from './warning-dialog';

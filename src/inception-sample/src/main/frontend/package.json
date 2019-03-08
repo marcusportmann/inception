@@ -34,7 +34,7 @@
     "jquery": "^3.3.1",
     "moment": "^2.24.0",
     "ngx-perfect-scrollbar": "^6.3.1",
-    "rxjs": "~6.3.3",
+    "rxjs": "~6.4.0",
     "uuid": "^3.3.2",
     "zone.js": "^0.8.29"
   },
@@ -60,6 +60,6 @@
     "protractor": "^5.4.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "3.1.6"
+    "typescript": "~3.2.4"
   }
 }

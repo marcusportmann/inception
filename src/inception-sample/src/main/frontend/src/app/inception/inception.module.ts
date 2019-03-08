@@ -36,6 +36,7 @@ import {RadioGroupFormField} from "./components/controls";
 import {TableFilter} from "./components/controls";
 
 // Import Inception dialogs
+import {ConfirmationDialog} from "./components/dialogs";
 import {ErrorDialog} from "./components/dialogs";
 import {InformationDialog} from "./components/dialogs";
 import {WarningDialog} from "./components/dialogs";
@@ -74,7 +75,6 @@ import {TitleService} from './services/layout/title.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
-
 
 // Import Inception miscellaneous
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
@@ -263,12 +263,13 @@ export const INCEPTION_DATE_FORMATS = {
     SpinnerComponent,
 
     // Inception dialogs
+    ConfirmationDialog,
     ErrorDialog,
     InformationDialog,
     WarningDialog
   ],
   entryComponents: [SpinnerComponent],
-  bootstrap: [AdminContainerComponent, ErrorDialog, InformationDialog, SimpleContainerComponent, WarningDialog]
+  bootstrap: [AdminContainerComponent, ConfirmationDialog, ErrorDialog, InformationDialog, SimpleContainerComponent, WarningDialog]
 })
 export class InceptionModule {
 
