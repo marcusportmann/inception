@@ -17,6 +17,7 @@
 import { Injectable } from "@angular/core";
 
 import {
+  ConfirmationDialog,
   ErrorDialog,
   InformationDialog,
   WarningDialog
@@ -41,6 +42,21 @@ export class DialogService {
    * @param {dialog} dialog The material dialog.
    */
   constructor(public dialog: MatDialog) {
+  }
+
+  /**
+   * Show a confirmation message using the confirmation dialog.
+   *
+   * @param {DialogData} data The data.
+   */
+  showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialog> {
+
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      width: '360px',
+      data: data
+    });
+
+    return dialogRef;
   }
 
   /**

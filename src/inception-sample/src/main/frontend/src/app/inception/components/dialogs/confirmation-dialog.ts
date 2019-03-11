@@ -41,7 +41,7 @@ export interface ConfirmationDialogData {
   template: `
 
     <div class="header">
-      <i class="far fa-3x fa-times-circle"></i>
+      <i class="far fa-3x fa-question-circle"></i>
     </div>
     <div class="message-holder">
       <span class="message">
@@ -49,7 +49,8 @@ export interface ConfirmationDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="onOkButtonClick()" tabindex="-1">Ok</button>
+      <button mat-flat-button (click)="onNoButtonClick()" tabindex="-1">No</button>
+      <button mat-flat-button (click)="onYesButtonClick()" tabindex="-1">Yes</button>
     </div>
   `,
   host: {
@@ -73,8 +74,12 @@ export class ConfirmationDialog {
     return this.data.message;
   }
 
-  onOkButtonClick(): void {
-    this.dialogRef.close();
+  onNoButtonClick(): void {
+    this.dialogRef.close(false);
+  }
+
+  onYesButtonClick(): void {
+    this.dialogRef.close(true);
   }
 }
 

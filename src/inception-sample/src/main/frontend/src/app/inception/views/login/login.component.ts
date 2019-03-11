@@ -28,7 +28,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
 import {catchError, map, first, takeUntil} from "rxjs/operators";
-import {Observable, Subject} from "../../../../../node_modules/rxjs";
+import {Observable, pipe, Subject} from "../../../../../node_modules/rxjs";
 
 import {Organization} from "../../services/security/organization";
 import {SessionService} from "../../services/session/session.service";
@@ -42,6 +42,8 @@ import {CommunicationError} from "../../errors/communication-error";
 
 
 import {I18n} from "@ngx-translate/i18n-polyfill";
+import {MatDialogRef} from "@angular/material";
+import {ConfirmationDialog} from "../../components/dialogs";
 
 /**
  * The LoginComponent class implements the login component.
@@ -84,12 +86,22 @@ export class LoginComponent {
 
     //let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    this.dialogService.showInformationDialog({message: 'This is an information message.'});
+    //this.dialogService.showInformationDialog({message: 'This is an information message.'});
 
     //this.dialogService.showWarningDialog({message: 'This is a warning message.'});
 
     //this.dialogService.showErrorDialog(new Error('This is an error message.'));
 
+    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: 'Are you sure you want to delete the code category \'XXX\'?'});
+
+    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+
+      console.log('confirmation = ', confirmation);
+
+      if (confirmation === true) {
+        console.log('Confirmed deletion');
+      }
+    });
 
 
 

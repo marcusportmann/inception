@@ -789,7 +789,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
 .mat-dialog-container {
 
-  .error-dialog, .information-dialog, .warning-dialog {
+  .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
     display: block;
     padding: 0;
     margin: -24px;
@@ -824,6 +824,22 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
       text-align: center;
       padding-top: 0.5rem;
       padding-bottom: 1.5rem;
+
+      button {
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+      }
+    }
+  }
+
+  .confirmation-dialog {
+    .header {
+      background-color: $primary;
+    }
+
+    .mat-flat-button {
+      color: #ffffff;
+      background-color: $primary;
     }
   }
 
