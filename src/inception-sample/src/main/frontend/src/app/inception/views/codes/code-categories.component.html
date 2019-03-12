@@ -20,7 +20,7 @@
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id}">
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id, name: row.name}">
         <button mat-icon-button>
           <i class="fas fa-ellipsis-v"></i>
         </button>
@@ -35,7 +35,7 @@
   <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-id="id">
+    <ng-template matMenuContent let-id="id" let-name="name">
       <button mat-menu-item (click)="editCodeCategory(id)">
         <i class="fas fa-edit"></i>
         <span>Edit</span>
@@ -44,7 +44,7 @@
         <i class="fas fa-list-ul"></i>
         <span>Codes</span>
       </button>
-      <button mat-menu-item (click)="deleteCodeCategory(id)">
+      <button mat-menu-item (click)="deleteCodeCategory(id, name)">
         <i class="far fa-trash-alt"></i>
         <span>Delete</span>
       </button>

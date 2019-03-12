@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CodeCategory} from "../../services/codes/code-category";
 import {Observable, Subject} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
@@ -26,6 +26,7 @@ import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ConfirmationDialog} from "../../components/dialogs";
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -64,20 +65,37 @@ export class CodeCategoriesComponent implements AfterViewInit {
     this.router.navigate([id + '/codes'], { queryParams: { name: name }, relativeTo: this.activatedRoute});
   }
 
-  deleteCodeCategory(id: string): void {
-    console.log('Deleting code category: ', id);
+  deleteCodeCategory(id: string, codeCategoryName: string): void {
+
+    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@confirm_delete_code_category', value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'}, {codeCategoryName: codeCategoryName})});
+
+    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+
+      if (confirmation === true) {
+
+        this.layoutService.showSpinner();
+
+        this.codesService.deleteCodeCategory(id).pipe(first()).subscribe((result: boolean) => {
+
+          this.layoutService.hideSpinner();
+
+          this.ngAfterViewInit();
+
+        }, (error: Error) => {
+
+          this.layoutService.hideSpinner();
+
+          this.dialogService.showErrorDialog(error);
+        });
+      }
+    });
   }
 
   editCodeCategory(id: string): void {
     console.log('Editing code category: ', id);
   }
 
-  newCodeCategory(): void {
-
-    this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
-  }
-
-  ngAfterViewInit(): void {
+  loadCodeCategories(): void {
 
     this.layoutService.showSpinner();
 
@@ -97,6 +115,16 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  newCodeCategory(): void {
+
+    this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
+  }
+
+  ngAfterViewInit(): void {
+
+    this.loadCodeCategories();
   }
 }
 
