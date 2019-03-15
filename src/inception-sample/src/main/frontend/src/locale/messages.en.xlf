@@ -1,27 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="en">
   <file original="ng.template" id="ngi18n">
-    <unit id="login_component_label_username">
+    <unit id="admin_header_component_menu_item_profile">
+      <notes>
+        <note category="location">app/inception/components/layout/admin-header.component.ts:41</note>
+      </notes>
+      <segment state="final">
+        <source>Profile</source>
+      <target>Profile</target></segment>
+    </unit><unit id="admin_header_component_menu_item_settings">
+      <notes>
+        <note category="location">app/inception/components/layout/admin-header.component.ts:42</note>
+      </notes>
+      <segment state="final">
+        <source>Settings</source>
+      <target>Settings</target></segment>
+    </unit><unit id="admin_header_component_menu_item_logout">
+      <notes>
+        <note category="location">app/inception/components/layout/admin-header.component.ts:43</note>
+      </notes>
+      <segment state="final">
+        <source>Logout</source>
+      <target>Logout</target></segment>
+    </unit><unit id="admin_header_component_link_login">
+      <notes>
+        <note category="location">app/inception/components/layout/admin-header.component.ts:50</note>
+      </notes>
+      <segment state="final">
+        <source>Login</source>
+      <target>Login</target></segment>
+    </unit><unit id="confirmation_dialog_button_no">
+      <notes>
+        <note category="location">app/inception/components/dialogs/confirmation-dialog.ts:12</note>
+      </notes>
+      <segment state="final">
+        <source>No</source>
+      <target>No</target></segment>
+    </unit><unit id="confirmation_dialog_button_yes">
+      <notes>
+        <note category="location">app/inception/components/dialogs/confirmation-dialog.ts:13</note>
+      </notes>
+      <segment state="final">
+        <source>Yes</source>
+      <target>Yes</target></segment>
+    </unit><unit id="error_dialog_button_ok">
+      <notes>
+        <note category="location">app/inception/components/dialogs/error-dialog.ts:12</note>
+      </notes>
+      <segment state="final">
+        <source>Ok</source>
+      <target>Ok</target></segment>
+    </unit><unit id="information_dialog_button_ok">
+      <notes>
+        <note category="location">app/inception/components/dialogs/information-dialog.ts:14</note>
+      </notes>
+      <segment state="final">
+        <source>Ok</source>
+      <target>Ok</target></segment>
+    </unit><unit id="warning_dialog_button_ok">
+      <notes>
+        <note category="location">app/inception/components/dialogs/warning-dialog.ts:14</note>
+      </notes>
+      <segment state="final">
+        <source>Ok</source>
+      <target>Ok</target></segment>
+    </unit><unit id="code_categories_component_button_new_code_category">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>New Code Category</source>
+      <target>New Code Category</target></segment>
+    </unit><unit id="code_categories_component_table_header_id">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>ID</source>
+      <target>ID</target></segment>
+    </unit><unit id="code_categories_component_table_header_name">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:16</note>
+      </notes>
+      <segment state="final">
+        <source>Name</source>
+      <target>Name</target></segment>
+    </unit><unit id="code_categories_component_table_header_actions">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:22</note>
+      </notes>
+      <segment state="final">
+        <source>Actions</source>
+      <target>Actions</target></segment>
+    </unit><unit id="code_categories_component_menu_item_edit">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:41</note>
+      </notes>
+      <segment state="final">
+        <source>Edit</source>
+      <target>Edit</target></segment>
+    </unit><unit id="code_categories_component_menu_item_codes">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:45</note>
+      </notes>
+      <segment state="final">
+        <source>Codes</source>
+      <target>Codes</target></segment>
+    </unit><unit id="code_categories_component_menu_item_delete">
+      <notes>
+        <note category="location">app/inception/views/codes/code-categories.component.html:49</note>
+      </notes>
+      <segment state="final">
+        <source>Delete</source>
+      <target>Delete</target></segment>
+    </unit><unit id="codes_component_button_new_code">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:3</note>
+      </notes>
+      <segment state="final">
+        <source>New Code</source>
+      <target>New Code</target></segment>
+    </unit><unit id="codes_component_table_header_id">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>ID</source>
+      <target>ID</target></segment>
+    </unit><unit id="codes_component_table_header_name">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:16</note>
+      </notes>
+      <segment state="final">
+        <source>Name</source>
+      <target>Name</target></segment>
+    </unit><unit id="codes_component_table_header_actions">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:22</note>
+      </notes>
+      <segment state="final">
+        <source>Actions</source>
+      <target>Actions</target></segment>
+    </unit><unit id="codes_component_menu_item_edit">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:41</note>
+      </notes>
+      <segment state="final">
+        <source>Edit</source>
+      <target>Edit</target></segment>
+    </unit><unit id="codes_component_menu_item_delete">
+      <notes>
+        <note category="location">app/inception/views/codes/codes.component.html:45</note>
+      </notes>
+      <segment state="final">
+        <source>Delete</source>
+      <target>Delete</target></segment>
+    </unit><unit id="new_code_category_component_label_id">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:7</note>
+      </notes>
+      <segment state="final">
+        <source>ID</source>
+      <target>ID</target></segment>
+    </unit><unit id="new_code_category_component_error_id_required">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:10</note>
+      </notes>
+      <segment state="final">
+        <source>An ID is required.</source>
+      <target>An ID is required.</target></segment>
+    </unit><unit id="new_code_category_component_label_name">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:18</note>
+      </notes>
+      <segment state="final">
+        <source>Name</source>
+      <target>Name</target></segment>
+    </unit><unit id="new_code_category_component_error_name_required">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:21</note>
+      </notes>
+      <segment state="final">
+        <source>A name is required.</source>
+      <target>A name is required.</target></segment>
+    </unit><unit id="new_code_category_component_button_cancel">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:28</note>
+      </notes>
+      <segment state="final">
+        <source>Cancel</source>
+      <target>Cancel</target></segment>
+    </unit><unit id="new_code_category_component_button_ok">
+      <notes>
+        <note category="location">app/inception/views/codes/new-code-category.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>OK</source>
+      <target>OK</target></segment>
+    </unit><unit id="login_component_label_username">
       <notes>
         <note category="location">app/inception/views/login/login.component.html:13</note>
       </notes>
       <segment state="final">
         <source>Username</source>
       <target>Username</target></segment>
-    </unit><unit id="login_component_error_a_username_is_required">
+    </unit><unit id="login_component_error_username_required">
       <notes>
         <note category="location">app/inception/views/login/login.component.html:16</note>
       </notes>
       <segment state="final">
         <source>A username is required.</source>
       <target>A username is required.</target></segment>
-    </unit><unit id="login_component_error_a_password_is_required">
+    </unit><unit id="login_component_label_password">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:24</note>
+      </notes>
+      <segment state="final">
+        <source>Password</source>
+      <target>Password</target></segment>
+    </unit><unit id="login_component_error_password_required">
       <notes>
         <note category="location">app/inception/views/login/login.component.html:27</note>
       </notes>
       <segment state="final">
         <source>A password is required.</source>
       <target>A password is required.</target></segment>
+    </unit><unit id="login_component_button_forgot_password">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:34</note>
+      </notes>
+      <segment state="final">
+        <source>Forgot password?</source>
+      <target>Forgot password?</target></segment>
+    </unit><unit id="login_component_button_login">
+      <notes>
+        <note category="location">app/inception/views/login/login.component.html:35</note>
+      </notes>
+      <segment state="final">
+        <source>Login</source>
+      <target>Login</target></segment>
     </unit><unit id="select_organization_component_explanation">
       <notes>
         <note category="location">app/inception/views/login/select-organization.component.html:12</note>
@@ -43,16 +260,51 @@
       <segment state="final">
         <source>Please select an organization.</source>
       <target>Please select an organization.</target></segment>
-    </unit><unit id="@@codes_service_failed_to_retrieve_the_code_categories">
+    </unit><unit id="select_organization_component_button_ok">
+      <notes>
+        <note category="location">app/inception/views/login/select-organization.component.html:29</note>
+      </notes>
+      <segment state="final">
+        <source>Ok</source>
+      <target>Ok</target></segment>
+    </unit>
+    <unit id="@@codes_service_the_code_category_could_not_be_found">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>The code category could not be found.</source>
+      <target>The code category could not be found.</target></segment>
+    </unit>
+    <unit id="@@codes_service_the_code_already_exists">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>The code already exists.</source>
+      <target>The code already exists.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_create_the_code">
       <notes>
         <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
         <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
       </notes>
       <segment state="final">
-        <source>Failed to retrieve the code categories.</source>
-      <target>Failed to retrieve the code categories.</target></segment>
-    </unit><unit id="@@system_unavailable_error">
+        <source>Failed to create the code.</source>
+      <target>Failed to create the code.</target></segment>
+    </unit>
+    <unit id="@@system_unavailable_error">
       <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
         <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
         <note category="location">src/app/inception/services/security/security.service.ts:1</note>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
@@ -60,15 +312,74 @@
       <segment state="final">
         <source>An error has occurred and the system is unable to process your request at this time.</source>
       <target>An error has occurred and the system is unable to process your request at this time.</target></segment>
-    </unit><unit id="@@security_service_failed_to_retrieve_the_organizations">
+    </unit>
+    <unit id="@@codes_service_the_code_category_already_exists">
       <notes>
-        <note category="location">src/app/inception/services/security/security.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>The code category already exists.</source>
+      <target>The code category already exists.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_create_the_code_category">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to create the code category.</source>
+      <target>Failed to create the code category.</target></segment>
+    </unit>
+    <unit id="@@codes_service_the_code_could_not_be_found">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>The code could not be found.</source>
+      <target>The code could not be found.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_delete_the_code">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to delete the code.</source>
+      <target>Failed to delete the code.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_delete_the_code_category">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to delete the code category.</source>
+      <target>Failed to delete the code category.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_retrieve_the_code_categories">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to retrieve the code categories.</source>
+      <target>Failed to retrieve the code categories.</target></segment>
+    </unit>
+    <unit id="@@codes_service_failed_to_retrieve_the_codes">
+      <notes>
+        <note category="location">src/app/inception/services/codes/codes.service.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Failed to retrieve the codes.</source>
+      <target>Failed to retrieve the codes.</target></segment>
+    </unit>
+    <unit id="@@security_service_failed_to_retrieve_the_organizations">
+      <notes>
         <note category="location">src/app/inception/services/security/security.service.ts:1</note>
       </notes>
       <segment state="final">
         <source>Failed to retrieve the organizations.</source>
       <target>Failed to retrieve the organizations.</target></segment>
-    </unit><unit id="@@session_service_incorrect_username_or_password">
+    </unit>
+    <unit id="@@session_service_incorrect_username_or_password">
       <notes>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
@@ -76,27 +387,38 @@
       <segment state="final">
         <source>Incorrect username or password.</source>
       <target>Incorrect username or password.</target></segment>
-    </unit><unit id="@@session_service_the_user_is_locked">
+    </unit>
+    <unit id="@@session_service_the_user_is_locked">
       <notes>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
       </notes>
       <segment state="final">
         <source>The user is locked.</source>
       <target>The user is locked.</target></segment>
-    </unit><unit id="@@session_service_the_password_has_expired">
+    </unit>
+    <unit id="@@session_service_the_password_has_expired">
       <notes>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
       </notes>
       <segment state="final">
         <source>The password has expired.</source>
       <target>The password has expired.</target></segment>
-    </unit><unit id="@@session_service_failed_to_refresh_the_user_session">
+    </unit>
+    <unit id="@@session_service_failed_to_refresh_the_user_session">
       <notes>
         <note category="location">src/app/inception/services/session/session.service.ts:1</note>
       </notes>
       <segment state="final">
         <source>Failed to refresh the user session.</source>
       <target>Failed to refresh the user session.</target></segment>
+    </unit>
+    <unit id="@@confirm_delete_code_category">
+      <notes>
+        <note category="location">src/app/inception/views/codes/code-categories.component.ts:1</note>
+      </notes>
+      <segment state="final">
+        <source>Are you sure you want to delete the code category '<ph id="0" equiv="INTERPOLATION" disp="{{codeCategoryName}}"/>'?</source>
+      <target>Are you sure you want to delete the code category '<ph id="0" equiv="INTERPOLATION" disp="{{codeCategoryName}}"/>'?</target></segment>
     </unit>
   </file>
 </xliff>

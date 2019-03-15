@@ -61,7 +61,7 @@ export class SelectOrganizationComponent implements OnInit {
     );
   }
 
-  onSubmit(): void {
+  onOk(): void {
 
     if (this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object')) {
 

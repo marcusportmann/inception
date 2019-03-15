@@ -70,16 +70,16 @@ import {Session} from "../../services/session/session";
         </li>
 
         <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
-          <a mat-menu-item href="#"><i class="fas fa-user-circle"></i> Profile</a>
-          <a mat-menu-item href="#"><i class="fas fa-cogs"></i> Settings</a>
-          <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a mat-menu-item href="#"><i class="fas fa-user-circle"></i> <span i18n="@@admin_header_component_menu_item_profile">Profile</span></a>
+          <a mat-menu-item href="#"><i class="fas fa-cogs"></i> <span i18n="@@admin_header_component_menu_item_settings">Settings</span></a>
+          <a mat-menu-item href="#" (click)="logout()"><i class="fas fa-sign-out-alt"></i> <span i18n="@@admin_header_component_menu_item_logout">Logout</span></a>
         </mat-menu>
 
         <ng-template #login_link>
           <li class="nav-item">
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
-              <span class="login d-md-down-none">Login</span>
+              <span class="login d-md-down-none" i18n="@@admin_header_component_link_login">Login</span>
             </a>
           </li>
         </ng-template>

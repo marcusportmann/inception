@@ -115,7 +115,7 @@ export class LoginComponent {
     // control.disabled ? control.enable() : control.disable()
   }
 
-  onSubmit(): void {
+  onLogin(): void {
 
     if (this.loginForm.valid) {
 

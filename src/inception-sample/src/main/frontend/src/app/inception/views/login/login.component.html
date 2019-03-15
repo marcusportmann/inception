@@ -1,7 +1,7 @@
 <div class="app flex-row align-items-center" >
   <div class="container">
     <div class="row justify-content-center">
-      <form [formGroup]="loginForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
+      <form [formGroup]="loginForm" autocomplete="off" validatedForm>
         <mat-card style="min-width: 350px; margin-bottom: 0;">
           <div class="d-flex justify-content-center pt-5 pb-3">
             <div class="logo-login"></div>
@@ -13,7 +13,7 @@
                   <mat-label i18n="@@login_component_label_username">Username</mat-label>
                   <input type="text" matInput formControlName="username" autofocus>
                   <mat-error *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched">
-                    <span *ngIf="loginForm.controls['username'].errors?.required" i18n="@@login_component_error_a_username_is_required">A username is required.</span>
+                    <span *ngIf="loginForm.controls['username'].errors?.required" i18n="@@login_component_error_username_required">A username is required.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -21,18 +21,18 @@
             <div class="row">
               <div class="col">
                 <mat-form-field>
-                  <mat-label>Password</mat-label>
+                  <mat-label i18n="@@login_component_label_password">Password</mat-label>
                   <input type="password" matInput formControlName="password">
                   <mat-error *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched">
-                    <span *ngIf="loginForm.controls['password'].errors?.required" i18n="@@login_component_error_a_password_is_required">A password is required.</span>
+                    <span *ngIf="loginForm.controls['password'].errors?.required" i18n="@@login_component_error_password_required">A password is required.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="button" mat-flat-button color="link" (click)="onForgotPassword()">Forgot password?</button>
-            <button type="submit" [disabled]="!loginForm.valid" mat-flat-button>Login</button>
+            <button type="button" mat-flat-button color="link" (click)="onForgotPassword()" i18n="@@login_component_button_forgot_password">Forgot password?</button>
+            <button type="button" [disabled]="!loginForm.valid" (click)="onLogin()" mat-flat-button i18n="@@login_component_button_login">Login</button>
           </mat-card-actions>
         </mat-card>
       </form>

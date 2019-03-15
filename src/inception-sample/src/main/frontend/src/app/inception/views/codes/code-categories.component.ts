@@ -115,6 +115,9 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = function(data, filter): boolean {
+      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+    };
   }
 
   newCodeCategory(): void {

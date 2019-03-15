@@ -1,7 +1,7 @@
 <div class="app flex-row align-items-center" >
   <div class="container">
     <div class="row justify-content-center">
-      <form [formGroup]="selectOrganizationForm" (submit)="onSubmit()" autocomplete="off" validatedForm>
+      <form [formGroup]="selectOrganizationForm" autocomplete="off" validatedForm>
         <mat-card style="width: 350px; margin-bottom: 0;">
           <div class="d-flex justify-content-center pt-5 pb-3">
             <div class="logo-login"></div>
@@ -26,7 +26,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="submit" [disabled]="!isOrganizationSelected()" mat-flat-button>Ok</button>
+            <button type="button" [disabled]="!isOrganizationSelected()" (click)="onOk()" mat-flat-button i18n="@@select_organization_component_button_ok">Ok</button>
           </mat-card-actions>
         </mat-card>
       </form>

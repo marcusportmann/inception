@@ -1,13 +1,13 @@
-<form [formGroup]="newCodeCategoryForm" (submit)="onSubmit()" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
+<form [formGroup]="newCodeCategoryForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
   <mat-card class="flex flex-column flex-auto">
     <mat-card-content class="d-flex flex-column flex-fill">
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>ID</mat-label>
+            <mat-label i18n="@@new_code_category_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id" required="true" autofocus>
             <mat-error *ngIf="newCodeCategoryForm.controls['id'].errors && !newCodeCategoryForm.controls['id'].untouched">
-              <span *ngIf="newCodeCategoryForm.controls['id'].errors?.required">An ID is required.</span>
+              <span *ngIf="newCodeCategoryForm.controls['id'].errors?.required" i18n="@@new_code_category_component_error_id_required">An ID is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -15,18 +15,18 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Name</mat-label>
+            <mat-label i18n="@@new_code_category_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
             <mat-error *ngIf="newCodeCategoryForm.controls['name'].errors && !newCodeCategoryForm.controls['name'].untouched">
-              <span *ngIf="newCodeCategoryForm.controls['name'].errors?.required">A name is required.</span>
+              <span *ngIf="newCodeCategoryForm.controls['name'].errors?.required" i18n="@@new_code_category_component_error_name_required">A name is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
       </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newCodeCategoryForm.valid" (click)="onOK()">OK</button>
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_code_category_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!newCodeCategoryForm.valid" (click)="onOK()" i18n="@@new_code_category_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

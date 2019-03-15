@@ -49,8 +49,8 @@ export interface ConfirmationDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="onNoButtonClick()" tabindex="-1">No</button>
-      <button mat-flat-button (click)="onYesButtonClick()" tabindex="-1">Yes</button>
+      <button mat-flat-button (click)="onNoButtonClick()" tabindex="-1" i18n="@@confirmation_dialog_button_no">No</button>
+      <button mat-flat-button (click)="onYesButtonClick()" tabindex="-1" i18n="@@confirmation_dialog_button_yes">Yes</button>
     </div>
   `,
   host: {
