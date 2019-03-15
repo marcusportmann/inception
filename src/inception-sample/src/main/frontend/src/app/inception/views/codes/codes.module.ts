@@ -28,6 +28,7 @@ import {RouterModule, Routes} from "@angular/router";
 // Import Inception components
 import {CodeCategoriesComponent} from "./code-categories.component";
 import {CodesComponent} from "./codes.component";
+import {EditCodeCategoryComponent} from "./edit-code-category.component";
 import {NewCodeCategoryComponent} from "./new-code-category.component";
 
 const routes: Routes = [
@@ -51,13 +52,38 @@ const routes: Routes = [
         component: CodeCategoriesComponent
       },
       {
-        path: ':id/codes',
-        pathMatch: 'full',
-        component: CodesComponent,
+        path: ':id',
         data: {
-          title: ''
-        }
-      }
+          title: '{id}'
+        },
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            component: EditCodeCategoryComponent
+          },
+          {
+            path: 'codes',
+            pathMatch: 'full',
+            component: CodesComponent,
+            data: {
+              title: 'Codes'
+            }
+          }
+        ]
+      },
+
+
+
+
+      // {
+      //   path: ':id/codes',
+      //   pathMatch: 'full',
+      //   component: CodesComponent,
+      //   data: {
+      //     title: 'Codes'
+      //   }
+      // }
     ]
   },
 
@@ -103,7 +129,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent, NewCodeCategoryComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, NewCodeCategoryComponent]
 })
 export class CodesModule {
 }

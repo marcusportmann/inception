@@ -92,7 +92,8 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   editCodeCategory(id: string): void {
-    console.log('Editing code category: ', id);
+    //this.router.navigate([id], { queryParams: { name: name }, relativeTo: this.activatedRoute});
+    this.router.navigate([id], { relativeTo: this.activatedRoute});
   }
 
   loadCodeCategories(): void {

@@ -35,6 +35,7 @@
     "moment": "^2.24.0",
     "ngx-perfect-scrollbar": "^6.3.1",
     "rxjs": "~6.4.0",
+    "string-template": "^1.0.0",
     "uuid": "^3.3.2",
     "zone.js": "^0.8.29"
   },
@@ -48,6 +49,7 @@
     "@types/jasmine": "^2.8.16",
     "@types/jasminewd2": "^2.0.6",
     "@types/node": "~8.9.4",
+    "@types/string-template": "^1.0.2",
     "@types/uuid": "^3.4.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",

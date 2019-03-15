@@ -62,20 +62,20 @@ export class ExampleFormComponent implements OnInit {
       //hideRequired: false,
       //floatLabel: 'auto',
       // tslint:disable-next-line
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      title: ['', Validators.required],
+      firstName: [{value: ''}, Validators.required],
+      lastName: [{value: ''}, Validators.required],
+      title: [{value: ''}, Validators.required],
       //dateOfBirth: [moment(), Validators.required],
-      dateOfBirth: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-      favoriteCountry: ['', Validators.required],
-      grossIncome: ['', Validators.required],
-      favoriteColor: ['', Validators.required],
-      favoritePetDog: [''],
-      favoritePetCat: ['true'],
-      favoritePetFish: [''],
-      notes: ['']
+      dateOfBirth: [{value: ''}, Validators.required],
+      password: [{value: ''}, Validators.required],
+      confirmPassword: [{value: ''}, Validators.required],
+      favoriteCountry: [{value: ''}, Validators.required],
+      grossIncome: [{value: ''}, Validators.required],
+      favoriteColor: [{value: ''}, Validators.required],
+      favoritePetDog: [{value: ''}],
+      favoritePetCat: [{value: 'true'}],
+      favoritePetFish: [{value: ''}],
+      notes: [{value: ''}]
     });
   }
 

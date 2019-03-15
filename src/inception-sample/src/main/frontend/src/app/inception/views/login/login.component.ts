@@ -64,9 +64,9 @@ export class LoginComponent {
 
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
-      username: ['Administrator', Validators.required],
+      username: [{value: 'Administrator'}, Validators.required],
       //username: ['test@test.com', [Validators.required, patternValidator(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-      password: ['Password1', Validators.required]
+      password: [{value: 'Password1'}, Validators.required]
     });
   }
 

@@ -39,7 +39,7 @@ import {TitleService} from "../../services/layout/title.service";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnInit, OnDestroy {
+export class CodesComponent implements AfterViewInit, OnInit {
 
   codeCategoryId: string;
 
@@ -53,7 +53,7 @@ export class CodesComponent implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService, private titleService: TitleService) {
+              private layoutService: SpinnerService) {
   }
 
   applyFilter(filterValue: string): void {
@@ -76,11 +76,6 @@ export class CodesComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.titleService.setTitle(this.codeCategoryId);
-  }
-
-  ngOnDestroy(): void {
-    this.titleService.clearTitle();
   }
 
   ngAfterViewInit(): void {

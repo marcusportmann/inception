@@ -42,7 +42,7 @@ export class SelectOrganizationComponent implements OnInit {
               private sessionService: SessionService) {
 
     this.selectOrganizationForm = this.formBuilder.group({
-      organization: ['', Validators.required]
+      organization: [{value: ''}, Validators.required]
     });
   }
 

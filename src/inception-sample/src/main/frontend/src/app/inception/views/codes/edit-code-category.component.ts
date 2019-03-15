@@ -26,31 +26,35 @@ import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
 
 /**
- * The NewCodeCategoryComponent class implements the new code category component.
+ * The EditCodeCategoryComponent class implements the edit code category component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'new-code-category.component.html',
-  styleUrls: ['new-code-category.component.css'],
+  templateUrl: 'edit-code-category.component.html',
+  styleUrls: ['edit-code-category.component.css'],
 })
-export class NewCodeCategoryComponent implements OnInit {
+export class EditCodeCategoryComponent implements OnInit {
 
-  newCodeCategoryForm: FormGroup;
+  codeCategoryId: string;
+
+  editCodeCategoryForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private layoutService: SpinnerService) {
 
-    this.newCodeCategoryForm = this.formBuilder.group({
+    this.editCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: ''}, Validators.required],
-      name: [{value: ''}, Validators.required]
+      id: [{value: '', disabled: true}, Validators.required],
+      name: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
+    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.editCodeCategoryForm.get('id').setValue(this.codeCategoryId);
   }
 
   onCancel(): void {
@@ -59,14 +63,14 @@ export class NewCodeCategoryComponent implements OnInit {
 
   onOK(): void {
 
-    if (this.newCodeCategoryForm.valid) {
+    if (this.editCodeCategoryForm.valid) {
 
-      let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
-        this.newCodeCategoryForm.get('name').value, null);
+      let codeCategory: CodeCategory = new CodeCategory(this.codeCategoryId,
+        this.editCodeCategoryForm.get('name').value, null);
 
       this.layoutService.showSpinner();
 
-      this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
+      this.codesService.updateCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
 
         this.layoutService.hideSpinner();
 

@@ -18,6 +18,8 @@ import {AfterViewInit, Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {BehaviorSubject, Observable} from 'rxjs/index';
 import {combineAll, filter} from 'rxjs/operators';
+import * as format from 'string-template';
+
 
 /**
  * The BreadcrumbsService class provides the Breadcrumbs Service implementation.
@@ -31,7 +33,7 @@ export class BreadcrumbsService {
 
   private _breadcrumbs: BehaviorSubject<Array<Object>>;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
 
     this._breadcrumbs = new BehaviorSubject<Object[]>(new Array<Object>());
 
@@ -39,8 +41,8 @@ export class BreadcrumbsService {
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
       const breadcrumbs = [];
-      let currentRoute = this.route.root,
-        url = '';
+      let currentRoute = this.activatedRoute.root, url = '';
+
       do {
         const childrenRoutes = currentRoute.children;
         currentRoute = null;
@@ -53,8 +55,11 @@ export class BreadcrumbsService {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
               if (routeSnapshot.data.title) {
+
+                let params = routeSnapshot.params;
+
                 breadcrumbs.push({
-                  label: routeSnapshot.data.title,
+                  label: format(routeSnapshot.data.title, routeSnapshot.params),
                   url: url
                 });
               }
