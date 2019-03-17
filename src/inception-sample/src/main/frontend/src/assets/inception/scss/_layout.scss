@@ -681,16 +681,48 @@ admin-root {
 }
 
 
-/*
-
-TODO GET THIS TO WORK - SIDEBAR NEEDS TO BE BIGGER ON SMALLER SCREEN WITH BIG FONT
-*/
 
 @include media-breakpoint-down(xs) {
-  .sidebar {
-    flex: 0 0 $sidebar-width * 1.5 !important;
-    margin-left: - $sidebar-width * 1.5;
+
+  .admin-body {
+    margin-top: $admin-header-height;
+
+    .main {
+      ol.breadcrumb {
+        font-size: 0.8125rem !important;
+
+        .breadcrumb-item + .breadcrumb-item {
+          padding-left: 0.3rem;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+          padding-right: 0.3rem !important;
+        }
+      }
+
+    }
   }
+}
+
+
+// Sidebar needs to be bigger on mobile devices
+@include media-breakpoint-down(sm) {
+
+  .sidebar {
+    flex: 0 0 $mobile-sidebar-width !important;
+    width: $mobile-sidebar-width !important;
+
+    margin-left: -$mobile-sidebar-width;
+
+    .sidebar-nav {
+      width: $mobile-sidebar-width !important;
+    }
+
+    .nav {
+      width: $mobile-sidebar-width !important;
+    }
+  }
+
 }
 
 

@@ -45,8 +45,8 @@ export class NewCodeCategoryComponent implements OnInit {
 
     this.newCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: ''}, Validators.required],
-      name: [{value: ''}, Validators.required]
+      id: ['', Validators.required],
+      name: ['', Validators.required]
     });
   }
 

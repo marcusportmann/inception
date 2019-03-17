@@ -1,6 +1,6 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-table-header">
-    <button mat-flat-button color="primary" (click)="newCodeCategory()" i18n="@@code_categories_component_button_new_code_category">New Code Category</button>
+    <button mat-flat-button color="primary" (click)="newCodeCategory()" i18n="@@code_categories_component_button_new">New</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort>

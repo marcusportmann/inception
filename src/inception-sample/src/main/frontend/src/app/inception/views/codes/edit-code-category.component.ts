@@ -36,8 +36,6 @@ import {first} from "rxjs/operators";
 })
 export class EditCodeCategoryComponent implements OnInit {
 
-  codeCategoryId: string;
-
   editCodeCategoryForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -53,19 +51,22 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.editCodeCategoryForm.get('id').setValue(this.codeCategoryId);
+    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.editCodeCategoryForm.get('id').setValue(codeCategoryId);
+
+
   }
 
   onCancel(): void {
-    this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../../../../../code-categories'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
 
     if (this.editCodeCategoryForm.valid) {
 
-      let codeCategory: CodeCategory = new CodeCategory(this.codeCategoryId,
+      let codeCategory: CodeCategory = new CodeCategory(this.editCodeCategoryForm.get('id').value,
         this.editCodeCategoryForm.get('name').value, null);
 
       this.layoutService.showSpinner();
