@@ -39,7 +39,6 @@ export interface ConfirmationDialogData {
 @Component({
   selector: 'confirmation-dialog',
   template: `
-
     <div class="header">
       <i class="far fa-3x fa-question-circle"></i>
     </div>

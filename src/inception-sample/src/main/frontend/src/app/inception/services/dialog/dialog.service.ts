@@ -52,7 +52,7 @@ export class DialogService {
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialog> {
 
     const dialogRef = this.dialog.open(ConfirmationDialog, {
-      width: '360px',
+      panelClass: 'confirmation-dialog-panel',
       data: data
     });
 
@@ -67,7 +67,7 @@ export class DialogService {
   showErrorDialog(error: Error): MatDialogRef<ErrorDialog> {
 
     const dialogRef = this.dialog.open(ErrorDialog, {
-      width: '360px',
+      panelClass: 'error-dialog-panel',
       data: {error: error}
     });
 
@@ -82,7 +82,7 @@ export class DialogService {
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialog> {
 
     const dialogRef = this.dialog.open(InformationDialog, {
-      width: '360px',
+      panelClass: 'information-dialog-panel',
       data: data
     });
 
@@ -97,7 +97,7 @@ export class DialogService {
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialog> {
 
     const dialogRef = this.dialog.open(WarningDialog, {
-      width: '360px',
+      panelClass: 'warning-dialog-panel',
       data: data
     });
 

@@ -39,7 +39,6 @@ export interface ErrorDialogData {
 @Component({
   selector: 'error-dialog',
   template: `
-
     <div class="header">
       <i class="far fa-3x fa-times-circle"></i>
     </div>

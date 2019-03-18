@@ -1,0 +1,43 @@
+<div class="app flex-row align-items-center" >
+  <div class="container simple-container">
+    <div class="row justify-content-center">
+      <form [formGroup]="errorForm" autocomplete="off" validatedForm>
+        <mat-card>
+          <div class="d-flex justify-content-center pt-5 pb-3">
+            <div class="logo-login"></div>
+          </div>
+          <mat-card-content>
+            <p>
+              An error occurred while processing your request.
+            </p>
+            <p>
+              Please provide a step-by-step description of what you were doing when the problem occurred.
+            </p>
+            <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label i18n="@@error_component_label_email">E-mail address</mat-label>
+                  <input type="text" matInput formControlName="email" autofocus>
+                  <mat-error *ngIf="errorForm.controls['email'].errors && !errorForm.controls['email'].untouched">
+                    <span *ngIf="errorForm.controls['email'].errors?.email" i18n="@@error_component_error_email_invalid">A valid e-mail address is required.</span>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-form-field>
+                  <mat-label>Problem description</mat-label>
+                  <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions align="right">
+            <button type="button" (click)="onSendErrorReport()" mat-flat-button i18n="@@error_component_button_send_error_report">Send Error Report</button>
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</div>

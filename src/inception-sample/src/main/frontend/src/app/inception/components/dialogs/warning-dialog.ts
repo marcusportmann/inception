@@ -26,7 +26,6 @@ import {DialogData} from "./dialog-data";
 @Component({
   selector: 'warning-dialog',
   template: `
-
     <div class="header">
       <i class="fas fa-3x fa-exclamation-triangle"></i>
     </div>

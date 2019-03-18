@@ -15,13 +15,13 @@
         </div>
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Disabled Input</mat-label>
+            <mat-label>Disabled input</mat-label>
             <input matInput disabled>
           </mat-form-field>
         </div>
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Disabled Select</mat-label>
+            <mat-label>Disabled select</mat-label>
             <mat-select disabled>
               <mat-option value="1">Option #1</mat-option>
               <mat-option value="2">Option #2</mat-option>
@@ -38,7 +38,7 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>First Name</mat-label>
+            <mat-label>First name</mat-label>
             <input type="text" matInput formControlName="firstName" required="true" autofocus>
             <mat-hint>The first name.</mat-hint>
             <mat-error *ngIf="exampleForm.controls['firstName'].errors && !exampleForm.controls['firstName'].untouched">
@@ -48,7 +48,7 @@
         </div>
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Last Name</mat-label>
+            <mat-label>Last name</mat-label>
             <input type="text" matInput formControlName="lastName" required="true">
             <mat-error *ngIf="exampleForm.controls['lastName'].errors && !exampleForm.controls['lastName'].untouched">
               <span *ngIf="exampleForm.controls['lastName'].errors?.required">A last name is required.</span>
@@ -59,7 +59,7 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Date of Birth</mat-label>
+            <mat-label>Date of birth</mat-label>
             <input matInput [matDatepicker]="datePicker" (focus)="datePicker.open()"  formControlName="dateOfBirth" required="true" readonly>
             <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
             <mat-datepicker #datePicker></mat-datepicker>
@@ -110,7 +110,7 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Favorite Country</mat-label>
+            <mat-label>Favorite country</mat-label>
             <input type="text" matInput [formControl]="exampleForm.get('favoriteCountry')" required="true" [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
               <mat-option *ngFor="let option of filteredCountryOptions | async" [value]="option">
@@ -124,7 +124,7 @@
         </div>
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Gross Income</mat-label>
+            <mat-label>Gross income</mat-label>
             <input matInput formControlName="grossIncome" type="number" class="text-right">
             <span matPrefix>R&nbsp;</span>
             <span matSuffix>.00</span>
@@ -137,7 +137,7 @@
       <div class="row">
         <div class="col-sm">
           <radio-group-form-field>
-            <mat-label>Favorite Color</mat-label>
+            <mat-label>Favorite color</mat-label>
             <mat-radio-group formControlName="favoriteColor" required="true">
               <mat-radio-button value="1">Red</mat-radio-button>
               <mat-radio-button value="2">Green</mat-radio-button>
@@ -151,7 +151,7 @@
         </div>
         <div class="col-sm">
           <checkbox-form-field>
-            <mat-label>Favorite Pet</mat-label>
+            <mat-label>Favorite pet</mat-label>
             <mat-checkbox formControlName="favoritePetDog">Dog</mat-checkbox>
             <mat-checkbox formControlName="favoritePetCat">Cat</mat-checkbox>
             <mat-checkbox formControlName="favoritePetFish">Fish</mat-checkbox>

@@ -97,6 +97,16 @@ export const routes: Routes = [
     }
   },
 
+  // Error route
+  {
+    path: 'error',
+    component: SimpleContainerComponent,
+    loadChildren: './inception/views/error/error.module#ErrorModule',
+    data: {
+      title: 'Error'
+    }
+  },
+
   // Default route for invalid paths
   {
     path: '**',

@@ -26,7 +26,6 @@ import {DialogData} from "./dialog-data";
 @Component({
   selector: 'information-dialog',
   template: `
-
     <div class="header">
       <i class="fas fa-3x fa-exclamation-circle"></i>
     </div>

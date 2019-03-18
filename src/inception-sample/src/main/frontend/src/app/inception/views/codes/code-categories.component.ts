@@ -62,7 +62,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   codesAdministration(id: string, name: string): void {
-    this.router.navigate([id + '/codes'], { queryParams: { name: name }, relativeTo: this.activatedRoute});
+    this.router.navigate([id + '/codes'], {queryParams: {name: name }, relativeTo: this.activatedRoute});
   }
 
   deleteCodeCategory(id: string, codeCategoryName: string): void {
@@ -93,7 +93,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
   editCodeCategory(id: string): void {
     //this.router.navigate([id], { queryParams: { name: name }, relativeTo: this.activatedRoute});
-    this.router.navigate([id], { relativeTo: this.activatedRoute});
+    this.router.navigate([id], {relativeTo: this.activatedRoute});
   }
 
   loadCodeCategories(): void {
@@ -111,7 +111,7 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
       this.layoutService.hideSpinner();
 
-      this.dialogService.showErrorDialog(error);
+      this.router.navigate(['/error'], {relativeTo: this.activatedRoute, state: {error: error}});
     });
 
     this.dataSource.paginator = this.paginator;

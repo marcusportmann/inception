@@ -11,7 +11,6 @@
               <div class="col">
                 <span i18n="@@select_organization_component_explanation">Your user account is associated with multiple organizations. To proceed, please select the organization you wish to login with.</span>
                 <mat-form-field floatLabel="never">
-
                   <input type="text" matInput [formControl]="selectOrganizationForm.get('organization')" [matAutocomplete]="auto" i18n-placeholder="@@select_organization_component_placeholder_organization" placeholder="Select an organization">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayOrganization">
                     <mat-option *ngFor="let filteredOrganization of filteredOrganizations | async" [value]="filteredOrganization">
