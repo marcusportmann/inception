@@ -228,6 +228,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-error</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-json</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -363,6 +368,7 @@
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
     <module>inception-configuration-ws</module>
+    <module>inception-error</module>
     <module>inception-core</module>
     <module>inception-json</module>
     <module>inception-kafka</module>

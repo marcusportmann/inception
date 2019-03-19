@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, ViewContainerRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -26,7 +26,7 @@ import {SecurityService} from '../../services/security/security.service';
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
-import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
+import {ErrorService} from "../../services/error/error.service";
 import {catchError, map, first, takeUntil} from "rxjs/operators";
 import {Observable, pipe, Subject} from "../../../../../node_modules/rxjs";
 
@@ -46,25 +46,48 @@ import {MatDialogRef} from "@angular/material";
 import {ConfirmationDialog} from "../../components/dialogs";
 
 /**
- * The ErrorComponent class implements the error component.
+ * The SendErrorReportComponent class implements the send error report component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'error.component.html'
+  templateUrl: 'send-error-report.component.html'
 })
-export class ErrorComponent {
+export class SendErrorReportComponent implements OnInit {
 
   errorForm: FormGroup;
 
-  constructor(private router: Router, private route: ActivatedRoute,
+  error: Error;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private layoutService: SpinnerService) {
 
     this.errorForm = this.formBuilder.group({
       // tslint:disable-next-line
+      message: [''],
       email: ['', Validators.email],
       description: ['']
+    });
+  }
+
+  ngOnInit(): void {
+
+    this.activatedRoute.paramMap.pipe(first(),
+      map((state: any) => window.history.state))   .subscribe((state: any) => {
+
+        if (state.error) {
+          this.error = state.error;
+
+          this.errorForm.get('message').setValue(this.error.message);
+
+        } else {
+
+          console.log('No error found, redirecting to the application root')
+
+          this.router.navigate(['/']);
+        }
+
     });
   }
 

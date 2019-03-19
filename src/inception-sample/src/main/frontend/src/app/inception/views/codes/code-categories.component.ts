@@ -111,7 +111,9 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
       this.layoutService.hideSpinner();
 
-      this.router.navigate(['/error'], {relativeTo: this.activatedRoute, state: {error: error}});
+      this.router.navigateByUrl('/error', { state: {error: error }});
+
+      //this.router.navigate(['/error'], {relativeTo: this.activatedRoute, state: {error: error}});
     });
 
     this.dataSource.paginator = this.paginator;

@@ -26,7 +26,7 @@ import {SecurityService} from '../../services/security/security.service';
 
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
-import {ErrorReportingService} from "../../services/error-reporting/error-reporting.service";
+import {ErrorService} from "../../services/error/error.service";
 import {catchError, map, first, takeUntil} from "rxjs/operators";
 import {Observable, pipe, Subject} from "../../../../../node_modules/rxjs";
 
@@ -57,7 +57,7 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(private router: Router, private route: ActivatedRoute,
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private layoutService: SpinnerService) {
@@ -130,7 +130,7 @@ export class LoginComponent {
             this.router.navigate(['/']);
           }
           else {
-            this.router.navigate(['select-organization'], {relativeTo: this.route});
+            this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
           }
         },(error: Error) => {
 

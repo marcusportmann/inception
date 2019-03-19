@@ -39,20 +39,20 @@ export class CanActivateFunctionGuard implements CanActivate {
   constructor(private router: Router, private sessionService: SessionService) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+  canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
     return this.sessionService.session.pipe(
       map((session: Session) => {
 
-        if (route) {
-          if (route.data) {
-            if (route.data.functionCodes) {
+        if (activatedRouteSnapshot) {
+          if (activatedRouteSnapshot.data) {
+            if (activatedRouteSnapshot.data.functionCodes) {
 
               // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
 
               if (session) {
-                for (var i = 0; i < route.data.functionCodes.length; i++) {
+                for (var i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
                   for (var j = 0; j < session.functionCodes.length; j++) {
-                    if (route.data.functionCodes[i] == session.functionCodes[j]) {
+                    if (activatedRouteSnapshot.data.functionCodes[i] == session.functionCodes[j]) {
                       return true;
                     }
                   }

@@ -332,6 +332,23 @@ label {
 
 .mat-form-field {
 
+  .mat-form-field-wrapper {
+
+    .mat-form-field-flex {
+
+      .mat-form-field-infix {
+
+        input {
+          min-height: 1.3rem;
+        }
+
+        textarea {
+          min-height: 1.3rem;
+        }
+      }
+    }
+  }
+
   /*
   &.mat-form-field-invalid {
 

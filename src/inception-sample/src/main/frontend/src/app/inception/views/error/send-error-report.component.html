@@ -15,9 +15,17 @@
             </p>
             <div class="row">
               <div class="col">
+                <mat-form-field class="static">
+                  <mat-label>Error</mat-label>
+                  <textarea matInput formControlName="message" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" readonly="true"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
                 <mat-form-field>
                   <mat-label i18n="@@error_component_label_email">E-mail address</mat-label>
-                  <input type="text" matInput formControlName="email" autofocus>
+                  <input type="text" matInput formControlName="email">
                   <mat-error *ngIf="errorForm.controls['email'].errors && !errorForm.controls['email'].untouched">
                     <span *ngIf="errorForm.controls['email'].errors?.email" i18n="@@error_component_error_email_invalid">A valid e-mail address is required.</span>
                   </mat-error>
@@ -34,7 +42,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="button" (click)="onSendErrorReport()" mat-flat-button i18n="@@error_component_button_send_error_report">Send Error Report</button>
+            <button type="button" (click)="onSendErrorReport()" mat-flat-button color="primary" i18n="@@error_component_button_send_error_report">Send Error Report</button>
           </mat-card-actions>
         </mat-card>
       </form>

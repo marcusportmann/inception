@@ -26,14 +26,14 @@ import {RouterModule, Routes} from "@angular/router";
 import {InceptionModule} from "../../inception.module";
 
 // Import Inception components
-import {ErrorComponent} from './error.component';
+import {SendErrorReportComponent} from './send-error-report.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ErrorComponent,
+    component: SendErrorReportComponent,
     data: {
-      title: 'Error'
+      title: 'Send Error Report'
     }
   }
 ];
@@ -54,7 +54,7 @@ const routes: Routes = [
     ReactiveFormsModule
   ],
   declarations: [
-    ErrorComponent
+    SendErrorReportComponent
   ]
 })
 export class ErrorModule { }
