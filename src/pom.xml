@@ -86,7 +86,7 @@
     <metrics-core.version>4.0.0</metrics-core.version>
     <mssql-jdbc.version>7.2.0.jre11</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
-    <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
+    <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>

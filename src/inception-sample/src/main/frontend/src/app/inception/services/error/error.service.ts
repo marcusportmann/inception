@@ -38,7 +38,7 @@ export class ErrorService {
    *
    * @param {Error} error The error.
    */
-  sendErrorReport(error: Error) {
+  sendErrorReport(email: string, description: string, error: Error) {
 
   }
 }
