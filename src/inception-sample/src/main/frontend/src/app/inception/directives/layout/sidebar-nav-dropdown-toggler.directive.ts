@@ -28,6 +28,11 @@ import {Directive, HostListener} from "@angular/core";
 })
 export class SidebarNavDropdownTogglerDirective {
 
+  /**
+   * Constructs a new SidebarNavDropdownDirective.
+   *
+   * @param {SidebarNavDropdownDirective} dropdown The sidebar nav dropdown directive.
+   */
   constructor(private dropdown: SidebarNavDropdownDirective) {}
 
   @HostListener('click', ['$event'])

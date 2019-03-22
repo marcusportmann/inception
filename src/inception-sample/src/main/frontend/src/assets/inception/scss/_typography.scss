@@ -112,12 +112,16 @@ small,
 
 
 // stylelint-disable declaration-no-important
-.font-xs {
+.font-xxs {
   font-size: .75rem !important;
 }
 
+.font-xs {
+  font-size: .875rem !important;
+}
+
 .font-sm {
-  font-size: .85rem !important;
+  font-size: .9375rem !important;
 }
 
 .font-lg {
@@ -143,6 +147,11 @@ small,
 .font-5xl {
   font-size: 2.5rem !important;
 }
+
+
+
+
+
 
 
 .text-white .text-muted {

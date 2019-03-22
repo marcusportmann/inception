@@ -47,7 +47,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
     </admin-footer>
   `
 })
-export class AdminContainerComponent implements OnInit, OnDestroy {
+export class AdminContainerComponent {
 
   element: HTMLElement = document.body;
 
@@ -66,11 +66,5 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
     this.changes.observe(<Element>this.element, {
       attributes: true
     });
-  }
-
-  ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
   }
 }

@@ -25,28 +25,20 @@ import {BehaviorSubject, Observable} from "rxjs";
 @Injectable()
 export class TitleService {
 
-  private _title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   /**
    * Constructs a new TitleService.
    */
   constructor() {
-  }
-
-  /**
-   * Returns the current title if one exists.
-   *
-   * @return {string} The current title if one exists or null.
-   */
-  get title(): Observable<string> {
-    return this._title;
+    console.log('Initializing the Title Service');
   }
 
   /**
    * Clear the current title
    */
   clearTitle(): void {
-    this._title.next(null);
+    this.title.next(null);
   }
 
   /**
@@ -55,6 +47,6 @@ export class TitleService {
    * @param title the current title
    */
   setTitle(title: string): void {
-    this._title.next(title);
+    this.title.next(title);
   }
 }

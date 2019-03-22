@@ -36,7 +36,6 @@ import {
     </div>
   `,
   styles: [`
-
     .table-filter-container {
       display: flex;
       align-items: center;
@@ -76,16 +75,15 @@ import {
       padding: 0;
       border: none !important;
     }
-
   `]
 })
 export class TableFilter {
 
-  @Input()
-  value: string = '';
-
   @Output()
   changed: EventEmitter<string> = new EventEmitter<string>();
+
+  @Input()
+  value: string = '';
 
   resetValue(): void {
     this.value = '';

@@ -42,6 +42,7 @@ export class SecurityService {
    * Constructs a new SecurityService.
    *
    * @param {HttpClient} httpClient The HTTP client.
+   * @param {I18n} i18n             The internationalization service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Security Service');
@@ -53,14 +54,10 @@ export class SecurityService {
    * @return {Observable<Organization[]>} The list of organizations.
    */
   getOrganizations(): Observable<Organization[]> {
-
     return this.httpClient.get<Organization[]>(environment.securityServiceUrlPrefix + '/organizations', {reportProgress: true}).pipe(
       map((organizations: Organization[]) => {
-
         return organizations;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -68,7 +65,7 @@ export class SecurityService {
             value: 'Failed to retrieve the organizations.'}), apiError));
         }
         else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         }
         else {
           return throwError(new SystemUnavailableError(this.i18n({id: '@@system_unavailable_error',

@@ -37,24 +37,7 @@ export class SpinnerService {
    * @param {Overlay} overlay The overlay.
    */
   constructor(private overlay: Overlay) {
-  }
-
-  /**
-   * Show the spinner.
-   */
-  showSpinner(): void {
-
-    if (!this.overlayRef) {
-
-      // Returns an OverlayRef (which is a PortalHost)
-      this.overlayRef = this.overlay.create();
-
-      // Create ComponentPortal that can be attached to a PortalHost
-      this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
-
-      // Attach ComponentPortal to PortalHost
-      this.overlayRef.attach(this.spinnerComponentPortal);
-    }
+    console.log('Initializing the Spinner Service');
   }
 
   /**
@@ -65,6 +48,22 @@ export class SpinnerService {
       this.overlayRef.dispose();
 
       this.overlayRef = null;
+    }
+  }
+
+  /**
+   * Show the spinner.
+   */
+  showSpinner(): void {
+    if (!this.overlayRef) {
+      // Returns an OverlayRef (which is a PortalHost)
+      this.overlayRef = this.overlay.create();
+
+      // Create ComponentPortal that can be attached to a PortalHost
+      this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
+
+      // Attach ComponentPortal to PortalHost
+      this.overlayRef.attach(this.spinnerComponentPortal);
     }
   }
 }

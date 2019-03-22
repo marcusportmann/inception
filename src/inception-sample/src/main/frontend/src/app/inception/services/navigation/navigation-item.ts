@@ -24,24 +24,9 @@ import {NavigationBadge} from "./navigation-badge";
 export class NavigationItem {
 
   /**
-   * The optional icon associated with the navigation item.
+   * The optional navigation badge associated with the navigation item.
    */
-  icon?: string;
-
-  /**
-   * The optional name of navigation item.
-   */
-  name?: string;
-
-  /**
-   * The optional url associated with the navigation item.
-   */
-  url?: string;
-
-  /**
-   * The optional function codes that are used to restrict access to the navigation item.
-   */
-  functionCodes?: string[];
+  badge?: NavigationBadge;
 
   /**
    * The optional child navigation items.
@@ -54,19 +39,34 @@ export class NavigationItem {
   cssClass?: string;
 
   /**
-   * The optional navigation badge associated with the navigation item.
-   */
-  badge?: NavigationBadge;
-
-  /**
    * The optional divider indicator.
    */
   divider?: boolean;
 
   /**
+   * The optional function codes that are used to restrict access to the navigation item.
+   */
+  functionCodes?: string[];
+
+  /**
+   * The optional icon associated with the navigation item.
+   */
+  icon?: string;
+
+  /**
+   * The optional name of navigation item.
+   */
+  name?: string;
+
+  /**
    * The optional title indicator.
    */
   title?: boolean;
+
+  /**
+   * The optional url associated with the navigation item.
+   */
+  url?: string;
 
   /**
    * The optional variant to apply to the navigation item.

@@ -22,14 +22,14 @@
 export class Code {
 
   /**
-   * The ID used to uniquely identify the code.
-   */
-  id: string;
-
-  /**
    * The ID used to uniquely identify the code category the code is associated with.
    */
   codeCategoryId: string;
+
+  /**
+   * The ID used to uniquely identify the code.
+   */
+  id: string;
 
   /**
    * The name of the code.

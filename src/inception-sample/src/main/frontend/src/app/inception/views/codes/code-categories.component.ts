@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CodeCategory} from "../../services/codes/code-category";
-import {Observable, Subject} from "rxjs";
 import {CodesService} from "../../services/codes/codes.service";
-import {catchError, first, map, single, takeUntil} from "rxjs/operators";
+import {first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -27,6 +26,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationDialog} from "../../components/dialogs";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -42,17 +42,19 @@ import {ConfirmationDialog} from "../../components/dialogs";
 })
 export class CodeCategoriesComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name', 'actions'];
-
   dataSource = new MatTableDataSource<CodeCategory>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService)
+              private spinnerService: SpinnerService)
   {}
 
   applyFilter(filterValue: string): void {
@@ -66,54 +68,52 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   deleteCodeCategory(id: string, codeCategoryName: string): void {
-
-    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@confirm_delete_code_category', value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'}, {codeCategoryName: codeCategoryName})});
+    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category', value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'}, {codeCategoryName: codeCategoryName})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
-
       if (confirmation === true) {
-
-        this.layoutService.showSpinner();
+        this.spinnerService.showSpinner();
 
         this.codesService.deleteCodeCategory(id).pipe(first()).subscribe((result: boolean) => {
 
-          this.layoutService.hideSpinner();
+          this.spinnerService.hideSpinner();
 
           this.ngAfterViewInit();
-
         }, (error: Error) => {
+          this.spinnerService.hideSpinner();
 
-          this.layoutService.hideSpinner();
-
-          this.dialogService.showErrorDialog(error);
+          if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          }
+          else {
+            this.dialogService.showErrorDialog(error);
+          }
         });
       }
     });
   }
 
   editCodeCategory(id: string): void {
-    //this.router.navigate([id], { queryParams: { name: name }, relativeTo: this.activatedRoute});
     this.router.navigate([id], {relativeTo: this.activatedRoute});
   }
 
   loadCodeCategories(): void {
+    this.spinnerService.showSpinner();
 
-    this.layoutService.showSpinner();
+    this.codesService.getCodeCategories().pipe(first()).subscribe((codeCategories: CodeCategory[]) => {
 
-    this.codesService.getCodeCategories().pipe(
-      first()).subscribe((codeCategories: CodeCategory[]) => {
-
-      this.layoutService.hideSpinner();
+      this.spinnerService.hideSpinner();
 
       this.dataSource.data = codeCategories;
-
     }, (error: Error) => {
+      this.spinnerService.hideSpinner();
 
-      this.layoutService.hideSpinner();
-
-      this.router.navigateByUrl('/error', { state: {error: error }});
-
-      //this.router.navigate(['/error'], {relativeTo: this.activatedRoute, state: {error: error}});
+      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+      }
+      else {
+        this.dialogService.showErrorDialog(error);
+      }
     });
 
     this.dataSource.paginator = this.paginator;
@@ -124,12 +124,10 @@ export class CodeCategoriesComponent implements AfterViewInit {
   }
 
   newCodeCategory(): void {
-
     this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-
     this.loadCodeCategories();
   }
 }

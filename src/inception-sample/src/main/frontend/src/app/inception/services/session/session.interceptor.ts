@@ -42,12 +42,9 @@ export class SessionInterceptor implements HttpInterceptor {
   }
 
   intercept(httpRequest: HttpRequest<any>, nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
-
     if (!httpRequest.url.endsWith('/oauth/token')) {
-
       let httpRequestHandler = this.sessionService.session.pipe(
         flatMap(session => {
-
           if (session) {
             httpRequest = httpRequest.clone({
               setHeaders: {

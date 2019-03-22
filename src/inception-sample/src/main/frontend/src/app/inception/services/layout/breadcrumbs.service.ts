@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {BehaviorSubject, Observable} from 'rxjs/index';
-import {combineAll, filter} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs/index';
+import {filter} from 'rxjs/operators';
 import * as format from 'string-template';
 
 
@@ -29,15 +29,16 @@ import * as format from 'string-template';
 @Injectable()
 export class BreadcrumbsService {
 
-  breadcrumbs: Observable<Array<Object>>;
+  breadcrumbs: BehaviorSubject<Array<Object>> = new BehaviorSubject<Object[]>(new Array<Object>());
 
-  private _breadcrumbs: BehaviorSubject<Array<Object>>;
-
+  /**
+   * Constructs a new BreadcrumbsService.
+   *
+   * @param {Router} router                 The router.
+   * @param {ActivatedRoute} activatedRoute The activated route.
+   */
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-
-    this._breadcrumbs = new BehaviorSubject<Object[]>(new Array<Object>());
-
-    this.breadcrumbs = this._breadcrumbs.asObservable();
+    console.log('Initializing the Breadcrumbs Service');
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
       const breadcrumbs = [];
@@ -55,7 +56,6 @@ export class BreadcrumbsService {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
               if (routeSnapshot.data.title) {
-
                 let params = routeSnapshot.params;
 
                 breadcrumbs.push({
@@ -69,7 +69,7 @@ export class BreadcrumbsService {
         });
       } while (currentRoute);
 
-      this._breadcrumbs.next(Object.assign([], breadcrumbs));
+      this.breadcrumbs.next(Object.assign([], breadcrumbs));
 
       return breadcrumbs;
     });

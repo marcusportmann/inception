@@ -76,5 +76,3 @@ export class ErrorDialog {
     this.dialogRef.close();
   }
 }
-
-// TODO: Show submit button if we are dealing with anything that is not a CommunicationError or SystemUnavailableError? -- MARCUS

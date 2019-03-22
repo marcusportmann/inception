@@ -57,11 +57,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class PaginationTableComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

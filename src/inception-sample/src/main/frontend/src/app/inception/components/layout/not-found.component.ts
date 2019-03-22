@@ -38,11 +38,11 @@ import {Component, OnInit} from '@angular/core';
     </div>
   `
 })
-export class NotFoundComponent implements OnInit {
+export class NotFoundComponent {
 
+  /**
+   * Constructs a new NotFoundComponent.
+   */
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 }

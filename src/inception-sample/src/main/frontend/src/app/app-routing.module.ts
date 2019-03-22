@@ -92,19 +92,19 @@ export const routes: Routes = [
     path: 'login',
     component: SimpleContainerComponent,
     loadChildren: './inception/views/login/login.module#LoginModule',
-    data: {
-      title: 'Login'
-    }
+    // data: {
+    //   title: 'Login'
+    // }
   },
 
-  // Error Report route
+  // Send Error Report route
   {
-    path: 'error-report',
+    path: 'error',
     component: SimpleContainerComponent,
-    loadChildren: './inception/views/error-report/error-report.module#ErrorReportModule',
-    data: {
-      title: 'Error Report'
-    }
+    loadChildren: './inception/views/error/error.module#ErrorModule',
+    // data: {
+    //   title: 'Send Error Report'
+    // }
   },
 
   // Default route for invalid paths

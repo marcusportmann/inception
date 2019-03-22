@@ -3,31 +3,26 @@
     <div class="row justify-content-center">
       <form [formGroup]="errorForm" autocomplete="off" validatedForm>
         <mat-card>
-          <div class="d-flex justify-content-center pt-5 pb-3">
-            <div class="logo-login"></div>
+          <div class="d-flex justify-content-center pt-4 pb-2 mat-error">
+            <i class="far fa-4x fa-times-circle"></i>
           </div>
           <mat-card-content>
-            <p>
+            <p i18n="@@send_error_component_an_error_occurred">
               An error occurred while processing your request.
             </p>
-            <p>
+            <p class="mat-error">
+              {{error.message}}
+            </p>
+            <p i18n="@@send_error_component_provide_step_by_step_description">
               Please provide a step-by-step description of what you were doing when the problem occurred.
             </p>
             <div class="row">
               <div class="col">
-                <mat-form-field class="static">
-                  <mat-label>Error</mat-label>
-                  <textarea matInput formControlName="message" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" readonly="true"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
                 <mat-form-field>
-                  <mat-label i18n="@@error_component_label_email">E-mail address</mat-label>
+                  <mat-label i18n="@@send_error_component_label_email">E-mail address</mat-label>
                   <input type="text" matInput formControlName="email">
                   <mat-error *ngIf="errorForm.controls['email'].errors && !errorForm.controls['email'].untouched">
-                    <span *ngIf="errorForm.controls['email'].errors?.email" i18n="@@error_component_error_email_invalid">A valid e-mail address is required.</span>
+                    <span *ngIf="errorForm.controls['email'].errors?.email" i18n="@@send_error_component_error_email_invalid">A valid e-mail address is required.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -42,7 +37,7 @@
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="button" (click)="onSendErrorReport()" mat-flat-button color="primary" i18n="@@error_component_button_send_error_report">Send Error Report</button>
+            <button type="button" (click)="onSendErrorReport()" mat-flat-button color="warn" i18n="@@send_error_component_button_send_error_report">Send Error Report</button>
           </mat-card-actions>
         </mat-card>
       </form>

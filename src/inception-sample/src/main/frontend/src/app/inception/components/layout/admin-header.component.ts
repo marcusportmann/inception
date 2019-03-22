@@ -90,17 +90,24 @@ import {Session} from "../../services/session/session";
 export class AdminHeaderComponent implements OnInit {
 
   @Input()
-  fixed: boolean;
-
-  @Input()
   brandFull: any;
 
   @Input()
   brandMinimized: any;
 
   @Input()
+  fixed: boolean;
+
+  @Input()
   sidebarToggler: any;
 
+  /**
+   * Constructs a new AdminHeaderComponent.
+   *
+   * @param {ElementRef} elementRef         The element reference.
+   * @param {Router} router                 The router.
+   * @param {SessionService} sessionService The Session Service.
+   */
   constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }
 

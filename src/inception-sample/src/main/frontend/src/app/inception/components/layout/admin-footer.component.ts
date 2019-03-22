@@ -35,6 +35,11 @@ export class AdminFooterComponent implements OnInit {
   @Input()
   fixed: boolean;
 
+  /**
+   * Constructs a new AdminFooterComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {

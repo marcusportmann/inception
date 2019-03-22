@@ -328,6 +328,17 @@ public class CodesService
   public void deleteCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
+    if (false)
+    {
+      throw new CodesServiceException("Testing 1.. 2.. 3..");
+    }
+
+    if (false)
+    {
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    }
+
+
     String deleteCodeCategorySQL = "DELETE FROM codes.code_categories WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();

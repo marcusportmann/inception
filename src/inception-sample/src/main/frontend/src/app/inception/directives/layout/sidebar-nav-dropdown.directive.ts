@@ -26,6 +26,11 @@ import {Directive, ElementRef} from "@angular/core";
 })
 export class SidebarNavDropdownDirective {
 
+  /**
+   * Constructs a new SidebarNavDropdownDirective.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) { }
 
   toggle(): void {

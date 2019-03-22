@@ -54,12 +54,14 @@ import {Component, ElementRef, Input, OnInit} from '@angular/core';
     `
   ]
 })
-export class SpinnerComponent implements OnInit {
+export class SpinnerComponent {
 
+  /**
+   * Constructs a new SpinnerComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) {
-  }
-
-  ngOnInit(): void {
   }
 
   show(): void {

@@ -33,13 +33,12 @@ import {
   MAT_LABEL_GLOBAL_OPTIONS, MatCheckbox,
   MatFormField,
   matFormFieldAnimations,
-  MatFormFieldDefaultOptions, MatHint
+  MatFormFieldDefaultOptions
 } from "@angular/material";
 import {ANIMATION_MODULE_TYPE} from "@angular/platform-browser/animations";
 import {startWith} from "rxjs/operators";
 import {Directionality} from "@angular/cdk/bidi";
 import {Platform} from "@angular/cdk/platform";
-
 
 export function getMatCheckboxMissingControlError(): Error {
   return Error('checkbox-form-field must contain a MatCheckbox.');
@@ -113,20 +112,20 @@ export class CheckboxFormField extends MatFormField
    * The checkboxes associated with the checkbox form field.
    */
   @ContentChildren(MatCheckbox)
-  private checkboxChildren: QueryList<MatCheckbox>;
+  checkboxChildren: QueryList<MatCheckbox>;
 
-  constructor(private elementRef: ElementRef,
-              private newChangeDetectorRef: ChangeDetectorRef,
-              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) private labelOptions: LabelOptions,
-              @Optional() private newDir: Directionality,
-              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions:
+  constructor(elementRef: ElementRef,
+              private changeDetectorRef: ChangeDetectorRef,
+              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
+              @Optional() directionality: Directionality,
+              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions:
                 MatFormFieldDefaultOptions,
               // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              private newPlatform?: Platform,
-              private newNgZone?: NgZone,
+              platform?: Platform,
+              zone?: NgZone,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
-    super(elementRef, newChangeDetectorRef, labelOptions, newDir, formFieldDefaultOptions,
-      newPlatform, newNgZone, animationMode);
+    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
+      platform, zone, animationMode);
 
     if (labelOptions) {
       this.floatLabel = labelOptions.float;
@@ -137,7 +136,6 @@ export class CheckboxFormField extends MatFormField
 
   /** Whether there are one or more hints associated with the checkbox form field. */
   get hasHint(): boolean {
-
     if (this._hintChildren) {
       if (this._hintChildren.length > 0) {
         return true;
@@ -161,14 +159,14 @@ export class CheckboxFormField extends MatFormField
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this.newChangeDetectorRef.markForCheck();
+      this.changeDetectorRef.markForCheck();
     });
   }
 
   ngAfterViewInit(): void {
     // Avoid animations on load.
     this._subscriptAnimationState = 'enter';
-    this.newChangeDetectorRef.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   protected validateCheckboxChildren(): void {

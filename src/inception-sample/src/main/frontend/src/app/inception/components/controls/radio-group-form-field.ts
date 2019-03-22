@@ -41,7 +41,6 @@ import {startWith} from "rxjs/operators";
 import {Directionality} from "@angular/cdk/bidi";
 import {Platform} from "@angular/cdk/platform";
 
-
 export function getMatRadioGroupMissingControlError(): Error {
   return Error('radio-group-form-field must contain a MatRadioGroup.');
 }
@@ -124,18 +123,20 @@ export class RadioGroupFormField extends MatFormField
   @ContentChild(MatRadioGroup)
   radioGroup: MatRadioGroup;
 
-  constructor(private elementRef: ElementRef,
-              private newChangeDetectorRef: ChangeDetectorRef,
-              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) private labelOptions: LabelOptions,
-              @Optional() private newDir: Directionality,
-              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) private formFieldDefaultOptions:
+  constructor(elementRef: ElementRef,
+              private changeDetectorRef: ChangeDetectorRef,
+              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
+              @Optional() directionality: Directionality,
+              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions:
                 MatFormFieldDefaultOptions,
               // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              private newPlatform?: Platform,
-              private newNgZone?: NgZone,
+              platform?: Platform,
+              zone?: NgZone,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
-    super(elementRef, newChangeDetectorRef, labelOptions, newDir, formFieldDefaultOptions,
-      newPlatform, newNgZone, animationMode);
+    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
+      platform, zone, animationMode);
+
+    this.changeDetectorRef = changeDetectorRef;
 
     if (labelOptions) {
       this.floatLabel = labelOptions.float;
@@ -169,19 +170,19 @@ export class RadioGroupFormField extends MatFormField
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this.newChangeDetectorRef.markForCheck();
+      this.changeDetectorRef.markForCheck();
     });
 
     // Re-validate when the number of errors changes.
     this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
-      this.newChangeDetectorRef.markForCheck();
+      this.changeDetectorRef.markForCheck();
     });
   }
 
   ngAfterViewInit(): void {
     // Avoid animations on load.
     this._subscriptAnimationState = 'enter';
-    this.newChangeDetectorRef.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   protected validateRadioGroupChild(): void {

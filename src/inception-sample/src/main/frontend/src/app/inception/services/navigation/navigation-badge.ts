@@ -22,14 +22,14 @@
 export class NavigationBadge {
 
   /**
-   * The type of navigation badge.
-   */
-  variant: string;
-
-  /**
    * The text for the navigation badge.
    */
   text: string;
+
+  /**
+   * The type of navigation badge.
+   */
+  variant: string;
 
   /**
    * Constructs a new NavigationBadge.

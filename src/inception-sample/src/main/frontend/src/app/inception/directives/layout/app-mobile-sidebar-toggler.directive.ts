@@ -26,6 +26,9 @@ import {Directive, HostListener} from "@angular/core";
 })
 export class AppMobileSidebarTogglerDirective {
 
+  /**
+   * Constructs a new AppMobileSidebarTogglerDirective.
+   */
   constructor() { }
 
   @HostListener('click', ['$event'])

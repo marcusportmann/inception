@@ -42,7 +42,6 @@ export class CanActivateFunctionGuard implements CanActivate {
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
     return this.sessionService.session.pipe(
       map((session: Session) => {
-
         if (activatedRouteSnapshot) {
           if (activatedRouteSnapshot.data) {
             if (activatedRouteSnapshot.data.functionCodes) {

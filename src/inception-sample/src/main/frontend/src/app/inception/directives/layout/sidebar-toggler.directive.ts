@@ -33,6 +33,9 @@ export class SidebarTogglerDirective implements OnInit {
 
   bp;
 
+  /**
+   * Constructs a new SidebarTogglerDirective.
+   */
   constructor() {}
 
   ngOnInit(): void {

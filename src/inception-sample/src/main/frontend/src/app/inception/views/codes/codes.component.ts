@@ -43,17 +43,19 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   codeCategoryId: string;
 
-  displayedColumns: string[] = ['id', 'name', 'actions'];
-
   dataSource = new MatTableDataSource<Code>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService) {
+              private spinnerService: SpinnerService) {
   }
 
   applyFilter(filterValue: string): void {
@@ -79,18 +81,14 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-
-    this.layoutService.showSpinner();
+    this.spinnerService.showSpinner();
 
     this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first()).subscribe((codes: Code[]) => {
-
-      this.layoutService.hideSpinner();
+      this.spinnerService.hideSpinner();
 
       this.dataSource.data = codes;
-
     }, (error: Error) => {
-
-      this.layoutService.hideSpinner();
+      this.spinnerService.hideSpinner();
 
       this.dialogService.showErrorDialog(error);
     });

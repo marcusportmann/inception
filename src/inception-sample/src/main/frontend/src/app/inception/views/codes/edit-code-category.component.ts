@@ -41,7 +41,7 @@ export class EditCodeCategoryComponent implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService) {
+              private spinnerService: SpinnerService) {
 
     this.editCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
@@ -54,8 +54,6 @@ export class EditCodeCategoryComponent implements OnInit {
     let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.editCodeCategoryForm.get('id').setValue(codeCategoryId);
-
-
   }
 
   onCancel(): void {
@@ -63,23 +61,18 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   onOK(): void {
-
     if (this.editCodeCategoryForm.valid) {
-
       let codeCategory: CodeCategory = new CodeCategory(this.editCodeCategoryForm.get('id').value,
         this.editCodeCategoryForm.get('name').value, null);
 
-      this.layoutService.showSpinner();
+      this.spinnerService.showSpinner();
 
       this.codesService.updateCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
-
-        this.layoutService.hideSpinner();
+        this.spinnerService.hideSpinner();
 
         this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
-
       }, (error: Error) => {
-
-        this.layoutService.hideSpinner();
+        this.spinnerService.hideSpinner();
 
         this.dialogService.showErrorDialog(error);
       });

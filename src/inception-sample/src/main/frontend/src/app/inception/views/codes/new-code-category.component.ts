@@ -41,8 +41,7 @@ export class NewCodeCategoryComponent implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private layoutService: SpinnerService) {
-
+              private spinnerService: SpinnerService) {
     this.newCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: ['', Validators.required],
@@ -58,23 +57,18 @@ export class NewCodeCategoryComponent implements OnInit {
   }
 
   onOK(): void {
-
     if (this.newCodeCategoryForm.valid) {
-
       let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
         this.newCodeCategoryForm.get('name').value, null);
 
-      this.layoutService.showSpinner();
+      this.spinnerService.showSpinner();
 
       this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
-
-        this.layoutService.hideSpinner();
+        this.spinnerService.hideSpinner();
 
         this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
-
       }, (error: Error) => {
-
-        this.layoutService.hideSpinner();
+        this.spinnerService.hideSpinner();
 
         this.dialogService.showErrorDialog(error);
       });

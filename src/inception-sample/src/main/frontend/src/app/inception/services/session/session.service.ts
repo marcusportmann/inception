@@ -34,7 +34,10 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 @Injectable()
 export class SessionService {
 
-  private _session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+  /**
+   * The current active session.
+   */
+  session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
 
   /**
    * Constructs a new SessionService.
@@ -44,7 +47,6 @@ export class SessionService {
    * @param {WebStorageService} sessionStorage The session storage service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
-
     console.log('Initializing the Session Service');
 
     // Start the session refresher
@@ -55,15 +57,6 @@ export class SessionService {
           console.log('Successfully refreshed session: ', refreshedSession);
         }
     });
-  }
-
-  /**
-   * Returns the current active session if one exists.
-   *
-   * @return {Session} The current active session if one exists or null.
-   */
-  get session(): Observable<Session> {
-    return this._session;
   }
   
   /**
@@ -91,7 +84,6 @@ export class SessionService {
       body.toString(), options)
       .pipe(
         flatMap((tokenResponse: TokenResponse) => {
-
           const helper = new JwtHelperService();
 
           const token: any = helper.decodeToken(tokenResponse.access_token);
@@ -103,14 +95,11 @@ export class SessionService {
             token.organizations, tokenResponse.access_token, accessTokenExpiry,
             tokenResponse.refresh_token);
 
-          this._session.next(session);
+          this.session.next(session);
 
-          return this._session;
-
+          return this.session;
         }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
           if (httpErrorResponse.status == 400) {
-
             if (httpErrorResponse.error && (httpErrorResponse.error.error == 'invalid_grant') && httpErrorResponse.error.error_description) {
               if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
                 return throwError(new LoginError(this.i18n({
@@ -138,7 +127,7 @@ export class SessionService {
             }), httpErrorResponse));
           }
           else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-            return throwError(new CommunicationError(httpErrorResponse));
+            return throwError(new CommunicationError(httpErrorResponse, this.i18n));
           }
           else {
             return throwError(new SystemUnavailableError(this.i18n({
@@ -153,15 +142,12 @@ export class SessionService {
    * Logout the current active session if one exists.
    */
   logout(): void {
-    this._session.next(null);
+    this.session.next(null);
   }
 
   private refreshSession(): Observable<Session | null> {
-
     return this.session.pipe(mergeMap((currentSession: Session) => {
-
       if (currentSession) {
-
         const selectedOrganization = currentSession.organization;
 
         /*
@@ -170,7 +156,6 @@ export class SessionService {
          */
         if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
           if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
-
             let body = new HttpParams()
               .set('grant_type', 'refresh_token')
               .set('refresh_token', currentSession.refreshToken)
@@ -182,7 +167,6 @@ export class SessionService {
             return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
               body.toString(), options).pipe(
               map((tokenResponse: TokenResponse) => {
-
                 const helper = new JwtHelperService();
 
                 const token: any = helper.decodeToken(tokenResponse.access_token);
@@ -196,23 +180,20 @@ export class SessionService {
 
                 refreshedSession.organization = selectedOrganization;
 
-                this._session.next(refreshedSession);
+                this.session.next(refreshedSession);
 
                 return refreshedSession;
-
               }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
                 console.log(this.i18n({
                   id: '@@session_service_failed_to_refresh_the_user_session',
                   value: 'Failed to refresh the user session.'
                 }), httpErrorResponse);
 
                 if (httpErrorResponse.status == 401) {
-                  this._session.next(null);
+                  this.session.next(null);
                 }
 
                 return of(null);
-
               }));
           }
         }

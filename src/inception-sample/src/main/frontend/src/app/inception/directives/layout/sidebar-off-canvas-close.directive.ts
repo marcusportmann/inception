@@ -28,6 +28,15 @@ export class SidebarOffCanvasCloseDirective {
 
   constructor() { }
 
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any): void {
+    $event.preventDefault();
+
+    if (this.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
+      this.toggleClass(document.querySelector('body'), 'sidebar-opened');
+    }
+  }
+
   /**
    * Check whether the element has the class with the specified name.
    *
@@ -55,15 +64,6 @@ export class SidebarOffCanvasCloseDirective {
       element.className = newClass.replace(/^\s+|\s+$/g, '');
     } else {
       element.className += ' ' + className;
-    }
-  }
-
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
-    $event.preventDefault();
-
-    if (this.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
-      this.toggleClass(document.querySelector('body'), 'sidebar-opened');
     }
   }
 }

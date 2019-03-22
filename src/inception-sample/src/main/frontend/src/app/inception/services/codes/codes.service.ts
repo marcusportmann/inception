@@ -43,6 +43,7 @@ export class CodesService {
    * Constructs a new CodesService.
    *
    * @param {HttpClient} httpClient The HTTP client.
+   * @param {I18n} i18n             The internationalization service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Codes Service');
@@ -56,16 +57,12 @@ export class CodesService {
    * @return True if the code was created successfully or false otherwise.
    */
   createCode(code: Code): Observable<boolean> {
-
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId,
       code, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -86,7 +83,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -104,15 +101,11 @@ export class CodesService {
    * @return True if the code category was created successfully or false otherwise.
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
-
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories',
       codeCategory, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -128,7 +121,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -148,16 +141,12 @@ export class CodesService {
    * @return True if the code was deleted or false otherwise.
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
-
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/' + codeId,
       {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -173,7 +162,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -191,16 +180,12 @@ export class CodesService {
    * @return True if the code category was deleted or false otherwise.
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
-
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId,
       {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -216,7 +201,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -232,15 +217,11 @@ export class CodesService {
    * @return {Observable<CodeCategory[]>} The list of code categories.
    */
   getCodeCategories(): Observable<CodeCategory[]> {
-
     return this.httpClient.get<CodeCategory[]>(
       environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
       map((codeCategories: CodeCategory[]) => {
-
         return codeCategories;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -249,7 +230,7 @@ export class CodesService {
             value: 'Failed to retrieve the code categories.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -267,16 +248,12 @@ export class CodesService {
    * @return the codes for the code category
    */
   getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
-
     return this.httpClient.get<Code[]>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes',
       {reportProgress: true}).pipe(
       map((codes: Code[]) => {
-
         return codes;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -292,7 +269,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -310,16 +287,12 @@ export class CodesService {
    * @return True if the code was updated successfully or false otherwise.
    */
   updateCode(code: Code): Observable<boolean> {
-
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId + '/' + code.id,
       code, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -335,7 +308,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',
@@ -353,16 +326,12 @@ export class CodesService {
    * @return True if the code category was updated successfully or false otherwise.
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
-
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategory.id,
       codeCategory, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-
         return true;
-
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-
         if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
@@ -378,7 +347,7 @@ export class CodesService {
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
           return throwError(new SystemUnavailableError(this.i18n({
             id: '@@system_unavailable_error',

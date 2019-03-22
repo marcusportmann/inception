@@ -27,6 +27,9 @@ import {Component} from '@angular/core';
 })
 export class SimpleContainerComponent  {
 
+  /**
+   * Constructs a new SimpleContainerComponent.
+   */
   constructor() {
   }
 }

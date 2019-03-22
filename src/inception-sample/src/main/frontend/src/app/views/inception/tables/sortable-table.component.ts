@@ -57,11 +57,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class SortableTableComponent implements AfterViewInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  @ViewChild(MatSort) sort: MatSort;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+
+  @ViewChild(MatSort)
+  sort: MatSort;
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;

@@ -42,6 +42,7 @@ export class DialogService {
    * @param {dialog} dialog The material dialog.
    */
   constructor(public dialog: MatDialog) {
+    console.log('Initializing the Dialog Service');
   }
 
   /**
@@ -50,7 +51,6 @@ export class DialogService {
    * @param {DialogData} data The data.
    */
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialog> {
-
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       panelClass: 'confirmation-dialog-panel',
       data: data
@@ -65,7 +65,6 @@ export class DialogService {
    * @param {Error} error The error.
    */
   showErrorDialog(error: Error): MatDialogRef<ErrorDialog> {
-
     const dialogRef = this.dialog.open(ErrorDialog, {
       panelClass: 'error-dialog-panel',
       data: {error: error}
@@ -80,7 +79,6 @@ export class DialogService {
    * @param {DialogData} data The data.
    */
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialog> {
-
     const dialogRef = this.dialog.open(InformationDialog, {
       panelClass: 'information-dialog-panel',
       data: data
@@ -95,7 +93,6 @@ export class DialogService {
    * @param {DialogData} data The data.
    */
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialog> {
-
     const dialogRef = this.dialog.open(WarningDialog, {
       panelClass: 'warning-dialog-panel',
       data: data

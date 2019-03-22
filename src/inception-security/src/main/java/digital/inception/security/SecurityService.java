@@ -201,6 +201,11 @@ public class SecurityService
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
+    if (true)
+    {
+      throw new SecurityServiceException("Testing 1.. 2.. 3..");
+    }
+
     try
     {
       // First check if this is an internal user and if so determine the user directory ID

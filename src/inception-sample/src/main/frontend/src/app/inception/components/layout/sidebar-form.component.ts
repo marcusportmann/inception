@@ -32,6 +32,11 @@ import { Replace } from '../../shared/index';
 })
 export class SidebarFormComponent implements OnInit {
 
+  /**
+   * Constructs a new SidebarFormComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {

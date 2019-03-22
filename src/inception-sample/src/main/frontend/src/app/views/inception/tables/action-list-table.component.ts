@@ -70,12 +70,16 @@ const USER_DATA: User[] = [
   styleUrls: ['action-list-table.component.css']
 })
 export class ActionListTableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
+
   dataSource = new MatTableDataSource<User>(USER_DATA);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
+  @ViewChild(MatSort)
+  sort: MatSort;
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();

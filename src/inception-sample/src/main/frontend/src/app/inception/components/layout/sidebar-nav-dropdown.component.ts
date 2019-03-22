@@ -41,6 +41,9 @@ export class SidebarNavDropdownComponent {
   @Input()
   navItem: NavigationItem;
 
+  /**
+   * Constructs a new SidebarNavDropdownComponent.
+   */
   constructor() {
   }
 

@@ -26,6 +26,9 @@ import {Directive, HostListener} from "@angular/core";
 })
 export class SidebarMinimizerDirective {
 
+  /**
+   * Constructs a new SidebarMinimizerDirective.
+   */
   constructor() { }
 
   @HostListener('click', ['$event'])

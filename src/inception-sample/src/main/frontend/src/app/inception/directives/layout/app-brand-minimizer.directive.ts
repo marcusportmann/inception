@@ -26,6 +26,9 @@ import {Directive, HostListener} from "@angular/core";
 })
 export class AppBrandMinimizerDirective {
 
+  /**
+   * Constructs a new AppBrandMinimizerDirective.
+   */
   constructor() {
   }
 

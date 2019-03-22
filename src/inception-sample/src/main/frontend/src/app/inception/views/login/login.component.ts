@@ -35,15 +35,17 @@ import {SessionService} from "../../services/session/session.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Error} from "../../errors/error";
 import {SpinnerService} from "../../services/layout/spinner.service";
-import {LoginError} from "../../services/session/session.service.errors";
+import {LoginError, SessionServiceError} from "../../services/session/session.service.errors";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {CommunicationError} from "../../errors/communication-error";
-
 
 
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {MatDialogRef} from "@angular/material";
 import {ConfirmationDialog} from "../../components/dialogs";
+import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {SecurityServiceError} from "../../services/security/security.service.errors";
 
 /**
  * The LoginComponent class implements the login component.
@@ -57,11 +59,22 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
+  /**
+   * Constructs a new LoginComponent.
+   *
+   * @param {Router} router                   The router.
+   * @param {ActivatedRoute} activatedRoute   The activated route.
+   * @param {FormBuilder} formBuilder         The form builder.
+   * @param {I18n} i18n                       The internationalization service.
+   * @param {DialogService} dialogService     The dialog service.
+   * @param {SecurityService} securityService The security service.
+   * @param {SessionService} sessionService   The session service.
+   * @param {SpinnerService} spinnerService   The spinner service.
+   */
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private securityService: SecurityService,
-              private sessionService: SessionService, private layoutService: SpinnerService) {
-
+              private sessionService: SessionService, private spinnerService: SpinnerService) {
     this.loginForm = this.formBuilder.group({
       // tslint:disable-next-line
       username: ['Administrator', Validators.required],
@@ -71,12 +84,10 @@ export class LoginComponent {
   }
 
   isForgottenPasswordEnabled(): boolean {
-
     return InceptionModule.forgottenPasswordEnabled;
   }
 
   isRegistrationEnabled(): boolean {
-
     return InceptionModule.registrationEnabled;
   }
 
@@ -104,7 +115,6 @@ export class LoginComponent {
     });
 
 
-
     //this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
 
@@ -116,28 +126,28 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-
     if (this.loginForm.valid) {
+      this.spinnerService.showSpinner();
 
-      this.layoutService.showSpinner();
-
-      this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
-        first()).subscribe(session => {
-
-          this.layoutService.hideSpinner();
+      this.sessionService.login(this.loginForm.get('username').value,
+        this.loginForm.get('password').value).pipe(first()).subscribe(session => {
+          this.spinnerService.hideSpinner();
 
           if (session.organizations.length == 1) {
             this.router.navigate(['/']);
-          }
-          else {
+          } else {
             this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
           }
-        },(error: Error) => {
+        }, (error: Error) => {
+          this.spinnerService.hideSpinner();
 
-          this.layoutService.hideSpinner();
-
-          this.dialogService.showErrorDialog(error);
-       });
+          if ((error instanceof SessionServiceError) || (error instanceof SystemUnavailableError)) {
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          }
+          else {
+            this.dialogService.showErrorDialog(error);
+          }
+      });
     }
   }
 }

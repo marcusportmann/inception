@@ -30,7 +30,7 @@ import {SendErrorReportComponent} from './send-error-report.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'send-error-report',
     component: SendErrorReportComponent,
     data: {
       title: 'Send Error Report'

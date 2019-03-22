@@ -71,6 +71,12 @@ export class SidebarNavItemComponent {
   @Input()
   navItem: NavigationItem;
 
+  /**
+   * Constructs a new SidebarNavItemComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   * @param {Router}     router     The router.
+   */
   constructor(private elementRef: ElementRef, private router: Router) {
   }
 

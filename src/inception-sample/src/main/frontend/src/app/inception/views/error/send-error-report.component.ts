@@ -61,8 +61,7 @@ export class SendErrorReportComponent implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private layoutService: SpinnerService) {
-
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     this.errorForm = this.formBuilder.group({
       // tslint:disable-next-line
       message: [''],
@@ -95,12 +94,12 @@ export class SendErrorReportComponent implements OnInit {
 
     if (this.errorForm.valid) {
 
-      // this.layoutService.showSpinner();
+      // this.spinnerService.showSpinner();
       //
       // this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
       //   first()).subscribe(session => {
       //
-      //   this.layoutService.hideSpinner();
+      //   this.spinnerService.hideSpinner();
       //
       //   if (session.organizations.length == 1) {
       //     this.router.navigate(['/']);
@@ -110,7 +109,7 @@ export class SendErrorReportComponent implements OnInit {
       //   }
       // },(error: Error) => {
       //
-      //   this.layoutService.hideSpinner();
+      //   this.spinnerService.hideSpinner();
       //
       //   this.dialogService.showErrorDialog(error);
       // });

@@ -32,6 +32,11 @@ import {Replace} from '../../shared/index';
 })
 export class SidebarHeaderComponent implements OnInit {
 
+  /**
+   * Constructs a new SidebarHeaderComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {

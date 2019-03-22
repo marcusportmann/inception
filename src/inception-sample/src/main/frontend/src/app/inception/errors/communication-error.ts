@@ -16,6 +16,7 @@
 
 import {Error} from "./error";
 import {HttpErrorResponse} from "@angular/common/http";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
  * The CommunicationError class holds the information for a communication error.
@@ -42,12 +43,14 @@ export class CommunicationError extends Error {
   /**
    * Constructs a new CommunicationError.
    *
-   * @param httpErrorResponse The HTTP error response containing the error information.
+   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
+   *                                              information.
+   * @param {I18n} i18n                           The internationalization service.
    */
-  constructor(httpErrorResponse: HttpErrorResponse) {
+  constructor(private httpErrorResponse: HttpErrorResponse, private i18n: I18n) {
 
-    // TODO: INTERNATIONALIZE THIS MESSAGE -- MARCUS
-    super("A communication error occurred.", httpErrorResponse);
+    super(i18n({id: '@@communication_error_a_communication_error_occurred',
+      value: 'A communication error occurred.'}), httpErrorResponse);
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
@@ -69,8 +72,7 @@ export class CommunicationError extends Error {
       && (httpErrorResponse.error instanceof ProgressEvent)
       && (httpErrorResponse.error.type === 'error')) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }

@@ -26,6 +26,11 @@ import {Directive, ElementRef, AfterContentInit} from '@angular/core';
 })
 export class AutofocusDirective implements AfterContentInit {
 
+  /**
+   * Constructs a new AutofocusDirective.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) {
   }
 

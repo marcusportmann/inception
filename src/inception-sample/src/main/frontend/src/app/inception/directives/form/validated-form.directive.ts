@@ -38,7 +38,13 @@ import {
 })
 export class ValidatedFormDirective implements AfterViewInit {
 
-  constructor(private viewContainer: ViewContainerRef,
+  /**
+   * Constructs a new ValidatedFormDirective.
+   *
+   * @param {ViewContainerRef} viewContainerRef     The view container reference.
+   * @param {FormGroupDirective} formGroupDirective The form group directive.
+   */
+  constructor(private viewContainerRef: ViewContainerRef,
     @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
   }
 
@@ -49,20 +55,17 @@ export class ValidatedFormDirective implements AfterViewInit {
   }
 
   onSubmit($event: Event): boolean {
-
     // Mark all controls as touched
     if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
-
       let form = this.formGroupDirective.control;
 
       for (let controlName in form.controls) {
-
         form.controls[controlName].markAsTouched();
       }
     }
 
     // Find the first invalid form control and set focus to it
-    if (this.checkForInvalidFormControlAndSetFocus(this.viewContainer.element.nativeElement)) {
+    if (this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement)) {
       return false;
     }
 
@@ -70,20 +73,15 @@ export class ValidatedFormDirective implements AfterViewInit {
   }
 
   private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
-
     if (nativeElement.children && (nativeElement.children.length > 0)) {
       for (let i = 0; i < nativeElement.children.length; i++) {
-
         let nativeChildElement = nativeElement.children[i];
 
         if (nativeChildElement && nativeChildElement.nodeName && this.isFormElement(nativeChildElement.nodeName)) {
-
           if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
-
             let formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
 
             if (formControl && formControl.invalid) {
-
               nativeChildElement.focus();
 
               return true;
@@ -101,7 +99,6 @@ export class ValidatedFormDirective implements AfterViewInit {
   }
 
   private isFormElement(nodeName: string): boolean {
-
     switch(nodeName) {
       case 'INPUT': {
         return true;

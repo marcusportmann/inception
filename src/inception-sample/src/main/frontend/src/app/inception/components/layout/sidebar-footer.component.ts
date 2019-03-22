@@ -31,6 +31,11 @@ import {Replace} from '../../shared/index';
 })
 export class SidebarFooterComponent implements OnInit {
 
+  /**
+   * Constructs a new SidebarFooterComponent.
+   *
+   * @param {ElementRef} elementRef The element reference.
+   */
   constructor(private elementRef: ElementRef) { }
 
   ngOnInit(): void {

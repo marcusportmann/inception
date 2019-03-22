@@ -46,17 +46,18 @@ export class SidebarComponent implements OnInit {
 
   @HostBinding('class.sidebar') true;
 
+  /**
+   * Constructs a new SidebarComponent.
+   */
   constructor() {
   }
 
   ngOnInit(): void {
-
     if (this.display !== false) {
       let cssClass;
       this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
       document.querySelector('body').classList.add(cssClass);
     }
-
 
     if (this.compact) {
       document.querySelector('body').classList.add('sidebar-compact');

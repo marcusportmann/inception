@@ -31,6 +31,7 @@ export class ErrorService {
    * Constructs a new ErrorService.
    */
   constructor() {
+    console.log('Initializing the Error Service');
   }
 
   /**

@@ -58,11 +58,18 @@ import titleContains = until.titleContains;
 })
 export class BreadcrumbsComponent implements OnInit {
 
+  breadcrumbs: Observable<Array<Object>>;
+
   @Input()
   fixed: boolean;
 
-  breadcrumbs;
-
+  /**
+   * Constructs a new BreadcrumbsComponent.
+   *
+   * @param {ElementRef} elementRef                 The element reference.
+   * @param {BreadcrumbsService} breadcrumbsService The Breadcrumbs Service.
+   * @param {TitleService} titleService             The Title Service.
+   */
   constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private titleService: TitleService) { }
 
   /**
