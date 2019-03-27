@@ -49,7 +49,12 @@ export class NavigationService {
     ).subscribe();
   }
 
-  setNavigation(navigation: NavigationItem[]) {
+  /**
+   * Initialize the navigation.
+   *
+   * @param {NavigationItem[]} navigation The navigation.
+   */
+  initNavigation(navigation: NavigationItem[]) {
     this.navigation = navigation;
     this.userNavigation.next(this.filterNavigationItems(navigation, null));
   }

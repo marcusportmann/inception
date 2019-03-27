@@ -66,12 +66,11 @@ export class SendErrorReportComponent implements OnInit {
       // tslint:disable-next-line
       message: [''],
       email: ['', Validators.email],
-      description: ['']
+      feedback: ['']
     });
   }
 
   ngOnInit(): void {
-
     this.activatedRoute.paramMap.pipe(first(),
       map((state: any) => window.history.state))   .subscribe((state: any) => {
 
@@ -79,14 +78,12 @@ export class SendErrorReportComponent implements OnInit {
           this.error = state.error;
 
           this.errorForm.get('message').setValue(this.error.message);
-
         } else {
 
           console.log('No error found, redirecting to the application root')
 
           this.router.navigate(['/']);
         }
-
     });
   }
 

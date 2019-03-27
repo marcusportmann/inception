@@ -35,7 +35,7 @@ export abstract class InceptionAppModule {
     const navigationService: NavigationService = InceptionInjector.get(NavigationService);
 
     if (navigationService) {
-      navigationService.setNavigation(this.initNavigation());
+      navigationService.initNavigation(this.initNavigation());
     }
     else {
       console.error('Failed to initialise the Navigation Service');

@@ -24,6 +24,10 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-error</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-security</artifactId>
     </dependency>
 

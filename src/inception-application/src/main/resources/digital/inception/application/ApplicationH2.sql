@@ -38,10 +38,10 @@ COMMENT ON COLUMN service_registry.service_registry.wsdl_location
 IS 'The location of the WSDL defining the web service on the classpath';
 
 COMMENT ON COLUMN service_registry.service_registry.username
-IS 'The username to use when accessing a web service with username-password security enabled';
+IS 'The username to use created accessing a web service with username-password security enabled';
 
 COMMENT ON COLUMN service_registry.service_registry.password
-IS 'The password to use when accessing a web service with username-password security enabled';
+IS 'The password to use created accessing a web service with username-password security enabled';
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

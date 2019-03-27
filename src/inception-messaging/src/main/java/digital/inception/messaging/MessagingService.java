@@ -27,8 +27,10 @@ import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import digital.inception.messaging.handler.IMessageHandler;
 import digital.inception.messaging.handler.MessageHandlerConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,26 +39,37 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+
+import java.lang.reflect.Constructor;
+
+import java.net.URL;
+
+import java.security.MessageDigest;
+
+import java.sql.*;
+
+import java.time.LocalDateTime;
+
+import java.util.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
 import javax.sql.DataSource;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.*;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service
@@ -84,8 +97,18 @@ public class MessagingService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
 
-  /* The name of the Messaging Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
+
+  /**
+   * The data source used to provide connections to the database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
    * The base64 encoded AES encryption master key used to derive the device/user encryption keys.
@@ -98,11 +121,8 @@ public class MessagingService
    */
   private byte[] encryptionMasterKey;
 
-  /**
-   * The delay in milliseconds to wait before re-attempting to process a message.
-   */
-  @Value("${application.messaging.processingRetryDelay:#{60000}}")
-  private int processingRetryDelay;
+  /* The name of the Messaging Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
 
   /**
    * The maximum number of times processing will be attempted for a message.
@@ -122,17 +142,10 @@ public class MessagingService
   private List<MessageHandlerConfig> messageHandlersConfig;
 
   /**
-   * The Spring application context.
+   * The delay in milliseconds to wait before re-attempting to process a message.
    */
-  @Autowired
-  private ApplicationContext applicationContext;
-
-  /**
-   * The data source used to provide connections to the database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+  @Value("${application.messaging.processingRetryDelay:#{60000}}")
+  private int processingRetryDelay;
 
   /**
    * Initialize the Messaging Service.
@@ -268,69 +281,6 @@ public class MessagingService
   public boolean canQueueMessagePartForAssembly(MessagePart messagePart)
   {
     return messageHandlers.containsKey(messagePart.getMessageTypeId());
-  }
-
-  /**
-   * Create the error report.
-   *
-   * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
-   */
-  @Override
-  public void createErrorReport(ErrorReport errorReport)
-    throws MessagingServiceException
-  {
-    String createErrorReportSQL = "INSERT INTO messaging.error_reports (id, application_id, "
-        + "application_version, description, detail, feedback, created, who, device_id, data) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createErrorReportSQL))
-    {
-      String description = errorReport.getDescription();
-
-      if (description.length() > 2048)
-      {
-        description = description.substring(0, 2048);
-      }
-
-      String detail = errorReport.getDetail();
-
-      if (detail.length() > 16384)
-      {
-        detail = detail.substring(0, 16384);
-      }
-
-      String feedback = errorReport.getFeedback();
-
-      if (feedback.length() > 4000)
-      {
-        feedback = feedback.substring(0, 4000);
-      }
-
-      statement.setObject(1, errorReport.getId());
-      statement.setObject(2, errorReport.getApplicationId());
-      statement.setInt(3, errorReport.getApplicationVersion());
-      statement.setString(4, description);
-      statement.setString(5, detail);
-      statement.setString(6, feedback);
-      statement.setTimestamp(7, Timestamp.valueOf(errorReport.getCreated()));
-      statement.setString(8, errorReport.getWho());
-      statement.setObject(9, errorReport.getDeviceId());
-      statement.setBytes(10, errorReport.getData());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createErrorReportSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(String.format("Failed to create the error report (%s)",
-          errorReport.getId()), e);
-    }
   }
 
   /**
@@ -699,86 +649,6 @@ public class MessagingService
   }
 
   /**
-   * Retrieve the error report.
-   *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
-   * @return the error report or <code>null</code> if the error report could not be found
-   */
-  @Override
-  public ErrorReport getErrorReport(UUID errorReportId)
-    throws MessagingServiceException
-  {
-    String getErrorReportSQL = "SELECT id, application_id, application_version, "
-        + "description, detail, feedback, created, who, device_id, data "
-        + "FROM messaging.error_reports WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getErrorReportSQL))
-    {
-      statement.setObject(1, errorReportId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return buildErrorReportFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(String.format("Failed to retrieve the error report (%s)",
-          errorReportId), e);
-    }
-  }
-
-  /**
-   * Retrieve the summary for the error report.
-   *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
-   * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
-   */
-  public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-    throws MessagingServiceException
-  {
-    String getErrorReportSummarySQL =
-        "SELECT id, application_id, application_version, created, who, device_id "
-        + "FROM messaging.error_reports WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getErrorReportSummarySQL))
-    {
-      statement.setObject(1, errorReportId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return buildErrorReportSummaryFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(String.format(
-          "Failed to retrieve the summary for the error report (%s)", errorReportId), e);
-    }
-  }
-
-  /**
    * Returns the maximum number of times processing will be attempted for a message.
    *
    * @return the maximum number of times processing will be attempted for a message
@@ -1134,46 +1004,6 @@ public class MessagingService
   }
 
   /**
-   * Retrieve the summaries for the most recent error reports.
-   *
-   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error
-   *                               reports to retrieve
-   *
-   * @return the summaries for the most recent error reports
-   */
-  @Override
-  public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-    throws MessagingServiceException
-  {
-    String getMostRecentErrorReportSummariesSQL =
-        "SELECT id, application_id, application_version, created, who, device_id "
-        + "FROM messaging.error_reports ";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(String.format(
-          "%s ORDER BY created DESC FETCH FIRST %d ROWS ONLY",
-          getMostRecentErrorReportSummariesSQL, maximumNumberOfEntries)))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<ErrorReportSummary> errorReportSummaries = new ArrayList<>();
-
-        while (rs.next())
-        {
-          errorReportSummaries.add(buildErrorReportSummaryFromResultSet(rs));
-        }
-
-        return errorReportSummaries;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(
-          "Failed to retrieve the summaries for the most recent error reports", e);
-    }
-  }
-
-  /**
    * Retrieve the next message that has been queued for processing.
    * <p/>
    * The message will be locked to prevent duplicate processing.
@@ -1245,39 +1075,6 @@ public class MessagingService
     {
       throw new MessagingServiceException(
           "Failed to retrieve the next message that has been queued for processing", e);
-    }
-  }
-
-  /**
-   * Returns the total number of error reports.
-   *
-   * @return the total number of error reports
-   */
-  @Override
-  public int getNumberOfErrorReports()
-    throws MessagingServiceException
-  {
-    String getNumberOfErrorReportsSQL = "SELECT COUNT(id) FROM messaging.error_reports";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfErrorReportsSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException("Failed to retrieve the total number of error reports",
-          e);
     }
   }
 
@@ -1991,27 +1788,6 @@ public class MessagingService
           "Failed to unlock and set the status for the message part (%s) to (%s)", messagePartId,
           status.toString()), e);
     }
-  }
-
-  private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    byte[] data = rs.getBytes(10);
-
-    return new ErrorReport(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)),
-        rs.getInt(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getTimestamp(7)
-        .toLocalDateTime(), rs.getString(8), UUID.fromString(rs.getString(9)),
-        (data == null)
-        ? new byte[0]
-        : data);
-  }
-
-  private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new ErrorReportSummary(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(
-        2)), rs.getInt(3), rs.getTimestamp(4).toLocalDateTime(), rs.getString(5), UUID.fromString(
-        rs.getString(6)));
   }
 
   private Message buildMessageFromResultSet(ResultSet rs)

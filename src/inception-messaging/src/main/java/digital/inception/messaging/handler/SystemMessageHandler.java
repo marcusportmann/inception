@@ -24,7 +24,8 @@ import digital.inception.codes.CodeCategoryNotFoundException;
 import digital.inception.codes.ICodesService;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.ExceptionUtil;
-import digital.inception.messaging.ErrorReport;
+import digital.inception.error.ErrorReport;
+import digital.inception.error.IErrorService;
 import digital.inception.messaging.IMessagingService;
 import digital.inception.messaging.Message;
 import digital.inception.messaging.MessageTranslator;
@@ -33,15 +34,17 @@ import digital.inception.security.AuthenticationFailedException;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.Organization;
 import digital.inception.security.UserNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -58,6 +61,10 @@ public class SystemMessageHandler extends MessageHandler
   /* Codes Service */
   @Autowired
   private ICodesService codesService;
+
+  /* Error Service */
+  @Autowired
+  private IErrorService errorService;
 
   /* Messaging Service */
   @Autowired
@@ -352,11 +359,11 @@ public class SystemMessageHandler extends MessageHandler
 
       ErrorReport errorReport = new ErrorReport(requestData.getId(),
           requestData.getApplicationId(), requestData.getApplicationVersion(),
-          requestData.getDescription(), requestData.getDetail(), requestData.getFeedback(),
-          requestData.getWhen(), requestData.getWho(), requestData.getDeviceId(),
+          requestData.getDescription(), requestData.getDetail(), requestData.getCreated(),
+          requestData.getWho(), requestData.getDeviceId(), requestData.getFeedback(),
           requestData.getData());
 
-      messagingService.createErrorReport(errorReport);
+      errorService.createErrorReport(errorReport);
 
       SubmitErrorReportResponseData responseData = new SubmitErrorReportResponseData(0,
           SubmitErrorReportResponseData.ERROR_MESSAGE_SUCCESS, requestData.getId());

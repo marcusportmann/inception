@@ -72,14 +72,6 @@ public interface IMessagingService
    */
   boolean canQueueMessagePartForAssembly(MessagePart messagePart);
 
-  /**
-   * Create the entry for the error report in the database.
-   *
-   * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
-   */
-  void createErrorReport(ErrorReport errorReport)
-    throws MessagingServiceException;
 
   /**
    * Create the message.
@@ -164,28 +156,7 @@ public interface IMessagingService
   boolean encryptMessage(Message message)
     throws MessagingServiceException;
 
-  /**
-   * Retrieve the error report.
-   *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
-   * @return the error report or <code>null</code> if the error report could not be found
-   */
-  ErrorReport getErrorReport(UUID errorReportId)
-    throws MessagingServiceException;
 
-  /**
-   * Retrieve the summary for the error report.
-   *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
-   * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
-   */
-  ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-    throws MessagingServiceException;
 
   /**
    * Returns the maximum number of times processing will be attempted for a message.
@@ -242,17 +213,6 @@ public interface IMessagingService
     throws MessagingServiceException;
 
   /**
-   * Retrieve the summaries for the most recent error reports.
-   *
-   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error
-   *                               reports to retrieve
-   *
-   * @return the summaries for the most recent error reports
-   */
-  List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-    throws MessagingServiceException;
-
-  /**
    * Retrieve the next message that has been queued for processing.
    * <p/>
    * The message will be locked to prevent duplicate processing.
@@ -263,13 +223,6 @@ public interface IMessagingService
   Message getNextMessageQueuedForProcessing()
     throws MessagingServiceException;
 
-  /**
-   * Returns the total number of error reports.
-   *
-   * @return the total number of error reports
-   */
-  int getNumberOfErrorReports()
-    throws MessagingServiceException;
 
   /**
    * Increment the processing attempts for the message.

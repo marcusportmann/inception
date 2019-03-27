@@ -280,6 +280,14 @@ public class TestConfiguration
 
     try
     {
+      Class.forName("digital.inception.error.ErrorService");
+
+      resources.add("digital/inception/error/inception-error-h2.sql");
+    }
+    catch (ClassNotFoundException ignored) {}
+
+    try
+    {
       Class.forName("digital.inception.messaging.MessagingService");
 
       resources.add("digital/inception/messaging/inception-messaging-h2.sql");

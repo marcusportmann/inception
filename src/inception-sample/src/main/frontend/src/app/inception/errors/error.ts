@@ -15,6 +15,8 @@
  */
 
 import {ApiError} from "./api-error";
+import {HttpErrorResponse} from "@angular/common/http";
+import {HttpError} from "./http-error";
 
 /**
  * The Error class provides the base class that all error classes should be derived from.
@@ -53,7 +55,27 @@ export class Error {
     }
 
     this.message = message;
-    this.cause = cause;
+
+    if (cause instanceof HttpErrorResponse) {
+
+      let httpErrorResponse: HttpErrorResponse = (<HttpErrorResponse>cause);
+
+      if (httpErrorResponse.error) {
+        this.cause = new HttpError(
+          httpErrorResponse.error.error ? httpErrorResponse.error.error : '' ,
+          httpErrorResponse.error.error_description ? httpErrorResponse.error.error_description : '' ,
+          httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
+          httpErrorResponse.url);
+      }
+      else {
+        this.cause = new HttpError('','',
+          httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
+          httpErrorResponse.url);
+      }
+    }
+    else {
+      this.cause = cause;
+    }
   }
 }
 

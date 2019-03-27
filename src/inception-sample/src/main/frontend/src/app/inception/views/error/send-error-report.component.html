@@ -13,13 +13,13 @@
             <p class="mat-error">
               {{error.message}}
             </p>
-            <p i18n="@@send_error_component_provide_step_by_step_description">
-              Please provide a step-by-step description of what you were doing when the problem occurred.
+            <p i18n="@@send_error_component_provide_feedback">
+              Please provide a description of what you were doing created the problem occurred.
             </p>
             <div class="row">
               <div class="col">
                 <mat-form-field>
-                  <mat-label i18n="@@send_error_component_label_email">E-mail address</mat-label>
+                  <mat-label i18n="@@send_error_component_label_email_address">E-mail address</mat-label>
                   <input type="text" matInput formControlName="email">
                   <mat-error *ngIf="errorForm.controls['email'].errors && !errorForm.controls['email'].untouched">
                     <span *ngIf="errorForm.controls['email'].errors?.email" i18n="@@send_error_component_error_email_invalid">A valid e-mail address is required.</span>
@@ -30,8 +30,8 @@
             <div class="row">
               <div class="col">
                 <mat-form-field>
-                  <mat-label>Problem description</mat-label>
-                  <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"></textarea>
+                  <mat-label i18n="@@send_error_component_label_feedback">Feedback</mat-label>
+                  <textarea matInput formControlName="feedback" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"></textarea>
                 </mat-form-field>
               </div>
             </div>

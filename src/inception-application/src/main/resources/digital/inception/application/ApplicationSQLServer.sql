@@ -1,12 +1,12 @@
 -- -------------------------------------------------------------------------------------------------
 -- DROP TABLES
 -- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"ERROR"."ERROR_REPORTS"', 'U') IS NOT NULL
+  DROP TABLE "ERROR"."ERROR_REPORTS";
 IF OBJECT_ID('"SMS"."SMS"', 'U') IS NOT NULL
   DROP TABLE "SMS"."SMS";
 IF OBJECT_ID('"REPORTING"."REPORT_DEFINITIONS"', 'U') IS NOT NULL
   DROP TABLE "REPORTING"."REPORT_DEFINITIONS";
-IF OBJECT_ID('"MESSAGING"."ERROR_REPORTS"', 'U') IS NOT NULL
-  DROP TABLE "MESSAGING"."ERROR_REPORTS";
 IF OBJECT_ID('"MESSAGING"."ARCHIVED_MESSAGES"', 'U') IS NOT NULL
   DROP TABLE "MESSAGING"."ARCHIVED_MESSAGES";
 IF OBJECT_ID('"MESSAGING"."MESSAGE_PARTS"', 'U') IS NOT NULL
@@ -105,6 +105,10 @@ END;
 IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SMS')
 BEGIN
     EXEC('CREATE SCHEMA SMS')
+END;
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SMS')
+BEGIN
+    EXEC('CREATE SCHEMA ERROR')
 END;
 IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'TEST')
 BEGIN
@@ -559,76 +563,6 @@ GO
 
 
 
-CREATE TABLE "MESSAGING"."ERROR_REPORTS" (
-  ID                   UNIQUEIDENTIFIER NOT NULL,
-  APPLICATION_ID       UNIQUEIDENTIFIER NOT NULL,
-  APPLICATION_VERSION  INTEGER NOT NULL,
-  DESCRIPTION          NVARCHAR(MAX) NOT NULL,
-  DETAIL               NVARCHAR(MAX) NOT NULL,
-  FEEDBACK             NVARCHAR(MAX) NOT NULL,
-  CREATED              DATETIME NOT NULL,
-  WHO                  NVARCHAR(256) NOT NULL,
-  DEVICE_ID            UNIQUEIDENTIFIER NOT NULL,
-  DATA                 VARBINARY(MAX),
-
-  PRIMARY KEY (ID)
-);
-
-CREATE INDEX ERROR_REPORTS_APPLICATION_ID_IX
-  ON "MESSAGING"."ERROR_REPORTS"
-  (APPLICATION_ID);
-
-CREATE INDEX ERROR_REPORTS_CREATED_IX
-  ON "MESSAGING"."ERROR_REPORTS"
-  (CREATED);
-
-CREATE INDEX ERROR_REPORTS_WHO_IX
-  ON "MESSAGING"."ERROR_REPORTS"
-  (WHO);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the error report' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the application that generated the error report' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The version of the application that generated the error report' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_VERSION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The description of the error' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The error detail e.g. a stack trace' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DETAIL';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The feedback provided by the user for the error' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'FEEDBACK';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the error report was created' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'CREATED';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The username identifying the user associated with the error report' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'WHO';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The data associated with the error report' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DATA';
-GO
-
-
-
 CREATE TABLE "REPORTING"."REPORT_DEFINITIONS" (
   ID        UNIQUEIDENTIFIER NOT NULL,
   NAME      NVARCHAR(256) NOT NULL,
@@ -705,7 +639,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'LAST_EXECUTED';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time when the job will next be executed' ,
+@name=N'MS_Description', @value=N'The date and time created the job will next be executed' ,
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'NEXT_EXECUTION';
 
 EXEC sys.sp_addextendedproperty
@@ -1347,11 +1281,11 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'WSDL_LOCATION';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The username to use when accessing a web service with username-password security enabled' ,
+@name=N'MS_Description', @value=N'The username to use created accessing a web service with username-password security enabled' ,
 @level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The password to use when accessing a web service with username-password security enabled' ,
+@name=N'MS_Description', @value=N'The password to use created accessing a web service with username-password security enabled' ,
 @level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'PASSWORD';
 GO
 
@@ -1400,6 +1334,76 @@ EXEC sys.sp_addextendedproperty
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the last attempt was made to send the SMS' ,
 @level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'LAST_PROCESSED';
+GO
+
+
+
+CREATE TABLE "ERROR"."ERROR_REPORTS" (
+  ID                   UNIQUEIDENTIFIER NOT NULL,
+  APPLICATION_ID       NVARCHAR(100) NOT NULL,
+  APPLICATION_VERSION  NVARCHAR(50) NOT NULL,
+  DESCRIPTION          NVARCHAR(4000) NOT NULL,
+  DETAIL               NVARCHAR(4000) NOT NULL,
+  CREATED              DATETIME NOT NULL,
+  WHO                  NVARCHAR(1000),
+  DEVICE_ID            NVARCHAR(50),
+  FEEDBACK             NVARCHAR(4000),
+  DATA                 VARBINARY(MAX),
+
+  PRIMARY KEY (ID)
+);
+
+CREATE INDEX ERROR_REPORTS_APPLICATION_ID_IX
+  ON "ERROR"."ERROR_REPORTS"
+    (APPLICATION_ID);
+
+CREATE INDEX ERROR_REPORTS_CREATED_IX
+  ON "ERROR"."ERROR_REPORTS"
+    (CREATED);
+
+CREATE INDEX ERROR_REPORTS_WHO_IX
+  ON "ERROR"."ERROR_REPORTS"
+    (WHO);
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the application that generated the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The version of the application that generated the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_VERSION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The description of the error' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The error detail e.g. a stack trace' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DETAIL';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The date and time the error report was created' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'CREATED';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional username identifying the user associated with the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'WHO';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional ID used to uniquely identify the device the error report originated from' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional feedback provided by the user for the error' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'FEEDBACK';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional data associated with the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DATA';
 GO
 
 

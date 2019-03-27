@@ -50,7 +50,7 @@ COMMENT ON COLUMN scheduler.jobs.last_executed
 IS 'The date and time the job was last executed';
 
 COMMENT ON COLUMN scheduler.jobs.next_execution
-IS 'The date and time when the job will next be executed';
+IS 'The date and time created the job will next be executed';
 
 COMMENT ON COLUMN scheduler.jobs.updated
 IS 'The date and time the job was updated';

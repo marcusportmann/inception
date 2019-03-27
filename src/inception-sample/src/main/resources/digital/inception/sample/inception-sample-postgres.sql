@@ -609,7 +609,7 @@ COMMENT ON COLUMN scheduler.jobs.last_executed
 IS 'The date and time the job was last executed';
 
 COMMENT ON COLUMN scheduler.jobs.next_execution
-IS 'The date and time when the job will next be executed';
+IS 'The date and time created the job will next be executed';
 
 COMMENT ON COLUMN scheduler.jobs.updated
 IS 'The date and time the job was updated';
@@ -1036,10 +1036,10 @@ COMMENT ON COLUMN service_registry.service_registry.wsdl_location
 IS 'The location of the WSDL defining the web service on the classpath';
 
 COMMENT ON COLUMN service_registry.service_registry.username
-IS 'The username to use when accessing a web service with username-password security enabled';
+IS 'The username to use created accessing a web service with username-password security enabled';
 
 COMMENT ON COLUMN service_registry.service_registry.password
-IS 'The password to use when accessing a web service with username-password security enabled';
+IS 'The password to use created accessing a web service with username-password security enabled';
 
 
 CREATE TABLE sms.sms (

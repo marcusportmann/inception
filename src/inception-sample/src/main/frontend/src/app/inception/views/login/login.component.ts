@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, ViewContainerRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {FormGroup, Validators, FormBuilder} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
@@ -143,11 +143,10 @@ export class LoginComponent {
 
           if ((error instanceof SessionServiceError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          }
-          else {
+          } else {
             this.dialogService.showErrorDialog(error);
           }
-      });
+        });
     }
   }
 }
