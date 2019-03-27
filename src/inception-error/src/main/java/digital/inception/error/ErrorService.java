@@ -18,6 +18,7 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -45,18 +46,9 @@ public class ErrorService
   /**
    * The data source used to provide connections to the database.
    */
-  private DataSource dataSource;
-
-  /**
-   * Constructs a new <code>ErrorService</code>.
-   *
-   * @param dataSource data source used to provide connections to the database
-   */
   @Autowired
-  public ErrorService(@Qualifier("applicationDataSource") DataSource dataSource)
-  {
-    this.dataSource = dataSource;
-  }
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
 
   /**
    * Create the error report.
@@ -82,7 +74,7 @@ public class ErrorService
         description = description.substring(0, 4000);
       }
 
-      String detail = errorReport.getDetail();
+      String detail = StringUtil.notNull(errorReport.getDetail());
 
       if (detail.length() > 4000)
       {
@@ -91,21 +83,21 @@ public class ErrorService
 
       String who = errorReport.getWho();
 
-      if (who.length() > 1000)
+      if ((who != null) && (who.length() > 1000))
       {
         who = who.substring(0, 1000);
       }
 
       String deviceId = errorReport.getDeviceId();
 
-      if (deviceId.length() > 50)
+      if ((deviceId != null) && (deviceId.length() > 50))
       {
         deviceId = deviceId.substring(0, 50);
       }
 
       String feedback = errorReport.getFeedback();
 
-      if (feedback.length() > 4000)
+      if ((feedback != null) && (feedback.length() > 4000))
       {
         feedback = feedback.substring(0, 4000);
       }
@@ -115,11 +107,44 @@ public class ErrorService
       statement.setString(3, errorReport.getApplicationVersion());
       statement.setString(4, description);
       statement.setString(5, detail);
+
       statement.setTimestamp(6, Timestamp.valueOf(errorReport.getCreated()));
-      statement.setString(7, who);
-      statement.setObject(8, deviceId);
-      statement.setString(9, feedback);
-      statement.setBytes(10, errorReport.getData());
+
+      if (who != null)
+      {
+        statement.setString(7, who);
+      }
+      else
+      {
+        statement.setNull(7, Types.VARCHAR);
+      }
+
+      if (deviceId != null)
+      {
+        statement.setObject(8, deviceId);
+      }
+      else
+      {
+        statement.setNull(8, Types.VARCHAR);
+      }
+
+      if (feedback != null)
+      {
+        statement.setString(9, feedback);
+      }
+      else
+      {
+        statement.setNull(9, Types.VARCHAR);
+      }
+
+      if (errorReport.getData() !=  null)
+      {
+        statement.setBytes(10, errorReport.getData());
+      }
+      else
+      {
+        statement.setNull(10, Types.BLOB);
+      }
 
       if (statement.executeUpdate() != 1)
       {

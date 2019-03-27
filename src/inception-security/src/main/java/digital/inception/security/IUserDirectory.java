@@ -73,7 +73,7 @@ interface IUserDirectory
         ExistingPasswordException, SecurityServiceException;
 
   /**
-   * Create a new security group.
+   * Create the new security group.
    *
    * @param group the security group
    */
@@ -81,7 +81,7 @@ interface IUserDirectory
     throws DuplicateGroupException, SecurityServiceException;
 
   /**
-   * Create a new user.
+   * Create the new user.
    *
    * @param user            the user
    * @param expiredPassword create the user with its password expired

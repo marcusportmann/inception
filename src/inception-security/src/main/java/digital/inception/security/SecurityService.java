@@ -201,11 +201,6 @@ public class SecurityService
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
-    if (true)
-    {
-      throw new SecurityServiceException("Testing 1.. 2.. 3..");
-    }
-
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
@@ -343,7 +338,7 @@ public class SecurityService
   }
 
   /**
-   * Create a new authorised function.
+   * Create the new authorised function.
    *
    * @param function the function
    */
@@ -387,7 +382,7 @@ public class SecurityService
   }
 
   /**
-   * Create a new security group.
+   * Create the new security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
@@ -408,7 +403,7 @@ public class SecurityService
   }
 
   /**
-   * Create a new organization.
+   * Create the new organization.
    *
    * @param organization        the organization
    * @param createUserDirectory should a new internal user directory be created for the organization
@@ -534,7 +529,7 @@ public class SecurityService
   }
 
   /**
-   * Create a new user.
+   * Create the new user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
@@ -558,7 +553,7 @@ public class SecurityService
   }
 
   /**
-   * Create a new user directory.
+   * Create the new user directory.
    *
    * @param userDirectory the user directory
    */

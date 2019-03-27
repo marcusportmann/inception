@@ -20,6 +20,7 @@ package digital.inception.sample;
 
 import digital.inception.application.Application;
 import digital.inception.codes.CodesWebService;
+import digital.inception.error.ErrorWebService;
 import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.reporting.IReportingService;
@@ -100,20 +101,6 @@ public class SampleApplication extends Application
   public void afterPropertiesSet()
     throws Exception
   {
-    try
-    {
-      byte[] cxfXml = ResourceUtil.getClasspathResource("/cxf.xml");
-
-      int xxx = 0;
-      xxx++;
-    }
-    catch (Throwable e)
-    {
-      int xxx = 0;
-      xxx++;
-
-    }
-
     try
     {
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
@@ -216,6 +203,17 @@ public class SampleApplication extends Application
   }
 
   /**
+   * Returns the Spring bean for the Error Service web service.
+   *
+   * @return the Spring bean for the Error Service web service
+   */
+  @Bean
+  protected Endpoint errorWebService()
+  {
+    return createWebServiceEndpoint("ErrorService", new ErrorWebService());
+  }
+
+  /**
    * Returns the Spring bean for the Reporting Service web service.
    *
    * @return the Spring bean for the Reporting Service web service
@@ -237,33 +235,4 @@ public class SampleApplication extends Application
   {
     return createWebServiceEndpoint("SampleService", sampleServiceController);
   }
-
-///**
-// * Setup the navigation hierarchy for the application.
-// *
-// * @param root the root of the navigation hierarchy
-// */
-//@Override
-//protected void initNavigation(NavigationGroup root)
-//{
-//  root.addItem(new NavigationLink("Home", "fa fa-home", HomePage.class));
-//  root.addItem(new NavigationLink("Dashboard", "fa fa-home", DashboardPage.class));
-//
-//  NavigationGroup dialogsGroup = new NavigationGroup("Dialogs", "fa fa-window-restore");
-//
-//  dialogsGroup.addItem(new NavigationLink("Test Extensible Dialog",
-//      TestExtensibleDialogImplementationPage.class));
-//  dialogsGroup.addItem(new NavigationLink("Test Extensible Form Dialog",
-//      TestExtensibleFormDialogImplementationPage.class));
-//
-//  root.addItem(dialogsGroup);
-//
-//  NavigationGroup formsGroup = new NavigationGroup("Forms", "fa fa-pencil-square-o");
-//
-//  formsGroup.addItem(new NavigationLink("Test Form", TestFormPage.class));
-//
-//  root.addItem(formsGroup);
-//
-//  super.initNavigation(root);
-//}
 }

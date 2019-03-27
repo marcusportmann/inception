@@ -65,7 +65,7 @@ public class ReportingWebService
   private DataSource dataSource;
 
   /**
-   * Create a report definition.
+   * Create the report definition.
    *
    * @param reportDefinition the report definition to create
    */

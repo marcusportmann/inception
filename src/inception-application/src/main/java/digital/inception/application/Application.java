@@ -440,15 +440,13 @@ public abstract class Application extends ApplicationBase
     }
     catch (ClassNotFoundException ignored) {}
 
-
     try
     {
-      Class.forName("digital.inception.sms.SMSService");
+      Class.forName("digital.inception.error.ErrorService");
 
-      resources.add("digital/inception/sms/inception-sms-h2.sql");
+      resources.add("digital/inception/error/inception-error-h2.sql");
     }
     catch (ClassNotFoundException ignored) {}
-
 
     try
     {

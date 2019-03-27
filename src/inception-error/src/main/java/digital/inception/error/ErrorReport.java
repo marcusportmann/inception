@@ -95,7 +95,7 @@ public class ErrorReport
   private LocalDateTime created;
 
   /**
-   * The data associated with the error report e.g. the application XML.
+   * The data associated with the error report.
    */
   @ApiModelProperty(value = "The data associated with the error report")
   @JsonProperty
@@ -113,7 +113,7 @@ public class ErrorReport
   private String description;
 
   /**
-   * The error detail e.g. a stack trace.
+   * The error detail.
    */
   @ApiModelProperty(value = "The error detail")
   @JsonProperty
@@ -173,7 +173,7 @@ public class ErrorReport
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description        the description of the error
-   * @param detail             the error detail e.g. a stack trace
+   * @param detail             the error detail
    * @param created               the date and time the error report was created
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
@@ -196,15 +196,14 @@ public class ErrorReport
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description        the description of the error
-   * @param detail             the error detail e.g. a stack trace
-   * @param created               the date and time the error report was created
+   * @param detail             the error detail
+   * @param created            the date and time the error report was created
    * @param who                the optional username identifying the user associated with the error
    *                           report
    * @param deviceId           the optional ID used to uniquely identify the device the error report
    *                           originated from
    * @param feedback           the optional feedback provided by the user for the error
-   * @param data               the optional data associated with the error report e.g. the
-   *                           application XML
+   * @param data               the optional data associated with the error report
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
       String detail, LocalDateTime created, String who, String deviceId, String feedback,
@@ -253,9 +252,9 @@ public class ErrorReport
   }
 
   /**
-   * Returns the optional data associated with the error report e.g. the application XML.
+   * Returns the optional data associated with the error report.
    *
-   * @return the optional data associated with the error report e.g. the application XML
+   * @return the optional data associated with the error report
    */
   public byte[] getData()
   {
@@ -273,9 +272,9 @@ public class ErrorReport
   }
 
   /**
-   * Returns the error detail e.g. a stack trace.
+   * Returns the error detail.
    *
-   * @return the error detail e.g. a stack trace
+   * @return the error detail
    */
   public String getDetail()
   {
@@ -354,9 +353,9 @@ public class ErrorReport
   }
 
   /**
-   * Set the data associated with the error report e.g. the application XML.
+   * Set the data associated with the error report.
    *
-   * @param data the data associated with the error report e.g. the application XML
+   * @param data the data associated with the error report
    */
   public void setData(byte[] data)
   {
@@ -374,9 +373,9 @@ public class ErrorReport
   }
 
   /**
-   * Set the error detail e.g. a stack trace.
+   * Set the error detail.
    *
-   * @param detail the error detail e.g. a stack trace
+   * @param detail the error detail
    */
   public void setDetail(String detail)
   {

@@ -24,6 +24,8 @@ import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
+import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The EditCodeCategoryComponent class implements the edit code category component.
@@ -51,9 +53,26 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+    let codeCategoryId:string = this.activatedRoute.snapshot.paramMap.get('id');
 
-    this.editCodeCategoryForm.get('id').setValue(codeCategoryId);
+    this.spinnerService.showSpinner();
+
+    this.codesService.getCodeCategory(codeCategoryId).pipe(first()).subscribe((codeCategory: CodeCategory) => {
+      this.spinnerService.hideSpinner();
+
+      this.editCodeCategoryForm.get('id').setValue(codeCategory.id);
+
+      this.editCodeCategoryForm.get('name').setValue(codeCategory.name);
+    }, (error: Error) => {
+      this.spinnerService.hideSpinner();
+
+      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+      }
+      else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   onCancel(): void {
@@ -70,11 +89,16 @@ export class EditCodeCategoryComponent implements OnInit {
       this.codesService.updateCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
         this.spinnerService.hideSpinner();
 
-        this.router.navigate(['../code-categories'], {relativeTo: this.activatedRoute});
+        this.router.navigate(['../../../../../code-categories'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        this.dialogService.showErrorDialog(error);
+        if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        }
+        else {
+          this.dialogService.showErrorDialog(error);
+        }
       });
     }
   }

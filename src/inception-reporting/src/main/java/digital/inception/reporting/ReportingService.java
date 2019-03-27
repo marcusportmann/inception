@@ -113,7 +113,7 @@ public class ReportingService
   }
 
   /**
-   * Create a PDF for the report using a connection retrieved from the application data source.
+   * Create the PDF for the report using a connection retrieved from the application data source.
    *
    * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the report definition
@@ -142,7 +142,7 @@ public class ReportingService
   }
 
   /**
-   * Create a PDF for the report.
+   * Create the PDF for the report.
    *
    * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the report definition
@@ -190,7 +190,7 @@ public class ReportingService
   }
 
   /**
-   * Create a PDF for the report.
+   * Create the PDF for the report.
    *
    * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
    *                           the report definition

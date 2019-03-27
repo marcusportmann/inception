@@ -63,7 +63,7 @@ public class CodesWebService
   private Validator validator;
 
   /**
-   * Create a code.
+   * Create the code.
    *
    * @param code the code to create
    */
@@ -90,7 +90,7 @@ public class CodesWebService
   }
 
   /**
-   * Create a code category.
+   * Create the code category.
    *
    * @param codeCategory the code category to create
    */
@@ -158,6 +158,36 @@ public class CodesWebService
   }
 
   /**
+   * Retrieve the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the code
+   *
+   * @return the code category
+   */
+  @WebMethod(operationName = "GetCode")
+  public Code getCode(@WebParam(name = "CodeCategoryId")
+  @XmlElement(required = true) String codeCategoryId, @WebParam(name = "CodeId")
+  @XmlElement(required = true) String codeId)
+    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
+  {
+    if (codeCategoryId == null)
+    {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (codeId == null)
+    {
+      throw new InvalidArgumentException("codeId");
+    }
+
+    return codesService.getCode(codeCategoryId, codeId);
+  }
+
+  /**
    * Retrieve the code categories.
    *
    * @return the code categories
@@ -168,6 +198,26 @@ public class CodesWebService
     throws CodesServiceException
   {
     return codesService.getCodeCategories();
+  }
+
+  /**
+   * Retrieve the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the code category
+   */
+  @WebMethod(operationName = "GetCodeCategory")
+  public CodeCategory getCodeCategory(@WebParam(name = "CodeCategoryId")
+  @XmlElement(required = true) String codeCategoryId)
+    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
+  {
+    if (codeCategoryId == null)
+    {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    return codesService.getCodeCategory(codeCategoryId);
   }
 
   /**

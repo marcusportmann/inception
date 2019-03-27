@@ -457,7 +457,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Create a new security group.
+   * Create the new security group.
    *
    * @param group the security group
    */
@@ -508,7 +508,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Create a new user.
+   * Create the new user.
    *
    * @param user            the user
    * @param expiredPassword create the user with its password expired

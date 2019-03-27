@@ -67,11 +67,11 @@ public class ReportingRestController
   private DataSource dataSource;
 
   /**
-   * Create a report definition.
+   * Create the report definition.
    *
    * @param reportDefinition the report definition to create
    */
-  @ApiOperation(value = "Create a report definition", notes = "Create a report definition")
+  @ApiOperation(value = "Create the report definition", notes = "Create the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The report definition was created successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,

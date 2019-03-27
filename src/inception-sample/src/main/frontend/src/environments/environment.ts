@@ -5,8 +5,13 @@
 export const environment = {
   production: false,
 
+  // Application Information
+  applicationId: 'digital.inception.sample.angular',
+  applicationVersion: '1.0.0',
+
   // Inception API URLs
   codesServiceUrlPrefix: 'http://localhost:20000/api/codes',
+  errorServiceUrlPrefix: 'http://localhost:20000/api/error',
   securityServiceUrlPrefix: 'http://localhost:20000/api/security'
 
 

@@ -84,7 +84,7 @@ public interface ISecurityService
         ExistingPasswordException, SecurityServiceException;
 
   /**
-   * Create a new authorised function.
+   * Create the new authorised function.
    *
    * @param function the function
    */
@@ -92,7 +92,7 @@ public interface ISecurityService
     throws DuplicateFunctionException, SecurityServiceException;
 
   /**
-   * Create a new security group.
+   * Create the new security group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
@@ -102,7 +102,7 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException;
 
   /**
-   * Create a new organization.
+   * Create the new organization.
    *
    * @param organization        the organization
    * @param createUserDirectory should a new internal user directory be created for the organization
@@ -114,7 +114,7 @@ public interface ISecurityService
     throws DuplicateOrganizationException, SecurityServiceException;
 
   /**
-   * Create a new user.
+   * Create the new user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
@@ -126,7 +126,7 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException;
 
   /**
-   * Create a new user directory.
+   * Create the new user directory.
    *
    * @param userDirectory the user directory
    */

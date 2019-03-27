@@ -43,7 +43,10 @@ import {CommunicationError} from "../../errors/communication-error";
 
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {MatDialogRef} from "@angular/material";
-import {ConfirmationDialog} from "../../components/dialogs";
+import {ConfirmationDialog, InformationDialog} from "../../components/dialogs";
+import {error} from "selenium-webdriver";
+import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -61,7 +64,8 @@ export class SendErrorReportComponent implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private dialogService: DialogService, private errorService: ErrorService,
+              private spinnerService: SpinnerService) {
     this.errorForm = this.formBuilder.group({
       // tslint:disable-next-line
       message: [''],
@@ -73,13 +77,11 @@ export class SendErrorReportComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.paramMap.pipe(first(),
       map((state: any) => window.history.state))   .subscribe((state: any) => {
-
         if (state.error) {
           this.error = state.error;
 
           this.errorForm.get('message').setValue(this.error.message);
         } else {
-
           console.log('No error found, redirecting to the application root')
 
           this.router.navigate(['/']);
@@ -88,28 +90,23 @@ export class SendErrorReportComponent implements OnInit {
   }
 
   onSendErrorReport(): void {
-
     if (this.errorForm.valid) {
+      this.spinnerService.showSpinner();
 
-      // this.spinnerService.showSpinner();
-      //
-      // this.sessionService.login(this.loginForm.get('username').value, this.loginForm.get('password').value).pipe(
-      //   first()).subscribe(session => {
-      //
-      //   this.spinnerService.hideSpinner();
-      //
-      //   if (session.organizations.length == 1) {
-      //     this.router.navigate(['/']);
-      //   }
-      //   else {
-      //     this.router.navigate(['select-organization'], {relativeTo: this.route});
-      //   }
-      // },(error: Error) => {
-      //
-      //   this.spinnerService.hideSpinner();
-      //
-      //   this.dialogService.showErrorDialog(error);
-      // });
+      this.errorService.sendErrorReport(this.errorForm.get('email').value, this.errorForm.get('feedback').value, this.error).pipe(
+        first()).subscribe(session => {
+          this.spinnerService.hideSpinner();
+
+          let dialogRef: MatDialogRef<InformationDialog, boolean> = this.dialogService.showInformationDialog({message: this.i18n({id: '@@send_error_component_error_report_submitted', value: 'Your error report was submitted.'}, {})});
+
+          dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+            this.router.navigate(['/']);
+          });
+        },(error: Error) => {
+        this.spinnerService.hideSpinner();
+
+        this.dialogService.showErrorDialog(error);
+      });
     }
   }
 }

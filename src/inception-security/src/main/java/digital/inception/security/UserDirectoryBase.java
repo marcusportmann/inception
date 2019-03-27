@@ -84,7 +84,7 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Create a new security group.
+   * Create the new security group.
    * <p/>
    * If a security group with the specified group name already exists the ID for this existing
    * security group will be returned.
@@ -133,7 +133,7 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Create a SHA-256 has of the specified password.
+   * Create the SHA-256 hash of the specified password.
    *
    * @param password the password to hash
    *

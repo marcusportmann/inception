@@ -67,7 +67,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   private LocalDateTime created;
 
   /**
-   * The data associated with the error report e.g. the application XML.
+   * The data associated with the error report.
    */
   private byte[] data;
 
@@ -77,7 +77,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   private String description;
 
   /**
-   * The error detail e.g. a stack trace.
+   * The error detail.
    */
   private String detail;
 
@@ -118,13 +118,13 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description        the description of the error
-   * @param detail             the error detail e.g. a stack trace
+   * @param detail             the error detail
    * @param feedback           the feedback provided by the user for the error
    * @param created            the date and time the error report was created
    * @param who                the username identifying the user associated with the error report
    * @param deviceId           the ID used to uniquely identify the device the error report
    *                           originated from
-   * @param data               the data associated with the error report e.g. the application XML
+   * @param data               the data associated with the error report
    */
   public SubmitErrorReportRequestData(UUID id, String applicationId, String applicationVersion,
       String description, String detail, String feedback, LocalDateTime created, String who,
@@ -243,9 +243,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the data associated with the error report e.g. the application XML.
+   * Returns the data associated with the error report.
    *
-   * @return the data associated with the error report e.g. the application XML
+   * @return the data associated with the error report
    */
   public byte[] getData()
   {
@@ -263,9 +263,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the error detail e.g. a stack trace.
+   * Returns the error detail.
    *
-   * @return the error detail e.g. a stack trace
+   * @return the error detail
    */
   public String getDetail()
   {

@@ -24,6 +24,8 @@ import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
+import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -34,7 +36,7 @@ import {first} from "rxjs/operators";
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
 })
-export class NewCodeCategoryComponent implements OnInit {
+export class NewCodeCategoryComponent {
 
   newCodeCategoryForm: FormGroup;
 
@@ -47,9 +49,6 @@ export class NewCodeCategoryComponent implements OnInit {
       id: ['', Validators.required],
       name: ['', Validators.required]
     });
-  }
-
-  ngOnInit(): void {
   }
 
   onCancel(): void {
@@ -70,7 +69,12 @@ export class NewCodeCategoryComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        this.dialogService.showErrorDialog(error);
+        if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        }
+        else {
+          this.dialogService.showErrorDialog(error);
+        }
       });
     }
   }

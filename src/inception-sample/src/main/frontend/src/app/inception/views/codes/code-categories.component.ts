@@ -75,7 +75,6 @@ export class CodeCategoriesComponent implements AfterViewInit {
         this.spinnerService.showSpinner();
 
         this.codesService.deleteCodeCategory(id).pipe(first()).subscribe((result: boolean) => {
-
           this.spinnerService.hideSpinner();
 
           this.ngAfterViewInit();
@@ -101,7 +100,6 @@ export class CodeCategoriesComponent implements AfterViewInit {
     this.spinnerService.showSpinner();
 
     this.codesService.getCodeCategories().pipe(first()).subscribe((codeCategories: CodeCategory[]) => {
-
       this.spinnerService.hideSpinner();
 
       this.dataSource.data = codeCategories;
