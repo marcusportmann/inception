@@ -76,10 +76,6 @@ export class CodesComponent implements AfterViewInit, OnInit {
     console.log('New code');
   }
 
-  ngOnInit(): void {
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
-  }
-
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -98,6 +94,10 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.filterPredicate = function(data, filter): boolean {
       return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
     };
+  }
+
+  ngOnInit(): void {
+    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
   }
 }
 

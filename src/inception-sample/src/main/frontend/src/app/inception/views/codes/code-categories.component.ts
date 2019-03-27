@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CodeCategory} from "../../services/codes/code-category";
 import {CodesService} from "../../services/codes/codes.service";
@@ -40,7 +40,7 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodeCategoriesComponent implements AfterViewInit {
+export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
   dataSource = new MatTableDataSource<CodeCategory>();
 
@@ -127,6 +127,9 @@ export class CodeCategoriesComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadCodeCategories();
+  }
+
+  ngOnInit(): void {
   }
 }
 

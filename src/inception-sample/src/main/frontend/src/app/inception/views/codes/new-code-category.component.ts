@@ -36,7 +36,7 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
 })
-export class NewCodeCategoryComponent {
+export class NewCodeCategoryComponent implements OnInit {
 
   newCodeCategoryForm: FormGroup;
 
@@ -49,6 +49,9 @@ export class NewCodeCategoryComponent {
       id: ['', Validators.required],
       name: ['', Validators.required]
     });
+  }
+
+  ngOnInit(): void {
   }
 
   onCancel(): void {
