@@ -45,7 +45,7 @@ public class TestCodeProvider
   public TestCodeProvider(CodeProviderConfig codeProviderConfig)
   {
     codeCategory = new CodeCategory("TestCodeCategory",
-        "Test Code Category Name", LocalDateTime.now());
+        "Test Code Category Name", "Test Code Category Data", LocalDateTime.now());
 
     codes = new ArrayList<>();
 

@@ -77,20 +77,20 @@
     <apache-avro.version>1.8.2</apache-avro.version>
     <cglib.version>3.2.10</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.3.0</cxf.version>
+    <cxf.version>3.3.1</cxf.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
-    <hibernate-validator.version>6.0.14.Final</hibernate-validator.version>
-    <jasperreports.version>6.7.0</jasperreports.version>
-    <jaxb-xew-plugin.version>1.10</jaxb-xew-plugin.version>
+    <hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
+    <jasperreports.version>6.7.1</jasperreports.version>
+    <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
-    <metrics-core.version>4.0.0</metrics-core.version>
-    <mssql-jdbc.version>7.2.0.jre11</mssql-jdbc.version>
+    <metrics-core.version>4.0.5</metrics-core.version>
+    <mssql-jdbc.version>7.2.1.jre11</mssql-jdbc.version>
     <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-    <swagger-annotations.version>1.5.21</swagger-annotations.version>
+    <swagger-annotations.version>1.5.22</swagger-annotations.version>
     <wss4j-ws-security-common.version>2.2.2</wss4j-ws-security-common.version>
   </properties>
 

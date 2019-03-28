@@ -170,7 +170,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
         || (!rootElement.hasChild("Description"))
         || (!rootElement.hasChild("Detail"))
         || (!rootElement.hasChild("Feedback"))
-        || (!rootElement.hasChild("When"))
+        || (!rootElement.hasChild("Created"))
         || (!rootElement.hasChild("Who"))
         || (!rootElement.hasChild("DeviceId"))
         || (!rootElement.hasChild("Data")))

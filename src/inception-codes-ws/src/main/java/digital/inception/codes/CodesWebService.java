@@ -188,9 +188,9 @@ public class CodesWebService
   }
 
   /**
-   * Retrieve the code categories.
+   * Retrieve all the code categories.
    *
-   * @return the code categories
+   * @return all the code categories
    */
   @WebMethod(operationName = "GetCodeCategories")
   @WebResult(name = "CodeCategory")
@@ -260,6 +260,19 @@ public class CodesWebService
     }
 
     return StringUtil.notNull(codesService.getCodeCategoryData(codeCategoryId));
+  }
+
+  /**
+   * Retrieve the summaries for all the code categories.
+   *
+   * @return the summaries for all the code categories
+   */
+  @WebMethod(operationName = "GetCodeCategorySummaries")
+  @WebResult(name = "CodeCategorySummary")
+  public List<CodeCategorySummary> getCodeCategorySummaries()
+    throws CodesServiceException
+  {
+    return codesService.getCodeCategorySummaries();
   }
 
   /**

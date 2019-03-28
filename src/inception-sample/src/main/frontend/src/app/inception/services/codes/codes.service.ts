@@ -30,6 +30,7 @@ import {ApiError} from "../../errors/api-error";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {environment} from "../../../../environments/environment";
+import {CodeCategorySummary} from "./code-category-summary";
 
 /**
  * The CodesService class provides the Codes Service implementation.
@@ -253,9 +254,9 @@ export class CodesService {
   }
 
   /**
-   * Retrieve the code categories.
+   * Retrieve all the code categories.
    *
-   * @return {Observable<CodeCategory[]>} The list of code categories.
+   * @return {Observable<CodeCategory[]>} The code categories.
    */
   getCodeCategories(): Observable<CodeCategory[]> {
     return this.httpClient.get<CodeCategory[]>(
@@ -348,6 +349,35 @@ export class CodesService {
               value: 'Failed to retrieve the codes.'
             }), apiError));
           }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(this.i18n({
+            id: '@@system_unavailable_error',
+            value: 'An error has occurred and the system is unable to process your request at this time.'
+          }), httpErrorResponse));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the summaries for all code categories.
+   *
+   * @return {Observable<CodeCategorySummary[]>} The code category summaries.
+   */
+  getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
+    return this.httpClient.get<CodeCategory[]>(
+      environment.codesServiceUrlPrefix + '/codeCategorySummaries', {reportProgress: true}).pipe(
+      map((codeCategorySummaries: CodeCategorySummary[]) => {
+        return codeCategorySummaries;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          let apiError: ApiError = new ApiError(httpErrorResponse);
+
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_retrieve_the_code_categories',
+            value: 'Failed to retrieve the code categories.'
+          }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {

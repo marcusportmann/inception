@@ -48,7 +48,8 @@ export class EditCodeCategoryComponent implements OnInit {
     this.editCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: [{value: '', disabled: true}, Validators.required],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      data: ['']
     });
   }
 
@@ -61,8 +62,8 @@ export class EditCodeCategoryComponent implements OnInit {
       this.spinnerService.hideSpinner();
 
       this.editCodeCategoryForm.get('id').setValue(codeCategory.id);
-
       this.editCodeCategoryForm.get('name').setValue(codeCategory.name);
+      this.editCodeCategoryForm.get('data').setValue(codeCategory.data);
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
@@ -81,8 +82,10 @@ export class EditCodeCategoryComponent implements OnInit {
 
   onOK(): void {
     if (this.editCodeCategoryForm.valid) {
+      let data = this.editCodeCategoryForm.get('data').value;
+
       let codeCategory: CodeCategory = new CodeCategory(this.editCodeCategoryForm.get('id').value,
-        this.editCodeCategoryForm.get('name').value, null);
+        this.editCodeCategoryForm.get('name').value, (!data || 0 === data.length) ? null : data);
 
       this.spinnerService.showSpinner();
 

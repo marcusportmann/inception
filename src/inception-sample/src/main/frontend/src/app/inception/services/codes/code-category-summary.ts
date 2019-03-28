@@ -15,16 +15,11 @@
  */
 
 /**
- * The CodeCategory class stores the information for a code category.
+ * The CodeCategorySummary class stores the summary information for a code category.
  *
  * @author Marcus Portmann
  */
-export class CodeCategory {
-
-  /**
-   * The optional code data for the code category.
-   */
-  data: string;
+export class CodeCategorySummary {
 
   /**
    * The ID used to uniquely identify the code category.
@@ -42,17 +37,15 @@ export class CodeCategory {
   updated: Date;
 
   /**
-   * Constructs a new CodeCategory.
+   * Constructs a new CodeCategorySummary.
    *
    * @param {string} id      The ID used to uniquely identify the code category.
    * @param {string} name    The name of the code category.
-   * @oaram {string} data    The optional code data for the code category.
    * @param {string} updated The date and time the code category was updated.
    */
-  constructor(id: string, name: string, data?: string, updated?: Date) {
+  constructor(id: string, name: string, updated?: Date) {
     this.id = id;
     this.name = name;
-    this.data = data;
     this.updated = this.updated;
   }
 }

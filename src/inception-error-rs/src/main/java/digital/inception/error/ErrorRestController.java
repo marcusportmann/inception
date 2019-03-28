@@ -29,6 +29,8 @@ import io.swagger.annotations.ApiResponses;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -71,11 +73,18 @@ public class ErrorRestController
   @RequestMapping(value = "/errorReports", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void createCode(@ApiParam(name = "errorReport", value = "The error report",
+  public void createErrorReport(@ApiParam(name = "errorReport", value = "The error report",
       required = true)
   @RequestBody ErrorReport errorReport)
     throws InvalidArgumentException, ErrorServiceException
   {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null)
+    {
+      errorReport.setWho(authentication.getPrincipal().toString());
+    }
+
     if (errorReport == null)
     {
       throw new InvalidArgumentException("code");

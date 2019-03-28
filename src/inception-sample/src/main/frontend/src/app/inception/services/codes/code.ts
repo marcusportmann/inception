@@ -42,7 +42,7 @@ export class Code {
   value: string;
 
   /**
-   * Constructs a new Organization.
+   * Constructs a new Code.
    *
    * @param {string} id             The ID used to uniquely identify the code.
    * @oaram {string} codeCategoryId The ID used to uniquely identify the code category the code is

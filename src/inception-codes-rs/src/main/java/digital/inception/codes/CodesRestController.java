@@ -371,6 +371,28 @@ public class CodesRestController
   }
 
   /**
+   * Retrieve the code category summaries.
+   *
+   * @return the code category summaries
+   */
+  @ApiOperation(value = "Retrieve the code category summaries",
+      notes = "Retrieve the code category summaries")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/codeCategorySummaries", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+
+  // @PreAuthorize("hasAuthority('Application.CodeCategoryAdministration')")
+  public List<CodeCategorySummary> getCodeCategorySummaries()
+    throws CodesServiceException
+  {
+    return codesService.getCodeCategorySummaries();
+  }
+
+  /**
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category

@@ -387,8 +387,8 @@ public class SystemMessageTest
     throws Exception
   {
     SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
-        UUID.randomUUID(), 1, "Test Description", "Test Detail", "Test Feedback",
-        LocalDateTime.now(), "Administrator", UUID.randomUUID(), "Test Data".getBytes());
+        "ApplicationId", "1.0.0", "Test Description", "Test Detail", "Test Feedback",
+        LocalDateTime.now(), "Administrator", "DeviceId", "Test Data".getBytes());
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 

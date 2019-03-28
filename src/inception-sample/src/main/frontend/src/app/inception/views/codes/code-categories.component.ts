@@ -27,6 +27,7 @@ import {Error} from "../../errors/error";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationDialog} from "../../components/dialogs";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {CodeCategorySummary} from "../../services/codes/code-category-summary";
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -42,7 +43,7 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 })
 export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
-  dataSource = new MatTableDataSource<CodeCategory>();
+  dataSource = new MatTableDataSource<CodeCategorySummary>();
 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
@@ -96,13 +97,13 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     this.router.navigate([id], {relativeTo: this.activatedRoute});
   }
 
-  loadCodeCategories(): void {
+  loadCodeCategorySummaries(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategories().pipe(first()).subscribe((codeCategories: CodeCategory[]) => {
+    this.codesService.getCodeCategorySummaries().pipe(first()).subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
       this.spinnerService.hideSpinner();
 
-      this.dataSource.data = codeCategories;
+      this.dataSource.data = codeCategorySummaries;
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
@@ -126,7 +127,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadCodeCategories();
+    this.loadCodeCategorySummaries();
   }
 
   ngOnInit(): void {

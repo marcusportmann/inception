@@ -238,7 +238,7 @@ public class CodesService
     throws DuplicateCodeCategoryException, CodesServiceException
   {
     String createCodeCategorySQL =
-        "INSERT INTO codes.code_categories (id, name, updated) VALUES (?, ?, ?)";
+        "INSERT INTO codes.code_categories (id, name, data, updated) VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
@@ -250,18 +250,19 @@ public class CodesService
 
       statement.setString(1, codeCategory.getId());
       statement.setString(2, codeCategory.getName());
+      statement.setString(3, codeCategory.getData());
 
       if (codeCategory.getUpdated() == null)
       {
         LocalDateTime updated = LocalDateTime.now();
 
-        statement.setTimestamp(3, Timestamp.valueOf(updated));
+        statement.setTimestamp(4, Timestamp.valueOf(updated));
 
         codeCategory.setUpdated(updated);
       }
       else
       {
-        statement.setTimestamp(3, Timestamp.valueOf(codeCategory.getUpdated()));
+        statement.setTimestamp(4, Timestamp.valueOf(codeCategory.getUpdated()));
       }
 
       if (statement.executeUpdate() != 1)
@@ -418,7 +419,7 @@ public class CodesService
     throws CodesServiceException
   {
     String getCodeCategoriesSQL =
-        "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
+        "SELECT id, name, data, updated FROM codes.code_categories ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategoriesSQL))
@@ -452,7 +453,8 @@ public class CodesService
   public CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getCodeCategorySQL = "SELECT id, name, updated FROM codes.code_categories WHERE id=?";
+    String getCodeCategorySQL =
+        "SELECT id, name, data, updated FROM codes.code_categories WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
@@ -688,6 +690,40 @@ public class CodesService
   }
 
   /**
+   * Returns the summaries for all the code categories.
+   *
+   * @return the summaries for all the code categories
+   */
+  @Override
+  public List<CodeCategorySummary> getCodeCategorySummaries()
+    throws CodesServiceException
+  {
+    String getCodeCategorySummariesSQL =
+        "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getCodeCategorySummariesSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<CodeCategorySummary> codeCategorySummaries = new ArrayList<>();
+
+        while (rs.next())
+        {
+          codeCategorySummaries.add(getCodeCategorySummary(rs));
+        }
+
+        return codeCategorySummaries;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new CodesServiceException("Failed to retrieve the summaries for the code categories",
+          e);
+    }
+  }
+
+  /**
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category
@@ -875,7 +911,8 @@ public class CodesService
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String updateCodeCategorySQL = "UPDATE codes.code_categories SET name=?, updated=? WHERE id=?";
+    String updateCodeCategorySQL =
+        "UPDATE codes.code_categories SET name=?, data=?, updated=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
@@ -883,8 +920,9 @@ public class CodesService
       LocalDateTime updated = LocalDateTime.now();
 
       statement.setString(1, codeCategory.getName());
-      statement.setTimestamp(2, Timestamp.valueOf(updated));
-      statement.setString(3, codeCategory.getId());
+      statement.setString(2, codeCategory.getData());
+      statement.setTimestamp(3, Timestamp.valueOf(updated));
+      statement.setString(4, codeCategory.getId());
 
       if (statement.executeUpdate() == 0)
       {
@@ -987,7 +1025,16 @@ public class CodesService
   private CodeCategory getCodeCategory(ResultSet rs)
     throws SQLException
   {
-    return new CodeCategory(rs.getString(1), rs.getString(2),
+    return new CodeCategory(rs.getString(1), rs.getString(2), rs.getString(3),
+        (rs.getTimestamp(4) == null)
+        ? null
+        : rs.getTimestamp(4).toLocalDateTime());
+  }
+
+  private CodeCategorySummary getCodeCategorySummary(ResultSet rs)
+    throws SQLException
+  {
+    return new CodeCategorySummary(rs.getString(1), rs.getString(2),
         (rs.getTimestamp(3) == null)
         ? null
         : rs.getTimestamp(3).toLocalDateTime());

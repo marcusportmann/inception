@@ -40,29 +40,21 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>CodeCategory</code> class holds the information for a code category.
+ * The <code>CodeCategorySummary</code> class holds the summary information for a code category.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "CodeCategory")
+@ApiModel(value = "CodeCategorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "data", "updated" })
-@XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
-@XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital",
-    propOrder = { "id", "name", "data", "updated" })
+@JsonPropertyOrder({ "id", "name", "updated" })
+@XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")
+@XmlType(name = "CodeCategorySummary", namespace = "http://codes.inception.digital",
+  propOrder = { "id", "name", "updated" })
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CodeCategory
+public class CodeCategorySummary
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * The optional code data for the code category.
-   */
-  @ApiModelProperty(value = "The optional code data for the code category")
-  @JsonProperty
-  @XmlElement(name = "Data")
-  private String data;
 
   /**
    * The ID used to uniquely identify the code category.
@@ -95,60 +87,22 @@ public class CodeCategory
   private LocalDateTime updated;
 
   /**
-   * Constructs a new <code>CodeCategory</code>.
+   * Constructs a new <code>CodeCategorySummary</code>.
    */
-  public CodeCategory() {}
+  public CodeCategorySummary() {}
 
   /**
-   * Constructs a new <code>CodeCategory</code>.
-   *
-   * @param id   the ID used to uniquely identify the code category
-   * @param name the name of the code category
-   */
-  public CodeCategory(String id, String name)
-  {
-    this.id = id;
-    this.name = name;
-  }
-
-  /**
-   * Constructs a new <code>CodeCategory</code>.
+   * Constructs a new <code>CodeCategorySummary</code>.
    *
    * @param id      the ID used to uniquely identify the code category
    * @param name    the name of the code category
-   * @param data    the optional code data for the code category
    * @param updated the date and time the code category was updated
    */
-  public CodeCategory(String id, String name, String data, LocalDateTime updated)
+  public CodeCategorySummary(String id, String name, LocalDateTime updated)
   {
     this.id = id;
     this.name = name;
-    this.data = data;
     this.updated = updated;
-  }
-
-  /**
-   * Constructs a new <code>CodeCategory</code>.
-   *
-   * @param id   the ID used to uniquely identify the code category
-   * @param name the name of the code category
-   * @param data the optional code data for the code category
-   */
-  public CodeCategory(String id, String name, String data)
-  {
-    this.id = id;
-    this.name = name;
-    this.data = data;
-  }
-
-  /**
-   * Returns the optional code data for the code category.
-   *
-   * @return the optional code data for the code category
-   */
-  public String getData()
-  {
-    return data;
   }
 
   /**
@@ -179,45 +133,5 @@ public class CodeCategory
   public LocalDateTime getUpdated()
   {
     return updated;
-  }
-
-  /**
-   * Set the optional code data for the code category.
-   *
-   * @param data the optional code data for the code category
-   */
-  public void setData(String data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the code category.
-   *
-   * @param id the ID used to uniquely identify the code category
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the code category.
-   *
-   * @param name the name of the code category
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the date and time the code category was updated.
-   *
-   * @param updated the date and time the code category was updated
-   */
-  public void setUpdated(LocalDateTime updated)
-  {
-    this.updated = updated;
   }
 }

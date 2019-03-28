@@ -178,6 +178,14 @@ public interface ICodesService
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
+   * Returns the summaries for all the code categories.
+   *
+   * @return the summaries for all the code categories
+   */
+  List<CodeCategorySummary> getCodeCategorySummaries()
+    throws CodesServiceException;
+
+  /**
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category

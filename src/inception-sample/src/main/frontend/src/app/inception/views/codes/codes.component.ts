@@ -26,6 +26,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {first} from "rxjs/operators";
 import {TitleService} from "../../services/layout/title.service";
+import {CodesServiceError} from "../../services/codes/codes.service.errors";
+import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -72,11 +74,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
     console.log('Editing code: ', id);
   }
 
-  newCode(): void {
-    console.log('New code');
-  }
-
-  ngAfterViewInit(): void {
+  loadCodes(): void {
     this.spinnerService.showSpinner();
 
     this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first()).subscribe((codes: Code[]) => {
@@ -86,7 +84,12 @@ export class CodesComponent implements AfterViewInit, OnInit {
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      this.dialogService.showErrorDialog(error);
+      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+      }
+      else {
+        this.dialogService.showErrorDialog(error);
+      }
     });
 
     this.dataSource.paginator = this.paginator;
@@ -94,6 +97,14 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.filterPredicate = function(data, filter): boolean {
       return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
     };
+  }
+
+  newCode(): void {
+    console.log('New code');
+  }
+
+  ngAfterViewInit(): void {
+    this.loadCodes();
   }
 
   ngOnInit(): void {

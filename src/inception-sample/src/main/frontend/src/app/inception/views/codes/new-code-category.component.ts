@@ -47,7 +47,8 @@ export class NewCodeCategoryComponent implements OnInit {
     this.newCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: ['', Validators.required],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      data: [''],
     });
   }
 
@@ -60,8 +61,10 @@ export class NewCodeCategoryComponent implements OnInit {
 
   onOK(): void {
     if (this.newCodeCategoryForm.valid) {
+      let data = this.newCodeCategoryForm.get('data').value;
+
       let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
-        this.newCodeCategoryForm.get('name').value, null);
+        this.newCodeCategoryForm.get('name').value, (!data || 0 === data.length) ? null : data);
 
       this.spinnerService.showSpinner();
 
