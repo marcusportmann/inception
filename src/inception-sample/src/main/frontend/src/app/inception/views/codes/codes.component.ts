@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Code} from "../../services/codes/code";
 import {CodesService} from "../../services/codes/codes.service";
 import {DialogService} from "../../services/dialog/dialog.service";
@@ -28,6 +28,7 @@ import {first} from "rxjs/operators";
 import {TitleService} from "../../services/layout/title.service";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {ConfirmationDialog} from "../../components/dialogs";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -66,9 +67,29 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  deleteCode(id: string): void {
-    console.log('Deleting code: ', id);
-  }
+  deleteCode(codeId: string, codeName: string): void {
+    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@codes_component_confirm_delete_code', value: 'Are you sure you want to delete the code \'{{codeName}}\'?'}, {codeName: codeName})});
+
+    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
+
+        this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first()).subscribe((result: boolean) => {
+          this.spinnerService.hideSpinner();
+
+          this.ngAfterViewInit();
+        }, (error: Error) => {
+          this.spinnerService.hideSpinner();
+
+          if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          }
+          else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });  }
 
   editCode(id: string): void {
     console.log('Editing code: ', id);

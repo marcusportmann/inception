@@ -143,7 +143,7 @@ export class CodesService {
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/' + codeId,
+      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes/' + codeId,
       {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;

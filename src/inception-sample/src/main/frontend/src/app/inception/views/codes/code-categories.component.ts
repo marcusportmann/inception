@@ -64,18 +64,18 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  codesAdministration(id: string, name: string): void {
-    this.router.navigate([id + '/codes'], {queryParams: {name: name }, relativeTo: this.activatedRoute});
+  codesAdministration(codeCategoryId: string, name: string): void {
+    this.router.navigate([codeCategoryId + '/codes'], {queryParams: {name: name }, relativeTo: this.activatedRoute});
   }
 
-  deleteCodeCategory(id: string, codeCategoryName: string): void {
+  deleteCodeCategory(codeCategoryId: string, codeCategoryName: string): void {
     let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category', value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'}, {codeCategoryName: codeCategoryName})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.codesService.deleteCodeCategory(id).pipe(first()).subscribe((result: boolean) => {
+        this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe((result: boolean) => {
           this.spinnerService.hideSpinner();
 
           this.ngAfterViewInit();
