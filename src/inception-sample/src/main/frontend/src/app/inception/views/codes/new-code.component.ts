@@ -26,52 +26,54 @@ import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {Code} from "../../services/codes/code";
 
 /**
- * The NewCodeCategoryComponent class implements the new code category component.
+ * The NewCodeComponent class implements the new code component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'new-code-category.component.html',
-  styleUrls: ['new-code-category.component.css'],
+  templateUrl: 'new-code.component.html',
+  styleUrls: ['new-code.component.css'],
 })
-export class NewCodeCategoryComponent implements OnInit {
+export class NewCodeComponent implements OnInit {
 
-  newCodeCategoryForm: FormGroup;
+  codeCategoryId: string;
+
+  newCodeForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
-    this.newCodeCategoryForm = this.formBuilder.group({
+    this.newCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: ['', Validators.required],
       name: ['', Validators.required],
-      data: [''],
+      value: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
+    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
   }
 
   onCancel(): void {
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
-    if (this.newCodeCategoryForm.valid) {
-      let data = this.newCodeCategoryForm.get('data').value;
-
-      let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
-        this.newCodeCategoryForm.get('name').value, (!data || 0 === data.length) ? null : data);
+    if (this.newCodeForm.valid) {
+      let code: Code = new Code(this.newCodeForm.get('id').value, this.codeCategoryId,
+        this.newCodeForm.get('name').value, this.newCodeForm.get('value').value);
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
+      this.codesService.createCode(code).pipe(first()).subscribe((result: boolean) => {
         this.spinnerService.hideSpinner();
 
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+        this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 

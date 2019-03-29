@@ -60,7 +60,7 @@ export class ErrorService {
       (!email || 0 === email.length) ? null : email,
       null, (!feedback || 0 === feedback.length) ? null : feedback);
 
-    return this.httpClient.post<boolean>(environment.errorServiceUrlPrefix + '/errorReports',
+    return this.httpClient.post<boolean>(environment.errorServiceUrlPrefix + '/error-reports',
       errorReport, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;

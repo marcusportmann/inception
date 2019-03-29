@@ -67,7 +67,7 @@ public class SampleServiceController
    *
    * @return all the data
    */
-  @RequestMapping(value = "/allData", method = RequestMethod.GET, produces = "application/json")
+  @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
   @WebMethod(operationName = "GetAllData")
   @WebResult(name = "Data")
   public List<Data> allData()
@@ -102,7 +102,7 @@ public class SampleServiceController
   /**
    * Test the exception handling.
    */
-  @RequestMapping(value = "/testExceptionHandling", method = RequestMethod.GET)
+  @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
   @WebMethod(operationName = "TestExceptionHandling")
   public void testExceptionHandling()
     throws SampleServiceException
@@ -118,7 +118,7 @@ public class SampleServiceController
   @ApiOperation(value = "Test the local date time serialization",
       notes = "Test the local date time serialization")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-  @RequestMapping(value = "/testLocalDateTime", method = RequestMethod.GET,
+  @RequestMapping(value = "/test-local-date-time", method = RequestMethod.GET,
       produces = "application/json")
   @WebMethod(operationName = "TestLocalDateTime")
   public LocalDateTime testLocalDateTime(@ApiParam(name = "localDateTime",
@@ -146,7 +146,7 @@ public class SampleServiceController
   @ApiOperation(value = "Test the zoned date time serialization",
       notes = "Test the zoned date time serialization")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-  @RequestMapping(value = "/testZonedDateTime", method = RequestMethod.GET,
+  @RequestMapping(value = "/test-zoned-date-time", method = RequestMethod.GET,
       produces = "application/json")
   @WebMethod(operationName = "TestZonedDateTime")
   public ZonedDateTime testZonedDateTime(@ApiParam(name = "zonedDateTime",

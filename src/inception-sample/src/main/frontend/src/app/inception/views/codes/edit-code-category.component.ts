@@ -54,7 +54,7 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let codeCategoryId:string = this.activatedRoute.snapshot.paramMap.get('id');
+    let codeCategoryId:string = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
 
     this.spinnerService.showSpinner();
 
@@ -77,7 +77,7 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['../../../../../code-categories'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../../../..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -92,7 +92,7 @@ export class EditCodeCategoryComponent implements OnInit {
       this.codesService.updateCodeCategory(codeCategory).pipe(first()).subscribe((result: boolean) => {
         this.spinnerService.hideSpinner();
 
-        this.router.navigate(['../../../../../code-categories'], {relativeTo: this.activatedRoute});
+        this.router.navigate(['../../../..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 

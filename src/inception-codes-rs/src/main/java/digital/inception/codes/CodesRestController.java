@@ -76,7 +76,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/codes", method = RequestMethod.POST,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createCode(@ApiParam(name = "codeCategoryId",
@@ -121,7 +121,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories", method = RequestMethod.POST,
+  @RequestMapping(value = "/code-categories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createCodeCategory(@ApiParam(name = "codeCategory", value = "The code category",
@@ -158,7 +158,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/codes/{codeId}",
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteCode(@ApiParam(name = "codeCategoryId",
@@ -195,7 +195,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}", method = RequestMethod.DELETE,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteCodeCategory(@ApiParam(name = "codeCategoryId",
@@ -228,7 +228,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/codes/{codeId}",
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public Code getCode(@ApiParam(name = "codeCategoryId",
@@ -262,7 +262,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories", method = RequestMethod.GET,
+  @RequestMapping(value = "/code-categories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
 
@@ -290,7 +290,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}", method = RequestMethod.GET,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public CodeCategory getCodeCategory(@ApiParam(name = "codeCategoryId",
@@ -322,7 +322,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/codes", method = RequestMethod.GET,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public List<Code> getCodeCategoryCodes(@ApiParam(name = "codeCategoryId",
@@ -354,7 +354,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/data", method = RequestMethod.GET)
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/data", method = RequestMethod.GET)
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public String getCodeCategoryData(@ApiParam(name = "codeCategoryId",
@@ -381,7 +381,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategorySummaries", method = RequestMethod.GET,
+  @RequestMapping(value = "/code-category-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
 
@@ -408,7 +408,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/updated", method = RequestMethod.GET,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/updated", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
@@ -440,7 +440,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}/codes/{codeId}",
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateCode(@ApiParam(name = "codeCategoryId",
@@ -492,7 +492,7 @@ public class CodesRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/codeCategories/{codeCategoryId}", method = RequestMethod.PUT,
+  @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateCodeCategory(@ApiParam(name = "codeCategoryId",

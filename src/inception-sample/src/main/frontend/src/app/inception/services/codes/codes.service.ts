@@ -59,7 +59,7 @@ export class CodesService {
    */
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId,
+      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes',
       code, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
@@ -102,7 +102,7 @@ export class CodesService {
    * @return True if the code category was created successfully or false otherwise.
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
-    return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/codeCategories',
+    return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/code-categories',
       codeCategory, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
@@ -143,7 +143,7 @@ export class CodesService {
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes/' + codeId,
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
       {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
@@ -182,7 +182,7 @@ export class CodesService {
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId,
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
       {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
@@ -223,7 +223,7 @@ export class CodesService {
    */
   getCode(codeCategoryId: string, codeId: string): Observable<Code> {
     return this.httpClient.get<Code>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes/' + codeId, {reportProgress: true}).pipe(
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId, {reportProgress: true}).pipe(
       map((code: Code) => {
         return code;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -260,7 +260,7 @@ export class CodesService {
    */
   getCodeCategories(): Observable<CodeCategory[]> {
     return this.httpClient.get<CodeCategory[]>(
-      environment.codesServiceUrlPrefix + '/codeCategories', {reportProgress: true}).pipe(
+      environment.codesServiceUrlPrefix + '/code-categories', {reportProgress: true}).pipe(
       map((codeCategories: CodeCategory[]) => {
         return codeCategories;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -291,7 +291,7 @@ export class CodesService {
    */
   getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId, {reportProgress: true}).pipe(
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId, {reportProgress: true}).pipe(
       map((codeCategory: CodeCategory) => {
         return codeCategory;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -330,7 +330,7 @@ export class CodesService {
    */
   getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategoryId + '/codes',
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes',
       {reportProgress: true}).pipe(
       map((codes: Code[]) => {
         return codes;
@@ -367,7 +367,7 @@ export class CodesService {
    */
   getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
     return this.httpClient.get<CodeCategory[]>(
-      environment.codesServiceUrlPrefix + '/codeCategorySummaries', {reportProgress: true}).pipe(
+      environment.codesServiceUrlPrefix + '/code-category-summaries', {reportProgress: true}).pipe(
       map((codeCategorySummaries: CodeCategorySummary[]) => {
         return codeCategorySummaries;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -398,7 +398,7 @@ export class CodesService {
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + code.codeCategoryId + '/' + code.id,
+      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/' + code.id,
       code, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
@@ -437,7 +437,7 @@ export class CodesService {
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.codesServiceUrlPrefix + '/codeCategories/' + codeCategory.id,
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id,
       codeCategory, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;

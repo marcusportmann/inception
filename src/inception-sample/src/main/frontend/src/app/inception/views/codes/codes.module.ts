@@ -30,6 +30,7 @@ import {CodeCategoriesComponent} from "./code-categories.component";
 import {CodesComponent} from "./codes.component";
 import {EditCodeCategoryComponent} from "./edit-code-category.component";
 import {NewCodeCategoryComponent} from "./new-code-category.component";
+import {NewCodeComponent} from "./new-code.component";
 
 const routes: Routes = [
   {
@@ -52,9 +53,9 @@ const routes: Routes = [
         component: CodeCategoriesComponent
       },
       {
-        path: ':id',
+        path: ':codeCategoryId',
         data: {
-          title: '{id}'
+          title: '{codeCategoryId}'
         },
         children: [
           {
@@ -65,58 +66,35 @@ const routes: Routes = [
           {
             path: 'codes',
             pathMatch: 'full',
-            component: CodesComponent,
             data: {
               title: 'Codes'
+            },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                component: CodesComponent
+              },
+            ]
+          },
+          {
+            path: 'new-code',
+            pathMatch: 'full',
+            component: NewCodeComponent,
+            data: {
+              title: 'New Code',
             }
           }
         ]
       },
-
-
-
-
-      // {
-      //   path: ':id/codes',
-      //   pathMatch: 'full',
-      //   component: CodesComponent,
-      //   data: {
-      //     title: 'Codes'
-      //   }
-      // }
     ]
   },
-
-
-
-  /*
-  {
-    path: 'code-categories',
-    pathMatch: 'full',
-    component: CodeCategoriesComponent,
-    data: {
-      title: 'Code Categories'
-    }
-  },
-  {
-    path: 'code-categories/:id/codes',
-
-    component: CodesComponent,
-    data: {
-      title: ''
-    }
-  },
-  */
-
-
-
   {
     path: 'new-code-category',
     pathMatch: 'full',
     component: NewCodeCategoryComponent,
     data: {
-      title: 'New Code Category',
-      sidebarNav: false
+      title: 'New Code Category'
     }
   }
 ];
@@ -129,7 +107,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, NewCodeCategoryComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, NewCodeCategoryComponent, NewCodeComponent]
 })
 export class CodesModule {
 }

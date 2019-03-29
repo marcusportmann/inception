@@ -54,6 +54,6 @@ export class Code {
     this.id = id;
     this.codeCategoryId = codeCategoryId;
     this.name = name;
-    this.value = this.value;
+    this.value = value;
   }
 }

@@ -70,7 +70,7 @@ public class ErrorRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/errorReports", method = RequestMethod.POST,
+  @RequestMapping(value = "/error-reports", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createErrorReport(@ApiParam(name = "errorReport", value = "The error report",

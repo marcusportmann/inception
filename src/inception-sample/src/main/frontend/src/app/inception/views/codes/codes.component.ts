@@ -121,7 +121,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   newCode(): void {
-    console.log('New code');
+    this.router.navigate(['../../../../../new-code'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -129,7 +129,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
   }
 }
 

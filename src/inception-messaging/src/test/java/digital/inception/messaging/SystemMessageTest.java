@@ -170,7 +170,7 @@ public class SystemMessageTest
     throws Exception
   {
     CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory1",
-        "Test Standard Code Category 1", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        "Test Standard Code Category 1", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -239,7 +239,7 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory2",
-        "Test Custom Code Category 2", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        "Test Custom Code Category 2", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {
@@ -281,7 +281,7 @@ public class SystemMessageTest
     parameters.put("Parameter Name 2", "Parameter Value 2");
 
     CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory2",
-        "Test Standard Code Category 2", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        "Test Standard Code Category 2", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testStandardCodeCategory != null)
     {
@@ -350,7 +350,7 @@ public class SystemMessageTest
     }
 
     CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory1",
-        "Test Custom Code Category 1", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        "Test Custom Code Category 1", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
     if (testCustomCodeCategory != null)
     {

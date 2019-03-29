@@ -35,8 +35,7 @@ const routes: Routes = [
     component: OverviewComponent,
     data: {
       title: 'Overview',
-      icon: 'fa fa-shield-alt',
-      sidebarNav: true
+      icon: 'fa fa-shield-alt'
     }
   }
 ];
