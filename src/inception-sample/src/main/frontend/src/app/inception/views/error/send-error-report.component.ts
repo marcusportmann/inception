@@ -15,7 +15,7 @@
  */
 
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {FormGroup, Validators, FormBuilder} from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
 
@@ -58,7 +58,7 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 })
 export class SendErrorReportComponent implements OnInit {
 
-  errorForm: FormGroup;
+  sendErrorReportForm: FormGroup;
 
   error: Error;
 
@@ -66,12 +66,24 @@ export class SendErrorReportComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private errorService: ErrorService,
               private spinnerService: SpinnerService) {
-    this.errorForm = this.formBuilder.group({
+    this.sendErrorReportForm = this.formBuilder.group({
       // tslint:disable-next-line
       message: [''],
       email: ['', Validators.email],
       feedback: ['']
     });
+  }
+
+  get emailFormControl(): AbstractControl {
+    return this.sendErrorReportForm.get('email');
+  }
+
+  get feedbackFormControl(): AbstractControl {
+    return this.sendErrorReportForm.get('feedback');
+  }
+
+  get messageFormControl(): AbstractControl {
+    return this.sendErrorReportForm.get('message');
   }
 
   ngOnInit(): void {
@@ -80,7 +92,7 @@ export class SendErrorReportComponent implements OnInit {
         if (state.error) {
           this.error = state.error;
 
-          this.errorForm.get('message').setValue(this.error.message);
+          this.messageFormControl.setValue(this.error.message);
 
           console.log('Error: ', this.error);
         } else {
@@ -92,11 +104,11 @@ export class SendErrorReportComponent implements OnInit {
   }
 
   onSendErrorReport(): void {
-    if (this.errorForm.valid) {
+    if (this.sendErrorReportForm.valid) {
       this.spinnerService.showSpinner();
 
-      this.errorService.sendErrorReport(this.errorForm.get('email').value, this.errorForm.get('feedback').value, this.error).pipe(
-        first()).subscribe(session => {
+      this.errorService.sendErrorReport(this.emailFormControl.value, this.feedbackFormControl.value, this.error).pipe(
+        first()).subscribe(result => {
           this.spinnerService.hideSpinner();
 
           let dialogRef: MatDialogRef<InformationDialog, boolean> = this.dialogService.showInformationDialog({message: this.i18n({id: '@@send_error_component_error_report_submitted', value: 'Your error report was submitted.'}, {})});

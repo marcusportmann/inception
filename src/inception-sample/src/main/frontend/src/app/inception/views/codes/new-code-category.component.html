@@ -8,7 +8,7 @@
             <input type="text" matInput formControlName="id" required="true" autofocus>
             <mat-error *ngIf="idFormControl.errors && !idFormControl.untouched">
               <span *ngIf="idFormControl.errors?.required" i18n="@@new_code_category_component_error_id_required">An ID is required.</span>
-              <span *ngIf="idFormControl.errors?.maxlength" i18n="@@edit_code_category_component_error_id_maxlength">ID must not exceed 100 characters.</span>
+              <span *ngIf="idFormControl.errors?.maxlength" i18n="@@new_code_category_component_error_id_maxlength">ID must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

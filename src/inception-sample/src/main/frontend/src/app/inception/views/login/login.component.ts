@@ -15,7 +15,7 @@
  */
 
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {FormGroup, Validators, FormBuilder} from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
 
 import {InceptionModule} from '../../inception.module';
 
@@ -83,6 +83,14 @@ export class LoginComponent {
     });
   }
 
+  get passwordFormControl(): AbstractControl {
+    return this.loginForm.get('password');
+  }
+
+  get usernameFormControl(): AbstractControl {
+    return this.loginForm.get('username');
+  }
+
   isForgottenPasswordEnabled(): boolean {
     return InceptionModule.forgottenPasswordEnabled;
   }
@@ -129,8 +137,8 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.spinnerService.showSpinner();
 
-      this.sessionService.login(this.loginForm.get('username').value,
-        this.loginForm.get('password').value).pipe(first()).subscribe(session => {
+      this.sessionService.login(this.usernameFormControl.value,
+        this.passwordFormControl.value).pipe(first()).subscribe(session => {
           this.spinnerService.hideSpinner();
 
           if (session.organizations.length == 1) {

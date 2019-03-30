@@ -46,8 +46,8 @@ export class NewCodeCategoryComponent implements OnInit {
               private spinnerService: SpinnerService) {
     this.newCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: ['', Validators.required],
-      name: ['', Validators.required],
+      id: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       data: [''],
     });
   }

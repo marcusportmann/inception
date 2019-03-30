@@ -47,8 +47,8 @@ export class EditCodeCategoryComponent implements OnInit {
 
     this.editCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: '', disabled: true}, Validators.required],
-      name: ['', Validators.required],
+      id: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       data: ['']
     });
   }

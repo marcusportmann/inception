@@ -15,7 +15,7 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first, flatMap, map, startWith} from "rxjs/operators";
 import {Observable, Subject} from "../../../../../node_modules/rxjs";
 import {Organization} from "../../services/security/organization";
@@ -46,26 +46,28 @@ export class SelectOrganizationComponent implements OnInit {
     });
   }
 
+  get organizationFormControl(): AbstractControl {
+    return this.selectOrganizationForm.get('organization');
+  }
+
   displayOrganization(organization: Organization): string {
     return organization.name;
   }
 
   isOrganizationSelected(): boolean {
-    return this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object');
+    return this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value == 'object');
   }
 
   ngOnInit(): void {
-    this.filteredOrganizations = this.selectOrganizationForm.get('organization').valueChanges.pipe(
+    this.filteredOrganizations = this.organizationFormControl.valueChanges.pipe(
       startWith(''),
       flatMap((value) => this.filterOrganizations(value))
     );
   }
 
   onOk(): void {
-
-    if (this.selectOrganizationForm.valid && (typeof this.selectOrganizationForm.get('organization').value == 'object')) {
-
-      const selectedOrganization: Organization = <Organization>this.selectOrganizationForm.get('organization').value;
+    if (this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value == 'object')) {
+      const selectedOrganization: Organization = <Organization>this.organizationFormControl.value;
 
       this.sessionService.session.pipe(first()).subscribe((session: Session) => {
 
