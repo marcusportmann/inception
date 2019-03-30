@@ -398,7 +398,7 @@ export class CodesService {
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/' + code.id,
+      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' + code.id,
       code, {observe: "response"}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;

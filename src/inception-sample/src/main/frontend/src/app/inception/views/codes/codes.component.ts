@@ -92,7 +92,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
     });  }
 
   editCode(id: string): void {
-    console.log('Editing code: ', id);
+    this.router.navigate([id], {relativeTo: this.activatedRoute});
   }
 
   loadCodes(): void {

@@ -29,6 +29,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {CodeCategoriesComponent} from "./code-categories.component";
 import {CodesComponent} from "./codes.component";
 import {EditCodeCategoryComponent} from "./edit-code-category.component";
+import {EditCodeComponent} from "./edit-code.component";
 import {NewCodeCategoryComponent} from "./new-code-category.component";
 import {NewCodeComponent} from "./new-code.component";
 
@@ -65,7 +66,6 @@ const routes: Routes = [
           },
           {
             path: 'codes',
-            pathMatch: 'full',
             data: {
               title: 'Codes'
             },
@@ -75,6 +75,13 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: CodesComponent
               },
+              {
+                path: ':codeId',
+                component: EditCodeComponent,
+                data: {
+                  title: '{codeId}'
+                },
+              }
             ]
           },
           {
@@ -107,7 +114,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, NewCodeCategoryComponent, NewCodeComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent, NewCodeCategoryComponent, NewCodeComponent]
 })
 export class CodesModule {
 }
