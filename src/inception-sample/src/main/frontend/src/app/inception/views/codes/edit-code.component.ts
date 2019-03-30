@@ -15,7 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -49,10 +49,22 @@ export class EditCodeComponent implements OnInit {
 
     this.editCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: '', disabled: true}, Validators.required],
-      name: ['', Validators.required],
+      id: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       value: ['', Validators.required]
     });
+  }
+
+  get idFormControl(): AbstractControl {
+    return this.editCodeForm.get('id');
+  }
+
+  get nameFormControl(): AbstractControl {
+    return this.editCodeForm.get('name');
+  }
+
+  get valueFormControl(): AbstractControl {
+    return this.editCodeForm.get('value');
   }
 
   ngOnInit(): void {
@@ -64,9 +76,9 @@ export class EditCodeComponent implements OnInit {
     this.codesService.getCode(this.codeCategoryId, codeId).pipe(first()).subscribe((codeCategory: Code) => {
       this.spinnerService.hideSpinner();
 
-      this.editCodeForm.get('id').setValue(codeCategory.id);
-      this.editCodeForm.get('name').setValue(codeCategory.name);
-      this.editCodeForm.get('value').setValue(codeCategory.value);
+      this.idFormControl.setValue(codeCategory.id);
+      this.nameFormControl.setValue(codeCategory.name);
+      this.valueFormControl.setValue(codeCategory.value);
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
@@ -85,8 +97,8 @@ export class EditCodeComponent implements OnInit {
 
   onOK(): void {
     if (this.editCodeForm.valid) {
-      let code: Code = new Code(this.editCodeForm.get('id').value, this.codeCategoryId,
-        this.editCodeForm.get('name').value, this.editCodeForm.get('value').value);
+      let code: Code = new Code(this.idFormControl.value, this.codeCategoryId,
+        this.nameFormControl.value, this.valueFormControl.value);
 
       this.spinnerService.showSpinner();
 

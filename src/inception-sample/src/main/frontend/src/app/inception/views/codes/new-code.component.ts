@@ -15,7 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -49,10 +49,22 @@ export class NewCodeComponent implements OnInit {
               private spinnerService: SpinnerService) {
     this.newCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: ['', Validators.required],
-      name: ['', Validators.required],
+      id: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       value: ['', Validators.required],
     });
+  }
+
+  get idFormControl(): AbstractControl {
+    return this.newCodeForm.get('id');
+  }
+
+  get nameFormControl(): AbstractControl {
+    return this.newCodeForm.get('name');
+  }
+
+  get valueFormControl(): AbstractControl {
+    return this.newCodeForm.get('value');
   }
 
   ngOnInit(): void {
@@ -65,8 +77,8 @@ export class NewCodeComponent implements OnInit {
 
   onOK(): void {
     if (this.newCodeForm.valid) {
-      let code: Code = new Code(this.newCodeForm.get('id').value, this.codeCategoryId,
-        this.newCodeForm.get('name').value, this.newCodeForm.get('value').value);
+      let code: Code = new Code(this.idFormControl.value, this.codeCategoryId,
+        this.nameFormControl.value, this.valueFormControl.value);
 
       this.spinnerService.showSpinner();
 

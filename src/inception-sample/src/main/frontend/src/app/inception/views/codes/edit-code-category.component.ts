@@ -15,7 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -53,6 +53,18 @@ export class EditCodeCategoryComponent implements OnInit {
     });
   }
 
+  get dataFormControl(): AbstractControl {
+    return this.editCodeCategoryForm.get('data');
+  }
+
+  get idFormControl(): AbstractControl {
+    return this.editCodeCategoryForm.get('id');
+  }
+
+  get nameFormControl(): AbstractControl {
+    return this.editCodeCategoryForm.get('name');
+  }
+
   ngOnInit(): void {
     let codeCategoryId:string = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
 
@@ -61,9 +73,9 @@ export class EditCodeCategoryComponent implements OnInit {
     this.codesService.getCodeCategory(codeCategoryId).pipe(first()).subscribe((codeCategory: CodeCategory) => {
       this.spinnerService.hideSpinner();
 
-      this.editCodeCategoryForm.get('id').setValue(codeCategory.id);
-      this.editCodeCategoryForm.get('name').setValue(codeCategory.name);
-      this.editCodeCategoryForm.get('data').setValue(codeCategory.data);
+      this.idFormControl.setValue(codeCategory.id);
+      this.nameFormControl.setValue(codeCategory.name);
+      this.dataFormControl.setValue(codeCategory.data);
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
@@ -82,10 +94,10 @@ export class EditCodeCategoryComponent implements OnInit {
 
   onOK(): void {
     if (this.editCodeCategoryForm.valid) {
-      let data = this.editCodeCategoryForm.get('data').value;
+      let data = this.dataFormControl.value;
 
-      let codeCategory: CodeCategory = new CodeCategory(this.editCodeCategoryForm.get('id').value,
-        this.editCodeCategoryForm.get('name').value, (!data || 0 === data.length) ? null : data);
+      let codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
+        this.nameFormControl.value, (!data || 0 === data.length) ? null : data);
 
       this.spinnerService.showSpinner();
 

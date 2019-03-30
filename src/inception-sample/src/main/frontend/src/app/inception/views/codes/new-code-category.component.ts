@@ -15,7 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
@@ -52,6 +52,18 @@ export class NewCodeCategoryComponent implements OnInit {
     });
   }
 
+  get dataFormControl(): AbstractControl {
+    return this.newCodeCategoryForm.get('data');
+  }
+
+  get idFormControl(): AbstractControl {
+    return this.newCodeCategoryForm.get('id');
+  }
+
+  get nameFormControl(): AbstractControl {
+    return this.newCodeCategoryForm.get('name');
+  }
+
   ngOnInit(): void {
   }
 
@@ -61,10 +73,10 @@ export class NewCodeCategoryComponent implements OnInit {
 
   onOK(): void {
     if (this.newCodeCategoryForm.valid) {
-      let data = this.newCodeCategoryForm.get('data').value;
+      let data = this.dataFormControl.value;
 
-      let codeCategory: CodeCategory = new CodeCategory(this.newCodeCategoryForm.get('id').value,
-        this.newCodeCategoryForm.get('name').value, (!data || 0 === data.length) ? null : data);
+      let codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
+        this.nameFormControl.value, (!data || 0 === data.length) ? null : data);
 
       this.spinnerService.showSpinner();
 
