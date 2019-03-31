@@ -15,6 +15,8 @@
  */
 
 import {Error} from "./error";
+import {HttpErrorResponse} from "@angular/common/http";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
  * The SystemUnavailableError class holds the information for a system unavailable error.
@@ -26,10 +28,15 @@ export class SystemUnavailableError extends Error {
   /**
    * Constructs a new SystemUnavailableError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
+   *                                              information.
+   * @param {I18n} i18n                           The internationalization service.
    */
-  constructor(message: string, cause?: any) {
-    super(message, cause);
+  constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
+
+    super(i18n({id: '@@system_unavailable_error',
+      value: 'An error has occurred and the system is unable to process your request at this time.'}));
+
+    // TODO: Retrieve error details from HttpErrorResponse and save
   }
 }

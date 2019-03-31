@@ -59,8 +59,8 @@ import {TooltipsComponent} from './tooltips.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'buttons',
     pathMatch: 'full',
+    redirectTo: 'buttons'
   },
   {
     path: 'buttons',

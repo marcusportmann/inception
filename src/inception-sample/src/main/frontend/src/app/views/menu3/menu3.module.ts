@@ -24,8 +24,8 @@ import {RouterModule, Routes} from "@angular/router";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu31',
     pathMatch: 'full',
+    redirectTo: 'menu31'
   },
   {
     path: 'menu31',

@@ -10,8 +10,8 @@ import {CanActivateFunctionGuard} from "./inception/routing/can-activate-functio
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu1',
     pathMatch: 'full',
+    redirectTo: 'menu1',
   },
 
   {
@@ -72,7 +72,7 @@ export const routes: Routes = [
             path: 'codes',
             loadChildren: './inception/views/codes/codes.module#CodesModule',
             data: {
-              title: 'Codes'
+              title: 'Codes',
             }
           },
           {

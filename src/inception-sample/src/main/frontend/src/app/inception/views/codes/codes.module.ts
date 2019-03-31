@@ -32,12 +32,13 @@ import {EditCodeCategoryComponent} from "./edit-code-category.component";
 import {EditCodeComponent} from "./edit-code.component";
 import {NewCodeCategoryComponent} from "./new-code-category.component";
 import {NewCodeComponent} from "./new-code.component";
+import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'code-categories',
     pathMatch: 'full',
+    redirectTo: 'code-categories',
     data: {
       title: ''
     }
@@ -51,7 +52,14 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: CodeCategoriesComponent
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: CodeCategoriesComponent,
+        data: {
+          title: 'Code Categories',
+          functionCodes: ['Application.CodeAdministration']
+        }
       },
       {
         path: ':codeCategoryId',
@@ -62,7 +70,13 @@ const routes: Routes = [
           {
             path: '',
             pathMatch: 'full',
-            component: EditCodeCategoryComponent
+            canActivate: [
+              CanActivateFunctionGuard
+            ],
+            component: EditCodeCategoryComponent,
+            data: {
+              functionCodes: ['Application.CodeAdministration']
+            }
           },
           {
             path: 'codes',
@@ -73,13 +87,23 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: CodesComponent
+                canActivate: [
+                  CanActivateFunctionGuard
+                ],
+                component: CodesComponent,
+                data: {
+                  functionCodes: ['Application.CodeAdministration']
+                }
               },
               {
                 path: ':codeId',
+                canActivate: [
+                  CanActivateFunctionGuard
+                ],
                 component: EditCodeComponent,
                 data: {
-                  title: '{codeId}'
+                  title: '{codeId}',
+                  functionCodes: ['Application.CodeAdministration']
                 },
               }
             ]
@@ -87,9 +111,13 @@ const routes: Routes = [
           {
             path: 'new-code',
             pathMatch: 'full',
+            canActivate: [
+              CanActivateFunctionGuard
+            ],
             component: NewCodeComponent,
             data: {
               title: 'New Code',
+              functionCodes: ['Application.CodeAdministration']
             }
           }
         ]
@@ -99,9 +127,13 @@ const routes: Routes = [
   {
     path: 'new-code-category',
     pathMatch: 'full',
+    canActivate: [
+      CanActivateFunctionGuard
+    ],
     component: NewCodeCategoryComponent,
     data: {
-      title: 'New Code Category'
+      title: 'New Code Category',
+      functionCodes: ['Application.CodeAdministration']
     }
   }
 ];

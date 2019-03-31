@@ -26,6 +26,7 @@ import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -87,7 +88,7 @@ export class NewCodeCategoryComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }
         else {

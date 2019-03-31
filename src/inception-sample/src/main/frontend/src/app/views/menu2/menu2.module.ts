@@ -26,8 +26,8 @@ import {Menu22Component} from "./menu22.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu21',
     pathMatch: 'full',
+    redirectTo: 'menu21',
   },
   {
     path: 'menu21',

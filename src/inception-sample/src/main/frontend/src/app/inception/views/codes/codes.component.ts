@@ -29,6 +29,7 @@ import {TitleService} from "../../services/layout/title.service";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {ConfirmationDialog} from "../../components/dialogs";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -81,7 +82,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 
-          if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           }
           else {
@@ -105,7 +106,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       }
       else {

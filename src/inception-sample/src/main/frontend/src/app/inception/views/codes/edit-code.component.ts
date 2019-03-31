@@ -26,6 +26,7 @@ import {Code} from "../../services/codes/code";
 import {first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The EditCodeComponent class implements the edit code category component.
@@ -46,7 +47,6 @@ export class EditCodeComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
-
     this.editCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
@@ -82,7 +82,7 @@ export class EditCodeComponent implements OnInit {
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       }
       else {
@@ -109,7 +109,7 @@ export class EditCodeComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }
         else {

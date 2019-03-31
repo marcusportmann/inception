@@ -17,13 +17,14 @@
 import {Error} from "./error";
 import {HttpErrorResponse} from "@angular/common/http";
 import {I18n} from "@ngx-translate/i18n-polyfill";
+import {ApiError} from "./api-error";
 
 /**
- * The CommunicationError class holds the information for a communication error.
+ * The AccessDeniedError class holds the information for an access denied error.
  *
  * @author Marcus Portmann
  */
-export class CommunicationError extends Error {
+export class AccessDeniedError extends Error {
 
   /**
    *  The HTTP status-code for the error.
@@ -41,7 +42,7 @@ export class CommunicationError extends Error {
   url?: string;
 
   /**
-   * Constructs a new CommunicationError.
+   * Constructs a new AccessDeniedError.
    *
    * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
    *                                              information.
@@ -49,28 +50,30 @@ export class CommunicationError extends Error {
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
-    super(i18n({id: '@@communication_error_a_communication_error_occurred',
-      value: 'A communication error occurred.'}));
+    super(i18n({id: '@@access_denied_error',
+      value: 'Access is denied. You do not have sufficient privileges to perform the requested operation.'}));
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
     this.url = httpErrorResponse.url;
+
+    if (ApiError.isApiError(httpErrorResponse)) {
+
+    }
   }
 
   /**
-   * Returns whether the specified HTTP error response is as a result of a communication error.
+   * Returns whether the specified HTTP error response is as a result of an HTTP 403 forbidden
+   * response, which indicates that access to the requested resource has been denied.
    *
    * @param httpErrorResponse The HTTP error response.
    *
-   * @return True if the HTTP error response is as a result of a communication error or false
-   *         otherwise.
+   * @return True if the HTTP error response is as a result of an HTTP 403 forbidden response,
+   *         which indicates that access to the requested resource has been denied.
    */
-  static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
+  static isAccessDeniedError(httpErrorResponse: HttpErrorResponse): boolean {
     if ((httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status == 0)
-      && httpErrorResponse.error
-      && (httpErrorResponse.error instanceof ProgressEvent)
-      && (httpErrorResponse.error.type === 'error')) {
+      && (httpErrorResponse.status == 403)) {
       return true;
     } else {
       return false;

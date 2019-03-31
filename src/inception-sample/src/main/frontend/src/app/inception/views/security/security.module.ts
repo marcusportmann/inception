@@ -27,8 +27,8 @@ import {OverviewComponent} from "./overview.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'overview',
     pathMatch: 'full',
+    redirectTo: 'overview'
   },
   {
     path: 'overview',

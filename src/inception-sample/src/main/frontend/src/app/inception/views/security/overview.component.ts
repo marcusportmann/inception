@@ -26,5 +26,9 @@ import {Component} from '@angular/core';
 })
 export class OverviewComponent {
 
-  constructor( ) { }
+  /**
+   * Constructs a new OverviewComponent.
+   */
+  constructor() {
+  }
 }

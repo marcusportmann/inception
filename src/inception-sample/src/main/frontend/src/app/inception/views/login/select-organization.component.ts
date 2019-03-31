@@ -40,7 +40,6 @@ export class SelectOrganizationComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
-
     this.selectOrganizationForm = this.formBuilder.group({
       organization: [{value: ''}, Validators.required]
     });

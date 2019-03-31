@@ -31,6 +31,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {environment} from "../../../../environments/environment";
 import {CodeCategorySummary} from "./code-category-summary";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The CodesService class provides the Codes Service implementation.
@@ -86,10 +87,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -124,10 +122,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -165,10 +160,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -204,10 +196,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -245,10 +234,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -274,10 +260,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -313,10 +296,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -352,10 +332,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -371,7 +348,9 @@ export class CodesService {
       map((codeCategorySummaries: CodeCategorySummary[]) => {
         return codeCategorySummaries;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
+        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+          return throwError(new AccessDeniedError(httpErrorResponse, this.i18n));
+        } else if (ApiError.isApiError(httpErrorResponse)) {
           let apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
@@ -381,10 +360,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -420,10 +396,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }
@@ -459,10 +432,7 @@ export class CodesService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }

@@ -28,6 +28,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationDialog} from "../../components/dialogs";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {CodeCategorySummary} from "../../services/codes/code-category-summary";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -55,8 +56,8 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService)
-  {}
+              private spinnerService: SpinnerService) {
+  }
 
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
@@ -82,7 +83,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 
-          if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           }
           else {
@@ -107,7 +108,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      if ((error instanceof CodesServiceError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       }
       else {

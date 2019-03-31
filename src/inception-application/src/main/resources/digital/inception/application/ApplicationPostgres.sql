@@ -1166,9 +1166,6 @@ INSERT INTO security.functions (id, code, name, description)
 VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups',
         'User Groups');
 INSERT INTO security.functions (id, code, name, description)
-VALUES ('0623bc3f-9a1b-4f19-8438-236660d789c5', 'Application.CodeCategoryAdministration',
-        'Code Category Administration', 'Code Category Administration');
-INSERT INTO security.functions (id, code, name, description)
 VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration',
         'Code Administration',
         'Code Administration');
@@ -1230,9 +1227,6 @@ VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d',
 INSERT INTO security.function_to_role_map (function_id, role_id)
 VALUES ('7a54a71e-3680-4d49-b87d-29604a247413',
         '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserGroups
-INSERT INTO security.function_to_role_map (function_id, role_id)
-VALUES ('0623bc3f-9a1b-4f19-8438-236660d789c5',
-        '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeCategoryAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id)
 VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6',
         '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeAdministration

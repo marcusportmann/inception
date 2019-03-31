@@ -75,10 +75,7 @@ export class ErrorService {
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SystemUnavailableError(this.i18n({
-            id: '@@system_unavailable_error',
-            value: 'An error has occurred and the system is unable to process your request at this time.'
-          }), httpErrorResponse));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
   }

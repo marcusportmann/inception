@@ -31,8 +31,8 @@ import {ExampleFormComponent} from "./example-form.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'example-form',
     pathMatch: 'full',
+    redirectTo: 'example-form'
   },
   {
     path: 'example-form',

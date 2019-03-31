@@ -26,8 +26,8 @@ import {Menu312Component} from "./menu312.component";
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'menu311',
     pathMatch: 'full',
+    redirectTo: 'menu311'
   },
   {
     path: 'menu311',

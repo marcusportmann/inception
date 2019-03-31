@@ -46,6 +46,7 @@ import {ConfirmationDialog} from "../../components/dialogs";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {SecurityServiceError} from "../../services/security/security.service.errors";
+import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
  * The LoginComponent class implements the login component.
@@ -100,7 +101,6 @@ export class LoginComponent {
   }
 
   onForgotPassword(): void {
-
     //this.router.navigate(['/']);
 
     //let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
@@ -122,9 +122,7 @@ export class LoginComponent {
       }
     });
 
-
     //this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
-
 
     //this.errorService.showConfirm('This is a title', 'This is a message');
 
@@ -149,7 +147,7 @@ export class LoginComponent {
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 
-          if ((error instanceof SessionServiceError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           } else {
             this.dialogService.showErrorDialog(error);
