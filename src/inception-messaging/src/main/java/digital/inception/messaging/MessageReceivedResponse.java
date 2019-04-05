@@ -22,10 +22,10 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageReceivedResponse</code> class represents the response to a request sent by a

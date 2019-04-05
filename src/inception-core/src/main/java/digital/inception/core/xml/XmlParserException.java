@@ -20,11 +20,12 @@ package digital.inception.core.xml;
 
 import org.xml.sax.SAXParseException;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+import java.util.Date;
 
 /**
  * The <code>XmlParserException</code> exception is thrown to indicate an error condition when

@@ -16,9 +16,12 @@
 
 package digital.inception.core.util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+
 import java.util.Enumeration;
 
 /**
@@ -61,13 +64,13 @@ public class NetworkUtil
 
       // Iterate all NICs (network interface cards)
       for (Enumeration networkInterfaces = NetworkInterface.getNetworkInterfaces();
-        networkInterfaces.hasMoreElements(); )
+          networkInterfaces.hasMoreElements(); )
       {
         NetworkInterface networkInterface = (NetworkInterface) networkInterfaces.nextElement();
 
         // Iterate all IP addresses assigned to each card
         for (Enumeration inetAddresses = networkInterface.getInetAddresses();
-          inetAddresses.hasMoreElements(); )
+            inetAddresses.hasMoreElements(); )
         {
           InetAddress inetAddress = (InetAddress) inetAddresses.nextElement();
           if (!inetAddress.isLoopbackAddress())
@@ -105,7 +108,7 @@ public class NetworkUtil
       if (jdkSuppliedAddress == null)
       {
         throw new UnknownHostException(
-          "The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
+            "The JDK InetAddress.getLocalHost() method unexpectedly returned null.");
       }
 
       return jdkSuppliedAddress;
@@ -113,7 +116,7 @@ public class NetworkUtil
     catch (Throwable e)
     {
       UnknownHostException unknownHostException = new UnknownHostException(
-        "Failed to determine LAN address: " + e);
+          "Failed to determine LAN address: " + e);
       unknownHostException.initCause(e);
 
       throw unknownHostException;

@@ -19,9 +19,11 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,10 +34,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.Validator;
 
 /**
  * The <code>SecurityRestController</code> class.
@@ -55,8 +58,6 @@ public class SecurityRestController
   @Autowired
   private Validator validator;
 
-
-
   /**
    * Retrieve the organizations.
    *
@@ -64,11 +65,11 @@ public class SecurityRestController
    */
   @ApiOperation(value = "Retrieve the organizations", notes = "Retrieve the organizations")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-    @ApiResponse(code = 500,
-      message = "An error has occurred and the service is unable to process the request at this time",
-      response = RestControllerError.class) })
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
-    produces = "application/json")
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
   public List<Organization> getOrganizations()
@@ -78,6 +79,4 @@ public class SecurityRestController
 
     return securityService.getOrganizations();
   }
-
-
 }

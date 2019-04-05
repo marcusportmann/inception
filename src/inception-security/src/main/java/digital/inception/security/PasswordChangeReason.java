@@ -26,8 +26,8 @@ public enum PasswordChangeReason
 {
   USER(0, "User"), ADMINISTRATIVE(1, "Administrative"), FORGOTTEN(2, "Forgotten");
 
-  private String description;
   private int code;
+  private String description;
 
   PasswordChangeReason(int code, String description)
   {

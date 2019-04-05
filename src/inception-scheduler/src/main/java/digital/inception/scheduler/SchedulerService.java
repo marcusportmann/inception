@@ -21,8 +21,10 @@ package digital.inception.scheduler;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,12 +34,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.*;
 import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
@@ -51,14 +55,21 @@ public class SchedulerService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
-
   /**
    * The Spring application context.
    */
   @Autowired
   private ApplicationContext applicationContext;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
+
+  /* The name of the Scheduler Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
@@ -71,13 +82,6 @@ public class SchedulerService
    */
   @Value("${application.scheduler.maximumJobExecutionAttempts:#{144}}")
   private int maximumJobExecutionAttempts;
-
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
 
   /**
    * Initialize the Scheduler Service.

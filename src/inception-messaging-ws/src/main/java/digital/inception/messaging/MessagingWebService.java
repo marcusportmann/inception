@@ -20,11 +20,12 @@ package digital.inception.messaging;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.Validator;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.Validator;
 
 /**
  * The <code>MessagingWebService</code> class.

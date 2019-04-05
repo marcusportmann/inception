@@ -20,13 +20,15 @@ package digital.inception.core.service;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
 import java.time.LocalDateTime;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>ServiceError</code> class holds the service error information.
@@ -41,12 +43,10 @@ import java.time.LocalDateTime;
 public class ServiceError
 {
   /**
-   * The date and time the service error occurred.
+   * The detail for the service error
    */
-  @XmlElement(name = "When", required = true)
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  private LocalDateTime when;
+  @XmlElement(name = "Detail", required = true)
+  private String detail;
 
   /**
    * The message for the service error.
@@ -55,10 +55,12 @@ public class ServiceError
   private String message;
 
   /**
-   * The detail for the service error
+   * The date and time the service error occurred.
    */
-  @XmlElement(name = "Detail", required = true)
-  private String detail;
+  @XmlElement(name = "When", required = true)
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  private LocalDateTime when;
 
   /**
    * Constructs a new <code>ServiceError</code>.

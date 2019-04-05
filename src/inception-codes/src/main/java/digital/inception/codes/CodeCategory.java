@@ -114,6 +114,20 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
+   * @param id   the ID used to uniquely identify the code category
+   * @param name the name of the code category
+   * @param data the optional code data for the code category
+   */
+  public CodeCategory(String id, String name, String data)
+  {
+    this.id = id;
+    this.name = name;
+    this.data = data;
+  }
+
+  /**
+   * Constructs a new <code>CodeCategory</code>.
+   *
    * @param id      the ID used to uniquely identify the code category
    * @param name    the name of the code category
    * @param data    the optional code data for the code category
@@ -125,20 +139,6 @@ public class CodeCategory
     this.name = name;
     this.data = data;
     this.updated = updated;
-  }
-
-  /**
-   * Constructs a new <code>CodeCategory</code>.
-   *
-   * @param id   the ID used to uniquely identify the code category
-   * @param name the name of the code category
-   * @param data the optional code data for the code category
-   */
-  public CodeCategory(String id, String name, String data)
-  {
-    this.id = id;
-    this.name = name;
-    this.data = data;
   }
 
   /**

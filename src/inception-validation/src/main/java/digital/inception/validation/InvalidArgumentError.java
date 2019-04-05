@@ -21,15 +21,18 @@ package digital.inception.validation;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.LocalDateTimeAdapter;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>InvalidArgumentError</code> class holds the invalid argument error information.
@@ -44,12 +47,10 @@ import java.util.List;
 public class InvalidArgumentError
 {
   /**
-   * The date and time the invalid argument error occurred.
+   * The detail for the invalid argument error
    */
-  @XmlElement(name = "When", required = true)
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  private LocalDateTime when;
+  @XmlElement(name = "Detail", required = true)
+  private String detail;
 
   /**
    * The message for the invalid argument error.
@@ -64,16 +65,18 @@ public class InvalidArgumentError
   private String name;
 
   /**
-   * The detail for the invalid argument error
-   */
-  @XmlElement(name = "Detail", required = true)
-  private String detail;
-
-  /**
    * The optional validation errors associated with the invalid argument error
    */
   @XmlElement(name = "ValidationErrors")
   private List<ValidationError> validationErrors;
+
+  /**
+   * The date and time the invalid argument error occurred.
+   */
+  @XmlElement(name = "When", required = true)
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  private LocalDateTime when;
 
   /**
    * Constructs a new <code>InvalidArgumentError</code>.

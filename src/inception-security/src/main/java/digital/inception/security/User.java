@@ -19,6 +19,7 @@ package digital.inception.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,7 +33,6 @@ public class User
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private HashMap<String, String> properties = new HashMap<>();
   private String email;
   private String firstName;
   private UUID id;
@@ -42,10 +42,11 @@ public class User
   private String password;
   private Integer passwordAttempts;
   private LocalDateTime passwordExpiry;
+  private String phoneNumber;
+  private HashMap<String, String> properties = new HashMap<>();
+  private UserStatus status;
   private UUID userDirectoryId;
   private String username;
-  private String phoneNumber;
-  private UserStatus status;
 
   /**
    * Constructs a new <code>User</code>.

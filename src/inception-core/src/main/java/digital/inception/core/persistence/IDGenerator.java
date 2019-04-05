@@ -27,11 +27,13 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.

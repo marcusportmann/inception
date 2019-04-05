@@ -32,8 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.CONFLICT,
     reason = "An organization with the specified name already exists")
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateOrganizationException
-  extends Exception
+public class DuplicateOrganizationException extends Exception
 {
   private static final long serialVersionUID = 1000000;
 

@@ -21,10 +21,12 @@ package digital.inception.reporting;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
@@ -33,13 +35,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.sql.DataSource;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 /**
  * The <code>ReportingRestController</code> class.
@@ -51,6 +56,13 @@ import java.util.*;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportingRestController
 {
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
+
   /* Reporting Service */
   @Autowired
   private IReportingService reportingService;
@@ -58,13 +70,6 @@ public class ReportingRestController
   /* Validator */
   @Autowired
   private Validator validator;
-
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
 
   /**
    * Create the report definition.
@@ -120,8 +125,8 @@ public class ReportingRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/report-definitions/{reportDefinitionId}",
-      method = RequestMethod.DELETE, produces = "application/json")
+  @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",

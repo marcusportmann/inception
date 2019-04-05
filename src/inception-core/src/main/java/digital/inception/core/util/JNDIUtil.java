@@ -18,11 +18,12 @@ package digital.inception.core.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.naming.*;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 /**
  * The <code>JNDIUtil</code> class provides JNDI utility functions.
@@ -189,8 +190,8 @@ public final class JNDIUtil
     }
     catch (Throwable e)
     {
-      pw.println(indent + "[ERROR] Failed to list the JNDIUtil nodes for the context (" + path + "): "
-          + e.getMessage());
+      pw.println(indent + "[ERROR] Failed to list the JNDIUtil nodes for the context (" + path
+          + "): " + e.getMessage());
       pw.println("");
 
       return;

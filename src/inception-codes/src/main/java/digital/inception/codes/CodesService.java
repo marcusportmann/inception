@@ -465,7 +465,7 @@ public class CodesService
       {
         if (rs.next())
         {
-            return getCodeCategory(rs);
+          return getCodeCategory(rs);
         }
         else
         {

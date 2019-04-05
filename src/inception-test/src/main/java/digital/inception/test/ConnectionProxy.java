@@ -16,14 +16,13 @@
 
 package digital.inception.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+//~--- JDK imports ------------------------------------------------------------
 
 import java.sql.*;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConnectionProxy</code> class implements a proxy for JDBC connections.

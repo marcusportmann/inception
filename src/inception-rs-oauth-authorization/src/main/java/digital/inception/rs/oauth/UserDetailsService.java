@@ -21,14 +21,15 @@ package digital.inception.rs.oauth;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.User;
 import digital.inception.security.UserNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDetailsService</code> class provides the User Details Service implementation

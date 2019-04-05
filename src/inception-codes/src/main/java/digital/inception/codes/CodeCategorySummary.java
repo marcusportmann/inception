@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @JsonPropertyOrder({ "id", "name", "updated" })
 @XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")
 @XmlType(name = "CodeCategorySummary", namespace = "http://codes.inception.digital",
-  propOrder = { "id", "name", "updated" })
+    propOrder = { "id", "name", "updated" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CodeCategorySummary
   implements Serializable

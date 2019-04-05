@@ -20,15 +20,19 @@ package digital.inception.test;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
 import org.slf4j.LoggerFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
+
 import java.sql.Connection;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DataSourceTracker</code> class implements a cglib method interceptor that tracks the
@@ -47,6 +51,16 @@ public class DataSourceTracker
    * Constructs a new <code>DataSourceTracker</code>.
    */
   DataSourceTracker() {}
+
+  /**
+   * Returns the active database connections for all Data Sources associated with the tracker.
+   *
+   * @return the active database connections for all Data Sources associated with the tracker
+   */
+  public static Map<Connection, StackTraceElement[]> getActiveDatabaseConnections()
+  {
+    return activeDatabaseConnections.get();
+  }
 
   /**
    * Intercept the method invocation.
@@ -101,15 +115,5 @@ public class DataSourceTracker
 
       throw e;
     }
-  }
-
-  /**
-   * Returns the active database connections for all Data Sources associated with the tracker.
-   *
-   * @return the active database connections for all Data Sources associated with the tracker
-   */
-  public static Map<Connection, StackTraceElement[]> getActiveDatabaseConnections()
-  {
-    return activeDatabaseConnections.get();
   }
 }

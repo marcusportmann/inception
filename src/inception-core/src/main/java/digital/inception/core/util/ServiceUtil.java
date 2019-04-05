@@ -21,9 +21,9 @@ package digital.inception.core.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.naming.InitialContext;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.naming.InitialContext;
 
 /**
  * The <code>ServiceUtil</code> class provides utility methods that are useful when creating

@@ -22,9 +22,9 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent a mobile device to

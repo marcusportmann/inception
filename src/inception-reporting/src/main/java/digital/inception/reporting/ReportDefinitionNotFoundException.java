@@ -19,15 +19,17 @@ package digital.inception.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionNotFoundException</code> exception is thrown to indicate an error

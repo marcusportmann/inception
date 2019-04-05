@@ -20,14 +20,16 @@ package digital.inception.security;
 
 import digital.inception.core.util.Base64Util;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.MessageDigest;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import java.util.Map;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory

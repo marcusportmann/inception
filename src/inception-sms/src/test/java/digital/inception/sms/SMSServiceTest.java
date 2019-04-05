@@ -19,8 +19,10 @@ package digital.inception.sms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
@@ -55,6 +57,6 @@ public class SMSServiceTest
   public void test()
     throws Exception
   {
-    //smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
+    // smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
   }
 }

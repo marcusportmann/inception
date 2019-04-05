@@ -22,23 +22,29 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.LocalDateTimeAdapter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Data</code> class.
@@ -61,6 +67,29 @@ public class Data
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The timestamp value for the data.
+   */
+  @ApiModelProperty(value = "The timestamp value for the data")
+  @JsonProperty
+  @XmlElement(name = "TimestampValue")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "TIMESTAMP_VALUE")
+  public LocalDateTime timestampValue;
+
+  /**
+   * The date value for the data.
+   */
+  @ApiModelProperty(value = "The date value for the data")
+  @JsonProperty
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+  @XmlElement(name = "DateValue")
+  @XmlJavaTypeAdapter(LocalDateAdapter.class)
+  @XmlSchemaType(name = "date")
+  @Column(name = "DATE_VALUE")
+  private LocalDate dateValue;
+
+  /**
    * The ID used to uniquely identify the data.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the data", required = true)
@@ -70,6 +99,15 @@ public class Data
   @NotNull
   @Column(name = "ID", nullable = false)
   private long id;
+
+  /**
+   * The integer value for the data.
+   */
+  @ApiModelProperty(value = "The integer value for the data")
+  @JsonProperty
+  @XmlElement(name = "IntegerValue")
+  @Column(name = "INTEGER_VALUE")
+  private Integer integerValue;
 
   /**
    * The name for the data.
@@ -89,38 +127,6 @@ public class Data
   @XmlElement(name = "StringValue")
   @Column(name = "STRING_VALUE")
   private String stringValue;
-
-  /**
-   * The integer value for the data.
-   */
-  @ApiModelProperty(value = "The integer value for the data")
-  @JsonProperty
-  @XmlElement(name = "IntegerValue")
-  @Column(name = "INTEGER_VALUE")
-  private Integer integerValue;
-
-  /**
-   * The date value for the data.
-   */
-  @ApiModelProperty(value = "The date value for the data")
-  @JsonProperty
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  @XmlElement(name = "DateValue")
-  @XmlJavaTypeAdapter(LocalDateAdapter.class)
-  @XmlSchemaType(name = "date")
-  @Column(name = "DATE_VALUE")
-  private LocalDate dateValue;
-
-  /**
-   * The timestamp value for the data.
-   */
-  @ApiModelProperty(value = "The timestamp value for the data")
-  @JsonProperty
-  @XmlElement(name = "TimestampValue")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "TIMESTAMP_VALUE")
-  public LocalDateTime timestampValue;
 
   /**
    * Constructs a new <code>Data</code>.

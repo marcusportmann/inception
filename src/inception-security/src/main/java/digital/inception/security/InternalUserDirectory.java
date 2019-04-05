@@ -20,17 +20,21 @@ package digital.inception.security;
 
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.StringUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.*;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
 import java.util.*;
 import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -39,6 +43,11 @@ import java.util.Date;
  */
 public class InternalUserDirectory extends UserDirectoryBase
 {
+  /**
+   * The default maximum number of filtered users.
+   */
+  private static final int DEFAULT_MAX_FILTERED_USERS = 100;
+
   /**
    * The default number of failed password attempts before the user is locked.
    */
@@ -53,11 +62,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default number of months to check password history against.
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
-
-  /**
-   * The default maximum number of filtered users.
-   */
-  private static final int DEFAULT_MAX_FILTERED_USERS = 100;
 
   /**
    * The data source used to provide connections to the application database.
@@ -554,7 +558,6 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       statement.setString(10, passwordHash);
-
 
       if (userLocked)
       {

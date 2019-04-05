@@ -20,12 +20,13 @@ package digital.inception.ws.security;
 
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import java.io.IOException;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordCallbackHandler</code> class implements the password callback handler.
@@ -35,8 +36,8 @@ import java.io.IOException;
 public class PasswordCallbackHandler
   implements CallbackHandler
 {
-  private String username;
   private String password;
+  private String username;
 
   /**
    * Constructs a new <code>PasswordCallbackHandler</code>.

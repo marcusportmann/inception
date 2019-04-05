@@ -19,22 +19,26 @@ package digital.inception.sample.model;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.ValidationError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.

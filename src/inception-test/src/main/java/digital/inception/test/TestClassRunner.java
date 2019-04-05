@@ -21,14 +21,18 @@ package digital.inception.test;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+
 import org.slf4j.LoggerFactory;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.transaction.Transaction;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
+
 import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.transaction.Transaction;
 
 /**
  * The <code>TestClassRunner</code> class implements the JUnit runner that provides support for

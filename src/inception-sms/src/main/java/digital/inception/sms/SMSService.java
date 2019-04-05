@@ -20,14 +20,17 @@ package digital.inception.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+
 import digital.inception.Debug;
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,22 +38,30 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.StringReader;
+
+import java.net.URL;
+
+import java.sql.*;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import javax.sql.DataSource;
+
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
-import java.io.StringReader;
-import java.net.URL;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -69,9 +80,6 @@ public class SMSService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
-
-  /* The name of the SMS Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
   /**
    * The Spring application context.
@@ -92,17 +100,20 @@ public class SMSService
   @Autowired
   private IDGenerator idGenerator;
 
+  /* The name of the SMS Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
+
+  /**
+   * The maximum number of times sending will be attempted for a SMS.
+   */
+  @Value("${application.sms.maximumSendAttempts:#{100}}")
+  private int maximumSendAttempts;
+
   /**
    * The MyMobileAPI endpoint.
    */
   @Value("${application.sms.myMobileAPIEndPoint:#{null}}")
   private String myMobileAPIEndPoint;
-
-  /**
-   * The MyMobileAPI username.
-   */
-  @Value("${application.sms.myMobileAPIUsername:#{null}}")
-  private String myMobileAPIUsername;
 
   /**
    * The MyMobileAPI password.
@@ -111,10 +122,10 @@ public class SMSService
   private String myMobileAPIPassword;
 
   /**
-   * The maximum number of times sending will be attempted for a SMS.
+   * The MyMobileAPI username.
    */
-  @Value("${application.sms.maximumSendAttempts:#{100}}")
-  private int maximumSendAttempts;
+  @Value("${application.sms.myMobileAPIUsername:#{null}}")
+  private String myMobileAPIUsername;
 
   /**
    *  The delay in milliseconds to wait before re-attempting to send a SMS.

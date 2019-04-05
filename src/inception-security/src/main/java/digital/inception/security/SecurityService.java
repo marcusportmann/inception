@@ -20,8 +20,10 @@ package digital.inception.security;
 
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,20 +31,24 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.ServiceUnavailableException;
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Constructor;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.naming.ServiceUnavailableException;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.
@@ -86,8 +92,12 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
+
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the application database.
@@ -101,12 +111,8 @@ public class SecurityService
    */
   @Autowired
   private IDGenerator idGenerator;
-
-  /**
-   * The Spring application context.
-   */
-  @Autowired
-  private ApplicationContext applicationContext;
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -1446,7 +1452,6 @@ public class SecurityService
     {
       throw new SecurityServiceException("Testing 1.. 2.. 3..");
     }
-
 
     String getOrganizationsSQL =
         "SELECT id, name, status FROM security.organizations ORDER BY name";

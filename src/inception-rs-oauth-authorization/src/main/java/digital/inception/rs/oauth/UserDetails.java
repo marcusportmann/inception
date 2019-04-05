@@ -19,14 +19,15 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.security.User;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDetails</code> class stores the details for a user.
@@ -36,8 +37,8 @@ import java.util.List;
 public class UserDetails
   implements org.springframework.security.core.userdetails.UserDetails
 {
-  private User user;
   private List<GrantedAuthority> authorities;
+  private User user;
 
   /**
    * Constructs a new <code>UserDetails</code>.

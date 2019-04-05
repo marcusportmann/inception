@@ -21,9 +21,9 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>WbxmlMessageData</code> class provides the abstract base class from which all

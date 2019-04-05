@@ -19,10 +19,15 @@ package digital.inception.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+
 import digital.inception.core.util.JDBCUtil;
+
 import net.sf.cglib.proxy.Enhancer;
+
 import org.h2.jdbcx.JdbcDataSource;
+
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
@@ -41,16 +46,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
@@ -63,9 +70,11 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true,
-    excludeFilters = {@ComponentScan.Filter(value = SpringBootApplication.class,
-        type = FilterType.ANNOTATION), @ComponentScan.Filter(pattern = "digital\\.inception\\application\\.ApplicationTransactionManager",
-      type = FilterType.REGEX) })
+    excludeFilters = { @ComponentScan.Filter(value = SpringBootApplication.class,
+        type = FilterType.ANNOTATION) ,
+        @ComponentScan.Filter(
+            pattern = "digital\\.inception\\application\\.ApplicationTransactionManager",
+                type = FilterType.REGEX) })
 public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();

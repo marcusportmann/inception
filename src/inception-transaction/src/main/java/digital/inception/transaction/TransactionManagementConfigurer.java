@@ -43,15 +43,15 @@ public class TransactionManagementConfigurer
   implements org.springframework.transaction.annotation.TransactionManagementConfigurer
 {
   private static final Object lock = new Object();
-  private static UserTransactionManager userTransactionManager;
-  private static UserTransactionImp userTransaction;
   private static Class<?> enhancerClass;
+  private static Method enhancerClassCreateMethod;
+  private static Method enhancerClassSetCallbackMethod;
+  private static Method enhancerClassSetSuperclassMethod;
   private static Class<?> transactionManagerClass;
   private static Class<?> transactionManagerTransactionTrackerClass;
+  private static UserTransactionImp userTransaction;
+  private static UserTransactionManager userTransactionManager;
   private static Class<?> userTransactionTrackerClass;
-  private static Method enhancerClassSetSuperclassMethod;
-  private static Method enhancerClassSetCallbackMethod;
-  private static Method enhancerClassCreateMethod;
 
   static
   {

@@ -22,6 +22,7 @@ import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.StringUtil;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityServiceAuthenticationManager;
+
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,28 +31,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration
-  .EnableGlobalMethodSecurity;
+    .EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.configurers
+    .ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration
-  .AuthorizationServerConfigurerAdapter;
+    .AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration
-  .EnableAuthorizationServer;
+    .EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers
-  .AuthorizationServerEndpointsConfigurer;
+    .AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers
-  .AuthorizationServerSecurityConfigurer;
+    .AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import java.util.Arrays;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.Arrays;
 
 /**
  * The <code>AuthorizationServerConfiguration</code> class provides the OAuth2 Authorization Server
@@ -143,20 +145,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   }
 
   /**
-   * Configure the ClientDetailsService, e.g. declaring individual clients and their properties. Note that password
-   * grant is not enabled (even if some clients are allowed it) unless an AuthenticationManager is supplied to the
-   * configure(AuthorizationServerEndpointsConfigurer). At least one client, or a fully formed custom
-   * ClientDetailsService must be declared or the server will not start.
-   *
-   * @param clients the client details service configurer
-   */
-  @Override
-  public void configure(ClientDetailsServiceConfigurer clients) throws Exception
-  {
-    clients.withClientDetails(new ClientDetailsService());
-  }
-
-  /**
    * Configure the non-security features of the Authorization Server endpoints, like token store,
    * token customizations, user approvals and grant types.
    *
@@ -216,6 +204,21 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   }
 
   /**
+   * Configure the ClientDetailsService, e.g. declaring individual clients and their properties. Note that password
+   * grant is not enabled (even if some clients are allowed it) unless an AuthenticationManager is supplied to the
+   * configure(AuthorizationServerEndpointsConfigurer). At least one client, or a fully formed custom
+   * ClientDetailsService must be declared or the server will not start.
+   *
+   * @param clients the client details service configurer
+   */
+  @Override
+  public void configure(ClientDetailsServiceConfigurer clients)
+    throws Exception
+  {
+    clients.withClientDetails(new ClientDetailsService());
+  }
+
+  /**
    * Returns the token enhancer for the authorization server.
    *
    * @return the token enhancer for the authorization server
@@ -237,7 +240,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
     defaultTokenServices.setTokenStore(tokenStore());
     defaultTokenServices.setSupportRefreshToken(true);
-    //defaultTokenServices.setClientDetailsService(clientDetailsService());
+
+    // defaultTokenServices.setClientDetailsService(clientDetailsService());
     defaultTokenServices.setAccessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY);
     defaultTokenServices.setRefreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY);
 

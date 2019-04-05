@@ -19,6 +19,7 @@ package digital.inception.sms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestConfiguration;
+
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

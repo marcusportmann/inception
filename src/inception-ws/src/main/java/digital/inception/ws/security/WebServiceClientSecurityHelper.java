@@ -18,24 +18,28 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-
 import digital.inception.core.util.MutualSSLSocketFactory;
 import digital.inception.core.util.NoTrustSSLSocketFactory;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+import java.net.URL;
+
+import java.security.KeyStore;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import javax.net.ssl.SSLSocketFactory;
+
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.handler.HandlerResolver;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.security.KeyStore;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientSecurityHelper</code> class is a utility class
@@ -60,22 +64,22 @@ public class WebServiceClientSecurityHelper
   /* The web service client cache. */
   private static ConcurrentMap<String, WebServiceClient> webServiceClientCache =
       new ConcurrentHashMap<>();
+  private static boolean apacheCxfCheckFailed;
+  private static Class apacheCxfClientClass;
   private static Method apacheCxfClientGetConduitMethod;
   private static Class apacheCxfClientProxyClass;
   private static Method apacheCxfClientProxyGetClientMethod;
   private static Method apacheCxfHttpConduitSetTlsClientParametersMethod;
   private static Class apacheCxfTlsClientParametersClass;
+  private static Method apacheCxfTlsClientParametersSetDisableCNCheckMethod;
   private static Method apacheCxfTlsParametersBaseSetKeyManagersMethod;
   private static Method apacheCxfTlsParametersBaseSetTrustManagersMethod;
-  private static Class apacheCxfClientClass;
 
   /**
    * The socket factory used to connect to a web service using SSL without validating the server
    * certificate.
    */
   private static NoTrustSSLSocketFactory noTrustSSLSocketFactory;
-  private static boolean apacheCxfCheckFailed;
-  private static Method apacheCxfTlsClientParametersSetDisableCNCheckMethod;
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with

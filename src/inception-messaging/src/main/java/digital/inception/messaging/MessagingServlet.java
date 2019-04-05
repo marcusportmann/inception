@@ -20,9 +20,19 @@ package digital.inception.messaging;
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -31,12 +41,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageServlet</code> servlet.
@@ -54,14 +58,14 @@ public class MessagingServlet extends HttpServlet
   private static final Logger logger = LoggerFactory.getLogger(MessagingServlet.class);
   private static final long serialVersionUID = 1000000;
 
-  /* Messaging Service */
-  @Autowired
-  private IMessagingService messagingService;
-
   /**
    * Is the messaging servlet initialized?
    */
   private boolean isInitialized;
+
+  /* Messaging Service */
+  @Autowired
+  private IMessagingService messagingService;
 
   /**
    * Constructs a new <code>MessagingServlet</code>.

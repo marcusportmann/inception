@@ -18,13 +18,16 @@ package digital.inception.core.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.net.ssl.*;
 import java.io.IOException;
+
 import java.net.InetAddress;
 import java.net.Socket;
+
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.*;
 
 /**
  * The <code>NoTrustSSLSocketFactory</code> class implements the no-trust SSL socket factory.

@@ -21,15 +21,18 @@ package digital.inception.core.util;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.InputStream;
+
 import java.math.BigInteger;
+
 import java.security.*;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import java.util.UUID;
 
 /**
  * The <code>CryptoUtil</code> class provides a number of cryptography related utility functions.

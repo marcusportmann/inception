@@ -26,13 +26,15 @@ import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+
 import java.security.KeyStore;
+
 import java.util.HashMap;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSX509CertificateTokenProfileProxyConfigurator</code> class provides the capability

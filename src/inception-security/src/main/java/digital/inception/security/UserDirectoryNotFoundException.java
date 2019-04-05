@@ -21,9 +21,9 @@ package digital.inception.security;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation

@@ -21,19 +21,23 @@ package digital.inception.configuration;
 import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.List;
-import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>ConfigurationWebService</code> class.

@@ -22,10 +22,11 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Organization;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
+
+import java.util.UUID;
 
 /**
  * The <code>OrganizationData</code> class stores the information for an organization.

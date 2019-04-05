@@ -21,15 +21,18 @@ package digital.inception.configuration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>Configuration</code> class stores the key, value and description for the configuration.
@@ -47,6 +50,16 @@ public class Configuration
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The description for the configuration.
+   */
+  @ApiModelProperty(value = "The description for the configuration", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 4000)
+  private String description;
 
   /**
    * The key used to uniquely identify the configuration.
@@ -67,16 +80,6 @@ public class Configuration
   @NotNull
   @Size(max = 4000)
   private String value;
-
-  /**
-   * The description for the configuration.
-   */
-  @ApiModelProperty(value = "The description for the configuration", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Description", required = true)
-  @NotNull
-  @Size(max = 4000)
-  private String description;
 
   /**
    * Constructs a new <code>Configuration</code>.

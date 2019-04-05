@@ -24,12 +24,13 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+
 import java.util.HashMap;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSUsernameTokenProfileProxyConfigurator</code> class provides the capability to

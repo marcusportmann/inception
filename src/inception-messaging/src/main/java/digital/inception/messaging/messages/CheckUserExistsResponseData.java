@@ -26,9 +26,9 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>CheckUserExistsResponseData</code> class manages the data for a
@@ -41,14 +41,14 @@ import java.util.UUID;
 public class CheckUserExistsResponseData extends WbxmlMessageData
 {
   /**
-   * The error code returned to indicate success.
-   */
-  private static final int ERROR_CODE_SUCCESS = 0;
-
-  /**
    * The error code returned when an unknown error occurred.
    */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
+
+  /**
+   * The error code returned to indicate success.
+   */
+  private static final int ERROR_CODE_SUCCESS = 0;
 
   /**
    * The message returned to indicate success.

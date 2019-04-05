@@ -48,9 +48,9 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Marcus Portmann
  */
 @WebService(serviceName = "ErrorService", name = "IErrorService",
-  targetNamespace = "http://error.inception.digital")
+    targetNamespace = "http://error.inception.digital")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-  parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ErrorWebService
 {
@@ -82,7 +82,7 @@ public class ErrorWebService
     if (!constraintViolations.isEmpty())
     {
       throw new InvalidArgumentException("errorReport", ValidationError.toValidationErrors(
-        constraintViolations));
+          constraintViolations));
     }
 
     errorService.createErrorReport(errorReport);

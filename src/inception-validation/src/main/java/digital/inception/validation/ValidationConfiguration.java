@@ -19,6 +19,7 @@ package digital.inception.validation;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.support.MergedMessageSource;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

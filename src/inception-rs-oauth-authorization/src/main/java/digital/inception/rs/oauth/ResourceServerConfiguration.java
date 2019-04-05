@@ -27,8 +27,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration
+    .ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers
+    .ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -59,7 +61,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
   {
     if (StringUtil.isNullOrEmpty(jwtPublicKey))
     {
-      throw new ConfigurationException("Failed to initialize the JWT access token converter for the resource server: "
+      throw new ConfigurationException(
+          "Failed to initialize the JWT access token converter for the resource server: "
           + "The JWT public key was not specified");
     }
 
@@ -73,7 +76,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialize the JWT access token converter for the resource server", e);
+      throw new FatalBeanException(
+          "Failed to initialize the JWT access token converter for the resource server", e);
     }
   }
 

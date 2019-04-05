@@ -25,12 +25,14 @@ import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
-import javax.xml.ws.Endpoint;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.security.KeyStore;
+
 import java.util.HashMap;
 import java.util.Map;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.ws.Endpoint;
 
 /**
  * The <code>CXFWSSX509CertificateTokenProfileEndpointConfigurator</code> class provides the

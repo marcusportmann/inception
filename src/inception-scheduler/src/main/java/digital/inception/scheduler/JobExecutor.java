@@ -31,8 +31,8 @@ public class JobExecutor
 {
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(JobExecutor.class);
-  private ISchedulerService schedulerService;
   private Job job;
+  private ISchedulerService schedulerService;
 
   /**
    * Constructs a new <code>JobExecutorThread</code>.

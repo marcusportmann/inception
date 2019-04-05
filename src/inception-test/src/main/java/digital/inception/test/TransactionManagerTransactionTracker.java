@@ -20,16 +20,20 @@ package digital.inception.test;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+
 import org.slf4j.LoggerFactory;
 
-import javax.transaction.Transaction;
-import javax.transaction.TransactionManager;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.lang.reflect.Method;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 
 /**
  * The <code>TransactionManagerTransactionTracker</code> class implements a cglib method

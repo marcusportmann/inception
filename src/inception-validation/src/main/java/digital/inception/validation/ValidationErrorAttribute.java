@@ -19,12 +19,14 @@ package digital.inception.validation;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import io.swagger.annotations.ApiModel;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>ValidationErrorAttribute</code> attribute represents an attribute associated with the
@@ -34,7 +36,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ValidationErrorAttribute")
 @JsonPropertyOrder({ "name", "value" })
-@XmlRootElement(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital")
+@XmlRootElement(name = "ValidationErrorAttribute",
+    namespace = "http://validation.inception.digital")
 @XmlType(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital",
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)

@@ -24,10 +24,11 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.UUID;
 
 /**
  * The <code>Message</code> class holds the information for a message.

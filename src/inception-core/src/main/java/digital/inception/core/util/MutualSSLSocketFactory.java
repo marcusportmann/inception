@@ -18,16 +18,19 @@ package digital.inception.core.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.net.ssl.*;
 import java.io.IOException;
+
 import java.net.InetAddress;
 import java.net.Socket;
+
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.*;
 
 /**
  * The <code>MutualSSLSocketFactory</code> class implements the custom SSL socket factory that

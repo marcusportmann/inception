@@ -22,10 +22,11 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-import java.io.IOException;
-import java.util.Properties;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.util.Properties;
 
 /**
  * The <code>MergedMessageSource</code> class implements the merged message source that provides
@@ -33,8 +34,7 @@ import java.util.Properties;
  *
  * @author Marcus Portmann
  */
-public class MergedMessageSource
-  extends ReloadableResourceBundleMessageSource
+public class MergedMessageSource extends ReloadableResourceBundleMessageSource
 {
   private static final String PROPERTIES_SUFFIX = ".properties";
   private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

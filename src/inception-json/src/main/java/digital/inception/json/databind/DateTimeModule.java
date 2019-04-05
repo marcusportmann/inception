@@ -21,12 +21,12 @@ package digital.inception.json.databind;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DateTimeModule</code> implements the custom Jackson module that registers the

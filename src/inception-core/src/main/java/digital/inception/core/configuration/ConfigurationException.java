@@ -21,7 +21,7 @@ package digital.inception.core.configuration;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class ConfigurationException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;
@@ -56,4 +56,3 @@ public class ConfigurationException extends RuntimeException
     super(message, cause);
   }
 }
-

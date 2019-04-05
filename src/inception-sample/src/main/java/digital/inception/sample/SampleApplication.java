@@ -20,15 +20,17 @@ package digital.inception.sample;
 
 import digital.inception.application.Application;
 import digital.inception.codes.CodesWebService;
-import digital.inception.error.ErrorWebService;
 import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.error.ErrorWebService;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
 import digital.inception.sample.api.SampleServiceController;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -36,6 +38,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -44,12 +47,13 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.xml.ws.Endpoint;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.ws.Endpoint;
 
 /**
  * The <code>SampleApplication</code> provides the implementation of the Wicket Web Application
@@ -66,13 +70,13 @@ public class SampleApplication extends Application
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
 
-  /* Sample Service Controller */
-  @Autowired
-  private SampleServiceController sampleServiceController;
-
   /* Reporting Service */
   @Autowired
   private IReportingService reportingService;
+
+  /* Sample Service Controller */
+  @Autowired
+  private SampleServiceController sampleServiceController;
 
 //
 ///* Sample Configuration */
@@ -161,6 +165,17 @@ public class SampleApplication extends Application
     return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService());
   }
 
+  /**
+   * Returns the Spring bean for the Error Service web service.
+   *
+   * @return the Spring bean for the Error Service web service
+   */
+  @Bean
+  protected Endpoint errorWebService()
+  {
+    return createWebServiceEndpoint("ErrorService", new ErrorWebService());
+  }
+
 ///**
 // * Returns the in-memory distributed cache manager.
 // *
@@ -200,17 +215,6 @@ public class SampleApplication extends Application
     packagesToScan.add("digital.inception.sample");
 
     return packagesToScan;
-  }
-
-  /**
-   * Returns the Spring bean for the Error Service web service.
-   *
-   * @return the Spring bean for the Error Service web service
-   */
-  @Bean
-  protected Endpoint errorWebService()
-  {
-    return createWebServiceEndpoint("ErrorService", new ErrorWebService());
   }
 
   /**

@@ -22,14 +22,16 @@ import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.StringUtil;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.security.MessageDigest;
+
+import java.util.UUID;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.MessageDigest;
-import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageTranslator</code> class provides the facilities to create messages containing

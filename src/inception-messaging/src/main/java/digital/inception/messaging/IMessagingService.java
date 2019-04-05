@@ -72,7 +72,6 @@ public interface IMessagingService
    */
   boolean canQueueMessagePartForAssembly(MessagePart messagePart);
 
-
   /**
    * Create the message.
    *
@@ -156,8 +155,6 @@ public interface IMessagingService
   boolean encryptMessage(Message message)
     throws MessagingServiceException;
 
-
-
   /**
    * Returns the maximum number of times processing will be attempted for a message.
    *
@@ -222,7 +219,6 @@ public interface IMessagingService
    */
   Message getNextMessageQueuedForProcessing()
     throws MessagingServiceException;
-
 
   /**
    * Increment the processing attempts for the message.

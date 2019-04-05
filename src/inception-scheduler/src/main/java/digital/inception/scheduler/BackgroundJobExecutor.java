@@ -20,17 +20,18 @@ package digital.inception.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
@@ -42,8 +43,10 @@ import java.util.concurrent.TimeUnit;
 public class BackgroundJobExecutor
   implements InitializingBean
 {
-  /* Logger */
-  private static Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
+  /**
+   * The default number of minutes an idle processing thread should be kept alive.
+   */
+  private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
 
   /**
    * The default number of threads to start initially to process jobs.
@@ -51,29 +54,27 @@ public class BackgroundJobExecutor
   private static final int DEFAULT_INITIAL_PROCESSING_THREADS = 1;
 
   /**
-   * The default maximum number of threads to create to process jobs.
-   */
-  private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
-
-  /**
-   * The default number of minutes an idle processing thread should be kept alive.
-   */
-  private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
-
-  /**
    * The default maximum number of jobs to queue for processing if no processing threads are
    * available.
    */
   private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
 
-  /* Scheduler Service */
-  @Autowired
-  private ISchedulerService schedulerService;
+  /**
+   * The default maximum number of threads to create to process jobs.
+   */
+  private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
+
+  /* Logger */
+  private static Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
   /**
    * The executor responsible for processing jobs.
    */
   private Executor jobProcessor;
+
+  /* Scheduler Service */
+  @Autowired
+  private ISchedulerService schedulerService;
 
   /**
    * Initialize the Background Job Executor.

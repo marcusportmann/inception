@@ -20,9 +20,9 @@ package digital.inception.sample.model;
 
 import digital.inception.validation.ValidationError;
 
-import java.util.List;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ISampleService</code> interface defines the functionality that must be provided by

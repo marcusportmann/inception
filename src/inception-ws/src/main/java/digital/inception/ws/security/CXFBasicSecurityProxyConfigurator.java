@@ -24,10 +24,10 @@ import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.http.auth.DefaultBasicAuthSupplier;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFBasicSecurityProxyConfigurator</code> class provides the capability to configure

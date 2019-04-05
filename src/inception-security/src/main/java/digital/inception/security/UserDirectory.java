@@ -22,19 +22,23 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import org.xml.sax.InputSource;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>UserDirectory</code> class stores the information for a user directory.
@@ -46,9 +50,9 @@ public class UserDirectory
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-  private Map<String, String> parameters = new HashMap<>();
   private UUID id;
   private String name;
+  private Map<String, String> parameters = new HashMap<>();
   private UserDirectoryType type;
   private UUID typeId;
 

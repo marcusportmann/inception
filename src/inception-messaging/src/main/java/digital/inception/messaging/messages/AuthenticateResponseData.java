@@ -27,10 +27,10 @@ import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 import digital.inception.security.Organization;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.*;
 import java.util.stream.Collectors;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a

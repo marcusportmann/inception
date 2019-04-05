@@ -19,6 +19,7 @@ package digital.inception.error;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.StringUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -137,7 +138,7 @@ public class ErrorService
         statement.setNull(9, Types.VARCHAR);
       }
 
-      if (errorReport.getData() !=  null)
+      if (errorReport.getData() != null)
       {
         statement.setBytes(10, errorReport.getData());
       }

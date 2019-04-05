@@ -20,10 +20,11 @@ package digital.inception.core.xml;
 
 import digital.inception.core.util.ISO8601Util;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDate;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * The <code>LocalDateAdapter</code> class implements a JAXB 2.0 adapter used to convert between

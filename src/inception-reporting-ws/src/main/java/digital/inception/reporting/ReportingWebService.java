@@ -20,22 +20,28 @@ package digital.inception.reporting;
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.sql.Connection;
+
+import java.util.*;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import javax.sql.DataSource;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.xml.bind.annotation.XmlElement;
-import java.sql.Connection;
-import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>ReportingWebService</code> class.
@@ -49,6 +55,13 @@ import java.util.*;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportingWebService
 {
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  private DataSource dataSource;
+
   /* Reporting Service */
   @Autowired
   private IReportingService reportingService;
@@ -56,13 +69,6 @@ public class ReportingWebService
   /* Validator */
   @Autowired
   private Validator validator;
-
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
 
   /**
    * Create the report definition.

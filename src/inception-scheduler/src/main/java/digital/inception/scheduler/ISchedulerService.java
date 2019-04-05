@@ -20,10 +20,10 @@ package digital.inception.scheduler;
 
 import digital.inception.validation.InvalidArgumentException;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler

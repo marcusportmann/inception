@@ -21,11 +21,11 @@ package digital.inception.configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationNotFoundException</code> exception is thrown to indicate that the required

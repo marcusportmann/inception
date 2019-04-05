@@ -23,17 +23,19 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * The <code>CXFMutualSSLSecurityProxyConfigurator</code> class provides the capability to configure

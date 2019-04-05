@@ -22,10 +22,10 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded by a
@@ -58,11 +58,6 @@ public class MessagePartResult
   public static final int SUCCESS = 0;
 
   /**
-   * The flattened information for the exception that resulted from uploading the message part.
-   */
-  private String exception;
-
-  /**
    * The result code.
    * <p/>
    * A result code of 0 is used to indicate that the message part was uploaded successfully.
@@ -75,6 +70,11 @@ public class MessagePartResult
    * The <b>detail</b> may be blank if the message part was uploaded successfully.
    */
   private String detail;
+
+  /**
+   * The flattened information for the exception that resulted from uploading the message part.
+   */
+  private String exception;
 
   /**
    * Constructs a new <code>MessagePartResult</code> and populates it from the information

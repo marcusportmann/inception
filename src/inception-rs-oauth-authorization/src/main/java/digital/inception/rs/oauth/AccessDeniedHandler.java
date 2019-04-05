@@ -19,22 +19,28 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+
+import java.math.BigDecimal;
+
+import java.nio.charset.StandardCharsets;
+
+import java.time.LocalDateTime;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AccessDeniedHandler</code> implements the custom access denied handler.

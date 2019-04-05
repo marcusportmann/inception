@@ -22,20 +22,23 @@ import digital.inception.core.util.StringUtil;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 /**
  * The <code>ConfigurationRestController</code> class.

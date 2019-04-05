@@ -21,12 +21,13 @@ package digital.inception.validation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition

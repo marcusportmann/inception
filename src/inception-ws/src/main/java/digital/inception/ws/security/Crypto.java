@@ -22,22 +22,27 @@ import org.apache.wss4j.common.crypto.CryptoBase;
 import org.apache.wss4j.common.crypto.CryptoType;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
 import org.apache.wss4j.common.ext.WSSecurityException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
+
+import java.math.BigInteger;
+
+import java.security.*;
+import java.security.cert.*;
+import java.security.cert.Certificate;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.x500.X500Principal;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.*;
-import java.security.cert.Certificate;
-import java.util.*;
-import java.util.regex.Pattern;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Crypto</code> class.
@@ -49,10 +54,10 @@ public class Crypto extends CryptoBase
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Crypto.class);
+  private CertStore crlStore;
   private KeyStore keyStore;
   private String keyStorePassword;
   private KeyStore trustStore;
-  private CertStore crlStore;
 
   /**
    * Constructs a new <code>Crypto</code>.

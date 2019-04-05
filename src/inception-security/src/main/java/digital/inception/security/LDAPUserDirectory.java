@@ -20,25 +20,31 @@ package digital.inception.security;
 
 import digital.inception.core.util.JNDIUtil;
 import digital.inception.core.util.StringUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import java.util.*;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.
@@ -81,6 +87,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
+  private LdapName baseDN;
+  private String bindDN;
+  private String bindPassword;
 
   /**
    * The data source used to provide connections to the application database.
@@ -88,9 +97,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
-  private LdapName baseDN;
-  private String bindDN;
-  private String bindPassword;
   private LdapName groupBaseDN;
   private String groupDescriptionAttribute;
   private String groupMemberAttribute;
@@ -112,13 +118,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userEmailAttribute;
   private String userFirstNameAttribute;
   private String userLastNameAttribute;
-  private String userPhoneNumberAttribute;
   private String userMobileNumberAttribute;
   private String userObjectClass;
   private String userPasswordAttemptsAttribute;
   private String userPasswordExpiryAttribute;
   private String userPasswordHistoryAttribute;
   private String[] userPasswordHistoryAttributeArray;
+  private String userPhoneNumberAttribute;
   private String userUsernameAttribute;
 
   /**

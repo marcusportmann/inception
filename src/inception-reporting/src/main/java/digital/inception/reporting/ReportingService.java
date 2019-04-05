@@ -19,27 +19,34 @@ package digital.inception.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.StringUtil;
+
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 import org.w3c.dom.Document;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.ByteArrayInputStream;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -54,15 +61,15 @@ public class ReportingService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
-  /* The real path to the folder where the local Jasper reports are stored. */
-  private String localReportFolderPath;
-
   /**
    * The data source used to provide connections to the application database.
    */
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /* The real path to the folder where the local Jasper reports are stored. */
+  private String localReportFolderPath;
 
   /**
    * Constructs a new <code>ReportingService</code>.

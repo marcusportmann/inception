@@ -19,6 +19,7 @@ package digital.inception.sms;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.Date;
 
 /**

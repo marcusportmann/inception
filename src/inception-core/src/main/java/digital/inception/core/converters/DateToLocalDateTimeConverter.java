@@ -21,11 +21,12 @@ package digital.inception.core.converters;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+import java.util.Date;
 
 /**
  * The <code>DateToLocalDateTimeConverter</code> class implements the Spring converter that

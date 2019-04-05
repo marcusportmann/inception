@@ -21,9 +21,9 @@ package digital.inception.rs.oauth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.*;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.*;
 
 /**
  * The <code>ClientDetails</code> class holds the information for an OAuth2 client.

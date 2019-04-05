@@ -26,9 +26,9 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>TestResponseData</code> class manages the data for a

@@ -20,20 +20,25 @@ package digital.inception.validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.util.StringUtil;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.ConstraintViolation;
+import javax.validation.constraints.NotNull;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>ValidationError</code> class represents a validation error that occurred while
@@ -54,14 +59,13 @@ public class ValidationError
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The path for the property that resulted in the validation error.
+   * The attributes associated with the validation error.
    */
-  @ApiModelProperty(value = "The path for the property that resulted in the validation error",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Property", required = true)
+  @ApiModelProperty(value = "The attributes associated with the validation error")
+  @JsonProperty
+  @XmlElement(name = "Attributes")
   @NotNull
-  private String property;
+  private List<ValidationErrorAttribute> attributes;
 
   /**
    * The error message for the validation error.
@@ -73,13 +77,14 @@ public class ValidationError
   private String message;
 
   /**
-   * The attributes associated with the validation error.
+   * The path for the property that resulted in the validation error.
    */
-  @ApiModelProperty(value = "The attributes associated with the validation error")
-  @JsonProperty
-  @XmlElement(name = "Attributes")
+  @ApiModelProperty(value = "The path for the property that resulted in the validation error",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Property", required = true)
   @NotNull
-  private List<ValidationErrorAttribute> attributes;
+  private String property;
 
   /**
    * Constructs a new <code>ValidationError</code>.

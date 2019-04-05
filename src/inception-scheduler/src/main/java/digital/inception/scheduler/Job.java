@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -42,6 +43,11 @@ public class Job
    * The Universally Unique Identifier (UUID) used to uniquely identify the job.
    */
   private UUID id;
+
+  /**
+   * Is the job enabled for execution.
+   */
+  private boolean isEnabled;
 
   /**
    * The fully qualified name of the Java class that implements the job.
@@ -82,11 +88,6 @@ public class Job
    * The date and time the job was updated.
    */
   private Date updated;
-
-  /**
-   * Is the job enabled for execution.
-   */
-  private boolean isEnabled;
 
   /**
    * Constructs a new <code>Job</code>.

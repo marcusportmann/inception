@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author Marcus Portmann
  */
-@Api(tags="Sample API", description = "Sample Service Controller")
+@Api(tags = "Sample API", description = "Sample Service Controller")
 @RestController
 @RequestMapping(value = "/api/sample")
 @WebService(serviceName = "SampleService", name = "ISampleService",

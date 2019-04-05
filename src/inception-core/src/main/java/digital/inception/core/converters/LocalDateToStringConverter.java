@@ -19,12 +19,13 @@ package digital.inception.core.converters;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDate;
 
 /**
  * The <code>LocalDateToStringConverter</code> class implements the Spring converter that

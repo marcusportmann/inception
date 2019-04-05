@@ -16,16 +16,17 @@
 
 package digital.inception.core.util;
 
-//~--- non-JDK imports --------------------------------------------------------
+//~--- JDK imports ------------------------------------------------------------
 
-import javax.sql.DataSource;
 import java.io.*;
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.

@@ -85,22 +85,21 @@ public abstract class ServiceException extends Exception
   }
 
   /**
-   * Returns the service error info.
-   *
-   * @return the service error info
-   */
-  public ServiceError getServiceError()
-  {
-    return serviceError;
-  }
-
-
-  /**
    * Returns the fault info.
    *
    * @return the fault info
    */
   public ServiceError getFaultInfo()
+  {
+    return serviceError;
+  }
+
+  /**
+   * Returns the service error info.
+   *
+   * @return the service error info
+   */
+  public ServiceError getServiceError()
   {
     return serviceError;
   }

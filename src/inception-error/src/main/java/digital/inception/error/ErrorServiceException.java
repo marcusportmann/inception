@@ -38,9 +38,9 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
-  reason = "An error has occurred and the service is unable to process the request at this time")
+    reason = "An error has occurred and the service is unable to process the request at this time")
 @WebFault(name = "ErrorServiceException", targetNamespace = "http://error.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ErrorServiceException extends ServiceException

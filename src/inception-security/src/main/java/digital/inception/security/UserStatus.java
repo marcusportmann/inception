@@ -16,9 +16,14 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -43,8 +48,8 @@ public enum UserStatus
   @XmlEnumValue("Expired")
   EXPIRED(3, "Expired");
 
-  private String description;
   private int code;
+  private String description;
 
   UserStatus(int code, String description)
   {

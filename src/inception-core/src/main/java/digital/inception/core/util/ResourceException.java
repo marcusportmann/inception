@@ -22,7 +22,7 @@ package digital.inception.core.util;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class ResourceException extends RuntimeException
 {
   private static final long serialVersionUID = 1000000;

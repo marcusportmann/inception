@@ -20,6 +20,7 @@ package digital.inception.core.persistence;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class IDGeneratorException extends RuntimeException
 {
   private static final String NO_ERROR_CODE = "NONE";

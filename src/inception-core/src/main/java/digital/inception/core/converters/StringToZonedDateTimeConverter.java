@@ -20,12 +20,13 @@ package digital.inception.core.converters;
 
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.util.StringUtil;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.time.ZonedDateTime;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.ZonedDateTime;
 
 /**
  * The <code>StringToZonedDateTimeConverter</code> class implements the Spring converter that

@@ -16,9 +16,14 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -40,8 +45,8 @@ public enum OrganizationStatus
   @XmlEnumValue("Active")
   ACTIVE(1, "Active");
 
-  private String description;
   private int code;
+  private String description;
 
   OrganizationStatus(int code, String description)
   {
