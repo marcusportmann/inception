@@ -18,7 +18,6 @@ package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +35,25 @@ import javax.validation.Validator;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SchedulerRestController
 {
-  /* Scheduler Service */
-  @Autowired
+  /**
+   * The Scheduler Service.
+   */
   private ISchedulerService schedulerService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SchedulerRestController</code>.
+   *
+   * @param schedulerService the Scheduler Service
+   * @param validator        the JSR-303 validator
+   */
+  public SchedulerRestController(ISchedulerService schedulerService, Validator validator)
+  {
+    this.schedulerService = schedulerService;
+    this.validator = validator;
+  }
 }

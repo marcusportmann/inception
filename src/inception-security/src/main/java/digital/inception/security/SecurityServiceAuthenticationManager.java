@@ -18,13 +18,11 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,8 +40,9 @@ import java.util.UUID;
 public class SecurityServiceAuthenticationManager
   implements AuthenticationManager
 {
-  /* Security Service */
-  @Autowired
+  /**
+   * The Security Service.
+   */
   private ISecurityService securityService;
 
   /**
@@ -110,7 +109,7 @@ public class SecurityServiceAuthenticationManager
       return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
           authentication.getCredentials(), authorities);
     }
-    catch (AuthenticationFailedException e)
+    catch (AuthenticationFailedException | UserNotFoundException e)
     {
       throw new BadCredentialsException("Failed to authenticate the user ("
           + authentication.getPrincipal() + "): Bad credentials");
@@ -124,11 +123,6 @@ public class SecurityServiceAuthenticationManager
     {
       throw new CredentialsExpiredException("Failed to authenticate the user ("
           + authentication.getPrincipal() + "): Credentials expired");
-    }
-    catch (UserNotFoundException e)
-    {
-      throw new BadCredentialsException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): Bad credentials");
     }
     catch (Throwable e)
     {

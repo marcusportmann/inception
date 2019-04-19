@@ -16,10 +16,6 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
@@ -34,16 +30,29 @@ import javax.validation.Validator;
  */
 @WebService(serviceName = "SchedulerService", name = "ISchedulerService",
     targetNamespace = "http://scheduler.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+@SOAPBinding
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SchedulerWebService
 {
-  /* Scheduler Service */
-  @Autowired
+  /**
+   * The Scheduler Service.
+   */
   private ISchedulerService schedulerService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SchedulerWebService</code>.
+   *
+   * @param schedulerService the Scheduler Service
+   * @param validator        the JSR-303 validator
+   */
+  public SchedulerWebService(ISchedulerService schedulerService, Validator validator)
+  {
+    this.schedulerService = schedulerService;
+    this.validator = validator;
+  }
 }

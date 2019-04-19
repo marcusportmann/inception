@@ -125,6 +125,6 @@ public class ReportDefinitionSummary
   @Override
   public String toString()
   {
-    return "ReportDefinitionSummary {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return "ReportDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

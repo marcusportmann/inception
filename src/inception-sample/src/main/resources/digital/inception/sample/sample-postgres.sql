@@ -2,6 +2,7 @@
 --  Execute the following command to start the database server if it is not running:
 --
 --    OS X: pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/postgres.log start
+--    OS X (Homebrew): brew services start postgresql
 --    CentOS (as root): service postgresql-9.6 start
 --
 --  Execute the following command to create the database:
@@ -11,8 +12,8 @@
 --
 --  Execute the following command to initialise the database:
 --
---    OS X: psql -d sample -f inception-sample-postgres.sql
---    CentOS (as root): su postgres -c 'psql -d sample -f inception-sample-postgres.sql'
+--    OS X: psql -d sample -f sample-postgres.sql
+--    CentOS (as root): su postgres -c 'psql -d sample -f sample-postgres.sql'
 --
 --  Execute the following command to delete the database:
 --
@@ -30,6 +31,7 @@ SET client_min_messages = 'warning';
 -- -------------------------------------------------------------------------------------------------
 -- DROP TABLES
 -- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS error.error_reports CASCADE;
 DROP TABLE IF EXISTS sms.sms CASCADE;
 DROP TABLE IF EXISTS reporting.report_definitions CASCADE;
 DROP TABLE IF EXISTS messaging.error_reports CASCADE;
@@ -64,6 +66,7 @@ DROP TABLE IF EXISTS test.test_data CASCADE;
 -- DROP SCHEMAS
 -- -------------------------------------------------------------------------------------------------
 DROP SCHEMA IF EXISTS test CASCADE;
+DROP SCHEMA IF EXISTS error CASCADE;
 DROP SCHEMA IF EXISTS sms CASCADE;
 DROP SCHEMA IF EXISTS service_registry CASCADE;
 DROP SCHEMA IF EXISTS security CASCADE;
@@ -121,6 +124,7 @@ CREATE SCHEMA scheduler;
 CREATE SCHEMA security;
 CREATE SCHEMA service_registry;
 CREATE SCHEMA sms;
+CREATE SCHEMA error;
 CREATE SCHEMA test;
 
 -- -------------------------------------------------------------------------------------------------
@@ -1080,6 +1084,64 @@ COMMENT ON COLUMN sms.sms.last_processed
 IS 'The date and time the last attempt was made to send the SMS';
 
 
+CREATE TABLE error.error_reports (
+    id                  UUID      NOT NULL,
+    application_id      TEXT      NOT NULL,
+    application_version TEXT      NOT NULL,
+    description         TEXT      NOT NULL,
+    detail              TEXT      NOT NULL,
+    created             TIMESTAMP NOT NULL,
+    who                 TEXT,
+    device_id           TEXT,
+    feedback            TEXT,
+    data                BYTEA,
+
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX error_reports_application_id_ix
+    ON error.error_reports
+        (application_id);
+
+CREATE INDEX error_reports_created_ix
+    ON error.error_reports
+        (created);
+
+CREATE INDEX error_reports_who_ix
+    ON error.error_reports
+        (who);
+
+COMMENT ON COLUMN error.error_reports.id
+    IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
+
+COMMENT ON COLUMN error.error_reports.application_id
+    IS 'The ID used to uniquely identify the application that generated the error report';
+
+COMMENT ON COLUMN error.error_reports.application_version
+    IS 'The version of the application that generated the error report';
+
+COMMENT ON COLUMN error.error_reports.description
+    IS 'The description of the error';
+
+COMMENT ON COLUMN error.error_reports.detail
+    IS 'The error detail e.g. a stack trace';
+
+COMMENT ON COLUMN error.error_reports.created
+    IS 'The date and time the error report was created';
+
+COMMENT ON COLUMN error.error_reports.who
+    IS 'The optional username identifying the user associated with the error report';
+
+COMMENT ON COLUMN error.error_reports.device_id
+    IS 'The optional ID used to uniquely identify the device the error report originated from';
+
+COMMENT ON COLUMN error.error_reports.feedback
+    IS 'The optional feedback provided by the user for the error';
+
+COMMENT ON COLUMN error.error_reports.data
+    IS 'The optional data associated with the error report';
+
+
 CREATE TABLE test.test_data (
   id    TEXT NOT NULL,
   name  TEXT NOT NULL,
@@ -1333,6 +1395,7 @@ GRANT ALL ON SCHEMA scheduler TO sample;
 GRANT ALL ON SCHEMA security TO sample;
 GRANT ALL ON SCHEMA service_registry TO sample;
 GRANT ALL ON SCHEMA sms TO sample;
+GRANT ALL ON SCHEMA error TO sample;
 GRANT ALL ON SCHEMA test TO sample;
 
 GRANT ALL ON TABLE codes.code_categories TO sample;
@@ -1363,4 +1426,5 @@ GRANT ALL ON TABLE security.function_to_role_map TO sample;
 GRANT ALL ON TABLE security.role_to_group_map TO sample;
 GRANT ALL ON TABLE service_registry.service_registry TO sample;
 GRANT ALL ON TABLE sms.sms TO sample;
+GRANT ALL ON TABLE error.error_reports TO sample;
 GRANT ALL ON TABLE test.test_data TO sample;

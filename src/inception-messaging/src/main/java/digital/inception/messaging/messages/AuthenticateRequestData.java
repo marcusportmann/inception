@@ -18,17 +18,17 @@ package digital.inception.messaging.messages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuthenticateRequestData</code> class manages the data for a
@@ -95,6 +95,7 @@ public class AuthenticateRequestData extends WbxmlMessageData
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    *         <code>false</code> otherwise
    */
+  @Override
   public boolean fromMessageData(byte[] messageData)
     throws MessagingServiceException
   {
@@ -160,14 +161,18 @@ public class AuthenticateRequestData extends WbxmlMessageData
    * @return the WBXML data representation of the message data that will be sent as part of a
    *         message
    */
+  @Override
   public byte[] toMessageData()
-    throws MessagingServiceException
   {
     Element rootElement = new Element("AuthenticateRequest");
 
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
-    rootElement.addContent(new Element("Password", StringUtil.notNull(password)));
-    rootElement.addContent(new Element("Username", StringUtil.notNull(username)));
+    rootElement.addContent(new Element("Password", StringUtils.isEmpty(password)
+        ? ""
+        : password));
+    rootElement.addContent(new Element("Username", StringUtils.isEmpty(username)
+        ? ""
+        : username));
 
     Document document = new Document(rootElement);
 

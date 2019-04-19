@@ -322,7 +322,7 @@ public class Encoder
         catch (Throwable e)
         {
           throw new RuntimeException("Failed to calculate the offset of the string (" + str
-              + ") in the string table for" + " the WBXML document", e);
+              + ") in the string table for the WBXML document", e);
         }
       }
     }

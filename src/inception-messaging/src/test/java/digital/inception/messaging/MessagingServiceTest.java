@@ -19,8 +19,10 @@ package digital.inception.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
@@ -29,8 +31,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit
@@ -46,7 +46,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServiceTest
 {
-  /* Messaging Service */
+  /**
+   * The Messaging Service.
+   */
   @Autowired
   private IMessagingService messagingService;
 

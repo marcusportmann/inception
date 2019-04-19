@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -72,18 +71,26 @@ public class BackgroundJobExecutor
    */
   private Executor jobProcessor;
 
-  /* Scheduler Service */
-  @Autowired
+  /**
+   * The Scheduler Service.
+   */
   private ISchedulerService schedulerService;
 
   /**
-   * Initialize the Background Job Executor.
+   * Constructs a new <code>BackgroundJobExecutor</code>.
    *
-   * @throws Exception
+   * @param schedulerService the Scheduler Service
+   */
+  public BackgroundJobExecutor(ISchedulerService schedulerService)
+  {
+    this.schedulerService = schedulerService;
+  }
+
+  /**
+   * Initialize the Background Job Executor.
    */
   @Override
   public void afterPropertiesSet()
-    throws Exception
   {
     logger.info("Initializing the Background Job Executor");
 

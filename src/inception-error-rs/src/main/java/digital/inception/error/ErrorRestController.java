@@ -27,7 +27,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,16 +46,30 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/error")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class ErrorRestController
 {
-  /* Error Service */
-  @Autowired
+  /**
+   * The Error Service.
+   */
   private IErrorService errorService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ErrorRestController</code>.
+   *
+   * @param errorService the Error Service
+   * @param validator    the JSR-303 validator
+   */
+  public ErrorRestController(IErrorService errorService, Validator validator)
+  {
+    this.errorService = errorService;
+    this.validator = validator;
+  }
 
   /**
    * Create the error report.

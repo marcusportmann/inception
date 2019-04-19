@@ -27,6 +27,7 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("WeakerAccess")
 public class CodeProviderConfig
   implements Serializable
 {

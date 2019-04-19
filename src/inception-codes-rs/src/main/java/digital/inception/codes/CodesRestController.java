@@ -18,7 +18,6 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -28,9 +27,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -50,16 +49,30 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/codes")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class CodesRestController
 {
-  /* Codes Service */
-  @Autowired
+  /**
+   * The Codes Service.
+   */
   private ICodesService codesService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 Validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>CodesRestController</code>.
+   *
+   * @param codesService the Codes Service
+   * @param validator    the JSR-303 validator
+   */
+  public CodesRestController(ICodesService codesService, Validator validator)
+  {
+    this.codesService = codesService;
+    this.validator = validator;
+  }
 
   /**
    * Create the code.
@@ -177,7 +190,7 @@ public class CodesRestController
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtil.isNullOrEmpty(codeId))
+    if (StringUtils.isEmpty(codeId))
     {
       throw new InvalidArgumentException("codeId");
     }
@@ -375,7 +388,11 @@ public class CodesRestController
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return StringUtil.notNull(codesService.getCodeCategoryData(codeCategoryId));
+    String data = codesService.getCodeCategoryData(codeCategoryId);
+
+    return StringUtils.isEmpty(data)
+        ? ""
+        : data;
   }
 
   /**

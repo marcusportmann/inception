@@ -18,26 +18,21 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import javax.xml.bind.annotation.XmlElement;
+import java.util.List;
+import java.util.Set;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationWebService</code> class.
@@ -46,20 +41,31 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @WebService(serviceName = "ConfigurationService", name = "IConfigurationService",
     targetNamespace = "http://configuration.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SOAPBinding
+@SuppressWarnings({ "unused" })
 public class ConfigurationWebService
 {
   /**
    * The Configuration Service.
    */
-  @Autowired
   private IConfigurationService configurationService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ConfigurationWebService</code>.
+   *
+   * @param configurationService the Configuration Service
+   * @param validator            the JSR-303 validator
+   */
+  public ConfigurationWebService(IConfigurationService configurationService, Validator validator)
+  {
+    this.configurationService = configurationService;
+    this.validator = validator;
+  }
 
   /**
    * Delete the configuration.
@@ -71,7 +77,7 @@ public class ConfigurationWebService
   @XmlElement(required = true) String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }
@@ -91,7 +97,7 @@ public class ConfigurationWebService
   @XmlElement(required = true) String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }
@@ -111,7 +117,7 @@ public class ConfigurationWebService
   @XmlElement(required = true) String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }

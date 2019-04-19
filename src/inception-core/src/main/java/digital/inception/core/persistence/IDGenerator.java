@@ -18,7 +18,6 @@ package digital.inception.core.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -50,15 +49,26 @@ public class IDGenerator
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
-   * The Transaction Manager.
+   * The Spring platform transaction manager.
    */
-  @Autowired
-  private PlatformTransactionManager transactionManager;
+  private PlatformTransactionManager platformTransactionManager;
+
+  /**
+   * Constructs a new <code>IDGenerator</code>.
+   *
+   * @param dataSource                 the data source used to provide connections to the
+   *                                   application database
+   * @param platformTransactionManager the Spring platform transaction manager
+   */
+  public IDGenerator(@Qualifier("applicationDataSource") DataSource dataSource,
+      PlatformTransactionManager platformTransactionManager)
+  {
+    this.dataSource = dataSource;
+    this.platformTransactionManager = platformTransactionManager;
+  }
 
   /**
    * Get the next unique <code>long</code> ID for the entity with the specified type.
@@ -69,7 +79,7 @@ public class IDGenerator
    */
   public long next(String type)
   {
-    TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager,
+    TransactionTemplate transactionTemplate = new TransactionTemplate(platformTransactionManager,
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
     try

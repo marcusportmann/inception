@@ -19,12 +19,11 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityServiceAuthenticationManager;
 
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -78,6 +77,7 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@SuppressWarnings("WeakerAccess")
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {
   /**
@@ -102,9 +102,20 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   @Value("${security.oauth2.jwt.publicKey:#{null}}")
   private String jwtPublicKey;
 
-  /* Security Service */
-  @Autowired
+  /**
+   * The Security Service.
+   */
   private ISecurityService securityService;
+
+  /**
+   * Constructs a new <code>AuthorizationServerConfiguration</code>.
+   *
+   * @param securityService the Security Service
+   */
+  public AuthorizationServerConfiguration(ISecurityService securityService)
+  {
+    this.securityService = securityService;
+  }
 
   /**
    * Returns the JWT access token converter for the authorization server.
@@ -113,14 +124,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    */
   public JwtAccessTokenConverter accessTokenConverter()
   {
-    if (StringUtil.isNullOrEmpty(jwtPrivateKey))
+    if (StringUtils.isEmpty(jwtPrivateKey))
     {
       throw new ConfigurationException(
           "Failed to initialize the JWT access token converter for the authorization server: "
           + "The JWT private key was not specified");
     }
 
-    if (StringUtil.isNullOrEmpty(jwtPublicKey))
+    if (StringUtils.isEmpty(jwtPublicKey))
     {
       throw new ConfigurationException(
           "Failed to initialize the JWT access token converter for the authorization server: "
@@ -152,7 +163,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    */
   @Override
   public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-    throws Exception
   {
     // Set the token store
     endpoints.tokenStore(tokenStore());

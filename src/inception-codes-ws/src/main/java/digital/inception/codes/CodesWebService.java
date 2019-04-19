@@ -18,29 +18,23 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.Set;
+import org.springframework.util.StringUtils;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import javax.xml.bind.annotation.XmlElement;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesWebService</code> class.
@@ -49,18 +43,31 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @WebService(serviceName = "CodesService", name = "ICodesService",
     targetNamespace = "http://codes.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SOAPBinding
+@SuppressWarnings({ "unused" })
 public class CodesWebService
 {
-  /* Codes Service */
-  @Autowired
+  /**
+   * The Codes Service.
+   */
   private ICodesService codesService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 Validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>CodesRestController</code>.
+   *
+   * @param codesService the Codes Service
+   * @param validator    the JSR-303 validator
+   */
+  public CodesWebService(ICodesService codesService, Validator validator)
+  {
+    this.codesService = codesService;
+    this.validator = validator;
+  }
 
   /**
    * Create the code.
@@ -73,18 +80,7 @@ public class CodesWebService
     throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
         CodesServiceException
   {
-    if (code == null)
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty())
-    {
-      throw new InvalidArgumentException("code", ValidationError.toValidationErrors(
-          constraintViolations));
-    }
+    validateCode(code);
 
     codesService.createCode(code);
   }
@@ -99,18 +95,7 @@ public class CodesWebService
   @XmlElement(required = true) CodeCategory codeCategory)
     throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException
   {
-    if (codeCategory == null)
-    {
-      throw new InvalidArgumentException("codeCategory");
-    }
-
-    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
-
-    if (!constraintViolations.isEmpty())
-    {
-      throw new InvalidArgumentException("codeCategory", ValidationError.toValidationErrors(
-          constraintViolations));
-    }
+    validateCodeCategory(codeCategory);
 
     codesService.createCodeCategory(codeCategory);
   }
@@ -131,7 +116,7 @@ public class CodesWebService
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtil.isNullOrEmpty(codeId))
+    if (StringUtils.isEmpty(codeId))
     {
       throw new InvalidArgumentException("codeId");
     }
@@ -165,8 +150,6 @@ public class CodesWebService
    * @param codeId         the ID uniquely identifying the code
    *
    * @return the code
-   *
-   * @return the code category
    */
   @WebMethod(operationName = "GetCode")
   public Code getCode(@WebParam(name = "CodeCategoryId")
@@ -259,7 +242,9 @@ public class CodesWebService
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return StringUtil.notNull(codesService.getCodeCategoryData(codeCategoryId));
+    String data = codesService.getCodeCategoryData(codeCategoryId);
+
+    return StringUtils.isEmpty(data) ? "" : data;
   }
 
   /**
@@ -306,18 +291,7 @@ public class CodesWebService
   @XmlElement(required = true) Code code)
     throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
   {
-    if (code == null)
-    {
-      throw new InvalidArgumentException("code");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty())
-    {
-      throw new InvalidArgumentException("code", ValidationError.toValidationErrors(
-          constraintViolations));
-    }
+    validateCode(code);
 
     codesService.updateCode(code);
   }
@@ -332,6 +306,33 @@ public class CodesWebService
   @XmlElement(required = true) CodeCategory codeCategory)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
+    validateCodeCategory(codeCategory);
+
+    codesService.updateCodeCategory(codeCategory);
+  }
+
+  private void validateCode(@XmlElement(required = true)
+  @WebParam(name = "Code") Code code)
+    throws InvalidArgumentException
+  {
+    if (code == null)
+    {
+      throw new InvalidArgumentException("code");
+    }
+
+    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("code", ValidationError.toValidationErrors(
+          constraintViolations));
+    }
+  }
+
+  private void validateCodeCategory(@XmlElement(required = true)
+  @WebParam(name = "CodeCategory") CodeCategory codeCategory)
+    throws InvalidArgumentException
+  {
     if (codeCategory == null)
     {
       throw new InvalidArgumentException("codeCategory");
@@ -344,7 +345,5 @@ public class CodesWebService
       throw new InvalidArgumentException("codeCategory", ValidationError.toValidationErrors(
           constraintViolations));
     }
-
-    codesService.updateCodeCategory(codeCategory);
   }
 }

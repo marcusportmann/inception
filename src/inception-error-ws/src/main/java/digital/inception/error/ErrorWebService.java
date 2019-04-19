@@ -18,22 +18,15 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.List;
 import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -49,18 +42,31 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @WebService(serviceName = "ErrorService", name = "IErrorService",
     targetNamespace = "http://error.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SOAPBinding
+@SuppressWarnings({ "unused" })
 public class ErrorWebService
 {
-  /* Error Service */
-  @Autowired
+  /**
+   * The Error Service.
+   */
   private IErrorService errorService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ErrorWebService</code>.
+   *
+   * @param errorService the Error Service
+   * @param validator    the JSR-303 validator
+   */
+  public ErrorWebService(IErrorService errorService, Validator validator)
+  {
+    this.errorService = errorService;
+    this.validator = validator;
+  }
 
   /**
    * Create the error report.

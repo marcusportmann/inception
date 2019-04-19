@@ -43,7 +43,7 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://messaging.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class MessagingServiceException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;

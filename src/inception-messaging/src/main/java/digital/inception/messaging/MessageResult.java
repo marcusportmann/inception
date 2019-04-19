@@ -33,6 +33,7 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageResult
 {
   /**
@@ -124,7 +125,7 @@ public class MessageResult
       catch (Throwable e)
       {
         throw new MessagingServiceException(
-            "Failed to parse the WBXML for the message associated with " + "the message result", e);
+            "Failed to parse the WBXML for the message associated with the message result", e);
       }
     }
   }

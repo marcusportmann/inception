@@ -18,7 +18,7 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -28,7 +28,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,18 +46,31 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/configuration")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class ConfigurationRestController
 {
   /**
    * The Configuration Service.
    */
-  @Autowired
   private IConfigurationService configurationService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ConfigurationRestController</code>.
+   *
+   * @param configurationService the Configuration Service
+   * @param validator            the JSR-303 validator
+   */
+  public ConfigurationRestController(IConfigurationService configurationService,
+      Validator validator)
+  {
+    this.configurationService = configurationService;
+    this.validator = validator;
+  }
 
   /**
    * Delete the configuration.
@@ -82,7 +94,7 @@ public class ConfigurationRestController
   @PathVariable String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }
@@ -112,7 +124,7 @@ public class ConfigurationRestController
   @PathVariable String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }
@@ -143,7 +155,7 @@ public class ConfigurationRestController
   @PathVariable String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
   {
-    if (StringUtil.isNullOrEmpty(key))
+    if (StringUtils.isEmpty(key))
     {
       throw new InvalidArgumentException("key");
     }

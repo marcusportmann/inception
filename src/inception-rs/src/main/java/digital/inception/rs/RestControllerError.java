@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
@@ -138,7 +138,7 @@ public class RestControllerError
       // Use the HTTP response status specified through the @ResponseStatus annotation
       responseStatus = annotation.value();
 
-      if (!StringUtil.isNullOrEmpty(annotation.reason()))
+      if (!StringUtils.isEmpty(annotation.reason()))
       {
         this.message = annotation.reason();
         this.detail = cause.getMessage();

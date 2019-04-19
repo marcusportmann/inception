@@ -24,7 +24,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -50,13 +49,27 @@ import javax.validation.Validator;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SecurityRestController
 {
-  /* Scheduler Service */
-  @Autowired
+  /**
+   * The Security Service.
+   */
   private ISecurityService securityService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SecurityRestController</code>.
+   *
+   * @param securityService the Security Service
+   * @param validator       the JSR-303 validator
+   */
+  public SecurityRestController(ISecurityService securityService, Validator validator)
+  {
+    this.securityService = securityService;
+    this.validator = validator;
+  }
 
   /**
    * Retrieve the organizations.

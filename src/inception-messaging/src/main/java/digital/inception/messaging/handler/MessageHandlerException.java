@@ -24,6 +24,7 @@ package digital.inception.messaging.handler;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("WeakerAccess")
 public class MessageHandlerException extends Exception
 {
   private static final long serialVersionUID = 1000000;

@@ -63,11 +63,15 @@ public class SystemMessageTest
   private static final String PASSWORD = "Password1";
   private static final String USERNAME = "Administrator";
 
-  /* Codes Service */
+  /**
+   * The Codes Service.
+   */
   @Autowired
   private ICodesService codesService;
 
-  /* Messaging Service */
+  /**
+   * The Messaging Service.
+   */
   @Autowired
   private IMessagingService messagingService;
 
@@ -159,7 +163,7 @@ public class SystemMessageTest
 
     assertEquals(0, responseData.getErrorCode());
     assertNotNull(responseData.getErrorMessage());
-    assertEquals(true, responseData.getUserExists());
+    assertTrue(responseData.getUserExists());
   }
 
   /**

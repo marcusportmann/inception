@@ -2,6 +2,7 @@
 --  Execute the following command to start the database server if it is not running:
 --
 --    OS X: pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/postgres.log start
+--    OS X (Homebrew): brew services start postgresql
 --    CentOS (as root): service postgresql-9.6 start
 --
 --  Execute the following command to create the database:
@@ -122,6 +123,7 @@ CREATE SCHEMA scheduler;
 CREATE SCHEMA security;
 CREATE SCHEMA service_registry;
 CREATE SCHEMA sms;
+CREATE SCHEMA error;
 CREATE SCHEMA test;
 
 -- -------------------------------------------------------------------------------------------------
@@ -1363,6 +1365,7 @@ GRANT ALL ON SCHEMA scheduler TO dbuser;
 GRANT ALL ON SCHEMA security TO dbuser;
 GRANT ALL ON SCHEMA service_registry TO dbuser;
 GRANT ALL ON SCHEMA sms TO dbuser;
+GRANT ALL ON SCHEMA error TO dbuser;
 GRANT ALL ON SCHEMA test TO dbuser;
 
 GRANT ALL ON TABLE codes.code_categories TO dbuser;
@@ -1393,4 +1396,5 @@ GRANT ALL ON TABLE security.function_to_role_map TO dbuser;
 GRANT ALL ON TABLE security.role_to_group_map TO dbuser;
 GRANT ALL ON TABLE service_registry.service_registry TO dbuser;
 GRANT ALL ON TABLE sms.sms TO dbuser;
+GRANT ALL ON TABLE error.error_reports TO dbuser;
 GRANT ALL ON TABLE test.test_data TO dbuser;

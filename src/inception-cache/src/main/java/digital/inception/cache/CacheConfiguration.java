@@ -76,6 +76,7 @@ public class CacheConfiguration
    *
    * @return the Hazelcast configuration
    */
+  @SuppressWarnings("deprecation")
   @Bean
   public Config hazelCastConfig()
   {
@@ -118,6 +119,8 @@ public class CacheConfiguration
         tcpIpConfig.addMember(member);
       }
     }
+
+    config.setProperty("hazelcast.application.validation.token", getCluster().getPassword());
 
     GroupConfig groupConfig = config.getGroupConfig();
     groupConfig.setName(getCluster().getName());

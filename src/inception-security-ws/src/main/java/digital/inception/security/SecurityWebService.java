@@ -16,10 +16,6 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
@@ -34,16 +30,29 @@ import javax.validation.Validator;
  */
 @WebService(serviceName = "SecurityService", name = "ISecurityService",
     targetNamespace = "http://security.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+@SOAPBinding
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SecurityWebService
 {
-  /* Security Service */
-  @Autowired
+  /**
+   * The Security Service.
+   */
   private ISecurityService securityService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SecurityWebService</code>.
+   *
+   * @param securityService the Security Service
+   * @param validator       the JSR-303 validator
+   */
+  public SecurityWebService(ISecurityService securityService, Validator validator)
+  {
+    this.securityService = securityService;
+    this.validator = validator;
+  }
 }

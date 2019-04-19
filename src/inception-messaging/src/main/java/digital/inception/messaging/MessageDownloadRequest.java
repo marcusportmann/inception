@@ -35,6 +35,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("WeakerAccess")
 public class MessageDownloadRequest
 {
   /**

@@ -37,6 +37,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageDownloadResponse
 {
   /**
@@ -128,7 +129,7 @@ public class MessageDownloadResponse
    *
    * @param messages the messages being downloaded
    */
-  public MessageDownloadResponse(List<Message> messages)
+  MessageDownloadResponse(List<Message> messages)
   {
     this.code = SUCCESS;
     this.detail = "";
@@ -141,7 +142,7 @@ public class MessageDownloadResponse
    * @param code   the result code
    * @param detail the text description of the result of processing the message download request
    */
-  public MessageDownloadResponse(long code, String detail)
+  MessageDownloadResponse(long code, String detail)
   {
     this.code = code;
     this.detail = detail;

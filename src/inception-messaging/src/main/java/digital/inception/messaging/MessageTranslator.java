@@ -20,7 +20,7 @@ package digital.inception.messaging;
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -40,6 +40,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"WeakerAccess"})
 public class MessageTranslator
 {
   private static ThreadLocal<MessageDigest> threadLocalMessageDigest = ThreadLocal.withInitial(
@@ -188,7 +189,7 @@ public class MessageTranslator
     if (message.isEncrypted())
     {
       data = decryptMessageData(encryptionKey,
-          StringUtil.isNullOrEmpty(message.getEncryptionIV())
+          StringUtils.isEmpty(message.getEncryptionIV())
           ? new byte[0]
           : Base64Util.decode(message.getEncryptionIV()), message.getData());
 
@@ -251,7 +252,7 @@ public class MessageTranslator
   public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
     throws MessagingServiceException
   {
-    if (StringUtil.isNullOrEmpty(username))
+    if (StringUtils.isEmpty(username))
     {
       throw new MessagingServiceException(String.format(
           "Failed to create the message with type (%s): A username has not been specified",

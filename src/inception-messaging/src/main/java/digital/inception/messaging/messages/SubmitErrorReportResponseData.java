@@ -18,17 +18,17 @@ package digital.inception.messaging.messages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
-//~--- JDK imports ------------------------------------------------------------
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SubmitErrorReportResponseData</code> class manages the data for a
@@ -103,6 +103,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    * <code>false</code> otherwise
    */
+  @Override
   public boolean fromMessageData(byte[] messageData)
     throws MessagingServiceException
   {
@@ -170,13 +171,13 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return the WBXML data representation of the message data that will be sent as part of a
    * message
    */
+  @Override
   public byte[] toMessageData()
-    throws MessagingServiceException
   {
     Element rootElement = new Element("SubmitErrorReportResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
-    rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
+    rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
     rootElement.addContent(new Element("ErrorReportId", errorReportId.toString()));
 
     Document document = new Document(rootElement);
@@ -194,8 +195,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   @Override
   public String toString()
   {
-    return "SubmitErrorReportResponseData {" + "errorReportId=\"" + errorReportId + "\", "
-        + "errorCode=\"" + errorCode + "\", " + "errorMessage=\"" + StringUtil.notNull(
-        errorMessage) + "\"" + "}";
+    return "SubmitErrorReportResponseData {errorReportId=\"" + errorReportId + "\", "
+        + "errorCode=\"" + errorCode + "\", errorMessage=\"" + (StringUtils.isEmpty(
+        errorMessage) ? "" : errorMessage) + "\"}";
   }
 }

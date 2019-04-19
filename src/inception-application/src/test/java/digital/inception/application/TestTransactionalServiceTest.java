@@ -20,8 +20,10 @@ package digital.inception.application;
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -49,9 +51,9 @@ public class TestTransactionalServiceTest
 {
   private static int testDataCount;
   @Autowired
-  private ITestTransactionalService testTransactionalService;
+  private PlatformTransactionManager platformTransactionManager;
   @Autowired
-  private PlatformTransactionManager transactionManager;
+  private ITestTransactionalService testTransactionalService;
 
   /**
    * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
@@ -62,7 +64,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -91,7 +93,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -117,7 +119,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -132,7 +134,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
 
@@ -152,7 +154,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -167,7 +169,7 @@ public class TestTransactionalServiceTest
           + "Failed to find a transaction marked for rollback after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
 
@@ -187,7 +189,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -202,7 +204,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testTransactionalService.getTestData(testData.getId());
 
@@ -244,7 +246,7 @@ public class TestTransactionalServiceTest
   public void testIDGenerator()
     throws Exception
   {
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testTransactionalService.getNextIDWithoutException();
@@ -262,7 +264,7 @@ public class TestTransactionalServiceTest
       fail("The generated ID is incorrect");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     id = testTransactionalService.getNextIDWithoutException();
 
@@ -281,7 +283,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testTransactionalService.createTestData(testData);
@@ -306,7 +308,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.commit(transactionStatus);
+    platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -332,7 +334,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testTransactionalService.createTestData(testData);
@@ -357,7 +359,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -383,7 +385,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testTransactionalService.createTestDataInNewTransaction(testData);
@@ -408,7 +410,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.commit(transactionStatus);
+    platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -434,7 +436,7 @@ public class TestTransactionalServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testTransactionalService.createTestDataInNewTransaction(testData);
@@ -459,7 +461,7 @@ public class TestTransactionalServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {

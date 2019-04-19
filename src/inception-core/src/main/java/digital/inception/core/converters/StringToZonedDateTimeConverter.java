@@ -19,7 +19,7 @@ package digital.inception.core.converters;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -47,7 +47,7 @@ public final class StringToZonedDateTimeConverter
   @Override
   public ZonedDateTime convert(String source)
   {
-    if (StringUtil.isNullOrEmpty(source))
+    if (StringUtils.isEmpty(source))
     {
       return null;
     }

@@ -20,21 +20,23 @@ package digital.inception.application;
 
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.test.DataSourceTracker;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Map;
 import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -51,15 +53,25 @@ public class TestTransactionalService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
-   * The ID Generator.
+   * The ID generator.
    */
-  @Autowired
   private IDGenerator idGenerator;
+
+  /**
+   * Constructs a new <code>TestTransactionalService</code>.
+   *
+   * @param dataSource  the data source used to provide connections to the application database
+   * @param idGenerator the ID generator
+   */
+  public TestTransactionalService(@Qualifier("applicationDataSource") DataSource dataSource,
+      IDGenerator idGenerator)
+  {
+    this.dataSource = dataSource;
+    this.idGenerator = idGenerator;
+  }
 
   /**
    * Create the test data.

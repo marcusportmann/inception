@@ -20,8 +20,10 @@ package digital.inception.application;
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -40,11 +42,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-
 public class TransactionManagerTest
 {
   @Autowired
-  private PlatformTransactionManager transactionManager;
+  private PlatformTransactionManager platformTransactionManager;
 
   /**
    * Test the JTA Transaction Manager.
@@ -52,12 +53,12 @@ public class TransactionManagerTest
   @Test
   public void transactionManagerTest()
   {
-    transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
+    platformTransactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
         .PROPAGATION_NEVER));
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
   }
 }

@@ -28,11 +28,12 @@ import org.h2.jdbcx.JdbcDataSource;
 
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
@@ -47,6 +48,8 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.IOException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -73,14 +76,34 @@ import javax.sql.DataSource;
     excludeFilters = { @ComponentScan.Filter(value = SpringBootApplication.class,
         type = FilterType.ANNOTATION) ,
         @ComponentScan.Filter(
+            pattern = "digital\\.inception\\application\\.ApplicationDatabaseConfiguration",
+                type = FilterType.REGEX) ,
+        @ComponentScan.Filter(
             pattern = "digital\\.inception\\application\\.ApplicationTransactionManager",
                 type = FilterType.REGEX) })
+@SuppressWarnings("WeakerAccess")
 public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
-  @Autowired
   private ApplicationContext applicationContext;
+
+  /**
+   * The resources on the classpath that contain the SQL statements used to initialize the in-memory
+   * application database.
+   */
+  @Value("classpath*:**/*-h2.sql")
+  private Resource[] databaseInitResources;
+
+  /**
+   * Constructs a new <code>TestConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public TestConfiguration(ApplicationContext applicationContext)
+  {
+    this.applicationContext = applicationContext;
+  }
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -108,8 +131,7 @@ public class TestConfiguration
     PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
         PlatformTransactionManager.class);
 
-    if ((platformTransactionManager != null)
-        && (platformTransactionManager instanceof JtaTransactionManager))
+    if ((platformTransactionManager instanceof JtaTransactionManager))
     {
       Map<String, Object> jpaPropertyMap =
           localContainerEntityManagerFactoryBean.getJpaPropertyMap();
@@ -160,8 +182,6 @@ public class TestConfiguration
     {
       if (dataSource == null)
       {
-        boolean logSQL = false;
-
         try
         {
           JdbcDataSource jdbcDataSource = new JdbcDataSource();
@@ -173,11 +193,9 @@ public class TestConfiguration
               {
                 try
                 {
-                  try (Connection connection = jdbcDataSource.getConnection();
-                    Statement statement = connection.createStatement())
-
+                  try (Connection connection = jdbcDataSource.getConnection())
                   {
-                    statement.executeUpdate("SHUTDOWN");
+                    JDBCUtil.shutdownHsqlDatabase(connection);
                   }
                 }
                 catch (Throwable e)
@@ -189,48 +207,28 @@ public class TestConfiguration
               ));
 
           /*
-           * Initialize the in-memory database using the SQL statements contained in the file with
-           * the specified resource path.
+           * Initialize the in-memory database using the SQL statements contained in the resources
+           * for the Inception framework.
            */
-          for (String resourcePath : getDatabaseInitResources())
+          for (Resource databaseInitResource : databaseInitResources)
           {
-            try
+            if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
+                && databaseInitResource.getFilename().startsWith("inception-"))
             {
-              // Load the SQL statements used to initialize the database tables
-              List<String> sqlStatements = JDBCUtil.loadSQL(resourcePath);
-
-              // Get a connection to the in-memory database
-              try (Connection connection = jdbcDataSource.getConnection())
-              {
-                for (String sqlStatement : sqlStatements)
-                {
-                  if (logSQL)
-                  {
-                    LoggerFactory.getLogger(TestConfiguration.class).info(
-                        "Executing SQL statement: " + sqlStatement);
-                  }
-
-                  try (Statement statement = connection.createStatement())
-                  {
-                    statement.execute(sqlStatement);
-                  }
-                }
-              }
+              loadSQL(jdbcDataSource, databaseInitResource);
             }
-            catch (SQLException e)
-            {
-              try (Connection connection = jdbcDataSource.getConnection();
-                Statement shutdownStatement = connection.createStatement())
-              {
-                shutdownStatement.executeUpdate("SHUTDOWN");
-              }
-              catch (Throwable f)
-              {
-                LoggerFactory.getLogger(TestConfiguration.class).error(
-                    "Failed to shutdown the in-memory application database: " + e.getMessage());
-              }
+          }
 
-              throw e;
+          /*
+           * Initialize the in-memory database using the SQL statements contained in any other
+           * resources.
+           */
+          for (Resource databaseInitResource : databaseInitResources)
+          {
+            if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
+                && (!databaseInitResource.getFilename().startsWith("inception-")))
+            {
+              loadSQL(jdbcDataSource, databaseInitResource);
             }
           }
 
@@ -261,84 +259,6 @@ public class TestConfiguration
   }
 
   /**
-   * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialize the in-memory application database.
-   */
-  protected List<String> getDatabaseInitResources()
-  {
-    List<String> resources = new ArrayList<>();
-
-    resources.add("digital/inception/core/inception-core-h2.sql");
-    resources.add("digital/inception/test/inception-test-h2.sql");
-
-    try
-    {
-      Class.forName("digital.inception.codes.CodesService");
-
-      resources.add("digital/inception/codes/inception-codes-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.configuration.ConfigurationService");
-
-      resources.add("digital/inception/configuration/inception-configuration-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.error.ErrorService");
-
-      resources.add("digital/inception/error/inception-error-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.messaging.MessagingService");
-
-      resources.add("digital/inception/messaging/inception-messaging-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.reporting.ReportingService");
-
-      resources.add("digital/inception/reporting/inception-reporting-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.scheduler.SchedulerService");
-
-      resources.add("digital/inception/scheduler/inception-scheduler-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.security.SecurityService");
-
-      resources.add("digital/inception/security/inception-security-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class.forName("digital.inception.sms.SMSService");
-
-      resources.add("digital/inception/sms/inception-sms-h2.sql");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    return resources;
-  }
-
-  /**
    * Returns the names of the packages to scan for JPA classes.
    *
    * @return the names of the packages to scan for JPA classes
@@ -350,5 +270,41 @@ public class TestConfiguration
     packagesToScan.add("digital.inception");
 
     return packagesToScan;
+  }
+
+  private void loadSQL(JdbcDataSource jdbcDataSource, Resource databaseInitResource)
+    throws IOException, SQLException
+  {
+    try
+    {
+      // Load the SQL statements used to initialize the database tables
+      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
+
+      // Get a connection to the in-memory database
+      try (Connection connection = jdbcDataSource.getConnection())
+      {
+        for (String sqlStatement : sqlStatements)
+        {
+          try (Statement statement = connection.createStatement())
+          {
+            statement.execute(sqlStatement);
+          }
+        }
+      }
+    }
+    catch (SQLException e)
+    {
+      try (Connection connection = jdbcDataSource.getConnection())
+      {
+        JDBCUtil.shutdownHsqlDatabase(connection);
+      }
+      catch (Throwable f)
+      {
+        LoggerFactory.getLogger(TestConfiguration.class).error(
+            "Failed to shutdown the in-memory application database: " + e.getMessage());
+      }
+
+      throw e;
+    }
   }
 }

@@ -33,6 +33,7 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageReceivedResponse
 {
   /**

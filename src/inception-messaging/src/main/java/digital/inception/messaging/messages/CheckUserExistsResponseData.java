@@ -18,13 +18,14 @@ package digital.inception.messaging.messages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -120,6 +121,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    *         <code>false</code> otherwise
    */
+  @Override
   public boolean fromMessageData(byte[] messageData)
     throws MessagingServiceException
   {
@@ -199,13 +201,15 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * @return the WBXML data representation of the message data that will be sent as part of a
    *         message
    */
+  @Override
   public byte[] toMessageData()
-    throws MessagingServiceException
   {
     Element rootElement = new Element("CheckUserExistsResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
-    rootElement.addContent(new Element("ErrorMessage", StringUtil.notNull(errorMessage)));
+    rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage)
+        ? ""
+        : errorMessage));
     rootElement.addContent(new Element("UserExists", String.valueOf(userExists)));
 
     Document document = new Document(rootElement);

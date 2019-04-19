@@ -18,14 +18,12 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.configuration.Configuration;
-import digital.inception.configuration.ConfigurationNotFoundException;
-import digital.inception.configuration.ConfigurationServiceException;
-import digital.inception.configuration.IConfigurationService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -33,11 +31,11 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
 
 /**
  * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit
@@ -49,26 +47,25 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class ConfigurationServiceTest
 {
-  private static final String TEST_FILTERED_KEY = "TestFilteredKey";
-  private static final String TEST_STRING_KEY = "TestStringKey";
-  private static final String TEST_INTEGER_KEY = "TestIntegerKey";
-  private static final String TEST_LONG_KEY = "TestLongKey";
-  private static final String TEST_DOUBLE_KEY = "TestDoubleKey";
   private static final String TEST_BINARY_KEY = "TestBinaryKey";
-  private static final String TEST_STRING_VALUE = "TestStringValue";
-  private static final String TEST_DESCRIPTION = "Test Description";
-  private static final Integer TEST_INTEGER_VALUE = 1234;
-  private static final Long TEST_LONG_VALUE = 4321L;
-  private static final Double TEST_DOUBLE_VALUE = 1234.4321;
-  private static final byte[] TEST_BINARY_VALUE = "TestBinaryValue".getBytes();
-  private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
   private static final String TEST_BOOLEAN_KEY = "TestBooleanKey";
-  private static final boolean TEST_BOOLEAN_VALUE = true;
   private static final String TEST_CONFIGURATION_KEY = "TestConfigurationKey";
   private static final String TEST_CONFIGURATION_VALUE = "TestConfigurationValue";
+  private static final String TEST_DESCRIPTION = "Test Description";
+  private static final String TEST_DOUBLE_KEY = "TestDoubleKey";
+  private static final Double TEST_DOUBLE_VALUE = 1234.4321;
+  private static final String TEST_FILTERED_KEY = "TestFilteredKey";
+  private static final String TEST_INTEGER_KEY = "TestIntegerKey";
+  private static final Integer TEST_INTEGER_VALUE = 1234;
+  private static final String TEST_LONG_KEY = "TestLongKey";
+  private static final Long TEST_LONG_VALUE = 4321L;
+  private static final String TEST_STRING_KEY = "TestStringKey";
+  private static final String TEST_STRING_VALUE = "TestStringValue";
+  private static final boolean TEST_BOOLEAN_VALUE = true;
+  private static final byte[] TEST_BINARY_VALUE = "TestBinaryValue".getBytes();
+  private static final byte[] TEST_BINARY_UPDATED_VALUE = "TestBinaryUpdatedValue".getBytes();
 
   /**
    * The Configuration Service.
@@ -162,8 +159,8 @@ public class ConfigurationServiceTest
 
     value = configurationService.getBoolean(TEST_BOOLEAN_KEY);
 
-    assertEquals("The required updated Boolean value was not retrieved for the configuration key ("
-        + TEST_BOOLEAN_KEY + ")", false, value);
+    assertFalse("The required updated Boolean value was not retrieved for the configuration key ("
+        + TEST_BOOLEAN_KEY + ")", value);
   }
 
   /**

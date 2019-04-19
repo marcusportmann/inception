@@ -19,7 +19,7 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,7 +59,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
    */
   public JwtAccessTokenConverter accessTokenConverter()
   {
-    if (StringUtil.isNullOrEmpty(jwtPublicKey))
+    if (StringUtils.isEmpty(jwtPublicKey))
     {
       throw new ConfigurationException(
           "Failed to initialize the JWT access token converter for the resource server: "

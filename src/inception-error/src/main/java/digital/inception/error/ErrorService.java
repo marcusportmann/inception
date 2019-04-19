@@ -18,11 +18,9 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -47,9 +45,17 @@ public class ErrorService
   /**
    * The data source used to provide connections to the database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * Constructs a new <code>ErrorService</code>.
+   *
+   * @param dataSource the data source used to provide connections to the database
+   */
+  public ErrorService(@Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.dataSource = dataSource;
+  }
 
   /**
    * Create the error report.
@@ -75,7 +81,9 @@ public class ErrorService
         description = description.substring(0, 4000);
       }
 
-      String detail = StringUtil.notNull(errorReport.getDetail());
+      String detail = StringUtils.isEmpty(errorReport.getDetail())
+          ? ""
+          : errorReport.getDetail();
 
       if (detail.length() > 4000)
       {

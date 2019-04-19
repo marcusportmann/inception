@@ -20,8 +20,10 @@ package digital.inception.application;
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -49,9 +51,9 @@ public class TestJPAServiceTest
 {
   private static int testDataCount = 1000;
   @Autowired
-  private ITestJPAService testJPAService;
+  private PlatformTransactionManager platformTransactionManager;
   @Autowired
-  private PlatformTransactionManager transactionManager;
+  private ITestJPAService testJPAService;
 
   /**
    * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
@@ -62,7 +64,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -91,7 +93,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -117,7 +119,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -132,7 +134,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
@@ -152,7 +154,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -167,7 +169,7 @@ public class TestJPAServiceTest
           + "Failed to find a transaction marked for rollback after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
@@ -187,7 +189,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try
@@ -202,7 +204,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after creating the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
@@ -246,7 +248,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestData(testData);
@@ -271,7 +273,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.commit(transactionStatus);
+    platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -297,7 +299,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestData(testData);
@@ -322,7 +324,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -348,7 +350,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestDataInNewTransaction(testData);
@@ -373,7 +375,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.commit(transactionStatus);
+    platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {
@@ -399,7 +401,7 @@ public class TestJPAServiceTest
   {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = transactionManager.getTransaction(
+    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestDataInNewTransaction(testData);
@@ -424,7 +426,7 @@ public class TestJPAServiceTest
           + "Failed to find an active transaction after retrieving the test data");
     }
 
-    transactionManager.rollback(transactionStatus);
+    platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted())
     {

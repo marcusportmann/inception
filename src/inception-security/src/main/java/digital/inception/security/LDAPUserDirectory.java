@@ -19,13 +19,13 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JNDIUtil;
-import digital.inception.core.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -219,7 +219,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       if ((parameters.containsKey("SharedBaseDN"))
-          && (!StringUtil.isNullOrEmpty(parameters.get("SharedBaseDN"))))
+          && (!StringUtils.isEmpty(parameters.get("SharedBaseDN"))))
       {
         sharedBaseDN = new LdapName(parameters.get("SharedBaseDN"));
       }
@@ -550,7 +550,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordAttribute));
 
-      if (!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+      if (!StringUtils.isEmpty(userPasswordExpiryAttribute))
       {
         if (expirePassword)
         {
@@ -573,7 +573,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      if (!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+      if (!StringUtils.isEmpty(userPasswordAttemptsAttribute))
       {
         if (lockUser)
         {
@@ -595,7 +595,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
       {
         if (resetPasswordHistory)
         {
@@ -846,10 +846,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       attributes.put(new BasicAttribute(groupNameAttribute, group.getGroupName()));
 
-      if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+      if (!StringUtils.isEmpty(groupDescriptionAttribute))
       {
-        attributes.put(new BasicAttribute(groupDescriptionAttribute, StringUtil.notNull(
-            group.getDescription())));
+        attributes.put(new BasicAttribute(groupDescriptionAttribute,
+            StringUtils.isEmpty(group.getDescription())
+            ? ""
+            : group.getDescription()));
       }
 
       dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + ","
@@ -902,33 +904,44 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if (!StringUtil.isNullOrEmpty(userFirstNameAttribute))
+      if (!StringUtils.isEmpty(userFirstNameAttribute))
       {
-        attributes.put(new BasicAttribute(userFirstNameAttribute, StringUtil.notNull(
-            user.getFirstName())));
+        attributes.put(new BasicAttribute(userFirstNameAttribute,
+            StringUtils.isEmpty(user.getFirstName())
+            ? ""
+            : user.getFirstName()));
       }
 
-      if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
+      if (!StringUtils.isEmpty(userLastNameAttribute))
       {
-        attributes.put(new BasicAttribute(userLastNameAttribute, StringUtil.notNull(
-            user.getLastName())));
+        attributes.put(new BasicAttribute(userLastNameAttribute,
+            StringUtils.isEmpty(user.getLastName())
+            ? ""
+            : user.getLastName()));
       }
 
-      if (!StringUtil.isNullOrEmpty(userEmailAttribute))
+      if (!StringUtils.isEmpty(userEmailAttribute))
       {
-        attributes.put(new BasicAttribute(userEmailAttribute, StringUtil.notNull(user.getEmail())));
+        attributes.put(new BasicAttribute(userEmailAttribute,
+            StringUtils.isEmpty(user.getEmail())
+            ? ""
+            : user.getEmail()));
       }
 
-      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      if (!StringUtils.isEmpty(userPhoneNumberAttribute))
       {
-        attributes.put(new BasicAttribute(userPhoneNumberAttribute, StringUtil.notNull(
-            user.getPhoneNumber())));
+        attributes.put(new BasicAttribute(userPhoneNumberAttribute,
+            StringUtils.isEmpty(user.getPhoneNumber())
+            ? ""
+            : user.getPhoneNumber()));
       }
 
-      if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+      if (!StringUtils.isEmpty(userMobileNumberAttribute))
       {
-        attributes.put(new BasicAttribute(userMobileNumberAttribute, StringUtil.notNull(
-            user.getMobileNumber())));
+        attributes.put(new BasicAttribute(userMobileNumberAttribute,
+            StringUtils.isEmpty(user.getMobileNumber())
+            ? ""
+            : user.getMobileNumber()));
       }
 
       String passwordHash;
@@ -942,14 +955,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
         passwordHash = createPasswordHash("");
       }
 
-      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
       {
         attributes.put(new BasicAttribute(userPasswordHistoryAttribute, passwordHash));
       }
 
-      attributes.put(new BasicAttribute("userPassword", StringUtil.notNull(user.getPassword())));
+      attributes.put(new BasicAttribute("userPassword",
+          StringUtils.isEmpty(user.getPassword())
+          ? ""
+          : user.getPassword()));
 
-      if (!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+      if (!StringUtils.isEmpty(userPasswordAttemptsAttribute))
       {
         if (userLocked)
         {
@@ -962,7 +978,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      if (!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+      if (!StringUtils.isEmpty(userPasswordExpiryAttribute))
       {
         if (expiredPassword)
         {
@@ -1193,7 +1209,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       String searchFilter = String.format("(objectClass=%s)", userObjectClass);
 
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
             userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
@@ -1597,7 +1613,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       String searchFilter = String.format("(objectClass=%s)", userObjectClass);
 
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
             userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
@@ -2117,10 +2133,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+      if (!StringUtils.isEmpty(groupDescriptionAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            groupDescriptionAttribute, StringUtil.notNull(group.getDescription()))));
+            groupDescriptionAttribute,
+            StringUtils.isEmpty(group.getDescription())
+            ? ""
+            : group.getDescription())));
       }
 
       if (modificationItems.size() > 0)
@@ -2171,37 +2190,52 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtil.isNullOrEmpty(userFirstNameAttribute))
+      if (!StringUtils.isEmpty(userFirstNameAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userFirstNameAttribute, StringUtil.notNull(user.getFirstName()))));
+            userFirstNameAttribute,
+            StringUtils.isEmpty(user.getFirstName())
+            ? ""
+            : user.getFirstName())));
       }
 
-      if (!StringUtil.isNullOrEmpty(userLastNameAttribute))
+      if (!StringUtils.isEmpty(userLastNameAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userLastNameAttribute, StringUtil.notNull(user.getLastName()))));
+            userLastNameAttribute,
+            StringUtils.isEmpty(user.getLastName())
+            ? ""
+            : user.getLastName())));
       }
 
-      if (!StringUtil.isNullOrEmpty(userEmailAttribute))
+      if (!StringUtils.isEmpty(userEmailAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userEmailAttribute, StringUtil.notNull(user.getEmail()))));
+            userEmailAttribute,
+            StringUtils.isEmpty(user.getEmail())
+            ? ""
+            : user.getEmail())));
       }
 
-      if (!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+      if (!StringUtils.isEmpty(userPhoneNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userPhoneNumberAttribute, StringUtil.notNull(user.getPhoneNumber()))));
+            userPhoneNumberAttribute,
+            StringUtils.isEmpty(user.getPhoneNumber())
+            ? ""
+            : user.getPhoneNumber())));
       }
 
-      if (!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+      if (!StringUtils.isEmpty(userMobileNumberAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userMobileNumberAttribute, StringUtil.notNull(user.getMobileNumber()))));
+            userMobileNumberAttribute,
+            StringUtils.isEmpty(user.getMobileNumber())
+            ? ""
+            : user.getMobileNumber())));
       }
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+      if ((!StringUtils.isEmpty(userPasswordAttemptsAttribute))
           && (user.getPasswordAttempts() != null))
       {
         if (lockUser)
@@ -2218,8 +2252,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
-          && (user.getPasswordExpiry() != null))
+      if ((!StringUtils.isEmpty(userPasswordExpiryAttribute)) && (user.getPasswordExpiry() != null))
       {
         if (expirePassword)
         {
@@ -2266,7 +2299,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     group.setId(null);
     group.setUserDirectoryId(getUserDirectoryId());
 
-    if ((!StringUtil.isNullOrEmpty(groupDescriptionAttribute))
+    if ((!StringUtils.isEmpty(groupDescriptionAttribute))
         && (attributes.get(groupDescriptionAttribute) != null))
     {
       group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
@@ -2292,7 +2325,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     user.setReadOnly(isReadOnly);
     user.setPassword("");
 
-    if ((!StringUtil.isNullOrEmpty(userFirstNameAttribute))
+    if ((!StringUtils.isEmpty(userFirstNameAttribute))
         && (attributes.get(userFirstNameAttribute) != null))
     {
       user.setFirstName(String.valueOf(attributes.get(userFirstNameAttribute).get()));
@@ -2302,7 +2335,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setFirstName("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userLastNameAttribute))
+    if ((!StringUtils.isEmpty(userLastNameAttribute))
         && (attributes.get(userLastNameAttribute) != null))
     {
       user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
@@ -2312,7 +2345,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setLastName("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userPhoneNumberAttribute))
+    if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
         && (attributes.get(userPhoneNumberAttribute) != null))
     {
       user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
@@ -2322,7 +2355,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setPhoneNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userMobileNumberAttribute))
+    if ((!StringUtils.isEmpty(userMobileNumberAttribute))
         && (attributes.get(userMobileNumberAttribute) != null))
     {
       user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
@@ -2332,8 +2365,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setMobileNumber("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userEmailAttribute))
-        && (attributes.get(userEmailAttribute) != null))
+    if ((!StringUtils.isEmpty(userEmailAttribute)) && (attributes.get(userEmailAttribute) != null))
     {
       user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
     }
@@ -2342,13 +2374,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
       user.setEmail("");
     }
 
-    if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+    if ((!StringUtils.isEmpty(userPasswordAttemptsAttribute))
         && (attributes.get(userPasswordAttemptsAttribute) != null))
     {
       String userPasswordAttemptsAttributeValue = String.valueOf(attributes.get(
           userPasswordAttemptsAttribute).get());
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttributeValue))
+      if ((!StringUtils.isEmpty(userPasswordAttemptsAttributeValue))
           && (!userPasswordAttemptsAttributeValue.equals("-1")))
       {
         user.setPasswordAttempts(Integer.parseInt(String.valueOf(attributes.get(
@@ -2356,13 +2388,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
     }
 
-    if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttribute))
+    if ((!StringUtils.isEmpty(userPasswordExpiryAttribute))
         && (attributes.get(userPasswordExpiryAttribute) != null))
     {
       String userPasswordExpiryAttributeValue = String.valueOf(attributes.get(
           userPasswordExpiryAttribute).get());
 
-      if ((!StringUtil.isNullOrEmpty(userPasswordExpiryAttributeValue))
+      if ((!StringUtils.isEmpty(userPasswordExpiryAttributeValue))
           && (!userPasswordExpiryAttributeValue.equals("-1")))
       {
         LocalDateTime epochSecond = LocalDateTime.ofEpochSecond(Long.parseLong(String.valueOf(
@@ -2632,7 +2664,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     try
     {
-      if ((!StringUtil.isNullOrEmpty(userPasswordAttemptsAttribute))
+      if ((!StringUtils.isEmpty(userPasswordAttemptsAttribute))
           && (user.getPasswordAttempts() != null)
           && (user.getPasswordAttempts() != -1))
       {
@@ -2655,7 +2687,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     try
     {
-      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
       {
         Attributes attributes = dirContext.getAttributes(userDN, userPasswordHistoryAttributeArray);
 
@@ -2692,7 +2724,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     try
     {
-      if (!StringUtil.isNullOrEmpty(userPasswordHistoryAttribute))
+      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
       {
         BasicAttribute attribute = new BasicAttribute(userPasswordHistoryAttribute);
 

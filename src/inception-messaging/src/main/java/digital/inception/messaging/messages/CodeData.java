@@ -19,8 +19,9 @@ package digital.inception.messaging.messages;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.codes.Code;
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Element;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -80,8 +81,12 @@ public class CodeData
     {
       this.id = element.getChildText("Id");
       this.codeCategoryId = element.getChildText("CodeCategoryId");
-      this.name = StringUtil.notNull(element.getChildText("Name"));
-      this.value = StringUtil.notNull(element.getChildText("Value"));
+      this.name = StringUtils.isEmpty(element.getChildText("Name"))
+          ? ""
+          : element.getChildText("Name");
+      this.value = StringUtils.isEmpty(element.getChildText("Value"))
+          ? ""
+          : element.getChildText("Value");
     }
     catch (Throwable e)
     {
@@ -138,10 +143,16 @@ public class CodeData
   {
     Element codeElement = new Element("Code");
 
-    codeElement.addContent(new Element("Id", StringUtil.notNull(id)));
-    codeElement.addContent(new Element("CodeCategoryId", codeCategoryId.toString()));
-    codeElement.addContent(new Element("Name", StringUtil.notNull(name)));
-    codeElement.addContent(new Element("Value", StringUtil.notNull(value)));
+    codeElement.addContent(new Element("Id", StringUtils.isEmpty(id)
+        ? ""
+        : id));
+    codeElement.addContent(new Element("CodeCategoryId", codeCategoryId));
+    codeElement.addContent(new Element("Name", StringUtils.isEmpty(name)
+        ? ""
+        : name));
+    codeElement.addContent(new Element("Value", StringUtils.isEmpty(value)
+        ? ""
+        : value));
 
     return codeElement;
   }

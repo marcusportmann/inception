@@ -18,7 +18,7 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -29,7 +29,6 @@ import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -64,8 +63,6 @@ public class ReportingService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /* The real path to the folder where the local Jasper reports are stored. */
@@ -73,8 +70,13 @@ public class ReportingService
 
   /**
    * Constructs a new <code>ReportingService</code>.
+   *
+   * @param dataSource the data source used to provide connections to the application database
    */
-  public ReportingService() {}
+  public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.dataSource = dataSource;
+  }
 
   /**
    * Create the new report definition.
@@ -169,7 +171,7 @@ public class ReportingService
 
       Map<String, Object> localParameters = new HashMap<>();
 
-      if (StringUtil.isNullOrEmpty(getLocalReportFolderPath()))
+      if (StringUtils.isEmpty(getLocalReportFolderPath()))
       {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }
@@ -223,7 +225,7 @@ public class ReportingService
       localParameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
       localParameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 
-      if (StringUtil.isNullOrEmpty(getLocalReportFolderPath()))
+      if (StringUtils.isEmpty(getLocalReportFolderPath()))
       {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }

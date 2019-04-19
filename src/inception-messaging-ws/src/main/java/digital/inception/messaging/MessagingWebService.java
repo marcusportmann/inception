@@ -16,10 +16,6 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
@@ -34,16 +30,29 @@ import javax.validation.Validator;
  */
 @WebService(serviceName = "MessagingService", name = "IMessagingService",
     targetNamespace = "http://messaging.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+@SOAPBinding
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class MessagingWebService
 {
-  /* Messaging Service */
-  @Autowired
+  /**
+   * The Messaging Service.
+   */
   private IMessagingService messagingService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>MessagingWebService</code>.
+   *
+   * @param messagingService the Messaging Service
+   * @param validator        the JSR-303 validator
+   */
+  public MessagingWebService(IMessagingService messagingService, Validator validator)
+  {
+    this.messagingService = messagingService;
+    this.validator = validator;
+  }
 }

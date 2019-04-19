@@ -18,18 +18,18 @@ package digital.inception.application;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestJPAService</code> class provides the Test JPA Service
@@ -46,9 +46,20 @@ public class TestJPAService
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /* Transaction Manager */
-  @Autowired
+  /**
+   * The Spring platform transaction manager.
+   */
   private PlatformTransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>TestJPAService</code>.
+   *
+   * @param platformTransactionManager the Spring platform transaction manager
+   */
+  public TestJPAService(PlatformTransactionManager platformTransactionManager)
+  {
+    this.transactionManager = platformTransactionManager;
+  }
 
   /**
    * Create the test data.

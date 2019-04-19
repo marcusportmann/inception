@@ -51,7 +51,6 @@ import java.util.List;
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class CodesServiceTest
 {
   private static int codeCategoryCount;
@@ -328,7 +327,7 @@ public class CodesServiceTest
     assertEquals("The name values for the two code categories do not match",
         codeCategory1.getName(), codeCategory2.getName());
     assertEquals("The data values for the two code categories do not match",
-      codeCategory1.getData(), codeCategory2.getData());
+        codeCategory1.getData(), codeCategory2.getData());
     assertEquals("The updated values for the two code categories do not match",
         codeCategory1.getUpdated(), codeCategory2.getUpdated());
   }

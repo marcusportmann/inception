@@ -109,7 +109,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
           throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
               + "): Found an unexpected active transaction (" + transaction.toString()
               + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
               + stackTrace[i + 1].getLineNumber() + ")");
         }
       }
@@ -138,7 +138,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
           throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
               + "): Found an unexpected open database connection (" + connection.toString()
               + ") that was retrieved by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class" + " (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
               + stackTrace[i + 1].getLineNumber() + ")");
         }
       }

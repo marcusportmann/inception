@@ -92,6 +92,14 @@ public interface IConfigurationService
     throws ConfigurationNotFoundException, ConfigurationServiceException;
 
   /**
+   * Retrieve all the configuration summaries.
+   *
+   * @return all the configuration summaries
+   */
+  List<ConfigurationSummary> getConfigurationSummaries()
+    throws ConfigurationServiceException;
+
+  /**
    * Retrieve all the configurations.
    *
    * @return all the configurations
@@ -119,6 +127,16 @@ public interface IConfigurationService
    *         entry does not exist
    */
   double getDouble(String key, double defaultValue)
+    throws ConfigurationServiceException;
+
+  /**
+   * Retrieve the filtered configuration summaries.
+   *
+   * @param filter the filter to apply to the keys for the configuration summaries
+   *
+   * @return the filtered configuration summaries
+   */
+  List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
     throws ConfigurationServiceException;
 
   /**

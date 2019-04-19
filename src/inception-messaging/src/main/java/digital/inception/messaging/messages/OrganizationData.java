@@ -18,9 +18,10 @@ package digital.inception.messaging.messages;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Organization;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -58,7 +59,9 @@ public class OrganizationData
     try
     {
       this.id = UUID.fromString(element.getChildText("Id"));
-      this.name = StringUtil.notNull(element.getChildText("Name"));
+      this.name = StringUtils.isEmpty(element.getChildText("Name"))
+          ? ""
+          : element.getChildText("Name");
     }
     catch (Throwable e)
     {
@@ -127,7 +130,9 @@ public class OrganizationData
     Element organizationElement = new Element("Organization");
 
     organizationElement.addContent(new Element("Id", id.toString()));
-    organizationElement.addContent(new Element("Name", StringUtil.notNull(name)));
+    organizationElement.addContent(new Element("Name", StringUtils.isEmpty(name)
+        ? ""
+        : name));
 
     return organizationElement;
   }

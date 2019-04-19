@@ -19,18 +19,27 @@ package digital.inception.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestConfiguration;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * The <code>MessagingTestConfiguration</code> class provides the Spring configuration for the
- * JUnit test classes that test the messaging capabilities provided by the
- * <b>mmp-java (Open Source Java and JEE Development Framework)</b>.
+ * JUnit test classes that test the messaging capabilities provided by the <b>Inception</b>
+ * framework.
  *
  * @author Marcus Portmann
  */
 @Configuration
-@ConfigurationProperties
-@SpringBootConfiguration
-public class MessagingTestConfiguration extends TestConfiguration {}
+public class MessagingTestConfiguration extends TestConfiguration
+{
+  /**
+   * Constructs a new <code>MessagingTestConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public MessagingTestConfiguration(ApplicationContext applicationContext)
+  {
+    super(applicationContext);
+  }
+}

@@ -21,8 +21,10 @@ package digital.inception.reporting;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,14 +33,15 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.sql.Connection;
+
+import java.util.*;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ReportingServiceTest</code> class contains the implementation of the JUnit
@@ -50,10 +53,15 @@ import static org.junit.Assert.fail;
 @ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class ReportingServiceTest
 {
   private static int reportDefinitionCount;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  @Autowired
+  private DataSource dataSource;
 
   /**
    * The Reporting Service.
@@ -61,12 +69,6 @@ public class ReportingServiceTest
   @Autowired
   private IReportingService reportingService;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
 
   /**
    * Test the create report PDF functionality.
@@ -108,8 +110,7 @@ public class ReportingServiceTest
     boolean reportDefinitionExists = reportingService.reportDefinitionExists(
         reportDefinition.getId());
 
-    assertEquals("The report definition that was saved does not exist", true,
-        reportDefinitionExists);
+    assertTrue("The report definition that was saved does not exist", reportDefinitionExists);
 
     reportDefinition.setName("Updated " + reportDefinition.getName());
 
@@ -121,7 +122,7 @@ public class ReportingServiceTest
 
     reportDefinitionExists = reportingService.reportDefinitionExists(reportDefinition.getId());
 
-    assertEquals("The updated report definition that was saved does not exist", true,
+    assertTrue("The updated report definition that was saved does not exist",
         reportDefinitionExists);
 
     int numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
@@ -167,7 +168,7 @@ public class ReportingServiceTest
     reportDefinitionCount++;
 
     byte[] testReportTemplate = ResourceUtil.getClasspathResource(
-      "digital/inception/reporting/TestReport.jasper");
+        "digital/inception/reporting/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
     reportDefinition.setId(UUID.randomUUID());
@@ -193,7 +194,7 @@ public class ReportingServiceTest
         reportDefinition1.getId(), reportDefinition2.getId());
     assertEquals("The name values for the two report definitions do not match",
         reportDefinition1.getName(), reportDefinition2.getName());
-    assertEquals("The template values for the two report definitions do not match", true,
-        Arrays.equals(reportDefinition1.getTemplate(), reportDefinition2.getTemplate()));
+    assertTrue("The template values for the two report definitions do not match", Arrays.equals(
+        reportDefinition1.getTemplate(), reportDefinition2.getTemplate()));
   }
 }

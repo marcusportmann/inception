@@ -22,6 +22,7 @@ package digital.inception.messaging.handler;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class MessageHandler
   implements IMessageHandler
 {

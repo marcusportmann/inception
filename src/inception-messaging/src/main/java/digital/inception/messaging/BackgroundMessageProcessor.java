@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -40,18 +39,26 @@ public class BackgroundMessageProcessor
   /* Logger */
   private static Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
 
-  /* Messaging Service */
-  @Autowired
+  /**
+   * The Messaging Service.
+   */
   private IMessagingService messagingService;
 
   /**
-   * Initialize the Background Message Processor.
+   * Constructs a new <code>BackgroundMessageProcessor</code>.
    *
-   * @throws Exception
+   * @param messagingService the Messaging Service
+   */
+  public BackgroundMessageProcessor(IMessagingService messagingService)
+  {
+    this.messagingService = messagingService;
+  }
+
+  /**
+   * Initialize the Background Message Processor.
    */
   @Override
   public void afterPropertiesSet()
-    throws Exception
   {
     logger.info("Initializing the Background Message Processor");
 

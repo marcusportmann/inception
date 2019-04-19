@@ -21,13 +21,10 @@ package digital.inception.reporting;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,16 +32,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.sql.Connection;
-
-import java.util.*;
-
 import javax.sql.DataSource;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.sql.Connection;
+import java.util.*;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingRestController</code> class.
@@ -53,23 +47,38 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/reporting")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class ReportingRestController
 {
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
-  /* Reporting Service */
-  @Autowired
+  /**
+   * The Reporting Service.
+   */
   private IReportingService reportingService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ReportingRestController</code>.
+   *
+   * @param dataSource       the data source used to provide connections to the application database
+   * @param reportingService the Reporting Service
+   * @param validator        the JSR-303 validator
+   */
+  public ReportingRestController(@Qualifier("applicationDataSource") DataSource dataSource,
+      IReportingService reportingService, Validator validator)
+  {
+    this.dataSource = dataSource;
+    this.reportingService = reportingService;
+    this.validator = validator;
+  }
 
   /**
    * Create the report definition.
@@ -203,9 +212,7 @@ public class ReportingRestController
       headers.setContentDispositionFormData(filename, filename);
       headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
-      ResponseEntity<byte[]> response = new ResponseEntity<>(reportPDF, headers, HttpStatus.OK);
-
-      return response;
+      return new ResponseEntity<>(reportPDF, headers, HttpStatus.OK);
     }
     catch (ReportDefinitionNotFoundException e)
     {

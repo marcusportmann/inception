@@ -64,12 +64,17 @@ application:
     url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     minPoolSize: 5
     maxPoolSize: 10
+    packagesToScanForEntities: digital.inception.sample
+    inMemoryDatabaseInitResources: digital/inception/sample/inception-sample-h2.sql
+
 
   database-sql-server:
     dataSource: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
     url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
     minPoolSize: 5
     maxPoolSize: 10
+    packagesToScanForEntities: digital.inception.sample
+
 
   security:
     enableCORS: true

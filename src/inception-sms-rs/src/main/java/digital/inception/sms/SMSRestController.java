@@ -18,7 +18,6 @@ package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +35,25 @@ import javax.validation.Validator;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SMSRestController
 {
-  /* SMS Service */
-  @Autowired
+  /**
+   * The SMS Service.
+   */
   private ISMSService smsService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SMSRestController</code>.
+   *
+   * @param smsService the SMS Service
+   * @param validator  the JSR-303 validator
+   */
+  public SMSRestController(ISMSService smsService, Validator validator)
+  {
+    this.smsService = smsService;
+    this.validator = validator;
+  }
 }

@@ -19,12 +19,11 @@ package digital.inception.configuration;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.Base64Util;
-import digital.inception.core.util.StringUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -51,9 +50,17 @@ public class ConfigurationService
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
+
+  /**
+   * Constructs a new <code>ConfigurationService</code>.
+   *
+   * @param dataSource the data source used to provide connections to the application database
+   */
+  public ConfigurationService(@Qualifier("applicationDataSource") DataSource dataSource)
+  {
+    this.dataSource = dataSource;
+  }
 
   /**
    * Remove the configuration with the specified key.
@@ -267,6 +274,28 @@ public class ConfigurationService
   }
 
   /**
+   * Retrieve all the configuration summaries.
+   *
+   * @return all the configuration summaries
+   */
+  @Override
+  public List<ConfigurationSummary> getConfigurationSummaries()
+    throws ConfigurationServiceException
+  {
+    String getValueSQL = "SELECT key, description FROM configuration.configuration ORDER BY key";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    {
+      return getConfigurationSummaries(statement);
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationServiceException("Failed to retrieve the configuration summaries", e);
+    }
+  }
+
+  /**
    * Retrieve all the configurations.
    *
    * @return all the configurations
@@ -358,9 +387,45 @@ public class ConfigurationService
   }
 
   /**
+   * Retrieve the filtered configuration summaries.
+   *
+   * @param filter the filter to apply to the keys for the configuration summaries
+   *
+   * @return the filtered configuration summaries
+   */
+  @Override
+  public List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
+    throws ConfigurationServiceException
+  {
+    String getConfigValuesSQL = "SELECT key, description FROM "
+        + "configuration.configuration ORDER BY key";
+
+    String getFilteredConfigValuesSQL = "SELECT key, description FROM "
+        + "configuration.configuration WHERE (UPPER(key) LIKE ?) ORDER BY key";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
+          ? getConfigValuesSQL
+          : getFilteredConfigValuesSQL))
+    {
+      if (!StringUtils.isEmpty(filter))
+      {
+        statement.setString(1, "%" + filter.toUpperCase() + "%");
+      }
+
+      return getConfigurationSummaries(statement);
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationServiceException(String.format(
+          "Failed to retrieve the configuration summaries matching the filter (%s)", filter), e);
+    }
+  }
+
+  /**
    * Retrieve the filtered configurations.
    *
-   * @param filter the filter to apply to the keys for the configuration
+   * @param filter the filter to apply to the keys for the configurations
    *
    * @return the filtered configurations
    */
@@ -375,11 +440,11 @@ public class ConfigurationService
         + "configuration.configuration WHERE (UPPER(key) LIKE ?) ORDER BY key";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getConfigValuesSQL
           : getFilteredConfigValuesSQL))
     {
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         statement.setString(1, "%" + filter.toUpperCase() + "%");
       }
@@ -580,11 +645,11 @@ public class ConfigurationService
         + "configuration.configuration WHERE (UPPER(key) LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getNumberOfConfigurationsSQL
           : getNumberOfFilteredConfigurationsSQL))
     {
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         statement.setString(1, "%" + filter.toUpperCase() + "%");
       }
@@ -764,7 +829,10 @@ public class ConfigurationService
         try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
         {
           statement.setString(1, stringValue);
-          statement.setString(2, StringUtil.notNull(description));
+          statement.setString(2,
+              StringUtils.isEmpty(description)
+              ? ""
+              : description);
           statement.setString(3, key.toUpperCase());
 
           if (statement.executeUpdate() <= 0)
@@ -808,7 +876,10 @@ public class ConfigurationService
     {
       statement.setString(1, key);
       statement.setString(2, stringValue);
-      statement.setString(3, StringUtil.notNull(description));
+      statement.setString(3,
+          StringUtils.isEmpty(description)
+          ? ""
+          : description);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -816,6 +887,22 @@ public class ConfigurationService
             "No rows were affected as a result of executing the SQL statement (%s)",
             createValueSQL));
       }
+    }
+  }
+
+  private List<ConfigurationSummary> getConfigurationSummaries(PreparedStatement statement)
+    throws SQLException
+  {
+    try (ResultSet rs = statement.executeQuery())
+    {
+      List<ConfigurationSummary> configurationSummaries = new ArrayList<>();
+
+      while (rs.next())
+      {
+        configurationSummaries.add(new ConfigurationSummary(rs.getString(1), rs.getString(2)));
+      }
+
+      return configurationSummaries;
     }
   }
 

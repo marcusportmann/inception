@@ -23,7 +23,6 @@ import com.codahale.metrics.MetricRegistry;
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.NetworkUtil;
-import digital.inception.core.util.StringUtil;
 import digital.inception.json.databind.DateTimeModule;
 
 import org.apache.http.client.HttpClient;
@@ -39,10 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -53,6 +50,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -71,7 +69,7 @@ import java.security.SecureRandom;
 
 import java.text.SimpleDateFormat;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -91,8 +89,7 @@ import javax.xml.ws.Endpoint;
  */
 @Component
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
-@SpringBootApplication
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public abstract class ApplicationBase
   implements ServletContextInitializer
 {
@@ -117,7 +114,6 @@ public abstract class ApplicationBase
   /**
    * The Spring application context.
    */
-  @Autowired
   private ApplicationContext applicationContext;
 
   /**
@@ -283,6 +279,26 @@ public abstract class ApplicationBase
   private String wssX509CertificateTokenProfileTrustStoreType;
 
   /**
+   * Constructs a new <code>ApplicationBase</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public ApplicationBase(ApplicationContext applicationContext)
+  {
+    this.applicationContext = applicationContext;
+  }
+
+  /**
+   * Returns the Spring application context.
+   *
+   * @return the Spring application context
+   */
+  public ApplicationContext getApplicationContext()
+  {
+    return applicationContext;
+  }
+
+  /**
    * Configure the given {@link ServletContext} with any servlets, filters, listeners,
    * context-params and attributes necessary for initialization.
    *
@@ -365,10 +381,10 @@ public abstract class ApplicationBase
       CorsConfiguration config = new CorsConfiguration();
       config.applyPermitDefaultValues();
       config.setAllowCredentials(true);
-      config.setAllowedOrigins(Arrays.asList("*"));
-      config.setAllowedHeaders(Arrays.asList("*"));
-      config.setAllowedMethods(Arrays.asList("*"));
-      config.setExposedHeaders(Arrays.asList("content-length"));
+      config.setAllowedOrigins(Collections.singletonList("*"));
+      config.setAllowedHeaders(Collections.singletonList("*"));
+      config.setAllowedMethods(Collections.singletonList("*"));
+      config.setExposedHeaders(Collections.singletonList("content-length"));
       config.setMaxAge(3600L);
       source.registerCorsConfiguration("/**", config);
     }
@@ -392,7 +408,6 @@ public abstract class ApplicationBase
    *
    * @return the web service endpoint
    */
-  @SuppressWarnings("ConstantConditions")
   protected Endpoint createWebServiceEndpoint(String name, Object implementation)
   {
     try
@@ -423,25 +438,25 @@ public abstract class ApplicationBase
       {
         try
         {
-          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreType))
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreType))
           {
             throw new ConfigurationException(
                 "The type was not specified for the server SSL key store");
           }
 
-          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePath))
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePath))
           {
             throw new ConfigurationException(
                 "The path was not specified for the server SSL key store");
           }
 
-          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStorePassword))
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePassword))
           {
             throw new ConfigurationException(
                 "The password was not specified for the server SSL key store");
           }
 
-          if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
           {
             throw new ConfigurationException(
                 "The alias was not specified for the server SSL key store");
@@ -465,23 +480,23 @@ public abstract class ApplicationBase
 
           KeyStore trustStore = keyStore;
 
-          if ((!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
-              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
-              || (!StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
+          if ((!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType))
+              || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath))
+              || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
           {
-            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStoreType))
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType))
             {
               throw new ConfigurationException(
                   "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
             }
 
-            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePath))
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath))
             {
               throw new ConfigurationException(
                   "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
             }
 
-            if (StringUtil.isNullOrEmpty(wssX509CertificateTokenProfileTrustStorePassword))
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword))
             {
               throw new ConfigurationException(
                   "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
@@ -553,23 +568,23 @@ public abstract class ApplicationBase
     {
       HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-      if ((!StringUtil.isNullOrEmpty(applicationKeyStoreType))
-          || (!StringUtil.isNullOrEmpty(applicationKeyStorePath))
-          || (!StringUtil.isNullOrEmpty(applicationKeyStorePassword)))
+      if ((!StringUtils.isEmpty(applicationKeyStoreType))
+          || (!StringUtils.isEmpty(applicationKeyStorePath))
+          || (!StringUtils.isEmpty(applicationKeyStorePassword)))
       {
-        if (StringUtil.isNullOrEmpty(applicationKeyStoreType))
+        if (StringUtils.isEmpty(applicationKeyStoreType))
         {
           throw new ConfigurationException(
               "The type was not specified for the application key store");
         }
 
-        if (StringUtil.isNullOrEmpty(applicationKeyStorePath))
+        if (StringUtils.isEmpty(applicationKeyStorePath))
         {
           throw new ConfigurationException(
               "The path was not specified for the application key store");
         }
 
-        if (StringUtil.isNullOrEmpty(applicationKeyStorePassword))
+        if (StringUtils.isEmpty(applicationKeyStorePassword))
         {
           throw new ConfigurationException(
               "The password was not specified for the application key store");
@@ -589,23 +604,25 @@ public abstract class ApplicationBase
 
         KeyStore trustStore = null;
 
-        if ((!StringUtil.isNullOrEmpty(applicationTrustStoreType))
-            || (!StringUtil.isNullOrEmpty(applicationTrustStorePath))
-            || (!StringUtil.isNullOrEmpty(applicationTrustStorePassword)))
+        if ((!StringUtils.isEmpty(applicationTrustStoreType))
+            || (!StringUtils.isEmpty(applicationTrustStorePath))
+            || (!StringUtils.isEmpty(applicationTrustStorePassword)))
         {
-          if (StringUtil.isNullOrEmpty(applicationTrustStoreType))
+          if (StringUtils.isEmpty(applicationTrustStoreType))
           {
             throw new ConfigurationException(
                 "The type was not specified for the application trust store");
           }
 
-          if (StringUtil.isNullOrEmpty(applicationTrustStorePath))
+          if (StringUtils.isEmpty(applicationTrustStorePath))
           {
             throw new ConfigurationException(
                 "The path was not specified for the application trust store");
           }
 
-          applicationTrustStorePassword = StringUtil.notNull(applicationTrustStorePassword);
+          applicationTrustStorePassword = StringUtils.isEmpty(applicationTrustStorePassword)
+              ? ""
+              : applicationTrustStorePassword;
 
           try
           {
@@ -753,25 +770,25 @@ public abstract class ApplicationBase
 
             try
             {
-              if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreType))
+              if (StringUtils.isEmpty(serverSecurityKeyStoreType))
               {
                 throw new ConfigurationException(
                     "The type was not specified for the server security key store");
               }
 
-              if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePath))
+              if (StringUtils.isEmpty(serverSecurityKeyStorePath))
               {
                 throw new ConfigurationException(
                     "The path was not specified for the server security key store");
               }
 
-              if (StringUtil.isNullOrEmpty(serverSecurityKeyStorePassword))
+              if (StringUtils.isEmpty(serverSecurityKeyStorePassword))
               {
                 throw new ConfigurationException(
                     "The password was not specified for the server security key store");
               }
 
-              if (StringUtil.isNullOrEmpty(serverSecurityKeyStoreAlias))
+              if (StringUtils.isEmpty(serverSecurityKeyStoreAlias))
               {
                 throw new ConfigurationException(
                     "The alias was not specified for the server security key store");
@@ -792,23 +809,23 @@ public abstract class ApplicationBase
 
               KeyStore trustStore = keyStore;
 
-              if ((!StringUtil.isNullOrEmpty(serverSecurityTrustStoreType))
-                  || (!StringUtil.isNullOrEmpty(serverSecurityTrustStorePath))
-                  || (!StringUtil.isNullOrEmpty(serverSecurityTrustStorePassword)))
+              if ((!StringUtils.isEmpty(serverSecurityTrustStoreType))
+                  || (!StringUtils.isEmpty(serverSecurityTrustStorePath))
+                  || (!StringUtils.isEmpty(serverSecurityTrustStorePassword)))
               {
-                if (StringUtil.isNullOrEmpty(serverSecurityTrustStoreType))
+                if (StringUtils.isEmpty(serverSecurityTrustStoreType))
                 {
                   throw new ConfigurationException(
                       "The type was not specified for the server security trust store");
                 }
 
-                if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePath))
+                if (StringUtils.isEmpty(serverSecurityTrustStorePath))
                 {
                   throw new ConfigurationException(
                       "The path was not specified for the server security trust store");
                 }
 
-                if (StringUtil.isNullOrEmpty(serverSecurityTrustStorePassword))
+                if (StringUtils.isEmpty(serverSecurityTrustStorePassword))
                 {
                   throw new ConfigurationException(
                       "The password was not specified for the server security trust store");
@@ -844,7 +861,7 @@ public abstract class ApplicationBase
 
               builder.addHttpsListener(serverSSLHttpListenerPort, "0.0.0.0", sslContext);
 
-              if (!StringUtil.isNullOrEmpty(serverSecurityClientAuthMode))
+              if (!StringUtils.isEmpty(serverSecurityClientAuthMode))
               {
                 if (serverSecurityClientAuthMode.equalsIgnoreCase("required"))
                 {

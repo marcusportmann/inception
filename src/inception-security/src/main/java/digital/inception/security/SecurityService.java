@@ -19,17 +19,16 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
-import digital.inception.core.util.StringUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -45,8 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.naming.ServiceUnavailableException;
 
 import javax.sql.DataSource;
 
@@ -96,28 +93,35 @@ public class SecurityService
   /**
    * The Spring application context.
    */
-  @Autowired
   private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
-   * The ID Generator.
+   * The ID generator.
    */
-  @Autowired
   private IDGenerator idGenerator;
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
   private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param idGenerator        the ID generator
    */
-  public SecurityService() {}
+  public SecurityService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+    this.idGenerator = idGenerator;
+  }
 
   /**
    * Add the user to the security group.
@@ -173,12 +177,9 @@ public class SecurityService
 
   /**
    * Initialize the Security Service.
-   *
-   * @throws Exception
    */
   @Override
   public void afterPropertiesSet()
-    throws Exception
   {
     try
     {
@@ -811,13 +812,13 @@ public class SecurityService
         + "WHERE (UPPER(name) LIKE ?) ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getOrganizationsSQL
           : getFilteredOrganizationsSQL))
     {
       statement.setMaxRows(MAX_FILTERED_ORGANISATIONS);
 
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
 
@@ -862,13 +863,13 @@ public class SecurityService
         + "WHERE (UPPER(name) LIKE ?) ORDER BY name";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getUserDirectoriesSQL
           : getFilteredUserDirectoriesSQL))
     {
       statement.setMaxRows(MAX_FILTERED_USER_DIRECTORIES);
 
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
 
@@ -1126,11 +1127,11 @@ public class SecurityService
         "SELECT COUNT(id) FROM security.organizations WHERE (UPPER(name) LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getNumberOfOrganizationsSQL
           : getNumberOfFilteredOrganizationsSQL))
     {
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
 
@@ -1177,11 +1178,11 @@ public class SecurityService
         "SELECT COUNT(id) FROM security.user_directories WHERE (UPPER(name) LIKE ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getNumberOfUserDirectoriesSQL
           : getNumberOfFilteredUserDirectoriesSQL))
     {
-      if (!StringUtil.isNullOrEmpty(filter))
+      if (!StringUtils.isEmpty(filter))
       {
         String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
 
@@ -1980,7 +1981,10 @@ public class SecurityService
       }
 
       statement.setString(1, function.getName());
-      statement.setString(2, StringUtil.notNull(function.getDescription()));
+      statement.setString(2,
+          StringUtils.isEmpty(function.getDescription())
+          ? ""
+          : function.getDescription());
       statement.setString(3, function.getCode());
 
       if (statement.executeUpdate() <= 0)
@@ -2137,7 +2141,12 @@ public class SecurityService
     function.setId(UUID.fromString(rs.getString(1)));
     function.setCode(rs.getString(2));
     function.setName(rs.getString(3));
-    function.setDescription(StringUtil.notNull(rs.getString(4)));
+
+    String description = rs.getString(4);
+
+    function.setDescription(StringUtils.isEmpty(description)
+        ? ""
+        : description);
 
     return function;
   }
@@ -2275,10 +2284,7 @@ public class SecurityService
 
     if (value instanceof String)
     {
-      if (String.class.cast(value).length() == 0)
-      {
-        return true;
-      }
+      return String.class.cast(value).length() == 0;
     }
 
     return false;
@@ -2293,8 +2299,8 @@ public class SecurityService
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName(organization.getName() + " User Directory");
 
-    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory "
-        + "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>"
+    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
+        + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
         + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
         + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
         + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"

@@ -20,7 +20,6 @@ package digital.inception.sample.model;
 
 import digital.inception.validation.ValidationError;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,10 +56,19 @@ public class SampleService
   private EntityManager entityManager;
 
   /**
-   * The JSR 303 Bean Validation validator.
+   * The JSR-303 validator.
    */
-  @Autowired
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SampleService</code>.
+   *
+   * @param validator the JSR-303 validator
+   */
+  public SampleService(Validator validator)
+  {
+    this.validator = validator;
+  }
 
   /**
    * Add the data.

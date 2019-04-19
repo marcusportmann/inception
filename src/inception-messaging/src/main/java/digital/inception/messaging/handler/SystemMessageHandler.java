@@ -37,7 +37,6 @@ import digital.inception.security.UserNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -52,7 +51,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "CdiManagedBeanInconsistencyInspection" })
+@SuppressWarnings({"unused", "CdiManagedBeanInconsistencyInspection",
+  "SpringJavaAutowiredMembersInspection"})
 public class SystemMessageHandler extends MessageHandler
 {
   /* Logger */
@@ -303,7 +303,7 @@ public class SystemMessageHandler extends MessageHandler
 
         String codeData = codesService.getCodeCategoryData(requestData.getCodeCategoryId());
 
-        List<Code> codes = null;
+        List<Code> codes;
 
         if (requestData.getParameters().isEmpty())
         {

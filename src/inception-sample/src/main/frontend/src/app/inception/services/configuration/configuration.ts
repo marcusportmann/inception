@@ -36,42 +36,17 @@ export class Configuration {
    */
   value: string;
 
-
-
-
   /**
-   * The ID used to uniquely identify the code category the code is associated with.
-   */
-  codeCategoryId: string;
-
-  /**
-   * The ID used to uniquely identify the code.
-   */
-  id: string;
-
-  /**
-   * The name of the code.
-   */
-  name: string;
-
-  /**
-   * The value for the code.
-   */
-  value: string;
-
-  /**
-   * Constructs a new Code.
+   * Constructs a new Configuration.
    *
-   * @param {string} id             The ID used to uniquely identify the code.
-   * @oaram {string} codeCategoryId The ID used to uniquely identify the code category the code is
-   *                                associated with.
-   * @param {string} name           The name of the code category.
-   * @param {string} value          The value for the code.
+   * @param {string} key         The key used to uniquely identify the configuration.
+   * @oaram {string} value       The value for the configuration.
+   * @param {string} description The description for the configuration.
    */
-  constructor(id: string, codeCategoryId: string, name: string, value: string) {
-    this.id = id;
-    this.codeCategoryId = codeCategoryId;
-    this.name = name;
+  constructor(key: string, value: string, description: string) {
+
+    this.key = key;
     this.value = value;
+    this.description = description;
   }
 }

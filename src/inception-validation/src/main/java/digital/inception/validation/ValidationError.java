@@ -21,14 +21,15 @@ package digital.inception.validation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.core.util.StringUtil;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+import java.io.StringReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +145,53 @@ public class ValidationError
   }
 
   /**
+   * Capitalize each word in the string.
+   *
+   * @param str the string
+   *
+   * @return the capitalized string
+   */
+  public static String capitalizePropertyName(String str)
+  {
+    if (StringUtils.isEmpty(str))
+    {
+      return str;
+    }
+
+    StringReader reader = new StringReader(str);
+
+    try
+    {
+      StringBuilder buffer = new StringBuilder();
+
+      boolean capitilizeNextCharacter = true;
+
+      int c;
+      while ((c = reader.read()) != -1)
+      {
+        char character = (char) c;
+
+        if (capitilizeNextCharacter)
+        {
+          buffer.append(Character.toUpperCase(character));
+        }
+        else
+        {
+          buffer.append(character);
+        }
+
+        capitilizeNextCharacter = (character == '.') || (character == ' ');
+      }
+
+      return buffer.toString();
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException("Failed to capitalizePropertyName the string (" + str + ")", e);
+    }
+  }
+
+  /**
    * Capitalize the property names for the validation errors.
    *
    * @param validationErrors the validation errors
@@ -157,7 +205,7 @@ public class ValidationError
 
     for (ValidationError validationError : validationErrors)
     {
-      validationError.setProperty(StringUtil.capitalize(validationError.getProperty()));
+      validationError.setProperty(capitalizePropertyName(validationError.getProperty()));
     }
   }
 
@@ -195,7 +243,7 @@ public class ValidationError
 
       if (capitalizePropertyNames)
       {
-        validationError.setProperty(StringUtil.capitalize(validationError.getProperty()));
+        validationError.setProperty(capitalizePropertyName(validationError.getProperty()));
       }
 
       validationErrors.add(validationError);

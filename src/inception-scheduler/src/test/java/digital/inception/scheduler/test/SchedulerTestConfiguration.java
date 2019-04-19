@@ -19,14 +19,27 @@ package digital.inception.scheduler.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestConfiguration;
+
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * The <code>MessagingTestConfiguration</code> class provides the Spring configuration for the
- * JUnit test classes that test the scheduler capabilities provided by the
- * <b>mmp-java (Open Source Java and JEE Development Framework)</b>.
+ * JUnit test classes that test the scheduler capabilities provided by the <b>Inception</b>
+ * framework.
  *
  * @author Marcus Portmann
  */
 @Configuration
-public class SchedulerTestConfiguration extends TestConfiguration {}
+public class SchedulerTestConfiguration extends TestConfiguration
+{
+  /**
+   * Constructs a new <code>SchedulerTestConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SchedulerTestConfiguration(ApplicationContext applicationContext)
+  {
+    super(applicationContext);
+  }
+}

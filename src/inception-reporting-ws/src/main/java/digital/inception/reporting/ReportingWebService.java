@@ -21,7 +21,6 @@ package digital.inception.reporting;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -50,25 +49,39 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @WebService(serviceName = "ReportingService", name = "IReportingService",
     targetNamespace = "http://reporting.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SOAPBinding
+@SuppressWarnings({ "unused" })
 public class ReportingWebService
 {
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
-  /* Reporting Service */
-  @Autowired
+  /**
+   * The Reporting Service.
+   */
   private IReportingService reportingService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>ReportingWebService</code>.
+   *
+   * @param dataSource       the data source used to provide connections to the application database
+   * @param reportingService the Reporting Service
+   * @param validator        the JSR-303 validator
+   */
+  public ReportingWebService(@Qualifier("applicationDataSource") DataSource dataSource,
+      IReportingService reportingService, Validator validator)
+  {
+    this.dataSource = dataSource;
+    this.reportingService = reportingService;
+    this.validator = validator;
+  }
 
   /**
    * Create the report definition.

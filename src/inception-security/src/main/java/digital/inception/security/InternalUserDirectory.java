@@ -19,10 +19,10 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
-import digital.inception.core.util.StringUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -71,7 +71,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   private DataSource dataSource;
 
   /**
-   * The ID Generator.
+   * The ID generator.
    */
   @Autowired
   private IDGenerator idGenerator;
@@ -540,11 +540,26 @@ public class InternalUserDirectory extends UserDirectoryBase
       statement.setObject(2, getUserDirectoryId());
       statement.setString(3, user.getUsername());
       statement.setInt(4, user.getStatus().code());
-      statement.setString(5, StringUtil.notNull(user.getFirstName()));
-      statement.setString(6, StringUtil.notNull(user.getLastName()));
-      statement.setString(7, StringUtil.notNull(user.getPhoneNumber()));
-      statement.setString(8, StringUtil.notNull(user.getMobileNumber()));
-      statement.setString(9, StringUtil.notNull(user.getEmail()));
+      statement.setString(5,
+          StringUtils.isEmpty(user.getFirstName())
+          ? ""
+          : user.getFirstName());
+      statement.setString(6,
+          StringUtils.isEmpty(user.getLastName())
+          ? ""
+          : user.getLastName());
+      statement.setString(7,
+          StringUtils.isEmpty(user.getPhoneNumber())
+          ? ""
+          : user.getPhoneNumber());
+      statement.setString(8,
+          StringUtils.isEmpty(user.getMobileNumber())
+          ? ""
+          : user.getMobileNumber());
+      statement.setString(9,
+          StringUtils.isEmpty(user.getEmail())
+          ? ""
+          : user.getEmail());
 
       String passwordHash;
 
@@ -773,13 +788,13 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?)) ORDER BY username";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getInternalUsersSQL
           : getFilteredInternalUsersSQL))
     {
       statement.setMaxRows(maxFilteredUsers);
 
-      if (StringUtil.isNullOrEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
         statement.setObject(1, getUserDirectoryId());
       }
@@ -881,7 +896,12 @@ public class InternalUserDirectory extends UserDirectoryBase
 
           group.setId(UUID.fromString(rs.getString(1)));
           group.setUserDirectoryId(getUserDirectoryId());
-          group.setDescription(StringUtil.notNull(rs.getString(3)));
+
+          String description = rs.getString(3);
+
+          group.setDescription(StringUtils.isEmpty(description)
+              ? ""
+              : description);
 
           return group;
         }
@@ -965,7 +985,12 @@ public class InternalUserDirectory extends UserDirectoryBase
 
           group.setId(UUID.fromString(rs.getString(1)));
           group.setUserDirectoryId(getUserDirectoryId());
-          group.setDescription(StringUtil.notNull(rs.getString(3)));
+
+          String description = rs.getString(3);
+
+          group.setDescription(StringUtils.isEmpty(description)
+              ? ""
+              : description);
           list.add(group);
         }
 
@@ -1035,11 +1060,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?))";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtil.isNullOrEmpty(filter)
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
           ? getNumberOfInternalUsersSQL
           : getNumberOfFilteredInternalUsersSQL))
     {
-      if (StringUtil.isNullOrEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
         statement.setObject(1, getUserDirectoryId());
       }
@@ -1397,7 +1422,12 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(group.getGroupName());
       }
 
-      statement.setString(1, StringUtil.notNull(group.getDescription()));
+      String description = group.getDescription();
+
+      statement.setString(1,
+          StringUtils.isEmpty(description)
+          ? ""
+          : description);
       statement.setObject(2, getUserDirectoryId());
       statement.setObject(3, internalGroupId);
 
@@ -1481,7 +1511,7 @@ public class InternalUserDirectory extends UserDirectoryBase
             : ", mobile=?");
       }
 
-      if (!StringUtil.isNullOrEmpty(user.getPassword()))
+      if (!StringUtils.isEmpty(user.getPassword()))
       {
         fieldsBuffer.append((fieldsBuffer.length() == 0)
             ? "SET password=?"
@@ -1751,13 +1781,42 @@ public class InternalUserDirectory extends UserDirectoryBase
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setStatus(UserStatus.fromCode(rs.getInt(3)));
-    user.setFirstName(StringUtil.notNull(rs.getString(4)));
-    user.setLastName(StringUtil.notNull(rs.getString(5)));
-    user.setPhoneNumber(StringUtil.notNull(rs.getString(6)));
-    user.setMobileNumber(StringUtil.notNull(rs.getString(7)));
-    user.setEmail(StringUtil.notNull(rs.getString(8)));
 
-    user.setPassword(StringUtil.notNull(rs.getString(9)));
+    String firstName = rs.getString(4);
+
+    user.setFirstName(StringUtils.isEmpty(firstName)
+        ? ""
+        : firstName);
+
+    String lastName = rs.getString(5);
+
+    user.setLastName(StringUtils.isEmpty(lastName)
+        ? ""
+        : lastName);
+
+    String phoneNumber = rs.getString(6);
+
+    user.setPhoneNumber(StringUtils.isEmpty(phoneNumber)
+        ? ""
+        : phoneNumber);
+
+    String mobilePhoneNumber = rs.getString(7);
+
+    user.setMobileNumber(StringUtils.isEmpty(mobilePhoneNumber)
+        ? ""
+        : mobilePhoneNumber);
+
+    String email = rs.getString(8);
+
+    user.setEmail(StringUtils.isEmpty(email)
+        ? ""
+        : email);
+
+    String password = rs.getString(9);
+
+    user.setPassword(StringUtils.isEmpty(password)
+        ? ""
+        : password);
 
     if (rs.getObject(10) != null)
     {

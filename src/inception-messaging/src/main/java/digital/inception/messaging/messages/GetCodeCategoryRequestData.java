@@ -45,6 +45,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class GetCodeCategoryRequestData extends WbxmlMessageData
 {
   /**
@@ -128,6 +129,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    * <code>false</code> otherwise
    */
+  @Override
   public boolean fromMessageData(byte[] messageData)
     throws MessagingServiceException
   {
@@ -158,7 +160,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
       catch (Throwable e)
       {
         throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
-            + lastRetrievedValue + ") for" + " the \"Get Code Category Request\" message", e);
+            + lastRetrievedValue + ") for the \"Get Code Category Request\" message", e);
       }
     }
     else
@@ -234,12 +236,12 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    * @return the WBXML data representation of the message data that will be sent as part of a
    * message
    */
+  @Override
   public byte[] toMessageData()
-    throws MessagingServiceException
   {
     Element rootElement = new Element("GetCodeCategoryRequest");
 
-    rootElement.addContent(new Element("CodeCategoryId", codeCategoryId.toString()));
+    rootElement.addContent(new Element("CodeCategoryId", codeCategoryId));
     rootElement.addContent(new Element("LastRetrieved",
         (lastRetrieved == null)
         ? ISO8601Util.now()

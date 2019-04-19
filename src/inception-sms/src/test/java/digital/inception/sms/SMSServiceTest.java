@@ -46,7 +46,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SMSServiceTest
 {
-  /* SMS Service */
+  /**
+   * The SMS Service.
+   */
   @Autowired
   private ISMSService smsService;
 

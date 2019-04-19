@@ -20,6 +20,7 @@ package digital.inception.core.util;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -210,7 +211,7 @@ public class CryptoUtil
 
       // Attempt to retrieve the private key from the key store
       Key privateKey = ks.getKey(alias,
-          StringUtil.isNullOrEmpty(password)
+          StringUtils.isEmpty(password)
           ? "".toCharArray()
           : password.toCharArray());
 

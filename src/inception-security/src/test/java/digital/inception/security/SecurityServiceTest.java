@@ -21,8 +21,10 @@ package digital.inception.security;
 import digital.inception.core.util.BinaryBuffer;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -30,17 +32,18 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.math.BigDecimal;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -580,7 +583,7 @@ public class SecurityServiceTest
     List<Function> functions = securityService.getFunctions();
 
     assertEquals("The correct number of function codes (" + functions.size()
-        + ") was not retrieved for " + "the user (" + user.getUsername() + ")", functions.size(),
+        + ") was not retrieved for the user (" + user.getUsername() + ")", functions.size(),
         functionCodesForUser.size());
   }
 
@@ -595,7 +598,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    assertEquals("The user directory does not support group administration", true,
+    assertTrue("The user directory does not support group administration",
         securityService.supportsGroupAdministration(userDirectory.getId()));
 
     Group group = getTestGroupDetails();
@@ -659,8 +662,8 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getGroupName());
-    assertEquals("Could not determine that the user (" + user.getUsername()
-        + ") is a member of the group " + "(" + group.getGroupName() + ")", true,
+    assertTrue("Could not determine that the user (" + user.getUsername()
+        + ") is a member of the group (" + group.getGroupName() + ")",
         securityService.isUserInGroup(userDirectory.getId(), user.getUsername(),
         group.getGroupName()));
   }
@@ -734,13 +737,13 @@ public class SecurityServiceTest
     int numberOfOrganizations = securityService.getNumberOfOrganizations();
 
     assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
-        + 1) + ") " + "was not retrieved", beforeRetrievedOrganizations.size() + 1,
+        + 1) + ") was not retrieved", beforeRetrievedOrganizations.size() + 1,
         numberOfOrganizations);
 
     List<Organization> afterRetrievedOrganizations = securityService.getOrganizations();
 
     assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
-        + 1) + ") " + "was not retrieved", beforeRetrievedOrganizations.size() + 1,
+        + 1) + ") was not retrieved", beforeRetrievedOrganizations.size() + 1,
         afterRetrievedOrganizations.size());
 
     boolean foundOrganization = false;
@@ -938,7 +941,7 @@ public class SecurityServiceTest
 
     securityService.createUserDirectory(userDirectory);
 
-    assertEquals("The user directory does not support user administration", true,
+    assertTrue("The user directory does not support user administration",
         securityService.supportsUserAdministration(userDirectory.getId()));
 
     UserDirectory retrievedUserDirectory = securityService.getUserDirectory(userDirectory.getId());
@@ -1035,7 +1038,6 @@ public class SecurityServiceTest
    */
   @Test
   public void userPropertyTest()
-    throws Exception
   {
     User user = getTestUserDetails();
 
@@ -1093,8 +1095,6 @@ public class SecurityServiceTest
         retrievedFilteredUsers.size());
 
     compareUsers(user, retrievedFilteredUsers.get(0), true);
-
-    Calendar calendar = Calendar.getInstance();
 
     LocalDateTime passwordExpiry = LocalDateTime.now();
     passwordExpiry = passwordExpiry.plus(10, ChronoUnit.DAYS);
@@ -1203,8 +1203,8 @@ public class SecurityServiceTest
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
-    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "<!DOCTYPE userDirectory "
-        + "SYSTEM \"UserDirectoryConfiguration.dtd\">" + "<userDirectory>"
+    String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
+        + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
         + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
         + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
         + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
@@ -1260,7 +1260,7 @@ public class SecurityServiceTest
   private void compareUsers(User user1, User user2, boolean checkPasswordExpiry)
   {
     assertEquals("The status values for the two users do not match", user1.getStatus(),
-      user2.getStatus());
+        user2.getStatus());
     assertEquals("The e-mail values for the two users do not match", user1.getEmail(),
         user2.getEmail());
     assertEquals("The first name values for the two users do not match", user1.getFirstName(),
@@ -1278,7 +1278,7 @@ public class SecurityServiceTest
     if (checkPasswordExpiry)
     {
       assertEquals("The password expiry values for the two users do not match",
-        user1.getPasswordExpiry(), user2.getPasswordExpiry());
+          user1.getPasswordExpiry(), user2.getPasswordExpiry());
     }
   }
 }

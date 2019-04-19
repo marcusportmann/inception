@@ -24,20 +24,19 @@ import com.mymobileapi.api5.APISoap;
 import digital.inception.Debug;
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -84,20 +83,16 @@ public class SMSService
   /**
    * The Spring application context.
    */
-  @Autowired
   private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the application database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
-   * The ID Generator.
+   * The ID generator.
    */
-  @Autowired
   private IDGenerator idGenerator;
 
   /* The name of the SMS Service instance. */
@@ -132,6 +127,22 @@ public class SMSService
    */
   @Value("${application.sms.sendRetryDelay:#{600000}}")
   private int sendRetryDelay;
+
+  /**
+   * Constructs a new <code>SMSService</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param idGenerator        the ID generator
+   */
+  public SMSService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+    this.idGenerator = idGenerator;
+  }
 
   /**
    * Create the SMS.
@@ -305,7 +316,7 @@ public class SMSService
 
       String credits = XmlUtil.getChildElementText(dataElement, "credits");
 
-      return StringUtil.isNullOrEmpty(credits)
+      return StringUtils.isEmpty(credits)
           ? 0
           : Integer.parseInt(credits);
     }
@@ -470,7 +481,7 @@ public class SMSService
   {
     try
     {
-      if (StringUtil.isNullOrEmpty(message))
+      if (StringUtils.isEmpty(message))
       {
         logger.info(String.format("Failed to send the empty SMS message to (%s)", mobileNumber));
 
@@ -543,7 +554,12 @@ public class SMSService
 
       if (!result)
       {
-        String error = StringUtil.notNull(XmlUtil.getChildElementText(callResultElement, "error"));
+        String error = XmlUtil.getChildElementText(callResultElement, "error");
+
+        if (StringUtils.isEmpty(error))
+        {
+          error = "UNKNOWN";
+        }
 
         // If the SMS cannot be sent...
         if (error.equalsIgnoreCase("No data to send"))
@@ -551,10 +567,7 @@ public class SMSService
           return false;
         }
 
-        throw new RuntimeException("The MyMobileAPI service returned an error: "
-            + (StringUtil.isNullOrEmpty(error)
-            ? "UNKNOWN"
-            : error));
+        throw new RuntimeException("The MyMobileAPI service returned an error: " + error);
       }
 
       Element sendInfoElement = XmlUtil.getChildElement(apiResultElement, "send_info");
@@ -566,7 +579,7 @@ public class SMSService
 
       String credits = XmlUtil.getChildElementText(sendInfoElement, "credits");
 
-      int remainingCredits = StringUtil.isNullOrEmpty(credits)
+      int remainingCredits = StringUtils.isEmpty(credits)
           ? 0
           : Integer.parseInt(credits);
 
@@ -667,24 +680,27 @@ public class SMSService
 
     // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
 
-    return "<senddata>" + "<settings>" + "<live>True</live>"
-        + "<return_credits>True</return_credits>" + "<default_date>" + dateFormat.format(now)
-        + "</default_date>" + "<default_time>" + timeFormat.format(now) + "</default_time>"
-        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate>" + "<default_curtime>"
-        + timeFormat.format(now) + "</default_curtime>" + "<mo_forwardemail>"
-        + "sms-reply@mmp.guru" + "</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
-        + mobileNumber + "</numto>" + "<customerid>" + smsId + "</customerid>" + "<data1>"
-        + message + "</data1>" + "<type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
+    return "<senddata><settings><live>True</live>"
+        + "<return_credits>True</return_credits><default_date>" + dateFormat.format(now)
+        + "</default_date><default_time>" + timeFormat.format(now) + "</default_time>"
+        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate><default_curtime>"
+        + timeFormat.format(now) + "</default_curtime><mo_forwardemail>"
+        + "sms-reply@mmp.guru</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
+        + mobileNumber + "</numto><customerid>" + smsId + "</customerid>" + "<data1>" + message
+        + "</data1><type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
   }
 
   private String formatMobileNumber(String mobileNumber)
   {
-    mobileNumber = StringUtil.notNull(mobileNumber);
+    if (StringUtils.isEmpty(mobileNumber))
+    {
+      return "";
+    }
 
     // Remove whitespace
     mobileNumber = mobileNumber.trim();
-    mobileNumber = StringUtil.replace(mobileNumber, " ", "");
-    mobileNumber = StringUtil.replace(mobileNumber, "\t", "");
+    mobileNumber = StringUtils.replace(mobileNumber, " ", "");
+    mobileNumber = StringUtils.replace(mobileNumber, "\t", "");
 
     if (mobileNumber.length() > 30)
     {
@@ -774,7 +790,7 @@ public class SMSService
         String error = XmlUtil.getChildElementText(callResultElement, "error");
 
         throw new RuntimeException("The MyMobileAPI service returned an error: "
-            + (StringUtil.isNullOrEmpty(error)
+            + (StringUtils.isEmpty(error)
             ? "UNKNOWN"
             : error));
       }

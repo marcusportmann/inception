@@ -20,9 +20,12 @@ package digital.inception.sample;
 
 import digital.inception.application.Application;
 import digital.inception.codes.CodesWebService;
+import digital.inception.codes.ICodesService;
 import digital.inception.configuration.ConfigurationWebService;
+import digital.inception.configuration.IConfigurationService;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.error.ErrorWebService;
+import digital.inception.error.IErrorService;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
@@ -32,9 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
@@ -53,6 +57,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.sql.DataSource;
+
+import javax.validation.Validator;
+
 import javax.xml.ws.Endpoint;
 
 /**
@@ -70,23 +78,70 @@ public class SampleApplication extends Application
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
 
-  /* Reporting Service */
-  @Autowired
+  /**
+   * The Codes Service.
+   */
+  private ICodesService codesService;
+
+  /**
+   * The Configuration Service.
+   */
+  private IConfigurationService configurationService;
+
+  /**
+   * The Error Service.
+   */
+  private IErrorService errorService;
+
+  /**
+   * The Reporting Service.
+   */
   private IReportingService reportingService;
 
-  /* Sample Service Controller */
-  @Autowired
+  /**
+   * The Sample Service Controller.
+   */
   private SampleServiceController sampleServiceController;
 
-//
-///* Sample Configuration */
-//@Inject
-//private Configuration configuration;
+  /**
+   * The JSR-303 validator.
+   */
+  private Validator validator;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  private DataSource dataSource;
+
 
   /**
    * Constructs a new <code>SampleApplication</code>.
+   *
+   * @param applicationContext      the Spring application context
+   * @param dataSource              the data source used to provide connections to the application
+   *                                database
+   * @param codesService            the Codes Service
+   * @param configurationService    the Configuration Service
+   * @param errorService            the Error Service
+   * @param reportingService        the Reporting Service
+   * @param sampleServiceController the Sample Service Controller
+   * @param validator               the JSR-303 validator
    */
-  public SampleApplication() {}
+  public SampleApplication(ApplicationContext applicationContext, @Qualifier("applicationDataSource") DataSource dataSource, ICodesService codesService,
+      IConfigurationService configurationService, IErrorService errorService,
+      IReportingService reportingService, SampleServiceController sampleServiceController,
+      Validator validator)
+  {
+    super(applicationContext);
+
+    this.dataSource = dataSource;
+    this.codesService = codesService;
+    this.configurationService = configurationService;
+    this.errorService = errorService;
+    this.reportingService = reportingService;
+    this.sampleServiceController = sampleServiceController;
+    this.validator = validator;
+  }
 
   /**
    * The main method.
@@ -103,7 +158,6 @@ public class SampleApplication extends Application
    */
   @Override
   public void afterPropertiesSet()
-    throws Exception
   {
     try
     {
@@ -151,7 +205,7 @@ public class SampleApplication extends Application
   @Bean
   protected Endpoint codesWebService()
   {
-    return createWebServiceEndpoint("CodesService", new CodesWebService());
+    return createWebServiceEndpoint("CodesService", new CodesWebService(codesService, validator));
   }
 
   /**
@@ -162,7 +216,8 @@ public class SampleApplication extends Application
   @Bean
   protected Endpoint configurationWebService()
   {
-    return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService());
+    return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService(
+        configurationService, validator));
   }
 
   /**
@@ -173,7 +228,7 @@ public class SampleApplication extends Application
   @Bean
   protected Endpoint errorWebService()
   {
-    return createWebServiceEndpoint("ErrorService", new ErrorWebService());
+    return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
   }
 
 ///**
@@ -188,34 +243,9 @@ public class SampleApplication extends Application
 //  return new CacheManager(configuration.getCacheManager());
 //}
 
-  /**
-   * Returns the paths to the resources on the classpath that contain the SQL statements used to
-   * initialize the in-memory application database.
-   */
-  @Override
-  protected List<String> getInMemoryDatabaseInitResources()
-  {
-    List<String> resources = super.getInMemoryDatabaseInitResources();
 
-    resources.add("digital/inception/sample/inception-sample-h2.sql");
 
-    return resources;
-  }
 
-  /**
-   * Returns the names of the packages to scan for JPA classes.
-   *
-   * @return the names of the packages to scan for JPA classes
-   */
-  @Override
-  protected List<String> getJpaPackagesToScan()
-  {
-    List<String> packagesToScan = super.getJpaPackagesToScan();
-
-    packagesToScan.add("digital.inception.sample");
-
-    return packagesToScan;
-  }
 
   /**
    * Returns the Spring bean for the Reporting Service web service.
@@ -225,7 +255,8 @@ public class SampleApplication extends Application
   @Bean
   protected Endpoint reportingWebService()
   {
-    return createWebServiceEndpoint("ReportingService", new ReportingWebService());
+    return createWebServiceEndpoint("ReportingService", new ReportingWebService(dataSource,
+        reportingService, validator));
   }
 
   /**

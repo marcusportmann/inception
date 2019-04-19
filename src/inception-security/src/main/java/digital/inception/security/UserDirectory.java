@@ -18,10 +18,11 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
+import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -78,8 +79,9 @@ public class UserDirectory
     {
       buffer.append("<parameter>");
       buffer.append("<name>").append(parameterName).append("</name>");
-      buffer.append("<value>").append(StringUtil.notNull(parameters.get(parameterName))).append(
-          "</value>");
+      buffer.append("<value>").append(StringUtils.isEmpty(parameters.get(parameterName))
+          ? ""
+          : parameters.get(parameterName)).append("</value>");
       buffer.append("</parameter>");
     }
 

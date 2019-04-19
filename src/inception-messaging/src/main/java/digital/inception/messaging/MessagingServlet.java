@@ -18,6 +18,7 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 
@@ -47,6 +48,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class MessagingServlet extends HttpServlet
 {
   /**
@@ -88,14 +90,14 @@ public class MessagingServlet extends HttpServlet
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException
+    throws IOException
   {
     doPost(request, response);
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException
+    throws IOException
   {
     if (!isInitialized)
     {
@@ -126,37 +128,77 @@ public class MessagingServlet extends HttpServlet
       {
         // We are processing a Message...
         case "Message":
-          processMessage(document, response);
+          if (!processMessage(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message: " + document.toString());
+            }
+          }
 
           break;
 
         // We are processing a MessagePart...
         case "MessagePart":
-          processMessagePart(document, response);
+          if (!processMessagePart(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message part: " + document.toString());
+            }
+          }
 
           break;
 
         // We are processing a request to download messages queued for a device
         case "MessageDownloadRequest":
-          processMessageDownloadRequest(document, response);
+          if (!processMessageDownloadRequest(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message download request: "
+                  + document.toString());
+            }
+          }
 
           break;
 
         // We are processing an acknowledgement that a message has been downloaded successfully
         case "MessageReceivedRequest":
-          processMessageReceivedRequest(document, response);
+          if (!processMessageReceivedRequest(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message received request: "
+                  + document.toString());
+            }
+          }
 
           break;
 
         // We are processing a request to download message parts queued for a device
         case "MessagePartDownloadRequest":
-          processMessagePartDownloadRequest(document, response);
+          if (!processMessagePartDownloadRequest(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message part download request: "
+                  + document.toString());
+            }
+          }
 
           break;
 
         // We are processing an acknowledgement that a message part has been downloaded successfully
         case "MessagePartReceivedRequest":
-          processMessagePartReceivedRequest(document, response);
+          if (!processMessagePartReceivedRequest(document, response))
+          {
+            if (Debug.inDebugMode())
+            {
+              logger.debug("Failed to process the message part received request: "
+                  + document.toString());
+            }
+          }
 
           break;
 
@@ -444,7 +486,6 @@ public class MessagingServlet extends HttpServlet
   }
 
   private boolean processMessagePart(Document document, HttpServletResponse response)
-    throws MessagingServiceException
   {
     // Is the WBXML document valid
     if (!MessagePart.isValidWBXML(document))
@@ -693,7 +734,6 @@ public class MessagingServlet extends HttpServlet
 
   private boolean queueMessageForAsynchronousProcessing(Message message,
       HttpServletResponse response)
-    throws MessagingServiceException
   {
     try
     {
@@ -747,12 +787,9 @@ public class MessagingServlet extends HttpServlet
   {
     // Read the request data
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ServletInputStream in = null;
 
-    try
+    try (ServletInputStream in = request.getInputStream())
     {
-      in = request.getInputStream();
-
       byte[] readBuffer = new byte[2048];
 
       int numberOfBytesRead;
@@ -766,17 +803,6 @@ public class MessagingServlet extends HttpServlet
     {
       // A network error means that the document could not be read so stop here
       return null;
-    }
-    finally
-    {
-      try
-      {
-        if (in != null)
-        {
-          in.close();
-        }
-      }
-      catch (Throwable ignored) {}
     }
 
     try
@@ -814,7 +840,7 @@ public class MessagingServlet extends HttpServlet
           "    body {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 8pt;}");
       pw.println(
           "    h1 {thirdparty-family: Tahoma, Verdana, Arial, Helvetica; thirdparty-size: 12pt;}");
-      pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green;" + " "
+      pw.println("      .section {padding-top: 10px; padding-bottom: 2px; color: green; "
           + "thirdparty-weight: bold; thirdparty-size: 9pt;}");
       pw.println("    .className {color: 808080;}");
       pw.println("  </style>");

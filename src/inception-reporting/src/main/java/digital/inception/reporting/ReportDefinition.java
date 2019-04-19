@@ -189,6 +189,6 @@ public class ReportDefinition
   @Override
   public String toString()
   {
-    return "ReportDefinition {" + "id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return "ReportDefinition {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

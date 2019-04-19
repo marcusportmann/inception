@@ -21,7 +21,7 @@ package digital.inception.messaging;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.ServiceUtil;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -100,14 +99,11 @@ public class MessagingService
   /**
    * The Spring application context.
    */
-  @Autowired
   private ApplicationContext applicationContext;
 
   /**
    * The data source used to provide connections to the database.
    */
-  @Autowired
-  @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
   /**
@@ -148,13 +144,23 @@ public class MessagingService
   private int processingRetryDelay;
 
   /**
-   * Initialize the Messaging Service.
+   * Constructs a new <code>MessagingService</code>.
    *
-   * @throws Exception
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the database
+   */
+  public MessagingService(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+  }
+
+  /**
+   * Initialize the Messaging Service.
    */
   @Override
   public void afterPropertiesSet()
-    throws Exception
   {
     logger.info(String.format("Initializing the Messaging Service (%s)", instanceName));
 
@@ -425,7 +431,7 @@ public class MessagingService
     {
       // Decrypt the message data
       byte[] decryptedData = MessageTranslator.decryptMessageData(userEncryptionKey,
-          StringUtil.isNullOrEmpty(message.getEncryptionIV())
+          StringUtils.isEmpty(message.getEncryptionIV())
           ? new byte[0]
           : Base64Util.decode(message.getEncryptionIV()), message.getData());
 
@@ -929,7 +935,7 @@ public class MessagingService
           {
             Message message = buildMessageFromResultSet(rs);
 
-            if (!StringUtil.isNullOrEmpty(message.getLockName()))
+            if (!StringUtils.isEmpty(message.getLockName()))
             {
               if (!message.getLockName().equals(instanceName))
               {
@@ -1838,7 +1844,7 @@ public class MessagingService
   {
     try
     {
-      if (StringUtil.isNullOrEmpty(encryptionKeyBase64))
+      if (StringUtils.isEmpty(encryptionKeyBase64))
       {
         throw new MessagingServiceException(
             "No application.messaging.encryptionKey configuration value found");

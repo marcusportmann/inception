@@ -16,10 +16,6 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
@@ -34,16 +30,29 @@ import javax.validation.Validator;
  */
 @WebService(serviceName = "SMSService", name = "ISMSService",
     targetNamespace = "http://sms.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+@SOAPBinding
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SMSWebService
 {
-  /* SMS Service */
-  @Autowired
+  /**
+   * The SMS Service.
+   */
   private ISMSService smsService;
 
-  /* Validator */
-  @Autowired
+  /**
+   * The JSR-303 validator.
+   */
   private Validator validator;
+
+  /**
+   * Constructs a new <code>SMSWebService</code>.
+   *
+   * @param smsService the SMS Service
+   * @param validator  the JSR-303 validator
+   */
+  public SMSWebService(ISMSService smsService, Validator validator)
+  {
+    this.smsService = smsService;
+    this.validator = validator;
+  }
 }

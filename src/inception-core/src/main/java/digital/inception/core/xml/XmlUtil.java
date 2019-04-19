@@ -18,7 +18,7 @@ package digital.inception.core.xml;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -49,7 +49,7 @@ public class XmlUtil
    * The <code>DatatypeFactory</code> instance used to convert java.xml.datatype object that map
    * XML to/from Java objects.
    */
-  private static DatatypeFactory datatypeFactory = null;
+  private static DatatypeFactory datatypeFactory;
 
   static
   {
@@ -254,13 +254,15 @@ public class XmlUtil
    */
   public static QName getQName(Document document, String qname)
   {
-    qname = StringUtil.notNull(qname).trim();
+    qname = StringUtils.isEmpty(qname)
+        ? ""
+        : qname.trim();
 
     String[] nameParts = qname.split(":");
 
     if (nameParts.length == 1)
     {
-      if (!StringUtil.isNullOrEmpty(document.getNamespaceURI()))
+      if (!StringUtils.isEmpty(document.getNamespaceURI()))
       {
         return new QName(document.getNamespaceURI(), nameParts[0]);
       }

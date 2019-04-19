@@ -25,7 +25,6 @@ import digital.inception.validation.ValidationError;
 
 import io.swagger.annotations.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -54,13 +53,21 @@ import javax.xml.bind.annotation.XmlElement;
 @RequestMapping(value = "/api/sample")
 @WebService(serviceName = "SampleService", name = "ISampleService",
     targetNamespace = "http://sample.inception.digital")
-@SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL,
-    parameterStyle = SOAPBinding.ParameterStyle.WRAPPED)
+@SOAPBinding
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class SampleServiceController
 {
-  @Autowired
   private ISampleService sampleService;
+
+  /**
+   * Constructs a new <code>SampleServiceController</code>.
+   *
+   * @param sampleService
+   */
+  public SampleServiceController(ISampleService sampleService)
+  {
+    this.sampleService = sampleService;
+  }
 
   /**
    * Returns all the data.

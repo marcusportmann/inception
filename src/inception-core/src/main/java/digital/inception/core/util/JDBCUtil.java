@@ -16,17 +16,19 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.util.StringUtils;
+
+import javax.sql.DataSource;
 import java.io.*;
-
+import java.net.URL;
 import java.sql.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.
@@ -46,7 +48,7 @@ public class JDBCUtil
    *
    * @param connection the connection to close
    */
-  public static void close(Connection connection)
+  public static void closex(Connection connection)
   {
     if (connection != null)
     {
@@ -66,7 +68,7 @@ public class JDBCUtil
    *
    * @param rs the result set to close
    */
-  public static void close(ResultSet rs)
+  public static void closex(ResultSet rs)
   {
     if (rs != null)
     {
@@ -86,7 +88,7 @@ public class JDBCUtil
    *
    * @param statement the statement to close
    */
-  public static void close(Statement statement)
+  public static void closex(Statement statement)
   {
     if (statement != null)
     {
@@ -112,21 +114,13 @@ public class JDBCUtil
   public static int executeStatement(Connection connection, String sql)
     throws SQLException
   {
-    Statement statement = null;
-
-    try
+    try (Statement statement = connection.createStatement())
     {
-      statement = connection.createStatement();
-
       return statement.executeUpdate(sql);
     }
     catch (Throwable e)
     {
       throw new SQLException("Failed to execute the SQL statement: " + sql, e);
-    }
-    finally
-    {
-      close(statement);
     }
   }
 
@@ -146,7 +140,8 @@ public class JDBCUtil
 
     try
     {
-      List<String> sqlStatements = loadSQL(resourcePath);
+      List<String> sqlStatements = loadSQL(Thread.currentThread().getContextClassLoader()
+          .getResource(resourcePath));
 
       for (String sqlStatement : sqlStatements)
       {
@@ -192,31 +187,19 @@ public class JDBCUtil
   }
 
   /**
-   * Load the SQL statements from the file with the specified resource path.
+   * Load the SQL statements from the specified URL.
    *
-   * @param resourcePath the resource path
+   * @param url the URL
    *
-   * @return the SQL statements loaded from the file
+   * @return the SQL statements loaded from the specified URL
    */
-  public static List<String> loadSQL(String resourcePath)
+  public static List<String> loadSQL(URL url)
     throws IOException
   {
     List<String> sqlStatements = new ArrayList<>();
-    BufferedReader reader = null;
 
-    try
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream())))
     {
-      InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-          resourcePath);
-
-      if (inputStream == null)
-      {
-        throw new IOException("Failed to load the SQL statements from the file (" + resourcePath
-            + "): The file could not be found");
-      }
-
-      reader = new BufferedReader(new InputStreamReader(inputStream));
-
       StringBuilder multiLineBuffer = null;
       String line;
 
@@ -319,21 +302,10 @@ public class JDBCUtil
       if (multiLineBuffer != null)
       {
         throw new IOException("Failed to process the last SQL statement from the file ("
-            + resourcePath + ") since " + "it was not terminated by a ';'");
+            + url.getPath() + ") since it was not terminated by a ';'");
       }
 
       return sqlStatements;
-    }
-    finally
-    {
-      try
-      {
-        if (reader != null)
-        {
-          reader.close();
-        }
-      }
-      catch (Throwable ignored) {}
     }
   }
 
@@ -349,14 +321,9 @@ public class JDBCUtil
   public static byte[] readBlob(ResultSet rs, int index)
     throws SQLException
   {
-    ByteArrayOutputStream bos = null;
-    BufferedInputStream in = null;
-
-    try
+    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(index)))
     {
-      bos = new ByteArrayOutputStream();
-      in = new BufferedInputStream(rs.getBinaryStream(index));
-
       int noBytes;
       byte[] tmpBuffer = new byte[1024];
 
@@ -371,32 +338,6 @@ public class JDBCUtil
     {
       throw new SQLException("An IO error occurred while reading the BLOB from the database: "
           + e.getMessage());
-    }
-    finally
-    {
-      if (bos != null)
-      {
-        try
-        {
-          bos.close();
-        }
-        catch (IOException e)
-        {
-          // Do nothing
-        }
-      }
-
-      if (in != null)
-      {
-        try
-        {
-          in.close();
-        }
-        catch (IOException e)
-        {
-          // Do nothing
-        }
-      }
     }
   }
 
@@ -434,23 +375,23 @@ public class JDBCUtil
   public static boolean schemaExists(Connection connection, String catalog, String schema)
     throws SQLException
   {
-    ResultSet rs = null;
-
     if (schema == null)
     {
       throw new SQLException("Failed to check whether the schema (null) exists");
     }
 
-    try
+    DatabaseMetaData metaData = connection.getMetaData();
+
+    try (ResultSet rs = metaData.getSchemas())
     {
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      rs = metaData.getSchemas();
-
       while (rs.next())
       {
-        String tmpCatalog = StringUtil.notNull(rs.getString("TABLE_CATALOG"));
-        String tmpSchema = StringUtil.notNull(rs.getString("TABLE_SCHEM"));
+        String tmpCatalog = StringUtils.isEmpty(rs.getString("TABLE_CATALOG"))
+            ? ""
+            : rs.getString("TABLE_CATALOG");
+        String tmpSchema = StringUtils.isEmpty(rs.getString("TABLE_SCHEM"))
+            ? ""
+            : rs.getString("TABLE_SCHEM");
 
         if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog))
         {
@@ -460,13 +401,10 @@ public class JDBCUtil
           }
         }
       }
+    }
 
-      return false;
-    }
-    finally
-    {
-      close(rs);
-    }
+    return false;
+
   }
 
   /**
@@ -483,42 +421,14 @@ public class JDBCUtil
   public static boolean schemaExists(DataSource dataSource, String catalog, String schema)
     throws SQLException
   {
-    Connection connection = null;
-    ResultSet rs = null;
-
     if (schema == null)
     {
       throw new SQLException("Failed to check whether the schema (null) exists");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      rs = metaData.getSchemas();
-
-      while (rs.next())
-      {
-        String tmpCatalog = StringUtil.notNull(rs.getString("TABLE_CATALOG"));
-        String tmpSchema = StringUtil.notNull(rs.getString("TABLE_SCHEM"));
-
-        if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog))
-        {
-          if (tmpSchema.equalsIgnoreCase(schema))
-          {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    }
-    finally
-    {
-      close(rs);
-      close(connection);
+      return schemaExists(connection, catalog, schema);
     }
   }
 
@@ -533,17 +443,10 @@ public class JDBCUtil
   public static void shutdownHsqlDatabase(Connection connection)
     throws SQLException
   {
-    Statement statement = null;
-
-    try
+    try (Statement statement = connection.createStatement())
     {
-      statement = connection.createStatement();
-
+      // language=H2
       statement.executeUpdate("SHUTDOWN");
-    }
-    finally
-    {
-      close(statement);
     }
   }
 
@@ -563,41 +466,35 @@ public class JDBCUtil
       String table)
     throws SQLException
   {
-    ResultSet rs = null;
-
     if (table == null)
     {
       throw new SQLException("Failed to check whether the table (null) exists");
     }
 
-    try
+    // First check if the schema exists
+    if ((schema != null) && (!schemaExists(connection, catalog, schema)))
     {
-      // First check if the schema exists
-      if ((schema != null) && (!schemaExists(connection, catalog, schema)))
-      {
-        return false;
-      }
+      return false;
+    }
 
-      DatabaseMetaData metaData = connection.getMetaData();
+    DatabaseMetaData metaData = connection.getMetaData();
 
-      rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" });
-
+    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" }))
+    {
       while (rs.next())
       {
-        String tmpTable = StringUtil.notNull(rs.getString("TABLE_NAME"));
+        String tmpTable = StringUtils.isEmpty(rs.getString("TABLE_NAME"))
+            ? ""
+            : rs.getString("TABLE_NAME");
 
         if (table.equals(tmpTable))
         {
           return true;
         }
       }
+    }
 
-      return false;
-    }
-    finally
-    {
-      close(rs);
-    }
+    return false;
   }
 
   /**
@@ -616,44 +513,14 @@ public class JDBCUtil
       String table)
     throws SQLException
   {
-    Connection connection = null;
-    ResultSet rs = null;
-
     if (table == null)
     {
       throw new SQLException("Failed to check whether the table (null) exists");
     }
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
-      connection = dataSource.getConnection();
-
-      // First check if the schema exists
-      if ((schema != null) && (!schemaExists(connection, catalog, schema)))
-      {
-        return false;
-      }
-
-      DatabaseMetaData metaData = connection.getMetaData();
-
-      rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" });
-
-      while (rs.next())
-      {
-        String tmpTable = StringUtil.notNull(rs.getString("TABLE_NAME"));
-
-        if (table.equals(tmpTable))
-        {
-          return true;
-        }
-      }
-
-      return false;
-    }
-    finally
-    {
-      close(rs);
-      close(connection);
+      return tableExists(connection, catalog, schema, table);
     }
   }
 

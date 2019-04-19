@@ -18,8 +18,9 @@ package digital.inception.validation;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.xml.LocalDateTimeAdapter;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -43,7 +44,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "InvalidArgumentError", namespace = "http://validation.inception.digital")
 @XmlType(name = "InvalidArgumentError", namespace = "http://validation.inception.digital",
     propOrder = { "when", "message", "name", "detail", "validationErrors" })
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class InvalidArgumentError
 {
   /**
@@ -94,8 +95,8 @@ public class InvalidArgumentError
     this.message = (cause.getMessage() != null)
         ? cause.getMessage()
         : "Invalid Argument";
-    this.name = (!StringUtil.isNullOrEmpty(cause.getName()))
-        ? StringUtil.capitalize(cause.getName())
+    this.name = (!StringUtils.isEmpty(cause.getName()))
+        ? ValidationError.capitalizePropertyName(cause.getName())
         : "Unknown";
 
     try
@@ -124,7 +125,8 @@ public class InvalidArgumentError
         {
           ValidationError newValidationError = (ValidationError) validationError.clone();
 
-          newValidationError.setProperty(StringUtil.capitalize(newValidationError.getProperty()));
+          newValidationError.setProperty(ValidationError.capitalizePropertyName(
+              newValidationError.getProperty()));
 
           this.validationErrors.add(newValidationError);
         }

@@ -19,13 +19,14 @@ package digital.inception.messaging.messages;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-import digital.inception.core.util.StringUtil;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
+
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -152,6 +153,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
    * <code>false</code> otherwise
    */
+  @Override
   public boolean fromMessageData(byte[] messageData)
     throws MessagingServiceException
   {
@@ -319,21 +321,29 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @return the WBXML data representation of the message data that will be sent as part of a
    * message
    */
+  @Override
   public byte[] toMessageData()
-    throws MessagingServiceException
   {
     Element rootElement = new Element("SubmitErrorReportRequest");
 
     rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("ApplicationId", applicationId));
     rootElement.addContent(new Element("ApplicationVersion", applicationVersion));
-    rootElement.addContent(new Element("Description", StringUtil.notNull(description)));
-    rootElement.addContent(new Element("Detail", StringUtil.notNull(detail)));
-    rootElement.addContent(new Element("Feedback", StringUtil.notNull(feedback)));
+    rootElement.addContent(new Element("Description", StringUtils.isEmpty(description)
+        ? ""
+        : description));
+    rootElement.addContent(new Element("Detail", StringUtils.isEmpty(detail)
+        ? ""
+        : detail));
+    rootElement.addContent(new Element("Feedback", StringUtils.isEmpty(feedback)
+        ? ""
+        : feedback));
     rootElement.addContent(new Element("Created", (created == null)
         ? ISO8601Util.now()
         : ISO8601Util.fromLocalDateTime(created)));
-    rootElement.addContent(new Element("Who", StringUtil.notNull(who)));
+    rootElement.addContent(new Element("Who", StringUtils.isEmpty(who)
+        ? ""
+        : who));
     rootElement.addContent(new Element("DeviceId", deviceId));
     rootElement.addContent(new Element("Data", (data != null)
         ? data

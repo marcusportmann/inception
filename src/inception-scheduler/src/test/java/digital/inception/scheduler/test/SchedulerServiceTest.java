@@ -23,8 +23,10 @@ import digital.inception.scheduler.Job;
 import digital.inception.scheduler.JobParameter;
 import digital.inception.scheduler.JobStatus;
 import digital.inception.test.TestClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -32,13 +34,13 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
@@ -54,7 +56,9 @@ public class SchedulerServiceTest
 {
   private static int jobCount;
 
-  /* Scheduler Service */
+  /**
+   * The Scheduler Service.
+   */
   @Autowired
   private ISchedulerService schedulerService;
 
@@ -171,6 +175,7 @@ public class SchedulerServiceTest
           job.getId()));
     }
 
+    //noinspection StatementWithEmptyBody
     while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();

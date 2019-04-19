@@ -20,8 +20,7 @@ package digital.inception.sms;
 
 import digital.inception.test.TestConfiguration;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -31,6 +30,15 @@ import org.springframework.context.annotation.Configuration;
  * @author Marcus Portmann
  */
 @Configuration
-@ConfigurationProperties
-@SpringBootConfiguration
-public class SMSTestConfiguration extends TestConfiguration {}
+public class SMSTestConfiguration extends TestConfiguration
+{
+  /**
+   * Constructs a new <code>SMSTestConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public SMSTestConfiguration(ApplicationContext applicationContext)
+  {
+    super(applicationContext);
+  }
+}

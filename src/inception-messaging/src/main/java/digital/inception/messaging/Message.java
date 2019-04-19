@@ -19,7 +19,7 @@ package digital.inception.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-import digital.inception.core.util.StringUtil;
+import org.springframework.util.StringUtils;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
@@ -534,7 +534,7 @@ public class Message
    */
   public boolean isEncrypted()
   {
-    return (!StringUtil.isNullOrEmpty(dataHash));
+    return (!StringUtils.isEmpty(dataHash));
   }
 
   /**

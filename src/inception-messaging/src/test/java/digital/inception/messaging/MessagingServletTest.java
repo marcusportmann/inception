@@ -23,15 +23,19 @@ import com.meterware.httpunit.WebResponse;
 import com.meterware.servletunit.InvocationContext;
 import com.meterware.servletunit.ServletRunner;
 import com.meterware.servletunit.ServletUnitClient;
+
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 import digital.inception.messaging.messages.*;
 import digital.inception.test.TestClassRunner;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.context.ApplicationContext;
@@ -42,18 +46,21 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import javax.servlet.Servlet;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.Servlet;
 
 /**
  * The <code>MessagingServletTest</code> class contains the implementation of the JUnit
@@ -69,23 +76,24 @@ import static org.junit.Assert.*;
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServletTest
 {
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
+  private static final String PASSWORD = "Password1";
+  private static final String USERNAME = "Administrator";
 
   /**
    * The HTTP content-type used when receiving and sending WBXML.
    */
   private static final String WBXML_CONTENT_TYPE = "application/wbxml";
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
   private static final UUID DEVICE_ID = UUID.randomUUID();
-  private static final String USERNAME = "Administrator";
-  private static final String PASSWORD = "Password1";
-  private ServletUnitClient servletUnitClient;
 
   /**
    * The Spring application context.
    */
   @Autowired
   private ApplicationContext applicationContext;
+  private ServletUnitClient servletUnitClient;
 
   /**
    * Test the "Another Test" asynchronous message functionality.
@@ -176,7 +184,7 @@ public class MessagingServletTest
     MessageResult messageResult = sendMessage(requestMessage);
 
     assertEquals(MessageResult.SUCCESS, messageResult.getCode());
-    assertEquals(null, messageResult.getMessage());
+    assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
     try
