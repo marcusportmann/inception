@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
@@ -65,6 +66,7 @@ import javax.sql.XADataSource;
  * @author Marcus Portmann
  */
 @Configuration
+@ConditionalOnProperty(value = "application.database.dataSource")
 @SuppressWarnings("unused")
 public class ApplicationDatabaseConfiguration
   implements DisposableBean
@@ -157,119 +159,13 @@ public class ApplicationDatabaseConfiguration
   }
 
   /**
-   * Destroy.
-   */
-  @Override
-  public void destroy()
-  {
-    shutdownInMemoryApplicationDatabase();
-  }
-
-  /**
-   * Returns the fully qualified name of the data source class used to connect to the application
-   * database.
-   *
-   * @return the fully qualified name of the data source class used to connect to the application
-   *         database
-   */
-  public String getDataSourceClass()
-  {
-    return dataSourceClass;
-  }
-
-  /**
-   * Returns the maximum size of the database connection pool used to connect to the application
-   * database.
-   *
-   * @return the maximum size of the database connection pool used to connect to the application
-   *         database
-   */
-  public int getMaxPoolSize()
-  {
-    return maxPoolSize;
-  }
-
-  /**
-   * Returns the minimum size of the database connection pool used to connect to the application
-   * database.
-   *
-   * @return the minimum size of the database connection pool used to connect to the application
-   *         database
-   */
-  public int getMinPoolSize()
-  {
-    return minPoolSize;
-  }
-
-  /**
-   * Returns the names of the packages to scan for JPA entities.
-   *
-   * @return the names of the packages to scan for JPA entities
-   */
-  public List<String> getPackagesToScanForEntities()
-  {
-    List<String> packagesToScanForEntities = new ArrayList<>();
-
-    packagesToScanForEntities.add("digital.inception");
-
-    if (!StringUtils.isEmpty(this.packagesToScanForEntities))
-    {
-      String[] packagesToScan = this.packagesToScanForEntities.split(",");
-
-      Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));
-    }
-
-    return packagesToScanForEntities;
-  }
-
-  /**
-   * Returns the URL used to connect to the application database.
-   *
-   * @return the URL used to connect to the application database
-   */
-  public String getUrl()
-  {
-    return url;
-  }
-
-  /**
-   * Returns the XA password for the application database.
-   *
-   * @return the XA password for the application database
-   */
-  public String getXaPassword()
-  {
-    return xaPassword;
-  }
-
-  /**
-   * Returns the XA server name for the application database.
-   *
-   * @return the XA server name for the application database
-   */
-  public String getXaServerName()
-  {
-    return xaServerName;
-  }
-
-  /**
-   * Returns the XA username for the application database.
-   *
-   * @return the XA username for the application database
-   */
-  public String getXaUsername()
-  {
-    return xaUsername;
-  }
-
-  /**
    * Returns the data source that can be used to interact with the application database.
    *
    * @return the data source that can be used to interact with the in-memory database
    */
   @Bean(name = "applicationDataSource")
   @DependsOn({ "transactionManager" })
-  protected DataSource dataSource()
+  public DataSource dataSource()
   {
     try
     {
@@ -422,6 +318,15 @@ public class ApplicationDatabaseConfiguration
   }
 
   /**
+   * Destroy.
+   */
+  @Override
+  public void destroy()
+  {
+    shutdownInMemoryApplicationDatabase();
+  }
+
+  /**
    * Returns the application entity manager factory bean associated with the application data
    * source.
    *
@@ -429,7 +334,7 @@ public class ApplicationDatabaseConfiguration
    */
   @Bean(name = "applicationPersistenceUnit")
   @DependsOn("applicationDataSource")
-  protected LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
   {
     try
     {
@@ -474,7 +379,7 @@ public class ApplicationDatabaseConfiguration
       entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
       entityManagerFactoryBean.setJtaDataSource(dataSource);
       entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-          getPackagesToScanForEntities()));
+          packagesToScanForEntities()));
       entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
       PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
@@ -537,6 +442,27 @@ public class ApplicationDatabaseConfiguration
 
       throw e;
     }
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA entities.
+   *
+   * @return the names of the packages to scan for JPA entities
+   */
+  private List<String> packagesToScanForEntities()
+  {
+    List<String> packagesToScanForEntities = new ArrayList<>();
+
+    packagesToScanForEntities.add("digital.inception");
+
+    if (!StringUtils.isEmpty(this.packagesToScanForEntities))
+    {
+      String[] packagesToScan = this.packagesToScanForEntities.split(",");
+
+      Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));
+    }
+
+    return packagesToScanForEntities;
   }
 
   /**

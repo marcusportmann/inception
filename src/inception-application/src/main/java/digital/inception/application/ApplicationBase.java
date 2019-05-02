@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Marcus Portmann
+ * Copyright 2019 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -89,7 +91,7 @@ import javax.xml.ws.Endpoint;
  */
 @Component
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public abstract class ApplicationBase
   implements ServletContextInitializer
 {
@@ -115,48 +117,6 @@ public abstract class ApplicationBase
    * The Spring application context.
    */
   private ApplicationContext applicationContext;
-
-  /**
-   * The application key store alias.
-   */
-  @Value("${application.security.keyStore.alias:#{null}}")
-  private String applicationKeyStoreAlias;
-
-  /**
-   * The application key store password.
-   */
-  @Value("${application.security.keyStore.password:#{null}}")
-  private String applicationKeyStorePassword;
-
-  /**
-   * The application key store path.
-   */
-  @Value("${application.security.keyStore.path:#{null}}")
-  private String applicationKeyStorePath;
-
-  /**
-   * The application key store type.
-   */
-  @Value("${application.security.keyStore.type:#{null}}")
-  private String applicationKeyStoreType;
-
-  /**
-   * The optional application trust store password.
-   */
-  @Value("${application.security.trustStore.password:#{null}}")
-  private String applicationTrustStorePassword;
-
-  /**
-   * The optional application trust store path.
-   */
-  @Value("${application.security.trustStore.path:#{null}}")
-  private String applicationTrustStorePath;
-
-  /**
-   * The optional application trust store type.
-   */
-  @Value("${application.security.trustStore.type:#{null}}")
-  private String applicationTrustStoreType;
 
   /**
    * Enable cross-origin resource sharing (CORS).
@@ -557,139 +517,62 @@ public abstract class ApplicationBase
   }
 
   /**
-   * Returns the HTTP client bean.
+   * Returns the insecure HTTP client bean.
    *
-   * @return the HTTP client bean
+   * @return the insecure HTTP client bean
    */
   @Bean
-  protected HttpClient httpClient()
+  @ConditionalOnMissingBean(ApplicationSecurityConfiguration.class)
+  protected HttpClient insecureHttpClient()
   {
     try
     {
       HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
-      if ((!StringUtils.isEmpty(applicationKeyStoreType))
-          || (!StringUtils.isEmpty(applicationKeyStorePath))
-          || (!StringUtils.isEmpty(applicationKeyStorePassword)))
-      {
-        if (StringUtils.isEmpty(applicationKeyStoreType))
-        {
-          throw new ConfigurationException(
-              "The type was not specified for the application key store");
-        }
+      Registry<ConnectionSocketFactory> socketFactoryRegistry =
+          RegistryBuilder.<ConnectionSocketFactory>create().register("http",
+          new PlainConnectionSocketFactory()).build();
 
-        if (StringUtils.isEmpty(applicationKeyStorePath))
-        {
-          throw new ConfigurationException(
-              "The path was not specified for the application key store");
-        }
+      PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+          socketFactoryRegistry);
 
-        if (StringUtils.isEmpty(applicationKeyStorePassword))
-        {
-          throw new ConfigurationException(
-              "The password was not specified for the application key store");
-        }
+      // Increase max total connection to 200
+      connectionManager.setMaxTotal(200);
 
-        KeyStore keyStore;
+      // Increase default max connection per route to 20
+      connectionManager.setDefaultMaxPerRoute(20);
 
-        try
-        {
-          keyStore = CryptoUtil.loadKeyStore(applicationKeyStoreType, applicationKeyStorePath,
-              applicationKeyStorePassword);
-        }
-        catch (Throwable e)
-        {
-          throw new FatalBeanException("Failed to initialize the application key store", e);
-        }
-
-        KeyStore trustStore = null;
-
-        if ((!StringUtils.isEmpty(applicationTrustStoreType))
-            || (!StringUtils.isEmpty(applicationTrustStorePath))
-            || (!StringUtils.isEmpty(applicationTrustStorePassword)))
-        {
-          if (StringUtils.isEmpty(applicationTrustStoreType))
-          {
-            throw new ConfigurationException(
-                "The type was not specified for the application trust store");
-          }
-
-          if (StringUtils.isEmpty(applicationTrustStorePath))
-          {
-            throw new ConfigurationException(
-                "The path was not specified for the application trust store");
-          }
-
-          applicationTrustStorePassword = StringUtils.isEmpty(applicationTrustStorePassword)
-              ? ""
-              : applicationTrustStorePassword;
-
-          try
-          {
-            trustStore = CryptoUtil.loadTrustStore(applicationTrustStoreType,
-                applicationTrustStorePath, applicationTrustStorePassword);
-          }
-          catch (Throwable e)
-          {
-            throw new ApplicationException("Failed to initialize the application trust store", e);
-          }
-        }
-
-        // Setup the key manager factory
-        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
-            KeyManagerFactory.getDefaultAlgorithm());
-
-        keyManagerFactory.init(keyStore, applicationKeyStorePassword.toCharArray());
-
-        // Setup the trust manager factory
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-            TrustManagerFactory.getDefaultAlgorithm());
-
-        if (trustStore != null)
-        {
-          trustManagerFactory.init(trustStore);
-        }
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
-            new SecureRandom());
-
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-            sslContext);
-
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-            RegistryBuilder.<ConnectionSocketFactory>create().register("https",
-            sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory())
-            .build();
-
-        PoolingHttpClientConnectionManager connectionManager =
-            new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-
-        httpClientBuilder.setConnectionManager(connectionManager);
-      }
-      else
-      {
-        Registry<ConnectionSocketFactory> socketFactoryRegistry =
-            RegistryBuilder.<ConnectionSocketFactory>create().register("http",
-            new PlainConnectionSocketFactory()).build();
-
-        PoolingHttpClientConnectionManager connectionManager =
-            new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-
-        // Increase max total connection to 200
-        connectionManager.setMaxTotal(200);
-
-        // Increase default max connection per route to 20
-        connectionManager.setDefaultMaxPerRoute(20);
-
-        httpClientBuilder.setConnectionManager(connectionManager);
-      }
+      httpClientBuilder.setConnectionManager(connectionManager);
 
       return httpClientBuilder.build();
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialize the HTTP client", e);
+      throw new FatalBeanException("Failed to initialize the insecure HTTP client", e);
+    }
+  }
+
+  /**
+   * Returns the REST template bean.
+   *
+   * @return the REST template bean
+   */
+  @Bean
+  @ConditionalOnMissingBean(ApplicationSecurityConfiguration.class)
+  protected RestTemplate insecureRestTemplate()
+  {
+    try
+    {
+      HttpComponentsClientHttpRequestFactory requestFactory =
+          new HttpComponentsClientHttpRequestFactory();
+
+      requestFactory.setHttpClient(insecureHttpClient());
+
+      return new RestTemplate(requestFactory);
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException("Failed to initialize the REST template", e);
     }
   }
 
@@ -722,19 +605,79 @@ public abstract class ApplicationBase
   }
 
   /**
-   * Returns the REST template bean.
+   * Returns the secure HTTP client bean.
    *
-   * @return the REST template bean
+   * @return the secure HTTP client bean
    */
   @Bean
-  protected RestTemplate restTemplate()
+  @ConditionalOnBean(ApplicationSecurityConfiguration.class)
+  protected HttpClient secureHttpClient()
+  {
+    try
+    {
+      HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+
+      ApplicationSecurityConfiguration applicationSecurityConfiguration =
+          applicationContext.getBean(ApplicationSecurityConfiguration.class);
+
+      // Setup the key manager factory
+      KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
+          KeyManagerFactory.getDefaultAlgorithm());
+
+      keyManagerFactory.init(applicationSecurityConfiguration.keyStore(),
+          applicationSecurityConfiguration.keyStorePassword().toCharArray());
+
+      // Setup the trust manager factory
+      TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+          TrustManagerFactory.getDefaultAlgorithm());
+
+      trustManagerFactory.init(applicationSecurityConfiguration.trustStore());
+
+      SSLContext sslContext = SSLContext.getInstance("TLS");
+      sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
+          new SecureRandom());
+
+      SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
+          sslContext);
+
+      Registry<ConnectionSocketFactory> socketFactoryRegistry =
+          RegistryBuilder.<ConnectionSocketFactory>create().register("https",
+          sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory()).build();
+
+      PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+          socketFactoryRegistry);
+
+      // Increase max total connection to 200
+      connectionManager.setMaxTotal(200);
+
+      // Increase default max connection per route to 20
+      connectionManager.setDefaultMaxPerRoute(20);
+
+      httpClientBuilder.setConnectionManager(connectionManager);
+
+      return httpClientBuilder.build();
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException("Failed to initialize the secure HTTP client", e);
+    }
+  }
+
+  /**
+   * Returns the secure REST template bean.
+   *
+   * @return the secure REST template bean
+   */
+  @Bean
+  @ConditionalOnBean(ApplicationSecurityConfiguration.class)
+  protected RestTemplate secureRestTemplate()
   {
     try
     {
       HttpComponentsClientHttpRequestFactory requestFactory =
           new HttpComponentsClientHttpRequestFactory();
 
-      requestFactory.setHttpClient(httpClient());
+      requestFactory.setHttpClient(secureHttpClient());
 
       return new RestTemplate(requestFactory);
     }

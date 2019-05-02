@@ -35,8 +35,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@ConditionalOnProperty(value = "application.cache.enabled", havingValue = "true")
 @Configuration
+@ConditionalOnProperty(value = "application.cache.enabled", havingValue = "true")
 @EnableCaching
 @ConfigurationProperties("application.cache")
 public class CacheConfiguration
