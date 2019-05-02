@@ -19,9 +19,12 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.atomikos.jdbc.AtomikosDataSourceBean;
+
 import digital.inception.core.util.JDBCUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,16 +43,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import javax.sql.XADataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
 
 /**
  * The <code>ApplicationDatabaseConfiguration</code> class provides access to the application
@@ -208,7 +214,7 @@ public class ApplicationDatabaseConfiguration
 
     if (!StringUtils.isEmpty(this.packagesToScanForEntities))
     {
-      String[] packagesToScan =  this.packagesToScanForEntities.split(",");
+      String[] packagesToScan = this.packagesToScanForEntities.split(",");
 
       Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));
     }
