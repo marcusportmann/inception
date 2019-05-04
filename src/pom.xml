@@ -90,6 +90,7 @@
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+    <sun-activation.version>1.2.0</sun-activation.version>
     <swagger-annotations.version>1.5.22</swagger-annotations.version>
     <wss4j-ws-security-common.version>2.2.3</wss4j-ws-security-common.version>
   </properties>
@@ -105,6 +106,11 @@
         <groupId>com.microsoft.sqlserver</groupId>
         <artifactId>mssql-jdbc</artifactId>
         <version>${mssql-jdbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.activation</groupId>
+        <artifactId>javax.activation</artifactId>
+        <version>${sun-activation.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

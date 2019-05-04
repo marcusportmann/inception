@@ -46,6 +46,7 @@ import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -53,7 +54,10 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -92,8 +96,7 @@ import javax.xml.ws.Endpoint;
 @Component
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public abstract class ApplicationBase
-  implements ServletContextInitializer
+public abstract class ApplicationBase implements WebApplicationInitializer
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
@@ -117,12 +120,6 @@ public abstract class ApplicationBase
    * The Spring application context.
    */
   private ApplicationContext applicationContext;
-
-  /**
-   * Enable cross-origin resource sharing (CORS).
-   */
-  @Value("${application.security.enableCORS:#{false}}")
-  private boolean enableCORS;
 
   /**
    * Is server security enabled?
@@ -258,102 +255,19 @@ public abstract class ApplicationBase
     return applicationContext;
   }
 
-  /**
-   * Configure the given {@link ServletContext} with any servlets, filters, listeners,
-   * context-params and attributes necessary for initialization.
-   *
-   * @param servletContext the {@code ServletContext} to initialize
-   */
+
   @Override
-  public void onStartup(ServletContext servletContext)
-  {
-    try
-    {
-      Class<? extends Servlet> dispatcherServletClass = Thread.currentThread()
-          .getContextClassLoader().loadClass("org.springframework.web.servlet.DispatcherServlet")
-          .asSubclass(Servlet.class);
+  public void onStartup(ServletContext container) {
 
-      ServletRegistration dispatcherServlet = servletContext.addServlet("DispatcherServlet",
-          (dispatcherServletClass));
-      dispatcherServlet.addMapping("/*");
+    // Create the 'root' Spring application context
+    AnnotationConfigWebApplicationContext rootContext =
+      new AnnotationConfigWebApplicationContext();
 
-      dispatcherServlet.setInitParameter("contextClass",
-          "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
-
-      logger.info("Initializing the Spring Dispatcher servlet");
-    }
-    catch (ClassNotFoundException ignored) {}
-
-    try
-    {
-      Class<? extends Servlet> cxfServletClass = Thread.currentThread().getContextClassLoader()
-          .loadClass("org.apache.cxf.transport.servlet.CXFServlet").asSubclass(Servlet.class);
-
-      ServletRegistration cxfServlet = servletContext.addServlet("CXFServlet", (cxfServletClass));
-      cxfServlet.addMapping("/service/*");
-
-      logger.info("Initializing the Apache CXF framework");
-    }
-    catch (ClassNotFoundException ignored) {}
+    container.addListener(new ContextLoaderListener(rootContext));
   }
 
-  /**
-   * Returns the web services bean factory post processor.
-   *
-   * @return web services bean factory post processor
-   */
-  @Bean
-  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor()
-  {
-    return beanFactory ->
-        {
-          try
-          {
-            Class<?> springBusClass = Thread.currentThread().getContextClassLoader().loadClass(
-                "org.apache.cxf.bus.spring.SpringBus");
 
-            Object springBus = springBusClass.getConstructor().newInstance();
 
-            beanFactory.registerSingleton("cxf", springBus);
-          }
-          catch (ClassNotFoundException ignored) {}
-          catch (Throwable e)
-          {
-            throw new FatalBeanException(
-                "Failed to initialize the org.apache.cxf.bus.spring.SpringBus bean", e);
-          }
-        }
-        ;
-  }
-
-  /**
-   * Returns the cross-origin resource sharing (CORS) filter registration bean.
-   *
-   * @return the cross-origin resource sharing (CORS) filter registration bean
-   */
-  @Bean
-  protected FilterRegistrationBean corsFilterRegistrationBean()
-  {
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-    if (enableCORS)
-    {
-      CorsConfiguration config = new CorsConfiguration();
-      config.applyPermitDefaultValues();
-      config.setAllowCredentials(true);
-      config.setAllowedOrigins(Collections.singletonList("*"));
-      config.setAllowedHeaders(Collections.singletonList("*"));
-      config.setAllowedMethods(Collections.singletonList("*"));
-      config.setExposedHeaders(Collections.singletonList("content-length"));
-      config.setMaxAge(3600L);
-      source.registerCorsConfiguration("/**", config);
-    }
-
-    FilterRegistrationBean<?> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-    bean.setOrder(0);
-
-    return bean;
-  }
 
   /**
    * Create the web service endpoint.

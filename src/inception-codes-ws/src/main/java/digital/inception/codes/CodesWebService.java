@@ -20,21 +20,26 @@ package digital.inception.codes;
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import org.springframework.util.StringUtils;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-import javax.xml.bind.annotation.XmlElement;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>CodesWebService</code> class.
@@ -244,7 +249,9 @@ public class CodesWebService
 
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
-    return StringUtils.isEmpty(data) ? "" : data;
+    return StringUtils.isEmpty(data)
+        ? ""
+        : data;
   }
 
   /**
