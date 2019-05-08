@@ -34,17 +34,18 @@ import {
   MatFormField,
   matFormFieldAnimations,
   MatFormFieldDefaultOptions
-} from "@angular/material";
-import {ANIMATION_MODULE_TYPE} from "@angular/platform-browser/animations";
-import {startWith} from "rxjs/operators";
-import {Directionality} from "@angular/cdk/bidi";
-import {Platform} from "@angular/cdk/platform";
+} from '@angular/material';
+import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
+import {startWith} from 'rxjs/operators';
+import {Directionality} from '@angular/cdk/bidi';
+import {Platform} from '@angular/cdk/platform';
 
 export function getMatCheckboxMissingControlError(): Error {
   return Error('checkbox-form-field must contain a MatCheckbox.');
 }
 
 @Component({
+  // tslint:disable-next-line
   selector: 'checkbox-form-field',
   template: `
     <div class="mat-form-field-wrapper">
@@ -87,24 +88,25 @@ export function getMatCheckboxMissingControlError(): Error {
     }
   `],
   animations: [matFormFieldAnimations.transitionMessages],
+  // tslint:disable-next-line
   host: {
     'class': 'mat-form-field checkbox-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
     '[class.mat-form-field-appearance-fill]': 'appearance == "fill"',
     '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
     '[class.mat-form-field-appearance-legacy]': 'appearance == "legacy"',
-    '[class.mat-form-field-invalid]': 'hasError',
     '[class.mat-form-field-can-float]': '_canLabelFloat',
     '[class.mat-form-field-should-float]': 'shouldLabelFloat',
-    //'[class.mat-form-field-disabled]': 'radioGroup.disabled',
     '[class.mat-accent]': 'color == "accent"',
     '[class.mat-warn]': 'color == "warn"',
     '[class._mat-animation-noopable]': '!_animationsEnabled'
   },
+  // tslint:disable-next-line
   inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// tslint:disable-next-line
 export class CheckboxFormField extends MatFormField
   implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
 

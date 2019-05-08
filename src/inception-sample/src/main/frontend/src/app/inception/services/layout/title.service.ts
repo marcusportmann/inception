@@ -18,7 +18,7 @@ import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 
 /**
- * The TitleService class provides the Title Service implementation.
+ * The Title Service implementation.
  *
  * @author Marcus Portmann
  */

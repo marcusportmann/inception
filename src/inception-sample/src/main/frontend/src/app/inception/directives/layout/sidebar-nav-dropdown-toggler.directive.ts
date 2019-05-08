@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {SidebarNavDropdownDirective} from "./sidebar-nav-dropdown.directive";
-import {Directive, HostListener} from "@angular/core";
+import {SidebarNavDropdownDirective} from './sidebar-nav-dropdown.directive';
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The SidebarNavDropdownTogglerDirective class implements the sidebar nav dropdown toggle
@@ -24,6 +24,7 @@ import {Directive, HostListener} from "@angular/core";
  * @author Marcus Portmann
  */
 @Directive({
+  // tslint:disable-next-line
   selector: '[sidebarNavDropdownToggler]'
 })
 export class SidebarNavDropdownTogglerDirective {
@@ -31,7 +32,7 @@ export class SidebarNavDropdownTogglerDirective {
   /**
    * Constructs a new SidebarNavDropdownDirective.
    *
-   * @param {SidebarNavDropdownDirective} dropdown The sidebar nav dropdown directive.
+   * @param dropdown The sidebar nav dropdown directive.
    */
   constructor(private dropdown: SidebarNavDropdownDirective) {}
 

@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Code} from "../../services/codes/code";
-import {CodesService} from "../../services/codes/codes.service";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Error} from "../../errors/error";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of} from "rxjs";
-import {first} from "rxjs/operators";
-import {TitleService} from "../../services/layout/title.service";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {ConfirmationDialog} from "../../components/dialogs";
-import {AccessDeniedError} from "../../errors/access-denied-error";
+import {Code} from '../../services/codes/code';
+import {CodesService} from '../../services/codes/codes.service';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Error} from '../../errors/error';
+import {ActivatedRoute, Router} from '@angular/router';
+import {first} from 'rxjs/operators';
+import {CodesServiceError} from '../../services/codes/codes.service.errors';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {AccessDeniedError} from '../../errors/access-denied-error';
 
 /**
  * The CodesComponent class implements the codes component.
@@ -69,7 +67,10 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   deleteCode(codeId: string, codeName: string): void {
-    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@codes_component_confirm_delete_code', value: 'Are you sure you want to delete the code \'{{codeName}}\'?'}, {codeName: codeName})});
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog(
+        {message: this.i18n({id: '@@codes_component_confirm_delete_code',
+            value: 'Are you sure you want to delete the code \'{{codeName}}\'?'}, {codeName: codeName})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
@@ -84,8 +85,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
           if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          }
-          else {
+          } else {
             this.dialogService.showErrorDialog(error);
           }
         });
@@ -108,8 +108,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      }
-      else {
+      } else {
         this.dialogService.showErrorDialog(error);
       }
     });

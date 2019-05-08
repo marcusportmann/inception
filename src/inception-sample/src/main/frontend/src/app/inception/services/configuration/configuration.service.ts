@@ -15,23 +15,9 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Configuration} from "./configuration";
-import {
-  ConfigurationNotFoundError,
-  ConfigurationServiceError
-} from "./configuration.service.errors";
-import {CommunicationError} from "../../errors/communication-error";
-import {ApiError} from "../../errors/api-error";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {environment} from "../../../../environments/environment";
-import {AccessDeniedError} from "../../errors/access-denied-error";
 
 /**
- * The CodesService class provides the Configuration Service implementation.
+ * The Configuration Service implementation.
  *
  * @author Marcus Portmann
  */

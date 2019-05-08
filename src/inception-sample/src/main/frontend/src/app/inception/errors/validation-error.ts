@@ -20,5 +20,4 @@
  * @author Marcus Portmann
  */
 export class ValidationError {
-
 }

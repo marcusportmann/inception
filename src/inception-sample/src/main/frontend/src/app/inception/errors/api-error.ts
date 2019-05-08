@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {HttpErrorResponse} from "@angular/common/http";
-import {ValidationError} from "./validation-error";
+import {HttpErrorResponse} from '@angular/common/http';
+import {ValidationError} from './validation-error';
 
 /**
  * The ApiError class holds the information for an API error returned by a RESTful API.
@@ -107,18 +107,13 @@ export class ApiError {
    * @return True if the HTTP error response is as a result of an API error or false otherwise.
    */
   static isApiError(httpErrorResponse: HttpErrorResponse): boolean {
-    if ((httpErrorResponse.name === 'HttpErrorResponse')
+    return !!((httpErrorResponse.name === 'HttpErrorResponse')
       && httpErrorResponse.error
       && (httpErrorResponse.error.timestamp)
       && (httpErrorResponse.error.message)
       && (httpErrorResponse.error.status)
       && (httpErrorResponse.error.statusText)
-      && (httpErrorResponse.error.uri)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+      && (httpErrorResponse.error.uri));
   }
 }
 

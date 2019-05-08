@@ -27,9 +27,8 @@ import {
   SidebarNavDropdownTogglerDirective,
   SidebarOffCanvasCloseDirective,
   SidebarTogglerDirective
-} from './layout'
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-
+} from './layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   imports: [

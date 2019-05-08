@@ -16,23 +16,23 @@
 
 // Import Angular modules
 import {CommonModule} from '@angular/common';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
 
 // Import Angular classes
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from '@angular/router';
 
 // Import Inception components
-import {CodeCategoriesComponent} from "./code-categories.component";
-import {CodesComponent} from "./codes.component";
-import {EditCodeCategoryComponent} from "./edit-code-category.component";
-import {EditCodeComponent} from "./edit-code.component";
-import {NewCodeCategoryComponent} from "./new-code-category.component";
-import {NewCodeComponent} from "./new-code.component";
-import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
+import {CodeCategoriesComponent} from './code-categories.component';
+import {CodesComponent} from './codes.component';
+import {EditCodeCategoryComponent} from './edit-code-category.component';
+import {EditCodeComponent} from './edit-code.component';
+import {NewCodeCategoryComponent} from './new-code-category.component';
+import {NewCodeComponent} from './new-code.component';
+import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
 
 const routes: Routes = [
   {

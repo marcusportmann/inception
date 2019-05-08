@@ -17,10 +17,10 @@
 import { Injectable } from "@angular/core";
 
 import {
-  ConfirmationDialog,
-  ErrorDialog,
-  InformationDialog,
-  WarningDialog
+  ConfirmationDialogComponent,
+  ErrorDialogComponent,
+  InformationDialogComponent,
+  WarningDialogComponent
 } from "../../components/dialogs/index";
 
 import {MatDialog, MatDialogRef} from '@angular/material';
@@ -29,7 +29,7 @@ import {Error} from "../../errors/error";
 import {DialogData} from "../../components/dialogs/dialog-data";
 
 /**
- * The DialogService class provides the capability to show different standard dialogs.
+ * The service that provides the capability to show different standard dialogs.
  *
  * @author Marcus Portmann
  */
@@ -50,8 +50,8 @@ export class DialogService {
    *
    * @param {DialogData} data The data.
    */
-  showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialog> {
-    const dialogRef = this.dialog.open(ConfirmationDialog, {
+  showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       panelClass: 'confirmation-dialog-panel',
       data: data
     });
@@ -64,8 +64,8 @@ export class DialogService {
    *
    * @param {Error} error The error.
    */
-  showErrorDialog(error: Error): MatDialogRef<ErrorDialog> {
-    const dialogRef = this.dialog.open(ErrorDialog, {
+  showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
+    const dialogRef = this.dialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog-panel',
       data: {error: error}
     });
@@ -78,8 +78,8 @@ export class DialogService {
    *
    * @param {DialogData} data The data.
    */
-  showInformationDialog(data: DialogData): MatDialogRef<InformationDialog> {
-    const dialogRef = this.dialog.open(InformationDialog, {
+  showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
+    const dialogRef = this.dialog.open(InformationDialogComponent, {
       panelClass: 'information-dialog-panel',
       data: data
     });
@@ -92,8 +92,8 @@ export class DialogService {
    *
    * @param {DialogData} data The data.
    */
-  showWarningDialog(data: DialogData): MatDialogRef<WarningDialog> {
-    const dialogRef = this.dialog.open(WarningDialog, {
+  showWarningDialog(data: DialogData): MatDialogRef<WarningDialogComponent> {
+    const dialogRef = this.dialog.open(WarningDialogComponent, {
       panelClass: 'warning-dialog-panel',
       data: data
     });

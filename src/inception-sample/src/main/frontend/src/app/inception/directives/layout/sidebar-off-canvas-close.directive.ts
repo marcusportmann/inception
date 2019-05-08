@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from "@angular/core";
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The SidebarOffCanvasCloseDirective class implements the sidebar off canvas close directive.
@@ -22,6 +22,7 @@ import {Directive, HostListener} from "@angular/core";
  * @author Marcus Portmann
  */
 @Directive({
+  // tslint:disable-next-line
   selector: '[sidebarOffCanvasClose]'
 })
 export class SidebarOffCanvasCloseDirective {
@@ -40,8 +41,8 @@ export class SidebarOffCanvasCloseDirective {
   /**
    * Check whether the element has the class with the specified name.
    *
-   * @param {any} target       The target element.
-   * @param {string} className The class name to check for.
+   * @param target    The target element.
+   * @param className The class name to check for.
    *
    * @return True if the element has a class with the specified name or false otherwise.
    */
@@ -52,8 +53,8 @@ export class SidebarOffCanvasCloseDirective {
   /**
    * Toggle the class on the element.
    *
-   * @param {any} element      The element.
-   * @param {string} className The class name.
+   * @param element   The element.
+   * @param className The class name.
    */
   private toggleClass(element: any, className: string): void {
     let newClass = ' ' + element.className.replace( /[\t\r\n]/g, ' ' ) + ' ';

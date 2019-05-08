@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Error} from "./error";
-import {HttpErrorResponse} from "@angular/common/http";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {ApiError} from "./api-error";
+import {Error} from './error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {ApiError} from './api-error';
 
 /**
  * The AccessDeniedError class holds the information for an access denied error.
@@ -44,9 +44,8 @@ export class AccessDeniedError extends Error {
   /**
    * Constructs a new AccessDeniedError.
    *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
-   *                                              information.
-   * @param {I18n} i18n                           The internationalization service.
+   * @param httpErrorResponse The HTTP error response containing the error information.
+   * @param i18n              The internationalization service.
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
@@ -72,11 +71,7 @@ export class AccessDeniedError extends Error {
    *         which indicates that access to the requested resource has been denied.
    */
   static isAccessDeniedError(httpErrorResponse: HttpErrorResponse): boolean {
-    if ((httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status == 403)) {
-      return true;
-    } else {
-      return false;
-    }
+    return (httpErrorResponse.name === 'HttpErrorResponse')
+      && (httpErrorResponse.status === 403);
   }
 }

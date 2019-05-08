@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input} from "@angular/core";
-import {NavigationItem} from "../../services/navigation/navigation-item";
-import {Router} from "@angular/router";
+import {Component, ElementRef, Input} from '@angular/core';
+import {NavigationItem} from '../../services/navigation/navigation-item';
+import {Router} from '@angular/router';
 
 /**
  * The SidebarNavItemComponent class implements the sidebar nav item component.
@@ -24,6 +24,7 @@ import {Router} from "@angular/router";
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-nav-item',
   template: `
     <ng-container *ngIf="isDivider(); else checkForTitle">
@@ -74,8 +75,8 @@ export class SidebarNavItemComponent {
   /**
    * Constructs a new SidebarNavItemComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
-   * @param {Router}     router     The router.
+   * @param elementRef The element reference.
+   * @param router     The router.
    */
   constructor(private elementRef: ElementRef, private router: Router) {
   }

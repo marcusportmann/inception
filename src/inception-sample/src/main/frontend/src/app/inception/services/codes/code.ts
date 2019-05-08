@@ -44,11 +44,11 @@ export class Code {
   /**
    * Constructs a new Code.
    *
-   * @param {string} id             The ID used to uniquely identify the code.
-   * @oaram {string} codeCategoryId The ID used to uniquely identify the code category the code is
-   *                                associated with.
-   * @param {string} name           The name of the code category.
-   * @param {string} value          The value for the code.
+   * @param id             The ID used to uniquely identify the code.
+   * @param codeCategoryId The ID used to uniquely identify the code category the code is
+   *                       associated with.
+   * @param name           The name of the code category.
+   * @param value          The value for the code.
    */
   constructor(id: string, codeCategoryId: string, name: string, value: string) {
     this.id = id;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Component, ElementRef} from '@angular/core';
 
 /**
  * The SpinnerComponent class implements the spinner component.
@@ -22,6 +22,7 @@ import {Component, ElementRef, Input, OnInit} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'spinner',
   template: `<div class="spinner spinner-oval"></div>`,
   styles: [
@@ -59,7 +60,7 @@ export class SpinnerComponent {
   /**
    * Constructs a new SpinnerComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) {
   }

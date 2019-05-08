@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {NavigationItem} from "./services/navigation/navigation-item";
-import {NavigationService} from "./services/navigation/navigation.service";
-import {InceptionInjector} from "./inception-injector";
-import {Injector} from "@angular/core";
+import {NavigationItem} from './services/navigation/navigation-item';
+import {NavigationService} from './services/navigation/navigation.service';
+import {InceptionInjector} from './inception-injector';
 
 /**
  * The InceptionAppModule class provides the base class that all application module classes that
@@ -36,8 +35,7 @@ export abstract class InceptionAppModule {
 
     if (navigationService) {
       navigationService.initNavigation(this.initNavigation());
-    }
-    else {
+    } else {
       console.error('Failed to initialise the Navigation Service');
     }
   }
@@ -45,7 +43,7 @@ export abstract class InceptionAppModule {
   /**
    * Initialise the navigation for the application.
    *
-   * @returns {NavigationItem[]}
+   * @returns The navigation for the application.
    */
   protected abstract initNavigation(): NavigationItem[];
 }

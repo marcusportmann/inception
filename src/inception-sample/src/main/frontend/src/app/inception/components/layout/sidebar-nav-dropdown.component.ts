@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, Input} from "@angular/core";
-import {NavigationItem} from "../../services/navigation/navigation-item";
+import {Component, Input} from '@angular/core';
+import {NavigationItem} from '../../services/navigation/navigation-item';
 
 /**
  * The SidebarNavDropdownComponent class implements the sidebar nav dropdown component.
@@ -23,6 +23,7 @@ import {NavigationItem} from "../../services/navigation/navigation-item";
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-nav-dropdown',
   template: `
     <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
@@ -48,10 +49,10 @@ export class SidebarNavDropdownComponent {
   }
 
   hasBadge(): boolean {
-    return this.navItem.badge ? true : false;
+    return !!this.navItem.badge;
   }
 
   hasIcon(): boolean {
-    return this.navItem.icon ? true : false;
+    return !!this.navItem.icon;
   }
 }

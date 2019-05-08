@@ -14,39 +14,17 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
-
-import {InceptionModule} from '../../inception.module';
-
-
-import {patternValidator} from "../../validators/pattern-validator";
-import {SecurityService} from '../../services/security/security.service';
-
-
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-
-import {ErrorService} from "../../services/error/error.service";
-import {catchError, map, first, takeUntil} from "rxjs/operators";
-import {Observable, pipe, Subject} from "../../../../../node_modules/rxjs";
-
-import {Organization} from "../../services/security/organization";
-import {SessionService} from "../../services/session/session.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Error} from "../../errors/error";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {LoginError} from "../../services/session/session.service.errors";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {CommunicationError} from "../../errors/communication-error";
-
-
-
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {MatDialogRef} from "@angular/material";
-import {ConfirmationDialog, InformationDialog} from "../../components/dialogs";
-import {error} from "selenium-webdriver";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {ErrorService} from '../../services/error/error.service';
+import {map, first} from 'rxjs/operators';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Error} from '../../errors/error';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {MatDialogRef} from '@angular/material';
+import {InformationDialogComponent} from '../../components/dialogs';
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -96,8 +74,9 @@ export class SendErrorReportComponent implements OnInit {
 
           console.log('Error: ', this.error);
         } else {
-          console.log('No error found, redirecting to the application root')
+          console.log('No error found, redirecting to the application root');
 
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
         }
     });
@@ -111,12 +90,14 @@ export class SendErrorReportComponent implements OnInit {
         first()).subscribe(result => {
           this.spinnerService.hideSpinner();
 
-          let dialogRef: MatDialogRef<InformationDialog, boolean> = this.dialogService.showInformationDialog({message: this.i18n({id: '@@send_error_component_error_report_submitted', value: 'Your error report was submitted.'}, {})});
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
+            this.dialogService.showInformationDialog(
+              {message: this.i18n({id: '@@send_error_component_error_report_submitted', value: 'Your error report was submitted.'}, {})});
 
           dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
             this.router.navigate(['/']);
           });
-        },(error: Error) => {
+        }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
         this.dialogService.showErrorDialog(error);

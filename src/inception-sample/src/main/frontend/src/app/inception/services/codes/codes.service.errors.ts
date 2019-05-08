@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../errors/error";
+import {Error} from '../../errors/error';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.

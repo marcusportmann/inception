@@ -22,6 +22,7 @@ import {
 } from '@angular/core';
 
 @Component({
+  // tslint:disable-next-line
   selector: 'table-filter',
   template: `
 
@@ -29,7 +30,8 @@ import {
       <div class="table-filter-icon">
         <i class="fa fa-search"></i>
       </div>
-      <input class="table-filter-input" matInput [value]="this.value" #tableFilterInput (keyup)="updateValue($event.target.value)" placeholder="Search..." autocomplete="off">
+      <input class="table-filter-input" matInput [value]="this.value" #tableFilterInput
+          (keyup)="updateValue($event)" placeholder="Search..." autocomplete="off">
       <button class="table-filter-reset" mat-icon-button *ngIf="value" (click)="resetValue()">
         <i class="fa fa-times"></i>
       </button>
@@ -77,21 +79,22 @@ import {
     }
   `]
 })
+// tslint:disable-next-line
 export class TableFilter {
 
   @Output()
   changed: EventEmitter<string> = new EventEmitter<string>();
 
   @Input()
-  value: string = '';
+  value = '';
 
   resetValue(): void {
     this.value = '';
     this.changed.emit(this.value);
   }
 
-  updateValue(newValue: string): void {
-    this.value = newValue;
+  updateValue(event: any): void {
+    this.value = event.target.value;
     this.changed.emit(this.value);
   }
 }

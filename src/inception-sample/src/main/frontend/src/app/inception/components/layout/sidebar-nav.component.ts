@@ -21,10 +21,10 @@ import {
   OnInit,
 } from '@angular/core';
 
-import {NavigationService} from "../../services/navigation/navigation.service";
-import {NavigationItem} from "../../services/navigation/navigation-item";
-import {Subscription} from "rxjs";
-import {map} from "rxjs/operators";
+import {NavigationService} from '../../services/navigation/navigation.service';
+import {NavigationItem} from '../../services/navigation/navigation-item';
+import {Subscription} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /**
  * The SidebarNavComponent class implements the sidebar nav component.
@@ -32,6 +32,7 @@ import {map} from "rxjs/operators";
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-nav',
   template: `
     <ul class="nav">
@@ -52,7 +53,7 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
   /**
    * Constructs a new SidebarNavComponent.
    *
-   * @param {NavigationService} navigationService The Navigation Service.
+   * @param navigationService The Navigation Service.
    */
   constructor(private navigationService: NavigationService) {
     this.navItems = new Array<NavigationItem>();

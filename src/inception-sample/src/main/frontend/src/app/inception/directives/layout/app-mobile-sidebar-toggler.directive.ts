@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from "@angular/core";
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The AppMobileSidebarTogglerDirective class implements the app mobile sidebar toggler directive.
@@ -40,8 +40,8 @@ export class AppMobileSidebarTogglerDirective {
   /**
    * Check whether the element has the class with the specified name.
    *
-   * @param {any} target       the target element
-   * @param {string} className the class name to check for
+   * @param target    The target element.
+   * @param className The class name to check for.
    *
    * @return True if the element has the class with the specified name or false otherwise.
    */

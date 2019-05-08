@@ -15,7 +15,7 @@
  */
 
 import {Component, Input, HostBinding, OnInit} from '@angular/core';
-import {sidebarCssClasses} from '../../shared/index';
+import {sidebarCssClasses} from '../../shared';
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -23,6 +23,7 @@ import {sidebarCssClasses} from '../../shared/index';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar',
   template: `
     <ng-content></ng-content>`

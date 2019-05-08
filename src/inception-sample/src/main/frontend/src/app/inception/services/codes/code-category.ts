@@ -44,15 +44,15 @@ export class CodeCategory {
   /**
    * Constructs a new CodeCategory.
    *
-   * @param {string} id      The ID used to uniquely identify the code category.
-   * @param {string} name    The name of the code category.
-   * @oaram {string} data    The optional code data for the code category.
-   * @param {string} updated The date and time the code category was updated.
+   * @param id      The ID used to uniquely identify the code category.
+   * @param name    The name of the code category.
+   * @param data    The optional code data for the code category.
+   * @param updated The date and time the code category was updated.
    */
   constructor(id: string, name: string, data?: string, updated?: Date) {
     this.id = id;
     this.name = name;
     this.data = data;
-    this.updated = this.updated;
+    this.updated = updated;
   }
 }

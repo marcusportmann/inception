@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, Router} from "@angular/router";
-import {SessionService} from "../services/session/session.service";
-import {Session} from "../services/session/session";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
+import {SessionService} from '../services/session/session.service';
+import {Session} from '../services/session/session';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route
@@ -33,8 +33,8 @@ export class CanActivateFunctionGuard implements CanActivate {
   /**
    * Constructs a new CanActivateFunctionGuard.
    *
-   * @param {Router}         router         The router.
-   * @param {SessionService} sessionService The Session Service.
+   * @param router         The router.
+   * @param sessionService The Session Service.
    */
   constructor(private router: Router, private sessionService: SessionService) {
   }
@@ -49,9 +49,9 @@ export class CanActivateFunctionGuard implements CanActivate {
               // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
 
               if (session) {
-                for (var i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
-                  for (var j = 0; j < session.functionCodes.length; j++) {
-                    if (activatedRouteSnapshot.data.functionCodes[i] == session.functionCodes[j]) {
+                for (let i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
+                  for (let j = 0; j < session.functionCodes.length; j++) {
+                    if (activatedRouteSnapshot.data.functionCodes[i] === session.functionCodes[j]) {
                       return true;
                     }
                   }
@@ -60,22 +60,18 @@ export class CanActivateFunctionGuard implements CanActivate {
                 this.router.navigate(['/login']);
 
                 return false;
-              }
-              else {
+              } else {
                 this.router.navigate(['/login']);
 
                 return false;
               }
-            }
-            else {
+            } else {
               return true;
             }
-          }
-          else {
+          } else {
             return true;
           }
-        }
-        else {
+        } else {
           this.router.navigate(['/login']);
 
           return false;

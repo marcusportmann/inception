@@ -16,49 +16,65 @@
 
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {DialogData} from "./dialog-data";
+import {Error} from '../../errors/error';
 
 /**
- * The InformationDialog class implements the information dialog component.
+ * The ErrorDialogData interface defines the data that is displayed by an error dialog.
+ *
+ * @author Marcus Portmann
+ */
+export interface ErrorDialogData {
+
+  /**
+   * The error.
+   */
+  error: Error;
+}
+
+/**
+ * The ErrorDialogComponent class implements the error dialog component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  selector: 'information-dialog',
+  // tslint:disable-next-line
+  selector: 'error-dialog',
   template: `
     <div class="header">
-      <i class="fas fa-3x fa-exclamation-circle"></i>
+      <i class="far fa-3x fa-times-circle"></i>
     </div>
     <div class="message-holder">
       <span class="message">
-        {{data.message}}
+        {{message}}
       </span>
     </div>
     <div class="button">
-      <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText }}</button>
-      <ng-template #defaultButton>
-        <button mat-flat-button (click)="onButtonClick()" tabindex="-1" i18n="@@information_dialog_button_ok">Ok</button>
-      </ng-template>
+      <button mat-flat-button (click)="onOkButtonClick()" tabindex="-1" i18n="@@error_dialog_button_ok">Ok</button>
     </div>
   `,
+  // tslint:disable-next-line
   host: {
-    'class': 'information-dialog'
+    'class': 'error-dialog'
   }
 })
-export class InformationDialog {
+export class ErrorDialogComponent {
 
   /**
-   * Constructs a new InformationDialog.
+   * Constructs a new ErrorDialogComponent.
    *
-   * @param {MatDialogRef<InformationDialog>} dialogRef The dialog reference.
-   * @param {DialogData} data                           The dialog data.
+   * @param dialogRef The dialog reference.
+   * @param data      The dialog data.
    */
   constructor(
-    private dialogRef: MatDialogRef<InformationDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+    private dialogRef: MatDialogRef<ErrorDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
   }
 
-  onButtonClick(): void {
+  get message(): string {
+    return this.data.error.message;
+  }
+
+  onOkButtonClick(): void {
     this.dialogRef.close();
   }
 }

@@ -58,12 +58,12 @@ export class HttpError {
   /**
    * Constructs a new HttpError.
    *
-   * @param {string} error            The error.
-   * @param {string} errorDescription The error description.
-   * @param {string} message          The error message.
-   * @param {number} status           The status code.
-   * @param {string} statusText       The status text.
-   * @param {string} url              The URL associated with the error.
+   * @param error            The error.
+   * @param errorDescription The error description.
+   * @param message          The error message.
+   * @param status           The status code.
+   * @param statusText       The status text.
+   * @param url              The URL associated with the error.
    */
   constructor(error: string, errorDescription: string, message: string, status: number, statusText: string, url: string) {
     this.error = error;

@@ -16,19 +16,18 @@
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {CodeCategory} from "../../services/codes/code-category";
-import {CodesService} from "../../services/codes/codes.service";
-import {first} from "rxjs/operators";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Error} from "../../errors/error";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ConfirmationDialog} from "../../components/dialogs";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {CodeCategorySummary} from "../../services/codes/code-category-summary";
-import {AccessDeniedError} from "../../errors/access-denied-error";
+import {CodesService} from '../../services/codes/codes.service';
+import {first} from 'rxjs/operators';
+import {CodesServiceError} from '../../services/codes/codes.service.errors';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Error} from '../../errors/error';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {CodeCategorySummary} from '../../services/codes/code-category-summary';
+import {AccessDeniedError} from '../../errors/access-denied-error';
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -70,7 +69,10 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   deleteCodeCategory(codeCategoryId: string, codeCategoryName: string): void {
-    let dialogRef: MatDialogRef<ConfirmationDialog, boolean> = this.dialogService.showConfirmationDialog({message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category', value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'}, {codeCategoryName: codeCategoryName})});
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
+      this.dialogService.showConfirmationDialog(
+        {message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category',
+            value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'},{codeCategoryName: codeCategoryName})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
@@ -85,8 +87,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
           if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          }
-          else {
+          } else {
             this.dialogService.showErrorDialog(error);
           }
         });
@@ -110,8 +111,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      }
-      else {
+      } else {
         this.dialogService.showErrorDialog(error);
       }
     });

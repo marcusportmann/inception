@@ -22,7 +22,7 @@ import * as format from 'string-template';
 
 
 /**
- * The BreadcrumbsService class provides the Breadcrumbs Service implementation.
+ * The Breadcrumbs Service implementation.
  *
  * @author Marcus Portmann
  */

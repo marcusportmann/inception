@@ -15,7 +15,7 @@
  */
 
 import { Component, ElementRef, OnInit  } from '@angular/core';
-import { Replace } from '../../shared/index';
+import { Replace } from '../../shared';
 
 /**
  * The SidebarFormComponent class implements the sidebar form component.
@@ -23,6 +23,7 @@ import { Replace } from '../../shared/index';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-form',
   template: `
     <form class="sidebar-form">
@@ -35,7 +36,7 @@ export class SidebarFormComponent implements OnInit {
   /**
    * Constructs a new SidebarFormComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) { }
 

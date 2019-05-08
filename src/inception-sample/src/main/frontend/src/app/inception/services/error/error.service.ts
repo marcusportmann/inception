@@ -30,8 +30,8 @@ import {v4 as uuid} from "uuid";
 import {ErrorServiceError} from "./error.service.errors";
 
 /**
- * The ErrorService class provides the capability to capture and process application and
- * back-end errors and submit error reports.
+ * The Error Service implementation that provides the capability to capture and process application
+ * and back-end errors and submit error reports.
  *
  * @author Marcus Portmann
  */

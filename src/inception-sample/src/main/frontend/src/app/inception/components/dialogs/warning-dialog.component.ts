@@ -16,14 +16,15 @@
 
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {DialogData} from "./dialog-data";
+import {DialogData} from './dialog-data';
 
 /**
- * The WarningDialog class implements the warning dialog component.
+ * The WarningDialogComponent class implements the warning dialog component.
  *
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'warning-dialog',
   template: `
     <div class="header">
@@ -35,26 +36,28 @@ import {DialogData} from "./dialog-data";
       </span>
     </div>
     <div class="button">
-      <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onButtonClick()" tabindex="-1">{{ data.buttonText }}</button>
+      <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onButtonClick()"
+          tabindex="-1">{{ data.buttonText }}</button>
       <ng-template #defaultButton>
         <button mat-flat-button (click)="onButtonClick()" tabindex="-1" i18n="@@warning_dialog_button_ok">Ok</button>
       </ng-template>
     </div>
   `,
+  // tslint:disable-next-line
   host: {
     'class': 'warning-dialog'
   }
 })
-export class WarningDialog {
+export class WarningDialogComponent {
 
   /**
-   * Constructs a new WarningDialog.
+   * Constructs a new WarningDialogComponent.
    *
-   * @param {MatDialogRef<WarningDialog>} dialogRef The dialog reference.
-   * @param {DialogData} data                       The dialog data.
+   * @param dialogRef The dialog reference.
+   * @param data      The dialog data.
    */
   constructor(
-    private dialogRef: MatDialogRef<WarningDialog>,
+    private dialogRef: MatDialogRef<WarningDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 

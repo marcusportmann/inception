@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -22,6 +22,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'admin-container',
   template: `
     <admin-header

@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {Replace} from '../../shared/index';
+import {Replace} from '../../shared';
 
 /**
  * The SidebarFooterComponent class implements the sidebar footer component.
@@ -23,6 +23,7 @@ import {Replace} from '../../shared/index';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-footer',
   template: `
     <div class="sidebar-footer">
@@ -34,7 +35,7 @@ export class SidebarFooterComponent implements OnInit {
   /**
    * Constructs a new SidebarFooterComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) { }
 

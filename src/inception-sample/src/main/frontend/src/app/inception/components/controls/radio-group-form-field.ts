@@ -35,17 +35,18 @@ import {
   matFormFieldAnimations,
   MatFormFieldDefaultOptions,
   MatRadioGroup
-} from "@angular/material";
-import {ANIMATION_MODULE_TYPE} from "@angular/platform-browser/animations";
-import {startWith} from "rxjs/operators";
-import {Directionality} from "@angular/cdk/bidi";
-import {Platform} from "@angular/cdk/platform";
+} from '@angular/material';
+import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
+import {startWith} from 'rxjs/operators';
+import {Directionality} from '@angular/cdk/bidi';
+import {Platform} from '@angular/cdk/platform';
 
 export function getMatRadioGroupMissingControlError(): Error {
   return Error('radio-group-form-field must contain a MatRadioGroup.');
 }
 
 @Component({
+  // tslint:disable-next-line
   selector: 'radio-group-form-field',
   template: `
     <div class="mat-form-field-wrapper">
@@ -96,6 +97,7 @@ export function getMatRadioGroupMissingControlError(): Error {
     }
   `],
   animations: [matFormFieldAnimations.transitionMessages],
+  // tslint:disable-next-line
   host: {
     'class': 'mat-form-field radio-group-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
@@ -110,10 +112,12 @@ export function getMatRadioGroupMissingControlError(): Error {
     '[class.mat-warn]': 'color == "warn"',
     '[class._mat-animation-noopable]': '!_animationsEnabled'
   },
+  // tslint:disable-next-line
   inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+// tslint:disable-next-line
 export class RadioGroupFormField extends MatFormField
   implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
 

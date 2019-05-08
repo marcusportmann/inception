@@ -15,7 +15,7 @@
  */
 
 import { Component, ElementRef, Input, OnInit  } from '@angular/core';
-import { Replace } from '../../shared/index';
+import { Replace } from '../../shared';
 
 /**
  * The AdminFooterComponent class implements the admin footer component.
@@ -23,6 +23,7 @@ import { Replace } from '../../shared/index';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'admin-footer',
   template: `
     <footer class="admin-footer">
@@ -38,7 +39,7 @@ export class AdminFooterComponent implements OnInit {
   /**
    * Constructs a new AdminFooterComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) {}
 

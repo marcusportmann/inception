@@ -27,7 +27,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 
 /**
- * The SessionService class provides the Session Service implementation.
+ * The Session Service implementation.
  *
  * @author Marcus Portmann
  */

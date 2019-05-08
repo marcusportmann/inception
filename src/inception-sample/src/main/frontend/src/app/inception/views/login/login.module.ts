@@ -20,14 +20,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 // Import Angular classes
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from '@angular/router';
 
 // Import Inception modules
-import {InceptionModule} from "../../inception.module";
+import {InceptionModule} from '../../inception.module';
 
 // Import Inception components
 import {LoginComponent} from './login.component';
-import {SelectOrganizationComponent} from "./select-organization.component";
+import {SelectOrganizationComponent} from './select-organization.component';
 
 const routes: Routes = [
   {

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Error} from "./error";
-import {HttpErrorResponse} from "@angular/common/http";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Error} from './error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The SystemUnavailableError class holds the information for a system unavailable error.
@@ -28,9 +28,8 @@ export class SystemUnavailableError extends Error {
   /**
    * Constructs a new SystemUnavailableError.
    *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
-   *                                              information.
-   * @param {I18n} i18n                           The internationalization service.
+   * @param httpErrorResponse The HTTP error response containing the error information.
+   * @param i18n              The internationalization service.
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 

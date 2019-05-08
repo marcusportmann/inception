@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Error} from "./error";
-import {HttpErrorResponse} from "@angular/common/http";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Error} from './error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The CommunicationError class holds the information for a communication error.
@@ -43,9 +43,8 @@ export class CommunicationError extends Error {
   /**
    * Constructs a new CommunicationError.
    *
-   * @param {HttpErrorResponse} httpErrorResponse The HTTP error response containing the error
-   *                                              information.
-   * @param {I18n} i18n                           The internationalization service.
+   * @param httpErrorResponse The HTTP error response containing the error information.
+   * @param i18n              The internationalization service.
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
@@ -66,14 +65,10 @@ export class CommunicationError extends Error {
    *         otherwise.
    */
   static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
-    if ((httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status == 0)
+    return (httpErrorResponse.name === 'HttpErrorResponse')
+      && (httpErrorResponse.status === 0)
       && httpErrorResponse.error
       && (httpErrorResponse.error instanceof ProgressEvent)
-      && (httpErrorResponse.error.type === 'error')) {
-      return true;
-    } else {
-      return false;
-    }
+      && (httpErrorResponse.error.type === 'error');
   }
 }

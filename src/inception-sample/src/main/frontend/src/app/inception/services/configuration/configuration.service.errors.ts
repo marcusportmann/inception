@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../errors/error";
+import {Error} from '../../errors/error';
 
 /**
  * The ConfigurationNotFoundError class holds the information for a configuration not found error.

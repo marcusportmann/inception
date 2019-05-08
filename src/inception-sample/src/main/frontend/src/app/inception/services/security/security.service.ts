@@ -31,7 +31,7 @@ import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {environment} from "../../../../environments/environment";
 
 /**
- * The SecurityService class provides the Security Service implementation.
+ * The Security Service implementation.
  *
  * @author Marcus Portmann
  */

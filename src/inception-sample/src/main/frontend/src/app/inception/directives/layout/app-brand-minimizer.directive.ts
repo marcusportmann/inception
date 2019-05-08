@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from "@angular/core";
+import {Directive, HostListener} from '@angular/core';
 
 /**
  * The AppBrandMinimizerDirective class implements the app brand minimizer directive.

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {ApiError} from "./api-error";
-import {HttpErrorResponse} from "@angular/common/http";
-import {HttpError} from "./http-error";
+import {ApiError} from './api-error';
+import {HttpErrorResponse} from '@angular/common/http';
+import {HttpError} from './http-error';
 
 /**
- * The Error class provides the base class that all error classes should be derived from.
+ * The base class that all error classes should be derived from.
  *
  * @author Marcus Portmann
  */
@@ -49,8 +49,7 @@ export class Error {
   constructor(message: string, cause?: any) {
     if ((cause) && (cause instanceof ApiError)) {
       this.timestamp = (<ApiError>cause).timestamp;
-    }
-    else {
+    } else {
       this.timestamp = new Date();
     }
 
@@ -58,7 +57,7 @@ export class Error {
 
     if (cause instanceof HttpErrorResponse) {
 
-      let httpErrorResponse: HttpErrorResponse = (<HttpErrorResponse>cause);
+      const httpErrorResponse: HttpErrorResponse = (<HttpErrorResponse>cause);
 
       if (httpErrorResponse.error) {
         this.cause = new HttpError(
@@ -66,14 +65,12 @@ export class Error {
           httpErrorResponse.error.error_description ? httpErrorResponse.error.error_description : '' ,
           httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
           httpErrorResponse.url);
-      }
-      else {
-        this.cause = new HttpError('','',
+      } else {
+        this.cause = new HttpError('', '',
           httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
           httpErrorResponse.url);
       }
-    }
-    else {
+    } else {
       this.cause = cause;
     }
   }

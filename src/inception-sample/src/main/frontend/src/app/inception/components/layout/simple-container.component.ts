@@ -22,6 +22,7 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'simple-container',
   template: '<router-outlet></router-outlet>',
 })

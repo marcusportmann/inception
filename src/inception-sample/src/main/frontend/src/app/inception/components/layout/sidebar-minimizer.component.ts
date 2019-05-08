@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {Replace} from '../../shared/index';
+import {Replace} from '../../shared';
 
 /**
  * The SidebarMinimizerComponent class implements the sidebar minimizer component.
@@ -23,6 +23,7 @@ import {Replace} from '../../shared/index';
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'sidebar-minimizer',
   template: `
     <button class="sidebar-minimizer" type="button" sidebarMinimizer appBrandMinimizer></button>
@@ -33,7 +34,7 @@ export class SidebarMinimizerComponent implements OnInit {
   /**
    * Constructs a new SidebarMinimizerComponent.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) { }
 

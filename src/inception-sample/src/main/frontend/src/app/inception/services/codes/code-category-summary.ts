@@ -39,13 +39,13 @@ export class CodeCategorySummary {
   /**
    * Constructs a new CodeCategorySummary.
    *
-   * @param {string} id      The ID used to uniquely identify the code category.
-   * @param {string} name    The name of the code category.
-   * @param {string} updated The date and time the code category was updated.
+   * @param id      The ID used to uniquely identify the code category.
+   * @param name    The name of the code category.
+   * @param updated The date and time the code category was updated.
    */
   constructor(id: string, name: string, updated?: Date) {
     this.id = id;
     this.name = name;
-    this.updated = this.updated;
+    this.updated = updated;
   }
 }

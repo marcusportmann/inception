@@ -18,23 +18,23 @@ import {Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Code} from "./code";
-import {CodeCategory} from "./code-category";
+import {Code} from './code';
+import {CodeCategory} from './code-category';
 import {
   CodeCategoryNotFoundError, CodeNotFoundError,
   CodesServiceError,
   DuplicateCodeCategoryError, DuplicateCodeError
-} from "./codes.service.errors";
-import {CommunicationError} from "../../errors/communication-error";
-import {ApiError} from "../../errors/api-error";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {environment} from "../../../../environments/environment";
-import {CodeCategorySummary} from "./code-category-summary";
-import {AccessDeniedError} from "../../errors/access-denied-error";
+} from './codes.service.errors';
+import {CommunicationError} from '../../errors/communication-error';
+import {ApiError} from '../../errors/api-error';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {environment} from '../../../../environments/environment';
+import {CodeCategorySummary} from './code-category-summary';
+import {AccessDeniedError} from '../../errors/access-denied-error';
 
 /**
- * The CodesService class provides the Codes Service implementation.
+ * The Codes Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -44,8 +44,8 @@ export class CodesService {
   /**
    * Constructs a new CodesService.
    *
-   * @param {HttpClient} httpClient The HTTP client.
-   * @param {I18n} i18n             The internationalization service.
+   * @param httpClient The HTTP client.
+   * @param i18n       The internationalization service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Codes Service');
@@ -54,26 +54,26 @@ export class CodesService {
   /**
    * Create a code.
    *
-   * @param {Code} code The code code to create.
+   * @param code The code code to create.
    *
    * @return True if the code was created successfully or false otherwise.
    */
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes',
-      code, {observe: "response"}).pipe(
+      code, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeCategoryNotFoundError(this.i18n({
               id: '@@codes_service_the_code_category_could_not_be_found',
               value: 'The code category could not be found.'
             }), apiError));
-          } else if (apiError.status == 409) {
+          } else if (apiError.status === 409) {
             return throwError(new DuplicateCodeError(this.i18n({
               id: '@@codes_service_the_code_already_exists',
               value: 'The code already exists.'
@@ -95,20 +95,20 @@ export class CodesService {
   /**
    * Create a code category.
    *
-   * @param {CodeCategory} codeCategory The code category to create.
+   * @param codeCategory The code category to create.
    *
    * @return True if the code category was created successfully or false otherwise.
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/code-categories',
-      codeCategory, {observe: "response"}).pipe(
+      codeCategory, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 409) {
+          if (apiError.status === 409) {
             return throwError(new DuplicateCodeCategoryError(this.i18n({
               id: '@@codes_service_the_code_category_already_exists',
               value: 'The code category already exists.'
@@ -130,23 +130,23 @@ export class CodesService {
   /**
    * Delete the code.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category the code is
-   *                                associated with.
-   * @param {string} codeId         The ID used to uniquely identify the code.
+   * @param codeCategoryId The ID used to uniquely identify the code category the code is
+   *                       associated with.
+   * @param codeId         The ID used to uniquely identify the code.
    *
    * @return True if the code was deleted or false otherwise.
    */
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
-      {observe: "response"}).pipe(
+      {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeNotFoundError(this.i18n({
               id: '@@codes_service_the_code_could_not_be_found',
               value: 'The code could not be found.'
@@ -168,21 +168,21 @@ export class CodesService {
   /**
    * Delete the code category.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
+   * @param codeCategoryId The ID used to uniquely identify the code category.
    *
    * @return True if the code category was deleted or false otherwise.
    */
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
-      {observe: "response"}).pipe(
+      {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeCategoryNotFoundError(this.i18n({
               id: '@@codes_service_the_code_category_could_not_be_found',
               value: 'The code category could not be found.'
@@ -204,11 +204,11 @@ export class CodesService {
   /**
    * Retrieve the code.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category the code is
-   *                                associated with.
-   * @param {string} codeId         The ID uniquely identifying the code.
+   * @param codeCategoryId The ID used to uniquely identify the code category the code is
+   *                       associated with.
+   * @param codeId         The ID uniquely identifying the code.
    *
-   * @return {Code} The code.
+   * @return The code.
    */
   getCode(codeCategoryId: string, codeId: string): Observable<Code> {
     return this.httpClient.get<Code>(
@@ -217,15 +217,14 @@ export class CodesService {
         return code;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeNotFoundError(this.i18n({
               id: '@@codes_service_the_code_could_not_be_found',
               value: 'The code could not be found.'
             }), apiError));
-          }
-          else {
+          } else {
             return throwError(new CodesServiceError(this.i18n({
               id: '@@codes_service_failed_to_retrieve_the_code',
               value: 'Failed to retrieve the code.'
@@ -242,7 +241,7 @@ export class CodesService {
   /**
    * Retrieve all the code categories.
    *
-   * @return {Observable<CodeCategory[]>} The code categories.
+   * @return The code categories.
    */
   getCodeCategories(): Observable<CodeCategory[]> {
     return this.httpClient.get<CodeCategory[]>(
@@ -251,7 +250,7 @@ export class CodesService {
         return codeCategories;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
             id: '@@codes_service_failed_to_retrieve_the_code_categories',
@@ -268,9 +267,9 @@ export class CodesService {
   /**
    * Retrieve the code category.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
+   * @param codeCategoryId The ID used to uniquely identify the code category.
    *
-   * @return {CodeCategory} The code category.
+   * @return The code category.
    */
   getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
@@ -279,15 +278,14 @@ export class CodesService {
         return codeCategory;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeCategoryNotFoundError(this.i18n({
               id: '@@codes_service_the_code_category_could_not_be_found',
               value: 'The code category could not be found.'
             }), apiError));
-          }
-          else {
+          } else {
             return throwError(new CodesServiceError(this.i18n({
               id: '@@codes_service_failed_to_retrieve_the_code_category',
               value: 'Failed to retrieve the code category.'
@@ -304,7 +302,7 @@ export class CodesService {
   /**
    * Retrieve the codes for the code category.
    *
-   * @param {string} codeCategoryId The ID used to uniquely identify the code category.
+   * @param codeCategoryId The ID used to uniquely identify the code category.
    *
    * @return the codes for the code category
    */
@@ -316,9 +314,9 @@ export class CodesService {
         return codes;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeCategoryNotFoundError(this.i18n({
               id: '@@codes_service_the_code_category_could_not_be_found',
               value: 'The code category could not be found.'
@@ -340,7 +338,7 @@ export class CodesService {
   /**
    * Retrieve the summaries for all code categories.
    *
-   * @return {Observable<CodeCategorySummary[]>} The code category summaries.
+   * @return The code category summaries.
    */
   getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
     return this.httpClient.get<CodeCategory[]>(
@@ -351,7 +349,7 @@ export class CodesService {
         if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
           return throwError(new AccessDeniedError(httpErrorResponse, this.i18n));
         } else if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
             id: '@@codes_service_failed_to_retrieve_the_code_categories',
@@ -368,21 +366,21 @@ export class CodesService {
   /**
    * Update the code.
    *
-   * @param {Code} code The code to update.
+   * @param code The code to update.
    *
    * @return True if the code was updated successfully or false otherwise.
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' + code.id,
-      code, {observe: "response"}).pipe(
+      code, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeNotFoundError(this.i18n({
               id: '@@codes_service_the_code_could_not_be_found',
               value: 'The code could not be found.'
@@ -404,21 +402,21 @@ export class CodesService {
   /**
    * Update the code category.
    *
-   * @param {CodeCategory} codeCategory The code category to update.
+   * @param codeCategory The code category to update.
    *
    * @return True if the code category was updated successfully or false otherwise.
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id,
-      codeCategory, {observe: "response"}).pipe(
+      codeCategory, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
         return true;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status == 404) {
+          if (apiError.status === 404) {
             return throwError(new CodeCategoryNotFoundError(this.i18n({
               id: '@@codes_service_the_code_category_could_not_be_found',
               value: 'The code category could not be found.'

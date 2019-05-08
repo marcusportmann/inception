@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export * from './confirmation-dialog';
-export * from './error-dialog';
-export * from './information-dialog';
-export * from './warning-dialog';
+export * from './confirmation-dialog.component';
+export * from './error-dialog.component';
+export * from './information-dialog.component';
+export * from './warning-dialog.component';

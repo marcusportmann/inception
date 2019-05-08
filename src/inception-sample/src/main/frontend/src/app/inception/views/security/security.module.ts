@@ -19,10 +19,10 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
 // Import Angular classes
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from '@angular/router';
 
 // Import Inception components
-import {OverviewComponent} from "./overview.component";
+import {OverviewComponent} from './overview.component';
 
 const routes: Routes = [
   {

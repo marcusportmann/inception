@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first, flatMap, map, startWith} from "rxjs/operators";
-import {Observable, Subject} from "../../../../../node_modules/rxjs";
-import {Organization} from "../../services/security/organization";
-import {SessionService} from "../../services/session/session.service";
-import {Router} from "@angular/router";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Session} from "../../services/session/session";
+import {first, flatMap, map, startWith} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {Organization} from '../../services/security/organization';
+import {SessionService} from '../../services/session/session.service';
+import {Router} from '@angular/router';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Session} from '../../services/session/session';
 
 /**
  * The SelectOrganizationComponent class implements the select organization component.
@@ -54,7 +54,7 @@ export class SelectOrganizationComponent implements OnInit {
   }
 
   isOrganizationSelected(): boolean {
-    return this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value == 'object');
+    return this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value === 'object');
   }
 
   ngOnInit(): void {
@@ -65,13 +65,14 @@ export class SelectOrganizationComponent implements OnInit {
   }
 
   onOk(): void {
-    if (this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value == 'object')) {
+    if (this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value === 'object')) {
       const selectedOrganization: Organization = <Organization>this.organizationFormControl.value;
 
       this.sessionService.session.pipe(first()).subscribe((session: Session) => {
 
         session.organization = selectedOrganization;
 
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['/']);
       });
     }
@@ -80,10 +81,9 @@ export class SelectOrganizationComponent implements OnInit {
   private filterOrganizations(value: string | object): Observable<Organization[]> {
     let filterValue = '';
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       filterValue = (<string>value).toLowerCase();
-    }
-    else if (typeof value === 'object') {
+    } else if (typeof value === 'object') {
       filterValue = (<Organization>value).name.toLowerCase();
     }
 
@@ -91,9 +91,9 @@ export class SelectOrganizationComponent implements OnInit {
       map((session: Session) => {
         if (session) {
           return session.organizations.filter(
-            organization => organization.name.toLowerCase().indexOf(filterValue) === 0)
-        }
-        else {
+            organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
+        } else {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/login']);
           return [];
         }

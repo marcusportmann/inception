@@ -22,7 +22,7 @@ import {map} from "rxjs/operators";
 import {Session} from "../session/session";
 
 /**
- * The NavigationService class provides the Navigation Service implementation.
+ * The Navigation Service implementation.
  *
  * @author Marcus Portmann
  */

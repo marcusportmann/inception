@@ -20,7 +20,7 @@ import {
   Host,
   Optional,
   Self, ViewContainerRef
-} from '@angular/core'
+} from '@angular/core';
 
 import {
   FormGroupDirective,
@@ -33,19 +33,33 @@ import {
  * @author Marcus Portmann
  */
 @Directive({
+  // tslint:disable-next-line
   selector: 'form[validatedForm]',
-  host: {'(submit)': 'onSubmit($event)', '(reset)': 'onReset()'}
+  // tslint:disable-next-line
+  host: {'(submit)': 'onSubmit()', '(reset)': 'onReset()'}
 })
 export class ValidatedFormDirective implements AfterViewInit {
 
   /**
    * Constructs a new ValidatedFormDirective.
    *
-   * @param {ViewContainerRef} viewContainerRef     The view container reference.
-   * @param {FormGroupDirective} formGroupDirective The form group directive.
+   * @param viewContainerRef   The view container reference.
+   * @param formGroupDirective The form group directive.
    */
   constructor(private viewContainerRef: ViewContainerRef,
     @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
+  }
+
+  private static isFormElement(nodeName: string): boolean {
+    switch (nodeName) {
+      case 'INPUT': {
+        return true;
+      }
+
+      default: {
+        return false;
+      }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -54,32 +68,28 @@ export class ValidatedFormDirective implements AfterViewInit {
   onReset(): void {
   }
 
-  onSubmit($event: Event): boolean {
+  onSubmit(): boolean {
     // Mark all controls as touched
     if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
-      let form = this.formGroupDirective.control;
+      const form = this.formGroupDirective.control;
 
-      for (let controlName in form.controls) {
-        form.controls[controlName].markAsTouched();
-      }
+      Object.keys(form.controls).forEach(key => {
+        form.get(key).markAsTouched();
+      });
     }
 
     // Find the first invalid form control and set focus to it
-    if (this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement)) {
-      return false;
-    }
-
-    return true;
+    return !this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement);
   }
 
   private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
     if (nativeElement.children && (nativeElement.children.length > 0)) {
       for (let i = 0; i < nativeElement.children.length; i++) {
-        let nativeChildElement = nativeElement.children[i];
+        const nativeChildElement = nativeElement.children[i];
 
-        if (nativeChildElement && nativeChildElement.nodeName && this.isFormElement(nativeChildElement.nodeName)) {
+        if (nativeChildElement && nativeChildElement.nodeName && ValidatedFormDirective.isFormElement(nativeChildElement.nodeName)) {
           if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
-            let formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
+            const formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
 
             if (formControl && formControl.invalid) {
               nativeChildElement.focus();
@@ -96,17 +106,5 @@ export class ValidatedFormDirective implements AfterViewInit {
     }
 
     return false;
-  }
-
-  private isFormElement(nodeName: string): boolean {
-    switch(nodeName) {
-      case 'INPUT': {
-        return true;
-      }
-
-      default: {
-        return false;
-      }
-    }
   }
 }

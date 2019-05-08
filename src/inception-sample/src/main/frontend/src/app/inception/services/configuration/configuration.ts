@@ -39,9 +39,9 @@ export class Configuration {
   /**
    * Constructs a new Configuration.
    *
-   * @param {string} key         The key used to uniquely identify the configuration.
-   * @oaram {string} value       The value for the configuration.
-   * @param {string} description The description for the configuration.
+   * @param key         The key used to uniquely identify the configuration.
+   * @oaram value       The value for the configuration.
+   * @param description The description for the configuration.
    */
   constructor(key: string, value: string, description: string) {
 

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener, Input, OnInit} from "@angular/core";
-import {sidebarCssClasses} from "../../shared/classes";
-import {ToggleClasses} from "../../shared/toggle-classes";
+import {Directive, HostListener, Input, OnInit} from '@angular/core';
+import {sidebarCssClasses} from '../../shared';
+import {ToggleClasses} from '../../shared/toggle-classes';
 
 /**
  * The SidebarTogglerDirective class implements the sidebar toggler directive.
@@ -24,6 +24,7 @@ import {ToggleClasses} from "../../shared/toggle-classes";
  * @author Marcus Portmann
  */
 @Directive({
+  // tslint:disable-next-line
   selector: '[sidebarToggler]'
 })
 export class SidebarTogglerDirective implements OnInit {

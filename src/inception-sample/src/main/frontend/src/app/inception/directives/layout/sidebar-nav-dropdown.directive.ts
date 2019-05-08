@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, ElementRef} from "@angular/core";
+import {Directive, ElementRef} from '@angular/core';
 
 /**
  * The SidebarNavDropdownDirective class implements the sidebar nav dropdown directive.
@@ -22,6 +22,7 @@ import {Directive, ElementRef} from "@angular/core";
  * @author Marcus Portmann
  */
 @Directive({
+  // tslint:disable-next-line
   selector: '[sidebarNavDropdown]'
 })
 export class SidebarNavDropdownDirective {
@@ -29,7 +30,7 @@ export class SidebarNavDropdownDirective {
   /**
    * Constructs a new SidebarNavDropdownDirective.
    *
-   * @param {ElementRef} elementRef The element reference.
+   * @param elementRef The element reference.
    */
   constructor(private elementRef: ElementRef) { }
 

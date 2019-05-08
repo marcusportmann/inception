@@ -16,12 +16,12 @@
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from './../../shared';
-import {SessionService} from "../../services/session/session.service";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
+import {SessionService} from '../../services/session/session.service';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import {Router} from "@angular/router";
-import {Session} from "../../services/session/session";
+import {Router} from '@angular/router';
+import {Session} from '../../services/session/session';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -29,6 +29,7 @@ import {Session} from "../../services/session/session";
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'admin-header',
   template: `
     <header class="admin-header">
@@ -104,9 +105,9 @@ export class AdminHeaderComponent implements OnInit {
   /**
    * Constructs a new AdminHeaderComponent.
    *
-   * @param {ElementRef} elementRef         The element reference.
-   * @param {Router} router                 The router.
-   * @param {SessionService} sessionService The Session Service.
+   * @param elementRef     The element reference.
+   * @param router         The router.
+   * @param sessionService The Session Service.
    */
   constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }

@@ -15,12 +15,10 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../shared/index';
-import {BreadcrumbsService} from "../../services/layout/breadcrumbs.service";
-import {Observable} from "rxjs";
-import {TitleService} from "../../services/layout/title.service";
-import {until} from "selenium-webdriver";
-import titleContains = until.titleContains;
+import {Replace} from '../../shared';
+import {BreadcrumbsService} from '../../services/layout/breadcrumbs.service';
+import {Observable} from 'rxjs';
+import {TitleService} from '../../services/layout/title.service';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -28,6 +26,7 @@ import titleContains = until.titleContains;
  * @author Marcus Portmann
  */
 @Component({
+  // tslint:disable-next-line
   selector: 'breadcrumbs',
   template: `
     <ol *ngIf="title | async as title; else noTitle" class="breadcrumb">
@@ -66,9 +65,9 @@ export class BreadcrumbsComponent implements OnInit {
   /**
    * Constructs a new BreadcrumbsComponent.
    *
-   * @param {ElementRef} elementRef                 The element reference.
-   * @param {BreadcrumbsService} breadcrumbsService The Breadcrumbs Service.
-   * @param {TitleService} titleService             The Title Service.
+   * @param elementRef         The element reference.
+   * @param breadcrumbsService The Breadcrumbs Service.
+   * @param titleService       The Title Service.
    */
   constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private titleService: TitleService) { }
 
