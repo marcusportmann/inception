@@ -57,10 +57,12 @@ export class CanActivateFunctionGuard implements CanActivate {
                   }
                 }
 
+                // noinspection JSIgnoredPromiseFromCall
                 this.router.navigate(['/login']);
 
                 return false;
               } else {
+                // noinspection JSIgnoredPromiseFromCall
                 this.router.navigate(['/login']);
 
                 return false;
@@ -72,6 +74,7 @@ export class CanActivateFunctionGuard implements CanActivate {
             return true;
           }
         } else {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/login']);
 
           return false;

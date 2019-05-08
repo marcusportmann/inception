@@ -17,35 +17,25 @@
 import {Directive, HostListener} from '@angular/core';
 
 /**
- * The AppMobileSidebarTogglerDirective class implements the app mobile sidebar toggler directive.
+ * The AppBrandMinimizerDirective class implements the app brand minimizer directive.
  *
  * @author Marcus Portmann
  */
 @Directive({
-  selector: '[appMobileSidebarToggler]'
+  // tslint:disable-next-line:directive-selector
+  selector: '[brandMinimizer]'
 })
-export class AppMobileSidebarTogglerDirective {
+export class BrandMinimizerDirective {
 
   /**
-   * Constructs a new AppMobileSidebarTogglerDirective.
+   * Constructs a new AppBrandMinimizerDirective.
    */
-  constructor() { }
+  constructor() {
+  }
 
   @HostListener('click', ['$event'])
   toggleOpen($event: any): void {
     $event.preventDefault();
-    document.querySelector('body').classList.toggle('sidebar-mobile-show');
-  }
-
-  /**
-   * Check whether the element has the class with the specified name.
-   *
-   * @param target    The target element.
-   * @param className The class name to check for.
-   *
-   * @return True if the element has the class with the specified name or false otherwise.
-   */
-  private hasClass(target: any, className: string): boolean {
-    return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
+    document.querySelector('body').classList.toggle('admin-brand-minimized');
   }
 }

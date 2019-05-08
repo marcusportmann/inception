@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import {Injectable} from "@angular/core";
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
-import {flatMap} from "rxjs/operators";
+import {flatMap} from 'rxjs/operators';
 
-import {SessionService} from "./session.service";
-import {Session} from "./session";
+import {SessionService} from './session.service';
 
 /**
  * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
@@ -36,14 +35,14 @@ export class SessionInterceptor implements HttpInterceptor {
   /**
    * Constructs a new SessionInterceptor.
    *
-   * @param {SessionService} sessionService The Session Service.
+   * @param sessionService The Session Service.
    */
   constructor(private sessionService: SessionService) {
   }
 
   intercept(httpRequest: HttpRequest<any>, nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
-      let httpRequestHandler = this.sessionService.session.pipe(
+      return this.sessionService.session.pipe(
         flatMap(session => {
           if (session) {
             httpRequest = httpRequest.clone({
@@ -55,10 +54,7 @@ export class SessionInterceptor implements HttpInterceptor {
 
           return nextHttpHandler.handle(httpRequest);
         }));
-
-      return httpRequestHandler;
-    }
-    else {
+    } else {
       return nextHttpHandler.handle(httpRequest);
     }
   }

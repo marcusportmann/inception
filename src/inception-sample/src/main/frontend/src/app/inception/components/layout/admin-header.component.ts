@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from './../../shared';
+import {Replace} from '../../shared';
 import {SessionService} from '../../services/session/session.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -112,6 +112,11 @@ export class AdminHeaderComponent implements OnInit {
   constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }
 
+  static breakpoint(breakpoint: any): any {
+    console.log(breakpoint);
+    return breakpoint ? breakpoint : '';
+  }
+
   ngOnInit(): void {
     Replace(this.elementRef);
     if (this.fixed) {
@@ -135,11 +140,6 @@ export class AdminHeaderComponent implements OnInit {
     return brand.alt ? brand.alt : '';
   }
 
-  breakpoint(breakpoint: any): any {
-    console.log(breakpoint);
-    return breakpoint ? breakpoint : '';
-  }
-
   isLoggedIn(): Observable<boolean> {
     return this.sessionService.session.pipe(
       map((session: Session) => {
@@ -149,12 +149,14 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   login(): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/login']);
   }
 
   logout(): void {
     this.sessionService.logout();
 
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/']);
   }
 

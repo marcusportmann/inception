@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {NavigationBadge} from "./navigation-badge";
+import {NavigationBadge} from './navigation-badge';
 
 /**
  * The NavigationItem class holds the information for a navigation item.

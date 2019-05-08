@@ -18,13 +18,13 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, throwError, timer} from 'rxjs';
 import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {Session} from "./session";
-import {TokenResponse} from "./token-response";
-import {LoginError, PasswordExpiredError, UserLockedError} from "./session.service.errors";
+import {Session} from './session';
+import {TokenResponse} from './token-response';
+import {LoginError, PasswordExpiredError, UserLockedError} from './session.service.errors';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import {CommunicationError} from "../../errors/communication-error";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+import {CommunicationError} from '../../errors/communication-error';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 
 /**
  * The Session Service implementation.
@@ -42,9 +42,8 @@ export class SessionService {
   /**
    * Constructs a new SessionService.
    *
-   * @param {HttpClient} httpClient            The HTTP client.
-   * @param {I18n} i18n                        The internationalisation service.
-   * @param {WebStorageService} sessionStorage The session storage service.
+   * @param httpClient     The HTTP client.
+   * @param i18n           The internationalisation service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Session Service');
@@ -58,27 +57,27 @@ export class SessionService {
         }
     });
   }
-  
+
   /**
    * Logon.
    *
-   * @param {string} username The username.
-   * @param {string} password The password.
+   * @param username The username.
+   * @param password The password.
    *
-   * @return {Observable<Session>} The current active session.
+   * @return The current active session.
    */
   login(username: string, password: string): Observable<Session> {
 
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
-    let body = new HttpParams()
+    const body = new HttpParams()
       .set('grant_type', 'password')
       .set('username', username)
       .set('password', password)
       .set('scope', 'inception-sample')
       .set('client_id', 'inception-sample');
 
-    let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+    const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
     return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
       body.toString(), options)
@@ -88,10 +87,10 @@ export class SessionService {
 
           const token: any = helper.decodeToken(tokenResponse.access_token);
 
-          let accessTokenExpiry: Date = helper.getTokenExpirationDate(
+          const accessTokenExpiry: Date = helper.getTokenExpirationDate(
             tokenResponse.access_token);
 
-          let session: Session = new Session(token.user_name, token.scope, token.authorities,
+          const session: Session = new Session(token.user_name, token.scope, token.authorities,
             token.organizations, tokenResponse.access_token, accessTokenExpiry,
             tokenResponse.refresh_token);
 
@@ -99,21 +98,20 @@ export class SessionService {
 
           return this.session;
         }), catchError((httpErrorResponse: HttpErrorResponse) => {
-          if (httpErrorResponse.status == 400) {
-            if (httpErrorResponse.error && (httpErrorResponse.error.error == 'invalid_grant') && httpErrorResponse.error.error_description) {
+          if (httpErrorResponse.status === 400) {
+            if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
+              httpErrorResponse.error.error_description) {
               if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
                 return throwError(new LoginError(this.i18n({
                   id: '@@session_service_incorrect_username_or_password',
                   value: 'Incorrect username or password.'
                 }), httpErrorResponse));
-              }
-              else if (httpErrorResponse.error.error_description.includes('User locked')) {
+              } else if (httpErrorResponse.error.error_description.includes('User locked')) {
                 return throwError(new UserLockedError(this.i18n({
                   id: '@@session_service_the_user_is_locked',
                   value: 'The user is locked.'
                 }), httpErrorResponse));
-              }
-              else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+              } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
                 return throwError(new PasswordExpiredError(this.i18n({
                   id: '@@session_service_the_password_has_expired',
                   value: 'The password has expired.'
@@ -125,11 +123,9 @@ export class SessionService {
               id: '@@session_service_incorrect_username_or_password',
               value: 'Incorrect username or password.'
             }), httpErrorResponse));
-          }
-          else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
             return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-          }
-          else {
+          } else {
             return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
           }
         }));
@@ -153,13 +149,13 @@ export class SessionService {
          */
         if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
           if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
-            let body = new HttpParams()
+            const body = new HttpParams()
               .set('grant_type', 'refresh_token')
               .set('refresh_token', currentSession.refreshToken)
               .set('scope', 'inception-sample')
               .set('client_id', 'inception-sample');
 
-            let options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+            const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
             return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
               body.toString(), options).pipe(
@@ -171,7 +167,7 @@ export class SessionService {
                 const accessTokenExpiry: Date = helper.getTokenExpirationDate(
                   tokenResponse.access_token);
 
-                const refreshedSession:Session = new Session(token.user_name, token.scope, token.authorities,
+                const refreshedSession: Session = new Session(token.user_name, token.scope, token.authorities,
                   token.organizations, tokenResponse.access_token, accessTokenExpiry,
                   tokenResponse.refresh_token);
 
@@ -186,7 +182,7 @@ export class SessionService {
                   value: 'Failed to refresh the user session.'
                 }), httpErrorResponse);
 
-                if (httpErrorResponse.status == 401) {
+                if (httpErrorResponse.status === 401) {
                   this.session.next(null);
                 }
 

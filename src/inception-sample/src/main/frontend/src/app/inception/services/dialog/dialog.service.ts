@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { Injectable } from "@angular/core";
+import {Injectable} from '@angular/core';
 
 import {
   ConfirmationDialogComponent,
   ErrorDialogComponent,
   InformationDialogComponent,
   WarningDialogComponent
-} from "../../components/dialogs/index";
+} from '../../components/dialogs';
 
 import {MatDialog, MatDialogRef} from '@angular/material';
 
-import {Error} from "../../errors/error";
-import {DialogData} from "../../components/dialogs/dialog-data";
+import {Error} from '../../errors/error';
+import {DialogData} from '../../components/dialogs/dialog-data';
 
 /**
  * The service that provides the capability to show different standard dialogs.
@@ -39,7 +39,7 @@ export class DialogService {
   /**
    * Constructs a new DialogService.
    *
-   * @param {dialog} dialog The material dialog.
+   * @param dialog The material dialog.
    */
   constructor(public dialog: MatDialog) {
     console.log('Initializing the Dialog Service');
@@ -48,56 +48,48 @@ export class DialogService {
   /**
    * Show a confirmation message using the confirmation dialog.
    *
-   * @param {DialogData} data The data.
+   * @param data The data.
    */
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    return this.dialog.open(ConfirmationDialogComponent, {
       panelClass: 'confirmation-dialog-panel',
       data: data
     });
-
-    return dialogRef;
   }
 
   /**
    * Show an error using the error dialog.
    *
-   * @param {Error} error The error.
+   * @param error The error.
    */
   showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
-    const dialogRef = this.dialog.open(ErrorDialogComponent, {
+    return this.dialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog-panel',
       data: {error: error}
     });
-
-    return dialogRef;
   }
 
   /**
    * Show an informational message using the information dialog.
    *
-   * @param {DialogData} data The data.
+   * @param data The data.
    */
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
-    const dialogRef = this.dialog.open(InformationDialogComponent, {
+    return this.dialog.open(InformationDialogComponent, {
       panelClass: 'information-dialog-panel',
       data: data
     });
-
-    return dialogRef;
   }
 
   /**
    * Show a warning using the warning dialog.
    *
-   * @param {DialogData} data The data.
+   * @param data The data.
    */
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialogComponent> {
-    const dialogRef = this.dialog.open(WarningDialogComponent, {
+    return this.dialog.open(WarningDialogComponent, {
       panelClass: 'warning-dialog-panel',
       data: data
     });
-
-    return dialogRef;
   }
 }

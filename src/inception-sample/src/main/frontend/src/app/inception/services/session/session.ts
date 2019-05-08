@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Organization} from "../security/organization";
+import {Organization} from '../security/organization';
 
 /**
  * The Session class holds the information for an active user session associated with an authenticated user. All values

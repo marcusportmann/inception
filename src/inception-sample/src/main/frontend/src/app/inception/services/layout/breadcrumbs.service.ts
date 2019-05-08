@@ -16,10 +16,9 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs/index';
+import {BehaviorSubject} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import * as format from 'string-template';
-
 
 /**
  * The Breadcrumbs Service implementation.
@@ -34,8 +33,8 @@ export class BreadcrumbsService {
   /**
    * Constructs a new BreadcrumbsService.
    *
-   * @param {Router} router                 The router.
-   * @param {ActivatedRoute} activatedRoute The activated route.
+   * @param router         The router.
+   * @param activatedRoute The activated route.
    */
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     console.log('Initializing the Breadcrumbs Service');
@@ -56,7 +55,7 @@ export class BreadcrumbsService {
               url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
               if (routeSnapshot.data.title) {
-                let params = routeSnapshot.params;
+                const params = routeSnapshot.params;
 
                 breadcrumbs.push({
                   label: format(routeSnapshot.data.title, routeSnapshot.params),

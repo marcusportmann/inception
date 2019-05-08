@@ -38,7 +38,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
 
-    //ChartsModule,
+    // ChartsModule,
 
     RouterModule.forChild(routes)
   ],

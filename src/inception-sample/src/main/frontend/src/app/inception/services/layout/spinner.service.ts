@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Injectable, ViewContainerRef} from "@angular/core";
-import {SpinnerComponent} from "../../components/layout";
-import {Overlay, OverlayRef} from "@angular/cdk/overlay";
-import {ComponentPortal} from "@angular/cdk/portal";
+import {Injectable} from '@angular/core';
+import {SpinnerComponent} from '../../components/layout';
+import {Overlay, OverlayRef} from '@angular/cdk/overlay';
+import {ComponentPortal} from '@angular/cdk/portal';
 
 /**
  * The Spinner Service implementation.
@@ -34,7 +34,7 @@ export class SpinnerService {
   /**
    * Constructs a new SpinnerService.
    *
-   * @param {Overlay} overlay The overlay.
+   * @param overlay The overlay.
    */
   constructor(private overlay: Overlay) {
     console.log('Initializing the Spinner Service');

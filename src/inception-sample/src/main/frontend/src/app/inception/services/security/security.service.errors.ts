@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../errors/error";
-import {ApiError} from "../../errors/api-error";
+import {Error} from '../../errors/error';
 
 /**
  * The SecurityServiceError class holds the information for a Security Service error.

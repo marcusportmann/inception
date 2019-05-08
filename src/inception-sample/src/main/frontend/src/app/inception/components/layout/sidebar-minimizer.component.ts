@@ -26,7 +26,7 @@ import {Replace} from '../../shared';
   // tslint:disable-next-line
   selector: 'sidebar-minimizer',
   template: `
-    <button class="sidebar-minimizer" type="button" sidebarMinimizer appBrandMinimizer></button>
+    <button class="sidebar-minimizer" type="button" sidebarMinimizer brandMinimizer></button>
   `
 })
 export class SidebarMinimizerComponent implements OnInit {

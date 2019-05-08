@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {OrganizationStatus} from "./organization-status";
+import {OrganizationStatus} from './organization-status';
 
 /**
  * The Organization class stores the information for an organization.
@@ -41,9 +41,9 @@ export class Organization {
   /**
    * Constructs a new Organization.
    *
-   * @param {string} id     The Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   * @param {string} name   The name of the organization.
-   * @param {string} status The status for the organization.
+   * @param id     The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * @param name   The name of the organization.
+   * @param status The status for the organization.
    */
   constructor(id: string, name: string, status: OrganizationStatus) {
     this.id = id;

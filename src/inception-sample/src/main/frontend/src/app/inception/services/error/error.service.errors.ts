@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../errors/error";
+import {Error} from '../../errors/error';
 
 /**
  * The ErrorServiceError class holds the information for a Error Service error.

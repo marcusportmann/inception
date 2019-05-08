@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {NavigationItem} from "./navigation-item";
-import {NavigationBadge} from "./navigation-badge";
+import {NavigationItem} from './navigation-item';
 
 /**
  * The NavigationTitle class holds the information for a navigation title.
@@ -27,7 +26,7 @@ export class NavigationTitle extends NavigationItem {
   /**
    * Constructs a new NavigationTitle.
    *
-   * @param {string} name The name of navigation title.
+   * @param name The name of navigation title.
    */
   constructor(name: string) {
     super(null, name, null, [], null, null, null, null, false, true);

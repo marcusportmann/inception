@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-export * from './app-brand-minimizer.directive';
-export * from './app-mobile-sidebar-toggler.directive';
+export * from './brand-minimizer.directive';
+export * from './mobile-sidebar-toggler.directive';
 export * from './sidebar-minimizer.directive';
 export * from './sidebar-nav-dropdown.directive';
 export * from './sidebar-nav-dropdown-toggler.directive';

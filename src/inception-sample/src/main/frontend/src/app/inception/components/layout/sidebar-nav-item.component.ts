@@ -82,19 +82,19 @@ export class SidebarNavItemComponent {
   }
 
   hasBadge(): boolean {
-    return this.navItem.badge ? true : false;
+    return !!this.navItem.badge;
   }
 
   hasClass(): boolean {
-    return this.navItem.cssClass ? true : false;
+    return !!this.navItem.cssClass;
   }
 
   hasIcon(): boolean {
-    return this.navItem.icon ? true : false;
+    return !!this.navItem.icon;
   }
 
   hasVariant(): boolean {
-    return this.navItem.variant ? true : false;
+    return !!this.navItem.variant;
   }
 
   hideMobile() {
@@ -106,24 +106,23 @@ export class SidebarNavItemComponent {
   isActive(): boolean {
     if (this.navItem.url) {
       return this.router.isActive(this.thisUrl(), false);
-    }
-    else {
+    } else {
       return false;
     }
   }
 
   isDivider(): boolean {
-    return this.navItem.divider ? true : false;
+    return this.navItem.divider;
   }
 
   isDropdown(): boolean {
-    return this.navItem.children ? true : false;
+    return !!this.navItem.children;
   }
 
   isExternalLink(): boolean {
     if (this.navItem) {
       if (this.navItem.url) {
-        return this.navItem.url.substring(0, 4) === 'http' ? true : false;
+        return this.navItem.url.substring(0, 4) === 'http';
       }
     }
 
@@ -131,7 +130,7 @@ export class SidebarNavItemComponent {
   }
 
   isTitle(): boolean {
-    return this.navItem.title ? true : false;
+    return this.navItem.title;
   }
 
   thisUrl(): string {

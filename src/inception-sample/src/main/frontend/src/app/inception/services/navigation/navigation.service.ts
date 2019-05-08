@@ -15,11 +15,11 @@
  */
 
 import {Injectable} from '@angular/core';
-import {NavigationItem} from "./navigation-item";
-import {BehaviorSubject} from "rxjs";
-import {SessionService} from "../session/session.service";
-import {map} from "rxjs/operators";
-import {Session} from "../session/session";
+import {NavigationItem} from './navigation-item';
+import {BehaviorSubject} from 'rxjs';
+import {SessionService} from '../session/session.service';
+import {map} from 'rxjs/operators';
+import {Session} from '../session/session';
 
 /**
  * The Navigation Service implementation.
@@ -36,11 +36,11 @@ export class NavigationService {
   /**
    * Constructs a new NavigationService.
    *
-   * @param {SessionService} sessionService The session service.
+   * @param sessionService The session service.
    */
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Navigation Service');
-    
+
     this.sessionService.session.pipe(
       map((session: Session) => {
         this.userNavigation.next(Object.assign([],
@@ -52,7 +52,7 @@ export class NavigationService {
   /**
    * Initialize the navigation.
    *
-   * @param {NavigationItem[]} navigation The navigation.
+   * @param navigation The navigation.
    */
   initNavigation(navigation: NavigationItem[]) {
     this.navigation = navigation;
@@ -64,19 +64,19 @@ export class NavigationService {
       return navigationItems;
     }
 
-    let filteredNavigationItems: NavigationItem[] = [];
+    const filteredNavigationItems: NavigationItem[] = [];
 
     for (let i = 0; i < navigationItems.length; i++) {
-      let navigationItem: NavigationItem = navigationItems[i];
+      const navigationItem: NavigationItem = navigationItems[i];
 
-      let functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
+      const functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
 
       if (functionCodes.length > 0) {
         if (session) {
           for (let j = 0; j < functionCodes.length; j++) {
             for (let k = 0; k < session.functionCodes.length; k++) {
-              if (functionCodes[j] == session.functionCodes[k]) {
-                let filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+              if (functionCodes[j] === session.functionCodes[k]) {
+                const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
                 filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
                   navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
@@ -85,9 +85,8 @@ export class NavigationService {
             }
           }
         }
-      }
-      else {
-        let filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+      } else {
+        const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
         filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
           navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,

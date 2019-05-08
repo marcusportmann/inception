@@ -60,8 +60,8 @@ export class AdminContainerComponent {
    * Constructs a new AdminContainerComponent.
    */
   constructor() {
-    this.changes = new MutationObserver((mutations) => {
-      this.sidebarMinimized = document.body.classList.contains('sidebar-minimized')
+    this.changes = new MutationObserver(() => {
+      this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
 
     this.changes.observe(<Element>this.element, {

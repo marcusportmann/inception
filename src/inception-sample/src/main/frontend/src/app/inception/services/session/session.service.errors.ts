@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import {Error} from "../../errors/error";
-import {HttpErrorResponse} from "@angular/common/http";
-import {ApiError} from "../../errors/api-error";
+import {Error} from '../../errors/error';
 
 /**
  * The LoginError class holds the information for a login error.

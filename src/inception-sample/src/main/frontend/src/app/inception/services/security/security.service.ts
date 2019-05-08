@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {Observable, pipe, throwError} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Organization} from "./organization";
-import {SessionError} from "../session/session.service.errors";
-import {SecurityServiceError} from "./security.service.errors";
-import {CommunicationError} from "../../errors/communication-error";
-import {ApiError} from "../../errors/api-error";
-import {Router} from "@angular/router";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {environment} from "../../../../environments/environment";
+import {Organization} from './organization';
+import {SecurityServiceError} from './security.service.errors';
+import {CommunicationError} from '../../errors/communication-error';
+import {ApiError} from '../../errors/api-error';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {environment} from '../../../../environments/environment';
 
 /**
  * The Security Service implementation.
@@ -41,8 +39,8 @@ export class SecurityService {
   /**
    * Constructs a new SecurityService.
    *
-   * @param {HttpClient} httpClient The HTTP client.
-   * @param {I18n} i18n             The internationalization service.
+   * @param httpClient The HTTP client.
+   * @param i18n       The internationalization service.
    */
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Security Service');
@@ -51,7 +49,7 @@ export class SecurityService {
   /**
    * Retrieve the organizations.
    *
-   * @return {Observable<Organization[]>} The organizations.
+   * @return The organizations.
    */
   getOrganizations(): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(environment.securityServiceUrlPrefix + '/organizations', {reportProgress: true}).pipe(
@@ -59,15 +57,13 @@ export class SecurityService {
         return organizations;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
-          let apiError: ApiError = new ApiError(httpErrorResponse);
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new SecurityServiceError(this.i18n({id: '@@security_service_failed_to_retrieve_the_organizations',
             value: 'Failed to retrieve the organizations.'}), apiError));
-        }
-        else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-        }
-        else {
+        } else {
           return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
          }
       }));
