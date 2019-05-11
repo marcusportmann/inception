@@ -91,7 +91,7 @@ export class EditConfigurationComponent implements OnInit {
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../../..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -105,7 +105,7 @@ export class EditConfigurationComponent implements OnInit {
         this.spinnerService.hideSpinner();
 
         // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../../../..'], {relativeTo: this.activatedRoute});
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 

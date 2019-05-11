@@ -35,49 +35,14 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'configurations',
+    canActivate: [
+      CanActivateFunctionGuard
+    ],
+    component: ConfigurationsComponent,
     data: {
-      title: ''
+      title: '',
+      functionCodes: ['Application.ConfigurationAdministration']
     }
-  },
-  {
-    path: 'configurations',
-    data: {
-      title: 'Configurations'
-    },
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: ConfigurationsComponent,
-        data: {
-          title: 'Configurations',
-          functionCodes: ['Application.ConfigurationAdministration']
-        }
-      },
-      {
-        path: ':key',
-        data: {
-          title: '{key}'
-        },
-        children: [
-          {
-            path: '',
-            pathMatch: 'full',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: EditConfigurationComponent,
-            data: {
-              functionCodes: ['Application.ConfigurationAdministration']
-            }
-          }
-        ]
-      },
-    ]
   },
   {
     path: 'new-configuration',
@@ -88,6 +53,18 @@ const routes: Routes = [
     component: NewConfigurationComponent,
     data: {
       title: 'New Configuration',
+      functionCodes: ['Application.ConfigurationAdministration']
+    }
+  },
+  {
+    path: ':key',
+    pathMatch: 'full',
+    canActivate: [
+      CanActivateFunctionGuard
+    ],
+    component: EditConfigurationComponent,
+    data: {
+      title: '{key}',
       functionCodes: ['Application.ConfigurationAdministration']
     }
   }

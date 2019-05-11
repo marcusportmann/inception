@@ -124,7 +124,7 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
   newConfiguration(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../../new-configuration'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new-configuration'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
