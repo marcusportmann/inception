@@ -65,6 +65,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   codesAdministration(codeCategoryId: string): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([codeCategoryId + '/codes'], {relativeTo: this.activatedRoute});
   }
 
@@ -78,7 +79,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe((result: boolean) => {
+        this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe(() => {
           this.spinnerService.hideSpinner();
 
           this.ngAfterViewInit();
@@ -86,6 +87,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
           this.spinnerService.hideSpinner();
 
           if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           } else {
             this.dialogService.showErrorDialog(error);
@@ -96,6 +98,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   editCodeCategory(id: string): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([id], {relativeTo: this.activatedRoute});
   }
 
@@ -110,6 +113,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
       this.spinnerService.hideSpinner();
 
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       } else {
         this.dialogService.showErrorDialog(error);
@@ -124,6 +128,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   newCodeCategory(): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
   }
 

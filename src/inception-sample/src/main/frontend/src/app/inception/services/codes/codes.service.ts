@@ -63,7 +63,7 @@ export class CodesService {
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes',
       code, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -103,7 +103,7 @@ export class CodesService {
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/code-categories',
       codeCategory, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -141,7 +141,7 @@ export class CodesService {
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
       {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -177,7 +177,7 @@ export class CodesService {
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
       {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -375,7 +375,7 @@ export class CodesService {
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' + code.id,
       code, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -411,7 +411,7 @@ export class CodesService {
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id,
       codeCategory, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);

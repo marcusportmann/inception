@@ -16,38 +16,36 @@
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Code} from '../../services/codes/code';
-import {CodesService} from '../../services/codes/codes.service';
+import {first} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
 import {ActivatedRoute, Router} from '@angular/router';
-import {first} from 'rxjs/operators';
-import {CodesServiceError} from '../../services/codes/codes.service.errors';
-import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
+import {Configuration} from "../../services/configuration/configuration";
+import {ConfigurationService} from "../../services/configuration/configuration.service";
+import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
 
 /**
- * The CodesComponent class implements the codes component.
+ * The ConfigurationsComponent class implements the configurations component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'codes.component.html',
-  styleUrls: ['codes.component.css'],
+  templateUrl: 'configurations.component.html',
+  styleUrls: ['configurations.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnInit {
+export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
-  codeCategoryId: string;
+  dataSource = new MatTableDataSource<Configuration>();
 
-  dataSource = new MatTableDataSource<Code>();
-
-  displayedColumns: string[] = ['id', 'name', 'actions'];
+  displayedColumns: string[] = ['key', 'value', 'actions'];
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -56,7 +54,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
   sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
+              private configurationService: ConfigurationService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
   }
 
@@ -66,24 +64,24 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  deleteCode(codeId: string, codeName: string): void {
+  deleteConfiguration(key: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
-        {message: this.i18n({id: '@@codes_component_confirm_delete_code',
-            value: 'Are you sure you want to delete the code \'{{codeName}}\'?'}, {codeName: codeName})});
+        {message: this.i18n({id: '@@configurations_component_confirm_delete_configuration',
+            value: 'Are you sure you want to delete the configuration \'{{key}}\'?'},{key: key})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first()).subscribe(() => {
+        this.configurationService.deleteConfiguration(key).pipe(first()).subscribe(() => {
           this.spinnerService.hideSpinner();
 
           this.ngAfterViewInit();
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           } else {
@@ -91,24 +89,25 @@ export class CodesComponent implements AfterViewInit, OnInit {
           }
         });
       }
-    });  }
-
-  editCode(id: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([id], {relativeTo: this.activatedRoute});
+    });
   }
 
-  loadCodes(): void {
+  editConfiguration(key: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate([key], {relativeTo: this.activatedRoute});
+  }
+
+  loadConfigurations(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first()).subscribe((codes: Code[]) => {
+    this.configurationService.getConfigurations().pipe(first()).subscribe((configurations: Configuration[]) => {
       this.spinnerService.hideSpinner();
 
-      this.dataSource.data = codes;
+      this.dataSource.data = configurations;
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       } else {
@@ -119,21 +118,20 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.dataSource.filterPredicate = function(data, filter): boolean {
-      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+      return data.key.toLowerCase().includes(filter);
     };
   }
 
-  newCode(): void {
+  newConfiguration(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../../../../new-code'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../../../new-configuration'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    this.loadCodes();
+    this.loadConfigurations();
   }
 
   ngOnInit(): void {
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
   }
 }
 

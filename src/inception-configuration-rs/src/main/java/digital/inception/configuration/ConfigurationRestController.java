@@ -18,7 +18,6 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.util.StringUtils;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -29,6 +28,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -89,6 +90,7 @@ public class ConfigurationRestController
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public void deleteConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -119,6 +121,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.GET,
       produces = "application/json")
+  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public Configuration getConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -150,6 +153,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET)
   @ResponseBody
+  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public String getConfigurationValue(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -176,6 +180,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations", method = RequestMethod.GET,
       produces = "application/json")
+  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public List<Configuration> getConfigurations()
     throws ConfigurationServiceException
   {
@@ -197,6 +202,7 @@ public class ConfigurationRestController
   @RequestMapping(value = "/configurations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
   public void setConfiguration(@ApiParam(name = "configuration", value = "The configuration",
       required = true)
   @RequestBody Configuration configuration)

@@ -106,16 +106,14 @@ export class AppModule extends InceptionAppModule {
         new NavigationItem('fa fa-palette', 'Colors', '/inception/theme/colors', []),
         new NavigationItem('fa fa-font', 'Typography', '/inception/theme/typography', [])
       ])
-
     ]));
 
 
     navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', [], [
       new NavigationItem('fa fa-list', 'Codes', '/administration/codes', ['Application.CodeAdministration']),
+      new NavigationItem('fa fa-list', 'Configuration', '/administration/configuration', ['Application.ConfigurationAdministration']),
       new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', [])
     ]));
-
-
 
     navigation.push(new NavigationTitle('Menus'));
 

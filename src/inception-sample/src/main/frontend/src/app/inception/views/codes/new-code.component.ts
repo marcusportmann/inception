@@ -22,7 +22,6 @@ import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
-import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
@@ -73,6 +72,7 @@ export class NewCodeComponent implements OnInit {
   }
 
   onCancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
   }
 
@@ -83,14 +83,16 @@ export class NewCodeComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCode(code).pipe(first()).subscribe((result: boolean) => {
+      this.codesService.createCode(code).pipe(first()).subscribe(() => {
         this.spinnerService.hideSpinner();
 
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
         if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }
         else {

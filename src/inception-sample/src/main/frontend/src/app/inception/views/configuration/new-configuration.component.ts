@@ -20,49 +20,49 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
-import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
-import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
+import {ConfigurationService} from "../../services/configuration/configuration.service";
+import {Configuration} from "../../services/configuration/configuration";
+import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
 
 /**
- * The NewCodeCategoryComponent class implements the new code category component.
+ * The NewConfigurationComponent class implements the new configuration component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'new-code-category.component.html',
-  styleUrls: ['new-code-category.component.css'],
+  templateUrl: 'new-configuration.component.html',
+  styleUrls: ['new-configuration.component.css'],
 })
-export class NewCodeCategoryComponent implements OnInit {
+export class NewConfigurationComponent implements OnInit {
 
-  newCodeCategoryForm: FormGroup;
+  newConfigurationForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
+              private configurationService: ConfigurationService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
-    this.newCodeCategoryForm = this.formBuilder.group({
+    this.newConfigurationForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: ['', [Validators.required, Validators.maxLength(100)]],
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      data: [''],
+      key: ['', [Validators.required, Validators.maxLength(4000)]],
+      value: ['', [Validators.required, Validators.maxLength(4000)]],
+      description: [''],
     });
   }
 
-  get dataFormControl(): AbstractControl {
-    return this.newCodeCategoryForm.get('data');
+  get descriptionFormControl(): AbstractControl {
+    return this.newConfigurationForm.get('description');
   }
 
-  get idFormControl(): AbstractControl {
-    return this.newCodeCategoryForm.get('id');
+  get keyFormControl(): AbstractControl {
+    return this.newConfigurationForm.get('key');
   }
 
-  get nameFormControl(): AbstractControl {
-    return this.newCodeCategoryForm.get('name');
+  get valueFormControl(): AbstractControl {
+    return this.newConfigurationForm.get('value');
   }
 
   ngOnInit(): void {
@@ -74,15 +74,14 @@ export class NewCodeCategoryComponent implements OnInit {
   }
 
   onOK(): void {
-    if (this.newCodeCategoryForm.valid) {
-      let data = this.dataFormControl.value;
+    if (this.newConfigurationForm.valid) {
 
-      let codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
-        this.nameFormControl.value, (!data || 0 === data.length) ? null : data);
+      let configuration: Configuration = new Configuration(this.keyFormControl.value,
+        this.valueFormControl.value, this.descriptionFormControl.value);
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe(() => {
+      this.configurationService.saveConfiguration(configuration).pipe(first()).subscribe(() => {
         this.spinnerService.hideSpinner();
 
         // noinspection JSIgnoredPromiseFromCall
@@ -90,7 +89,7 @@ export class NewCodeCategoryComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }

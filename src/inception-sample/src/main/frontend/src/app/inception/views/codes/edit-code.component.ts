@@ -83,6 +83,7 @@ export class EditCodeComponent implements OnInit {
       this.spinnerService.hideSpinner();
 
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       }
       else {
@@ -92,6 +93,7 @@ export class EditCodeComponent implements OnInit {
   }
 
   onCancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../codes'], {relativeTo: this.activatedRoute});
   }
 
@@ -102,14 +104,16 @@ export class EditCodeComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCode(code).pipe(first()).subscribe((result: boolean) => {
+      this.codesService.updateCode(code).pipe(first()).subscribe(() => {
         this.spinnerService.hideSpinner();
 
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['../../codes'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
         if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }
         else {

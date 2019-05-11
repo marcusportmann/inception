@@ -20,66 +20,66 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
 import {SpinnerService} from "../../services/layout/spinner.service";
 import {I18n} from "@ngx-translate/i18n-polyfill";
-import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
-import {CodeCategory} from "../../services/codes/code-category";
 import {first} from "rxjs/operators";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
+import {ConfigurationService} from "../../services/configuration/configuration.service";
+import {Configuration} from "../../services/configuration/configuration";
+import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
 
 /**
- * The EditCodeCategoryComponent class implements the edit code category component.
+ * The EditConfigurationComponent class implements the edit configuration component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'edit-code-category.component.html',
-  styleUrls: ['edit-code-category.component.css'],
+  templateUrl: 'edit-configuration.component.html',
+  styleUrls: ['edit-configuration.component.css'],
 })
-export class EditCodeCategoryComponent implements OnInit {
+export class EditConfigurationComponent implements OnInit {
 
-  editCodeCategoryForm: FormGroup;
+  editConfigurationForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
+              private configurationService: ConfigurationService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
-    this.editCodeCategoryForm = this.formBuilder.group({
+    this.editConfigurationForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      data: ['']
+      key: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(4000)]],
+      value: ['', [Validators.required, Validators.maxLength(4000)]],
+      description: ['']
     });
   }
 
-  get dataFormControl(): AbstractControl {
-    return this.editCodeCategoryForm.get('data');
+  get descriptionFormControl(): AbstractControl {
+    return this.editConfigurationForm.get('description');
   }
 
-  get idFormControl(): AbstractControl {
-    return this.editCodeCategoryForm.get('id');
+  get keyFormControl(): AbstractControl {
+    return this.editConfigurationForm.get('key');
   }
 
-  get nameFormControl(): AbstractControl {
-    return this.editCodeCategoryForm.get('name');
+  get valueFormControl(): AbstractControl {
+    return this.editConfigurationForm.get('value');
   }
 
   ngOnInit(): void {
-    let codeCategoryId:string = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+    let key:string = this.activatedRoute.snapshot.paramMap.get('key');
 
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategory(codeCategoryId).pipe(first()).subscribe((codeCategory: CodeCategory) => {
+    this.configurationService.getConfiguration(key).pipe(first()).subscribe((configuration: Configuration) => {
       this.spinnerService.hideSpinner();
 
-      this.idFormControl.setValue(codeCategory.id);
-      this.nameFormControl.setValue(codeCategory.name);
-      this.dataFormControl.setValue(codeCategory.data);
+      this.keyFormControl.setValue(configuration.key);
+      this.valueFormControl.setValue(configuration.value);
+      this.descriptionFormControl.setValue(configuration.description);
     }, (error: Error) => {
       this.spinnerService.hideSpinner();
 
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
       }
@@ -95,15 +95,13 @@ export class EditCodeCategoryComponent implements OnInit {
   }
 
   onOK(): void {
-    if (this.editCodeCategoryForm.valid) {
-      let data = this.dataFormControl.value;
-
-      let codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
-        this.nameFormControl.value, (!data || 0 === data.length) ? null : data);
+    if (this.editConfigurationForm.valid) {
+      let configuration: Configuration = new Configuration(this.keyFormControl.value,
+        this.valueFormControl.value, this.descriptionFormControl.value);
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCodeCategory(codeCategory).pipe(first()).subscribe(() => {
+      this.configurationService.saveConfiguration(configuration).pipe(first()).subscribe(() => {
         this.spinnerService.hideSpinner();
 
         // noinspection JSIgnoredPromiseFromCall
@@ -111,7 +109,7 @@ export class EditCodeCategoryComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         }

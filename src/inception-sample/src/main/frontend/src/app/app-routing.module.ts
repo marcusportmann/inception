@@ -76,6 +76,13 @@ export const routes: Routes = [
             }
           },
           {
+            path: 'configuration',
+            loadChildren: './inception/views/configuration/configuration.module#ConfigurationModule',
+            data: {
+              title: 'Configuration',
+            }
+          },
+          {
             path: 'security',
             loadChildren: './inception/views/security/security.module#SecurityModule',
             data: {
