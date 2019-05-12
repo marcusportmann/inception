@@ -20,7 +20,7 @@ import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 
 // Import Inception module
-import {InceptionModule} from '../../../inception/inception.module';
+import {InceptionModule} from '../../inception.module';
 
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
@@ -34,7 +34,6 @@ import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guar
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     canActivate: [
       CanActivateFunctionGuard
     ],
@@ -46,7 +45,6 @@ const routes: Routes = [
   },
   {
     path: 'new-configuration',
-    pathMatch: 'full',
     canActivate: [
       CanActivateFunctionGuard
     ],
@@ -58,7 +56,6 @@ const routes: Routes = [
   },
   {
     path: ':key',
-    pathMatch: 'full',
     canActivate: [
       CanActivateFunctionGuard
     ],

@@ -70,7 +70,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
         {message: this.i18n({id: '@@codes_component_confirm_delete_code',
-            value: 'Are you sure you want to delete the code \'{{codeName}}\'?'}, {codeName: codeName})});
+            value: 'Are you sure you want to delete the code?'})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
@@ -125,7 +125,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   newCode(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../../../../new-code'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new-code'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {

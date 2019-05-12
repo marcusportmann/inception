@@ -73,16 +73,12 @@ export class NavigationService {
 
       if (functionCodes.length > 0) {
         if (session) {
-          for (let j = 0; j < functionCodes.length; j++) {
-            for (let k = 0; k < session.functionCodes.length; k++) {
-              if (functionCodes[j] === session.functionCodes[k]) {
-                const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+          if (NavigationService.hasAccessToNavigationItem(functionCodes, session.functionCodes)) {
+            const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
 
-                filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-                  navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-                  navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
-              }
-            }
+            filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
+              navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+              navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
           }
         }
       } else {
@@ -95,5 +91,17 @@ export class NavigationService {
     }
 
     return filteredNavigationItems;
+  }
+
+  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[], sessionFunctionCodes: string[]): boolean {
+    for (let i = 0; i < navigationItemFunctionCodes.length; i++) {
+      for (let j = 0; j < sessionFunctionCodes.length; j++) {
+        if (navigationItemFunctionCodes[i] === sessionFunctionCodes[j]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }

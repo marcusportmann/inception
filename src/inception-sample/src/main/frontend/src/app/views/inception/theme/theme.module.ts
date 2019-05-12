@@ -34,7 +34,6 @@ import {TypographyComponent} from '../theme/typography.component';
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     redirectTo: 'colors'
   },
   {

@@ -23,11 +23,11 @@ import {RouterModule, Routes} from '@angular/router';
 
 // Import Inception components
 import {OverviewComponent} from './overview.component';
+import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     redirectTo: 'overview'
   },
   {
@@ -37,7 +37,49 @@ const routes: Routes = [
       title: 'Overview',
       icon: 'fa fa-shield-alt'
     }
+  },
+  /*
+  {
+    path: 'organizations',
+    data: {
+      title: 'Organizations'
+    },
+    children: [
+      {
+        path: '',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: OrganizationsComponent,
+        data: {
+          functionCodes: ['Application.OrganizationAdministration']
+        }
+      },
+      {
+        path: 'new-organization',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: NewOrganizationComponent,
+        data: {
+          title: 'New Organization',
+          functionCodes: ['Application.OrganizationAdministration']
+        }
+      },
+      {
+        path: ':organizationId',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: EditOrganizationComponent,
+        data: {
+          title: '{organizationId}',
+          functionCodes: ['Application.OrganizationAdministration']
+        }
+      }
+    ]
   }
+  */
 ];
 
 @NgModule({

@@ -23,42 +23,39 @@ export const routes: Routes = [
         canActivate: [
           CanActivateFunctionGuard
         ],
-        loadChildren: './views/dashboard/dashboard.module#DashboardModule',
         data: {
           title: 'Dashboard',
           functionCodes: ['Application.Dashboard']
-        }
+        },
+        loadChildren: './views/dashboard/dashboard.module#DashboardModule'
       },
-
       {
         path: 'inception',
-        loadChildren: './views/inception/inception.module#InceptionModule',
         data: {
           title: 'Inception'
         },
+        loadChildren: './views/inception/inception.module#InceptionModule'
       },
       {
         path: 'menu1',
-        loadChildren: './views/menu1/menu1.module#Menu1Module',
         data: {
           title: 'Menu 1'
         },
+        loadChildren: './views/menu1/menu1.module#Menu1Module'
       },
-
       {
         path: 'menu2',
-        loadChildren: './views/menu2/menu2.module#Menu2Module',
         data: {
           title: 'Menu 2'
         },
+        loadChildren: './views/menu2/menu2.module#Menu2Module'
       },
-
       {
         path: 'menu3',
-        loadChildren: './views/menu3/menu3.module#Menu3Module',
         data: {
           title: 'Menu 3'
         },
+        loadChildren: './views/menu3/menu3.module#Menu3Module'
       },
 
       // Administration routes
@@ -69,25 +66,33 @@ export const routes: Routes = [
         },
         children: [
           {
-            path: 'codes',
-            loadChildren: './inception/views/codes/codes.module#CodesModule',
+            path: 'system',
             data: {
-              title: 'Codes',
-            }
-          },
-          {
-            path: 'configuration',
-            loadChildren: './inception/views/configuration/configuration.module#ConfigurationModule',
-            data: {
-              title: 'Configuration',
-            }
+              title: 'System'
+            },
+            children: [
+              {
+                path: 'code-categories',
+                data: {
+                  title: 'Code Categories'
+                },
+                loadChildren: './inception/views/codes/codes.module#CodesModule'
+              },
+              {
+                path: 'configuration',
+                data: {
+                  title: 'Configuration'
+                },
+                loadChildren: './inception/views/configuration/configuration.module#ConfigurationModule'
+              }
+            ]
           },
           {
             path: 'security',
-            loadChildren: './inception/views/security/security.module#SecurityModule',
             data: {
               title: 'Security'
-            }
+            },
+            loadChildren: './inception/views/security/security.module#SecurityModule'
           }
         ]
       }
@@ -98,20 +103,14 @@ export const routes: Routes = [
   {
     path: 'login',
     component: SimpleContainerComponent,
-    loadChildren: './inception/views/login/login.module#LoginModule',
-    // data: {
-    //   title: 'Login'
-    // }
+    loadChildren: './inception/views/login/login.module#LoginModule'
   },
 
   // Send Error Report route
   {
     path: 'error',
     component: SimpleContainerComponent,
-    loadChildren: './inception/views/error/error.module#ErrorModule',
-    // data: {
-    //   title: 'Send Error Report'
-    // }
+    loadChildren: './inception/views/error/error.module#ErrorModule'
   },
 
   // Default route for invalid paths
@@ -123,7 +122,7 @@ export const routes: Routes = [
 
 @NgModule({
   // Tracing should only be enabled for DEBUG purposes
-  imports: [RouterModule.forRoot(routes, {enableTracing: false})],
+  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

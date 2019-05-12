@@ -73,7 +73,7 @@ export class NewCodeComponent implements OnInit {
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -87,7 +87,7 @@ export class NewCodeComponent implements OnInit {
         this.spinnerService.hideSpinner();
 
         // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../codes'], {relativeTo: this.activatedRoute});
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 

@@ -73,7 +73,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
         {message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category',
-            value: 'Are you sure you want to delete the code category \'{{codeCategoryName}}\'?'},{codeCategoryName: codeCategoryName})});
+            value: 'Are you sure you want to delete the code category?'})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
@@ -129,7 +129,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
 
   newCodeCategory(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../../new-code-category'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new-code-category'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {

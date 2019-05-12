@@ -37,96 +37,17 @@ import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guar
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'code-categories',
+    canActivate: [
+      CanActivateFunctionGuard
+    ],
+    component: CodeCategoriesComponent,
     data: {
-      title: ''
+      title: 'Code Categories',
+      functionCodes: ['Application.CodeAdministration']
     }
   },
   {
-    path: 'code-categories',
-    data: {
-      title: 'Code Categories'
-    },
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: CodeCategoriesComponent,
-        data: {
-          title: 'Code Categories',
-          functionCodes: ['Application.CodeAdministration']
-        }
-      },
-      {
-        path: ':codeCategoryId',
-        data: {
-          title: '{codeCategoryId}'
-        },
-        children: [
-          {
-            path: '',
-            pathMatch: 'full',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: EditCodeCategoryComponent,
-            data: {
-              functionCodes: ['Application.CodeAdministration']
-            }
-          },
-          {
-            path: 'codes',
-            data: {
-              title: 'Codes'
-            },
-            children: [
-              {
-                path: '',
-                pathMatch: 'full',
-                canActivate: [
-                  CanActivateFunctionGuard
-                ],
-                component: CodesComponent,
-                data: {
-                  functionCodes: ['Application.CodeAdministration']
-                }
-              },
-              {
-                path: ':codeId',
-                canActivate: [
-                  CanActivateFunctionGuard
-                ],
-                component: EditCodeComponent,
-                data: {
-                  title: '{codeId}',
-                  functionCodes: ['Application.CodeAdministration']
-                },
-              }
-            ]
-          },
-          {
-            path: 'new-code',
-            pathMatch: 'full',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: NewCodeComponent,
-            data: {
-              title: 'New Code',
-              functionCodes: ['Application.CodeAdministration']
-            }
-          }
-        ]
-      },
-    ]
-  },
-  {
     path: 'new-code-category',
-    pathMatch: 'full',
     canActivate: [
       CanActivateFunctionGuard
     ],
@@ -135,6 +56,64 @@ const routes: Routes = [
       title: 'New Code Category',
       functionCodes: ['Application.CodeAdministration']
     }
+  },
+  {
+    path: ':codeCategoryId',
+    data: {
+      title: '{codeCategoryId}'
+    },
+    children: [
+      {
+        path: '',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: EditCodeCategoryComponent,
+        data: {
+          functionCodes: ['Application.CodeAdministration']
+        }
+      },
+      {
+        path: 'codes',
+        data: {
+          title: 'Codes'
+        },
+        children: [
+          {
+            path: '',
+            canActivate: [
+              CanActivateFunctionGuard
+            ],
+            component: CodesComponent,
+            data: {
+              functionCodes: ['Application.CodeAdministration']
+            }
+          },
+          {
+            path: 'new-code',
+            canActivate: [
+              CanActivateFunctionGuard
+            ],
+            component: NewCodeComponent,
+            data: {
+              title: 'New Code',
+              functionCodes: ['Application.CodeAdministration']
+            }
+          },
+          {
+            path: ':codeId',
+            canActivate: [
+              CanActivateFunctionGuard
+            ],
+            component: EditCodeComponent,
+            data: {
+              title: '{codeId}',
+              functionCodes: ['Application.CodeAdministration']
+            }
+          }
+        ]
+      }
+    ]
   }
 ];
 

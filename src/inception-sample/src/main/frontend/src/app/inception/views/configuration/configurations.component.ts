@@ -68,7 +68,7 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
         {message: this.i18n({id: '@@configurations_component_confirm_delete_configuration',
-            value: 'Are you sure you want to delete the configuration \'{{key}}\'?'},{key: key})});
+            value: 'Are you sure you want to delete the configuration?'})});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {

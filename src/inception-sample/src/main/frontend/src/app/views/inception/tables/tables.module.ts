@@ -46,7 +46,6 @@ import {SortableTableComponent} from "./sortable-table.component";
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
     redirectTo: 'action-list-table',
   },
   {

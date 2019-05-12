@@ -691,6 +691,13 @@ admin-root {
       ol.breadcrumb {
         font-size: 0.8125rem !important;
 
+        .breadcrumb-item {
+          max-width: 340px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
         .breadcrumb-item + .breadcrumb-item {
           padding-left: 0.3rem;
         }
