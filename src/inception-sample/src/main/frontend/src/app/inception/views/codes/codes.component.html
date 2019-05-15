@@ -20,7 +20,7 @@
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@codes_component_table_header_actions">Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{id: row.id, name: row.name}">
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{codeId: row.id}">
         <button mat-icon-button>
           <i class="fas fa-ellipsis-v"></i>
         </button>
@@ -35,12 +35,12 @@
   <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-id="id" let-name="name">
-      <button mat-menu-item (click)="editCode(id)">
+    <ng-template matMenuContent let-codeId="codeId">
+      <button mat-menu-item (click)="editCode(codeId)">
         <i class="fas fa-edit"></i>
         <span i18n="@@codes_component_menu_item_edit">Edit</span>
       </button>
-      <button mat-menu-item (click)="deleteCode(id, name)">
+      <button mat-menu-item (click)="deleteCode(codeId)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@codes_component_menu_item_delete">Delete</span>
       </button>

@@ -19,14 +19,18 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
-import {SecurityServiceError} from './security.service.errors';
+import {OrganizationNotFoundError, SecurityServiceError} from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {environment} from '../../../../environments/environment';
+import {
+  ConfigurationNotFoundError,
+  ConfigurationServiceError
+} from "../configuration/configuration.service.errors";
 
 /**
  * The Security Service implementation.
@@ -45,6 +49,44 @@ export class SecurityService {
   constructor(private httpClient: HttpClient, private i18n: I18n) {
     console.log('Initializing the Security Service');
   }
+
+  /**
+   * Delete the organization.
+   *
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
+   *
+   * @return True if the organization was deleted or false otherwise.
+   */
+  deleteOrganization(organizationId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.configurationServiceUrlPrefix + '/organizations/' + organizationId,
+      {observe: 'response'}).pipe(
+      map((httpResponse: HttpResponse<any>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new OrganizationNotFoundError(this.i18n({
+              id: '@@security_service_the_organization_could_not_be_found',
+              value: 'The organization could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_delete_the_organization',
+              value: 'Failed to delete the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
 
   /**
    * Retrieve the organizations.

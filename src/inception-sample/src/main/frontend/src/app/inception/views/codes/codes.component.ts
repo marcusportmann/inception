@@ -66,7 +66,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  deleteCode(codeId: string, codeName: string): void {
+  deleteCode(codeId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
         {message: this.i18n({id: '@@codes_component_confirm_delete_code',
@@ -93,9 +93,9 @@ export class CodesComponent implements AfterViewInit, OnInit {
       }
     });  }
 
-  editCode(id: string): void {
+  editCode(codeId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([id], {relativeTo: this.activatedRoute});
+    this.router.navigate([codeId], {relativeTo: this.activatedRoute});
   }
 
   loadCodes(): void {

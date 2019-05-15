@@ -19,8 +19,10 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.validation.InvalidArgumentException;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -28,14 +30,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Validator;
 
@@ -69,6 +70,39 @@ public class SecurityRestController
   {
     this.securityService = securityService;
     this.validator = validator;
+  }
+
+  /**
+   * Delete the organization.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   */
+  @ApiOperation(value = "Delete the organization", notes = "Delete the organization")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The organization was deleted successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The organization could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  public void deleteOrganization(@ApiParam(name = "organizationId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
+      required = true)
+  @PathVariable UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
+  {
+    if (organizationId == null)
+    {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    securityService.deleteOrganization(organizationId);
   }
 
   /**

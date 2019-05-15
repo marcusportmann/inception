@@ -22,6 +22,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 // Import Inception components
+import {OrganizationsComponent} from './organizations.component';
 import {OverviewComponent} from './overview.component';
 import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 
@@ -38,7 +39,6 @@ const routes: Routes = [
       icon: 'fa fa-shield-alt'
     }
   },
-  /*
   {
     path: 'organizations',
     data: {
@@ -55,6 +55,8 @@ const routes: Routes = [
           functionCodes: ['Application.OrganizationAdministration']
         }
       },
+
+      /*
       {
         path: 'new-organization',
         canActivate: [
@@ -77,9 +79,9 @@ const routes: Routes = [
           functionCodes: ['Application.OrganizationAdministration']
         }
       }
+      */
     ]
   }
-  */
 ];
 
 @NgModule({
@@ -88,7 +90,7 @@ const routes: Routes = [
 
     RouterModule.forChild(routes)
   ],
-  declarations: [OverviewComponent]
+  declarations: [OrganizationsComponent, OverviewComponent]
 })
 export class SecurityModule {
 }

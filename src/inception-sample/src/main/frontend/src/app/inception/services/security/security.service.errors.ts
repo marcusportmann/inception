@@ -17,6 +17,24 @@
 import {Error} from '../../errors/error';
 
 /**
+ * The OrganizationNotFoundError class holds the information for an organization not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class OrganizationNotFoundError extends Error {
+
+  /**
+   * Constructs a new OrganizationNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}
+
+/**
  * The SecurityServiceError class holds the information for a Security Service error.
  *
  * @author Marcus Portmann

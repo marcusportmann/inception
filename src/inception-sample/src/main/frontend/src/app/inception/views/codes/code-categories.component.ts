@@ -69,7 +69,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     this.router.navigate([codeCategoryId + '/codes'], {relativeTo: this.activatedRoute});
   }
 
-  deleteCodeCategory(codeCategoryId: string, codeCategoryName: string): void {
+  deleteCodeCategory(codeCategoryId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
         {message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category',
@@ -97,9 +97,9 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
     });
   }
 
-  editCodeCategory(id: string): void {
+  editCodeCategory(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([id], {relativeTo: this.activatedRoute});
+    this.router.navigate([codeCategoryId], {relativeTo: this.activatedRoute});
   }
 
   loadCodeCategorySummaries(): void {
