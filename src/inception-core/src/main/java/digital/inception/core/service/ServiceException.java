@@ -17,7 +17,7 @@
 package digital.inception.core.service;
 
 /**
- * The <code>ServiceException</code> exception is the base class that all service service that
+ * The <code>ServiceException</code> exception is the base class that all service exceptions that
  * will be returned as a web service faults should be derived from.
  *
  * @author Marcus Portmann
