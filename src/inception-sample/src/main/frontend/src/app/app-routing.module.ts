@@ -122,7 +122,7 @@ export const routes: Routes = [
 
 @NgModule({
   // Tracing should only be enabled for DEBUG purposes
-  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
+  imports: [RouterModule.forRoot(routes, {enableTracing: false})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -29,12 +29,12 @@
   <mat-paginator #paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-id="id">
-      <button mat-menu-item (click)="editOrganization(id)">
+    <ng-template matMenuContent let-organizationId="organizationId">
+      <button mat-menu-item (click)="editOrganization(organizationId)">
         <i class="fas fa-edit"></i>
         <span i18n="@@organizations_component_menu_item_edit">Edit</span>
       </button>
-      <button mat-menu-item (click)="deleteOrganization(id)">
+      <button mat-menu-item (click)="deleteOrganization(organizationId)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@organizations_component_menu_item_delete">Delete</span>
       </button>

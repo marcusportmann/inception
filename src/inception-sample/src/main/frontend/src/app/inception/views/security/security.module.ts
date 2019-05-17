@@ -16,7 +16,11 @@
 
 // Import Angular modules
 import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
+
+// Import Inception module
+import {InceptionModule} from '../../inception.module';
 
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
@@ -87,6 +91,8 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    InceptionModule,
 
     RouterModule.forChild(routes)
   ],

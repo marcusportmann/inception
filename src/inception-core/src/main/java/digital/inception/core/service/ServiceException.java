@@ -33,8 +33,7 @@ public abstract class ServiceException extends Exception
   private ServiceError serviceError;
 
   /**
-   * Constructs a new <code>ServiceException</code> with
-   * <code>null</code> as its message.
+   * Constructs a new <code>ServiceException</code> with <code>null</code> as its message.
    */
   public ServiceException()
   {

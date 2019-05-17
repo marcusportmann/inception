@@ -92,7 +92,7 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
     });
   }
 
-  editOrganiztion(organizationId: string): void {
+  editOrganization(organizationId: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([organizationId], {relativeTo: this.activatedRoute});
   }
