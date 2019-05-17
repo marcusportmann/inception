@@ -16,7 +16,7 @@
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -67,20 +67,20 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
   deleteConfiguration(key: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
-        {message: this.i18n({id: '@@configurations_component_confirm_delete_configuration',
-            value: 'Are you sure you want to delete the configuration?'})});
+        {
+          message: this.i18n({
+            id: '@@configurations_component_confirm_delete_configuration',
+            value: 'Are you sure you want to delete the configuration?'
+          })
+        });
 
-    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
         this.configurationService.deleteConfiguration(key).pipe(first()).subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          this.ngAfterViewInit();
+          this.loadConfigurations();
         }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
           if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
@@ -100,13 +100,9 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
   loadConfigurations(): void {
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfigurations().pipe(first()).subscribe((configurations: Configuration[]) => {
-      this.spinnerService.hideSpinner();
-
+    this.configurationService.getConfigurations().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((configurations: Configuration[]) => {
       this.dataSource.data = configurations;
     }, (error: Error) => {
-      this.spinnerService.hideSpinner();
-
       if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
@@ -117,7 +113,7 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function(data, filter): boolean {
+    this.dataSource.filterPredicate = function (data, filter): boolean {
       return data.key.toLowerCase().includes(filter);
     };
   }

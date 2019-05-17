@@ -23,7 +23,7 @@ import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
 import {ActivatedRoute, Router} from '@angular/router';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
@@ -72,17 +72,13 @@ export class CodesComponent implements AfterViewInit, OnInit {
         {message: this.i18n({id: '@@codes_component_confirm_delete_code',
             value: 'Are you sure you want to delete the code?'})});
 
-    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
         this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first()).subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          this.ngAfterViewInit();
+          this.loadCodes();
         }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
           if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
@@ -101,13 +97,9 @@ export class CodesComponent implements AfterViewInit, OnInit {
   loadCodes(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first()).subscribe((codes: Code[]) => {
-      this.spinnerService.hideSpinner();
-
+    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((codes: Code[]) => {
       this.dataSource.data = codes;
     }, (error: Error) => {
-      this.spinnerService.hideSpinner();
-
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});

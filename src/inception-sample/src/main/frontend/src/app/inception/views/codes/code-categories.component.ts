@@ -17,7 +17,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {CodesService} from '../../services/codes/codes.service';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -75,17 +75,13 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
         {message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category',
             value: 'Are you sure you want to delete the code category?'})});
 
-    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
         this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          this.ngAfterViewInit();
+          this.loadCodeCategorySummaries();
         }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
           if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
@@ -105,13 +101,9 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   loadCodeCategorySummaries(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategorySummaries().pipe(first()).subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
-      this.spinnerService.hideSpinner();
-
+    this.codesService.getCodeCategorySummaries().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
       this.dataSource.data = codeCategorySummaries;
     }, (error: Error) => {
-      this.spinnerService.hideSpinner();
-
       if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
