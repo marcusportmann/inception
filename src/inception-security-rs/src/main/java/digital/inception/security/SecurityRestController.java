@@ -119,11 +119,15 @@ public class SecurityRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
-  public List<Organization> getOrganizations()
+  public List<Organization> getOrganizations(@RequestParam(value = "filter",
+      required = false) String filter, @RequestParam(value = "sortDirection",
+          required = false) SortDirection sortDirection, @RequestParam(value = "pageIndex",
+              required = false) Integer pageIndex, @RequestParam(value = "pageSize",
+                  required = false) Integer pageSize)
     throws SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    return securityService.getOrganizations();
+    return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 }

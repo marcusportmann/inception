@@ -1491,11 +1491,23 @@ public class SecurityService
    */
   @Override
   public List<Organization> getOrganizations(String filter, SortDirection sortDirection,
-      int pageIndex, int pageSize)
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
     String getOrganizationsSQL =
-        "SELECT id, name, status FROM security.organizations ORDER BY name";
+        "SELECT id, name, status FROM security.organizations ORDER BY name " + ((sortDirection
+        == SortDirection.DESCENDING)
+        ? "DESC"
+        : "ASC")
+          + " LIMIT " + ((pageSize != null)
+          ? pageSize
+          : 1000
+
+          + " OFFSET  " + ((pageIndex != null)
+        ? ((pageSize != null)
+        ? (pageIndex * pageSize)
+        : 0)
+        : 0));
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))

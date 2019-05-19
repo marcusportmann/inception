@@ -413,8 +413,8 @@ public interface ISecurityService
    *
    * @return the organizations for the requested page
    */
-  List<Organization> getOrganizations(String filter, SortDirection sortDirection, int pageIndex,
-      int pageSize)
+  List<Organization> getOrganizations(String filter, SortDirection sortDirection, Integer pageIndex,
+    Integer pageSize)
     throws SecurityServiceException;
 
   /**

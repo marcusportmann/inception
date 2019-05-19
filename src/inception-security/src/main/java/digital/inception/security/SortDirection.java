@@ -16,14 +16,18 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
 /**
  * The <code>SortDirection</code> enumeration defines the possible sort directions when retrieving
- * security related entities from the database.
+ * security related entities.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +36,63 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
 public enum SortDirection
 {
+  ASCENDING("asc", "Ascending"), DESCENDING("desc", "Descending");
 
+  private String code;
+  private String name;
 
+  SortDirection(String code, String name)
+  {
+    this.code = code;
+    this.name = name;
+  }
 
+  /**
+   * Returns the sort direction given by the specified code value.
+   *
+   * @param code the code value identifying the sort direction
+   *
+   * @return the sort direction given by the specified code value
+   */
+  public static SortDirection fromCode(String code)
+  {
+    switch (code)
+    {
+      case "desc":
+        return SortDirection.DESCENDING;
+
+      default:
+        return SortDirection.ASCENDING;
+    }
+  }
+
+  /**
+   * Returns the code value identifying the sort direction.
+   *
+   * @return the code value identifying the sort direction
+   */
+  public String getCode()
+  {
+    return code;
+  }
+
+  /**
+   * Returns the name of the sort direction.
+   *
+   * @return the name of the sort direction
+   */
+  public String getName()
+  {
+    return name;
+  }
+
+  /**
+   * Return the string representation of the sort direction enumeration value.
+   *
+   * @return the string representation of the sort direction enumeration value
+   */
+  public String toString()
+  {
+    return name;
+  }
 }
