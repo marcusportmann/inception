@@ -69,25 +69,32 @@ export class CodesComponent implements AfterViewInit, OnInit {
   deleteCode(codeId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
-        {message: this.i18n({id: '@@codes_component_confirm_delete_code',
-            value: 'Are you sure you want to delete the code?'})});
+        {
+          message: this.i18n({
+            id: '@@codes_component_confirm_delete_code',
+            value: 'Are you sure you want to delete the code?'
+          })
+        });
 
-    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first()).subscribe(() => {
-          this.loadCodes();
-        }, (error: Error) => {
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first(),
+          finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            this.loadCodes();
+          }, (error: Error) => {
+            if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
       }
-    });  }
+    });
+  }
 
   editCode(codeId: string): void {
     // noinspection JSIgnoredPromiseFromCall
@@ -97,20 +104,22 @@ export class CodesComponent implements AfterViewInit, OnInit {
   loadCodes(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((codes: Code[]) => {
-      this.dataSource.data = codes;
-    }, (error: Error) => {
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first(),
+      finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((codes: Code[]) => {
+        this.dataSource.data = codes;
+      }, (error: Error) => {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function(data, filter): boolean {
+    this.dataSource.filterPredicate = function (data, filter): boolean {
       return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
     };
   }

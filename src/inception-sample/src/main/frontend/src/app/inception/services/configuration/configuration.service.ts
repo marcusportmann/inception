@@ -15,22 +15,22 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Observable, throwError} from "rxjs";
-import {environment} from "../../../../environments/environment";
-import {catchError, map} from "rxjs/operators";
-import {ApiError} from "../../errors/api-error";
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Observable, throwError} from 'rxjs';
+import {environment} from '../../../../environments/environment';
+import {catchError, map} from 'rxjs/operators';
+import {ApiError} from '../../errors/api-error';
 import {
   CodesServiceError
-} from "../codes/codes.service.errors";
-import {CommunicationError} from "../../errors/communication-error";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
+} from '../codes/codes.service.errors';
+import {CommunicationError} from '../../errors/communication-error';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {
   ConfigurationNotFoundError,
   ConfigurationServiceError
-} from "./configuration.service.errors";
-import {Configuration} from "./configuration";
+} from './configuration.service.errors';
+import {Configuration} from './configuration';
 
 /**
  * The Configuration Service implementation.

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {Organization} from "./organization";
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {SecurityService} from "./security.service";
-import {catchError, finalize} from "rxjs/operators";
+import {CollectionViewer, DataSource} from '@angular/cdk/collections';
+import {Organization} from './organization';
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import {SecurityService} from './security.service';
+import {catchError, finalize} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {DialogService} from '../dialog/dialog.service';
 
 
 export class OrganizationDatasource implements DataSource<Organization> {
@@ -28,10 +30,16 @@ export class OrganizationDatasource implements DataSource<Organization> {
 
   loading = this.loadingSubject.asObservable();
 
-  constructor(private securityService: SecurityService) {}
+  // constructor(private router: Router, private dialogService: DialogService,
+  //             private securityService: SecurityService) {
+  // }
+
+  constructor(private securityService: SecurityService) {
+  }
+
 
   connect(collectionViewer: CollectionViewer): Observable<Organization[] | ReadonlyArray<Organization>> {
-    return this.dataSubject.asObservable();;
+    return this.dataSubject.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
@@ -40,18 +48,14 @@ export class OrganizationDatasource implements DataSource<Organization> {
   }
 
   load() {
-
     this.loadingSubject.next(true);
 
     this.securityService.getOrganizations().pipe(
-      catchError(() => of([])),
-      finalize(() => this.loadingSubject.next(false))
-    )
+      catchError(error => {
+        return throwError(error);
+      }),
+      finalize(() => this.loadingSubject.next(false)))
       .subscribe((organizations: Organization[]) => this.dataSubject.next(organizations));
-
-
-
-
 
 
     // this.securityService.getOrganizations().pipe(first()).subscribe((organizations: Organization[]) => {

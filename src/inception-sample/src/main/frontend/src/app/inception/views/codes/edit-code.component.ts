@@ -16,17 +16,17 @@
 
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from "@angular/router";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {CodesService} from "../../services/codes/codes.service";
-import {Error} from "../../errors/error";
-import {Code} from "../../services/codes/code";
-import {first} from "rxjs/operators";
-import {CodesServiceError} from "../../services/codes/codes.service.errors";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {AccessDeniedError} from "../../errors/access-denied-error";
+import {ActivatedRoute, Router} from '@angular/router';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {CodesService} from '../../services/codes/codes.service';
+import {Error} from '../../errors/error';
+import {Code} from '../../services/codes/code';
+import {first} from 'rxjs/operators';
+import {CodesServiceError} from '../../services/codes/codes.service.errors';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {AccessDeniedError} from '../../errors/access-denied-error';
 
 /**
  * The EditCodeComponent class implements the edit code category component.
@@ -69,7 +69,7 @@ export class EditCodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
-    let codeId:string = this.activatedRoute.snapshot.paramMap.get('codeId');
+    const codeId: string = this.activatedRoute.snapshot.paramMap.get('codeId');
 
     this.spinnerService.showSpinner();
 

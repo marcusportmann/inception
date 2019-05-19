@@ -1480,6 +1480,47 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the organizations using pagination for the requested page.
+   *
+   * @param filter        the filter to apply to the organization name
+   * @param sortDirection the sort direction to apply to the organization name
+   * @param pageIndex     the page index
+   * @param pageSize      the page size
+   *
+   * @return the organizations for the requested page
+   */
+  @Override
+  public List<Organization> getOrganizations(String filter, SortDirection sortDirection,
+      int pageIndex, int pageSize)
+    throws SecurityServiceException
+  {
+    String getOrganizationsSQL =
+        "SELECT id, name, status FROM security.organizations ORDER BY name";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
+    {
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Organization> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildOrganizationFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the organizations for the page %d using the page size %d: %s",
+          pageIndex, pageSize, e.getMessage()), e);
+    }
+  }
+
+  /**
    * Retrieve the organizations associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the

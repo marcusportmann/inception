@@ -76,18 +76,17 @@ export class NavigationItem {
   /**
    * Constructs a new NavigationItem.
    *
-   * @param {string} icon               The icon associated with the navigation item.
-   * @param {string} name               The name of navigation item.
-   * @param {string} url                The url associated with the navigation item.
-   * @param {string[]} functionCodes    The function codes that are used to restrict access to the
-   *                                    navigation item.
-   * @param {NavigationItem[]} children The optional child navigation items.
-   * @param {string} cssClass           The optional CSS class to apply to the navigation item.
-   * @param {string} variant            The optional variant to apply to the navigation item.
-   * @param {NavigationBadge} badge     The optional navigation badge associated with the navigation
-   *                                    item.
-   * @param {boolean} divider           The optional divider indicator.
-   * @param {boolean} title             The optional title indicator.
+   * @param icon          The icon associated with the navigation item.
+   * @param name          The name of navigation item.
+   * @param url           The url associated with the navigation item.
+   * @param functionCodes The function codes that are used to restrict access to the navigation
+   *                      item.
+   * @param children      The optional child navigation items.
+   * @param cssClass      The optional CSS class to apply to the navigation item.
+   * @param variant       The optional variant to apply to the navigation item.
+   * @param badge         The optional navigation badge associated with the navigation item.
+   * @param divider       The optional divider indicator.
+   * @param title         The optional title indicator.
    */
   constructor(icon: string, name: string, url: string, functionCodes: string[],
               children?: NavigationItem[], cssClass?: string, variant?: string,

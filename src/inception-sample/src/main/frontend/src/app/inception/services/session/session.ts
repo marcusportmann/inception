@@ -67,19 +67,15 @@ export class Session {
   /**
    * Constructs a new Session.
    *
-   * @param {string} username              The username for the user the user session is associated
-   *                                       with.
-   * @param {string[]} scopes              The OAuth2 scopes for the user session.
-   * @param {string[]} functionCodes       The codes identifying the functions the user associated
-   *                                       with the user session has access to.
-   * @param {Organization[]} organizations The organizations for the user, the user session is
-   *                                       associated with.
-   * @param {string} accessToken           The base-64 encoded OAuth2 JWT access token for the user
-   *                                       session.
-   * @param {number} accessTokenExpiry     The string representation of the epoch timestamp giving the date and time
-   *                                       the OAuth2 JWT access token for the user session will expire.
-   * @param {string} refreshToken          The base-64 encoded OAuth2 refresh token for the user
-   *                                       session.
+   * @param username          The username for the user the user session is associated with.
+   * @param scopes            The OAuth2 scopes for the user session.
+   * @param functionCodes     The codes identifying the functions the user associated with the user
+   *                          session has access to.
+   * @param organizations     The organizations for the user, the user session is associated with.
+   * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
+   * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
+   *                          time the OAuth2 JWT access token for the user session will expire.
+   * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(username: string, scopes: string[], functionCodes: string[],
               organizations: Organization[], accessToken: string, accessTokenExpiry: Date,

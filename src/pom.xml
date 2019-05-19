@@ -65,7 +65,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.1.4.RELEASE</version>
+    <version>2.1.5.RELEASE</version>
   </parent>
 
   <properties>
@@ -75,9 +75,9 @@
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
     <apache-avro.version>1.8.2</apache-avro.version>
-    <cglib.version>3.2.10</cglib.version>
+    <cglib.version>3.2.12</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.3.1</cxf.version>
+    <cxf.version>3.3.2</cxf.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
     <hibernate-validator.version>6.0.16.Final</hibernate-validator.version>
     <jasperreports.version>6.7.1</jasperreports.version>
