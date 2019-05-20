@@ -72,25 +72,31 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   deleteCodeCategory(codeCategoryId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
-        {message: this.i18n({id: '@@code_categories_component_confirm_delete_code_category',
-            value: 'Are you sure you want to delete the code category?'})});
-
-    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
-
-        this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe(() => {
-          this.loadCodeCategorySummaries();
-        }, (error: Error) => {
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+        {
+          message: this.i18n({
+            id: '@@code_categories_component_confirm_delete_code_category',
+            value: 'Are you sure you want to delete the code category?'
+          })
         });
-      }
-    });
+
+    dialogRef.afterClosed().pipe(first(),
+      finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((confirmation: boolean) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
+
+          this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe(() => {
+            this.loadCodeCategorySummaries();
+          }, (error: Error) => {
+            if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
+        }
+      });
   }
 
   editCodeCategory(codeCategoryId: string): void {
@@ -101,20 +107,22 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   loadCodeCategorySummaries(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategorySummaries().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
-      this.dataSource.data = codeCategorySummaries;
-    }, (error: Error) => {
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.codesService.getCodeCategorySummaries().pipe(first(),
+      finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
+        this.dataSource.data = codeCategorySummaries;
+      }, (error: Error) => {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function(data, filter): boolean {
+    this.dataSource.filterPredicate = function (data, filter): boolean {
       return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
     };
   }

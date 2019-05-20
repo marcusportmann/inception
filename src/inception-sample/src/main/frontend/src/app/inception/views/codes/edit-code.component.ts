@@ -23,7 +23,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {Code} from "../../services/codes/code";
-import {first} from "rxjs/operators";
+import {finalize, first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
@@ -69,27 +69,24 @@ export class EditCodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
-    let codeId:string = this.activatedRoute.snapshot.paramMap.get('codeId');
+    let codeId: string = this.activatedRoute.snapshot.paramMap.get('codeId');
 
     this.spinnerService.showSpinner();
 
-    this.codesService.getCode(this.codeCategoryId, codeId).pipe(first()).subscribe((codeCategory: Code) => {
-      this.spinnerService.hideSpinner();
-
-      this.idFormControl.setValue(codeCategory.id);
-      this.nameFormControl.setValue(codeCategory.name);
-      this.valueFormControl.setValue(codeCategory.value);
-    }, (error: Error) => {
-      this.spinnerService.hideSpinner();
-
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      }
-      else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.codesService.getCode(this.codeCategoryId, codeId).pipe(first(),
+      finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((codeCategory: Code) => {
+        this.idFormControl.setValue(codeCategory.id);
+        this.nameFormControl.setValue(codeCategory.name);
+        this.valueFormControl.setValue(codeCategory.value);
+      }, (error: Error) => {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
   }
 
   onCancel(): void {
@@ -104,22 +101,19 @@ export class EditCodeComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCode(code).pipe(first()).subscribe(() => {
-        this.spinnerService.hideSpinner();
-
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['../../codes'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+      this.codesService.updateCode(code).pipe(first(),
+        finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-        }
-        else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+          this.router.navigate(['../../codes'], {relativeTo: this.activatedRoute});
+        }, (error: Error) => {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
     }
   }
 }

@@ -23,7 +23,7 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
 import {CodesService} from "../../services/codes/codes.service";
 import {Error} from "../../errors/error";
 import {CodeCategory} from "../../services/codes/code-category";
-import {first} from "rxjs/operators";
+import {finalize, first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
@@ -82,22 +82,19 @@ export class NewCodeCategoryComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(codeCategory).pipe(first()).subscribe(() => {
-        this.spinnerService.hideSpinner();
-
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+      this.codesService.createCodeCategory(codeCategory).pipe(first(),
+        finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-        }
-        else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+        }, (error: Error) => {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
     }
   }
 }
