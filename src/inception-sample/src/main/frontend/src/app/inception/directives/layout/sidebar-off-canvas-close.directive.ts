@@ -27,7 +27,8 @@ import {Directive, HostListener} from '@angular/core';
 })
 export class SidebarOffCanvasCloseDirective {
 
-  constructor() { }
+  constructor() {
+  }
 
   /**
    * Check whether the element has the class with the specified name.
@@ -48,10 +49,10 @@ export class SidebarOffCanvasCloseDirective {
    * @param className The class name.
    */
   private static toggleClass(element: any, className: string): void {
-    let newClass = ' ' + element.className.replace( /[\t\r\n]/g, ' ' ) + ' ';
+    let newClass = ' ' + element.className.replace(/[\t\r\n]/g, ' ') + ' ';
     if (SidebarOffCanvasCloseDirective.hasClass(element, className)) {
-      while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
-        newClass = newClass.replace( ' ' + className + ' ' , ' ' );
+      while (newClass.indexOf(' ' + className + ' ') >= 0) {
+        newClass = newClass.replace(' ' + className + ' ', ' ');
       }
       element.className = newClass.replace(/^\s+|\s+$/g, '');
     } else {
@@ -59,11 +60,11 @@ export class SidebarOffCanvasCloseDirective {
     }
   }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
 
-    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
+    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'),
+      'sidebar-off-canvas')) {
       SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
     }
   }

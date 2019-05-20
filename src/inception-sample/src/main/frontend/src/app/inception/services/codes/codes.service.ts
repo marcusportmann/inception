@@ -21,9 +21,11 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {Code} from './code';
 import {CodeCategory} from './code-category';
 import {
-  CodeCategoryNotFoundError, CodeNotFoundError,
+  CodeCategoryNotFoundError,
+  CodeNotFoundError,
   CodesServiceError,
-  DuplicateCodeCategoryError, DuplicateCodeError
+  DuplicateCodeCategoryError,
+  DuplicateCodeError
 } from './codes.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
@@ -61,35 +63,34 @@ export class CodesService {
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes',
-      code, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
-          } else if (apiError.status === 409) {
-            return throwError(new DuplicateCodeError(this.i18n({
-              id: '@@codes_service_the_code_already_exists',
-              value: 'The code already exists.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_create_the_code',
-              value: 'Failed to create the code.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_category_could_not_be_found',
+            value: 'The code category could not be found.'
+          }), apiError));
+        } else if (apiError.status === 409) {
+          return throwError(new DuplicateCodeError(this.i18n({
+            id: '@@codes_service_the_code_already_exists',
+            value: 'The code already exists.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_create_the_code',
+            value: 'Failed to create the code.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -101,30 +102,29 @@ export class CodesService {
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/code-categories',
-      codeCategory, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      codeCategory, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 409) {
-            return throwError(new DuplicateCodeCategoryError(this.i18n({
-              id: '@@codes_service_the_code_category_already_exists',
-              value: 'The code category already exists.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_create_the_code_category',
-              value: 'Failed to create the code category.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 409) {
+          return throwError(new DuplicateCodeCategoryError(this.i18n({
+            id: '@@codes_service_the_code_category_already_exists',
+            value: 'The code category already exists.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_create_the_code_category',
+            value: 'Failed to create the code category.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -139,30 +139,29 @@ export class CodesService {
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
-      {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_could_not_be_found',
-              value: 'The code could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_delete_the_code',
-              value: 'Failed to delete the code.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_could_not_be_found',
+            value: 'The code could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_delete_the_code',
+            value: 'Failed to delete the code.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -175,30 +174,29 @@ export class CodesService {
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
-      {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_delete_the_code_category',
-              value: 'Failed to delete the code category.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_category_could_not_be_found',
+            value: 'The code category could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_delete_the_code_category',
+            value: 'Failed to delete the code category.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -212,30 +210,30 @@ export class CodesService {
    */
   getCode(codeCategoryId: string, codeId: string): Observable<Code> {
     return this.httpClient.get<Code>(
-      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId, {reportProgress: true}).pipe(
-      map((code: Code) => {
-        return code;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
+      {reportProgress: true}).pipe(map((code: Code) => {
+      return code;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_could_not_be_found',
-              value: 'The code could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_retrieve_the_code',
-              value: 'Failed to retrieve the code.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_could_not_be_found',
+            value: 'The code could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_retrieve_the_code',
+            value: 'Failed to retrieve the code.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -245,8 +243,8 @@ export class CodesService {
    */
   getCodeCategories(): Observable<CodeCategory[]> {
     return this.httpClient.get<CodeCategory[]>(
-      environment.codesServiceUrlPrefix + '/code-categories', {reportProgress: true}).pipe(
-      map((codeCategories: CodeCategory[]) => {
+      environment.codesServiceUrlPrefix + '/code-categories', {reportProgress: true})
+      .pipe(map((codeCategories: CodeCategory[]) => {
         return codeCategories;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
@@ -273,30 +271,30 @@ export class CodesService {
    */
   getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
-      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId, {reportProgress: true}).pipe(
-      map((codeCategory: CodeCategory) => {
-        return codeCategory;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
+      {reportProgress: true}).pipe(map((codeCategory: CodeCategory) => {
+      return codeCategory;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_retrieve_the_code_category',
-              value: 'Failed to retrieve the code category.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_category_could_not_be_found',
+            value: 'The code category could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_retrieve_the_code_category',
+            value: 'Failed to retrieve the code category.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -309,30 +307,29 @@ export class CodesService {
   getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes',
-      {reportProgress: true}).pipe(
-      map((codes: Code[]) => {
-        return codes;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      {reportProgress: true}).pipe(map((codes: Code[]) => {
+      return codes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_retrieve_the_codes',
-              value: 'Failed to retrieve the codes.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_category_could_not_be_found',
+            value: 'The code category could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_retrieve_the_codes',
+            value: 'Failed to retrieve the codes.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -342,8 +339,8 @@ export class CodesService {
    */
   getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
     return this.httpClient.get<CodeCategory[]>(
-      environment.codesServiceUrlPrefix + '/code-category-summaries', {reportProgress: true}).pipe(
-      map((codeCategorySummaries: CodeCategorySummary[]) => {
+      environment.codesServiceUrlPrefix + '/code-category-summaries', {reportProgress: true})
+      .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
         return codeCategorySummaries;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
@@ -372,31 +369,30 @@ export class CodesService {
    */
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' + code.id,
-      code, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' +
+      code.id, code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_could_not_be_found',
-              value: 'The code could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_update_the_code',
-              value: 'Failed to update the code.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_could_not_be_found',
+            value: 'The code could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_update_the_code',
+            value: 'Failed to update the code.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -408,30 +404,29 @@ export class CodesService {
    */
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id,
-      codeCategory, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<any>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id, codeCategory,
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_update_the_code_category',
-              value: 'Failed to update the code category.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@codes_service_the_code_category_could_not_be_found',
+            value: 'The code category could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@codes_service_failed_to_update_the_code_category',
+            value: 'Failed to update the code category.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 }

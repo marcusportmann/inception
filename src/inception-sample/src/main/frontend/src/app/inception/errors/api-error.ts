@@ -107,13 +107,10 @@ export class ApiError {
    * @return True if the HTTP error response is as a result of an API error or false otherwise.
    */
   static isApiError(httpErrorResponse: HttpErrorResponse): boolean {
-    return !!((httpErrorResponse.name === 'HttpErrorResponse')
-      && httpErrorResponse.error
-      && (httpErrorResponse.error.timestamp)
-      && (httpErrorResponse.error.message)
-      && (httpErrorResponse.error.status)
-      && (httpErrorResponse.error.statusText)
-      && (httpErrorResponse.error.uri));
+    return !!((httpErrorResponse.name === 'HttpErrorResponse') && httpErrorResponse.error &&
+      (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.message) &&
+      (httpErrorResponse.error.status) && (httpErrorResponse.error.statusText) &&
+      (httpErrorResponse.error.uri));
   }
 }
 

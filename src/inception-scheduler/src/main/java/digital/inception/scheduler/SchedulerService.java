@@ -505,52 +505,6 @@ public class SchedulerService
   }
 
   /**
-   * Retrieve the number of filtered jobs.
-   *
-   * @param filter the filter to apply to the jobs
-   *
-   * @return the number of filtered jobs
-   */
-  @Override
-  public int getNumberOfFilteredJobs(String filter)
-    throws SchedulerServiceException
-  {
-    String getNumberOfJobsSQL = "SELECT COUNT(id) FROM scheduler.jobs";
-
-    String getNumberOfFilteredJobsSQL = "SELECT COUNT(id) FROM scheduler.jobs "
-        + "WHERE (UPPER(name) LIKE ?) OR (UPPER(job_class) LIKE ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getNumberOfJobsSQL
-          : getNumberOfFilteredJobsSQL))
-    {
-      if (!StringUtils.isEmpty(filter))
-      {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
-        statement.setString(2, "%" + filter.toUpperCase() + "%");
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to retrieve the number of jobs matching the filter (%s)", filter), e);
-    }
-  }
-
-  /**
    * Retrieve the number of jobs.
    *
    * @return the number of jobs

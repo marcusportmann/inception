@@ -26,7 +26,7 @@ import {Component} from '@angular/core';
   selector: 'simple-container',
   template: '<router-outlet></router-outlet>',
 })
-export class SimpleContainerComponent  {
+export class SimpleContainerComponent {
 
   /**
    * Constructs a new SimpleContainerComponent.

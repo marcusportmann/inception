@@ -41,7 +41,7 @@ public class IntArrayValueMatcher
   /**
    * Builds the ValueMatcher.
    *
-   * @param integers A list of Integer elements, one for every value accepted by the matcher. The
+   * @param integers The Integer elements, one for every value accepted by the matcher. The
    *                 match() method will return true only if its parameter will be one of this list.
    */
   IntArrayValueMatcher(List<Integer> integers)

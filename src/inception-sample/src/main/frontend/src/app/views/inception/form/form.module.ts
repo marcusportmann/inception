@@ -18,42 +18,34 @@
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {NgModule} from '@angular/core';
-
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
-
 // Example Form component
 import {ExampleFormComponent} from "./example-form.component";
 
-const routes: Routes = [
-  {
-    path: '',
-      redirectTo: 'example-form'
-  },
-  {
-    path: 'example-form',
-    component: ExampleFormComponent,
-    data: {
-      title: 'Example Form',
-    }
+const routes: Routes = [{
+  path: '',
+  redirectTo: 'example-form'
+}, {
+  path: 'example-form',
+  component: ExampleFormComponent,
+  data: {
+    title: 'Example Form',
   }
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
+  imports: [CommonModule, FormsModule,
 
     InceptionModule,
 
     RouterModule.forChild(routes)
   ],
   declarations: [ExampleFormComponent],
-  providers: [
-  ]
+  providers: []
 })
 export class FormModule {
 }

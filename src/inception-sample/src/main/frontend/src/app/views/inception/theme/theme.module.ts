@@ -18,44 +18,35 @@
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {NgModule} from '@angular/core';
-
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
-
 // Colors component
 import {ColorsComponent} from '../theme/colors.component';
-
 // Typography Component
 import {TypographyComponent} from '../theme/typography.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'colors'
-  },
-  {
-    path: 'colors',
-    component: ColorsComponent,
-    data: {
-      title: 'Colors',
-    }
-  },
-  {
-    path: 'typography',
-    component: TypographyComponent,
-    data: {
-      title: 'Typography',
-    }
+const routes: Routes = [{
+  path: '',
+  redirectTo: 'colors'
+}, {
+  path: 'colors',
+  component: ColorsComponent,
+  data: {
+    title: 'Colors',
   }
+}, {
+  path: 'typography',
+  component: TypographyComponent,
+  data: {
+    title: 'Typography',
+  }
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
+  imports: [CommonModule, FormsModule,
 
     InceptionModule,
 

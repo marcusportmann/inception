@@ -730,7 +730,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @param attributes the attribute criteria used to select the users
    *
-   * @return the list of users whose attributes match the attribute criteria
+   * @return the users whose attributes match the attribute criteria
    */
   @Override
   public List<User> findUsers(List<Attribute> attributes)
@@ -768,11 +768,11 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the filtered list of users.
+   * Retrieve the filtered users.
    *
    * @param filter the filter to apply to the users
    *
-   * @return the filtered list of users
+   * @return the users
    */
   @Override
   public List<User> getFilteredUsers(String filter)
@@ -838,7 +838,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @param username the username identifying the user
    *
-   * @return the list of authorised function codes for the user
+   * @return the authorised function codes for the user
    */
   @Override
   public List<String> getFunctionCodesForUser(String username)
@@ -961,7 +961,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Retrieve all the security groups.
    *
-   * @return the list of security groups
+   * @return the security groups
    */
   @Override
   public List<Group> getGroups()
@@ -1026,7 +1026,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      // Get the list of groups the user is associated with
+      // Get the groups the user is associated with
       return getInternalGroupsForInternalUser(connection, internalUserId);
     }
     catch (UserNotFoundException e)
@@ -1038,70 +1038,6 @@ public class InternalUserDirectory extends UserDirectoryBase
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the security groups for the user (%s) for the user directory (%s): %s",
           username, getUserDirectoryId(), e.getMessage()), e);
-    }
-  }
-
-  /**
-   * Retrieve the number of filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the number of filtered users
-   */
-  @Override
-  public int getNumberOfFilteredUsers(String filter)
-    throws SecurityServiceException
-  {
-    String getNumberOfInternalUsersSQL =
-        "SELECT COUNT(id) FROM security.internal_users WHERE user_directory_id=?";
-
-    String getNumberOfFilteredInternalUsersSQL =
-        "SELECT COUNT(id) FROM security.internal_users WHERE user_directory_id=? AND "
-        + "((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?))";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getNumberOfInternalUsersSQL
-          : getNumberOfFilteredInternalUsersSQL))
-    {
-      if (StringUtils.isEmpty(filter))
-      {
-        statement.setObject(1, getUserDirectoryId());
-      }
-      else
-      {
-        StringBuilder filterBuffer = new StringBuilder("%");
-
-        filterBuffer.append(filter.toUpperCase());
-        filterBuffer.append("%");
-
-        statement.setObject(1, getUserDirectoryId());
-        statement.setString(2, filterBuffer.toString());
-        statement.setString(3, filterBuffer.toString());
-        statement.setString(4, filterBuffer.toString());
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          int numberOfFilteredUsers = rs.getInt(1);
-
-          return ((numberOfFilteredUsers > maxFilteredUsers)
-              ? maxFilteredUsers
-              : numberOfFilteredUsers);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of filtered users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 
@@ -1218,7 +1154,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Retrieve all the users.
    *
-   * @return the list of users
+   * @return the users
    */
   @Override
   public List<User> getUsers()
@@ -1310,7 +1246,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(groupName);
       }
 
-      // Get the current list of internal security groups for the internal user
+      // Get the current internal security groups for the internal user
       return isInternalUserInInternalGroup(connection, internalUserId, internalGroupId);
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1832,13 +1768,13 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the list of authorised function codes for the internal user.
+   * Retrieve the authorised function codes for the internal user.
    *
    * @param connection     the existing database connection to use
    * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       internal user
    *
-   * @return the list of authorised function codes for the internal user
+   * @return the authorised function codes for the internal user
    */
   private List<String> getFunctionCodesForUserId(Connection connection, UUID internalUserId)
     throws SQLException
@@ -1878,7 +1814,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       internal user
    *
-   * @return the list of security groups
+   * @return the security groups
    */
   private List<String> getGroupNamesForUser(Connection connection, UUID internalUserId)
     throws SQLException
@@ -1955,7 +1891,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       internal user
    *
-   * @return the list of internal security groups
+   * @return the internal security groups
    */
   private List<Group> getInternalGroupsForInternalUser(Connection connection, UUID internalUserId)
     throws SQLException

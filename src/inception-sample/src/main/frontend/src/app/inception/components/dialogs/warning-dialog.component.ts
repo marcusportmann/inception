@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogData} from './dialog-data';
 
 /**
@@ -37,13 +37,12 @@ import {DialogData} from './dialog-data';
     </div>
     <div class="button">
       <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onButtonClick()"
-          tabindex="-1">{{ data.buttonText }}</button>
+              tabindex="-1">{{ data.buttonText }}</button>
       <ng-template #defaultButton>
         <button mat-flat-button (click)="onButtonClick()" tabindex="-1" i18n="@@warning_dialog_button_ok">Ok</button>
       </ng-template>
     </div>
-  `,
-  // tslint:disable-next-line
+  `, // tslint:disable-next-line
   host: {
     'class': 'warning-dialog'
   }
@@ -56,9 +55,8 @@ export class WarningDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(
-    private dialogRef: MatDialogRef<WarningDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  constructor(private dialogRef: MatDialogRef<WarningDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
   onButtonClick(): void {

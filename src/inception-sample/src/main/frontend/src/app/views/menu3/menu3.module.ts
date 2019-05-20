@@ -17,29 +17,25 @@
 // Import Angular modules
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'menu31'
-  },
-  {
-    path: 'menu31',
-    loadChildren: './menu31/menu31.module#Menu31Module',
-    data: {
-      title: 'Menu 3.1',
-    }
-  },
-  {
-    path: 'menu32',
-    loadChildren: './menu32/menu32.module#Menu32Module',
-    data: {
-      title: 'Menu 3.2',
-    }
+const routes: Routes = [{
+  path: '',
+  redirectTo: 'menu31'
+}, {
+  path: 'menu31',
+  loadChildren: './menu31/menu31.module#Menu31Module',
+  data: {
+    title: 'Menu 3.1',
   }
+}, {
+  path: 'menu32',
+  loadChildren: './menu32/menu32.module#Menu32Module',
+  data: {
+    title: 'Menu 3.2',
+  }
+}
 ];
 
 /**
@@ -50,8 +46,7 @@ const routes: Routes = [
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [
-    CommonModule,
+  imports: [CommonModule,
 
     RouterModule.forChild(routes)
   ],

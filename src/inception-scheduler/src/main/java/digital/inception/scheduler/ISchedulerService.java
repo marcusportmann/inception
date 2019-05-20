@@ -121,16 +121,6 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
-   * Retrieve the number of filtered jobs.
-   *
-   * @param filter the filter to apply to the jobs
-   *
-   * @return the number of filtered jobs
-   */
-  int getNumberOfFilteredJobs(String filter)
-    throws SchedulerServiceException;
-
-  /**
    * Retrieve the number of jobs.
    *
    * @return the number of jobs

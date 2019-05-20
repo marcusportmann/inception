@@ -16,21 +16,25 @@
 
 import {
   AfterContentChecked,
-  AfterContentInit, AfterViewInit, ChangeDetectionStrategy,
+  AfterContentInit,
+  AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
   Inject,
   NgZone,
-  Optional, QueryList,
+  Optional,
+  QueryList,
   ViewEncapsulation
 } from '@angular/core';
 import {
   CanColor,
   LabelOptions,
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MAT_LABEL_GLOBAL_OPTIONS, MatCheckbox,
+  MAT_LABEL_GLOBAL_OPTIONS,
+  MatCheckbox,
   MatFormField,
   matFormFieldAnimations,
   MatFormFieldDefaultOptions
@@ -86,9 +90,9 @@ export function getMatCheckboxMissingControlError(): Error {
     .mat-form-field.checkbox-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
     }
-  `],
-  animations: [matFormFieldAnimations.transitionMessages],
-  // tslint:disable-next-line
+  `
+  ],
+  animations: [matFormFieldAnimations.transitionMessages], // tslint:disable-next-line
   host: {
     'class': 'mat-form-field checkbox-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
@@ -100,31 +104,24 @@ export function getMatCheckboxMissingControlError(): Error {
     '[class.mat-accent]': 'color == "accent"',
     '[class.mat-warn]': 'color == "warn"',
     '[class._mat-animation-noopable]': '!_animationsEnabled'
-  },
-  // tslint:disable-next-line
+  }, // tslint:disable-next-line
   inputs: ['color'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
-})
-// tslint:disable-next-line
-export class CheckboxFormField extends MatFormField
-  implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
+}) // tslint:disable-next-line
+export class CheckboxFormField extends MatFormField implements AfterContentInit,
+  AfterContentChecked, AfterViewInit, CanColor {
 
   /**
    * The checkboxes associated with the checkbox form field.
    */
-  @ContentChildren(MatCheckbox)
-  checkboxChildren: QueryList<MatCheckbox>;
+  @ContentChildren(MatCheckbox) checkboxChildren: QueryList<MatCheckbox>;
 
-  constructor(elementRef: ElementRef,
-              private changeDetectorRef: ChangeDetectorRef,
+  constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
-              @Optional() directionality: Directionality,
-              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions:
-                MatFormFieldDefaultOptions,
-              // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              platform?: Platform,
-              zone?: NgZone,
+              @Optional() directionality: Directionality, @Optional() @Inject(
+      MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
+              platform?: Platform, zone?: NgZone,
               @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
     super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
       platform, zone, animationMode);

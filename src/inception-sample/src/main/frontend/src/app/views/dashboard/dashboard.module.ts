@@ -15,33 +15,30 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception components
-import { DashboardComponent } from './dashboard.component';
+import {DashboardComponent} from './dashboard.component';
 
 // Import 3rd party modules
 //import { ChartsModule } from 'ng2-charts/ng2-charts';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: DashboardComponent,
-  }
+const routes: Routes = [{
+  path: '',
+  component: DashboardComponent,
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
+  imports: [CommonModule,
 
     // ChartsModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ DashboardComponent ]
+  declarations: [DashboardComponent]
 })
-export class DashboardModule { }
+export class DashboardModule {
+}

@@ -34,10 +34,10 @@ export class SidebarNavDropdownTogglerDirective {
    *
    * @param dropdown The sidebar nav dropdown directive.
    */
-  constructor(private dropdown: SidebarNavDropdownDirective) {}
+  constructor(private dropdown: SidebarNavDropdownDirective) {
+  }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     this.dropdown.toggle();
   }

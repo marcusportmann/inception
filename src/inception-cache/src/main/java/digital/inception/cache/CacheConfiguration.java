@@ -448,7 +448,7 @@ public class CacheConfiguration
   public static class ClusterConfig
   {
     /**
-     * The comma-delimited list of IP addresses or hostnames for the members of the distributed
+     * The comma-delimited IP addresses or hostnames for the members of the distributed
      * in-memory cache cluster.
      */
     private String members;
@@ -469,11 +469,11 @@ public class CacheConfiguration
     private int port;
 
     /**
-     * Returns the comma-delimited list of IP addresses or hostnames for the members of the
-     * distributed in-memory cache cluster.
+     * Returns the comma-delimited IP addresses or hostnames for the members of the distributed
+     * in-memory cache cluster.
      *
-     * @return the comma-delimited list of IP addresses or hostnames for the members of the
-     *         distributed in-memory cache cluster
+     * @return the comma-delimited IP addresses or hostnames for the members of the distributed
+     *         in-memory cache cluster
      */
     public String getMembers()
     {
@@ -511,10 +511,10 @@ public class CacheConfiguration
     }
 
     /**
-     * Set the comma-delimited list of IP addresses or hostnames for the members of the distributed
+     * Set the comma-delimited IP addresses or hostnames for the members of the distributed
      * in-memory cache cluster.
      *
-     * @param members the comma-delimited list of IP addresses or hostnames for the members of the
+     * @param members the comma-delimited IP addresses or hostnames for the members of the
      *                distributed in-memory cache cluster
      */
     public void setMembers(String members)

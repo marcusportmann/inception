@@ -26,5 +26,6 @@ import {Component} from '@angular/core';
 })
 export class Menu321Component {
 
-  constructor( ) { }
+  constructor() {
+  }
 }

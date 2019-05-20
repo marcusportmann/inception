@@ -49,8 +49,10 @@ export class AccessDeniedError extends Error {
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
-    super(i18n({id: '@@access_denied_error',
-      value: 'Access is denied. You do not have sufficient privileges to perform the requested operation.'}));
+    super(i18n({
+      id: '@@access_denied_error',
+      value: 'Access is denied. You do not have sufficient privileges to perform the requested operation.'
+    }));
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
@@ -71,7 +73,6 @@ export class AccessDeniedError extends Error {
    *         which indicates that access to the requested resource has been denied.
    */
   static isAccessDeniedError(httpErrorResponse: HttpErrorResponse): boolean {
-    return (httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status === 403);
+    return (httpErrorResponse.name === 'HttpErrorResponse') && (httpErrorResponse.status === 403);
   }
 }

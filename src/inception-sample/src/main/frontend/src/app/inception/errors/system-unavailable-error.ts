@@ -33,8 +33,10 @@ export class SystemUnavailableError extends Error {
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
-    super(i18n({id: '@@system_unavailable_error',
-      value: 'An error has occurred and the system is unable to process your request at this time.'}));
+    super(i18n({
+      id: '@@system_unavailable_error',
+      value: 'An error has occurred and the system is unable to process your request at this time.'
+    }));
 
     // TODO: Retrieve error details from HttpErrorResponse and save
   }

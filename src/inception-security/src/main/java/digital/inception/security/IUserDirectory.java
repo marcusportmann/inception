@@ -111,17 +111,17 @@ interface IUserDirectory
    *
    * @param attributes the attribute criteria used to select the users
    *
-   * @return the list of users whose attributes match the attribute criteria
+   * @return the users whose attributes match the attribute criteria
    */
   List<User> findUsers(List<Attribute> attributes)
     throws InvalidAttributeException, SecurityServiceException;
 
   /**
-   * Retrieve the filtered list of users.
+   * Retrieve the filtered users.
    *
    * @param filter the filter to apply to the users
    *
-   * @return the filtered list of users
+   * @return the users
    */
   List<User> getFilteredUsers(String filter)
     throws SecurityServiceException;
@@ -131,7 +131,7 @@ interface IUserDirectory
    *
    * @param username the username identifying the user
    *
-   * @return the list of authorised function codes for the user
+   * @return the authorised function codes for the user
    */
   List<String> getFunctionCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
@@ -159,7 +159,7 @@ interface IUserDirectory
   /**
    * Retrieve all the security groups.
    *
-   * @return the list of security groups
+   * @return the security groups
    */
   List<Group> getGroups()
     throws SecurityServiceException;
@@ -173,16 +173,6 @@ interface IUserDirectory
    */
   List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the number of filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the number of filtered users
-   */
-  int getNumberOfFilteredUsers(String filter)
-    throws SecurityServiceException;
 
   /**
    * Retrieve the number of security groups
@@ -213,7 +203,7 @@ interface IUserDirectory
   /**
    * Retrieve all the users.
    *
-   * @return the list of users
+   * @return the users
    */
   List<User> getUsers()
     throws SecurityServiceException;

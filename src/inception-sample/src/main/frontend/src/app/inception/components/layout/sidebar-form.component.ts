@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, OnInit  } from '@angular/core';
-import { Replace } from '../../shared';
+import {Component, ElementRef, OnInit} from '@angular/core';
+import {Replace} from '../../shared';
 
 /**
  * The SidebarFormComponent class implements the sidebar form component.
@@ -38,7 +38,8 @@ export class SidebarFormComponent implements OnInit {
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit(): void {
     Replace(this.elementRef);

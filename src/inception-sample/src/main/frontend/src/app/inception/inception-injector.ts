@@ -15,7 +15,7 @@
  */
 
 
-import {Injector, NgModuleRef} from "@angular/core";
+import {Injector} from "@angular/core";
 
 
 /**

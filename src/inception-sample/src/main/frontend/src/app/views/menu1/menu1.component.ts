@@ -60,5 +60,6 @@ import {Component} from '@angular/core';
 })
 export class Menu1Component {
 
-  constructor( ) { }
+  constructor() {
+  }
 }

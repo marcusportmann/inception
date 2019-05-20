@@ -41,7 +41,7 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher
   /**
    * Constructs a new <code>DayOfMonthValueMatcher</code>.
    *
-   * @param integers A list of Integer elements, one for every value accepted by the matcher.
+   * @param integers The Integer elements, one for every value accepted by the matcher.
    *                 The match() method will return <code>true</code> only if its parameter will be
    *                 one of this list or the last-day-of-month setting applies.
    */

@@ -18,13 +18,10 @@
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
-
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
-
 // Import Inception components
 import {CodeCategoriesComponent} from './code-categories.component';
 import {CodesComponent} from './codes.component';
@@ -34,98 +31,77 @@ import {NewCodeCategoryComponent} from './new-code-category.component';
 import {NewCodeComponent} from './new-code.component';
 import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
 
-const routes: Routes = [
-  {
+const routes: Routes = [{
+  path: '',
+  canActivate: [CanActivateFunctionGuard],
+  component: CodeCategoriesComponent,
+  data: {
+    title: 'Code Categories',
+    functionCodes: ['Application.CodeAdministration']
+  }
+}, {
+  path: 'new-code-category',
+  canActivate: [CanActivateFunctionGuard],
+  component: NewCodeCategoryComponent,
+  data: {
+    title: 'New Code Category',
+    functionCodes: ['Application.CodeAdministration']
+  }
+}, {
+  path: ':codeCategoryId',
+  data: {
+    title: '{codeCategoryId}'
+  },
+  children: [{
     path: '',
-    canActivate: [
-      CanActivateFunctionGuard
-    ],
-    component: CodeCategoriesComponent,
+    canActivate: [CanActivateFunctionGuard],
+    component: EditCodeCategoryComponent,
     data: {
-      title: 'Code Categories',
       functionCodes: ['Application.CodeAdministration']
     }
-  },
-  {
-    path: 'new-code-category',
-    canActivate: [
-      CanActivateFunctionGuard
-    ],
-    component: NewCodeCategoryComponent,
+  }, {
+    path: 'codes',
     data: {
-      title: 'New Code Category',
-      functionCodes: ['Application.CodeAdministration']
-    }
-  },
-  {
-    path: ':codeCategoryId',
-    data: {
-      title: '{codeCategoryId}'
+      title: 'Codes'
     },
-    children: [
-      {
-        path: '',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: EditCodeCategoryComponent,
-        data: {
-          functionCodes: ['Application.CodeAdministration']
-        }
-      },
-      {
-        path: 'codes',
-        data: {
-          title: 'Codes'
-        },
-        children: [
-          {
-            path: '',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: CodesComponent,
-            data: {
-              functionCodes: ['Application.CodeAdministration']
-            }
-          },
-          {
-            path: 'new-code',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: NewCodeComponent,
-            data: {
-              title: 'New Code',
-              functionCodes: ['Application.CodeAdministration']
-            }
-          },
-          {
-            path: ':codeId',
-            canActivate: [
-              CanActivateFunctionGuard
-            ],
-            component: EditCodeComponent,
-            data: {
-              title: '{codeId}',
-              functionCodes: ['Application.CodeAdministration']
-            }
-          }
-        ]
+    children: [{
+      path: '',
+      canActivate: [CanActivateFunctionGuard],
+      component: CodesComponent,
+      data: {
+        functionCodes: ['Application.CodeAdministration']
       }
+    }, {
+      path: 'new-code',
+      canActivate: [CanActivateFunctionGuard],
+      component: NewCodeComponent,
+      data: {
+        title: 'New Code',
+        functionCodes: ['Application.CodeAdministration']
+      }
+    }, {
+      path: ':codeId',
+      canActivate: [CanActivateFunctionGuard],
+      component: EditCodeComponent,
+      data: {
+        title: '{codeId}',
+        functionCodes: ['Application.CodeAdministration']
+      }
+    }
     ]
   }
+  ]
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    InceptionModule,
+  imports: [CommonModule, FormsModule, InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent, NewCodeCategoryComponent, NewCodeComponent]
+  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent,
+    EditCodeComponent, NewCodeCategoryComponent, NewCodeComponent
+  ]
 })
 export class CodesModule {
 }

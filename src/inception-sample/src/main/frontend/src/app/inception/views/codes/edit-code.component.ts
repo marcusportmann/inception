@@ -49,7 +49,11 @@ export class EditCodeComponent implements OnInit {
               private spinnerService: SpinnerService) {
     this.editCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
-      id: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]],
+      id: [{
+        value: '',
+        disabled: true
+      }, [Validators.required, Validators.maxLength(100)]
+      ],
       name: ['', [Validators.required, Validators.maxLength(100)]],
       value: ['', Validators.required]
     });
@@ -73,14 +77,15 @@ export class EditCodeComponent implements OnInit {
 
     this.spinnerService.showSpinner();
 
-    this.codesService.getCode(this.codeCategoryId, codeId).pipe(first(),
-      finalize(() => this.spinnerService.hideSpinner()))
+    this.codesService.getCode(this.codeCategoryId, codeId)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: Code) => {
         this.idFormControl.setValue(codeCategory.id);
         this.nameFormControl.setValue(codeCategory.name);
         this.valueFormControl.setValue(codeCategory.value);
       }, (error: Error) => {
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         } else {
@@ -101,13 +106,14 @@ export class EditCodeComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCode(code).pipe(first(),
-        finalize(() => this.spinnerService.hideSpinner()))
+      this.codesService.updateCode(code)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../../codes'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           } else {

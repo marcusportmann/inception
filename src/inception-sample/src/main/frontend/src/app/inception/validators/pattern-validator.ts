@@ -22,6 +22,6 @@ export function patternValidator(regexp: RegExp): ValidatorFn {
     if (value === '') {
       return null;
     }
-    return !regexp.test(value) ? { 'patternInvalid': { regexp } } : null;
+    return !regexp.test(value) ? {'patternInvalid': {regexp}} : null;
   };
 }

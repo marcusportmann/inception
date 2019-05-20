@@ -29,22 +29,21 @@ import {ToggleClasses} from '../../shared/toggle-classes';
 })
 export class SidebarTogglerDirective implements OnInit {
 
-  @Input('sidebarToggler')
-  breakpoint: string;
+  @Input('sidebarToggler') breakpoint: string;
 
   bp;
 
   /**
    * Constructs a new SidebarTogglerDirective.
    */
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.bp = this.breakpoint;
   }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     let cssClass;
     this.bp ? cssClass = `sidebar-${this.bp}-show` : cssClass = sidebarCssClasses[0];

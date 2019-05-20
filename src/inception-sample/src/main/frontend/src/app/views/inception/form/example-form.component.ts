@@ -16,10 +16,6 @@
 
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {patternValidator} from '../../../inception/validators/pattern-validator';
-import {NavigationService} from "../../../inception/services/navigation/navigation.service";
-
-import * as moment from 'moment';
 import {Observable} from "rxjs";
 import {map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from "@angular/router";
@@ -46,17 +42,26 @@ export class ExampleFormComponent implements OnInit {
 
   exampleForm: FormGroup;
 
-  titles: Array<any> = [
-    {name: 'Mr', value: 'Mr'},
-    {name: 'Mrs', value: 'Mrs'},
-    {name: 'Ms', value: 'Ms'}
+  titles: Array<any> = [{
+    name: 'Mr',
+    value: 'Mr'
+  }, {
+    name: 'Mrs',
+    value: 'Mrs'
+  }, {
+    name: 'Ms',
+    value: 'Ms'
+  }
   ];
 
-  countryOptions: string[] = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland', 'Zimbabwe'];
+  countryOptions: string[] = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland',
+    'Zimbabwe'
+  ];
 
   filteredCountryOptions: Observable<string[]>;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder) {
 
     this.exampleForm = this.formBuilder.group({
       //hideRequired: false,
@@ -64,8 +69,7 @@ export class ExampleFormComponent implements OnInit {
       // tslint:disable-next-line
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      title: ['', Validators.required],
-      //dateOfBirth: [moment(), Validators.required],
+      title: ['', Validators.required], //dateOfBirth: [moment(), Validators.required],
       dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
@@ -80,10 +84,8 @@ export class ExampleFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges.pipe(
-      startWith(''),
-      map(value => this.filter(value))
-    );
+    this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges
+      .pipe(startWith(''), map(value => this.filter(value)));
   }
 
   onSubmit(): void {

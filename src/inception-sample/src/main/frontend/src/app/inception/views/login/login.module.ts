@@ -15,55 +15,42 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
-
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgModule} from '@angular/core';
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
-
 // Import Inception modules
 import {InceptionModule} from '../../inception.module';
-
 // Import Inception components
 import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: LoginComponent,
-    data: {
-      title: 'Login'
-    }
-  },
-  {
-    path: 'select-organization',
-    component: SelectOrganizationComponent,
-    data: {
-      title: 'Select Organization'
-    }
+const routes: Routes = [{
+  path: '',
+  component: LoginComponent,
+  data: {
+    title: 'Login'
   }
+}, {
+  path: 'select-organization',
+  component: SelectOrganizationComponent,
+  data: {
+    title: 'Select Organization'
+  }
+}
 
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,
 
     InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  declarations: [
-    LoginComponent, SelectOrganizationComponent
-  ]
+  exports: [CommonModule, FormsModule, ReactiveFormsModule],
+  declarations: [LoginComponent, SelectOrganizationComponent]
 })
-export class LoginModule { }
+export class LoginModule {
+}

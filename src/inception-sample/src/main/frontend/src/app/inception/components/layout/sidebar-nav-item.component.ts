@@ -69,8 +69,7 @@ import {Router} from '@angular/router';
 })
 export class SidebarNavItemComponent {
 
-  @Input()
-  navItem: NavigationItem;
+  @Input() navItem: NavigationItem;
 
   /**
    * Constructs a new SidebarNavItemComponent.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, HostBinding, OnInit} from '@angular/core';
+import {Component, HostBinding, Input, OnInit} from '@angular/core';
 import {sidebarCssClasses} from '../../shared';
 
 /**
@@ -30,20 +30,15 @@ import {sidebarCssClasses} from '../../shared';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input()
-  compact: boolean;
+  @Input() compact: boolean;
 
-  @Input()
-  display: any;
+  @Input() display: any;
 
-  @Input()
-  fixed: boolean;
+  @Input() fixed: boolean;
 
-  @Input()
-  minimized: boolean;
+  @Input() minimized: boolean;
 
-  @Input()
-  offCanvas: boolean;
+  @Input() offCanvas: boolean;
 
   @HostBinding('class.sidebar') true;
 

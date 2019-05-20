@@ -15,7 +15,8 @@
  */
 
 const RemoveClasses = (NewClassNames) => {
-  const MatchClasses = NewClassNames.map((Class) => document.querySelector('body').classList.contains(Class));
+  const MatchClasses = NewClassNames.map(
+    (Class) => document.querySelector('body').classList.contains(Class));
   return MatchClasses.indexOf(true) !== -1;
 };
 

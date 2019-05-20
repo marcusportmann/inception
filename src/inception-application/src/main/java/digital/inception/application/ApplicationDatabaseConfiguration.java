@@ -100,8 +100,8 @@ public class ApplicationDatabaseConfiguration
   private Resource[] databaseInitResources;
 
   /**
-   * The optional list of paths to the resources on the classpath that contain the SQL statements
-   * used to initialize the in-memory application database.
+   * The optional paths to the resources on the classpath that contain the SQL statements used to
+   * initialize the in-memory application database.
    */
   @Value("${application.database.inMemoryDatabaseInitResources:#{null}}")
   private String inMemoryDatabaseInitResources;
@@ -119,7 +119,7 @@ public class ApplicationDatabaseConfiguration
   private int minPoolSize;
 
   /**
-   * The optional list of comma-delimited packages on the classpath to scan for JPA entities.
+   * The optional comma-delimited packages on the classpath to scan for JPA entities.
    */
   @Value("${application.database.packagesToScanForEntities:#{null}}")
   private String packagesToScanForEntities;

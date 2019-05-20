@@ -60,15 +60,14 @@ export class Error {
       const httpErrorResponse: HttpErrorResponse = (<HttpErrorResponse>cause);
 
       if (httpErrorResponse.error) {
-        this.cause = new HttpError(
-          httpErrorResponse.error.error ? httpErrorResponse.error.error : '' ,
-          httpErrorResponse.error.error_description ? httpErrorResponse.error.error_description : '' ,
-          httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
-          httpErrorResponse.url);
+        this.cause =
+          new HttpError(httpErrorResponse.error.error ? httpErrorResponse.error.error : '',
+            httpErrorResponse.error.error_description ? httpErrorResponse.error.error_description :
+              '', httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
+            httpErrorResponse.url);
       } else {
-        this.cause = new HttpError('', '',
-          httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
-          httpErrorResponse.url);
+        this.cause = new HttpError('', '', httpErrorResponse.message, httpErrorResponse.status,
+          httpErrorResponse.statusText, httpErrorResponse.url);
       }
     } else {
       this.cause = cause;

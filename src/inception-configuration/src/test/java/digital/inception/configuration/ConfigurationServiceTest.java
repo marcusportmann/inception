@@ -198,11 +198,6 @@ public class ConfigurationServiceTest
     throws ConfigurationServiceException
   {
     List<Configuration> configurations = configurationService.getConfigurations();
-
-    int numberOfConfigurations = configurationService.getNumberOfConfigurations();
-
-    assertEquals("The required number of configurations was not retrieved", configurations.size(),
-        numberOfConfigurations);
   }
 
   /**
@@ -270,12 +265,6 @@ public class ConfigurationServiceTest
 
     assertEquals("The required filtered configurations (" + TEST_STRING_VALUE
         + ") was not retrieved", TEST_STRING_VALUE, filteredConfigurations.get(0).getValue());
-
-    int numberOfFilteredConfigurations = configurationService.getNumberOfFilteredConfigurations(
-        "testfiltered");
-
-    assertEquals("The required number of filtered configurations (1) was not retrieved", 1,
-        numberOfFilteredConfigurations);
   }
 
   /**

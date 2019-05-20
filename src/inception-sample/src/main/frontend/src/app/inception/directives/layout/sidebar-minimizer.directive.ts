@@ -30,10 +30,10 @@ export class SidebarMinimizerDirective {
   /**
    * Constructs a new SidebarMinimizerDirective.
    */
-  constructor() { }
+  constructor() {
+  }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     document.querySelector('body').classList.toggle('sidebar-minimized');
   }

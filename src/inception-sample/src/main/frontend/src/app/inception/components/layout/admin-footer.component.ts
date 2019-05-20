@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, Input, OnInit  } from '@angular/core';
-import { Replace } from '../../shared';
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Replace} from '../../shared';
 
 /**
  * The AdminFooterComponent class implements the admin footer component.
@@ -33,15 +33,15 @@ import { Replace } from '../../shared';
 })
 export class AdminFooterComponent implements OnInit {
 
-  @Input()
-  fixed: boolean;
+  @Input() fixed: boolean;
 
   /**
    * Constructs a new AdminFooterComponent.
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit(): void {
     Replace(this.elementRef);

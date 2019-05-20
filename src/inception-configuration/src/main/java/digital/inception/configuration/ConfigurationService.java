@@ -427,7 +427,7 @@ public class ConfigurationService
    *
    * @param filter the filter to apply to the keys for the configurations
    *
-   * @return the filtered configurations
+   * @return the configurations
    */
   @Override
   public List<Configuration> getFilteredConfigurations(String filter)
@@ -591,87 +591,6 @@ public class ConfigurationService
     {
       throw new ConfigurationServiceException(String.format(
           "Failed to retrieve the Long configuration with the key (%s)", key), e);
-    }
-  }
-
-  /**
-   * Retrieve the numbered of configurations.
-   *
-   * @return the number of configurations
-   */
-  @Override
-  public int getNumberOfConfigurations()
-    throws ConfigurationServiceException
-  {
-    String getNumberOfConfigurationsSQL = "SELECT COUNT(key) FROM configuration.configuration";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfConfigurationsSQL))
-    {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new ConfigurationServiceException(String.format(
-              "No rows were returned as a result of executing the SQL statement (%s)",
-              getNumberOfConfigurationsSQL));
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new ConfigurationServiceException("Failed to retrieve the number of configurations", e);
-    }
-  }
-
-  /**
-   * Retrieve the numbered of filtered configurations.
-   *
-   * @param filter the filter to apply to the keys for the configuration
-   *
-   * @return the number of filtered configurations
-   */
-  @Override
-  public int getNumberOfFilteredConfigurations(String filter)
-    throws ConfigurationServiceException
-  {
-    String getNumberOfConfigurationsSQL = "SELECT COUNT(key) FROM configuration.configuration";
-
-    String getNumberOfFilteredConfigurationsSQL = "SELECT COUNT(key) FROM "
-        + "configuration.configuration WHERE (UPPER(key) LIKE ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getNumberOfConfigurationsSQL
-          : getNumberOfFilteredConfigurationsSQL))
-    {
-      if (!StringUtils.isEmpty(filter))
-      {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new ConfigurationServiceException(String.format(
-              "No rows were returned as a result of executing the SQL statement (%s)",
-              getNumberOfFilteredConfigurationsSQL));
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the number of configurations matching the filter (%s)", filter), e);
     }
   }
 

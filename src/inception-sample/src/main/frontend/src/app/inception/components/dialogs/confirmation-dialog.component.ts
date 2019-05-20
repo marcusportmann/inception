@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 /**
  * The ConfirmationDialogData interface defines the data that is displayed by a confirmation dialog.
@@ -51,8 +51,7 @@ export interface ConfirmationDialogData {
       <button mat-flat-button (click)="onNoButtonClick()" tabindex="-1" i18n="@@confirmation_dialog_button_no">No</button>
       <button mat-flat-button (click)="onYesButtonClick()" tabindex="-1" i18n="@@confirmation_dialog_button_yes">Yes</button>
     </div>
-  `,
-  // tslint:disable-next-line
+  `, // tslint:disable-next-line
   host: {
     'class': 'confirmation-dialog'
   }
@@ -65,9 +64,8 @@ export class ConfirmationDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(
-    private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData) {
+  constructor(private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData) {
   }
 
   get message(): string {

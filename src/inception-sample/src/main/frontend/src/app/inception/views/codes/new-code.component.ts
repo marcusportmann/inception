@@ -83,13 +83,14 @@ export class NewCodeComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCode(code).pipe(first(),
-        finalize(() => this.spinnerService.hideSpinner()))
+      this.codesService.createCode(code)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
           } else {

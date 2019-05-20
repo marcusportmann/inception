@@ -48,8 +48,10 @@ export class CommunicationError extends Error {
    */
   constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
 
-    super(i18n({id: '@@communication_error_a_communication_error_occurred',
-      value: 'A communication error occurred.'}));
+    super(i18n({
+      id: '@@communication_error_a_communication_error_occurred',
+      value: 'A communication error occurred.'
+    }));
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
@@ -65,10 +67,8 @@ export class CommunicationError extends Error {
    *         otherwise.
    */
   static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
-    return (httpErrorResponse.name === 'HttpErrorResponse')
-      && (httpErrorResponse.status === 0)
-      && httpErrorResponse.error
-      && (httpErrorResponse.error instanceof ProgressEvent)
-      && (httpErrorResponse.error.type === 'error');
+    return (httpErrorResponse.name === 'HttpErrorResponse') && (httpErrorResponse.status === 0) &&
+      httpErrorResponse.error && (httpErrorResponse.error instanceof ProgressEvent) &&
+      (httpErrorResponse.error.type === 'error');
   }
 }

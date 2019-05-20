@@ -155,9 +155,9 @@ public class Element
   }
 
   /**
-   * Returns a list of the attributes for this element.
+   * Returns the attributes for this element.
    *
-   * @return a list of the attributes for this element
+   * @return the attributes for this element
    */
   public List<Attribute> getAttributes()
   {
@@ -243,9 +243,9 @@ public class Element
   }
 
   /**
-   * Returns the list of child elements for this element.
+   * Returns the child elements for this element.
    *
-   * @return the list of child elements for this element
+   * @return the child elements for this element
    */
   public List<Element> getChildren()
   {
@@ -263,11 +263,11 @@ public class Element
   }
 
   /**
-   * Returns the list of child elements with the specified name for this element.
+   * Returns the child elements with the specified name for this element.
    *
    * @param name the name of the child elements to return
    *
-   * @return the list of child elements with the specified name
+   * @return the child elements with the specified name
    */
   public List<Element> getChildren(String name)
   {
@@ -290,9 +290,9 @@ public class Element
   }
 
   /**
-   * Returns the list of content items for this element.
+   * Returns the content items for this element.
    *
-   * @return the list of content items for this element
+   * @return the content items for this element
    */
   public List<Content> getContent()
   {

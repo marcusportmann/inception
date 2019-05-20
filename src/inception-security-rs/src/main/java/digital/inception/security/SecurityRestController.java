@@ -26,11 +26,12 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -47,7 +48,7 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/security")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class SecurityRestController
 {
   /**
@@ -106,11 +107,17 @@ public class SecurityRestController
   }
 
   /**
-   * Retrieve the organizations.
+   * Retrieve the filtered organizations using pagination.
+   *
+   * @param filter        the optional filter to apply to the organization name
+   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
    *
    * @return the organizations
    */
-  @ApiOperation(value = "Retrieve the organizations", notes = "Retrieve the organizations")
+  @ApiOperation(value = "Retrieve the filtered organizations using pagination",
+      notes = "Retrieve the filtered organizations using pagination")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
@@ -118,16 +125,27 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
-  public List<Organization> getOrganizations(@RequestParam(value = "filter",
-      required = false) String filter, @RequestParam(value = "sortDirection",
-          required = false) SortDirection sortDirection, @RequestParam(value = "pageIndex",
-              required = false) Integer pageIndex, @RequestParam(value = "pageSize",
-                  required = false) Integer pageSize)
+
+  // @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
+      value = "The optional filter to apply to the organization name")
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+      value = "The optional sort direction to apply to the organization name")
+  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
+      name = "pageIndex",
+      value = "The optional page index")
+  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
+      name = "pageSize",
+      value = "The optional page size")
+  @RequestParam(value = "pageSize", required = false) Integer pageSize)
     throws SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations()));
+
+    return new ResponseEntity<>(securityService.getFilteredOrganizations(filter, sortDirection,
+        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
   }
 }

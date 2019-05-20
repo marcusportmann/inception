@@ -15,20 +15,17 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception components
-import { Menu1Component } from './menu1.component';
+import {Menu1Component} from './menu1.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: Menu1Component,
-  }
+const routes: Routes = [{
+  path: '',
+  component: Menu1Component,
+}
 ];
 
 /**
@@ -38,11 +35,11 @@ const routes: Routes = [
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [
-    CommonModule,
+  imports: [CommonModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ Menu1Component ]
+  declarations: [Menu1Component]
 })
-export class Menu1Module { }
+export class Menu1Module {
+}

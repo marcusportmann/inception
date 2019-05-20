@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
-
 /**
- * The AppBrandMinimizerDirective class implements the app brand minimizer directive.
+ * The SortDirection enumeration defines the possible sort directions.
  *
  * @author Marcus Portmann
  */
-@Directive({
-  // tslint:disable-next-line:directive-selector
-  selector: '[brandMinimizer]'
-})
-export class BrandMinimizerDirective {
+export enum SortDirection {
 
   /**
-   * Constructs a new AppBrandMinimizerDirective.
+   * Sort in ascending order.
    */
-  constructor() {
-  }
+  Ascending = 'asc',
 
-  @HostListener('click', ['$event']) toggleOpen($event: any): void {
-    $event.preventDefault();
-    document.querySelector('body').classList.toggle('admin-brand-minimized');
-  }
+  /**
+   * Sort in descending order.
+   */
+  Descending = 'desc'
 }

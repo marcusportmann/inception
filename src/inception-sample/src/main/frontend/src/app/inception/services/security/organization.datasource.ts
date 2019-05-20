@@ -16,27 +16,30 @@
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Organization} from './organization';
-import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {SecurityService} from './security.service';
-import {catchError, finalize} from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {DialogService} from '../dialog/dialog.service';
+import {SortDirection} from "./sort-direction";
+import {FilteredOrganizations} from "./filtered-organizations";
 
-
+/**
+ * The OrganizationDatasource class implements the organization data source.
+ *
+ * @author Marcus Portmann
+ */
 export class OrganizationDatasource implements DataSource<Organization> {
 
+  private totalSubject = new BehaviorSubject<number>(0);
+
   private dataSubject = new BehaviorSubject<Organization[]>([]);
+
   private loadingSubject = new BehaviorSubject<boolean>(false);
+
+  total = this.totalSubject.asObservable();
 
   loading = this.loadingSubject.asObservable();
 
-  // constructor(private router: Router, private dialogService: DialogService,
-  //             private securityService: SecurityService) {
-  // }
-
   constructor(private securityService: SecurityService) {
   }
-
 
   connect(collectionViewer: CollectionViewer): Observable<Organization[] | ReadonlyArray<Organization>> {
     return this.dataSubject.asObservable();
@@ -47,33 +50,30 @@ export class OrganizationDatasource implements DataSource<Organization> {
     this.loadingSubject.complete();
   }
 
-  load() {
+  /**
+   * Load the organizations.
+   *
+   * @param filter        the optional filter to apply to the organization name
+   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   */
+  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
     this.loadingSubject.next(true);
 
-    this.securityService.getOrganizations().pipe(
-      catchError(error => {
-        return throwError(error);
-      }),
-      finalize(() => this.loadingSubject.next(false)))
-      .subscribe((organizations: Organization[]) => this.dataSubject.next(organizations));
+    this.securityService.getFilteredOrganizations(filter, sortDirection, pageIndex, pageSize)
+      .subscribe((filteredOrganizations: FilteredOrganizations) => {
+        this.loadingSubject.next(false);
 
+        this.totalSubject.next(filteredOrganizations.total);
 
-    // this.securityService.getOrganizations().pipe(first()).subscribe((organizations: Organization[]) => {
-    //   this.spinnerService.hideSpinner();
-    //
-    //   this.dataSource.data = organizations;
-    // }, (error: Error) => {
-    //   this.spinnerService.hideSpinner();
-    //
-    //   if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-    //     // noinspection JSIgnoredPromiseFromCall
-    //     this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-    //   } else {
-    //     this.dialogService.showErrorDialog(error);
-    //   }
-    // });
+        this.dataSubject.next(filteredOrganizations.organizations)
+      }, (error: Error) => {
+        this.loadingSubject.next(false);
 
+        this.totalSubject.next(0);
 
+        this.loadingSubject.error(error);
+      });
   }
-
 }

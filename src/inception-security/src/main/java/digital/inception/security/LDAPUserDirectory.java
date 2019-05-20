@@ -1108,7 +1108,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param attributes the attribute criteria used to select the users
    *
-   * @return the list of users whose attributes match the attribute criteria
+   * @return the users whose attributes match the attribute criteria
    */
   @Override
   public List<User> findUsers(List<Attribute> attributes)
@@ -1189,11 +1189,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the filtered list of users.
+   * Retrieve the filtered users.
    *
    * @param filter the filter to apply to the users
    *
-   * @return the filtered list of users
+   * @return the users
    */
   @Override
   public List<User> getFilteredUsers(String filter)
@@ -1261,7 +1261,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param username the username identifying the user
    *
-   * @return the list of authorised function codes for the user
+   * @return the authorised function codes for the user
    */
   @Override
   public List<String> getFunctionCodesForUser(String username)
@@ -1488,7 +1488,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * Retrieve all the security groups.
    *
-   * @return the list of security groups
+   * @return the security groups
    */
   @Override
   public List<Group> getGroups()
@@ -1588,79 +1588,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     finally
     {
       JNDIUtil.close(searchResults);
-      JNDIUtil.close(dirContext);
-    }
-  }
-
-  /**
-   * Retrieve the number of filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the number of filtered users
-   */
-  @Override
-  public int getNumberOfFilteredUsers(String filter)
-    throws SecurityServiceException
-  {
-    DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
-    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
-
-    try
-    {
-      dirContext = getDirContext(bindDN, bindPassword);
-
-      String searchFilter = String.format("(objectClass=%s)", userObjectClass);
-
-      if (!StringUtils.isEmpty(filter))
-      {
-        searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
-            userLastNameAttribute, filter);
-      }
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
-      searchControls.setCountLimit(maxFilteredUsers);
-
-      int numberOfUsers = 0;
-
-      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
-
-      while (searchResultsNonSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
-      {
-        searchResultsNonSharedUsers.next();
-
-        numberOfUsers++;
-      }
-
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
-        {
-          searchResultsSharedUsers.next();
-
-          numberOfUsers++;
-        }
-      }
-
-      return numberOfUsers;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of filtered users for the user directory (%s):%s",
-          getUserDirectoryId(), e.getMessage()), e);
-    }
-    finally
-    {
-      JNDIUtil.close(searchResultsSharedUsers);
-      JNDIUtil.close(searchResultsNonSharedUsers);
       JNDIUtil.close(dirContext);
     }
   }
@@ -1824,7 +1751,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * Retrieve all the users.
    *
-   * @return the list of users
+   * @return the users
    */
   @Override
   public List<User> getUsers()

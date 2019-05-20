@@ -39,8 +39,7 @@ import {NavigationItem} from '../../services/navigation/navigation-item';
 })
 export class SidebarNavDropdownComponent {
 
-  @Input()
-  navItem: NavigationItem;
+  @Input() navItem: NavigationItem;
 
   /**
    * Constructs a new SidebarNavDropdownComponent.

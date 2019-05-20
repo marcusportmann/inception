@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  HostBinding,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit,} from '@angular/core';
 
 import {NavigationService} from '../../services/navigation/navigation.service';
 import {NavigationItem} from '../../services/navigation/navigation-item';
@@ -39,16 +34,12 @@ import {map} from 'rxjs/operators';
       <sidebar-nav-item *ngFor="let navItem of navItems" [navItem]="navItem"></sidebar-nav-item>
     </ul>`
 })
-export class SidebarNavComponent implements  OnInit, OnDestroy {
+export class SidebarNavComponent implements OnInit, OnDestroy {
 
   navItems: NavigationItem[];
-
-  private userNavigationSubscription: Subscription;
-
   @HostBinding('class.sidebar-nav') true;
-
-  @HostBinding('attr.role')
-  role = 'nav';
+  @HostBinding('attr.role') role = 'nav';
+  private userNavigationSubscription: Subscription;
 
   /**
    * Constructs a new SidebarNavComponent.
@@ -66,11 +57,10 @@ export class SidebarNavComponent implements  OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userNavigationSubscription = this.navigationService.userNavigation.pipe(
-      map((navigation: NavigationItem[]) => {
+    this.userNavigationSubscription =
+      this.navigationService.userNavigation.pipe(map((navigation: NavigationItem[]) => {
         this.navItems = navigation;
-      })
-    ).subscribe();
+      })).subscribe();
   }
 }
 

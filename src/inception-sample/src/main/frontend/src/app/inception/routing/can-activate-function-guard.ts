@@ -40,46 +40,44 @@ export class CanActivateFunctionGuard implements CanActivate {
   }
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
-    return this.sessionService.session.pipe(
-      map((session: Session) => {
-        if (activatedRouteSnapshot) {
-          if (activatedRouteSnapshot.data) {
-            if (activatedRouteSnapshot.data.functionCodes) {
+    return this.sessionService.session.pipe(map((session: Session) => {
+      if (activatedRouteSnapshot) {
+        if (activatedRouteSnapshot.data) {
+          if (activatedRouteSnapshot.data.functionCodes) {
 
-              // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
+            // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
 
-              if (session) {
-                for (let i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
-                  for (let j = 0; j < session.functionCodes.length; j++) {
-                    if (activatedRouteSnapshot.data.functionCodes[i] === session.functionCodes[j]) {
-                      return true;
-                    }
+            if (session) {
+              for (let i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
+                for (let j = 0; j < session.functionCodes.length; j++) {
+                  if (activatedRouteSnapshot.data.functionCodes[i] === session.functionCodes[j]) {
+                    return true;
                   }
                 }
-
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/login']);
-
-                return false;
-              } else {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['/login']);
-
-                return false;
               }
+
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['/login']);
+
+              return false;
             } else {
-              return true;
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['/login']);
+
+              return false;
             }
           } else {
             return true;
           }
         } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/login']);
-
-          return false;
+          return true;
         }
-      })
-    );
+      } else {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/login']);
+
+        return false;
+      }
+    }));
   }
 }

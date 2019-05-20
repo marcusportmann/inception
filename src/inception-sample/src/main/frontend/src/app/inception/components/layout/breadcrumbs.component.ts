@@ -36,14 +36,14 @@ import {TitleService} from '../../services/layout/title.service';
           <a [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
         </li>
       </ng-template>
-      <li class="breadcrumb-item" >
+      <li class="breadcrumb-item">
         <span>{{title}}</span>
       </li>
     </ol>
 
     <ng-template #noTitle>
       <ol class="breadcrumb">
-        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last = last>
+        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
           <li class="breadcrumb-item"
               *ngIf="(breadcrumb.label)"
               [ngClass]="{active: last}">
@@ -59,8 +59,7 @@ export class BreadcrumbsComponent implements OnInit {
 
   breadcrumbs: Observable<Array<Object>>;
 
-  @Input()
-  fixed: boolean;
+  @Input() fixed: boolean;
 
   /**
    * Constructs a new BreadcrumbsComponent.
@@ -69,7 +68,9 @@ export class BreadcrumbsComponent implements OnInit {
    * @param breadcrumbsService The Breadcrumbs Service.
    * @param titleService       The Title Service.
    */
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService, private titleService: TitleService) { }
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService,
+              private titleService: TitleService) {
+  }
 
   /**
    * The current title from the Title Service.

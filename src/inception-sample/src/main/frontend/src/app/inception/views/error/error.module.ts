@@ -15,46 +15,36 @@
  */
 
 // Import Angular modules
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
-
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgModule} from '@angular/core';
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception modules
 import {InceptionModule} from "../../inception.module";
-
 // Import Inception components
 import {SendErrorReportComponent} from './send-error-report.component';
 
-const routes: Routes = [
-  {
-    path: 'send-error-report',
-    component: SendErrorReportComponent,
-    data: {
-      title: 'Send Error Report'
-    }
+const routes: Routes = [{
+  path: 'send-error-report',
+  component: SendErrorReportComponent,
+  data: {
+    title: 'Send Error Report'
   }
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,
 
     InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  exports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
+  exports: [CommonModule, FormsModule, ReactiveFormsModule
   ],
-  declarations: [
-    SendErrorReportComponent
+  declarations: [SendErrorReportComponent
   ]
 })
-export class ErrorModule { }
+export class ErrorModule {
+}

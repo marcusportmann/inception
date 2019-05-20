@@ -241,13 +241,13 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
   }
 
   /**
-   * Returns the list of cipher suites which are enabled by default.
+   * Returns the cipher suites which are enabled by default.
    * <p/>
    * Unless a different list is enabled, handshaking on an SSL connection will use one of these
    * cipher suites. The minimum quality of service for these defaults requires confidentiality
    * protection and server authentication (that is, no anonymous cipher suites).
    *
-   * @return the list of cipher suites which are enabled by default
+   * @return the cipher suites which are enabled by default
    */
   @Override
   public String[] getDefaultCipherSuites()

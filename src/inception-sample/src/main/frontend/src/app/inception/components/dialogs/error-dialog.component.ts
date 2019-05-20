@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Error} from '../../errors/error';
 
 /**
@@ -51,8 +51,7 @@ export interface ErrorDialogData {
     <div class="button">
       <button mat-flat-button (click)="onOkButtonClick()" tabindex="-1" i18n="@@error_dialog_button_ok">Ok</button>
     </div>
-  `,
-  // tslint:disable-next-line
+  `, // tslint:disable-next-line
   host: {
     'class': 'error-dialog'
   }
@@ -65,9 +64,8 @@ export class ErrorDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(
-    private dialogRef: MatDialogRef<ErrorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
+  constructor(private dialogRef: MatDialogRef<ErrorDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
   }
 
   get message(): string {

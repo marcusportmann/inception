@@ -147,7 +147,7 @@ public class Attribute
    * Returns the binary value for the <code>Attribute</code> instance with the specified name in the
    * specified list.
    *
-   * @param list the list of <code>Attribute</code> instances to search for the
+   * @param list the <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
    *
@@ -182,7 +182,7 @@ public class Attribute
    * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
    * specified name in the specified list.
    *
-   * @param list the list of <code>Attribute</code> instances to search for the
+   * @param list the <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
    *
@@ -217,7 +217,7 @@ public class Attribute
    * Returns the <code>double</code> value for the <code>Attribute</code> instance with the
    * specified name in the specified list.
    *
-   * @param list the list of <code>Attribute</code> instances to search for the
+   * @param list the <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
    *
@@ -252,7 +252,7 @@ public class Attribute
    * Returns the <code>long</code> value for the <code>Attribute</code> instance with the specified
    * name in the specified list.
    *
-   * @param list the list of <code>Attribute</code> instances to search for the
+   * @param list the <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
    *
@@ -287,7 +287,7 @@ public class Attribute
    * Returns the <code>String</code> value for the <code>Attribute</code> instance with the
    * specified name in the specified list.
    *
-   * @param list the list of <code>Attribute</code> instances to search for the
+   * @param list the <code>Attribute</code> instances to search for the
    *             <code>Attribute</code> with the specified name
    * @param name the name for the attribute
    *
@@ -314,7 +314,7 @@ public class Attribute
    * Set the binary value for the <code>Attribute</code> instance with the specified name in the
    * specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
@@ -329,7 +329,7 @@ public class Attribute
    * Set the binary value for the <code>Attribute</code> instance with the specified name in the
    * specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
@@ -356,7 +356,7 @@ public class Attribute
    * Set the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
    * specified name in the specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
@@ -383,7 +383,7 @@ public class Attribute
    * Set the <code>double</code> value for the <code>Attribute</code> instance with the specified
    * name in the specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
@@ -410,7 +410,7 @@ public class Attribute
    * Set the <code>long</code> value for the <code>Attribute</code> instance with the specified name
    * in the specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
@@ -437,7 +437,7 @@ public class Attribute
    * Set the <code>String</code> value for the <code>Attribute</code> instance with the specified
    * name in the specified list.
    *
-   * @param list  the list of <code>Attribute</code> instances to search for the
+   * @param list  the <code>Attribute</code> instances to search for the
    *              <code>Attribute</code> with the specified name
    * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute

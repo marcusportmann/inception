@@ -37,7 +37,8 @@ export class SidebarFooterComponent implements OnInit {
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   ngOnInit(): void {
     Replace(this.elementRef);

@@ -21,7 +21,6 @@ import {AutofocusDirective, ValidatedFormDirective} from './form';
 import {
   BrandMinimizerDirective,
   MobileSidebarTogglerDirective,
-
   SidebarMinimizerDirective,
   SidebarNavDropdownDirective,
   SidebarNavDropdownTogglerDirective,
@@ -31,34 +30,20 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  exports: [
-    BrandMinimizerDirective,
-    MobileSidebarTogglerDirective,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  exports: [BrandMinimizerDirective, MobileSidebarTogglerDirective,
 
-    SidebarMinimizerDirective,
-    SidebarNavDropdownDirective,
-    SidebarNavDropdownTogglerDirective,
-    SidebarOffCanvasCloseDirective,
-    SidebarTogglerDirective,
+    SidebarMinimizerDirective, SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective, SidebarTogglerDirective,
 
     AutofocusDirective,
 
     ValidatedFormDirective
   ],
-  declarations: [
-    BrandMinimizerDirective,
-    MobileSidebarTogglerDirective,
+  declarations: [BrandMinimizerDirective, MobileSidebarTogglerDirective,
 
-    SidebarMinimizerDirective,
-    SidebarNavDropdownDirective,
-    SidebarNavDropdownTogglerDirective,
-    SidebarOffCanvasCloseDirective,
-    SidebarTogglerDirective,
+    SidebarMinimizerDirective, SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective,
+    SidebarOffCanvasCloseDirective, SidebarTogglerDirective,
 
     AutofocusDirective,
 

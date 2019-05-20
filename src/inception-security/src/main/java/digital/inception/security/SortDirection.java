@@ -18,6 +18,8 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -54,6 +56,7 @@ public enum SortDirection
    *
    * @return the sort direction given by the specified code value
    */
+  @JsonCreator
   public static SortDirection fromCode(String code)
   {
     switch (code)
@@ -71,6 +74,7 @@ public enum SortDirection
    *
    * @return the code value identifying the sort direction
    */
+  @JsonValue
   public String getCode()
   {
     return code;

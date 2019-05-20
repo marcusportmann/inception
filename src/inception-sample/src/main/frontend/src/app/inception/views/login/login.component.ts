@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {InceptionModule} from '../../inception.module';
 import {SecurityService} from '../../services/security/security.service';
 import {first} from 'rxjs/operators';
@@ -94,9 +94,8 @@ export class LoginComponent {
 
     // this.dialogService.showErrorDialog(new Error('This is an error message.'));
 
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog(
-        {message: 'Are you sure you want to delete the code category \'XXX\'?'});
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {message: 'Are you sure you want to delete the code category \'XXX\'?'});
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
 
@@ -120,27 +119,28 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.spinnerService.showSpinner();
 
-      this.sessionService.login(this.usernameFormControl.value,
-        this.passwordFormControl.value).pipe(first()).subscribe(session => {
-          this.spinnerService.hideSpinner();
+      this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
+        .pipe(first()).subscribe(session => {
+        this.spinnerService.hideSpinner();
 
-          if (session.organizations.length === 1) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          } else {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
-          }
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
+        if (session.organizations.length === 1) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        } else {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
+        }
+      }, (error: Error) => {
+        this.spinnerService.hideSpinner();
 
-          if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

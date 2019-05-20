@@ -187,39 +187,43 @@ public interface ISecurityService
    *                        user directory
    * @param attributes      the attribute criteria used to select the users
    *
-   * @return the list of users whose attributes match the attribute criteria
+   * @return the users whose attributes match the attribute criteria
    */
   List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException;
 
   /**
-   * Retrieve the filtered list of organizations.
+   * Retrieve the filtered organizations using pagination.
    *
-   * @param filter the filter to apply to the organizations
+   * @param filter        the filter to apply to the organization name
+   * @param sortDirection the sort direction to apply to the organization name
+   * @param pageIndex     the page index
+   * @param pageSize      the page size
    *
-   * @return the filtered list of organizations
+   * @return the organizations
    */
-  List<Organization> getFilteredOrganizations(String filter)
+  List<Organization> getFilteredOrganizations(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException;
 
   /**
-   * Retrieve the filtered list of user directories.
+   * Retrieve the filtered user directories.
    *
    * @param filter the filter to apply to the user directories
    *
-   * @return the filtered list of user directories
+   * @return the user directories
    */
   List<UserDirectory> getFilteredUserDirectories(String filter)
     throws SecurityServiceException;
 
   /**
-   * Retrieve the filtered list of users.
+   * Retrieve the filtered users.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the filter to apply to the users
    *
-   * @return the filtered list of users
+   * @return the users
    */
   List<User> getFilteredUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -241,7 +245,7 @@ public interface ISecurityService
    *                        user directory
    * @param username        the username identifying the user
    *
-   * @return the list of authorised function codes for the user
+   * @return the authorised function codes for the user
    */
   List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
@@ -249,7 +253,7 @@ public interface ISecurityService
   /**
    * Retrieve all the authorised functions.
    *
-   * @return the list of authorised functions
+   * @return the authorised functions
    */
   List<Function> getFunctions()
     throws SecurityServiceException;
@@ -284,7 +288,7 @@ public interface ISecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the list of security groups
+   * @return the security groups
    */
   List<Group> getGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -300,38 +304,6 @@ public interface ISecurityService
    */
   List<Group> getGroupsForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the number of filtered organizations.
-   *
-   * @param filter the filter to apply to the organizations
-   *
-   * @return the number of filtered organizations
-   */
-  int getNumberOfFilteredOrganizations(String filter)
-    throws SecurityServiceException;
-
-  /**
-   * Retrieve the number of filtered user directories.
-   *
-   * @param filter the filter to apply to the user directories
-   *
-   * @return the number of filtered user directories
-   */
-  int getNumberOfFilteredUserDirectories(String filter)
-    throws SecurityServiceException;
-
-  /**
-   * Retrieve the number of filtered users.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param filter          the filter to apply to the users
-   *
-   * @return the number of filtered users
-   */
-  int getNumberOfFilteredUsers(UUID userDirectoryId, String filter)
-    throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of security groups
@@ -398,23 +370,9 @@ public interface ISecurityService
   /**
    * Retrieve the organizations.
    *
-   * @return the list of organizations
+   * @return the organizations
    */
   List<Organization> getOrganizations()
-    throws SecurityServiceException;
-
-  /**
-   * Retrieve the organizations using pagination for the requested page.
-   *
-   * @param filter        the filter to apply to the organization name
-   * @param sortDirection the sort direction to apply to the organization name
-   * @param pageIndex     the page index
-   * @param pageSize      the page size
-   *
-   * @return the organizations for the requested page
-   */
-  List<Organization> getOrganizations(String filter, SortDirection sortDirection, Integer pageIndex,
-    Integer pageSize)
     throws SecurityServiceException;
 
   /**
@@ -443,7 +401,7 @@ public interface ISecurityService
   /**
    * Retrieve the user directories.
    *
-   * @return the list of user directories
+   * @return the user directories
    */
   List<UserDirectory> getUserDirectories()
     throws SecurityServiceException;
@@ -497,7 +455,7 @@ public interface ISecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the list of users
+   * @return the users
    */
   List<User> getUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, ElementRef, AfterContentInit} from '@angular/core';
+import {AfterContentInit, Directive, ElementRef} from '@angular/core';
 
 /**
  * The AutofocusDirective class implements the autofocus directive.

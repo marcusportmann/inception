@@ -29,7 +29,7 @@ import {Session} from '../session/session';
 @Injectable()
 export class NavigationService {
 
-  userNavigation: BehaviorSubject<NavigationItem[]>  = new BehaviorSubject<Object[]>([]);
+  userNavigation: BehaviorSubject<NavigationItem[]> = new BehaviorSubject<Object[]>([]);
 
   private navigation: NavigationItem[];
 
@@ -41,15 +41,14 @@ export class NavigationService {
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Navigation Service');
 
-    this.sessionService.session.pipe(
-      map((session: Session) => {
-        this.userNavigation.next(Object.assign([],
-          this.filterNavigationItems(this.navigation, session)));
-      })
-    ).subscribe();
+    this.sessionService.session.pipe(map((session: Session) => {
+      this.userNavigation.next(
+        Object.assign([], this.filterNavigationItems(this.navigation, session)));
+    })).subscribe();
   }
 
-  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[], sessionFunctionCodes: string[]): boolean {
+  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[],
+                                           sessionFunctionCodes: string[]): boolean {
     for (let i = 0; i < navigationItemFunctionCodes.length; i++) {
       for (let j = 0; j < sessionFunctionCodes.length; j++) {
         if (navigationItemFunctionCodes[i] === sessionFunctionCodes[j]) {
@@ -71,7 +70,8 @@ export class NavigationService {
     this.userNavigation.next(this.filterNavigationItems(navigation, null));
   }
 
-  private filterNavigationItems(navigationItems: NavigationItem[], session: Session): NavigationItem[] {
+  private filterNavigationItems(navigationItems: NavigationItem[],
+                                session: Session): NavigationItem[] {
     if (!navigationItems) {
       return navigationItems;
     }
@@ -81,24 +81,31 @@ export class NavigationService {
     for (let i = 0; i < navigationItems.length; i++) {
       const navigationItem: NavigationItem = navigationItems[i];
 
-      const functionCodes = (navigationItem.functionCodes == null) ? [] : navigationItem.functionCodes;
+      const functionCodes = (navigationItem.functionCodes == null) ? [] :
+        navigationItem.functionCodes;
 
       if (functionCodes.length > 0) {
         if (session) {
           if (NavigationService.hasAccessToNavigationItem(functionCodes, session.functionCodes)) {
-            const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+            const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
+              navigationItem.children, session);
 
-            filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-              navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-              navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
+            filteredNavigationItems.push(
+              new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
+                navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+                navigationItem.variant, navigationItem.badge, navigationItem.divider,
+                navigationItem.title));
           }
         }
       } else {
-        const filteredChildNavigationItems: NavigationItem[] =  this.filterNavigationItems(navigationItem.children, session);
+        const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
+          navigationItem.children, session);
 
-        filteredNavigationItems.push(new NavigationItem(navigationItem.icon, navigationItem.name,
-          navigationItem.url, navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
-          navigationItem.variant, navigationItem.badge, navigationItem.divider, navigationItem.title));
+        filteredNavigationItems.push(
+          new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
+            navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+            navigationItem.variant, navigationItem.badge, navigationItem.divider,
+            navigationItem.title));
       }
     }
 

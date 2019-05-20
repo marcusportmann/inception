@@ -75,7 +75,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   private String errorMessage;
 
   /**
-   * The list of organizations the authenticated user is associated with.
+   * The organizations the authenticated user is associated with.
    */
   private List<OrganizationData> organizations;
 
@@ -118,7 +118,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organizations     the list of organizations the authenticated user is associated with
+   * @param organizations     the organizations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *                          data passed as part of a message
    * @param userProperties    the properties returned for the authenticated user
@@ -252,9 +252,9 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the list of organizations the authenticated user is associated with.
+   * Returns the organizations the authenticated user is associated with.
    *
-   * @return the list of organizations the authenticated user is associated with
+   * @return the organizations the authenticated user is associated with
    */
   public List<OrganizationData> getOrganizations()
   {

@@ -54,18 +54,18 @@ export class SelectOrganizationComponent implements OnInit {
   }
 
   isOrganizationSelected(): boolean {
-    return this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value === 'object');
+    return this.selectOrganizationForm.valid &&
+      (typeof this.organizationFormControl.value === 'object');
   }
 
   ngOnInit(): void {
-    this.filteredOrganizations = this.organizationFormControl.valueChanges.pipe(
-      startWith(''),
-      flatMap((value) => this.filterOrganizations(value))
-    );
+    this.filteredOrganizations = this.organizationFormControl.valueChanges.pipe(startWith(''),
+      flatMap((value) => this.filterOrganizations(value)));
   }
 
   onOk(): void {
-    if (this.selectOrganizationForm.valid && (typeof this.organizationFormControl.value === 'object')) {
+    if (this.selectOrganizationForm.valid &&
+      (typeof this.organizationFormControl.value === 'object')) {
       const selectedOrganization: Organization = <Organization>this.organizationFormControl.value;
 
       this.sessionService.session.pipe(first()).subscribe((session: Session) => {
@@ -87,17 +87,15 @@ export class SelectOrganizationComponent implements OnInit {
       filterValue = (<Organization>value).name.toLowerCase();
     }
 
-    return this.sessionService.session.pipe(
-      map((session: Session) => {
-        if (session) {
-          return session.organizations.filter(
-            organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
-        } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/login']);
-          return [];
-        }
-      })
-    );
+    return this.sessionService.session.pipe(map((session: Session) => {
+      if (session) {
+        return session.organizations.filter(
+          organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
+      } else {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/login']);
+        return [];
+      }
+    }));
   }
 }

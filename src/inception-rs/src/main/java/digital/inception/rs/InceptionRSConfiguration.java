@@ -28,6 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -63,7 +64,7 @@ public class InceptionRSConfiguration
       config.setAllowedOrigins(Collections.singletonList("*"));
       config.setAllowedHeaders(Collections.singletonList("*"));
       config.setAllowedMethods(Collections.singletonList("*"));
-      config.setExposedHeaders(Collections.singletonList("content-length"));
+      config.setExposedHeaders(Arrays.asList("Content-Length", "X-Total-Count"));
       config.setMaxAge(3600L);
       source.registerCorsConfiguration("/**", config);
     }

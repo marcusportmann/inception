@@ -18,92 +18,76 @@
 import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {NgModule} from '@angular/core';
-
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
-
 // Import Inception module
 import {InceptionModule} from '../../../inception/inception.module';
-
 // Action List Table component
 import {ActionListTableComponent} from "./action-list-table.component";
-
 // Action Menu Table component
 import {ActionMenuTableComponent} from "./action-menu-table.component";
-
 // Basic Table component
 import {BasicTableComponent} from "./basic-table.component";
-
 // Filterable Table component
 import {FilterableTableComponent} from "./filterable-table.component";
-
 // Pagination Table component
 import {PaginationTableComponent} from "./pagination-table.component";
-
 // Sortable Table component
 import {SortableTableComponent} from "./sortable-table.component";
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'action-list-table',
-  },
-  {
-    path: 'action-list-table',
-    component: ActionListTableComponent,
-    data: {
-      title: 'Action List Table',
-    }
-  },
-  {
-    path: 'action-menu-table',
-    component: ActionMenuTableComponent,
-    data: {
-      title: 'Action Menu Table',
-    }
-  },
-  {
-    path: 'basic-table',
-    component: BasicTableComponent,
-    data: {
-      title: 'Basic Table',
-    }
-  },
-  {
-    path: 'filterable-table',
-    component: FilterableTableComponent,
-    data: {
-      title: 'Filterable Table',
-    }
-  },
-  {
-    path: 'pagination-table',
-    component: PaginationTableComponent,
-    data: {
-      title: 'Pagination Table',
-    }
-  },
-  {
-    path: 'sortable-table',
-    component: SortableTableComponent,
-    data: {
-      title: 'Sortable Table',
-    }
+const routes: Routes = [{
+  path: '',
+  redirectTo: 'action-list-table',
+}, {
+  path: 'action-list-table',
+  component: ActionListTableComponent,
+  data: {
+    title: 'Action List Table',
   }
+}, {
+  path: 'action-menu-table',
+  component: ActionMenuTableComponent,
+  data: {
+    title: 'Action Menu Table',
+  }
+}, {
+  path: 'basic-table',
+  component: BasicTableComponent,
+  data: {
+    title: 'Basic Table',
+  }
+}, {
+  path: 'filterable-table',
+  component: FilterableTableComponent,
+  data: {
+    title: 'Filterable Table',
+  }
+}, {
+  path: 'pagination-table',
+  component: PaginationTableComponent,
+  data: {
+    title: 'Pagination Table',
+  }
+}, {
+  path: 'sortable-table',
+  component: SortableTableComponent,
+  data: {
+    title: 'Sortable Table',
+  }
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
+  imports: [CommonModule, FormsModule,
 
     InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent, FilterableTableComponent, PaginationTableComponent, SortableTableComponent],
-  providers: [
-  ]
+  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent,
+    FilterableTableComponent, PaginationTableComponent, SortableTableComponent
+  ],
+  providers: []
 })
 export class TablesModule {
 }

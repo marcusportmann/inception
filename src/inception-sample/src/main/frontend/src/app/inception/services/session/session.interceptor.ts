@@ -40,20 +40,20 @@ export class SessionInterceptor implements HttpInterceptor {
   constructor(private sessionService: SessionService) {
   }
 
-  intercept(httpRequest: HttpRequest<any>, nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(httpRequest: HttpRequest<any>,
+            nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
-      return this.sessionService.session.pipe(
-        flatMap(session => {
-          if (session) {
-            httpRequest = httpRequest.clone({
-              setHeaders: {
-                Authorization: `Bearer ${session.accessToken}`
-              }
-            });
-          }
+      return this.sessionService.session.pipe(flatMap(session => {
+        if (session) {
+          httpRequest = httpRequest.clone({
+            setHeaders: {
+              Authorization: `Bearer ${session.accessToken}`
+            }
+          });
+        }
 
-          return nextHttpHandler.handle(httpRequest);
-        }));
+        return nextHttpHandler.handle(httpRequest);
+      }));
     } else {
       return nextHttpHandler.handle(httpRequest);
     }

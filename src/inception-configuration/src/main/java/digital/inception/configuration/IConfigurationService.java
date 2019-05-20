@@ -134,7 +134,7 @@ public interface IConfigurationService
    *
    * @param filter the filter to apply to the keys for the configuration summaries
    *
-   * @return the filtered configuration summaries
+   * @return the configuration summaries
    */
   List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
     throws ConfigurationServiceException;
@@ -144,7 +144,7 @@ public interface IConfigurationService
    *
    * @param filter the filter to apply to the keys for the configuration
    *
-   * @return the filtered configurations
+   * @return the configurations
    */
   List<Configuration> getFilteredConfigurations(String filter)
     throws ConfigurationServiceException;
@@ -191,24 +191,6 @@ public interface IConfigurationService
    *         entry does not exist
    */
   long getLong(String key, long defaultValue)
-    throws ConfigurationServiceException;
-
-  /**
-   * Retrieve the numbered of filtered configurations.
-   *
-   * @return the number of filtered configurations
-   */
-  int getNumberOfConfigurations()
-    throws ConfigurationServiceException;
-
-  /**
-   * Retrieve the numbered of filtered configurations.
-   *
-   * @param filter the filter to apply to the keys for the configuration
-   *
-   * @return the number of filtered  configurations
-   */
-  int getNumberOfFilteredConfigurations(String filter)
     throws ConfigurationServiceException;
 
   /**

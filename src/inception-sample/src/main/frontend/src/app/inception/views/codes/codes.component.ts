@@ -49,11 +49,9 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @ViewChild(MatSort)
-  sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
@@ -67,32 +65,32 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   deleteCode(codeId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog(
-        {
-          message: this.i18n({
-            id: '@@codes_component_confirm_delete_code',
-            value: 'Are you sure you want to delete the code?'
-          })
-        });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: this.i18n({
+          id: '@@codes_component_confirm_delete_code',
+          value: 'Are you sure you want to delete the code?'
+        })
+      });
 
     dialogRef.afterClosed().pipe(first())
       .subscribe((confirmation: boolean) => {
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.codesService.deleteCode(this.codeCategoryId, codeId).pipe(first(),
-            finalize(() => this.spinnerService.hideSpinner()))
+          this.codesService.deleteCode(this.codeCategoryId, codeId)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-            this.loadCodes();
-          }, (error: Error) => {
-            if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+              this.loadCodes();
+            }, (error: Error) => {
+              if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
         }
       });
   }
@@ -105,12 +103,13 @@ export class CodesComponent implements AfterViewInit, OnInit {
   loadCodes(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId).pipe(first(),
-      finalize(() => this.spinnerService.hideSpinner()))
+    this.codesService.getCodeCategoryCodes(this.codeCategoryId)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codes: Code[]) => {
         this.dataSource.data = codes;
       }, (error: Error) => {
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
         } else {

@@ -210,12 +210,12 @@ public class ValidationError
   }
 
   /**
-   * Helper method to convert a list of JSR 303 constraint violations to a list of validation
+   * Helper method to convert a set of JSR 303 constraint violations to a set of validation
    * errors.
    *
-   * @param constraintViolations the list of JSR 303 constraint violations to convert
+   * @param constraintViolations the JSR 303 constraint violations to convert
    *
-   * @return the list of validation errors
+   * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
       Set<ConstraintViolation<T>> constraintViolations)
@@ -224,13 +224,13 @@ public class ValidationError
   }
 
   /**
-   * Helper method to convert a list of JSR 303 constraint violations to a list of validation
+   * Helper method to convert a set of JSR 303 constraint violations to a set of validation
    * errors.
    *
-   * @param constraintViolations    the list of JSR 303 constraint violations to convert
+   * @param constraintViolations    the JSR 303 constraint violations to convert
    * @param capitalizePropertyNames should the property names be capitilized
    *
-   * @return the list of validation errors
+   * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
       Set<ConstraintViolation<T>> constraintViolations, boolean capitalizePropertyNames)

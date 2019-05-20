@@ -72,13 +72,16 @@ import {Session} from '../../services/session/session';
 
         <mat-menu #userMenu="matMenu" yPosition="below" overlapTrigger="false" class="user-menu">
           <a mat-menu-item href="#">
-            <i class="fas fa-user-circle"></i> <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
+            <i class="fas fa-user-circle"></i>
+            <span i18n="@@admin_header_component_menu_item_profile">Profile</span>
           </a>
           <a mat-menu-item href="#">
-            <i class="fas fa-cogs"></i> <span i18n="@@admin_header_component_menu_item_settings">Settings</span>
+            <i class="fas fa-cogs"></i>
+            <span i18n="@@admin_header_component_menu_item_settings">Settings</span>
           </a>
           <a mat-menu-item href="#" (click)="logout()">
-            <i class="fas fa-sign-out-alt"></i> <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
+            <i class="fas fa-sign-out-alt"></i>
+            <span i18n="@@admin_header_component_menu_item_logout">Logout</span>
           </a>
         </mat-menu>
 
@@ -96,17 +99,13 @@ import {Session} from '../../services/session/session';
 })
 export class AdminHeaderComponent implements OnInit {
 
-  @Input()
-  brandFull: any;
+  @Input() brandFull: any;
 
-  @Input()
-  brandMinimized: any;
+  @Input() brandMinimized: any;
 
-  @Input()
-  fixed: boolean;
+  @Input() fixed: boolean;
 
-  @Input()
-  sidebarToggler: any;
+  @Input() sidebarToggler: any;
 
   /**
    * Constructs a new AdminHeaderComponent.
@@ -115,7 +114,8 @@ export class AdminHeaderComponent implements OnInit {
    * @param router         The router.
    * @param sessionService The Session Service.
    */
-  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
+  constructor(private elementRef: ElementRef, private router: Router,
+              private sessionService: SessionService) {
   }
 
   static breakpoint(breakpoint: any): any {
@@ -147,11 +147,9 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session.pipe(
-      map((session: Session) => {
-        return (session != null);
-      })
-    );
+    return this.sessionService.session.pipe(map((session: Session) => {
+      return (session != null);
+    }));
   }
 
   login(): void {
@@ -167,14 +165,12 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   username(): Observable<string> {
-    return this.sessionService.session.pipe(
-      map((session: Session) => {
-        if (session) {
-          return session.username;
-        } else {
-          return '';
-        }
-      })
-    );
+    return this.sessionService.session.pipe(map((session: Session) => {
+      if (session) {
+        return session.username;
+      } else {
+        return '';
+      }
+    }));
   }
 }

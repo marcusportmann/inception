@@ -766,14 +766,16 @@ public class SecurityServiceTest
           + "organizations");
     }
 
-    int numberOfFilteredOrganizations = securityService.getNumberOfFilteredOrganizations(
-        organization.getName());
+    List<Organization> filteredOrganizations = securityService.getFilteredOrganizations(
+        organization.getName(), null, null, null);
 
     assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
-        numberOfFilteredOrganizations);
+        filteredOrganizations.size());
 
-    List<Organization> filteredOrganizations = securityService.getFilteredOrganizations(
-        organization.getName());
+    compareOrganizations(organization, filteredOrganizations.get(0));
+
+    filteredOrganizations = securityService.getFilteredOrganizations(organization.getName(),
+        SortDirection.ASCENDING, 0, 100);
 
     assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
         filteredOrganizations.size());
@@ -980,12 +982,6 @@ public class SecurityServiceTest
           + "organizations");
     }
 
-    int numberOfFilteredUserDirectories = securityService.getNumberOfFilteredUserDirectories(
-        userDirectory.getName());
-
-    assertEquals("The correct number of filtered user directories (1) was not retrieved", 1,
-        numberOfFilteredUserDirectories);
-
     List<UserDirectory> filteredUserDirectories = securityService.getFilteredUserDirectories(
         userDirectory.getName());
 
@@ -1081,12 +1077,6 @@ public class SecurityServiceTest
     assertEquals("The correct number of users (1) was not retrieved", 1, retrievedUsers.size());
 
     compareUsers(user, retrievedUsers.get(0), true);
-
-    int numberOfFilteredUsers = securityService.getNumberOfFilteredUsers(userDirectory.getId(),
-        "Test");
-
-    assertEquals("The correct number of filtered users (1) was not retrieved", 1,
-        numberOfFilteredUsers);
 
     List<User> retrievedFilteredUsers = securityService.getFilteredUsers(userDirectory.getId(),
         "Test");

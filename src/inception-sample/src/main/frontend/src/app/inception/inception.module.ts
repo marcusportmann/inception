@@ -16,37 +16,29 @@
 
 // Import Angular decorators
 import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
-
 // Import Angular modules
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ReactiveFormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
-
 // Import Angular components
-import {HashLocationStrategy, LocationStrategy} from '@angular/common';
-
+import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
-
 // Import Inception controls
-import {CheckboxFormField} from "./components/controls";
-import {RadioGroupFormField} from "./components/controls";
-import {TableFilter} from "./components/controls";
-
+import {CheckboxFormField, RadioGroupFormField, TableFilter} from "./components/controls";
 // Import Inception dialogs
-import {ConfirmationDialogComponent} from "./components/dialogs";
-import {ErrorDialogComponent} from "./components/dialogs";
-import {InformationDialogComponent} from "./components/dialogs";
-import {WarningDialogComponent} from "./components/dialogs";
-
+import {
+  ConfirmationDialogComponent,
+  ErrorDialogComponent,
+  InformationDialogComponent,
+  WarningDialogComponent
+} from "./components/dialogs";
 // Import Inception layout components
 import {
-  BreadcrumbsComponent,
   AdminContainerComponent,
   AdminFooterComponent,
   AdminHeaderComponent,
+  BreadcrumbsComponent,
   NotFoundComponent,
   SidebarComponent,
   SidebarFooterComponent,
@@ -56,15 +48,11 @@ import {
   SidebarNavComponent,
   SidebarNavDropdownComponent,
   SidebarNavItemComponent,
-//  SidebarNavLinkComponent,
-//  SidebarNavTitleComponent,
   SimpleContainerComponent,
   SpinnerComponent
 } from './components/layout';
-
 // Import Inception interceptors
 import {SessionInterceptor} from "./services/session/session.interceptor";
-
 // Import Inception services
 import {BreadcrumbsService} from "./services/layout/breadcrumbs.service";
 import {CodesService} from "./services/codes/codes.service";
@@ -76,57 +64,53 @@ import {TitleService} from './services/layout/title.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
-
 // Import Inception miscellaneous
 import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
 import {setInceptionInjector} from "./inception-injector";
-
 // Import 3rd party modules
-import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
+// Import perfect scrollbar dependencies
+import {
+  PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
+} from 'ngx-perfect-scrollbar';
+// Import Material modules
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSliderModule,
+  MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule
+} from "@angular/material";
+// Import Material miscellaneous
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from "@angular/material-moment-adapter";
 
 // Import 3rd party components
-
-// Import perfect scrollbar dependencies
-import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
-import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
-// Import Material modules
-import {DateAdapter} from "@angular/material";
-import {MatAutocompleteModule} from "@angular/material";
-import {MatButtonModule} from "@angular/material";
-import {MatButtonToggleModule} from "@angular/material";
-import {MatCardModule} from "@angular/material";
-import {MatCheckboxModule} from "@angular/material";
-import {MatExpansionModule} from "@angular/material";
-import {MatDatepickerModule} from "@angular/material";
-import {MatDialogModule} from "@angular/material";
-import {MatFormFieldModule} from "@angular/material";
-import {MatGridListModule} from "@angular/material";
-import {MatIconModule} from "@angular/material";
-import {MatInputModule} from "@angular/material";
-import {MatListModule} from "@angular/material";
-import {MatMenuModule} from "@angular/material";
-import {MatPaginatorModule} from "@angular/material";
-import {MatProgressBarModule} from "@angular/material";
-import {MatRadioModule} from "@angular/material";
-import {MatSelectModule} from "@angular/material";
-import {MatSliderModule} from "@angular/material";
-import {MatSortModule} from "@angular/material";
-import {MatTableModule} from "@angular/material";
-import {MatTabsModule} from "@angular/material";
-import {MatToolbarModule} from "@angular/material";
-import {MatTooltipModule} from "@angular/material";
-
-// Import Material miscellaneous
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
-import {MAT_DATE_FORMATS} from "@angular/material";
-import {MAT_DATE_LOCALE} from "@angular/material";
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material";
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS} from "@angular/material-moment-adapter";
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -148,129 +132,64 @@ export const INCEPTION_DATE_FORMATS = {
  * @author Marcus Portmann
  */
 @NgModule({
-  imports: [
-    // Angular modules
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
+  imports: [// Angular modules
+    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
 
     // 3rd party modules
     //ChartsModule,
     PerfectScrollbarModule,
 
     // Material modules
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
+    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
+    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
     DirectivesModule
   ],
-  exports: [
-    // Angular modules
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    RouterModule,
+  exports: [// Angular modules
+    CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
 
     // 3rd party modules
     //ChartsModule,
     PerfectScrollbarModule,
 
     // Material modules
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSortModule,
-    MatTableModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
+    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
+    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
     DirectivesModule,
 
     // Inception control components
-    CheckboxFormField,
-    RadioGroupFormField,
-    TableFilter,
+    CheckboxFormField, RadioGroupFormField, TableFilter,
 
     // Inception layout components
-    AdminContainerComponent,
-    NotFoundComponent,
-    SimpleContainerComponent,
-    SpinnerComponent
+    AdminContainerComponent, NotFoundComponent, SimpleContainerComponent, SpinnerComponent
   ],
-  declarations: [
-    // Inception control components
-    CheckboxFormField,
-    RadioGroupFormField,
-    TableFilter,
+  declarations: [// Inception control components
+    CheckboxFormField, RadioGroupFormField, TableFilter,
 
     // Inception layout components
-    BreadcrumbsComponent,
-    AdminContainerComponent,
-    AdminFooterComponent,
-    AdminHeaderComponent,
-    NotFoundComponent,
-    SidebarComponent,
-    SidebarFooterComponent,
-    SidebarFormComponent,
-    SidebarHeaderComponent,
-    SidebarMinimizerComponent,
-    SidebarNavComponent,
-    SidebarNavDropdownComponent,
-    SidebarNavItemComponent,
-    SimpleContainerComponent,
+    BreadcrumbsComponent, AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent,
+    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
     SpinnerComponent,
 
     // Inception dialogs
-    ConfirmationDialogComponent,
-    ErrorDialogComponent,
-    InformationDialogComponent,
+    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
     WarningDialogComponent
   ],
   entryComponents: [SpinnerComponent],
-  bootstrap: [AdminContainerComponent, ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, SimpleContainerComponent, WarningDialogComponent]
+  bootstrap: [AdminContainerComponent, ConfirmationDialogComponent, ErrorDialogComponent,
+    InformationDialogComponent, SimpleContainerComponent, WarningDialogComponent
+  ]
 })
 export class InceptionModule {
 
@@ -283,15 +202,13 @@ export class InceptionModule {
     setInceptionInjector(injector);
   }
 
-  static forRoot(): ModuleWithProviders
-  {
+  static forRoot(): ModuleWithProviders {
     return {
       ngModule: InceptionModule,
-      providers: [
-        {
-          provide: LocationStrategy,
-          useClass: HashLocationStrategy,
-        },
+      providers: [{
+        provide: LocationStrategy,
+        useClass: HashLocationStrategy,
+      },
 
         {
           provide: HTTP_INTERCEPTORS,
@@ -327,16 +244,8 @@ export class InceptionModule {
 
         CanActivateFunctionGuard,
 
-        BreadcrumbsService,
-        CodesService,
-        ConfigurationService,
-        DialogService,
-        ErrorService,
-        SpinnerService,
-        TitleService,
-        NavigationService,
-        SecurityService,
-        SessionService
+        BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService,
+        SpinnerService, TitleService, NavigationService, SecurityService, SessionService
       ]
     }
   }

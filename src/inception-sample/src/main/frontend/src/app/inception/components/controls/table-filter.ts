@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output
-} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   // tslint:disable-next-line
@@ -31,7 +26,7 @@ import {
         <i class="fa fa-search"></i>
       </div>
       <input class="table-filter-input" matInput [value]="this.value" #tableFilterInput
-          (keyup)="updateValue($event)" placeholder="Search..." autocomplete="off">
+             (keyup)="updateValue($event)" placeholder="Search..." autocomplete="off">
       <button class="table-filter-reset" mat-icon-button *ngIf="value" (click)="resetValue()">
         <i class="fa fa-times"></i>
       </button>
@@ -77,16 +72,14 @@ import {
       padding: 0;
       border: none !important;
     }
-  `]
-})
-// tslint:disable-next-line
+  `
+  ]
+}) // tslint:disable-next-line
 export class TableFilter {
 
-  @Output()
-  changed: EventEmitter<string> = new EventEmitter<string>();
+  @Output() changed: EventEmitter<string> = new EventEmitter<string>();
 
-  @Input()
-  value = '';
+  @Input() value = '';
 
   resetValue(): void {
     this.value = '';

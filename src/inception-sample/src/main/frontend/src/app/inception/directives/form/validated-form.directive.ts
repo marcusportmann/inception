@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewInit,
-  Directive,
-  Host,
-  Optional,
-  Self, ViewContainerRef
-} from '@angular/core';
+import {AfterViewInit, Directive, Host, Optional, Self, ViewContainerRef} from '@angular/core';
 
-import {
-  FormGroupDirective,
-} from '@angular/forms';
+import {FormGroupDirective,} from '@angular/forms';
 
 
 /**
@@ -34,9 +26,11 @@ import {
  */
 @Directive({
   // tslint:disable-next-line
-  selector: 'form[validatedForm]',
-  // tslint:disable-next-line
-  host: {'(submit)': 'onSubmit()', '(reset)': 'onReset()'}
+  selector: 'form[validatedForm]', // tslint:disable-next-line
+  host: {
+    '(submit)': 'onSubmit()',
+    '(reset)': 'onReset()'
+  }
 })
 export class ValidatedFormDirective implements AfterViewInit {
 
@@ -47,7 +41,7 @@ export class ValidatedFormDirective implements AfterViewInit {
    * @param formGroupDirective The form group directive.
    */
   constructor(private viewContainerRef: ViewContainerRef,
-    @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
+              @Host() @Self() @Optional() private formGroupDirective: FormGroupDirective) {
   }
 
   private static isFormElement(nodeName: string): boolean {
@@ -70,7 +64,8 @@ export class ValidatedFormDirective implements AfterViewInit {
 
   onSubmit(): boolean {
     // Mark all controls as touched
-    if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
+    if (this.formGroupDirective && this.formGroupDirective.control &&
+      this.formGroupDirective.control.controls) {
       const form = this.formGroupDirective.control;
 
       Object.keys(form.controls).forEach(key => {
@@ -87,8 +82,10 @@ export class ValidatedFormDirective implements AfterViewInit {
       for (let i = 0; i < nativeElement.children.length; i++) {
         const nativeChildElement = nativeElement.children[i];
 
-        if (nativeChildElement && nativeChildElement.nodeName && ValidatedFormDirective.isFormElement(nativeChildElement.nodeName)) {
-          if (this.formGroupDirective && this.formGroupDirective.control && this.formGroupDirective.control.controls) {
+        if (nativeChildElement && nativeChildElement.nodeName &&
+          ValidatedFormDirective.isFormElement(nativeChildElement.nodeName)) {
+          if (this.formGroupDirective && this.formGroupDirective.control &&
+            this.formGroupDirective.control.controls) {
             const formControl = this.formGroupDirective.control.controls[nativeChildElement.name];
 
             if (formControl && formControl.invalid) {

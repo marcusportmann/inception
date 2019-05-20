@@ -30,10 +30,10 @@ export class MobileSidebarTogglerDirective {
   /**
    * Constructs a new AppMobileSidebarTogglerDirective.
    */
-  constructor() { }
+  constructor() {
+  }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
+  @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     document.querySelector('body').classList.toggle('sidebar-mobile-show');
   }

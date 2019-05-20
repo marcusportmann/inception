@@ -18,81 +18,69 @@
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 // Import Inception module
 import {InceptionModule} from '../../inception.module';
-
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
-
 // Import Inception components
 import {OrganizationsComponent} from './organizations.component';
 import {OverviewComponent} from './overview.component';
 import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 
-const routes: Routes = [
-  {
-    path: '',
-    redirectTo: 'overview'
+const routes: Routes = [{
+  path: '',
+  redirectTo: 'overview'
+}, {
+  path: 'overview',
+  component: OverviewComponent,
+  data: {
+    title: 'Overview',
+    icon: 'fa fa-shield-alt'
+  }
+}, {
+  path: 'organizations',
+  data: {
+    title: 'Organizations'
   },
-  {
-    path: 'overview',
-    component: OverviewComponent,
+  children: [{
+    path: '',
+    canActivate: [CanActivateFunctionGuard],
+    component: OrganizationsComponent,
     data: {
-      title: 'Overview',
-      icon: 'fa fa-shield-alt'
+      functionCodes: ['Application.OrganizationAdministration']
     }
   },
-  {
-    path: 'organizations',
-    data: {
-      title: 'Organizations'
-    },
-    children: [
-      {
-        path: '',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: OrganizationsComponent,
-        data: {
-          functionCodes: ['Application.OrganizationAdministration']
-        }
-      },
 
-      /*
-      {
-        path: 'new-organization',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: NewOrganizationComponent,
-        data: {
-          title: 'New Organization',
-          functionCodes: ['Application.OrganizationAdministration']
-        }
-      },
-      {
-        path: ':organizationId',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: EditOrganizationComponent,
-        data: {
-          title: '{organizationId}',
-          functionCodes: ['Application.OrganizationAdministration']
-        }
+    /*
+    {
+      path: 'new-organization',
+      canActivate: [
+        CanActivateFunctionGuard
+      ],
+      component: NewOrganizationComponent,
+      data: {
+        title: 'New Organization',
+        functionCodes: ['Application.OrganizationAdministration']
       }
-      */
-    ]
-  }
+    },
+    {
+      path: ':organizationId',
+      canActivate: [
+        CanActivateFunctionGuard
+      ],
+      component: EditOrganizationComponent,
+      data: {
+        title: '{organizationId}',
+        functionCodes: ['Application.OrganizationAdministration']
+      }
+    }
+    */
+  ]
+}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    InceptionModule,
+  imports: [CommonModule, FormsModule, InceptionModule,
 
     RouterModule.forChild(routes)
   ],

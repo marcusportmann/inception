@@ -158,3 +158,23 @@ INSERT INTO codes.codes (id, code_category_id, name, value) VALUES ('TestCode113
 
 
 
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b601', 'Test 1', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b602', 'Test 2', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b603', 'Test 3', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b604', 'Test 4', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b605', 'Test 5', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b606', 'Test 6', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b607', 'Test 7', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b608', 'Test 8', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b609', 'Test 9', 1);
+INSERT INTO security.organizations (id, name, status) VALUES
+('204e5b8f-48e7-4354-bd15-753e6543b610', 'Test 10', 1);

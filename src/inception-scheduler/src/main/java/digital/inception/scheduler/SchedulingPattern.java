@@ -471,12 +471,12 @@ public class SchedulingPattern
   }
 
   /**
-   * Parses an element to retrieve the list of values for the pattern.
+   * Parses an element to retrieve the values for the pattern.
    *
    * @param str    the element string
    * @param parser the parser used to parse the values
    *
-   * @return a list of integers representing the allowed values
+   * @return the integers representing the allowed values
    */
   private List<Integer> parseListElement(String str, ValueParser parser)
     throws Exception
@@ -540,7 +540,7 @@ public class SchedulingPattern
    * @param str    the range string.
    * @param parser the parser used to parse the values
    *
-   * @return a list of integers representing the allowed values
+   * @return the integers representing the allowed values
    */
   private List<Integer> parseRange(String str, ValueParser parser)
     throws Exception

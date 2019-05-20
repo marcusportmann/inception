@@ -43,11 +43,15 @@ export class EditConfigurationComponent implements OnInit {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private configurationService: ConfigurationService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+              private configurationService: ConfigurationService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     this.editConfigurationForm = this.formBuilder.group({
       // tslint:disable-next-line
-      key: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(4000)]],
+      key: [{
+        value: '',
+        disabled: true
+      }, [Validators.required, Validators.maxLength(4000)]
+      ],
       value: ['', [Validators.required, Validators.maxLength(4000)]],
       description: ['']
     });
@@ -66,27 +70,28 @@ export class EditConfigurationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let key:string = this.activatedRoute.snapshot.paramMap.get('key');
+    let key: string = this.activatedRoute.snapshot.paramMap.get('key');
 
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfiguration(key).pipe(first()).subscribe((configuration: Configuration) => {
-      this.spinnerService.hideSpinner();
+    this.configurationService.getConfiguration(key).pipe(first())
+      .subscribe((configuration: Configuration) => {
+        this.spinnerService.hideSpinner();
 
-      this.keyFormControl.setValue(configuration.key);
-      this.valueFormControl.setValue(configuration.value);
-      this.descriptionFormControl.setValue(configuration.description);
-    }, (error: Error) => {
-      this.spinnerService.hideSpinner();
+        this.keyFormControl.setValue(configuration.key);
+        this.valueFormControl.setValue(configuration.value);
+        this.descriptionFormControl.setValue(configuration.description);
+      }, (error: Error) => {
+        this.spinnerService.hideSpinner();
 
-      if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      }
-      else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
   }
 
   onCancel(): void {
@@ -109,11 +114,11 @@ export class EditConfigurationComponent implements OnInit {
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
-        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-        }
-        else {
+        } else {
           this.dialogService.showErrorDialog(error);
         }
       });

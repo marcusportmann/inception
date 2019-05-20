@@ -49,13 +49,13 @@ export class SessionService {
     console.log('Initializing the Session Service');
 
     // Start the session refresher
-    timer(0, 10000).pipe(
-      switchMap(() => this.refreshSession())).subscribe((refreshedSession: Session) => {
+    timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
+      .subscribe((refreshedSession: Session) => {
 
         if (refreshedSession != null) {
           console.log('Successfully refreshed session: ', refreshedSession);
         }
-    });
+      });
   }
 
   /**
@@ -81,54 +81,52 @@ export class SessionService {
 
     return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
       body.toString(), options)
-      .pipe(
-        flatMap((tokenResponse: TokenResponse) => {
-          const helper = new JwtHelperService();
+      .pipe(flatMap((tokenResponse: TokenResponse) => {
+        const helper = new JwtHelperService();
 
-          const token: any = helper.decodeToken(tokenResponse.access_token);
+        const token: any = helper.decodeToken(tokenResponse.access_token);
 
-          const accessTokenExpiry: Date = helper.getTokenExpirationDate(
-            tokenResponse.access_token);
+        const accessTokenExpiry: Date = helper.getTokenExpirationDate(tokenResponse.access_token);
 
-          const session: Session = new Session(token.user_name, token.scope, token.authorities,
-            token.organizations, tokenResponse.access_token, accessTokenExpiry,
-            tokenResponse.refresh_token);
+        const session: Session = new Session(token.user_name, token.scope, token.authorities,
+          token.organizations, tokenResponse.access_token, accessTokenExpiry,
+          tokenResponse.refresh_token);
 
-          this.session.next(session);
+        this.session.next(session);
 
-          return this.session;
-        }), catchError((httpErrorResponse: HttpErrorResponse) => {
-          if (httpErrorResponse.status === 400) {
-            if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
-              httpErrorResponse.error.error_description) {
-              if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
-                return throwError(new LoginError(this.i18n({
-                  id: '@@session_service_incorrect_username_or_password',
-                  value: 'Incorrect username or password.'
-                }), httpErrorResponse));
-              } else if (httpErrorResponse.error.error_description.includes('User locked')) {
-                return throwError(new UserLockedError(this.i18n({
-                  id: '@@session_service_the_user_is_locked',
-                  value: 'The user is locked.'
-                }), httpErrorResponse));
-              } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
-                return throwError(new PasswordExpiredError(this.i18n({
-                  id: '@@session_service_the_password_has_expired',
-                  value: 'The password has expired.'
-                }), httpErrorResponse));
-              }
+        return this.session;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (httpErrorResponse.status === 400) {
+          if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
+            httpErrorResponse.error.error_description) {
+            if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+              return throwError(new LoginError(this.i18n({
+                id: '@@session_service_incorrect_username_or_password',
+                value: 'Incorrect username or password.'
+              }), httpErrorResponse));
+            } else if (httpErrorResponse.error.error_description.includes('User locked')) {
+              return throwError(new UserLockedError(this.i18n({
+                id: '@@session_service_the_user_is_locked',
+                value: 'The user is locked.'
+              }), httpErrorResponse));
+            } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+              return throwError(new PasswordExpiredError(this.i18n({
+                id: '@@session_service_the_password_has_expired',
+                value: 'The password has expired.'
+              }), httpErrorResponse));
             }
-
-            return throwError(new LoginError(this.i18n({
-              id: '@@session_service_incorrect_username_or_password',
-              value: 'Incorrect username or password.'
-            }), httpErrorResponse));
-          } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-            return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-          } else {
-            return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
           }
-        }));
+
+          return throwError(new LoginError(this.i18n({
+            id: '@@session_service_incorrect_username_or_password',
+            value: 'Incorrect username or password.'
+          }), httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
   }
 
   /**
@@ -158,36 +156,35 @@ export class SessionService {
             const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
             return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
-              body.toString(), options).pipe(
-              map((tokenResponse: TokenResponse) => {
-                const helper = new JwtHelperService();
+              body.toString(), options).pipe(map((tokenResponse: TokenResponse) => {
+              const helper = new JwtHelperService();
 
-                const token: any = helper.decodeToken(tokenResponse.access_token);
+              const token: any = helper.decodeToken(tokenResponse.access_token);
 
-                const accessTokenExpiry: Date = helper.getTokenExpirationDate(
-                  tokenResponse.access_token);
+              const accessTokenExpiry: Date = helper.getTokenExpirationDate(
+                tokenResponse.access_token);
 
-                const refreshedSession: Session = new Session(token.user_name, token.scope, token.authorities,
-                  token.organizations, tokenResponse.access_token, accessTokenExpiry,
-                  tokenResponse.refresh_token);
+              const refreshedSession: Session = new Session(token.user_name, token.scope,
+                token.authorities, token.organizations, tokenResponse.access_token,
+                accessTokenExpiry, tokenResponse.refresh_token);
 
-                refreshedSession.organization = selectedOrganization;
+              refreshedSession.organization = selectedOrganization;
 
-                this.session.next(refreshedSession);
+              this.session.next(refreshedSession);
 
-                return refreshedSession;
-              }), catchError((httpErrorResponse: HttpErrorResponse) => {
-                console.log(this.i18n({
-                  id: '@@session_service_failed_to_refresh_the_user_session',
-                  value: 'Failed to refresh the user session.'
-                }), httpErrorResponse);
+              return refreshedSession;
+            }), catchError((httpErrorResponse: HttpErrorResponse) => {
+              console.log(this.i18n({
+                id: '@@session_service_failed_to_refresh_the_user_session',
+                value: 'Failed to refresh the user session.'
+              }), httpErrorResponse);
 
-                if (httpErrorResponse.status === 401) {
-                  this.session.next(null);
-                }
+              if (httpErrorResponse.status === 401) {
+                this.session.next(null);
+              }
 
-                return of(null);
-              }));
+              return of(null);
+            }));
           }
         }
       }

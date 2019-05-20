@@ -32,7 +32,8 @@ export class SidebarNavDropdownDirective {
    *
    * @param elementRef The element reference.
    */
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   toggle(): void {
     this.elementRef.nativeElement.classList.toggle('open');

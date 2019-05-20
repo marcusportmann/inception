@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {finalize, first} from 'rxjs/operators';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef, MatPaginator, MatSort} from '@angular/material';
+import {finalize, first, tap} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -25,10 +25,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {Organization} from '../../services/security/organization';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {OrganizationDatasource} from '../../services/security/organization.datasource';
+import {SortDirection} from "../../services/security/sort-direction";
+import {Subscription} from "rxjs";
 
 /**
  * The OrganizationsComponent class implements the organizations component.
@@ -42,21 +43,22 @@ import {OrganizationDatasource} from '../../services/security/organization.datas
     'class': 'flex flex-column flex-fill',
   }
 })
-export class OrganizationsComponent implements AfterViewInit, OnInit {
+export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy {
 
   dataSource: OrganizationDatasource;
 
+  dataSourceLoadingSubscription: Subscription;
+
   displayedColumns: string[] = ['name', 'actions'];
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @ViewChild(MatSort)
-  sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+
   }
 
   applyFilter(filterValue: string): void {
@@ -66,25 +68,25 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
   }
 
   deleteOrganization(organizationId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog(
-        {
-          message: this.i18n({
-            id: '@@organizations_component_confirm_delete_organization',
-            value: 'Are you sure you want to delete the organization?'
-          })
-        });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: this.i18n({
+          id: '@@organizations_component_confirm_delete_organization',
+          value: 'Are you sure you want to delete the organization?'
+        })
+      });
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.securityService.deleteOrganization(organizationId).pipe(first(),
-          finalize(() => this.spinnerService.hideSpinner()))
+        this.securityService.deleteOrganization(organizationId)
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
           .subscribe(() => {
-            this.dataSource.load();
+            this.dataSource.load('', SortDirection.Ascending, 0, 10);
           }, (error: Error) => {
-            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+              (error instanceof SystemUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
             } else {
@@ -126,17 +128,41 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
   // }
 
   newOrganization(): void {
-    // noinspection JSIgnoredPromiseFromCall
+    // noinspection JSIgnoredPromiseFromCalla
     this.router.navigate(['new-organization'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    //this.loadOrganizations();
+    this.dataSource.load('', SortDirection.Ascending, 0, 10);
+
+    this.paginator.page.pipe(tap(() => {
+      this.dataSource.load('', SortDirection.Ascending, this.paginator.pageIndex,
+        this.paginator.pageSize);
+    })).subscribe();
   }
 
   ngOnInit(): void {
     this.dataSource = new OrganizationDatasource(this.securityService);
-    this.dataSource.load();
+
+    this.dataSourceLoadingSubscription = this.dataSource.loading.subscribe((next: boolean) => {
+      if (next) {
+        this.spinnerService.showSpinner()
+      } else {
+        this.spinnerService.hideSpinner();
+      }
+    }, (error: Error) => {
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.dataSourceLoadingSubscription.unsubscribe();
   }
 }
 

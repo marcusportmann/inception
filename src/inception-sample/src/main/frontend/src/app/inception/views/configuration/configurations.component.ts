@@ -47,15 +47,13 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['key', 'value', 'actions'];
 
-  @ViewChild(MatPaginator)
-  paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @ViewChild(MatSort)
-  sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private configurationService: ConfigurationService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+              private configurationService: ConfigurationService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
   }
 
   applyFilter(filterValue: string): void {
@@ -65,31 +63,32 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
   }
 
   deleteConfiguration(key: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
-      this.dialogService.showConfirmationDialog(
-        {
-          message: this.i18n({
-            id: '@@configurations_component_confirm_delete_configuration',
-            value: 'Are you sure you want to delete the configuration?'
-          })
-        });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: this.i18n({
+          id: '@@configurations_component_confirm_delete_configuration',
+          value: 'Are you sure you want to delete the configuration?'
+        })
+      });
 
-    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((confirmation: boolean) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((confirmation: boolean) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.configurationService.deleteConfiguration(key).pipe(first()).subscribe(() => {
-          this.loadConfigurations();
-        }, (error: Error) => {
-          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-      }
-    });
+          this.configurationService.deleteConfiguration(key).pipe(first()).subscribe(() => {
+            this.loadConfigurations();
+          }, (error: Error) => {
+            if ((error instanceof ConfigurationServiceError) ||
+              (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
+        }
+      });
   }
 
   editConfiguration(key: string): void {
@@ -100,16 +99,19 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
   loadConfigurations(): void {
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfigurations().pipe(first(), finalize(() => this.spinnerService.hideSpinner())).subscribe((configurations: Configuration[]) => {
-      this.dataSource.data = configurations;
-    }, (error: Error) => {
-      if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
+    this.configurationService.getConfigurations()
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((configurations: Configuration[]) => {
+        this.dataSource.data = configurations;
+      }, (error: Error) => {
+        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
 
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

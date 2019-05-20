@@ -15,9 +15,9 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ErrorService} from '../../services/error/error.service';
-import {map, first} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -65,8 +65,8 @@ export class SendErrorReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.pipe(first(),
-      map((state: any) => window.history.state))   .subscribe((state: any) => {
+    this.activatedRoute.paramMap.pipe(first(), map((state: any) => window.history.state))
+      .subscribe((state: any) => {
         if (state.error) {
           this.error = state.error;
 
@@ -79,25 +79,29 @@ export class SendErrorReportComponent implements OnInit {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
         }
-    });
+      });
   }
 
   onSendErrorReport(): void {
     if (this.sendErrorReportForm.valid) {
       this.spinnerService.showSpinner();
 
-      this.errorService.sendErrorReport(this.emailFormControl.value, this.feedbackFormControl.value, this.error).pipe(
-        first()).subscribe(result => {
-          this.spinnerService.hideSpinner();
+      this.errorService.sendErrorReport(this.emailFormControl.value, this.feedbackFormControl.value,
+        this.error).pipe(first()).subscribe(result => {
+        this.spinnerService.hideSpinner();
 
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> =
-            this.dialogService.showInformationDialog(
-              {message: this.i18n({id: '@@send_error_component_error_report_submitted', value: 'Your error report was submitted.'}, {})});
-
-          dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
-            this.router.navigate(['/']);
+        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+          {
+            message: this.i18n({
+              id: '@@send_error_component_error_report_submitted',
+              value: 'Your error report was submitted.'
+            }, {})
           });
-        }, (error: Error) => {
+
+        dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+          this.router.navigate(['/']);
+        });
+      }, (error: Error) => {
         this.spinnerService.hideSpinner();
 
         this.dialogService.showErrorDialog(error);
