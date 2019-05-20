@@ -25,8 +25,8 @@ import {ApiError} from '../../errors/api-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {environment} from '../../../../environments/environment';
-import {SortDirection} from "./sort-direction";
-import {FilteredOrganizations} from "./filtered-organizations";
+import {SortDirection} from './sort-direction';
+import {FilteredOrganizations} from './filtered-organizations';
 
 /**
  * The Security Service implementation.
@@ -94,23 +94,23 @@ export class SecurityService {
    * @return The organizations.
    */
   getFilteredOrganizations(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-                   pageSize?: number): Observable<FilteredOrganizations> {
+                           pageSize?: number): Observable<FilteredOrganizations> {
 
     let params = new HttpParams();
 
-    if (filter) {
+    if (filter !== null) {
       params = params.append('filter', filter);
     }
 
-    if (sortDirection) {
+    if (sortDirection !== null) {
       params = params.append('sortDirection', sortDirection);
     }
 
-    if (pageIndex) {
+    if (pageIndex !== null) {
       params = params.append('pageIndex', String(pageIndex));
     }
 
-    if (pageSize) {
+    if (pageSize !== null) {
       params = params.append('pageSize', String(pageSize));
     }
 
@@ -120,11 +120,9 @@ export class SecurityService {
         params: params,
         reportProgress: true,
       }).pipe(map((response: HttpResponse<Organization[]>) => {
-        let totalCount = Number(response.headers.get("X-Total-Count"));
+      const totalCount = Number(response.headers.get('X-Total-Count'));
 
-        var filteredOrganizations = new FilteredOrganizations(totalCount, response.body);
-
-      return filteredOrganizations;
+      return new FilteredOrganizations(totalCount, response.body);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
