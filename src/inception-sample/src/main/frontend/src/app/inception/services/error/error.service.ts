@@ -65,7 +65,7 @@ export class ErrorService {
     return this.httpClient.post<boolean>(environment.errorServiceUrlPrefix + '/error-reports',
       errorReport, {observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<any>) => {
-        return true;
+        return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);

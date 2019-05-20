@@ -27,10 +27,6 @@ import {ApiError} from '../../errors/api-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {environment} from '../../../../environments/environment';
-import {
-  ConfigurationNotFoundError,
-  ConfigurationServiceError
-} from "../configuration/configuration.service.errors";
 
 /**
  * The Security Service implementation.

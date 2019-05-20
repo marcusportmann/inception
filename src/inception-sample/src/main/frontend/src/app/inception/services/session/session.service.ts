@@ -50,7 +50,7 @@ export class SessionService {
 
     // Start the session refresher
     timer(0, 10000).pipe(
-      switchMap(_ => this.refreshSession())).subscribe((refreshedSession: Session) => {
+      switchMap(() => this.refreshSession())).subscribe((refreshedSession: Session) => {
 
         if (refreshedSession != null) {
           console.log('Successfully refreshed session: ', refreshedSession);

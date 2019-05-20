@@ -29,15 +29,6 @@ export class SidebarOffCanvasCloseDirective {
 
   constructor() { }
 
-  @HostListener('click', ['$event'])
-  toggleOpen($event: any): void {
-    $event.preventDefault();
-
-    if (this.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
-      this.toggleClass(document.querySelector('body'), 'sidebar-opened');
-    }
-  }
-
   /**
    * Check whether the element has the class with the specified name.
    *
@@ -46,7 +37,7 @@ export class SidebarOffCanvasCloseDirective {
    *
    * @return True if the element has a class with the specified name or false otherwise.
    */
-  private hasClass(target: any, className: string): boolean {
+  private static hasClass(target: any, className: string): boolean {
     return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
   }
 
@@ -56,15 +47,24 @@ export class SidebarOffCanvasCloseDirective {
    * @param element   The element.
    * @param className The class name.
    */
-  private toggleClass(element: any, className: string): void {
+  private static toggleClass(element: any, className: string): void {
     let newClass = ' ' + element.className.replace( /[\t\r\n]/g, ' ' ) + ' ';
-    if (this.hasClass(element, className)) {
+    if (SidebarOffCanvasCloseDirective.hasClass(element, className)) {
       while (newClass.indexOf(' ' + className + ' ') >= 0 ) {
         newClass = newClass.replace( ' ' + className + ' ' , ' ' );
       }
       element.className = newClass.replace(/^\s+|\s+$/g, '');
     } else {
       element.className += ' ' + className;
+    }
+  }
+
+  @HostListener('click', ['$event'])
+  toggleOpen($event: any): void {
+    $event.preventDefault();
+
+    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
+      SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
     }
   }
 }

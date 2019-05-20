@@ -16,7 +16,7 @@
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -25,9 +25,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {Organization} from "../../services/security/organization";
-import {SecurityService} from "../../services/security/security.service";
-import {SecurityServiceError} from "../../services/security/security.service.errors";
+import {Organization} from '../../services/security/organization';
+import {SecurityService} from '../../services/security/security.service';
+import {SecurityServiceError} from '../../services/security/security.service.errors';
+import {OrganizationDatasource} from '../../services/security/organization.datasource';
 
 /**
  * The OrganizationsComponent class implements the organizations component.
@@ -43,7 +44,7 @@ import {SecurityServiceError} from "../../services/security/security.service.err
 })
 export class OrganizationsComponent implements AfterViewInit, OnInit {
 
-  dataSource = new MatTableDataSource<Organization>();
+  dataSource: OrganizationDatasource;
 
   displayedColumns: string[] = ['name', 'actions'];
 
@@ -59,35 +60,37 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
   }
 
   applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    // filterValue = filterValue.trim();
+    // filterValue = filterValue.toLowerCase();
+    // this.dataSource.filter = filterValue;
   }
 
   deleteOrganization(organizationId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> =
       this.dialogService.showConfirmationDialog(
-        {message: this.i18n({id: '@@organizations_component_confirm_delete_organization',
-            value: 'Are you sure you want to delete the organization?'})});
+        {
+          message: this.i18n({
+            id: '@@organizations_component_confirm_delete_organization',
+            value: 'Are you sure you want to delete the organization?'
+          })
+        });
 
     dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
       if (confirmation === true) {
         this.spinnerService.showSpinner();
 
-        this.securityService.deleteOrganization(organizationId).pipe(first()).subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          this.ngAfterViewInit();
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        this.securityService.deleteOrganization(organizationId).pipe(first(),
+          finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            this.dataSource.load();
+          }, (error: Error) => {
+            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
       }
     });
   }
@@ -97,30 +100,30 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
     this.router.navigate([organizationId], {relativeTo: this.activatedRoute});
   }
 
-  loadOrganizations(): void {
-    this.spinnerService.showSpinner();
-
-    this.securityService.getOrganizations().pipe(first()).subscribe((organizations: Organization[]) => {
-      this.spinnerService.hideSpinner();
-
-      this.dataSource.data = organizations;
-    }, (error: Error) => {
-      this.spinnerService.hideSpinner();
-
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-      } else {
-        this.dialogService.showErrorDialog(error);
-      }
-    });
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function(data, filter): boolean {
-      return data.name.toLowerCase().includes(filter);
-    };
-  }
+  // loadOrganizations(): void {
+  //   this.spinnerService.showSpinner();
+  //
+  //   this.securityService.getOrganizations().pipe(first()).subscribe((organizations: Organization[]) => {
+  //     this.spinnerService.hideSpinner();
+  //
+  //     this.dataSource.data = organizations;
+  //   }, (error: Error) => {
+  //     this.spinnerService.hideSpinner();
+  //
+  //     if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+  //       // noinspection JSIgnoredPromiseFromCall
+  //       this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+  //     } else {
+  //       this.dialogService.showErrorDialog(error);
+  //     }
+  //   });
+  //
+  //   this.dataSource.paginator = this.paginator;
+  //   this.dataSource.sort = this.sort;
+  //   this.dataSource.filterPredicate = function(data, filter): boolean {
+  //     return data.name.toLowerCase().includes(filter);
+  //   };
+  // }
 
   newOrganization(): void {
     // noinspection JSIgnoredPromiseFromCall
@@ -128,10 +131,12 @@ export class OrganizationsComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadOrganizations();
+    //this.loadOrganizations();
   }
 
   ngOnInit(): void {
+    this.dataSource = new OrganizationDatasource(this.securityService);
+    this.dataSource.load();
   }
 }
 

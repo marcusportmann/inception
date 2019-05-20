@@ -49,6 +49,18 @@ export class NavigationService {
     ).subscribe();
   }
 
+  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[], sessionFunctionCodes: string[]): boolean {
+    for (let i = 0; i < navigationItemFunctionCodes.length; i++) {
+      for (let j = 0; j < sessionFunctionCodes.length; j++) {
+        if (navigationItemFunctionCodes[i] === sessionFunctionCodes[j]) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   /**
    * Initialize the navigation.
    *
@@ -91,17 +103,5 @@ export class NavigationService {
     }
 
     return filteredNavigationItems;
-  }
-
-  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[], sessionFunctionCodes: string[]): boolean {
-    for (let i = 0; i < navigationItemFunctionCodes.length; i++) {
-      for (let j = 0; j < sessionFunctionCodes.length; j++) {
-        if (navigationItemFunctionCodes[i] === sessionFunctionCodes[j]) {
-          return true;
-        }
-      }
-    }
-
-    return false;
   }
 }

@@ -79,22 +79,23 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
           })
         });
 
-    dialogRef.afterClosed().pipe(first(),
-      finalize(() => this.spinnerService.hideSpinner()))
+    dialogRef.afterClosed().pipe(first())
       .subscribe((confirmation: boolean) => {
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.codesService.deleteCodeCategory(codeCategoryId).pipe(first()).subscribe(() => {
-            this.loadCodeCategorySummaries();
-          }, (error: Error) => {
-            if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+          this.codesService.deleteCodeCategory(codeCategoryId).pipe(first(),
+            finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              this.loadCodeCategorySummaries();
+            }, (error: Error) => {
+              if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
         }
       });
   }

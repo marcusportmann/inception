@@ -404,6 +404,20 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the organizations using pagination for the requested page.
+   *
+   * @param filter        the filter to apply to the organization name
+   * @param sortDirection the sort direction to apply to the organization name
+   * @param pageIndex     the page index
+   * @param pageSize      the page size
+   *
+   * @return the organizations for the requested page
+   */
+  List<Organization> getOrganizations(String filter, SortDirection sortDirection, Integer pageIndex,
+    Integer pageSize)
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the organizations associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the

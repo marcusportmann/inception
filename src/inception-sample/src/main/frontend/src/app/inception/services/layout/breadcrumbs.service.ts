@@ -39,39 +39,38 @@ export class BreadcrumbsService {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     console.log('Initializing the Breadcrumbs Service');
 
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
-      const breadcrumbs = [];
-      let currentRoute = this.activatedRoute.root, url = '';
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        const breadcrumbs = [];
+        let currentRoute = this.activatedRoute.root, url = '';
 
-      do {
-        const childrenRoutes = currentRoute.children;
-        currentRoute = null;
-        // tslint:disable-next-line:no-shadowed-variable
-        childrenRoutes.forEach(route => {
-          if (route.outlet === 'primary') {
-            const routeSnapshot = route.snapshot;
+        do {
+          const childrenRoutes = currentRoute.children;
+          currentRoute = null;
+          // tslint:disable-next-line:no-shadowed-variable
+          childrenRoutes.forEach(route => {
+            if (route.outlet === 'primary') {
+              const routeSnapshot = route.snapshot;
 
-            if (routeSnapshot.url.length > 0) {
-              url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+              if (routeSnapshot.url.length > 0) {
+                url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
-              if (routeSnapshot.data.title) {
-                const params = routeSnapshot.params;
-
-                breadcrumbs.push({
-                  label: format(routeSnapshot.data.title, routeSnapshot.params),
-                  url: url
-                });
+                if (routeSnapshot.data.title) {
+                  breadcrumbs.push({
+                    label: format(routeSnapshot.data.title, routeSnapshot.params),
+                    url: url
+                  });
+                }
               }
+              currentRoute = route;
             }
-            currentRoute = route;
-          }
-        });
-      } while (currentRoute);
+          });
+        } while (currentRoute);
 
-      this.breadcrumbs.next(Object.assign([], breadcrumbs));
+        this.breadcrumbs.next(Object.assign([], breadcrumbs));
 
-      return breadcrumbs;
-    });
+        return breadcrumbs;
+      });
   }
 }
 

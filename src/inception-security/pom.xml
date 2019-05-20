@@ -18,6 +18,27 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>
     </dependency>
+
+    <!-- Dependencies -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+
+
+    <!--
     <dependency>
       <groupId>digital.inception</groupId>
       <artifactId>inception-json</artifactId>
@@ -34,6 +55,7 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-validation</artifactId>
     </dependency>
+    -->
 
     <!-- Dependencies -->
     <dependency>
