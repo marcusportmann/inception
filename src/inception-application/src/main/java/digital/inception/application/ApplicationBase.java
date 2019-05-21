@@ -20,6 +20,7 @@ package digital.inception.application;
 
 import com.codahale.metrics.MetricRegistry;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.NetworkUtil;
@@ -96,7 +97,8 @@ import javax.xml.ws.Endpoint;
 @Component
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public abstract class ApplicationBase implements WebApplicationInitializer
+public abstract class ApplicationBase
+  implements WebApplicationInitializer
 {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
@@ -255,19 +257,14 @@ public abstract class ApplicationBase implements WebApplicationInitializer
     return applicationContext;
   }
 
-
   @Override
-  public void onStartup(ServletContext container) {
-
+  public void onStartup(ServletContext container)
+  {
     // Create the 'root' Spring application context
-    AnnotationConfigWebApplicationContext rootContext =
-      new AnnotationConfigWebApplicationContext();
+    AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 
     container.addListener(new ContextLoaderListener(rootContext));
   }
-
-
-
 
   /**
    * Create the web service endpoint.
@@ -501,7 +498,22 @@ public abstract class ApplicationBase implements WebApplicationInitializer
   protected Jackson2ObjectMapperBuilder jacksonBuilder()
   {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
-    jackson2ObjectMapperBuilder.indentOutput(true).dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    jackson2ObjectMapperBuilder.indentOutput(true);
+
+    /*
+     * NOTE: Changed the date format to fix timestamps in Spring errors that were only showing a
+     *       date. This will make ISO8601 the default date format for JSON serialization and
+     *       deserialization of dates. Which may have unintended consequences...
+     */
+    // jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+    //jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+    jackson2ObjectMapperBuilder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    /*
+     * NOTE: We have implemented a custom module that supports the JSR310 date/time classes as the
+     *       jackson-datatype-jsr310 module provided by Jackson does not handle timezones correctly
+     *       for LocalDateTime objects.
+     */
     jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
 
     return jackson2ObjectMapperBuilder;

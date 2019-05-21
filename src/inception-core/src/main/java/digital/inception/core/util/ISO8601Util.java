@@ -20,11 +20,14 @@ package digital.inception.core.util;
 
 import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+
+import java.util.Date;
 
 /**
  * The <code>ISO8601Util</code> class provides a helper class for handling ISO 8601 strings of the
@@ -35,14 +38,46 @@ import java.time.temporal.TemporalAccessor;
 @SuppressWarnings("unused")
 public final class ISO8601Util
 {
-  private static final ThreadLocal<DateTimeFormatter> threadLocalDateTimeFormatter =
+  private static final ThreadLocal<DateTimeFormatter> localDateTimeFormatter =
       ThreadLocal.withInitial(() -> (new DateTimeFormatterBuilder().appendPattern(
       "yyyy-MM-dd'T'HH:mm:ss").parseLenient().optionalStart().appendPattern(".SSS").optionalEnd()
       .optionalStart().appendOffset("+HH:MM", "Z").optionalEnd().toFormatter()));
-  private static final ThreadLocal<DateTimeFormatter> threadLocalDateFormatter =
+  private static final ThreadLocal<DateTimeFormatter> localDateFormatter =
       ThreadLocal.withInitial(() -> DateTimeFormatter.ISO_DATE);
-  private static final ThreadLocal<DateTimeFormatter> threadLocalTimeFormatter =
+  private static final ThreadLocal<DateTimeFormatter> localTimeFormatter =
       ThreadLocal.withInitial(() -> DateTimeFormatter.ISO_TIME);
+
+  private static final ThreadLocal<SimpleDateFormat> dateFormatter =
+    ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+
+  private static final ThreadLocal<SimpleDateFormat> dateTimeFormatter =
+    ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+
+  /**
+   * Transform the <code>Date</code> instance into an ISO 8601 string.
+   *
+   * @param date the <code>Date</code> instance to transform into an ISO 8601 string
+   *
+   * @return the ISO 8601 string for the <code>Date</code> instance
+   */
+  public static String fromDate(Date date)
+  {
+    return dateFormatter.get().format(date);
+  }
+
+  /**
+   * Transform the <code>Date</code> instance into an ISO 8601 string.
+   *
+   * @param date the <code>Date</code> instance to transform into an ISO 8601 string
+   *
+   * @return the ISO 8601 string for the <code>Date</code> instance
+   */
+  public static String fromDateTime(Date date)
+  {
+    return dateTimeFormatter.get().format(date);
+
+    //return ZonedDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC).format(localDateTimeFormatter.get());
+  }
 
   /**
    * Transform the <code>LocalDate</code> instance into an ISO 8601 string.
@@ -53,7 +88,7 @@ public final class ISO8601Util
    */
   public static String fromLocalDate(LocalDate localDate)
   {
-    return localDate.format(threadLocalDateFormatter.get());
+    return localDate.format(localDateFormatter.get());
   }
 
   /**
@@ -65,11 +100,7 @@ public final class ISO8601Util
    */
   public static String fromLocalDateTime(LocalDateTime localDateTime)
   {
-    ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-
-    ZonedDateTime gmtZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
-
-    return gmtZonedDateTime.format(threadLocalDateTimeFormatter.get());
+    return ZonedDateTime.of(localDateTime, ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).format(localDateTimeFormatter.get());
   }
 
   /**
@@ -81,7 +112,7 @@ public final class ISO8601Util
    */
   public static String fromLocalTime(LocalTime localTime)
   {
-    return localTime.format(threadLocalTimeFormatter.get());
+    return localTime.format(localTimeFormatter.get());
   }
 
   /**
@@ -94,7 +125,7 @@ public final class ISO8601Util
    */
   public static String fromZonedDateTime(ZonedDateTime zonedDateTime)
   {
-    return zonedDateTime.format(threadLocalDateTimeFormatter.get());
+    return zonedDateTime.format(localDateTimeFormatter.get());
   }
 
   /**
@@ -105,11 +136,20 @@ public final class ISO8601Util
   public static void main(String[] args)
     throws Exception
   {
-    System.out.println(fromLocalDateTime(LocalDateTime.now()));
+    System.out.println("fromDate(new Date()) = " + fromDate(new Date()));
 
-    System.out.println(fromZonedDateTime(ZonedDateTime.now(ZoneId.of("UTC"))));
+    System.out.println("fromDateTime(new Date()) = " + fromDateTime(new Date()));
 
-    System.out.println(fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())));
+    System.out.println("fromLocalDate(LocalDate.now()) = " + fromLocalDate(LocalDate.now()));
+
+    System.out.println("fromLocalDateTime(LocalDateTime.now()) = " + fromLocalDateTime(
+        LocalDateTime.now()));
+
+    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)) = "
+        + fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)));
+
+    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())) = "
+        + fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())));
 
     System.out.println("Local Date Time 2017-08-14T19:14:53.120Z = " + toLocalDateTime(
         "2017-08-14T19:14:53.120Z"));
@@ -153,10 +193,28 @@ public final class ISO8601Util
    *
    * @return the <code>LocalDate</code> instance for the ISO 8601 string
    */
+  public static Date toDate(String iso8601string)
+    throws ParseException
+  {
+
+  return null;
+
+//    return java.util.Date
+//      .from(toLocalDate(iso8601string).atZone(ZoneId.systemDefault())
+//        .toInstant());
+  }
+
+  /**
+   * Transform ISO 8601 string into a <code>LocalDate</code> instance.
+   *
+   * @param iso8601string the ISO 8601 string to transform
+   *
+   * @return the <code>LocalDate</code> instance for the ISO 8601 string
+   */
   public static LocalDate toLocalDate(String iso8601string)
     throws ParseException
   {
-    return LocalDate.parse(iso8601string, threadLocalDateFormatter.get());
+    return LocalDate.parse(iso8601string, localDateFormatter.get());
   }
 
   /**
@@ -169,16 +227,16 @@ public final class ISO8601Util
   public static LocalDateTime toLocalDateTime(String iso8601string)
     throws ParseException
   {
-    TemporalAccessor temporalAccessor = threadLocalDateTimeFormatter.get().parse(iso8601string);
+    TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
 
     if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
     {
-      return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
+      return ZonedDateTime.parse(iso8601string, localDateTimeFormatter.get())
           .withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
     else
     {
-      return LocalDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get());
+      return LocalDateTime.parse(iso8601string, localDateTimeFormatter.get());
     }
   }
 
@@ -192,7 +250,7 @@ public final class ISO8601Util
   public static LocalTime toLocalTime(String iso8601string)
     throws ParseException
   {
-    return LocalTime.parse(iso8601string, threadLocalTimeFormatter.get());
+    return LocalTime.parse(iso8601string, localTimeFormatter.get());
   }
 
   /**
@@ -205,16 +263,16 @@ public final class ISO8601Util
   public static ZonedDateTime toZonedDateTime(String iso8601string)
     throws ParseException
   {
-    TemporalAccessor temporalAccessor = threadLocalDateTimeFormatter.get().parse(iso8601string);
+    TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
 
     if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
     {
-      return ZonedDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get())
+      return ZonedDateTime.parse(iso8601string, localDateTimeFormatter.get())
           .withZoneSameInstant(ZoneId.systemDefault());
     }
     else
     {
-      return LocalDateTime.parse(iso8601string, threadLocalDateTimeFormatter.get()).atZone(
+      return LocalDateTime.parse(iso8601string, localDateTimeFormatter.get()).atZone(
           ZoneId.systemDefault());
     }
   }

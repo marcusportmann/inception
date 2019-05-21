@@ -23,6 +23,7 @@ import digital.inception.codes.CodesWebService;
 import digital.inception.codes.ICodesService;
 import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.configuration.IConfigurationService;
+import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.error.ErrorWebService;
 import digital.inception.error.IErrorService;
@@ -53,6 +54,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -150,7 +153,16 @@ public class SampleApplication extends Application
    */
   public static void main(String[] args)
   {
-    SpringApplication.run(SampleApplication.class, args);
+    try
+    {
+      System.out.println(ISO8601Util.toLocalDateTime("2019-05-21T07:22:51.287+0000"));
+    }
+    catch (Throwable e)
+    {
+      System.out.println(e.getMessage());
+    }
+
+    //SpringApplication.run(SampleApplication.class, args);
   }
 
   /**

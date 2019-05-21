@@ -22,10 +22,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import org.springframework.util.StringUtils;
-
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -119,7 +118,19 @@ public class RestControllerError
   private List<Object> validationErrors;
 
   /**
-   * Constructs a new <code>ApplicationError</code>.
+   * Constructs a new <code>RestControllerError</code>.
+   *
+   * @param request        the HTTP servlet request
+   * @param responseStatus the HTTP response status
+   */
+  @SuppressWarnings("unchecked")
+  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus)
+  {
+    this(request, responseStatus, null);
+  }
+
+  /**
+   * Constructs a new <code>RestControllerError</code>.
    *
    * @param request        the HTTP servlet request
    * @param responseStatus the HTTP response status
@@ -159,23 +170,26 @@ public class RestControllerError
     }
     else if ((annotation == null) || (annotation.value().is5xxServerError()))
     {
-      this.exception = cause.getClass().getName();
-
-      try
+      if (cause != null)
       {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintWriter pw = new PrintWriter(baos);
+        this.exception = cause.getClass().getName();
 
-        pw.println(cause.getMessage());
-        pw.println();
+        try
+        {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          PrintWriter pw = new PrintWriter(baos);
 
-        cause.printStackTrace(pw);
+          pw.println(cause.getMessage());
+          pw.println();
 
-        pw.flush();
+          cause.printStackTrace(pw);
 
-        this.stackTrace = baos.toString();
+          pw.flush();
+
+          this.stackTrace = baos.toString();
+        }
+        catch (Throwable ignored) {}
       }
-      catch (Throwable ignored) {}
     }
 
     this.uri = request.getRequestURI();
@@ -184,27 +198,30 @@ public class RestControllerError
 
     this.statusText = responseStatus.getReasonPhrase();
 
-    try
+    if (cause != null)
     {
-      if (cause.getClass().getName().equals(
-          "digital.inception.validation.InvalidArgumentException"))
+      try
       {
-        Method getNameMethod = cause.getClass().getMethod("getName");
-
-        if (getNameMethod != null)
+        if (cause.getClass().getName().equals(
+            "digital.inception.validation.InvalidArgumentException"))
         {
-          this.name = (String) getNameMethod.invoke(cause);
-        }
+          Method getNameMethod = cause.getClass().getMethod("getName");
 
-        Method getValidationErrorsMethod = cause.getClass().getMethod("getValidationErrors");
+          if (getNameMethod != null)
+          {
+            this.name = (String) getNameMethod.invoke(cause);
+          }
 
-        if (getValidationErrorsMethod != null)
-        {
-          validationErrors = (List<Object>) getValidationErrorsMethod.invoke(cause);
+          Method getValidationErrorsMethod = cause.getClass().getMethod("getValidationErrors");
+
+          if (getValidationErrorsMethod != null)
+          {
+            validationErrors = (List<Object>) getValidationErrorsMethod.invoke(cause);
+          }
         }
       }
+      catch (Throwable ignored) {}
     }
-    catch (Throwable ignored) {}
   }
 
   /**
