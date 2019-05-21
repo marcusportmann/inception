@@ -153,16 +153,7 @@ public class SampleApplication extends Application
    */
   public static void main(String[] args)
   {
-    try
-    {
-      System.out.println(ISO8601Util.toLocalDateTime("2019-05-21T07:22:51.287+0000"));
-    }
-    catch (Throwable e)
-    {
-      System.out.println(e.getMessage());
-    }
-
-    //SpringApplication.run(SampleApplication.class, args);
+    SpringApplication.run(SampleApplication.class, args);
   }
 
   /**

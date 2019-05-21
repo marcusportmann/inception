@@ -21,6 +21,7 @@ package digital.inception.application;
 import com.codahale.metrics.MetricRegistry;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.NetworkUtil;
@@ -40,14 +41,10 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -59,9 +56,6 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
@@ -73,18 +67,13 @@ import java.lang.reflect.Method;
 
 import java.security.KeyStore;
 import java.security.SecureRandom;
-
 import java.text.SimpleDateFormat;
-
-import java.util.Collections;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
 
 import javax.xml.ws.Endpoint;
 
@@ -507,7 +496,6 @@ public abstract class ApplicationBase
      */
     // jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
     //jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
-    jackson2ObjectMapperBuilder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
     /*
      * NOTE: We have implemented a custom module that supports the JSR310 date/time classes as the

@@ -28,6 +28,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
+import java.util.Date;
+
 /**
  * The <code>DateTimeModule</code> implements the custom Jackson module that registers the
  * serializer and deserializer extensions that support the Java 8 Date/Time API.
@@ -43,6 +45,8 @@ public class DateTimeModule extends SimpleModule
   {
     super("DateTimeModule", new Version(1, 0, 0, null, null, null));
 
+    addSerializer(Date.class, new DateSerializer());
+    addDeserializer(Date.class, new DateDeserializer());
     addSerializer(LocalDate.class, new LocalDateSerializer());
     addDeserializer(LocalDate.class, new LocalDateDeserializer());
     addSerializer(LocalTime.class, new LocalTimeSerializer());

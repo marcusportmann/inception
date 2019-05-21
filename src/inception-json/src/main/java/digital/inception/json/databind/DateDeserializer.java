@@ -29,6 +29,7 @@ import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
 
 import java.time.LocalDate;
+
 import java.util.Date;
 
 /**
@@ -45,12 +46,12 @@ public class DateDeserializer extends JsonDeserializer<Date>
   {
     try
     {
-      return ISO8601Util.toLocalDate(jsonParser.getValueAsString()).;
+      return ISO8601Util.toDate(jsonParser.getValueAsString());
     }
     catch (Throwable e)
     {
-      throw new IOException("Failed to deserialize the ISO8601Util value ("
-        + jsonParser.getValueAsString() + ")");
+      throw new IOException("Failed to deserialize the ISO 8601 value ("
+          + jsonParser.getValueAsString() + ")");
     }
   }
 }

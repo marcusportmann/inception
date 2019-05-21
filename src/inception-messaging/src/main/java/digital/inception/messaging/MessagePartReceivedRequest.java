@@ -32,7 +32,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"WeakerAccess"})
+@SuppressWarnings({ "WeakerAccess" })
 public class MessagePartReceivedRequest
 {
   /**

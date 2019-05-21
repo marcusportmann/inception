@@ -49,7 +49,7 @@ public class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime>
     }
     catch (Throwable e)
     {
-      throw new IOException("Failed to deserialize the ISO8601Util value ("
+      throw new IOException("Failed to deserialize the ISO 8601 value ("
           + jsonParser.getValueAsString() + ")");
     }
   }

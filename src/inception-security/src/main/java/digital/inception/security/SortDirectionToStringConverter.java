@@ -16,6 +16,8 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

@@ -22,17 +22,20 @@ import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Element;
+
 import org.springframework.util.StringUtils;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.Serializable;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryData</code> class stores the information for a code category.
@@ -131,7 +134,9 @@ public class CodeCategoryData
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
     this.lastUpdated = codeCategory.getUpdated();
-    this.codeData = StringUtils.isEmpty(codeData) ? "" : codeData;
+    this.codeData = StringUtils.isEmpty(codeData)
+        ? ""
+        : codeData;
     this.codes = new ArrayList<>();
 
     if (codes != null)
@@ -254,7 +259,10 @@ public class CodeCategoryData
     Element codeCategoryElement = new Element("CodeCategory");
 
     codeCategoryElement.addContent(new Element("Id", id));
-    codeCategoryElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    codeCategoryElement.addContent(new Element("Name",
+        StringUtils.isEmpty(name)
+        ? ""
+        : name));
     codeCategoryElement.addContent(new Element("LastUpdated",
         (lastUpdated == null)
         ? ISO8601Util.now()

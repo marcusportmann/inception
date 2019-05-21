@@ -18,9 +18,9 @@ package digital.inception.json.databind;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import digital.inception.core.util.ISO8601Util;
 
@@ -28,28 +28,20 @@ import digital.inception.core.util.ISO8601Util;
 
 import java.io.IOException;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
- * The <code>LocalDateDeserializer</code> class implements the Jackson deserializer for the
- * <code>LocalDate</code> type.
+ * The <code>DateDeserializer</code> class implements the Jackson serializer for the
+ * <code>Date</code> type.
  *
  * @author Marcus Portmann
  */
-public class LocalDateDeserializer extends JsonDeserializer<LocalDate>
+public class DateSerializer extends JsonSerializer<Date>
 {
   @Override
-  public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+  public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider serializers)
     throws IOException
   {
-    try
-    {
-      return ISO8601Util.toLocalDate(jsonParser.getValueAsString());
-    }
-    catch (Throwable e)
-    {
-      throw new IOException("Failed to deserialize the ISO 8601 value ("
-          + jsonParser.getValueAsString() + ")");
-    }
+    jsonGenerator.writeString(ISO8601Util.fromDateTime(date));
   }
 }

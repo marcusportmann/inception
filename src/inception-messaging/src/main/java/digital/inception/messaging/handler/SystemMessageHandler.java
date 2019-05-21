@@ -37,6 +37,7 @@ import digital.inception.security.UserNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -51,8 +52,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "CdiManagedBeanInconsistencyInspection",
-  "SpringJavaAutowiredMembersInspection"})
+@SuppressWarnings({ "unused", "CdiManagedBeanInconsistencyInspection",
+    "SpringJavaAutowiredMembersInspection" })
 public class SystemMessageHandler extends MessageHandler
 {
   /* Logger */

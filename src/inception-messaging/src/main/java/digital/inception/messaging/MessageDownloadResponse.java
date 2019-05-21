@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class MessageDownloadResponse
 {
   /**

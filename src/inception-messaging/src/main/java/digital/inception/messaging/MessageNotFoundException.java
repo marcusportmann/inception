@@ -43,7 +43,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "MessageNotFoundException", targetNamespace = "http://messaging.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({"unused"})
+@SuppressWarnings({ "unused" })
 public class MessageNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;

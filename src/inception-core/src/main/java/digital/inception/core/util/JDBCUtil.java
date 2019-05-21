@@ -20,15 +20,19 @@ package digital.inception.core.util;
 
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.*;
+
 import java.net.URL;
+
 import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.

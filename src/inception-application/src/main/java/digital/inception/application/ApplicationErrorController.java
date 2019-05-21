@@ -17,6 +17,9 @@
 //package digital.inception.application;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.autoconfigure.web.ErrorProperties;
+//import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
+//import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 //import org.springframework.boot.web.servlet.error.ErrorAttributes;
 //import org.springframework.boot.web.servlet.error.ErrorController;
 //import org.springframework.stereotype.Controller;
@@ -25,6 +28,7 @@
 //import org.springframework.web.context.request.ServletWebRequest;
 //
 //import javax.servlet.http.HttpServletRequest;
+//import java.util.Collections;
 //import java.util.Map;
 //
 ///**
@@ -34,8 +38,38 @@
 // * @author Marcus Portmann
 // */
 //@Controller
-//public class ApplicationErrorController implements ErrorController
+//@RequestMapping("${server.error.path:${error.path:/error}}")
+//public class ApplicationErrorController extends BasicErrorController
 //{
+//  /**
+//   * Create a new {@link BasicErrorController} instance.
+//   * @param errorAttributes the error attributes
+//   * @param errorProperties configuration properties
+//   */
+//  public BasicErrorController(ErrorAttributes errorAttributes,
+//    ErrorProperties errorProperties) {
+//    this(errorAttributes, errorProperties, Collections.emptyList());
+//  }
+//
+//  /**
+//   * Create a new {@link BasicErrorController} instance.
+//   * @param errorAttributes the error attributes
+//   * @param errorProperties configuration properties
+//   * @param errorViewResolvers error view resolvers
+//   */
+//  public BasicErrorController(ErrorAttributes errorAttributes,
+//    ErrorProperties errorProperties, List<ErrorViewResolver> errorViewResolvers) {
+//    super(errorAttributes, errorViewResolvers);
+//    Assert.notNull(errorProperties, "ErrorProperties must not be null");
+//    this.errorProperties = errorProperties;
+//  }
+//
+//
+//
+//
+//
+//
+//
 //  @Autowired
 //  private ErrorAttributes errorAttributes;
 //

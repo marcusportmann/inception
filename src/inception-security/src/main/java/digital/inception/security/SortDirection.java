@@ -20,6 +20,7 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.annotations.ApiModel;
 
 //~--- JDK imports ------------------------------------------------------------

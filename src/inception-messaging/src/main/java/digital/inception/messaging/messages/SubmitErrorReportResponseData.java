@@ -24,11 +24,12 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
+
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>SubmitErrorReportResponseData</code> class manages the data for a
@@ -177,7 +178,9 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
     Element rootElement = new Element("SubmitErrorReportResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
-    rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
+    rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage)
+        ? ""
+        : errorMessage));
     rootElement.addContent(new Element("ErrorReportId", errorReportId.toString()));
 
     Document document = new Document(rootElement);
@@ -196,7 +199,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   public String toString()
   {
     return "SubmitErrorReportResponseData {errorReportId=\"" + errorReportId + "\", "
-        + "errorCode=\"" + errorCode + "\", errorMessage=\"" + (StringUtils.isEmpty(
-        errorMessage) ? "" : errorMessage) + "\"}";
+        + "errorCode=\"" + errorCode + "\", errorMessage=\"" + (StringUtils.isEmpty(errorMessage)
+        ? ""
+        : errorMessage) + "\"}";
   }
 }

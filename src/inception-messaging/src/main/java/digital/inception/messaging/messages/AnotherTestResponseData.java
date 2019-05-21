@@ -24,11 +24,12 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
+
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
  * The <code>AnotherTestResponseData</code> class manages the data for a
@@ -142,7 +143,9 @@ public class AnotherTestResponseData extends WbxmlMessageData
   {
     Element rootElement = new Element("AnotherTestResponse");
 
-    rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue) ? "" : testValue));
+    rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue)
+        ? ""
+        : testValue));
     rootElement.addContent(new Element("TestData", testData));
 
     Document document = new Document(rootElement);

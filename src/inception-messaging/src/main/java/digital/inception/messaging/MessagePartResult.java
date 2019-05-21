@@ -33,7 +33,7 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class MessagePartResult
 {
   /**

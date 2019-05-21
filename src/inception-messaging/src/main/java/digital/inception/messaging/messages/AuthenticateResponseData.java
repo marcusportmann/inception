@@ -25,12 +25,13 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 import digital.inception.security.Organization;
+
 import org.springframework.util.StringUtils;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a

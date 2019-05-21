@@ -20,6 +20,7 @@ package digital.inception.messaging;
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
+
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -40,7 +41,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"WeakerAccess"})
+@SuppressWarnings({ "WeakerAccess" })
 public class MessageTranslator
 {
   private static ThreadLocal<MessageDigest> threadLocalMessageDigest = ThreadLocal.withInitial(

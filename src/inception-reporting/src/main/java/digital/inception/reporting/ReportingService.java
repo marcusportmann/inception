@@ -18,8 +18,6 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.util.StringUtils;
-
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -31,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
 

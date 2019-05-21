@@ -19,7 +19,6 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
-import org.springframework.util.StringUtils;
 
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +38,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>ResourceServerConfiguration</code> class provides the OAuth2 Resource Server
