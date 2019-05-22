@@ -795,89 +795,6 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the filtered organizations using pagination.
-   *
-   * @param filter        the filter to apply to the organization name
-   * @param sortDirection the sort direction to apply to the organization name
-   * @param pageIndex     the page index
-   * @param pageSize      the page size
-   *
-   * @return the organizations
-   */
-  @Override
-  public List<Organization> getFilteredOrganizations(String filter, SortDirection sortDirection,
-      Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException
-  {
-    if (false)
-    {
-      throw new SecurityServiceException("Testing 1.. 2.. 3..");
-    }
-
-    String getOrganizationsSQL = "SELECT id, name, status FROM security.organizations";
-
-    if (!StringUtils.isEmpty(filter))
-    {
-      getOrganizationsSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    getOrganizationsSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
-        ? "DESC"
-        : "ASC");
-
-    if ((pageIndex != null) && (pageSize != null))
-    {
-      getOrganizationsSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
-
-    }
-    else
-    {
-      getOrganizationsSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
-    {
-      if (!StringUtils.isEmpty(filter))
-      {
-        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Organization> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildOrganizationFromResultSet(rs));
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      String message = "Failed to retrieve the organizations";
-
-      if (!StringUtils.isEmpty(filter))
-      {
-        message += String.format(" matching the filter \"%s\"", filter);
-      }
-
-      if ((pageIndex != null) && (pageSize != null))
-      {
-        message += " for the page " + pageIndex + " using the page size " + pageSize;
-      }
-
-      message += ": ";
-
-      message += e.getMessage();
-
-      throw new SecurityServiceException(message, e);
-    }
-  }
-
-  /**
    * Retrieve the filtered user directories.
    *
    * @param filter the filter to apply to the user directories
@@ -926,29 +843,6 @@ public class SecurityService
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the filtered user directories: %s", e.getMessage()), e);
     }
-  }
-
-  /**
-   * Retrieve the filtered users.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param filter          the filter to apply to the users
-   *
-   * @return the users
-   */
-  @Override
-  public List<User> getFilteredUsers(UUID userDirectoryId, String filter)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getFilteredUsers(filter);
   }
 
   /**
@@ -1383,6 +1277,84 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the organizations.
+   *
+   * @param filter        the optional filter to apply to the organization name
+   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the organizations
+   */
+  @Override
+  public List<Organization> getOrganizations(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws SecurityServiceException
+  {
+    String getOrganizationsSQL = "SELECT id, name, status FROM security.organizations";
+
+    if (!StringUtils.isEmpty(filter))
+    {
+      getOrganizationsSQL += " WHERE (UPPER(name) LIKE ?)";
+    }
+
+    getOrganizationsSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
+        ? "DESC"
+        : "ASC");
+
+    if ((pageIndex != null) && (pageSize != null))
+    {
+      getOrganizationsSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
+
+    }
+    else
+    {
+      getOrganizationsSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+    }
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
+    {
+      if (!StringUtils.isEmpty(filter))
+      {
+        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Organization> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildOrganizationFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      String message = "Failed to retrieve the organizations";
+
+      if (!StringUtils.isEmpty(filter))
+      {
+        message += String.format(" matching the filter \"%s\"", filter);
+      }
+
+      if ((pageIndex != null) && (pageSize != null))
+      {
+        message += " for the page " + pageIndex + " using the page size " + pageSize;
+      }
+
+      message += ": ";
+
+      message += e.getMessage();
+
+      throw new SecurityServiceException(message, e);
+    }
+  }
+
+  /**
    * Retrieve the organizations associated with the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -1698,6 +1670,33 @@ public class SecurityService
     }
 
     return userDirectory.getUsers();
+  }
+
+  /**
+   * Retrieve the users.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param filter          the optional filter to apply to the users
+   * @param sortDirection   the optional sort direction to apply to the user username
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the users
+   */
+  @Override
+  public List<User> getUsers(UUID userDirectoryId, String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getUsers(filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -2187,7 +2186,7 @@ public class SecurityService
 
     if (value instanceof String)
     {
-      return String.class.cast(value).length() == 0;
+      return ((String) value).length() == 0;
     }
 
     return false;

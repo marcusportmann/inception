@@ -768,72 +768,6 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the users
-   */
-  @Override
-  public List<User> getFilteredUsers(String filter)
-    throws SecurityServiceException
-  {
-    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
-        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
-
-    String getFilteredInternalUsersSQL = "SELECT id, username, status, first_name, "
-        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) "
-        + "OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?)) ORDER BY username";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getInternalUsersSQL
-          : getFilteredInternalUsersSQL))
-    {
-      statement.setMaxRows(maxFilteredUsers);
-
-      if (StringUtils.isEmpty(filter))
-      {
-        statement.setObject(1, getUserDirectoryId());
-      }
-      else
-      {
-        StringBuilder filterBuffer = new StringBuilder("%");
-
-        filterBuffer.append(filter.toUpperCase());
-        filterBuffer.append("%");
-
-        statement.setObject(1, getUserDirectoryId());
-        statement.setString(2, filterBuffer.toString());
-        statement.setString(3, filterBuffer.toString());
-        statement.setString(4, filterBuffer.toString());
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
-    }
-  }
-
-  /**
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
@@ -1188,6 +1122,76 @@ public class InternalUserDirectory extends UserDirectoryBase
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the users for the user directory (%s): %s", getUserDirectoryId(),
           e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the users.
+   *
+   * @param filter        the optional filter to apply to the users
+   * @param sortDirection the optional sort direction to apply to the user username
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the users
+   */
+  @Override
+  public List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
+      Integer pageSize)
+    throws SecurityServiceException
+  {
+    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
+        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
+        + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
+
+    String getFilteredInternalUsersSQL = "SELECT id, username, status, first_name, "
+        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
+        + "FROM security.internal_users WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) "
+        + "OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?)) ORDER BY username";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
+          ? getInternalUsersSQL
+          : getFilteredInternalUsersSQL))
+    {
+      statement.setMaxRows(maxFilteredUsers);
+
+      if (StringUtils.isEmpty(filter))
+      {
+        statement.setObject(1, getUserDirectoryId());
+      }
+      else
+      {
+        StringBuilder filterBuffer = new StringBuilder("%");
+
+        filterBuffer.append(filter.toUpperCase());
+        filterBuffer.append("%");
+
+        statement.setObject(1, getUserDirectoryId());
+        statement.setString(2, filterBuffer.toString());
+        statement.setString(3, filterBuffer.toString());
+        statement.setString(4, filterBuffer.toString());
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<User> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          User user = buildUserFromResultSet(rs);
+
+          list.add(user);
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the filtered users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
   }
 

@@ -766,7 +766,7 @@ public class SecurityServiceTest
           + "organizations");
     }
 
-    List<Organization> filteredOrganizations = securityService.getFilteredOrganizations(
+    List<Organization> filteredOrganizations = securityService.getOrganizations(
         organization.getName(), null, null, null);
 
     assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
@@ -774,7 +774,7 @@ public class SecurityServiceTest
 
     compareOrganizations(organization, filteredOrganizations.get(0));
 
-    filteredOrganizations = securityService.getFilteredOrganizations(organization.getName(),
+    filteredOrganizations = securityService.getOrganizations(organization.getName(),
         SortDirection.ASCENDING, 0, 100);
 
     assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
@@ -1078,8 +1078,8 @@ public class SecurityServiceTest
 
     compareUsers(user, retrievedUsers.get(0), true);
 
-    List<User> retrievedFilteredUsers = securityService.getFilteredUsers(userDirectory.getId(),
-        "Test");
+    List<User> retrievedFilteredUsers = securityService.getUsers(userDirectory.getId(),
+        "Test", SortDirection.ASCENDING, null, null);
 
     assertEquals("The correct number of filtered users (1) was not retrieved", 1,
         retrievedFilteredUsers.size());

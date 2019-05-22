@@ -117,16 +117,6 @@ interface IUserDirectory
     throws InvalidAttributeException, SecurityServiceException;
 
   /**
-   * Retrieve the filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the users
-   */
-  List<User> getFilteredUsers(String filter)
-    throws SecurityServiceException;
-
-  /**
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
@@ -206,6 +196,20 @@ interface IUserDirectory
    * @return the users
    */
   List<User> getUsers()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the users.
+   *
+   * @param filter        the optional filter to apply to the users
+   * @param sortDirection the optional sort direction to apply to the user username
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the users
+   */
+  List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
+      Integer pageSize)
     throws SecurityServiceException;
 
   /**

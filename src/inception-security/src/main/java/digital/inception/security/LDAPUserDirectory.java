@@ -1189,74 +1189,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the filtered users.
-   *
-   * @param filter the filter to apply to the users
-   *
-   * @return the users
-   */
-  @Override
-  public List<User> getFilteredUsers(String filter)
-    throws SecurityServiceException
-  {
-    DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
-    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
-
-    try
-    {
-      dirContext = getDirContext(bindDN, bindPassword);
-
-      String searchFilter = String.format("(objectClass=%s)", userObjectClass);
-
-      if (!StringUtils.isEmpty(filter))
-      {
-        searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
-            userLastNameAttribute, filter);
-      }
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setCountLimit(maxFilteredUsers);
-
-      List<User> users = new ArrayList<>();
-
-      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
-
-      while (searchResultsNonSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
-      {
-        users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
-      }
-
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
-        {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
-        }
-      }
-
-      return users;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
-    }
-    finally
-    {
-      JNDIUtil.close(searchResultsSharedUsers);
-      JNDIUtil.close(searchResultsNonSharedUsers);
-      JNDIUtil.close(dirContext);
-    }
-  }
-
-  /**
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
@@ -1798,6 +1730,77 @@ public class LDAPUserDirectory extends UserDirectoryBase
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the users for the user directory (%s): %s", getUserDirectoryId(),
           e.getMessage()), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResultsSharedUsers);
+      JNDIUtil.close(searchResultsNonSharedUsers);
+      JNDIUtil.close(dirContext);
+    }
+  }
+
+  /**
+   * Retrieve the users.
+   *
+   * @param filter        the optional filter to apply to the users
+   * @param sortDirection the optional sort direction to apply to the user username
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the users
+   */
+  public List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
+      Integer pageSize)
+    throws SecurityServiceException
+  {
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResultsNonSharedUsers = null;
+    NamingEnumeration<SearchResult> searchResultsSharedUsers = null;
+
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      String searchFilter = String.format("(objectClass=%s)", userObjectClass);
+
+      if (!StringUtils.isEmpty(filter))
+      {
+        searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
+            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
+            userLastNameAttribute, filter);
+      }
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setCountLimit(maxFilteredUsers);
+
+      List<User> users = new ArrayList<>();
+
+      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+
+      while (searchResultsNonSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+      {
+        users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
+      }
+
+      if (sharedBaseDN != null)
+      {
+        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
+
+        while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
+        {
+          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
+        }
+      }
+
+      return users;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the filtered users for the user directory (%s): %s",
+          getUserDirectoryId(), e.getMessage()), e);
     }
     finally
     {

@@ -18,8 +18,8 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Organization} from './organization';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SecurityService} from './security.service';
-import {SortDirection} from "./sort-direction";
-import {FilteredOrganizations} from "./filtered-organizations";
+import {SortDirection} from './sort-direction';
+import {Organizations} from './organizations';
 
 /**
  * The OrganizationDatasource class implements the organization data source.
@@ -53,21 +53,21 @@ export class OrganizationDatasource implements DataSource<Organization> {
   /**
    * Load the organizations.
    *
-   * @param filter        the optional filter to apply to the organization name
-   * @param sortDirection the optional sort direction to apply to the organization name
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
+   * @param filter        The optional filter to apply to the organization name.
+   * @param sortDirection The optional sort direction to apply to the organization name.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
    */
   load(filter?: string, sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
     this.loadingSubject.next(true);
 
-    this.securityService.getFilteredOrganizations(filter, sortDirection, pageIndex, pageSize)
-      .subscribe((filteredOrganizations: FilteredOrganizations) => {
+    this.securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize)
+      .subscribe((organizations: Organizations) => {
         this.loadingSubject.next(false);
 
-        this.totalSubject.next(filteredOrganizations.total);
+        this.totalSubject.next(organizations.total);
 
-        this.dataSubject.next(filteredOrganizations.organizations)
+        this.dataSubject.next(organizations.organizations);
       }, (error: Error) => {
         this.loadingSubject.next(false);
 

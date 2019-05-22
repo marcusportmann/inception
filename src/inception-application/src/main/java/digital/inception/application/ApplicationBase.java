@@ -490,17 +490,9 @@ public abstract class ApplicationBase
     jackson2ObjectMapperBuilder.indentOutput(true);
 
     /*
-     * NOTE: Changed the date format to fix timestamps in Spring errors that were only showing a
-     *       date. This will make ISO8601 the default date format for JSON serialization and
-     *       deserialization of dates. Which may have unintended consequences...
-     */
-    // jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-    //jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
-
-    /*
-     * NOTE: We have implemented a custom module that supports the JSR310 date/time classes as the
-     *       jackson-datatype-jsr310 module provided by Jackson does not handle timezones correctly
-     *       for LocalDateTime objects.
+     * Install the custom Jackson module that supports serializing and de-serializing ISO 8601 date
+     * and date/time values. The jackson-datatype-jsr310 module provided by Jackson was not used as
+     * it does not handle timezones correctly for LocalDateTime objects.
      */
     jackson2ObjectMapperBuilder.modulesToInstall(new DateTimeModule());
 
