@@ -31,7 +31,7 @@ import javax.validation.Validator;
 @WebService(serviceName = "SchedulerService", name = "ISchedulerService",
     targetNamespace = "http://scheduler.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused", "WeakerAccess", "ValidExternallyBoundObject" })
 public class SchedulerWebService
 {
   /**

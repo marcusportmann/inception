@@ -21,6 +21,7 @@ package digital.inception.security;
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
 
+import digital.inception.validation.ValidationError;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -37,8 +38,10 @@ import org.springframework.web.bind.annotation.*;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 /**
@@ -71,6 +74,50 @@ public class SecurityRestController
   {
     this.securityService = securityService;
     this.validator = validator;
+  }
+
+  /**
+   * Create the organization.
+   *
+   * @param organization the organization to create
+   */
+  @ApiOperation(value = "Create the organization", notes = "Create the organization")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+    message = "The organization was created successfully") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 409, message = "An organization with the specified ID already exists",
+      response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/organizations", method = RequestMethod.POST,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  public void createOrganization(@ApiParam(name = "organization", value = "The organization",
+    required = true)
+  @RequestBody Organization organization,
+    @ApiParam(
+      name = "createUserDirectory",
+      value = "Should a new internal user directory be created for the organization")
+    @RequestParam(value = "createUserDirectory", required = false) Boolean createUserDirectory)
+    throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException
+  {
+    if (organization == null)
+    {
+      throw new InvalidArgumentException("organization");
+    }
+
+    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
+        constraintViolations));
+    }
+
+    securityService.createOrganization(organization,
+      (createUserDirectory != null) && createUserDirectory);
   }
 
   /**
@@ -107,7 +154,7 @@ public class SecurityRestController
   }
 
   /**
-   * Retrieve the filtered organizations using pagination.
+   * Retrieve the organizations.
    *
    * @param filter        the optional filter to apply to the organization name
    * @param sortDirection the optional sort direction to apply to the organization name
@@ -116,8 +163,8 @@ public class SecurityRestController
    *
    * @return the organizations
    */
-  @ApiOperation(value = "Retrieve the filtered organizations using pagination",
-      notes = "Retrieve the filtered organizations using pagination")
+  @ApiOperation(value = "Retrieve the organizations",
+      notes = "Retrieve the organizations")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
@@ -125,8 +172,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-
-  // @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
   public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
       value = "The optional filter to apply to the organization name")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
@@ -145,7 +191,7 @@ public class SecurityRestController
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations()));
 
-    return new ResponseEntity<>(securityService.getFilteredOrganizations(filter, sortDirection,
-        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(securityService.getOrganizations(filter, sortDirection, pageIndex,
+        pageSize), httpHeaders, HttpStatus.OK);
   }
 }

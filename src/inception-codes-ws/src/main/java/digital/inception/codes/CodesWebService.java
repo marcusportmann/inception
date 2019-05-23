@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "CodesService", name = "ICodesService",
     targetNamespace = "http://codes.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
 public class CodesWebService
 {
   /**
@@ -318,8 +318,7 @@ public class CodesWebService
     codesService.updateCodeCategory(codeCategory);
   }
 
-  private void validateCode(@XmlElement(required = true)
-  @WebParam(name = "Code") Code code)
+  private void validateCode(Code code)
     throws InvalidArgumentException
   {
     if (code == null)
@@ -336,8 +335,7 @@ public class CodesWebService
     }
   }
 
-  private void validateCodeCategory(@XmlElement(required = true)
-  @WebParam(name = "CodeCategory") CodeCategory codeCategory)
+  private void validateCodeCategory(CodeCategory codeCategory)
     throws InvalidArgumentException
   {
     if (codeCategory == null)

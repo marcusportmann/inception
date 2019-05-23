@@ -31,7 +31,7 @@ import javax.validation.Validator;
 @WebService(serviceName = "SMSService", name = "ISMSService",
     targetNamespace = "http://sms.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
 public class SMSWebService
 {
   /**

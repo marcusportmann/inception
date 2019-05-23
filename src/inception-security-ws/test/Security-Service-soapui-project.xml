@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1a4d1c22-52d4-4943-9f99-5773c0a1ca58" activeEnvironment="Default" name="Security Service" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Report Format(s)" value=""/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="false"/>
+  <con:entry key="Export All" value="false"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="TestSuite" value="Security Service Tests"/>
+  <con:entry key="Endpoint" value=""/>
+  <con:entry key="Select Report Type" value=""/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="false"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Export JUnit Results with test properties" value="false"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="TestCase" value="Organization Tests"/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="user-settings.xml Password" value=""/>
+  <con:entry key="TestRunner Path" value=""/>
+  <con:entry key="Environment" value="Default"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" id="d647fcad-51f1-4e83-9d52-6c9b018e5ec7" wsaVersion="NONE" name="SecurityServiceSoapBinding" type="wsdl" bindingName="{http://security.inception.digital}SecurityServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/service/SecurityService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/service/SecurityService?wsdl"><con:part><con:url>http://localhost:8080/service/SecurityService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="SecurityService" targetNamespace="http://security.inception.digital" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://security.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://validation.inception.digital">
+  <wsdl:types>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://validation.inception.digital" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.inception.digital">
+      <xs:element name="InvalidArgumentError" type="tns:InvalidArgumentError"/>
+      <xs:element name="ValidationError" type="tns:ValidationError"/>
+      <xs:element name="ValidationErrorAttribute" type="tns:ValidationErrorAttribute"/>
+      <xs:complexType name="InvalidArgumentError">
+        <xs:sequence>
+          <xs:element name="When" type="xs:dateTime"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element name="Name" type="xs:string"/>
+          <xs:element name="Detail" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="tns:ValidationError"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ValidationError">
+        <xs:sequence>
+          <xs:element name="Property" type="xs:string"/>
+          <xs:element name="Message" type="xs:string"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ValidationErrorAttribute">
+        <xs:sequence>
+          <xs:element name="Name" type="xs:string"/>
+          <xs:element minOccurs="0" name="Value" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="InvalidArgumentException" nillable="true" type="tns:InvalidArgumentError"/>
+    </xs:schema>
+    <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://security.inception.digital" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.inception.digital" xmlns:security="http://security.inception.digital" xmlns:core="http://core.inception.digital">
+      <xs:element name="CreateOrganization" type="security:CreateOrganization"/>
+      <xs:element name="CreateOrganizationResponse" type="security:CreateOrganizationResponse"/>
+      <xs:element name="DeleteOrganization" type="security:DeleteOrganization"/>
+      <xs:element name="DeleteOrganizationResponse" type="security:DeleteOrganizationResponse"/>
+      <xs:element name="GetOrganizations" type="security:GetOrganizations"/>
+      <xs:element name="GetOrganizationsResponse" type="security:GetOrganizationsResponse"/>
+      <xs:element name="Organization" type="security:Organization"/>
+      <xs:complexType name="DeleteOrganization">
+        <xs:sequence>
+          <xs:element name="OrganizationId" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DeleteOrganizationResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="GetOrganizations">
+        <xs:sequence>
+          <xs:element name="Filter" type="xs:string"/>
+          <xs:element name="SortDirection" type="security:SortDirection"/>
+          <xs:element name="PageIndex" type="xs:int"/>
+          <xs:element name="PageSize" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetOrganizationsResponse">
+        <xs:sequence>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="security:Organization"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="Organization">
+        <xs:sequence>
+          <xs:element name="Id" type="xs:string"/>
+          <xs:element name="Name" type="xs:string"/>
+          <xs:element name="Status" type="security:OrganizationStatus"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CreateOrganization">
+        <xs:sequence>
+          <xs:element name="Organization" type="security:Organization"/>
+          <xs:element name="CreateUserDirectory" type="xs:boolean"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CreateOrganizationResponse">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:simpleType name="SortDirection">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ASCENDING"/>
+          <xs:enumeration value="DESCENDING"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="OrganizationStatus">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="Inactive"/>
+          <xs:enumeration value="Active"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:element name="OrganizationNotFoundException" type="security:OrganizationNotFoundException"/>
+      <xs:complexType name="OrganizationNotFoundException">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="SecurityServiceException" type="security:SecurityServiceException"/>
+      <xs:complexType name="SecurityServiceException">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="DuplicateOrganizationException" type="security:DuplicateOrganizationException"/>
+      <xs:complexType name="DuplicateOrganizationException">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="CreateOrganizationResponse">
+    <wsdl:part element="tns:CreateOrganizationResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteOrganization">
+    <wsdl:part element="tns:DeleteOrganization" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteOrganizationResponse">
+    <wsdl:part element="tns:DeleteOrganizationResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetOrganizationsResponse">
+    <wsdl:part element="tns:GetOrganizationsResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CreateOrganization">
+    <wsdl:part element="tns:CreateOrganization" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DuplicateOrganizationException">
+    <wsdl:part element="tns:DuplicateOrganizationException" name="DuplicateOrganizationException"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetOrganizations">
+    <wsdl:part element="tns:GetOrganizations" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="InvalidArgumentException">
+    <wsdl:part element="ns1:InvalidArgumentException" name="InvalidArgumentException"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="OrganizationNotFoundException">
+    <wsdl:part element="tns:OrganizationNotFoundException" name="OrganizationNotFoundException"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SecurityServiceException">
+    <wsdl:part element="tns:SecurityServiceException" name="SecurityServiceException"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ISecurityService">
+    <wsdl:operation name="DeleteOrganization">
+      <wsdl:input message="tns:DeleteOrganization" name="DeleteOrganization"></wsdl:input>
+      <wsdl:output message="tns:DeleteOrganizationResponse" name="DeleteOrganizationResponse"></wsdl:output>
+      <wsdl:fault message="tns:OrganizationNotFoundException" name="OrganizationNotFoundException"></wsdl:fault>
+      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException"></wsdl:fault>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrganizations">
+      <wsdl:input message="tns:GetOrganizations" name="GetOrganizations"></wsdl:input>
+      <wsdl:output message="tns:GetOrganizationsResponse" name="GetOrganizationsResponse"></wsdl:output>
+      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException"></wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrganization">
+      <wsdl:input message="tns:CreateOrganization" name="CreateOrganization"></wsdl:input>
+      <wsdl:output message="tns:CreateOrganizationResponse" name="CreateOrganizationResponse"></wsdl:output>
+      <wsdl:fault message="tns:SecurityServiceException" name="SecurityServiceException"></wsdl:fault>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException"></wsdl:fault>
+      <wsdl:fault message="tns:DuplicateOrganizationException" name="DuplicateOrganizationException"></wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SecurityServiceSoapBinding" type="tns:ISecurityService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="DeleteOrganization">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="DeleteOrganization">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteOrganizationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="OrganizationNotFoundException">
+        <soap:fault name="OrganizationNotFoundException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SecurityServiceException">
+        <soap:fault name="SecurityServiceException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetOrganizations">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetOrganizations">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetOrganizationsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SecurityServiceException">
+        <soap:fault name="SecurityServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateOrganization">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="CreateOrganization">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CreateOrganizationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SecurityServiceException">
+        <soap:fault name="SecurityServiceException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DuplicateOrganizationException">
+        <soap:fault name="DuplicateOrganizationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SecurityService">
+    <wsdl:port binding="tns:SecurityServiceSoapBinding" name="ISecurityServicePort">
+      <soap:address location="http://localhost:8080/service/SecurityService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint></con:endpoints><con:operation id="89e79eb1-bf11-460d-9b48-d79c4e5bd344" isOneWay="false" action="" name="DeleteOrganization" bindingOperationName="DeleteOrganization" type="Request-Response" outputName="DeleteOrganizationResponse" inputName="DeleteOrganization" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="7f1df4a2-4d38-4f0a-a29f-81ebfb96b553" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sec:DeleteOrganization>
+         <OrganizationId>?</OrganizationId>
+      </sec:DeleteOrganization>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://security.inception.digital/ISecurityService/DeleteOrganization"/></con:call></con:operation><con:operation id="bafd5bb5-2733-41a7-aa7e-14403a08d706" isOneWay="false" action="" name="GetOrganizations" bindingOperationName="GetOrganizations" type="Request-Response" outputName="GetOrganizationsResponse" inputName="GetOrganizations" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="25b17192-21d3-4a91-86d8-786b2b9c73ba" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sec:GetOrganizations>
+         <Filter></Filter>
+         <SortDirection>DESCENDING</SortDirection>
+         <PageIndex>0</PageIndex>
+         <PageSize>5</PageSize>
+      </sec:GetOrganizations>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://security.inception.digital/ISecurityService/GetOrganizations"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="4ee56415-208d-4058-8a2d-12b0d25cdc6a" isOneWay="false" action="" name="CreateOrganization" bindingOperationName="CreateOrganization" type="Request-Response" outputName="CreateOrganizationResponse" inputName="CreateOrganization" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="aadfc50d-d662-4d3b-bdef-95cf3d37ea8d" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sec:CreateOrganization>
+         <Organization>
+            <Id>?</Id>
+            <Name>?</Name>
+            <Status>?</Status>
+         </Organization>
+         <CreateUserDirectory>?</CreateUserDirectory>
+      </sec:CreateOrganization>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://security.inception.digital/ISecurityService/CreateOrganization"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="6ab7b292-6637-4c84-a0c7-94bfb61e9865" name="Security Service Tests"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="52ed31dd-e422-4ca0-80a5-43c7dffda749" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Organization Tests" searchProperties="true"><con:settings/><con:testStep type="request" name="Create Organization" id="36b2d0ea-249b-4172-9ee2-9f97f053ebda"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>CreateOrganization</con:operation><con:request name="Create Organization" id="1485e692-d7cb-4746-8b44-4f6b42bfbd39"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sec:CreateOrganization>
+         <Organization>
+            <Id>060f708d-5a2d-496d-8dbc-287db39d3c6e</Id>
+            <Name>Test Organization</Name>
+            <Status>Active</Status>
+         </Organization>
+         <CreateUserDirectory>true</CreateUserDirectory>
+      </sec:CreateOrganization>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="41931e20-a251-4898-b46b-9461410bcde2"/><con:assertion type="Schema Compliance" id="91b91ebd-b6d2-483d-a6d3-172b439c92ef"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="1c73fe38-8523-49db-ab1e-619a58827505"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Delete Organization" id="a69390e3-3dcf-46cd-8365-a45134be67df"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>DeleteOrganization</con:operation><con:request name="Delete Organization" id="c74d58fb-5299-409c-b4ac-bc944b177ebf"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sec:DeleteOrganization>
+         <OrganizationId>060f708d-5a2d-496d-8dbc-287db39d3c6e</OrganizationId>
+      </sec:DeleteOrganization>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="76520cf4-5b12-4f73-b11c-3e42c87e2600"/><con:assertion type="Schema Compliance" id="50caa736-d1a1-4875-86c7-d9075008944c"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="d76b65a5-9ed5-4e86-a806-572a7d792fb5"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

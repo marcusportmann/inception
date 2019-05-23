@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "ReportingService", name = "IReportingService",
     targetNamespace = "http://reporting.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
 public class ReportingWebService
 {
   /**

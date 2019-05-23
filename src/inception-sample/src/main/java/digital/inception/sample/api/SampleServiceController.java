@@ -54,7 +54,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "SampleService", name = "ISampleService",
     targetNamespace = "http://sample.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
 public class SampleServiceController
 {
   private ISampleService sampleService;
@@ -62,7 +62,7 @@ public class SampleServiceController
   /**
    * Constructs a new <code>SampleServiceController</code>.
    *
-   * @param sampleService
+   * @param sampleService the Sample Service
    */
   public SampleServiceController(ISampleService sampleService)
   {

@@ -425,8 +425,6 @@ public class SecurityService
   {
     try
     {
-      UUID organizationId = idGenerator.nextUUID();
-
       UserDirectory userDirectory = null;
 
       try (Connection connection = dataSource.getConnection())
@@ -436,12 +434,17 @@ public class SecurityService
 
         try (PreparedStatement statement = connection.prepareStatement(createOrganizationSQL))
         {
+          if (organizationWithIdExists(connection, organization.getId()))
+          {
+            throw new DuplicateOrganizationException(organization.getId());
+          }
+
           if (organizationWithNameExists(connection, organization.getName()))
           {
             throw new DuplicateOrganizationException(organization.getName());
           }
 
-          statement.setObject(1, organizationId);
+          statement.setObject(1, organization.getId());
           statement.setString(2, organization.getName());
           statement.setInt(3, organization.getStatus().code());
 
@@ -484,7 +487,7 @@ public class SecurityService
               addUserDirectoryToOrganizationSQL))
           {
             statement.setObject(1, userDirectory.getId());
-            statement.setObject(2, organizationId);
+            statement.setObject(2, organization.getId());
 
             if (statement.executeUpdate() != 1)
             {
@@ -500,7 +503,7 @@ public class SecurityService
             addUserDirectoryToOrganizationSQL))
         {
           statement.setObject(1, DEFAULT_USER_DIRECTORY_ID);
-          statement.setObject(2, organizationId);
+          statement.setObject(2, organization.getId());
 
           if (statement.executeUpdate() != 1)
           {
@@ -510,8 +513,6 @@ public class SecurityService
           }
         }
       }
-
-      organization.setId(organizationId);
 
       try
       {
@@ -792,57 +793,6 @@ public class SecurityService
     }
 
     return userDirectory.findUsers(attributes);
-  }
-
-  /**
-   * Retrieve the filtered user directories.
-   *
-   * @param filter the filter to apply to the user directories
-   *
-   * @return the user directories
-   */
-  @Override
-  public List<UserDirectory> getFilteredUserDirectories(String filter)
-    throws SecurityServiceException
-  {
-    String getUserDirectoriesSQL =
-        "SELECT id, type_id, name, configuration FROM security.user_directories";
-
-    String getFilteredUserDirectoriesSQL =
-        "SELECT id, type_id, name, configuration FROM security.user_directories "
-        + "WHERE (UPPER(name) LIKE ?) ORDER BY name";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getUserDirectoriesSQL
-          : getFilteredUserDirectoriesSQL))
-    {
-      statement.setMaxRows(MAX_FILTERED_USER_DIRECTORIES);
-
-      if (!StringUtils.isEmpty(filter))
-      {
-        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
-
-        statement.setString(1, filterBuffer);
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectory> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildUserDirectoryFromResultSet(rs));
-        }
-
-        return list;
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered user directories: %s", e.getMessage()), e);
-    }
   }
 
   /**
@@ -1460,6 +1410,72 @@ public class SecurityService
     {
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the user directories: %s", e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directory name
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the user directories
+   */
+  @Override
+  public List<UserDirectory> getUserDirectories(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws SecurityServiceException
+  {
+    String getUserDirectoriesSQL =
+        "SELECT id, type_id, name, configuration FROM security.user_directories";
+
+    if (!StringUtils.isEmpty(filter))
+    {
+      getUserDirectoriesSQL += " WHERE (UPPER(name) LIKE ?)";
+    }
+
+    getUserDirectoriesSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
+        ? "DESC"
+        : "ASC");
+
+    if ((pageIndex != null) && (pageSize != null))
+    {
+      getUserDirectoriesSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
+
+    }
+    else
+    {
+      getUserDirectoriesSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+    }
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
+    {
+      if (!StringUtils.isEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectory> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildUserDirectoryFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the filtered user directories: %s", e.getMessage()), e);
     }
   }
 
@@ -2241,6 +2257,40 @@ public class SecurityService
     {
       throw new SecurityServiceException(String.format(
           "Failed to check whether the organization (%s) exists", organizationId), e);
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if an organization with the specified ID exists or
+   * <code>false</code> otherwise.
+   *
+   * @param connection     the existing database connection to use
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   *
+   * @return <code>true</code> if an organization with the specified ID exists or
+   *         <code>false</code> otherwise
+   */
+  private boolean organizationWithIdExists(Connection connection, UUID organizationId)
+    throws SecurityServiceException
+  {
+    String organizationWithIdExistsSQL =
+        "SELECT COUNT(id) FROM security.organizations WHERE id = ?";
+
+    try (PreparedStatement statement = connection.prepareStatement(organizationWithIdExistsSQL))
+    {
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next() && (rs.getInt(1) > 0);
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to check whether an organization with the ID (%s) exists",
+          organizationId.toString()), e);
     }
   }
 

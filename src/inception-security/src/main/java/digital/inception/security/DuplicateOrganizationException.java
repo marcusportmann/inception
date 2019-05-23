@@ -21,6 +21,10 @@ package digital.inception.security;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * A <code>DuplicateOrganizationException</code> is thrown to indicate that a security operation
  * failed as a result of a duplicate organization.
@@ -44,5 +48,15 @@ public class DuplicateOrganizationException extends Exception
   public DuplicateOrganizationException(String name)
   {
     super(String.format("The organization with the name (%s) already exists", name));
+  }
+
+  /**
+   * Constructs a new <code>DuplicateOrganizationException</code>.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   */
+  public DuplicateOrganizationException(UUID id)
+  {
+    super(String.format("The organization with the ID (%s) already exists", id.toString()));
   }
 }

@@ -31,6 +31,8 @@ import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
 import digital.inception.sample.api.SampleServiceController;
+import digital.inception.security.ISecurityService;
+import digital.inception.security.SecurityWebService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +57,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -92,6 +96,11 @@ public class SampleApplication extends Application
   private IConfigurationService configurationService;
 
   /**
+   * The data source used to provide connections to the application database.
+   */
+  private DataSource dataSource;
+
+  /**
    * The Error Service.
    */
   private IErrorService errorService;
@@ -107,15 +116,14 @@ public class SampleApplication extends Application
   private SampleServiceController sampleServiceController;
 
   /**
+   * The Security Service.
+   */
+  private ISecurityService securityService;
+
+  /**
    * The JSR-303 validator.
    */
   private Validator validator;
-
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  private DataSource dataSource;
-
 
   /**
    * Constructs a new <code>SampleApplication</code>.
@@ -127,13 +135,15 @@ public class SampleApplication extends Application
    * @param configurationService    the Configuration Service
    * @param errorService            the Error Service
    * @param reportingService        the Reporting Service
+   * @param securityService         the Security Service
    * @param sampleServiceController the Sample Service Controller
    * @param validator               the JSR-303 validator
    */
-  public SampleApplication(ApplicationContext applicationContext, @Qualifier("applicationDataSource") DataSource dataSource, ICodesService codesService,
+  public SampleApplication(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, ICodesService codesService,
       IConfigurationService configurationService, IErrorService errorService,
-      IReportingService reportingService, SampleServiceController sampleServiceController,
-      Validator validator)
+      IReportingService reportingService, ISecurityService securityService,
+      SampleServiceController sampleServiceController, Validator validator)
   {
     super(applicationContext);
 
@@ -142,6 +152,7 @@ public class SampleApplication extends Application
     this.configurationService = configurationService;
     this.errorService = errorService;
     this.reportingService = reportingService;
+    this.securityService = securityService;
     this.sampleServiceController = sampleServiceController;
     this.validator = validator;
   }
@@ -234,22 +245,6 @@ public class SampleApplication extends Application
     return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
   }
 
-///**
-// * Returns the in-memory distributed cache manager.
-// *
-// * @return the in-memory distributed cache manager
-// */
-//@Bean
-//protected CacheManager cacheManager()
-//  throws CacheManagerException
-//{
-//  return new CacheManager(configuration.getCacheManager());
-//}
-
-
-
-
-
   /**
    * Returns the Spring bean for the Reporting Service web service.
    *
@@ -272,5 +267,29 @@ public class SampleApplication extends Application
   protected Endpoint sampleWebService()
   {
     return createWebServiceEndpoint("SampleService", sampleServiceController);
+  }
+
+///**
+// * Returns the in-memory distributed cache manager.
+// *
+// * @return the in-memory distributed cache manager
+// */
+//@Bean
+//protected CacheManager cacheManager()
+//  throws CacheManagerException
+//{
+//  return new CacheManager(configuration.getCacheManager());
+//}
+
+  /**
+   * Returns the Spring bean for the Security Service web service.
+   *
+   * @return the Spring bean for the Security Service web service
+   */
+  @Bean
+  protected Endpoint securityWebService()
+  {
+    return createWebServiceEndpoint("SecurityService", new SecurityWebService(securityService,
+        validator));
   }
 }

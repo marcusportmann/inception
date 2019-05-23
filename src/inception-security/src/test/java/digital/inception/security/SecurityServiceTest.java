@@ -982,8 +982,8 @@ public class SecurityServiceTest
           + "organizations");
     }
 
-    List<UserDirectory> filteredUserDirectories = securityService.getFilteredUserDirectories(
-        userDirectory.getName());
+    List<UserDirectory> filteredUserDirectories = securityService.getUserDirectories(
+        userDirectory.getName(), SortDirection.ASCENDING, null, null);
 
     assertEquals("The correct number of filtered user directories (1) was not retrieved", 1,
         filteredUserDirectories.size());

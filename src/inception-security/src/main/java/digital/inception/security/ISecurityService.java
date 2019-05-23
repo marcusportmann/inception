@@ -193,16 +193,6 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException;
 
   /**
-   * Retrieve the filtered user directories.
-   *
-   * @param filter the filter to apply to the user directories
-   *
-   * @return the user directories
-   */
-  List<UserDirectory> getFilteredUserDirectories(String filter)
-    throws SecurityServiceException;
-
-  /**
    * Retrieve the authorised function.
    *
    * @param code the code identifying the function
@@ -392,6 +382,20 @@ public interface ISecurityService
    * @return the user directories
    */
   List<UserDirectory> getUserDirectories()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directory name
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the user directories
+   */
+  List<UserDirectory> getUserDirectories(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException;
 
   /**

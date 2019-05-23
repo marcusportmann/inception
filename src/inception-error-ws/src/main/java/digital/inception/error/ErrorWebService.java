@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "ErrorService", name = "IErrorService",
     targetNamespace = "http://error.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
 public class ErrorWebService
 {
   /**
