@@ -195,11 +195,8 @@
       </xs:complexType>
       <xs:complexType name="GetCodeCategoryUpdatedResponse">
         <xs:sequence>
-          <xs:element minOccurs="0" name="CodeCategoryUpdated" type="codes:localDateTime"/>
+          <xs:element minOccurs="0" name="CodeCategoryUpdated" type="xs:dateTime"/>
         </xs:sequence>
-      </xs:complexType>
-      <xs:complexType final="extension restriction" name="localDateTime">
-        <xs:sequence/>
       </xs:complexType>
       <xs:complexType name="GetCodeCategoryCodes">
         <xs:sequence>
@@ -993,4 +990,118 @@
          <PageSize>?</PageSize>
       </sec:GetOrganizations>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://security.inception.digital/ISecurityService/GetOrganizations"/></con:call></con:operation></con:interface><con:testSuite id="a70704a3-81b7-4498-9076-ceb8f1d9d943" name="Web Service Tests"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f8d1b965-8317-4421-91c1-e12634159c1f" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Security Service Tests" searchProperties="true"><con:settings/><con:properties/></con:testCase><con:testCase id="89336825-143c-4abc-984d-84e5cf0945c7" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Codes Service Tests" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://security.inception.digital/ISecurityService/GetOrganizations"/></con:call></con:operation></con:interface><con:testSuite id="a70704a3-81b7-4498-9076-ceb8f1d9d943" name="Web Service Tests"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f8d1b965-8317-4421-91c1-e12634159c1f" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Security Service Tests" searchProperties="true"><con:settings/><con:properties/></con:testCase><con:testCase id="89336825-143c-4abc-984d-84e5cf0945c7" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Codes Service Tests" searchProperties="true" timeout="0" wsrmEnabled="false" wsrmVersion="1.0" wsrmAckTo="" amfAuthorisation="false" amfEndpoint="" amfLogin="" amfPassword=""><con:settings/><con:testStep type="request" name="Create Test Code Category" id="2390ed1b-de76-47ee-940d-23e7fb150137"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>CreateCodeCategory</con:operation><con:request name="Create Test Code Category" id="6c762aa2-06bc-4761-84e4-9c0b58d34377"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:CreateCodeCategory>
+         <CodeCategory>
+            <Id>TestCodeCategoryId</Id>
+            <Name>Test Code Category Name</Name>
+            <Data>Test Code Category Data</Data>
+         </CodeCategory>
+      </cod:CreateCodeCategory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="57b8d9b6-b4ac-4f74-8ed9-4fab06c5a44a"/><con:assertion type="Schema Compliance" id="fbf439f2-3ae1-40fe-9842-83bd05d67318"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="1494a9f9-eb99-4106-b923-a69a2231d6e7"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Category" id="b4e81493-88c8-47ab-8afb-bd077d154fe7"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategory</con:operation><con:request name="Get Test Code Category" id="9a4c1cab-9a70-4f0d-9ed4-7180539fe3be"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategory>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:GetCodeCategory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="71fbd44a-3b6d-4415-b7cf-47b36de5bf24"/><con:assertion type="Schema Compliance" id="3bbcec9e-98c2-420c-b19c-a65eed4dffce"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="4367cff0-97a2-420f-8896-f468f089259b"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Categories" id="0a522ec3-1544-40fe-af90-41122ec0a96f"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategories</con:operation><con:request name="Get Test Code Categories" id="c29d64f6-352c-4e5c-9a64-ebcbfb93bbc2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategories/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="658dbaf0-b2c6-4d06-b084-8d343791e214"/><con:assertion type="Schema Compliance" id="a3510e5a-ee85-42a9-ac9e-da9cf3004023"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="5a6ba071-6100-4a56-8a86-97a012090c46"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Category Summaries" id="cf4ae56c-9f3b-4a79-b4d6-b2e66cf2bfb9"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategorySummaries</con:operation><con:request name="Get Test Code Category Summaries" id="996b481c-d001-401f-b9ba-a0197df1ba9c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategorySummaries/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="def4ae46-4ad1-4912-8d19-f1a706566828"/><con:assertion type="Schema Compliance" id="73a97cd0-3deb-4ab0-bb5b-7a8b2d6bb7a7"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="73eb5911-5826-4d4b-9944-e10c372690ca"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Category Data" id="7d823a05-c04c-45b9-ac34-b2bbe56d2b16"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategoryData</con:operation><con:request name="Get Test Code Category Data" id="7d4fa5d0-c5c3-4811-b70c-0e1fe124d8ba"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategoryData>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:GetCodeCategoryData>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="75b15c37-42a7-4546-8be9-ea65942a09f6"/><con:assertion type="Schema Compliance" id="37b2cbee-da24-4a32-b7b2-1d300f4600d0"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="3741972e-add8-4b6b-ad0d-72b9ca386931"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Category Updated" id="62ca9243-5b39-4e9d-9606-075f549e26d5"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategoryUpdated</con:operation><con:request name="Get Test Code Category Updated" id="9539b19b-a60c-4d4d-95dc-fb12f3cb5c95"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategoryUpdated>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:GetCodeCategoryUpdated>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="75778eb1-1802-4b34-9531-74543d0aada2"/><con:assertion type="Schema Compliance" id="df9d2edf-6dca-4ef5-9353-0521aaa4b7c2"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="6fe09fff-b3ba-4b85-a75e-e774ff853f15"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Update Test Code Category" id="c3fdffe8-aa3c-48c3-8b49-b6af8319a0a2"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>UpdateCodeCategory</con:operation><con:request name="Update Test Code Category" id="b7ddd9e0-fb24-4bef-ab86-e3b37ddf7ba3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:UpdateCodeCategory>
+         <CodeCategory>
+            <Id>TestCodeCategoryId</Id>
+            <Name>Updated Test Code Category Name</Name>
+            <Data>Updated Test Code Category Data</Data>
+         </CodeCategory>
+      </cod:UpdateCodeCategory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="9bef3b5b-8b38-49da-93ac-6106f21c1f5a"/><con:assertion type="Schema Compliance" id="4c9a816b-a005-45b2-a440-444f3da991cf"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="d1f9c5bd-0d81-4fd0-937b-fe37586bef77"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Updated Test Code Category" id="86bc0de8-f0d3-4baf-8e97-db1a180301c8"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategory</con:operation><con:request name="Get Updated Test Code Category" id="961ba6eb-ad70-4b4a-ae78-9ae6bee9b6c0"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategory>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:GetCodeCategory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="0d2cd481-2cb6-49d0-808a-6288d1efcce6"/><con:assertion type="Schema Compliance" id="67d9359e-54ed-4b77-95db-ccaff9bf84ba"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="55939c98-fdb8-45f7-994d-c269792a62c3"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Create Test Code" id="9dc3eeb7-1be1-43ee-a65d-f01061727bbf"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>CreateCode</con:operation><con:request name="Create Test Code" id="a6be58bd-13bd-4bdd-9ff1-99de29a92e5c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:CreateCode>
+         <Code>
+            <Id>TestCodeId</Id>
+            <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+            <Name>Test Code Name</Name>
+            <Value>Test Code Value</Value>
+         </Code>
+      </cod:CreateCode>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="5affe56f-01ee-4811-bacf-4dd81aad9f87"/><con:assertion type="Schema Compliance" id="57dd398a-0549-4e93-afe1-ff375391eb43"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="6cdd1b77-e912-4b4b-ad42-bb7d12038f8b"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Update Test Code" id="30b4cad3-1ebd-4944-958c-9f31463e9142"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>UpdateCode</con:operation><con:request name="Update Test Code" id="9a4f6e90-bfda-4daf-b7fc-8ce0ef142b98"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:UpdateCode>
+         <Code>
+            <Id>TestCodeId</Id>
+            <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+            <Name>Updated Test Code Name</Name>
+            <Value>Updated Test Code Value</Value>
+         </Code>
+      </cod:UpdateCode>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="55d5c628-4378-4cb7-9829-f2aaaf9d37cc"/><con:assertion type="Schema Compliance" id="71d93469-c0da-4e3d-99f4-20a40ceee463"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="bc8e9c89-9aca-4eae-bde9-3ba56b03ba38"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code" id="64253c76-4e3c-4c03-bf8e-43da0cc66cdb"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCode</con:operation><con:request name="Get Test Code" id="69f6c31c-307c-43f3-a3b8-445365d44f42"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCode>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+         <CodeId>TestCodeId</CodeId>
+      </cod:GetCode>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="e1f8b113-0021-4738-8602-2624c90df8f2"/><con:assertion type="Schema Compliance" id="05c6ba77-116e-4048-a77e-9345b79a3ce2"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="f4bc54ac-51cb-48a2-b25b-8c59ae050842"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Code Category Codes" id="3d3f329c-6850-4c51-82e0-c70ab19f639c"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>GetCodeCategoryCodes</con:operation><con:request name="Get Test Code Category Codes" id="94dc30dc-5cfc-46b0-a2d0-950f3745f3a5"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:GetCodeCategoryCodes>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:GetCodeCategoryCodes>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="5e2fd163-6cc1-4ac1-b576-b87ba4c6e28b"/><con:assertion type="Schema Compliance" id="059cd1c3-6608-4b4f-8e8e-33735b86e634"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="8b8df600-ffce-4f5d-b286-268219c511f9"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Delete Test Code" id="6b9ef696-dd17-41ce-abd0-ff879bc2105d"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>DeleteCode</con:operation><con:request name="Delete Test Code" id="6f13cd36-efaa-4cb2-8ce1-ff71cab9a1c4"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:DeleteCode>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+         <CodeId>TestCodeId</CodeId>
+      </cod:DeleteCode>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="fb64de49-2a6b-4890-87cb-894566a7f213"/><con:assertion type="Schema Compliance" id="27857822-5653-4641-8055-389b5316c1a8"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="0fe5831e-1186-4277-935d-5f24d9eb1d47"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Delete Test Code Category" id="cb6f738b-b36c-4c2f-b5f6-0f562e78ca68"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>CodesServiceSoapBinding</con:interface><con:operation>DeleteCodeCategory</con:operation><con:request name="Delete Test Code Category" id="391990f5-0752-400a-a873-c598d8377b92"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/CodesService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cod="http://codes.inception.digital">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <cod:DeleteCodeCategory>
+         <CodeCategoryId>TestCodeCategoryId</CodeCategoryId>
+      </cod:DeleteCodeCategory>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1369a595-d33f-4029-9c5f-d835f0da5462"/><con:assertion type="Schema Compliance" id="92044bb7-0c4b-43a3-8382-ad69e7a1e955"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="8f681576-289c-483d-bb45-3774317539af"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
