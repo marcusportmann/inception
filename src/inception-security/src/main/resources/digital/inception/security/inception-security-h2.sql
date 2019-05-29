@@ -370,167 +370,125 @@ INSERT INTO security.organizations (id, name, status) VALUES
   ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
 
 INSERT INTO security.user_directory_types (id, name, user_directory_class) VALUES
-  ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory',
-   'digital.inception.security.InternalUserDirectory');
+  ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
 INSERT INTO security.user_directory_types (id, name, user_directory_class) VALUES
-  ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory',
-   'digital.inception.security.LDAPUserDirectory');
+  ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type_id, name, configuration) VALUES
-  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f',
-   'Internal User Directory',
-   '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id) VALUES
   ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-VALUES
-  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator',
-    1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, NULL);
+INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry) VALUES
+  ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, NULL);
 
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description) VALUES
-  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators',
-   'Administrators');
+  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description) VALUES
-  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organization Administrators', 'Organization Administrators');
+  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators', 'Organization Administrators');
 
-INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
-VALUES
+INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id) VALUES
   ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 
 INSERT INTO security.groups (id, user_directory_id, groupname) VALUES
-  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Administrators');
+  ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
 INSERT INTO security.groups (id, user_directory_id, groupname) VALUES
-  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4',
-   'Organization Administrators');
+  ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators');
 
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
 INSERT INTO security.functions (id, code, name, description) VALUES
   ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganizationAdministration',
-   'Organization Administration', 'Organization Administration');
+  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
+
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration',
-   'User Administration');
+  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Codes.CodeAdministration', 'Code Administration', 'Code Administration');
+
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration',
-   'Group Administration', 'Group Administration');
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups', 'User Groups');
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration', 'Code Administration',
-   'Code Administration');
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword', 'Reset User Password',
-   'Reset User Password');
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Application.SecurityAdministration',
-   'Security Administration', 'Security Administration');
-INSERT INTO security.functions (id, code, name, description) VALUES
-  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Application.ConfigurationAdministration',
+  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration',
    'Configuration Administration', 'Configuration Administration');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Application.ErrorReports', 'ApplicationError Reports',
-   'ApplicationError Reports');
+  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration',
-   'Report Definition Administration', 'Report Definition Administration');
+  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report', 'View Report');
+  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Process.ViewProcess', 'View Process', 'View Process');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration',
-   'Process Definition Administration', 'Process Definition Administration');
+  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process',
-   'View Process');
+  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Reporting.ViewReport', 'View Report', 'View Report');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Application.SchedulerAdministration',
-   'Scheduler Administration', 'Scheduler Administration');
+  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
+
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Security.GroupAdministration', 'Group Administration', 'Group Administration');
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Security.OrganizationAdministration', 'Organization Administration', 'Organization Administration');
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Security.ResetUserPassword', 'Reset User Password', 'Reset User Password');
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Security.SecurityAdministration', 'Security Administration', 'Security Administration');
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration', 'User Administration');
+INSERT INTO security.functions (id, code, name, description) VALUES
+  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
 
 INSERT INTO security.roles (id, name, description) VALUES
   ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO security.roles (id, name, description) VALUES
-  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator',
-   'Organization Administrator');
+  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
 
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecureHome
+  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.SecureHome function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
+  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.Dashboard function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganizationAdministration
+  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Codes.CodeAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserAdministration
+  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Configuration.ConfigurationAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('ef03f384-24f7-43eb-a29c-f5c5b838698d',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.GroupAdministration
+  ('97f0f870-a871-48de-a3e0-a32a95770f12', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Error.ErrorReportAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserGroups
+  ('180c84f9-9816-48d0-9762-dc753b2228b1', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ProcessDefinitionAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeAdministration
+  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ViewProcess function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ResetUserPassword
+  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ReportDefinitionAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('9105fb6d-1629-4014-bf4c-1990a92db276',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecurityAdministration
+  ('539fceb8-da82-4170-ab1a-ae6b04001c03', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ViewReport function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ConfigurationAdministration
+  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Scheduler.SchedulerAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('97f0f870-a871-48de-a3e0-a32a95770f12',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ErrorReports
+  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.GroupAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ReportDefinitionAdministration
+  ('2d52b029-920f-4b15-b646-5b9955c188e3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.OrganizationAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewReport
+  ('029b9a06-0241-4a44-a234-5c489f2017ba', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.ResetUserPassword function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('180c84f9-9816-48d0-9762-dc753b2228b1',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ProcessDefinitionAdministration
+  ('9105fb6d-1629-4014-bf4c-1990a92db276', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.SecurityAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('d2854c65-9a59-40b8-9dc7-a882c64b2610',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewProcess
+  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SchedulerAdministration
+  ('7a54a71e-3680-4d49-b87d-29604a247413', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserGroups function to the Administrator role
 
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.SecureHome
+  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.Dashboard
+  ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.Dashboard function to the Organization Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserAdministration
+  ('539fceb8-da82-4170-ab1a-ae6b04001c03', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Reporting.ViewReport function to the Organization Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserGroups
+  ('029b9a06-0241-4a44-a234-5c489f2017ba', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.ResetUserPassword function to the Organization Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ResetUserPassword
+  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserAdministration function to the Organization Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ViewReport
+  ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
 
-INSERT INTO security.role_to_group_map (role_id, group_id)
-VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
+INSERT INTO security.role_to_group_map (role_id, group_id) VALUES
+  ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
+INSERT INTO security.role_to_group_map (role_id, group_id) VALUES
+  ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');

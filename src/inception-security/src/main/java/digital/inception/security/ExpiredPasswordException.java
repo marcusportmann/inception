@@ -18,8 +18,13 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 
 /**
  * A <code>ExpiredPasswordException</code> is thrown to indicate that a security operation failed
@@ -30,8 +35,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT, reason = "The password for the user has expired")
+@WebFault(name = "ExpiredPasswordException", targetNamespace = "http://security.inception.digital",
+  faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class ExpiredPasswordException extends Exception
+public class ExpiredPasswordException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

@@ -93,7 +93,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.POST,
     produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
   public void createOrganization(@ApiParam(name = "organization", value = "The organization",
     required = true)
   @RequestBody Organization organization,
@@ -138,7 +138,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
   public void deleteOrganization(@ApiParam(name = "organizationId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
@@ -172,7 +172,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Application.OrganizationAdministration')")
+  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
   public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
       value = "The optional filter to apply to the organization name")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",

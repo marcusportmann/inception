@@ -18,6 +18,8 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -40,8 +42,8 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://configuration.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class ConfigurationNotFoundException extends Exception
+@SuppressWarnings({ "unused" })
+public class ConfigurationNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

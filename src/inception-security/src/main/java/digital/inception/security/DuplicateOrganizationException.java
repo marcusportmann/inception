@@ -18,11 +18,15 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import java.util.UUID;
 
 /**
@@ -35,8 +39,11 @@ import java.util.UUID;
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
     reason = "An organization with the specified name already exists")
+@WebFault(name = "DuplicateOrganizationException", targetNamespace = "http://security.inception.digital",
+  faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateOrganizationException extends Exception
+public class DuplicateOrganizationException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 

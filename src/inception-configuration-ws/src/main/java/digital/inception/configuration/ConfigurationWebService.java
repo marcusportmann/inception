@@ -30,6 +30,7 @@ import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -97,6 +98,7 @@ public class ConfigurationWebService
    * @return the configuration
    */
   @WebMethod(operationName = "GetConfiguration")
+  @WebResult(name = "Configuration")
   public Configuration getConfiguration(@WebParam(name = "Key")
   @XmlElement(required = true) String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
@@ -117,6 +119,7 @@ public class ConfigurationWebService
    * @return the configuration value
    */
   @WebMethod(operationName = "GetConfigurationValue")
+  @WebResult(name = "ConfigurationValue")
   public String getConfigurationValue(@WebParam(name = "Key")
   @XmlElement(required = true) String key)
     throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
@@ -135,6 +138,7 @@ public class ConfigurationWebService
    * @return all the configurations
    */
   @WebMethod(operationName = "GetConfigurations")
+  @WebResult(name = "Configuration")
   public List<Configuration> getConfigurations()
     throws ConfigurationServiceException
   {

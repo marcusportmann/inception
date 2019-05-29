@@ -47,7 +47,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: OrganizationsComponent,
     data: {
-      functionCodes: ['Application.OrganizationAdministration']
+      functionCodes: ['Security.OrganizationAdministration']
     }
   },
 
@@ -60,7 +60,7 @@ const routes: Routes = [{
       component: NewOrganizationComponent,
       data: {
         title: 'New Organization',
-        functionCodes: ['Application.OrganizationAdministration']
+        functionCodes: ['Security.OrganizationAdministration']
       }
     },
     {
@@ -71,7 +71,7 @@ const routes: Routes = [{
       component: EditOrganizationComponent,
       data: {
         title: '{organizationId}',
-        functionCodes: ['Application.OrganizationAdministration']
+        functionCodes: ['Security.OrganizationAdministration']
       }
     }
     */

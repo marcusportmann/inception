@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
@@ -118,6 +119,7 @@ public class SecurityWebService
    * @return the organizations
    */
   @WebMethod(operationName = "GetOrganizations")
+  @WebResult(name = "Organization")
   public List<Organization> getOrganizations(@WebParam(name = "Filter")
   @XmlElement(required = true) String filter, @WebParam(name = "SortDirection")
   @XmlElement(required = true) SortDirection sortDirection, @WebParam(name = "PageIndex")

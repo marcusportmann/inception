@@ -37,7 +37,7 @@ const routes: Routes = [{
   component: CodeCategoriesComponent,
   data: {
     title: 'Code Categories',
-    functionCodes: ['Application.CodeAdministration']
+    functionCodes: ['Codes.CodeAdministration']
   }
 }, {
   path: 'new-code-category',
@@ -45,7 +45,7 @@ const routes: Routes = [{
   component: NewCodeCategoryComponent,
   data: {
     title: 'New Code Category',
-    functionCodes: ['Application.CodeAdministration']
+    functionCodes: ['Codes.CodeAdministration']
   }
 }, {
   path: ':codeCategoryId',
@@ -57,7 +57,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: EditCodeCategoryComponent,
     data: {
-      functionCodes: ['Application.CodeAdministration']
+      functionCodes: ['Codes.CodeAdministration']
     }
   }, {
     path: 'codes',
@@ -69,7 +69,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: CodesComponent,
       data: {
-        functionCodes: ['Application.CodeAdministration']
+        functionCodes: ['Codes.CodeAdministration']
       }
     }, {
       path: 'new-code',
@@ -77,7 +77,7 @@ const routes: Routes = [{
       component: NewCodeComponent,
       data: {
         title: 'New Code',
-        functionCodes: ['Application.CodeAdministration']
+        functionCodes: ['Codes.CodeAdministration']
       }
     }, {
       path: ':codeId',
@@ -85,7 +85,7 @@ const routes: Routes = [{
       component: EditCodeComponent,
       data: {
         title: '{codeId}',
-        functionCodes: ['Application.CodeAdministration']
+        functionCodes: ['Codes.CodeAdministration']
       }
     }
     ]

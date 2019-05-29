@@ -55,6 +55,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     propOrder = { "id", "applicationId", "applicationVersion", "description", "detail", "created",
         "who", "deviceId", "feedback", "data" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class ErrorReport
   implements Serializable
 {
@@ -118,6 +119,7 @@ public class ErrorReport
   @ApiModelProperty(value = "The error detail")
   @JsonProperty
   @XmlElement(name = "Detail")
+  @Size(max = 4000)
   private String detail;
 
   /**
@@ -136,6 +138,7 @@ public class ErrorReport
   @ApiModelProperty(value = "The optional feedback provided by the user for the error")
   @JsonProperty
   @XmlElement(name = "Detail")
+  @Size(max = 4000)
   private String feedback;
 
   /**

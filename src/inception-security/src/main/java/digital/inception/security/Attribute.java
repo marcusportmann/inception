@@ -19,12 +19,14 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.BinaryBuffer;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -34,10 +36,9 @@ import java.math.BigDecimal;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>Attribute</code> class stores an attribute for a security entity as name-value pair.
@@ -48,9 +49,10 @@ import javax.xml.bind.annotation.XmlType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "name", "value" })
 @XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")
-@XmlType(name = "Code", namespace = "http://security.inception.digital",
+@XmlType(name = "Attribute", namespace = "http://security.inception.digital",
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Attribute
   implements Serializable
 {
@@ -59,11 +61,20 @@ public class Attribute
   /**
    * The name for the attribute.
    */
+  @ApiModelProperty(value = "The name for the attribute", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1)
   private String name;
 
   /**
    * The value for the attribute.
    */
+  @ApiModelProperty(value = "The value for the attribute", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Value", required = true)
+  @NotNull
   private String value;
 
   /**

@@ -1210,48 +1210,48 @@ INSERT INTO security.functions (id, code, name, description) VALUES
 INSERT INTO security.functions (id, code, name, description) VALUES
   ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Application.OrganizationAdministration',
+  ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Security.OrganizationAdministration',
    'Organization Administration', 'Organization Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Application.UserAdministration', 'User Administration',
+  ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration',
    'User Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Application.GroupAdministration',
+  ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Security.GroupAdministration',
    'Group Administration', 'Group Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Application.UserGroups', 'User Groups', 'User Groups');
+  ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Application.CodeAdministration', 'Code Administration',
+  ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Codes.CodeAdministration', 'Code Administration',
    'Code Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Application.ResetUserPassword', 'Reset User Password',
+  ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Security.ResetUserPassword', 'Reset User Password',
    'Reset User Password');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Application.SecurityAdministration',
+  ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Security.SecurityAdministration',
    'Security Administration', 'Security Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Application.ConfigurationAdministration',
+  ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration',
    'Configuration Administration', 'Configuration Administration');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Application.ErrorReports', 'ApplicationError Reports',
-   'ApplicationError Reports');
+  ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Error.ErrorReportAdministration', 'Error Report Administration',
+   'Error Report Administration');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Application.ReportDefinitionAdministration',
+  ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Reporting.ReportDefinitionAdministration',
    'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Application.ViewReport', 'View Report', 'View Report');
+  ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Reporting.ViewReport', 'View Report', 'View Report');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Application.ProcessDefinitionAdministration',
+  ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Process.ProcessDefinitionAdministration',
    'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Application.ViewProcess', 'View Process',
+  ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Process.ViewProcess', 'View Process',
    'View Process');
 
 INSERT INTO security.functions (id, code, name, description) VALUES
-  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Application.SchedulerAdministration',
+  ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Scheduler.SchedulerAdministration',
    'Scheduler Administration', 'Scheduler Administration');
 
 INSERT INTO security.roles (id, name, description) VALUES
@@ -1268,46 +1268,46 @@ INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
    '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.Dashboard
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('2d52b029-920f-4b15-b646-5b9955c188e3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.OrganizationAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.OrganizationAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.UserAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('ef03f384-24f7-43eb-a29c-f5c5b838698d',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.GroupAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.GroupAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.UserGroups
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.UserGroups
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.CodeAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Codes.CodeAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ResetUserPassword
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.ResetUserPassword
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('9105fb6d-1629-4014-bf4c-1990a92db276',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecurityAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Security.SecurityAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('b233ed4a-b30f-4356-a5d3-1c660aa69f00',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ConfigurationAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Configuration.ConfigurationAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('97f0f870-a871-48de-a3e0-a32a95770f12',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ErrorReports
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Error.ErrorReportAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('3a17959c-5dfc-43a2-9587-48a1eb95a22a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ReportDefinitionAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Reporting.ReportDefinitionAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewReport
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Reporting.ViewReport
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('180c84f9-9816-48d0-9762-dc753b2228b1',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ProcessDefinitionAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Process.ProcessDefinitionAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('d2854c65-9a59-40b8-9dc7-a882c64b2610',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.ViewProcess
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Process.ViewProcess
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a',
-   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SchedulerAdministration
+   '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Scheduler.SchedulerAdministration
 
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5',
@@ -1317,16 +1317,16 @@ INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
    '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.Dashboard
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('567d7e55-f3d0-4191-bc4c-12d357900fa3',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserAdministration
+   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Security.UserAdministration
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('7a54a71e-3680-4d49-b87d-29604a247413',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.UserGroups
+   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Security.UserGroups
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('029b9a06-0241-4a44-a234-5c489f2017ba',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ResetUserPassword
+   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Security.ResetUserPassword
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('539fceb8-da82-4170-ab1a-ae6b04001c03',
-   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Application.ViewReport
+   '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Reporting.ViewReport
 
 INSERT INTO security.role_to_group_map (role_id, group_id)
 VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');

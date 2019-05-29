@@ -139,6 +139,7 @@ public class ReportingWebService
    * @return the PDF report
    */
   @WebMethod(operationName = "GenerateReport")
+  @WebResult(name = "Report")
   public byte[] generateReport(@WebParam(name = "ReportDefinitionId")
   @XmlElement(required = true) UUID reportDefinitionId, @WebParam(name = "ReportParameters")
   @XmlElement(required = true) List<ReportParameter> reportParameters)

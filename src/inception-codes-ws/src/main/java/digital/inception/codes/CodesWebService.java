@@ -164,6 +164,7 @@ public class CodesWebService
    * @return the code
    */
   @WebMethod(operationName = "GetCode")
+  @WebResult(name = "Code")
   public Code getCode(@WebParam(name = "CodeCategoryId")
   @XmlElement(required = true) String codeCategoryId, @WebParam(name = "CodeId")
   @XmlElement(required = true) String codeId)
@@ -203,6 +204,7 @@ public class CodesWebService
    * @return the code category
    */
   @WebMethod(operationName = "GetCodeCategory")
+  @WebResult(name = "CodeCategory")
   public CodeCategory getCodeCategory(@WebParam(name = "CodeCategoryId")
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException

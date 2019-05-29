@@ -90,7 +90,7 @@ public class ConfigurationRestController
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
+  @PreAuthorize("hasAuthority('Configuration.ConfigurationAdministration')")
   public void deleteConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -121,7 +121,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
+  @PreAuthorize("hasAuthority('Configuration.ConfigurationAdministration')")
   public Configuration getConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -153,7 +153,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET)
   @ResponseBody
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
+  @PreAuthorize("hasAuthority('Configuration.ConfigurationAdministration')")
   public String getConfigurationValue(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
@@ -180,7 +180,7 @@ public class ConfigurationRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/configurations", method = RequestMethod.GET,
       produces = "application/json")
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
+  @PreAuthorize("hasAuthority('Configuration.ConfigurationAdministration')")
   public List<Configuration> getConfigurations()
     throws ConfigurationServiceException
   {
@@ -202,7 +202,7 @@ public class ConfigurationRestController
   @RequestMapping(value = "/configurations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Application.ConfigurationAdministration')")
+  @PreAuthorize("hasAuthority('Configuration.ConfigurationAdministration')")
   public void setConfiguration(@ApiParam(name = "configuration", value = "The configuration",
       required = true)
   @RequestBody Configuration configuration)

@@ -41,7 +41,6 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "CodeNotFoundException", targetNamespace = "http://codes.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings("WeakerAccess")
 public class CodeNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;

@@ -18,6 +18,12 @@ package digital.inception.security;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.UUID;
 
 /**
@@ -32,8 +38,13 @@ public class Function
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The code for the function.
+   * The unique code used to identify the function.
    */
+  @ApiModelProperty(value = "The unique code used to identify the function", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
   private String code;
 
   /**
@@ -44,11 +55,22 @@ public class Function
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the function.
    */
+  @ApiModelProperty(
+    value = "The Universally Unique Identifier (UUID) used to uniquely identify the function",
+    required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
   private UUID id;
 
   /**
    * The name of the function.
    */
+  @ApiModelProperty(value = "The unique code used to identify the function", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
   private String name;
 
   /**
@@ -61,7 +83,7 @@ public class Function
    *
    * @param id          the Universally Unique Identifier (UUID) used to uniquely identify the
    *                    function
-   * @param code        the code for the function
+   * @param code        the unique code used to identify the function
    * @param name        the name of the function
    * @param description the description for the function
    */
@@ -74,9 +96,9 @@ public class Function
   }
 
   /**
-   * Returns the code for the function.
+   * Returns the unique code used to identify the function.
    *
-   * @return the code for the function
+   * @return the unique code used to identify the function
    */
   public String getCode()
   {
@@ -114,9 +136,9 @@ public class Function
   }
 
   /**
-   * Set the code for the function.
+   * Set the unique code used to identify the function.
    *
-   * @param code the code for the function
+   * @param code the unique code used to identify the function
    */
   public void setCode(String code)
   {

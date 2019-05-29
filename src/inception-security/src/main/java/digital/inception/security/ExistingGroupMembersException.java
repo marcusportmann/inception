@@ -18,8 +18,13 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 
 /**
  * A <code>ExistingGroupMembersException</code> is thrown to indicate that a security operation
@@ -30,9 +35,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-    reason = "The security group could not be deleted since it is still associated with 1 or more user(s)")
+    reason =
+      "The security group could not be deleted since it is still associated with 1 or more user(s)")
+@WebFault(name = "ExistingGroupMembersException", targetNamespace = "http://security.inception.digital",
+  faultBean = "digital.inception.core.service.ServiceError")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class ExistingGroupMembersException extends Exception
+public class ExistingGroupMembersException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
