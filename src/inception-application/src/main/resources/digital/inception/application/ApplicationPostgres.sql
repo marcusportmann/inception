@@ -1230,74 +1230,74 @@ INSERT INTO security.role_to_group_map (role_id, group_id) VALUES
 INSERT INTO security.role_to_group_map (role_id, group_id) VALUES
   ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
 
-INSERT INTO messaging.message_types (id, name)
-VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
-INSERT INTO messaging.message_types (id, name)
-VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
+INSERT INTO messaging.message_types (id, name) VALUES
+  ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
 
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (0, 'Initialised');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (1, 'QueuedForSending');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (2, 'QueuedForProcessing');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (3, 'Aborted');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (4, 'Failed');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (5, 'Processing');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (6, 'Sending');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (7, 'QueuedForDownload');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (8, 'Downloading');
-INSERT INTO messaging.message_statuses (code, name)
-VALUES (10, 'Processed');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (0, 'Initialised');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (1, 'QueuedForSending');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (2, 'QueuedForProcessing');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (3, 'Aborted');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (4, 'Failed');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (5, 'Processing');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (6, 'Sending');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (7, 'QueuedForDownload');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (8, 'Downloading');
+INSERT INTO messaging.message_statuses (code, name) VALUES
+  (10, 'Processed');
 
-INSERT INTO test.test_data (id, name, value)
-VALUES (1, 'Sample Name 1', 'Sample Value 1');
-INSERT INTO test.test_data (id, name, value)
-VALUES (2, 'Sample Name 2', 'Sample Value 2');
-INSERT INTO test.test_data (id, name, value)
-VALUES (3, 'Sample Name 3', 'Sample Value 3');
-INSERT INTO test.test_data (id, name, value)
-VALUES (4, 'Sample Name 4', 'Sample Value 4');
-INSERT INTO test.test_data (id, name, value)
-VALUES (5, 'Sample Name 5', 'Sample Value 5');
-INSERT INTO test.test_data (id, name, value)
-VALUES (6, 'Sample Name 6', 'Sample Value 6');
-INSERT INTO test.test_data (id, name, value)
-VALUES (7, 'Sample Name 7', 'Sample Value 7');
-INSERT INTO test.test_data (id, name, value)
-VALUES (8, 'Sample Name 8', 'Sample Value 8');
-INSERT INTO test.test_data (id, name, value)
-VALUES (9, 'Sample Name 9', 'Sample Value 9');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (1, 'Sample Name 1', 'Sample Value 1');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (2, 'Sample Name 2', 'Sample Value 2');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (3, 'Sample Name 3', 'Sample Value 3');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (4, 'Sample Name 4', 'Sample Value 4');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (5, 'Sample Name 5', 'Sample Value 5');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (6, 'Sample Name 6', 'Sample Value 6');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (7, 'Sample Name 7', 'Sample Value 7');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (8, 'Sample Name 8', 'Sample Value 8');
+INSERT INTO test.test_data (id, name, value) VALUES
+  (9, 'Sample Name 9', 'Sample Value 9');
 
 -- -------------------------------------------------------------------------------------------------
 -- SET PERMISSIONS

@@ -63,3 +63,6 @@ COMMENT ON COLUMN error.error_reports.feedback
 COMMENT ON COLUMN error.error_reports.data
   IS 'The optional data associated with the error report';
 
+-- -------------------------------------------------------------------------------------------------
+-- POPULATE TABLES
+-- -------------------------------------------------------------------------------------------------

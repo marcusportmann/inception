@@ -443,9 +443,9 @@ INSERT INTO security.roles (id, name, description) VALUES
   ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
 
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
-  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.SecureHome function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.Dashboard function to the Administrator role
+INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
+  ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.SecureHome function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
   ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Codes.CodeAdministration function to the Administrator role
 INSERT INTO security.function_to_role_map (function_id, role_id) VALUES
