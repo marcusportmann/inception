@@ -97,14 +97,16 @@ export class LoginComponent {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {message: 'Are you sure you want to delete the code category \'XXX\'?'});
 
-    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
+    dialogRef.afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean) => {
 
-      console.log('confirmation = ', confirmation);
+        console.log('confirmation = ', confirmation);
 
-      if (confirmation === true) {
-        console.log('Confirmed deletion');
-      }
-    });
+        if (confirmation === true) {
+          console.log('Confirmed deletion');
+        }
+      });
 
     // this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
@@ -120,27 +122,28 @@ export class LoginComponent {
       this.spinnerService.showSpinner();
 
       this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
-        .pipe(first()).subscribe(session => {
-        this.spinnerService.hideSpinner();
+        .pipe(first())
+        .subscribe(session => {
+          this.spinnerService.hideSpinner();
 
-        if (session.organizations.length === 1) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
-        } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
-        }
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
+          if (session.organizations.length === 1) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['/']);
+          } else {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
+          }
+        }, (error: Error) => {
+          this.spinnerService.hideSpinner();
 
-        if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+          if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
     }
   }
 }

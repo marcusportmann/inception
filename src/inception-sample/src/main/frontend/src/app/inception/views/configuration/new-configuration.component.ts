@@ -81,22 +81,24 @@ export class NewConfigurationComponent implements OnInit {
 
       this.spinnerService.showSpinner();
 
-      this.configurationService.saveConfiguration(configuration).pipe(first()).subscribe(() => {
-        this.spinnerService.hideSpinner();
+      this.configurationService.saveConfiguration(configuration)
+        .pipe(first())
+        .subscribe(() => {
+          this.spinnerService.hideSpinner();
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+        }, (error: Error) => {
+          this.spinnerService.hideSpinner();
+
+          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
     }
   }
 }

@@ -76,7 +76,8 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
         })
       });
 
-    dialogRef.afterClosed().pipe(first())
+    dialogRef.afterClosed()
+      .pipe(first())
       .subscribe((confirmation: boolean) => {
         if (confirmation === true) {
           this.spinnerService.showSpinner();

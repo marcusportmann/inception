@@ -20,6 +20,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 import {Organizations} from './organizations';
+import {first} from "rxjs/operators";
 
 /**
  * The OrganizationDatasource class implements the organization data source.
@@ -58,10 +59,12 @@ export class OrganizationDatasource implements DataSource<Organization> {
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
+  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+       pageSize?: number): void {
     this.loadingSubject.next(true);
 
     this.securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize)
+      .pipe(first())
       .subscribe((organizations: Organizations) => {
         this.loadingSubject.next(false);
 

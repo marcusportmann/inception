@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy, OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
+import {fromEvent, Subscription} from "rxjs";
+import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
 
 @Component({
   // tslint:disable-next-line
@@ -25,9 +34,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
       <div class="table-filter-icon">
         <i class="fa fa-search"></i>
       </div>
-      <input class="table-filter-input" matInput [value]="this.value" #tableFilterInput
-             (keyup)="updateValue($event)" placeholder="Search..." autocomplete="off">
-      <button class="table-filter-reset" mat-icon-button *ngIf="value" (click)="resetValue()">
+      <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..." autocomplete="off">
+      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async" (click)="resetValue()">
         <i class="fa fa-times"></i>
       </button>
     </div>
@@ -75,19 +83,38 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   `
   ]
 }) // tslint:disable-next-line
-export class TableFilter {
+export class TableFilter implements OnInit, OnDestroy {
+
+  private tableFilterInputSubscription: Subscription;
 
   @Output() changed: EventEmitter<string> = new EventEmitter<string>();
 
-  @Input() value = '';
+  filter: string;
 
-  resetValue(): void {
-    this.value = '';
-    this.changed.emit(this.value);
+  @ViewChild('tableFilterInput') tableFilterInput: ElementRef;
+
+  ngOnDestroy(): void {
+    if (this.tableFilterInputSubscription) {
+      this.tableFilterInputSubscription.unsubscribe();
+    }
   }
 
-  updateValue(event: any): void {
-    this.value = event.target.value;
-    this.changed.emit(this.value);
+  ngOnInit(): void {
+    this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement,'keyup')
+      .pipe(
+        debounceTime(250),
+        distinctUntilChanged(),
+        tap(() => {
+          this.filter = this.tableFilterInput.nativeElement.value;
+          this.changed.emit(this.filter);
+        })
+      )
+      .subscribe();
+  }
+
+  resetValue(): void {
+    this.filter = '';
+    this.tableFilterInput.nativeElement.value = this.filter;
+    this.changed.emit(this.filter);
   }
 }

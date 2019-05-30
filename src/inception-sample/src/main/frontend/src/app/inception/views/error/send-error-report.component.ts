@@ -65,7 +65,8 @@ export class SendErrorReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.pipe(first(), map((state: any) => window.history.state))
+    this.activatedRoute.paramMap
+      .pipe(first(), map((state: any) => window.history.state))
       .subscribe((state: any) => {
         if (state.error) {
           this.error = state.error;
@@ -87,25 +88,29 @@ export class SendErrorReportComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.errorService.sendErrorReport(this.emailFormControl.value, this.feedbackFormControl.value,
-        this.error).pipe(first()).subscribe(result => {
-        this.spinnerService.hideSpinner();
+        this.error)
+        .pipe(first())
+        .subscribe(result => {
+          this.spinnerService.hideSpinner();
 
-        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-          {
-            message: this.i18n({
-              id: '@@send_error_component_error_report_submitted',
-              value: 'Your error report was submitted.'
-            }, {})
-          });
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+            {
+              message: this.i18n({
+                id: '@@send_error_component_error_report_submitted',
+                value: 'Your error report was submitted.'
+              }, {})
+            });
 
-        dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
-          this.router.navigate(['/']);
+          dialogRef.afterClosed()
+            .pipe(first())
+            .subscribe((confirmation: boolean) => {
+              this.router.navigate(['/']);
+            });
+        }, (error: Error) => {
+          this.spinnerService.hideSpinner();
+
+          this.dialogService.showErrorDialog(error);
         });
-      }, (error: Error) => {
-        this.spinnerService.hideSpinner();
-
-        this.dialogService.showErrorDialog(error);
-      });
     }
   }
 }

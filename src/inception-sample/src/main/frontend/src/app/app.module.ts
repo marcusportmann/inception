@@ -110,8 +110,8 @@ export class AppModule extends InceptionAppModule {
         ])
     ]));
 
-    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', [],
-      [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', [],
+    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', ['Security.OrganizationAdministration', 'Codes.CodeAdministration', 'Configuration.ConfigurationAdministration'],
+      [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', ['Security.OrganizationAdministration'],
         [new NavigationItem('far fa-building', 'Organizations',
           '/administration/security/organizations', ['Security.OrganizationAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',

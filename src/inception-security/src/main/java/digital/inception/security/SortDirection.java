@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiModel;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -39,7 +40,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
 public enum SortDirection
 {
-  ASCENDING("asc", "Ascending"), DESCENDING("desc", "Descending");
+  @XmlEnumValue("Ascending")
+  ASCENDING("asc", "Ascending"),
+  @XmlEnumValue("Descending")
+  DESCENDING("desc", "Descending");
 
   private String code;
   private String name;

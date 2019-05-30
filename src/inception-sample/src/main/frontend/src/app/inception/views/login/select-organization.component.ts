@@ -68,13 +68,15 @@ export class SelectOrganizationComponent implements OnInit {
       (typeof this.organizationFormControl.value === 'object')) {
       const selectedOrganization: Organization = <Organization>this.organizationFormControl.value;
 
-      this.sessionService.session.pipe(first()).subscribe((session: Session) => {
+      this.sessionService.session
+        .pipe(first())
+        .subscribe((session: Session) => {
 
-        session.organization = selectedOrganization;
+          session.organization = selectedOrganization;
 
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
-      });
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        });
     }
   }
 

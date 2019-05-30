@@ -56,7 +56,7 @@ export class SecurityService {
    */
   deleteOrganization(organizationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.configurationServiceUrlPrefix + '/organizations/' + organizationId,
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId,
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -94,7 +94,7 @@ export class SecurityService {
    * @return The organizations.
    */
   getOrganizations(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-                           pageSize?: number): Observable<Organizations> {
+                   pageSize?: number): Observable<Organizations> {
 
     let params = new HttpParams();
 

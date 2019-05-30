@@ -29,7 +29,8 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {OrganizationDatasource} from '../../services/security/organization.datasource';
 import {SortDirection} from "../../services/security/sort-direction";
-import {Subscription} from "rxjs";
+import {merge, Subscription} from "rxjs";
+import {TableFilter} from "../../components/controls";
 
 /**
  * The OrganizationsComponent class implements the organizations component.
@@ -45,9 +46,9 @@ import {Subscription} from "rxjs";
 })
 export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy {
 
-  dataSource: OrganizationDatasource;
+  private subscriptions: Subscription = new Subscription();
 
-  dataSourceLoadingSubscription: Subscription;
+  dataSource: OrganizationDatasource;
 
   displayedColumns: string[] = ['name', 'actions'];
 
@@ -55,16 +56,12 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
 
   @ViewChild(MatSort) sort: MatSort;
 
+  @ViewChild(TableFilter) tableFilter: TableFilter;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
 
-  }
-
-  applyFilter(filterValue: string): void {
-    // filterValue = filterValue.trim();
-    // filterValue = filterValue.toLowerCase();
-    // this.dataSource.filter = filterValue;
   }
 
   deleteOrganization(organizationId: string): void {
@@ -76,25 +73,27 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
         })
       });
 
-    dialogRef.afterClosed().pipe(first()).subscribe((confirmation: boolean) => {
-      if (confirmation === true) {
-        this.spinnerService.showSpinner();
+    dialogRef.afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-        this.securityService.deleteOrganization(organizationId)
-          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-          .subscribe(() => {
-            this.dataSource.load('', SortDirection.Ascending, 0, 10);
-          }, (error: Error) => {
-            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-              (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
-      }
-    });
+          this.securityService.deleteOrganization(organizationId)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              this.dataSource.load('', SortDirection.Ascending, 0, 10);
+            }, (error: Error) => {
+              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
+        }
+      });
   }
 
   editOrganization(organizationId: string): void {
@@ -102,49 +101,53 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
     this.router.navigate([organizationId], {relativeTo: this.activatedRoute});
   }
 
-  // loadOrganizations(): void {
-  //   this.spinnerService.showSpinner();
-  //
-  //   this.securityService.getOrganizations().pipe(first()).subscribe((organizations: Organization[]) => {
-  //     this.spinnerService.hideSpinner();
-  //
-  //     this.dataSource.data = organizations;
-  //   }, (error: Error) => {
-  //     this.spinnerService.hideSpinner();
-  //
-  //     if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-  //       // noinspection JSIgnoredPromiseFromCall
-  //       this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-  //     } else {
-  //       this.dialogService.showErrorDialog(error);
-  //     }
-  //   });
-  //
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  //   this.dataSource.filterPredicate = function(data, filter): boolean {
-  //     return data.name.toLowerCase().includes(filter);
-  //   };
-  // }
+  loadOrganizations(): void {
+
+    let filter: string = '';
+
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
+      filter = filter.trim();
+      filter = filter.toLowerCase();
+    }
+
+    this.dataSource.load(filter,
+      this.sort.direction == 'asc' ? SortDirection.Ascending : SortDirection.Descending,
+      this.paginator.pageIndex,
+      this.paginator.pageSize);
+  }
 
   newOrganization(): void {
-    // noinspection JSIgnoredPromiseFromCalla
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['new-organization'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.load('', SortDirection.Ascending, 0, 10);
+    this.loadOrganizations();
 
-    this.paginator.page.pipe(tap(() => {
-      this.dataSource.load('', SortDirection.Ascending, this.paginator.pageIndex,
-        this.paginator.pageSize);
-    })).subscribe();
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
+
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => this.paginator.pageIndex = 0));
+
+    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+      .pipe(tap(() => {
+        console.log('Here 1');
+        this.loadOrganizations();
+      })).subscribe());
+
+
+
+    // this.subscriptions.add(merge(this.tableFilter.changed, this.paginator.page)
+    //   .pipe(tap(() => {
+    //     console.log('Here 2');
+    //     this.loadOrganizations();
+    //   })).subscribe());
   }
 
   ngOnInit(): void {
     this.dataSource = new OrganizationDatasource(this.securityService);
 
-    this.dataSourceLoadingSubscription = this.dataSource.loading.subscribe((next: boolean) => {
+    this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
       } else {
@@ -158,11 +161,11 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
       } else {
         this.dialogService.showErrorDialog(error);
       }
-    });
+    }));
   }
 
   ngOnDestroy(): void {
-    this.dataSourceLoadingSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }
 

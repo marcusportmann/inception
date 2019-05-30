@@ -3,7 +3,7 @@
     <button mat-flat-button color="primary" (click)="newCode()" i18n="@@codes_component_button_new">New</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="id" matSortStart="asc">
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">

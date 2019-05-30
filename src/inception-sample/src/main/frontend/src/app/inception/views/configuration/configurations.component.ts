@@ -71,22 +71,25 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
         })
       });
 
-    dialogRef.afterClosed().pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    dialogRef.afterClosed()
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((confirmation: boolean) => {
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.configurationService.deleteConfiguration(key).pipe(first()).subscribe(() => {
-            this.loadConfigurations();
-          }, (error: Error) => {
-            if ((error instanceof ConfigurationServiceError) ||
-              (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+          this.configurationService.deleteConfiguration(key)
+            .pipe(first())
+            .subscribe(() => {
+              this.loadConfigurations();
+            }, (error: Error) => {
+              if ((error instanceof ConfigurationServiceError) ||
+                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
         }
       });
   }
