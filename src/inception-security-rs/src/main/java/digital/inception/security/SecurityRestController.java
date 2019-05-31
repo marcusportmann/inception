@@ -354,6 +354,8 @@ public class SecurityRestController
 
         IMPLEMENT CHECK FOR USER DIRECTORY FOR LOGGED IN USER
 
+        THEN SORT OUT WEB SERVICE
+
         int xxx = 0;
         xxx++;
       }
