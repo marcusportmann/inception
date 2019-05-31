@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -271,6 +272,18 @@ public class SecurityRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+//    for (GrantedAuthority authority : authentication.getAuthorities())
+//    {
+//      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
+//      {
+//        String userDirectoryIdAuthority = authority.getAuthority().substring("USER_DIRECTORY_ID_".length());
+//
+//
+//        int xxx = 0;
+//        xxx++;
+//      }
+//    }
+
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations()));
 
@@ -332,6 +345,20 @@ public class SecurityRestController
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    for (GrantedAuthority authority : authentication.getAuthorities())
+    {
+      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
+      {
+        String userDirectoryIdAuthority = authority.getAuthority().substring("USER_DIRECTORY_ID_".length());
+
+        IMPLEMENT CHECK FOR USER DIRECTORY FOR LOGGED IN USER
+
+        int xxx = 0;
+        xxx++;
+      }
+    }
+
 
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUsers(userDirectoryId)));

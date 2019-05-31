@@ -53,6 +53,9 @@ public class UserDetails
 
     this.authorities = new ArrayList<>();
 
+    this.authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_"
+        + user.getUserDirectoryId()));
+
     for (String functionCode : functionCodes)
     {
       this.authorities.add(new SimpleGrantedAuthority(functionCode));

@@ -93,6 +93,8 @@ public class SecurityServiceAuthenticationManager
 
       List<GrantedAuthority> authorities = new ArrayList<>();
 
+      authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_" + userDirectoryId));
+
       for (String functionCode : functionCodes)
       {
         authorities.add(new SimpleGrantedAuthority(functionCode));
