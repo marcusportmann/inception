@@ -131,17 +131,8 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
       .pipe(tap(() => {
-        console.log('Here 1');
         this.loadOrganizations();
       })).subscribe());
-
-
-
-    // this.subscriptions.add(merge(this.tableFilter.changed, this.paginator.page)
-    //   .pipe(tap(() => {
-    //     console.log('Here 2');
-    //     this.loadOrganizations();
-    //   })).subscribe());
   }
 
   ngOnInit(): void {
