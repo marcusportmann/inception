@@ -1029,20 +1029,21 @@ public class SecurityServiceTest
     securityService.changePassword(user.getUsername(), "Password2", "Password1");
   }
 
-  /**
-   * Test the user property functionality.
-   */
-  @Test
-  public void userPropertyTest()
-  {
-    User user = getTestUserDetails();
-
-    user.setProperty("PropertyName", "PropertyValue");
-
-    assertTrue(user.hasProperty("PropertyName"));
-
-    assertEquals("PropertyValue", user.getProperty("PropertyName"));
-  }
+// TODO: DELETE THIS METHOD -- MARCUS
+//  /**
+//   * Test the user property functionality.
+//   */
+//  @Test
+//  public void userPropertyTest()
+//  {
+//    User user = getTestUserDetails();
+//
+//    user.setProperty("PropertyName", "PropertyValue");
+//
+//    assertTrue(user.hasProperty("PropertyName"));
+//
+//    assertEquals("PropertyValue", user.getProperty("PropertyName"));
+//  }
 
   /**
    * Test the user functionality.

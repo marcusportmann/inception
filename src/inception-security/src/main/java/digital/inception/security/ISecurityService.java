@@ -131,7 +131,7 @@ public interface ISecurityService
    * @param userDirectory the user directory
    */
   void createUserDirectory(UserDirectory userDirectory)
-    throws SecurityServiceException;
+    throws DuplicateUserDirectoryException, SecurityServiceException;
 
   /**
    * Delete the authorised function.

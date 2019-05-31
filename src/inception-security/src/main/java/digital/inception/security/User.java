@@ -16,36 +16,175 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import digital.inception.core.xml.LocalDateTimeAdapter;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
 
-import java.util.HashMap;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>User</code> class stores the information for a user.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "User")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+    "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status", "readOnly",
+    "externalReference" })
+@XmlRootElement(name = "User", namespace = "http://security.inception.digital")
+@XmlType(name = "User", namespace = "http://security.inception.digital",
+    propOrder = { "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+        "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
+        "readOnly", "externalReference" })
+@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class User
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The e-mail address for the user.
+   */
+  @ApiModelProperty(value = "The e-mail address for the user")
+  @JsonProperty
+  @XmlElement(name = "Email")
   private String email;
+
+  /**
+   * The optional external reference for the user.
+   */
+  @ApiModelProperty(value = "The optional external reference for the user")
+  @JsonProperty
+  @XmlElement(name = "ExternalReference")
+  private String externalReference;
+
+  /**
+   * The first name for the user.
+   */
+  @ApiModelProperty(value = "The first name for the user")
+  @JsonProperty
+  @XmlElement(name = "FirstName")
   private String firstName;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
   private UUID id;
-  private boolean isReadOnly;
+
+  /**
+   * The last name for the user.
+   */
+  @ApiModelProperty(value = "The last name for the user")
+  @JsonProperty
+  @XmlElement(name = "LastName")
   private String lastName;
+
+  /**
+   * The mobile number for the user.
+   */
+  @ApiModelProperty(value = "The mobile number for the user")
+  @JsonProperty
+  @XmlElement(name = "MobileNumber")
   private String mobileNumber;
+
+  /**
+   * The password hash for the user.
+   */
+  @ApiModelProperty(value = "The password hash for the user")
+  @JsonProperty
+  @XmlElement(name = "Password")
   private String password;
+
+  /**
+   * The number of failed authentication attempts as a result of an incorrect password for the user.
+   */
+  @ApiModelProperty(
+      value = "The number of failed authentication attempts as a result of an incorrect password for the user",
+      example = "0")
+  @JsonProperty
+  @XmlElement(name = "PasswordAttempts")
   private Integer passwordAttempts;
+
+  /**
+   * The date and time the password for the user expires.
+   */
+  @ApiModelProperty(value = "The date and time the password for the user expires")
+  @JsonProperty
+  @XmlElement(name = "PasswordExpiry")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
   private LocalDateTime passwordExpiry;
+
+  /**
+   * The phone number for the user.
+   */
+  @ApiModelProperty(value = "The phone number for the user")
+  @JsonProperty
+  @XmlElement(name = "PhoneNumber")
   private String phoneNumber;
-  private HashMap<String, String> properties = new HashMap<>();
+
+  /**
+   * Is the user read-only.
+   */
+  @ApiModelProperty(value = "Is the user read-only")
+  @JsonProperty
+  @XmlElement(name = "ReadOnly")
+  private Boolean readOnly;
+
+  /**
+   * The status for the user.
+   */
+  @ApiModelProperty(value = "The status for the user",
+      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired")
+  @JsonProperty
+  @XmlElement(name = "Status")
+  @NotNull
   private UserStatus status;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "UserDirectoryId", required = true)
+  @NotNull
   private UUID userDirectoryId;
+
+  /**
+   * The username for the user.
+   */
+  @ApiModelProperty(value = "The username for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Username", required = true)
+  @NotNull
   private String username;
 
   /**
@@ -61,6 +200,16 @@ public class User
   public String getEmail()
   {
     return email;
+  }
+
+  /**
+   * Returns the optional external reference for the user.
+   *
+   * @return the optional external reference for the user
+   */
+  public String getExternalReference()
+  {
+    return externalReference;
   }
 
   /**
@@ -146,20 +295,6 @@ public class User
   }
 
   /**
-   * Returns the value of the user property with the specified name or <code>null</code> if the
-   * user property does not exist.
-   *
-   * @param name the name of the user property
-   *
-   * @return the value of the user property with the specified name or <code>null</code> if the
-   *         user property does not exist
-   */
-  public String getProperty(String name)
-  {
-    return properties.get(name);
-  }
-
-  /**
    * Returns the status for the user.
    *
    * @return the status for the user
@@ -213,24 +348,12 @@ public class User
   }
 
   /**
-   * Returns <code>true</code> if the user has a property with the specified name or
-   * <code>false</code> otherwise.
-   *
-   * @param name the name of the user property
-   *
-   * @return <code>true</code> if the user has a property with the specified name or
-   *         <code>false</code> otherwise
-   */
-  public boolean hasProperty(String name)
-  {
-    return properties.containsKey(name);
-  }
-
-  /**
    * Is the user active?
    *
    * @return <code>true</code> if the user is active or <code>false</code> otherwise
    */
+  @JsonIgnore
+  @XmlTransient
   public boolean isActive()
   {
     return (status == UserStatus.ACTIVE);
@@ -241,6 +364,8 @@ public class User
    *
    * @return <code>true</code> if the user is expired or <code>false</code> otherwise
    */
+  @JsonIgnore
+  @XmlTransient
   public boolean isExpired()
   {
     return (status == UserStatus.EXPIRED);
@@ -251,6 +376,8 @@ public class User
    *
    * @return <code>true</code> if the user is locked or <code>false</code> otherwise
    */
+  @JsonIgnore
+  @XmlTransient
   public boolean isLocked()
   {
     return (status == UserStatus.LOCKED);
@@ -261,9 +388,9 @@ public class User
    *
    * @return <code>true</code> if the user is read-only or <code>false</code> otherwise
    */
-  public boolean isReadOnly()
+  public Boolean isReadOnly()
   {
-    return isReadOnly;
+    return readOnly;
   }
 
   /**
@@ -274,6 +401,16 @@ public class User
   public void setEmail(String email)
   {
     this.email = email;
+  }
+
+  /**
+   * Set the optional external reference for the user.
+   *
+   * @param externalReference the optional external reference for the user
+   */
+  public void setExternalReference(String externalReference)
+  {
+    this.externalReference = externalReference;
   }
 
   /**
@@ -331,7 +468,7 @@ public class User
    *
    * @param passwordAttempts the password attempts for the user
    */
-  public void setPasswordAttempts(int passwordAttempts)
+  public void setPasswordAttempts(Integer passwordAttempts)
   {
     this.passwordAttempts = passwordAttempts;
   }
@@ -357,24 +494,13 @@ public class User
   }
 
   /**
-   * Set the value of the user property.
-   *
-   * @param name  the name of the user property
-   * @param value the value of the user property
-   */
-  public void setProperty(String name, String value)
-  {
-    properties.put(name, value);
-  }
-
-  /**
    * Set whether the user is read-only.
    *
-   * @param isReadOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
+   * @param readOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
    */
-  public void setReadOnly(boolean isReadOnly)
+  public void setReadOnly(Boolean readOnly)
   {
-    this.isReadOnly = isReadOnly;
+    this.readOnly = readOnly;
   }
 
   /**

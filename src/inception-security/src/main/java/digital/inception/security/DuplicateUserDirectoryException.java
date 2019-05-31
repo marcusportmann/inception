@@ -30,39 +30,39 @@ import javax.xml.ws.WebFault;
 import java.util.UUID;
 
 /**
- * A <code>DuplicateOrganizationException</code> is thrown to indicate that a security operation
- * failed as a result of a duplicate organization.
+ * A <code>DuplicateUserDirectoryException</code> is thrown to indicate that a security operation
+ * failed as a result of a duplicate user directory.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-    reason = "An organization with the specified ID or name already exists")
-@WebFault(name = "DuplicateOrganizationException", targetNamespace = "http://security.inception.digital",
+  reason = "An organization with the specified name already exists")
+@WebFault(name = "DuplicateUserDirectoryException", targetNamespace = "http://security.inception.digital",
   faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateOrganizationException extends ServiceException
+public class DuplicateUserDirectoryException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateOrganizationException</code>.
+   * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
    * @param name the name of the organization
    */
-  public DuplicateOrganizationException(String name)
+  public DuplicateUserDirectoryException(String name)
   {
     super(String.format("The organization with the name (%s) already exists", name));
   }
 
   /**
-   * Constructs a new <code>DuplicateOrganizationException</code>.
+   * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public DuplicateOrganizationException(UUID id)
+  public DuplicateUserDirectoryException(UUID id)
   {
     super(String.format("The organization with the ID (%s) already exists", id.toString()));
   }

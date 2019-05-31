@@ -1,25 +1,23 @@
 -- -------------------------------------------------------------------------------------------------
 -- CREATE SCHEMAS
 -- -------------------------------------------------------------------------------------------------
-CREATE SCHEMA IDGENERATOR;
+CREATE SCHEMA idgenerator;
 
 
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
-CREATE TABLE IDGENERATOR.IDGENERATOR (
-  NAME     VARCHAR(4000) NOT NULL,
-  CURRENT  BIGINT DEFAULT 0,
+CREATE TABLE idgenerator.idgenerator (
+  name    VARCHAR(4000) NOT NULL,
+  current BIGINT DEFAULT 0,
 
-  PRIMARY KEY (NAME)
+  PRIMARY KEY (name)
 );
 
-COMMENT ON COLUMN IDGENERATOR.IDGENERATOR.NAME
-IS 'The name giving the type of entity associated with the generated ID';
+COMMENT ON COLUMN idgenerator.idgenerator.name IS 'The name giving the type of entity associated with the generated ID';
 
-COMMENT ON COLUMN IDGENERATOR.IDGENERATOR.CURRENT
-IS 'The current ID for the type';
+COMMENT ON COLUMN idgenerator.idgenerator.current IS 'The current ID for the type';
 
 
 

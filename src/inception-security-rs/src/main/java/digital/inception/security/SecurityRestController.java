@@ -76,6 +76,89 @@ public class SecurityRestController
     this.validator = validator;
   }
 
+
+
+
+
+
+
+
+  /**
+   * Create the user.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param user            the user
+   * @param expiredPassword create the user with its password expired
+   * @param userLocked      create the user locked
+   */
+  @ApiOperation(value = "Create the user", notes = "Create the user")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+    message = "The user was created successfully") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 404, message = "The user directory could not be found", response = RestControllerError.class) ,
+    @ApiResponse(code = 409, message = "A user with the specified username already exists",
+      response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.POST,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  //@PreAuthorize("hasAuthority('Security.UserAdministration')")
+  public void createUser(
+    @ApiParam(name = "userDirectoryId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+    @PathVariable UUID userDirectoryId,
+
+    @ApiParam(name = "user", value = "The user",
+    required = true)
+  @RequestBody User user,
+    @ApiParam(
+      name = "expiredPassword",
+      value = "Create the user with its password expired")
+    @RequestParam(value = "expiredPassword", required = false) Boolean expiredPassword,
+
+    @ApiParam(
+      name = "userLocked",
+      value = "Create the user locked")
+    @RequestParam(value = "userLocked", required = false) Boolean userLocked
+
+    )
+    throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
+  {
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (user == null)
+    {
+      throw new InvalidArgumentException("user");
+    }
+
+    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("user", ValidationError.toValidationErrors(
+        constraintViolations));
+    }
+
+    securityService.createUser(userDirectoryId, user, (expiredPassword != null) && expiredPassword, (userLocked != null) && userLocked );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   /**
    * Create the organization.
    *
@@ -85,7 +168,7 @@ public class SecurityRestController
   @ApiResponses(value = { @ApiResponse(code = 204,
     message = "The organization was created successfully") ,
     @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-    @ApiResponse(code = 409, message = "An organization with the specified ID already exists",
+    @ApiResponse(code = 409, message = "An organization with the specified ID or name already exists",
       response = RestControllerError.class) ,
     @ApiResponse(code = 500,
       message = "An error has occurred and the service is unable to process the request at this time",
@@ -179,10 +262,10 @@ public class SecurityRestController
       value = "The optional sort direction to apply to the organization name")
   @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
       name = "pageIndex",
-      value = "The optional page index")
+      value = "The optional page index", example = "0")
   @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
       name = "pageSize",
-      value = "The optional page size")
+      value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
     throws SecurityServiceException
   {
@@ -194,4 +277,69 @@ public class SecurityRestController
     return new ResponseEntity<>(securityService.getOrganizations(filter, sortDirection, pageIndex,
         pageSize), httpHeaders, HttpStatus.OK);
   }
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Retrieve the users.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param filter          the optional filter to apply to the users
+   * @param sortDirection   the optional sort direction to apply to the user username
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the users
+   */
+  @ApiOperation(value = "Retrieve the users",
+    notes = "Retrieve the users")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+    @ApiResponse(code = 404, message = "The user directory could not be found", response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.GET,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //@PreAuthorize("hasAuthority('Security.UserAdministration')")
+  public ResponseEntity<List<User>> getUsers(
+
+    @ApiParam(name = "userDirectoryId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+    @PathVariable UUID userDirectoryId,
+
+
+
+    @ApiParam(name = "filter",
+    value = "The optional filter to apply to the users")
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+    value = "The optional sort direction to apply to the user username")
+  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
+    name = "pageIndex",
+    value = "The optional page index", example = "0")
+  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
+    name = "pageSize",
+    value = "The optional page size", example = "0")
+  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUsers(userDirectoryId)));
+
+    return new ResponseEntity<>(securityService.getUsers(userDirectoryId, filter, sortDirection, pageIndex,
+      pageSize), httpHeaders, HttpStatus.OK);
+  }
+
+
+
 }

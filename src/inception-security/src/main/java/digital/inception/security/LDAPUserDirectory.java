@@ -650,7 +650,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      LdapName userDN = new LdapName(user.getProperty("dn"));
+      LdapName userDN = new LdapName(user.getExternalReference());
 
       if (!userDN.startsWith(sharedBaseDN))
       {
@@ -670,7 +670,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       try
       {
-        userDirContext = getDirContext(user.getProperty("dn"), password);
+        userDirContext = getDirContext(user.getExternalReference(), password);
 
         user.setPassword(password);
       }
@@ -2242,7 +2242,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     return group;
   }
 
-  private User buildUserFromSearchResult(SearchResult searchResult, boolean isReadOnly)
+  private User buildUserFromSearchResult(SearchResult searchResult, boolean readOnly)
     throws NamingException
   {
     Attributes attributes = searchResult.getAttributes();
@@ -2252,7 +2252,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     user.setId(null);
     user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
     user.setUserDirectoryId(getUserDirectoryId());
-    user.setReadOnly(isReadOnly);
+    user.setReadOnly(readOnly);
     user.setPassword("");
 
     if ((!StringUtils.isEmpty(userFirstNameAttribute))
@@ -2334,7 +2334,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
     }
 
-    user.setProperty("dn", new LdapName(searchResult.getNameInNamespace()
+    user.setExternalReference(new LdapName(searchResult.getNameInNamespace()
         .toLowerCase()).toString());
 
     return user;
@@ -2490,7 +2490,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
             buffer.append(" ");
           }
 
-          buffer.append("(").append(user.getProperty("dn")).append(")");
+          buffer.append("(").append(user.getExternalReference()).append(")");
         }
 
         throw new SecurityServiceException(String.format(
@@ -2598,7 +2598,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
           && (user.getPasswordAttempts() != null)
           && (user.getPasswordAttempts() != -1))
       {
-        dirContext.modifyAttributes(user.getProperty("dn"), new ModificationItem[] {
+        dirContext.modifyAttributes(user.getExternalReference(), new ModificationItem[] {
             new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
             userPasswordAttemptsAttribute, String.valueOf(user.getPasswordAttempts() + 1))) });
       }
