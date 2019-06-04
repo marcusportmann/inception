@@ -1743,7 +1743,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve the users.
    *
    * @param filter        the optional filter to apply to the users
-   * @param sortDirection the optional sort direction to apply to the user username
+   * @param sortDirection the optional sort direction to apply to the users
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *

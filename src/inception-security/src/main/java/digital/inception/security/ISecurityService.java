@@ -342,8 +342,8 @@ public interface ISecurityService
   /**
    * Retrieve the organizations.
    *
-   * @param filter        the optional filter to apply to the organization name
-   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param filter        the optional filter to apply to the organizations
+   * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
@@ -388,7 +388,7 @@ public interface ISecurityService
    * Retrieve the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
-   * @param sortDirection the optional sort direction to apply to the user directory name
+   * @param sortDirection the optional sort direction to apply to the user directories
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
@@ -458,7 +458,7 @@ public interface ISecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
-   * @param sortDirection   the optional sort direction to apply to the user username
+   * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
    *

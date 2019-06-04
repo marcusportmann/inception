@@ -20,30 +20,28 @@ package digital.inception.security;
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.validation.InvalidArgumentException;
-
 import digital.inception.validation.ValidationError;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityRestController</code> class.
@@ -240,8 +238,8 @@ public class SecurityRestController
   /**
    * Retrieve the organizations.
    *
-   * @param filter        the optional filter to apply to the organization name
-   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param filter        the optional filter to apply to the organizations
+   * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
@@ -258,9 +256,9 @@ public class SecurityRestController
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
   public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
-      value = "The optional filter to apply to the organization name")
+      value = "The optional filter to apply to the organizations")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the organization name")
+      value = "The optional sort direction to apply to the organizations")
   @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
       name = "pageIndex",
       value = "The optional page index", example = "0")
@@ -306,7 +304,7 @@ public class SecurityRestController
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
-   * @param sortDirection   the optional sort direction to apply to the user username
+   * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
    *
@@ -322,7 +320,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.GET,
     produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  //@PreAuthorize("hasAuthority('Security.UserAdministration')")
+  @PreAuthorize("hasAuthority('Security.UserAdministration')")
   public ResponseEntity<List<User>> getUsers(
 
     @ApiParam(name = "userDirectoryId",
@@ -334,7 +332,7 @@ public class SecurityRestController
     @ApiParam(name = "filter",
     value = "The optional filter to apply to the users")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-    value = "The optional sort direction to apply to the user username")
+    value = "The optional sort direction to apply to the users")
   @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
     name = "pageIndex",
     value = "The optional page index", example = "0")
@@ -344,22 +342,7 @@ public class SecurityRestController
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    for (GrantedAuthority authority : authentication.getAuthorities())
-    {
-      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
-      {
-        String userDirectoryIdAuthority = authority.getAuthority().substring("USER_DIRECTORY_ID_".length());
-
-        IMPLEMENT CHECK FOR USER DIRECTORY FOR LOGGED IN USER
-
-        THEN SORT OUT WEB SERVICE
-
-        int xxx = 0;
-        xxx++;
-      }
-    }
+    checkAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(), userDirectoryId);
 
 
     var httpHeaders = new HttpHeaders();
@@ -369,6 +352,32 @@ public class SecurityRestController
       pageSize), httpHeaders, HttpStatus.OK);
   }
 
+  /**
+   * Confirm that the user associated with the authenticated request has access to the user
+   * directory.
+   *
+   * @param authentication  the authenticated principal
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   */
+  private void checkAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
+  {
+    if (!authentication.isAuthenticated())
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId + ")");
+    }
 
+    for (GrantedAuthority authority : authentication.getAuthorities())
+    {
+      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
+      {
+        UUID userDirectoryIdAuthority = UUID.fromString(authority.getAuthority().substring("USER_DIRECTORY_ID_".length()));
 
+        if (!userDirectoryIdAuthority.equals(userDirectoryId))
+        {
+          throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId + ")");
+        }
+      }
+    }
+  }
 }

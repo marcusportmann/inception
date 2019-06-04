@@ -88,8 +88,8 @@ export class SessionService {
 
         const accessTokenExpiry: Date = helper.getTokenExpirationDate(tokenResponse.access_token);
 
-        const session: Session = new Session(token.user_name, token.scope, token.authorities,
-          token.organizations, tokenResponse.access_token, accessTokenExpiry,
+        const session: Session = new Session(token.user_name, token.userDirectoryId, token.scope,
+          token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry,
           tokenResponse.refresh_token);
 
         this.session.next(session);
@@ -164,8 +164,8 @@ export class SessionService {
               const accessTokenExpiry: Date = helper.getTokenExpirationDate(
                 tokenResponse.access_token);
 
-              const refreshedSession: Session = new Session(token.user_name, token.scope,
-                token.authorities, token.organizations, tokenResponse.access_token,
+              const refreshedSession: Session = new Session(token.user_name, token.userDirectoryId,
+                token.scope, token.authorities, token.organizations, tokenResponse.access_token,
                 accessTokenExpiry, tokenResponse.refresh_token);
 
               refreshedSession.organization = selectedOrganization;

@@ -17,8 +17,9 @@
 import {Organization} from '../security/organization';
 
 /**
- * The Session class holds the information for an active user session associated with an authenticated user. All values
- * are stored as strings to support the serialization of the user session.
+ * The Session class holds the information for an active user session associated with an
+ * authenticated user. All values are stored as strings to support the serialization of the user
+ * session.
  *
  * @author Marcus Portmann
  */
@@ -28,6 +29,12 @@ export class Session {
    * The username for the user, the user session is associated with.
    */
   username: string;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
+   */
+  userDirectoryId: string;
 
   /**
    * The OAuth2 scopes for the user session.
@@ -68,6 +75,8 @@ export class Session {
    * Constructs a new Session.
    *
    * @param username          The username for the user the user session is associated with.
+   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          user directory the user is associated with.
    * @param scopes            The OAuth2 scopes for the user session.
    * @param functionCodes     The codes identifying the functions the user associated with the user
    *                          session has access to.
@@ -77,10 +86,11 @@ export class Session {
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, scopes: string[], functionCodes: string[],
+  constructor(username: string, userDirectoryId: string, scopes: string[], functionCodes: string[],
               organizations: Organization[], accessToken: string, accessTokenExpiry: Date,
               refreshToken: string) {
     this.username = username;
+    this.userDirectoryId = userDirectoryId;
     this.scopes = scopes;
     this.functionCodes = functionCodes;
     this.organizations = organizations;

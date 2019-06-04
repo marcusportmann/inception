@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import {Organization} from './organization';
 import {SortDirection} from './sort-direction';
+import {User} from "./user";
 
 /**
- * The Organizations class holds the results of a request to retrieve a list of organizations.
+ * The Users class holds the results of a request to retrieve a list of users.
  *
  * @author Marcus Portmann
  */
-export class Organizations {
+export class Users {
 
   /**
-   * The optional filter that was applied to the organizations.
+   * The optional filter that was applied to the users.
    */
   filter?: string;
 
@@ -40,33 +40,33 @@ export class Organizations {
   pageSize?: number;
 
   /**
-   * The organizations.
+   * The users.
    */
-  organizations: Organization[];
+  users: User[];
 
   /**
-   * The optional sort direction that was applied to the organizations.
+   * The optional sort direction that was applied to the users.
    */
   sortDirection?: SortDirection;
 
   /**
-   * The total number of organizations.
+   * The total number of users.
    */
   total: number;
 
   /**
-   * Constructs a new Organizations.
+   * Constructs a new Users.
    *
-   * @param organizations The organizations.
-   * @param total         The total number of organizations.
-   * @param filter        The optional filter that was applied to the organizations.
-   * @param sortDirection The optional sort direction that was applied to the organizations.
+   * @param users         The users.
+   * @param total         The total number of users.
+   * @param filter        The optional filter that was applied to the users.
+   * @param sortDirection The optional sort direction that was applied to the users.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  constructor(organizations: Organization[], total: number, filter?: string,
+  constructor(users: User[], total: number, filter?: string,
               sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
-    this.organizations = organizations;
+    this.users = users;
     this.total = total;
     this.filter = filter;
     this.sortDirection = sortDirection;

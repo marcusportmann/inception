@@ -64,9 +64,10 @@ public class User
   /**
    * The e-mail address for the user.
    */
-  @ApiModelProperty(value = "The e-mail address for the user")
-  @JsonProperty
-  @XmlElement(name = "Email")
+  @ApiModelProperty(value = "The e-mail address for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Email", required = true)
+  @NotNull
   private String email;
 
   /**
@@ -80,9 +81,10 @@ public class User
   /**
    * The first name for the user.
    */
-  @ApiModelProperty(value = "The first name for the user")
-  @JsonProperty
-  @XmlElement(name = "FirstName")
+  @ApiModelProperty(value = "The first name for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "FirstName", required = true)
+  @NotNull
   private String firstName;
 
   /**
@@ -99,25 +101,28 @@ public class User
   /**
    * The last name for the user.
    */
-  @ApiModelProperty(value = "The last name for the user")
-  @JsonProperty
-  @XmlElement(name = "LastName")
+  @ApiModelProperty(value = "The last name for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "LastName", required = true)
+  @NotNull
   private String lastName;
 
   /**
    * The mobile number for the user.
    */
-  @ApiModelProperty(value = "The mobile number for the user")
-  @JsonProperty
-  @XmlElement(name = "MobileNumber")
+  @ApiModelProperty(value = "The mobile number for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MobileNumber", required = true)
+  @NotNull
   private String mobileNumber;
 
   /**
-   * The password hash for the user.
+   * The password or password hash for the user.
    */
-  @ApiModelProperty(value = "The password hash for the user")
-  @JsonProperty
-  @XmlElement(name = "Password")
+  @ApiModelProperty(value = "The password or password hash for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Password", required = true)
+  @NotNull
   private String password;
 
   /**
@@ -125,15 +130,16 @@ public class User
    */
   @ApiModelProperty(
       value = "The number of failed authentication attempts as a result of an incorrect password for the user",
-      example = "0")
-  @JsonProperty
-  @XmlElement(name = "PasswordAttempts")
+      example = "0", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PasswordAttempts", required = true)
+  @NotNull
   private Integer passwordAttempts;
 
   /**
-   * The date and time the password for the user expires.
+   * The optional date and time the password for the user expires.
    */
-  @ApiModelProperty(value = "The date and time the password for the user expires")
+  @ApiModelProperty(value = "The optional date and time the password for the user expires")
   @JsonProperty
   @XmlElement(name = "PasswordExpiry")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -143,9 +149,10 @@ public class User
   /**
    * The phone number for the user.
    */
-  @ApiModelProperty(value = "The phone number for the user")
-  @JsonProperty
-  @XmlElement(name = "PhoneNumber")
+  @ApiModelProperty(value = "The phone number for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PhoneNumber", required = true)
+  @NotNull
   private String phoneNumber;
 
   /**
@@ -160,9 +167,9 @@ public class User
    * The status for the user.
    */
   @ApiModelProperty(value = "The status for the user",
-      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired")
-  @JsonProperty
-  @XmlElement(name = "Status")
+      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Status", required = true)
   @NotNull
   private UserStatus status;
 
@@ -253,9 +260,9 @@ public class User
   }
 
   /**
-   * Returns the password hash for the user
+   * Returns the password or password hash for the user
    *
-   * @return the password hash for the user
+   * @return the password or password hash for the user
    */
   public String getPassword()
   {
@@ -275,9 +282,9 @@ public class User
   }
 
   /**
-   * Returns the date and time the password for the user expires
+   * Returns the optional date and time the password for the user expires
    *
-   * @return the date and time the password for the user expires
+   * @return the optional date and time the password for the user expires
    */
   public LocalDateTime getPasswordExpiry()
   {
@@ -454,9 +461,9 @@ public class User
   }
 
   /**
-   * Set the password for the user.
+   * Set the password or password hash for the user.
    *
-   * @param password the password for the user
+   * @param password the password or password hash for the user
    */
   public void setPassword(String password)
   {
@@ -474,9 +481,9 @@ public class User
   }
 
   /**
-   * Set the password expiry for the user
+   * Set the optional password expiry for the user
    *
-   * @param passwordExpiry the password expiry for the user
+   * @param passwordExpiry the optional password expiry for the user
    */
   public void setPasswordExpiry(LocalDateTime passwordExpiry)
   {

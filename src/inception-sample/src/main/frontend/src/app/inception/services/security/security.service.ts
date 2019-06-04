@@ -27,6 +27,8 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {environment} from '../../../../environments/environment';
 import {SortDirection} from './sort-direction';
 import {Organizations} from './organizations';
+import {Users} from "./users";
+import {User} from "./user";
 
 /**
  * The Security Service implementation.
@@ -86,8 +88,8 @@ export class SecurityService {
   /**
    * Retrieve the organizations.
    *
-   * @param filter        The optional filter to apply to the organization name.
-   * @param sortDirection The optional sort direction to apply to the organization name.
+   * @param filter        The optional filter to apply to the organizations.
+   * @param sortDirection The optional sort direction to apply to the organizations.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    *
@@ -139,4 +141,71 @@ export class SecurityService {
       }
     }));
   }
+
+
+
+
+  /**
+   * Retrieve the users.
+   *
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   * @param filter          The optional filter to apply to the users.
+   * @param sortDirection   The optional sort direction to apply to the users.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The organizations.
+   */
+  getUsers(userDirectoryId: string, filter?: string, sortDirection?: SortDirection,
+           pageIndex?: number, pageSize?: number): Observable<Users> {
+
+    let params = new HttpParams();
+
+    if (filter !== null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortDirection !== null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex !== null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize !== null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<User[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users' , {
+        observe: 'response',
+        params: params,
+        reportProgress: true,
+      }).pipe(map((response: HttpResponse<User[]>) => {
+      const totalCount = Number(response.headers.get('X-Total-Count'));
+
+      return new Users(response.body, totalCount, filter, sortDirection, pageIndex,
+        pageSize);
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+
+        console.log(apiError.stackTrace);
+
+        return throwError(new SecurityServiceError(this.i18n({
+          id: '@@security_service_failed_to_retrieve_the_users',
+          value: 'Failed to retrieve the users.'
+        }), apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+
 }

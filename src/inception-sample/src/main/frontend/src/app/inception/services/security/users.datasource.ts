@@ -15,23 +15,26 @@
  */
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {Organization} from './organization';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
-import {Organizations} from './organizations';
+
 import {first} from "rxjs/operators";
+import {User} from "./user";
+import {Users} from "./users";
+import {SessionService} from "../session/session.service";
+import {Session} from "../session/session";
 
 /**
- * The OrganizationDatasource class implements the organization data source.
+ * The UserDatasource class implements the user data source.
  *
  * @author Marcus Portmann
  */
-export class OrganizationDatasource implements DataSource<Organization> {
+export class UserDatasource implements DataSource<User> {
 
   private totalSubject = new BehaviorSubject<number>(0);
 
-  private dataSubject = new BehaviorSubject<Organization[]>([]);
+  private dataSubject = new BehaviorSubject<User[]>([]);
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
@@ -39,10 +42,10 @@ export class OrganizationDatasource implements DataSource<Organization> {
 
   loading = this.loadingSubject.asObservable();
 
-  constructor(private securityService: SecurityService) {
+  constructor(private sessionService: SessionService, private securityService: SecurityService) {
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<Organization[] | ReadonlyArray<Organization>> {
+  connect(collectionViewer: CollectionViewer): Observable<User[] | ReadonlyArray<User>> {
     return this.dataSubject.asObservable();
   }
 
@@ -52,10 +55,10 @@ export class OrganizationDatasource implements DataSource<Organization> {
   }
 
   /**
-   * Load the organizations.
+   * Load the users.
    *
-   * @param filter        The optional filter to apply to the organizations.
-   * @param sortDirection The optional sort direction to apply to the organizations.
+   * @param filter        The optional filter to apply to the users.
+   * @param sortDirection The optional sort direction to apply to the users.
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
@@ -63,20 +66,24 @@ export class OrganizationDatasource implements DataSource<Organization> {
        pageSize?: number): void {
     this.loadingSubject.next(true);
 
-    this.securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize)
-      .pipe(first())
-      .subscribe((organizations: Organizations) => {
-        this.loadingSubject.next(false);
+    this.sessionService.session.pipe(first()).subscribe((session: Session) => {
+      if (session) {
+        this.securityService.getUsers(session.userDirectoryId, filter, sortDirection, pageIndex, pageSize)
+          .pipe(first())
+          .subscribe((users: Users) => {
+            this.loadingSubject.next(false);
 
-        this.totalSubject.next(organizations.total);
+            this.totalSubject.next(users.total);
 
-        this.dataSubject.next(organizations.organizations);
-      }, (error: Error) => {
-        this.loadingSubject.next(false);
+            this.dataSubject.next(users.users);
+          }, (error: Error) => {
+            this.loadingSubject.next(false);
 
-        this.totalSubject.next(0);
+            this.totalSubject.next(0);
 
-        this.loadingSubject.error(error);
-      });
+            this.loadingSubject.error(error);
+          });
+      }
+    });
   }
 }

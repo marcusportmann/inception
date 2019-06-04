@@ -26,6 +26,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {OrganizationsComponent} from './organizations.component';
 import {OverviewComponent} from './overview.component';
 import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
+import {UsersComponent} from './users.component';
 
 const routes: Routes = [{
   path: '',
@@ -76,6 +77,45 @@ const routes: Routes = [{
     }
     */
   ]
+}, {
+  path: 'users',
+  data: {
+    title: 'Users'
+  },
+  children: [{
+    path: '',
+    canActivate: [CanActivateFunctionGuard],
+    component: UsersComponent,
+    data: {
+      functionCodes: ['Security.UserAdministration']
+    }
+  },
+
+    /*
+    {
+      path: 'new-user',
+      canActivate: [
+        CanActivateFunctionGuard
+      ],
+      component: NewUserComponent,
+      data: {
+        title: 'New User',
+        functionCodes: ['Security.UserAdministration']
+      }
+    },
+    {
+      path: ':username',
+      canActivate: [
+        CanActivateFunctionGuard
+      ],
+      component: EditUserComponent,
+      data: {
+        title: '{username}',
+        functionCodes: ['Security.UserAdministration']
+      }
+    }
+    */
+  ]
 }
 ];
 
@@ -84,7 +124,7 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [OrganizationsComponent, OverviewComponent]
+  declarations: [OrganizationsComponent, OverviewComponent, UsersComponent]
 })
 export class SecurityModule {
 }

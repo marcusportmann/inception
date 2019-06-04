@@ -97,6 +97,8 @@ public class TokenEnhancer
 
       UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
+      additionalInfo.put("userDirectoryId", userDirectoryId.toString());
+
       List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
           userDirectoryId);
 

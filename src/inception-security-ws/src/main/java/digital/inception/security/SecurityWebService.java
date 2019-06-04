@@ -111,8 +111,8 @@ public class SecurityWebService
   /**
    * Retrieve the filtered organizations using pagination.
    *
-   * @param filter        the optional filter to apply to the organization name
-   * @param sortDirection the optional sort direction to apply to the organization name
+   * @param filter        the optional filter to apply to the organizations
+   * @param sortDirection the optional sort direction to apply to the organizations
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
