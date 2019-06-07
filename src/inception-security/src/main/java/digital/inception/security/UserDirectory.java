@@ -21,11 +21,13 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 
 import io.swagger.annotations.ApiModel;
+
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -38,9 +40,7 @@ import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -53,10 +53,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 @ApiModel(value = "UserDirectory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "typeId", "name", "configuration" })
+@JsonPropertyOrder({ "id", "typeId", "name", "parameters" })
 @XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
-  propOrder = { "id", "typeId", "name", "configuration" })
+    propOrder = { "id", "typeId", "name", "parameters" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectory
@@ -66,12 +66,10 @@ public class UserDirectory
   private UUID id;
   private String name;
 
-  @JsonIgnore
-  @XmlTransient
-  private Map<String, String> parameters = new HashMap<>();
-
-DO THESE ANNOTATIONS and create summary
-
+  /**
+   * The configuration parameters for the user directory.
+   */
+  private List<UserDirectoryParameter> parameters = new ArrayList<>();
   private UUID typeId;
 
   /**
@@ -84,6 +82,8 @@ DO THESE ANNOTATIONS and create summary
    *
    * @return the XML configuration data for the user directory
    */
+  @JsonIgnore
+  @XmlTransient
   public String getConfiguration()
   {
     StringBuilder buffer = new StringBuilder();
@@ -92,13 +92,13 @@ DO THESE ANNOTATIONS and create summary
     buffer.append(
         "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
-    for (String parameterName : parameters.keySet())
+    for (UserDirectoryParameter userDirectoryParameter : parameters)
     {
       buffer.append("<parameter>");
-      buffer.append("<name>").append(parameterName).append("</name>");
-      buffer.append("<value>").append(StringUtils.isEmpty(parameters.get(parameterName))
+      buffer.append("<name>").append(userDirectoryParameter.getName()).append("</name>");
+      buffer.append("<value>").append(StringUtils.isEmpty(userDirectoryParameter.getStringValue())
           ? ""
-          : parameters.get(parameterName)).append("</value>");
+          : userDirectoryParameter.getStringValue()).append("</value>");
       buffer.append("</parameter>");
     }
 
@@ -128,11 +128,11 @@ DO THESE ANNOTATIONS and create summary
   }
 
   /**
-   * Returns the parameters for the user directory.
+   * Returns the configuration parameters for the user directory.
    *
-   * @return the parameters for the user directory
+   * @return the configuration parameters for the user directory
    */
-  public Map<String, String> getParameters()
+  public List<UserDirectoryParameter> getParameters()
   {
     return parameters;
   }
@@ -176,7 +176,7 @@ DO THESE ANNOTATIONS and create summary
       Element rootElement = document.getDocumentElement();
 
       // Read the user directory parameters configuration
-      parameters = new HashMap<>();
+      parameters = new ArrayList<>();
 
       NodeList parameterElements = rootElement.getElementsByTagName("parameter");
 
@@ -184,8 +184,8 @@ DO THESE ANNOTATIONS and create summary
       {
         Element parameterElement = (Element) parameterElements.item(i);
 
-        parameters.put(XmlUtil.getChildElementText(parameterElement, "name"),
-            XmlUtil.getChildElementText(parameterElement, "value"));
+        parameters.add(new UserDirectoryParameter(XmlUtil.getChildElementText(parameterElement,
+            "name"), XmlUtil.getChildElementText(parameterElement, "value")));
       }
     }
     catch (Throwable e)
@@ -216,11 +216,11 @@ DO THESE ANNOTATIONS and create summary
   }
 
   /**
-   * Set the parameters for the user directory.
+   * Set the configuration parameters for the user directory.
    *
-   * @param parameters the parameters for the user directory
+   * @param parameters the configuration parameters for the user directory
    */
-  public void setParameters(Map<String, String> parameters)
+  public void setParameters(List<UserDirectoryParameter> parameters)
   {
     this.parameters = parameters;
   }

@@ -41,7 +41,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>Attribute</code> class stores an attribute for a security entity as name-value pair.
+ * The <code>Attribute</code> class stores an attribute for a security entity as a name-value pair.
  *
  * @author Marcus Portmann
  */

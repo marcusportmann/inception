@@ -134,16 +134,16 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *                        user directory
    * @param parameters      the key-value configuration parameters for the user directory
    */
-  public LDAPUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
+  public LDAPUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
   {
     super(userDirectoryId, parameters);
 
     try
     {
-      if (parameters.containsKey("Host"))
+      if (UserDirectoryParameter.contains(parameters, "Host"))
       {
-        host = parameters.get("Host");
+        host = UserDirectoryParameter.getStringValue(parameters, "Host");
       }
       else
       {
@@ -151,9 +151,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
             "No Host configuration parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("Port"))
+      if (UserDirectoryParameter.contains(parameters, "Port"))
       {
-        port = Integer.parseInt(parameters.get("Port"));
+        port = UserDirectoryParameter.getIntegerValue(parameters, "Port");
       }
       else
       {
@@ -161,11 +161,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
             "No Port configuration parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      useSSL = parameters.containsKey("UseSSL") && Boolean.parseBoolean(parameters.get("UseSSL"));
+      useSSL = UserDirectoryParameter.contains(parameters, "UseSSL")
+          && UserDirectoryParameter.getBooleanValue(parameters, "UseSSL");
 
-      if (parameters.containsKey("BindDN"))
+      if (UserDirectoryParameter.contains(parameters, "BindDN"))
       {
-        bindDN = parameters.get("BindDN");
+        bindDN = UserDirectoryParameter.getStringValue(parameters, "BindDN");
       }
       else
       {
@@ -174,9 +175,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("BindPassword"))
+      if (UserDirectoryParameter.contains(parameters, "BindPassword"))
       {
-        bindPassword = parameters.get("BindPassword");
+        bindPassword = UserDirectoryParameter.getStringValue(parameters, "BindPassword");
       }
       else
       {
@@ -185,9 +186,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("BaseDN"))
+      if (UserDirectoryParameter.contains(parameters, "BaseDN"))
       {
-        baseDN = new LdapName(parameters.get("BaseDN"));
+        baseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "BaseDN"));
       }
       else
       {
@@ -196,9 +197,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserBaseDN"))
+      if (UserDirectoryParameter.contains(parameters, "UserBaseDN"))
       {
-        userBaseDN = new LdapName(parameters.get("UserBaseDN"));
+        userBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "UserBaseDN"));
       }
       else
       {
@@ -207,9 +208,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupBaseDN"))
+      if (UserDirectoryParameter.contains(parameters, "GroupBaseDN"))
       {
-        groupBaseDN = new LdapName(parameters.get("GroupBaseDN"));
+        groupBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters,
+            "GroupBaseDN"));
       }
       else
       {
@@ -218,15 +220,17 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if ((parameters.containsKey("SharedBaseDN"))
-          && (!StringUtils.isEmpty(parameters.get("SharedBaseDN"))))
+      if ((UserDirectoryParameter.contains(parameters, "SharedBaseDN"))
+          && (!StringUtils.isEmpty(UserDirectoryParameter.getStringValue(parameters,
+              "SharedBaseDN"))))
       {
-        sharedBaseDN = new LdapName(parameters.get("SharedBaseDN"));
+        sharedBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters,
+            "SharedBaseDN"));
       }
 
-      if (parameters.containsKey("UserObjectClass"))
+      if (UserDirectoryParameter.contains(parameters, "UserObjectClass"))
       {
-        userObjectClass = parameters.get("UserObjectClass");
+        userObjectClass = UserDirectoryParameter.getStringValue(parameters, "UserObjectClass");
       }
       else
       {
@@ -235,9 +239,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserUsernameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserUsernameAttribute"))
       {
-        userUsernameAttribute = parameters.get("UserUsernameAttribute");
+        userUsernameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserUsernameAttribute");
       }
       else
       {
@@ -246,9 +251,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserPasswordExpiryAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordExpiryAttribute"))
       {
-        userPasswordExpiryAttribute = parameters.get("UserPasswordExpiryAttribute");
+        userPasswordExpiryAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordExpiryAttribute");
       }
       else
       {
@@ -257,9 +263,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + "(%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("UserPasswordAttemptsAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordAttemptsAttribute"))
       {
-        userPasswordAttemptsAttribute = parameters.get("UserPasswordAttemptsAttribute");
+        userPasswordAttemptsAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordAttemptsAttribute");
       }
       else
       {
@@ -268,9 +275,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + "(%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("UserPasswordHistoryAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordHistoryAttribute"))
       {
-        userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
+        userPasswordHistoryAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordHistoryAttribute");
         userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
       }
       else
@@ -280,9 +288,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             + "(%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("UserFirstNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserFirstNameAttribute"))
       {
-        userFirstNameAttribute = parameters.get("UserFirstNameAttribute");
+        userFirstNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserFirstNameAttribute");
       }
       else
       {
@@ -291,9 +300,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserLastNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserLastNameAttribute"))
       {
-        userLastNameAttribute = parameters.get("UserLastNameAttribute");
+        userLastNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserLastNameAttribute");
       }
       else
       {
@@ -302,9 +312,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserPhoneNumberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserPhoneNumberAttribute"))
       {
-        userPhoneNumberAttribute = parameters.get("UserPhoneNumberAttribute");
+        userPhoneNumberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPhoneNumberAttribute");
       }
       else
       {
@@ -313,9 +324,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserMobileNumberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserMobileNumberAttribute"))
       {
-        userMobileNumberAttribute = parameters.get("UserMobileNumberAttribute");
+        userMobileNumberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserMobileNumberAttribute");
       }
       else
       {
@@ -324,9 +336,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserEmailAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserEmailAttribute"))
       {
-        userEmailAttribute = parameters.get("UserEmailAttribute");
+        userEmailAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserEmailAttribute");
       }
       else
       {
@@ -335,9 +348,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupObjectClass"))
+      if (UserDirectoryParameter.contains(parameters, "GroupObjectClass"))
       {
-        groupObjectClass = parameters.get("GroupObjectClass");
+        groupObjectClass = UserDirectoryParameter.getStringValue(parameters, "GroupObjectClass");
       }
       else
       {
@@ -346,9 +359,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupNameAttribute"))
       {
-        groupNameAttribute = parameters.get("GroupNameAttribute");
+        groupNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupNameAttribute");
       }
       else
       {
@@ -357,9 +371,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupMemberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupMemberAttribute"))
       {
-        groupMemberAttribute = parameters.get("GroupMemberAttribute");
+        groupMemberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupMemberAttribute");
 
         groupMemberAttributeArray = new String[] { groupMemberAttribute };
       }
@@ -370,62 +385,67 @@ public class LDAPUserDirectory extends UserDirectoryBase
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupDescriptionAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupDescriptionAttribute"))
       {
-        groupDescriptionAttribute = parameters.get("GroupDescriptionAttribute");
+        groupDescriptionAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupDescriptionAttribute");
       }
 
-      if (parameters.containsKey("MaxPasswordAttempts"))
+      if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts"))
       {
-        maxPasswordAttempts = Integer.parseInt(parameters.get("MaxPasswordAttempts"));
+        maxPasswordAttempts = UserDirectoryParameter.getIntegerValue(parameters,
+            "MaxPasswordAttempts");
       }
       else
       {
         maxPasswordAttempts = DEFAULT_MAX_PASSWORD_ATTEMPTS;
       }
 
-      if (parameters.containsKey("PasswordExpiryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths"))
       {
-        passwordExpiryMonths = Integer.parseInt(parameters.get("PasswordExpiryMonths"));
+        passwordExpiryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordExpiryMonths");
       }
       else
       {
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      supportPasswordHistory = parameters.containsKey("SupportPasswordHistory")
-          && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
+      supportPasswordHistory = UserDirectoryParameter.contains(parameters, "SupportPasswordHistory")
+          && UserDirectoryParameter.getBooleanValue(parameters, "SupportPasswordHistory");
 
-      if (parameters.containsKey("PasswordHistoryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
       {
-        passwordHistoryMonths = Integer.parseInt(parameters.get("PasswordHistoryMonths"));
+        passwordHistoryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordHistoryMonths");
       }
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
       }
 
-      if (parameters.containsKey("PasswordHistoryMaxLength"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMaxLength"))
       {
-        passwordHistoryMaxLength = Integer.parseInt(parameters.get("PasswordHistoryMaxLength"));
+        passwordHistoryMaxLength = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordHistoryMaxLength");
       }
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MAX_LENGTH;
       }
 
-      if (parameters.containsKey("MaxFilteredUsers"))
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers"))
       {
-        maxFilteredUsers = Integer.parseInt(parameters.get("MaxFilteredUsers"));
+        maxFilteredUsers = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredUsers");
       }
       else
       {
         maxFilteredUsers = DEFAULT_MAX_FILTERED_USERS;
       }
 
-      if (parameters.containsKey("MaxFilteredGroups"))
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroups"))
       {
-        maxFilteredGroups = Integer.parseInt(parameters.get("MaxFilteredGroups"));
+        maxFilteredGroups = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredGroups");
       }
       else
       {
