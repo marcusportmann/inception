@@ -13,7 +13,7 @@ CREATE TABLE sms.sms (
   status         INTEGER       NOT NULL,
   send_attempts  INTEGER       NOT NULL,
   lock_name      VARCHAR(4000),
-  last_processed DATETIME,
+  last_processed TIMESTAMP,
 
   PRIMARY KEY (id)
 );

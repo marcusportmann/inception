@@ -7,14 +7,14 @@
 
     <!-- Key Column -->
     <ng-container matColumnDef="key">
-      <mat-header-cell class="key-column" *matHeaderCellDef mat-sort-header i18n="@@configurations_component_table_header_key">Key</mat-header-cell>
-      <mat-cell class="key-column" *matCellDef="let row">{{row.key}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@configurations_component_table_header_key">Key</mat-header-cell>
+      <mat-cell  *matCellDef="let row">{{row.key}}</mat-cell>
     </ng-container>
 
     <!-- Value Column -->
     <ng-container matColumnDef="value">
-      <mat-header-cell class="value-column d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@configurations_component_table_header_value">Value</mat-header-cell>
-      <mat-cell class="value-column d-none d-md-table-cell" *matCellDef="let row">{{row.value}}</mat-cell>
+      <mat-header-cell class="d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@configurations_component_table_header_value">Value</mat-header-cell>
+      <mat-cell class="d-none d-md-table-cell" *matCellDef="let row">{{row.value}}</mat-cell>
     </ng-container>
 
     <!-- Actions Column -->

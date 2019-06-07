@@ -16,15 +16,23 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.UUID;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>Function</code> class stores the information for an authorised function that can be
@@ -32,6 +40,13 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "Function")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "code", "name", "description" })
+@XmlRootElement(name = "Function", namespace = "http://security.inception.digital")
+@XmlType(name = "Function", namespace = "http://security.inception.digital",
+    propOrder = { "id", "code", "name", "description" })
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Function
   implements java.io.Serializable
 {
@@ -50,14 +65,18 @@ public class Function
   /**
    * The description for the function.
    */
+  @ApiModelProperty(value = "The description for the function")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 4000)
   private String description;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the function.
    */
   @ApiModelProperty(
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the function",
-    required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the function",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -66,11 +85,11 @@ public class Function
   /**
    * The name of the function.
    */
-  @ApiModelProperty(value = "The unique code used to identify the function", required = true)
+  @ApiModelProperty(value = "The name of the function", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(max = 4000)
   private String name;
 
   /**

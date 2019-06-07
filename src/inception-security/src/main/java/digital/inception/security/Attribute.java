@@ -65,7 +65,7 @@ public class Attribute
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1)
+  @Size(min = 1, max = 4000)
   private String name;
 
   /**
@@ -75,6 +75,7 @@ public class Attribute
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
+  @Size(max = 4000)
   private String value;
 
   /**

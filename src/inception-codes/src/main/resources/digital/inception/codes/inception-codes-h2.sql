@@ -10,7 +10,7 @@ CREATE TABLE codes.code_categories (
   id      VARCHAR(100) NOT NULL,
   name    VARCHAR(100) NOT NULL,
   data    CLOB,
-  updated DATETIME,
+  updated TIMESTAMP,
 
   PRIMARY KEY (id)
 );

@@ -15,9 +15,9 @@ CREATE TABLE scheduler.jobs (
   status             INTEGER       NOT NULL DEFAULT 1,
   execution_attempts INTEGER       NOT NULL DEFAULT 0,
   lock_name          VARCHAR(4000),
-  last_executed      DATETIME,
-  next_execution     DATETIME,
-  updated            DATETIME,
+  last_executed      TIMESTAMP,
+  next_execution     TIMESTAMP,
+  updated            TIMESTAMP,
 
   PRIMARY KEY (id)
 );

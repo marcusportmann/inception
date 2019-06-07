@@ -18,10 +18,14 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 
+import io.swagger.annotations.ApiModel;
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -38,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -46,6 +51,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "UserDirectory")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "typeId", "name", "configuration" })
+@XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
+@XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
+  propOrder = { "id", "typeId", "name", "configuration" })
+@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectory
   implements java.io.Serializable
@@ -53,8 +65,13 @@ public class UserDirectory
   private static final long serialVersionUID = 1000000;
   private UUID id;
   private String name;
+
+  @JsonIgnore
+  @XmlTransient
   private Map<String, String> parameters = new HashMap<>();
-  private UserDirectoryType type;
+
+DO THESE ANNOTATIONS and create summary
+
   private UUID typeId;
 
   /**
@@ -118,16 +135,6 @@ public class UserDirectory
   public Map<String, String> getParameters()
   {
     return parameters;
-  }
-
-  /**
-   * Returns the user directory type.
-   *
-   * @return the user directory type
-   */
-  public UserDirectoryType getType()
-  {
-    return type;
   }
 
   /**
@@ -216,16 +223,6 @@ public class UserDirectory
   public void setParameters(Map<String, String> parameters)
   {
     this.parameters = parameters;
-  }
-
-  /**
-   * Set the user directory type.
-   *
-   * @param type the user directory type
-   */
-  public void setType(UserDirectoryType type)
-  {
-    this.type = type;
   }
 
   /**

@@ -130,6 +130,26 @@ public class SecurityWebService
     return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
+
+  /**
+   * Retrieve the user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   *
+   * @return the user directories the organization is associated with
+   */
+  @WebMethod(operationName = "GetUserDirectoriesForOrganization")
+  @WebResult(name = "UserDirectory")
+  public List<UserDirectory> getUserDirectoriesForOrganization(@WebParam(name = "OrganizationId")
+  @XmlElement(required = true)UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    return securityService.getUserDirectoriesForOrganization(organizationId, true);
+  }
+
+
+
   private void validateOrganization(Organization organization)
     throws InvalidArgumentException
   {

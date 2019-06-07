@@ -89,7 +89,7 @@ CREATE TABLE security.internal_users (
   email             VARCHAR(4000) NOT NULL DEFAULT '',
   password          VARCHAR(4000) NOT NULL DEFAULT '',
   password_attempts INTEGER       NOT NULL DEFAULT 0,
-  password_expiry   DATETIME,
+  password_expiry   TIMESTAMP,
 
   PRIMARY KEY (id),
   CONSTRAINT internal_users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -125,9 +125,9 @@ COMMENT ON COLUMN security.internal_users.password_expiry IS 'The date and time 
 
 
 CREATE TABLE security.internal_users_password_history (
-  id               UUID     NOT NULL,
-  internal_user_id UUID     NOT NULL,
-  changed          DATETIME NOT NULL,
+  id               UUID      NOT NULL,
+  internal_user_id UUID      NOT NULL,
+  changed          TIMESTAMP NOT NULL,
   password         VARCHAR(4000),
 
   PRIMARY KEY (id),
@@ -294,8 +294,8 @@ INSERT INTO security.user_directories (id, type_id, name, configuration)
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, NULL);
+INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');

@@ -401,12 +401,14 @@ public interface ISecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId                      the Universally Unique Identifier (UUID) used to
+   *                                            uniquely identify the organization
+   * @param includeDefaultInternalUserDirectory include the default internal user directory
    *
    * @return the user directories the organization is associated with
    */
-  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
+  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
+      boolean includeDefaultInternalUserDirectory)
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**

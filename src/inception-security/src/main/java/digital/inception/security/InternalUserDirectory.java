@@ -1142,17 +1142,30 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     String getInternalUsersSQL = "SELECT id, username, status, first_name, "
         + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
+        + "FROM security.internal_users";
 
-    String getFilteredInternalUsersSQL = "SELECT id, username, status, first_name, "
-        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) "
-        + "OR (UPPER(first_name) LIKE ?) OR (UPPER(last_name) LIKE ?)) ORDER BY username";
+    if (StringUtils.isEmpty(filter))
+    {
+      getInternalUsersSQL += " WHERE user_directory_id=? ORDER BY last_name";
+    }
+    else
+    {
+      getInternalUsersSQL +=
+          " WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) "
+          + "OR (UPPER(last_name) LIKE ?)) ORDER BY last_name";
+    }
+
+    if ((pageIndex != null) && (pageSize != null))
+    {
+      getInternalUsersSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
+    }
+    else
+    {
+      getInternalUsersSQL += " LIMIT " + maxFilteredUsers;
+    }
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getInternalUsersSQL
-          : getFilteredInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(getInternalUsersSQL))
     {
       statement.setMaxRows(maxFilteredUsers);
 

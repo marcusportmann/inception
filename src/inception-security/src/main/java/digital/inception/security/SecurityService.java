@@ -58,9 +58,10 @@ public class SecurityService
   implements ISecurityService, InitializingBean
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the default internal user
+   * directory.
    */
-  public static final UUID DEFAULT_USER_DIRECTORY_ID = UUID.fromString(
+  public static final UUID DEFAULT_INTERNAL_USER_DIRECTORY_ID = UUID.fromString(
       "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
@@ -89,6 +90,8 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * The Spring application context.
@@ -104,8 +107,6 @@ public class SecurityService
    * The ID generator.
    */
   private IDGenerator idGenerator;
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -502,7 +503,7 @@ public class SecurityService
         try (PreparedStatement statement = connection.prepareStatement(
             addUserDirectoryToOrganizationSQL))
         {
-          statement.setObject(1, DEFAULT_USER_DIRECTORY_ID);
+          statement.setObject(1, DEFAULT_INTERNAL_USER_DIRECTORY_ID);
           statement.setObject(2, organization.getId());
 
           if (statement.executeUpdate() != 1)
@@ -1482,13 +1483,15 @@ public class SecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId                      the Universally Unique Identifier (UUID) used to
+   *                                            uniquely identify the organization
+   * @param includeDefaultInternalUserDirectory include the default internal user directory
    *
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
+      boolean includeDefaultInternalUserDirectory)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectoriesForOrganizationSQL =
@@ -1514,7 +1517,19 @@ public class SecurityService
 
         while (rs.next())
         {
-          list.add(buildUserDirectoryFromResultSet(rs));
+          UserDirectory userDirectory = buildUserDirectoryFromResultSet(rs);
+
+          if (userDirectory.getId().equals(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID))
+          {
+            if (includeDefaultInternalUserDirectory)
+            {
+              list.add(userDirectory);
+            }
+          }
+          else
+          {
+            list.add(userDirectory);
+          }
         }
 
         return list;
@@ -1752,9 +1767,17 @@ public class SecurityService
     {
       Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
+      List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
+
       for (UserDirectory userDirectory : getUserDirectories())
       {
-        if (userDirectory.getType() == null)
+        UserDirectoryType userDirectoryType;
+
+        userDirectoryType = userDirectoryTypes.stream().filter(
+            possibleUserDirectoryType -> possibleUserDirectoryType.getId().equals(
+            userDirectory.getTypeId())).findFirst().orElse(null);
+
+        if (userDirectoryType == null)
         {
           logger.error(String.format(
               "Failed to load the user directory (%s): The user directory type (%s) was not loaded",
@@ -1765,7 +1788,7 @@ public class SecurityService
 
         try
         {
-          Class<?> clazz = userDirectory.getType().getUserDirectoryClass();
+          Class<?> clazz = userDirectoryType.getUserDirectoryClass();
 
           Class<? extends IUserDirectory> userDirectoryClass = clazz.asSubclass(
               IUserDirectory.class);
@@ -1774,7 +1797,7 @@ public class SecurityService
           {
             throw new SecurityServiceException(String.format(
                 "The user directory class (%s) does not implement the IUserDirectory interface",
-                userDirectory.getType().getUserDirectoryClassName()));
+                userDirectoryType.getUserDirectoryClassName()));
           }
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
@@ -1784,7 +1807,7 @@ public class SecurityService
           {
             throw new SecurityServiceException(String.format(
                 "The user directory class (%s) does not provide a valid constructor (long, "
-                + "Map<String,String>)", userDirectory.getType().getUserDirectoryClassName()));
+                + "Map<String,String>)", userDirectoryType.getUserDirectoryClassName()));
           }
 
           IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
@@ -2104,7 +2127,6 @@ public class SecurityService
     UserDirectory userDirectory = new UserDirectory();
     userDirectory.setId(UUID.fromString(rs.getString(1)));
     userDirectory.setTypeId(UUID.fromString(rs.getString(2)));
-    userDirectory.setType(userDirectoryTypes.get(UUID.fromString(rs.getString(2))));
     userDirectory.setName(rs.getString(3));
     userDirectory.setConfiguration(rs.getString(4));
 

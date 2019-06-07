@@ -7,14 +7,14 @@
 
     <!-- ID Column -->
     <ng-container matColumnDef="id">
-      <mat-header-cell class="id-column d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@code_categories_component_table_header_id">ID</mat-header-cell>
-      <mat-cell class="id-column d-none d-md-table-cell" *matCellDef="let row">{{row.id}}</mat-cell>
+      <mat-header-cell class="d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@code_categories_component_table_header_id">ID</mat-header-cell>
+      <mat-cell class="d-none d-md-table-cell" *matCellDef="let row">{{row.id}}</mat-cell>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell class="name-column" *matHeaderCellDef mat-sort-header i18n="@@code_categories_component_table_header_name">Name</mat-header-cell>
-      <mat-cell class="name-column" *matCellDef="let row">{{row.name}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@code_categories_component_table_header_name">Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
     </ng-container>
 
     <!-- Actions Column -->

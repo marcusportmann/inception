@@ -886,8 +886,8 @@ INSERT INTO security.user_directories (id, type_id, name, configuration)
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', NULL, NULL);
+INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
@@ -1091,7 +1091,6 @@ GRANT ALL ON table messaging.message_statuses TO dbuser;
 GRANT ALL ON table messaging.messages TO dbuser;
 GRANT ALL ON table messaging.message_parts TO dbuser;
 GRANT ALL ON table messaging.archived_messages TO dbuser;
-GRANT ALL ON table messaging.error_reports TO dbuser;
 GRANT ALL ON table reporting.report_definitions TO dbuser;
 GRANT ALL ON table scheduler.jobs TO dbuser;
 GRANT ALL ON table scheduler.job_parameters TO dbuser;

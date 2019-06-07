@@ -33,6 +33,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
@@ -104,7 +105,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.POST,
     produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  //@PreAuthorize("hasAuthority('Security.UserAdministration')")
+  @PreAuthorize("hasAuthority('Security.UserAdministration')")
   public void createUser(
     @ApiParam(name = "userDirectoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
@@ -135,6 +136,8 @@ public class SecurityRestController
     {
       throw new InvalidArgumentException("user");
     }
+
+    checkAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(), userDirectoryId);
 
     Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
@@ -268,20 +271,6 @@ public class SecurityRestController
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
     throws SecurityServiceException
   {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-//    for (GrantedAuthority authority : authentication.getAuthorities())
-//    {
-//      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
-//      {
-//        String userDirectoryIdAuthority = authority.getAuthority().substring("USER_DIRECTORY_ID_".length());
-//
-//
-//        int xxx = 0;
-//        xxx++;
-//      }
-//    }
-
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations()));
 
@@ -290,6 +279,50 @@ public class SecurityRestController
   }
 
 
+
+  /**
+   * Retrieve the user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   *
+   * @return the user directories the organization is associated with
+   */
+  @ApiOperation(value = "Retrieve the user directories the organization is associated with",
+    notes = "Retrieve the user directories the organization is associated with")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 404, message = "The organization could not be found",
+      response = RestControllerError.class) ,
+
+
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/organizations/{organizationId}/user-directories", method = RequestMethod.GET,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+
+  // TODO: HAS ROLE AdMINISTRATOR OR ORGANISATION ADMIN
+
+  //@PreAuthorize("hasAuthority('Security.OrganizationAdministration') or hasAuthority('Security.UserAdministration')")
+  public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(@ApiParam(name = "organizationId",
+    value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
+    required = true)
+  @PathVariable UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
+  {
+    if (organizationId == null)
+    {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    // TODO: CHECK ACCESS TO ORGANISATIONx
+
+    List<UserDirectory> userDirectories = securityService.getUserDirectoriesForOrganization(organizationId, isAdministrator(SecurityContextHolder.getContext().getAuthentication()));
+
+    return new ResponseEntity<>(userDirectories, HttpStatus.OK);
+  }
 
 
 
@@ -350,6 +383,28 @@ public class SecurityRestController
 
     return new ResponseEntity<>(securityService.getUsers(userDirectoryId, filter, sortDirection, pageIndex,
       pageSize), httpHeaders, HttpStatus.OK);
+  }
+
+  /**
+   * Confirm that the user associated with the authenticated request is an administrator.
+   *
+   * @param authentication  the authenticated principal
+   *
+   * @return <code>true</code> if the user associated with the authenticated request is an
+   *         administrator or <code>false</code> otherwise.
+   */
+  private boolean isAdministrator(Authentication authentication)
+  {
+    if (!authentication.isAuthenticated())
+    {
+      return false;
+
+
+      // TODO: CHECK RETURN OF THIS METHOD
+    }
+
+
+    return false;
   }
 
   /**

@@ -51,7 +51,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   dataSource: UserDatasource;
 
-  displayedColumns: string[] = ['username', 'actions'];
+  displayedColumns: string[] = ['lastName', 'firstName', 'actions'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
