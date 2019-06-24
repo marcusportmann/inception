@@ -53,11 +53,11 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   displayedColumns: string[] = ['lastName', 'firstName', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  @ViewChild(TableFilter) tableFilter: TableFilter;
+  @ViewChild(TableFilter, { static: true }) tableFilter: TableFilter;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private sessionService: SessionService,

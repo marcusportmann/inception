@@ -49,9 +49,9 @@ export class CodesComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,

@@ -91,7 +91,7 @@ export class TableFilter implements OnInit, OnDestroy {
 
   filter: string;
 
-  @ViewChild('tableFilterInput') tableFilterInput: ElementRef;
+  @ViewChild('tableFilterInput', { static: true }) tableFilterInput: ElementRef;
 
   ngOnDestroy(): void {
     if (this.tableFilterInputSubscription) {

@@ -47,9 +47,9 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['key', 'value', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private configurationService: ConfigurationService,

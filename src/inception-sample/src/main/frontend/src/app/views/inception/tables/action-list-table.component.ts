@@ -207,9 +207,9 @@ export class ActionListTableComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();

@@ -141,7 +141,7 @@ export class PaginationTableComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

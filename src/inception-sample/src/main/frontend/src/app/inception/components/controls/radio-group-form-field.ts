@@ -124,7 +124,7 @@ export class RadioGroupFormField extends MatFormField implements AfterContentIni
   /**
    * The radio group associated with the radio group form field.
    */
-  @ContentChild(MatRadioGroup) radioGroup: MatRadioGroup;
+  @ContentChild(MatRadioGroup, /* TODO: add static flag */ {}) radioGroup: MatRadioGroup;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,

@@ -141,7 +141,7 @@ export class SortableTableComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
