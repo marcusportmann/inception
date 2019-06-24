@@ -101,45 +101,48 @@ public class InternalUserDirectory extends UserDirectoryBase
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param parameters      the key-value configuration parameters for the user directory
+   * @param parameters      the parameters for the user directory
    */
-  public InternalUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
+  public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
   {
     super(userDirectoryId, parameters);
 
     try
     {
-      if (parameters.containsKey("MaxPasswordAttempts"))
+      if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts"))
       {
-        maxPasswordAttempts = Integer.parseInt(parameters.get("MaxPasswordAttempts"));
+        maxPasswordAttempts = UserDirectoryParameter.getIntegerValue(parameters,
+            "MaxPasswordAttempts");
       }
       else
       {
         maxPasswordAttempts = DEFAULT_MAX_PASSWORD_ATTEMPTS;
       }
 
-      if (parameters.containsKey("PasswordExpiryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths"))
       {
-        passwordExpiryMonths = Integer.parseInt(parameters.get("PasswordExpiryMonths"));
+        passwordExpiryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordExpiryMonths");
       }
       else
       {
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      if (parameters.containsKey("PasswordHistoryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
       {
-        passwordHistoryMonths = Integer.parseInt(parameters.get("PasswordHistoryMonths"));
+        passwordHistoryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordHistoryMonths");
       }
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
       }
 
-      if (parameters.containsKey("MaxFilteredUsers"))
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers"))
       {
-        maxFilteredUsers = Integer.parseInt(parameters.get("MaxFilteredUsers"));
+        maxFilteredUsers = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredUsers");
       }
       else
       {

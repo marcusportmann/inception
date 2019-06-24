@@ -18,14 +18,17 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -38,9 +41,13 @@ import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -53,26 +60,58 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 @ApiModel(value = "UserDirectory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "typeId", "name", "configuration" })
+@JsonPropertyOrder({ "id", "typeId", "name", "parameters" })
 @XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
-  propOrder = { "id", "typeId", "name", "configuration" })
+    propOrder = { "id", "typeId", "name", "parameters" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectory
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The parameters for the user directory.
+   */
+  @ApiModelProperty(value = "The parameters for the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Parameters", required = true)
+  @XmlElement(name = "Parameter", required = true)
+  @Valid
+  private List<UserDirectoryParameter> parameters = new ArrayList<>();
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
   private UUID id;
-  private String name;
 
-  @JsonIgnore
-  @XmlTransient
-  private Map<String, String> parameters = new HashMap<>();
-
-DO THESE ANNOTATIONS and create summary
-
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory type",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TypeId", required = true)
+  @NotNull
   private UUID typeId;
+
+  /**
+   * The name of the user directory.
+   */
+  @ApiModelProperty(value = "The name of the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
+  private String name;
 
   /**
    * Constructs a new <code>UserDirectory</code>.
@@ -92,13 +131,13 @@ DO THESE ANNOTATIONS and create summary
     buffer.append(
         "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
-    for (String parameterName : parameters.keySet())
+    for (UserDirectoryParameter parameter : parameters)
     {
       buffer.append("<parameter>");
-      buffer.append("<name>").append(parameterName).append("</name>");
-      buffer.append("<value>").append(StringUtils.isEmpty(parameters.get(parameterName))
+      buffer.append("<name>").append(parameter.getName()).append("</name>");
+      buffer.append("<value>").append(StringUtils.isEmpty(parameter.getValue())
           ? ""
-          : parameters.get(parameterName)).append("</value>");
+          : parameter.getValue()).append("</value>");
       buffer.append("</parameter>");
     }
 
@@ -132,7 +171,7 @@ DO THESE ANNOTATIONS and create summary
    *
    * @return the parameters for the user directory
    */
-  public Map<String, String> getParameters()
+  public List<UserDirectoryParameter> getParameters()
   {
     return parameters;
   }
@@ -176,7 +215,7 @@ DO THESE ANNOTATIONS and create summary
       Element rootElement = document.getDocumentElement();
 
       // Read the user directory parameters configuration
-      parameters = new HashMap<>();
+      parameters = new ArrayList<>();
 
       NodeList parameterElements = rootElement.getElementsByTagName("parameter");
 
@@ -184,8 +223,8 @@ DO THESE ANNOTATIONS and create summary
       {
         Element parameterElement = (Element) parameterElements.item(i);
 
-        parameters.put(XmlUtil.getChildElementText(parameterElement, "name"),
-            XmlUtil.getChildElementText(parameterElement, "value"));
+        parameters.add(new UserDirectoryParameter(XmlUtil.getChildElementText(parameterElement,
+            "name"), XmlUtil.getChildElementText(parameterElement, "value")));
       }
     }
     catch (Throwable e)
@@ -220,7 +259,7 @@ DO THESE ANNOTATIONS and create summary
    *
    * @param parameters the parameters for the user directory
    */
-  public void setParameters(Map<String, String> parameters)
+  public void setParameters(List<UserDirectoryParameter> parameters)
   {
     this.parameters = parameters;
   }

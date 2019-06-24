@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,9 +43,9 @@ public abstract class UserDirectoryBase
   implements IUserDirectory
 {
   /**
-   * The key-value configuration parameters for the user directory.
+   * The parameters for the user directory.
    */
-  private Map<String, String> parameters;
+  private List<UserDirectoryParameter> parameters;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
@@ -56,9 +57,9 @@ public abstract class UserDirectoryBase
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param parameters      the key-value configuration parameters for the user directory
+   * @param parameters      the parameters for the user directory
    */
-  public UserDirectoryBase(UUID userDirectoryId, Map<String, String> parameters)
+  public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
   {
     this.userDirectoryId = userDirectoryId;
@@ -66,11 +67,11 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the key-value configuration parameters for the user directory.
+   * Returns the parameters for the user directory.
    *
-   * @return the key-value configuration parameters for the user directory
+   * @return the parameters for the user directory
    */
-  public Map<String, String> getParameters()
+  public List<UserDirectoryParameter> getParameters()
   {
     return parameters;
   }

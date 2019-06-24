@@ -62,6 +62,11 @@ public class ErrorReport
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The maximum size of the error report detail.
+   */
+  public static final int MAX_DETAIL_SIZE = 102400;
+
+  /**
    * The ID used to uniquely identify the application that generated the error report.
    */
   @ApiModelProperty(
@@ -119,7 +124,7 @@ public class ErrorReport
   @ApiModelProperty(value = "The error detail")
   @JsonProperty
   @XmlElement(name = "Detail")
-  @Size(max = 4000)
+  @Size(max = 102400)
   private String detail;
 
   /**

@@ -26,7 +26,7 @@
     "@angular/platform-browser-dynamic": "^7.2.14",
     "@angular/router": "^7.2.14",
     "@auth0/angular-jwt": "^2.1.0",
-    "@fortawesome/fontawesome-free": "^5.8.1",
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "@ngx-translate/i18n-polyfill": "^1.0.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.9",

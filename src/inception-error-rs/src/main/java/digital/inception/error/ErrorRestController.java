@@ -91,6 +91,12 @@ public class ErrorRestController
   @RequestBody ErrorReport errorReport)
     throws InvalidArgumentException, ErrorServiceException
   {
+    // Truncate the detail if required
+    if ((errorReport.getDetail() != null) && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE))
+    {
+      errorReport.setDetail(errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
+    }
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null)

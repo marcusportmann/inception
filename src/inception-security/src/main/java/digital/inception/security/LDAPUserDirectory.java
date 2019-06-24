@@ -132,300 +132,312 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param parameters      the key-value configuration parameters for the user directory
+   * @param parameters      the parameters for the user directory
    */
-  public LDAPUserDirectory(UUID userDirectoryId, Map<String, String> parameters)
+  public LDAPUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
   {
     super(userDirectoryId, parameters);
 
     try
     {
-      if (parameters.containsKey("Host"))
+      if (UserDirectoryParameter.contains(parameters, "Host"))
       {
-        host = parameters.get("Host");
+        host = UserDirectoryParameter.getStringValue(parameters, "Host");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No Host configuration parameter found for the user directory (%s)", userDirectoryId));
+            "No Host parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("Port"))
+      if (UserDirectoryParameter.contains(parameters, "Port"))
       {
-        port = Integer.parseInt(parameters.get("Port"));
+        port = UserDirectoryParameter.getIntegerValue(parameters, "Port");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No Port configuration parameter found for the user directory (%s)", userDirectoryId));
+            "No Port parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      useSSL = parameters.containsKey("UseSSL") && Boolean.parseBoolean(parameters.get("UseSSL"));
+      useSSL = UserDirectoryParameter.contains(parameters, "UseSSL")
+          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters, "UseSSL"));
 
-      if (parameters.containsKey("BindDN"))
+      if (UserDirectoryParameter.contains(parameters, "BindDN"))
       {
-        bindDN = parameters.get("BindDN");
+        bindDN = UserDirectoryParameter.getStringValue(parameters, "BindDN");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindDN configuration parameter found for the user directory (%s)",
+            "No BindDN parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "BindPassword"))
+      {
+        bindPassword = UserDirectoryParameter.getStringValue(parameters, "BindPassword");
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No BindPassword parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "BaseDN"))
+      {
+        baseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "BaseDN"));
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No BindDN parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "UserBaseDN"))
+      {
+        userBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "UserBaseDN"));
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No UserBaseDN parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "GroupBaseDN"))
+      {
+        groupBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters,
+            "GroupBaseDN"));
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No GroupBaseDN parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if ((UserDirectoryParameter.contains(parameters, "SharedBaseDN"))
+          && (!StringUtils.isEmpty(UserDirectoryParameter.getStringValue(parameters,
+              "SharedBaseDN"))))
+      {
+        sharedBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters,
+            "SharedBaseDN"));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "UserObjectClass"))
+      {
+        userObjectClass = UserDirectoryParameter.getStringValue(parameters, "UserObjectClass");
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No UserObjectClass parameter found for the user directory (%s)", userDirectoryId));
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "UserUsernameAttribute"))
+      {
+        userUsernameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserUsernameAttribute");
+      }
+      else
+      {
+        throw new SecurityServiceException(String.format(
+            "No UserUsernameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("BindPassword"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordExpiryAttribute"))
       {
-        bindPassword = parameters.get("BindPassword");
+        userPasswordExpiryAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordExpiryAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindPassword configuration parameter found for the user directory (%s)",
+            "No UserPasswordExpiryAttribute parameter found for the user directory " + "(%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("BaseDN"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordAttemptsAttribute"))
       {
-        baseDN = new LdapName(parameters.get("BaseDN"));
+        userPasswordAttemptsAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordAttemptsAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindDN configuration parameter found for the user directory (%s)",
+            "No UserPasswordAttemptsAttribute parameter found for the user directory " + "(%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserBaseDN"))
+      if (UserDirectoryParameter.contains(parameters, "UserPasswordHistoryAttribute"))
       {
-        userBaseDN = new LdapName(parameters.get("UserBaseDN"));
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No UserBaseDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
-      }
-
-      if (parameters.containsKey("GroupBaseDN"))
-      {
-        groupBaseDN = new LdapName(parameters.get("GroupBaseDN"));
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No GroupBaseDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
-      }
-
-      if ((parameters.containsKey("SharedBaseDN"))
-          && (!StringUtils.isEmpty(parameters.get("SharedBaseDN"))))
-      {
-        sharedBaseDN = new LdapName(parameters.get("SharedBaseDN"));
-      }
-
-      if (parameters.containsKey("UserObjectClass"))
-      {
-        userObjectClass = parameters.get("UserObjectClass");
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No UserObjectClass configuration parameter found for the user directory (%s)",
-            userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserUsernameAttribute"))
-      {
-        userUsernameAttribute = parameters.get("UserUsernameAttribute");
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No UserUsernameAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserPasswordExpiryAttribute"))
-      {
-        userPasswordExpiryAttribute = parameters.get("UserPasswordExpiryAttribute");
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No UserPasswordExpiryAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserPasswordAttemptsAttribute"))
-      {
-        userPasswordAttemptsAttribute = parameters.get("UserPasswordAttemptsAttribute");
-      }
-      else
-      {
-        throw new SecurityServiceException(String.format(
-            "No UserPasswordAttemptsAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
-      }
-
-      if (parameters.containsKey("UserPasswordHistoryAttribute"))
-      {
-        userPasswordHistoryAttribute = parameters.get("UserPasswordHistoryAttribute");
+        userPasswordHistoryAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPasswordHistoryAttribute");
         userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPasswordHistoryAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
+            "No UserPasswordHistoryAttribute parameter found for the user directory " + "(%s)",
+            userDirectoryId));
       }
 
-      if (parameters.containsKey("UserFirstNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserFirstNameAttribute"))
       {
-        userFirstNameAttribute = parameters.get("UserFirstNameAttribute");
+        userFirstNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserFirstNameAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserFirstNameAttribute configuration parameter found for the user directory (%s)",
+            "No UserFirstNameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserLastNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserLastNameAttribute"))
       {
-        userLastNameAttribute = parameters.get("UserLastNameAttribute");
+        userLastNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserLastNameAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
+            "No UserLastNameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserPhoneNumberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserPhoneNumberAttribute"))
       {
-        userPhoneNumberAttribute = parameters.get("UserPhoneNumberAttribute");
+        userPhoneNumberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserPhoneNumberAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPhoneNumberAttribute configuration parameter found for the user directory (%s)",
+            "No UserPhoneNumberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserMobileNumberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserMobileNumberAttribute"))
       {
-        userMobileNumberAttribute = parameters.get("UserMobileNumberAttribute");
+        userMobileNumberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserMobileNumberAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserMobileNumberAttribute configuration parameter found for the user directory (%s)",
+            "No UserMobileNumberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("UserEmailAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "UserEmailAttribute"))
       {
-        userEmailAttribute = parameters.get("UserEmailAttribute");
+        userEmailAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "UserEmailAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserEmailAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No UserEmailAttribute parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupObjectClass"))
+      if (UserDirectoryParameter.contains(parameters, "GroupObjectClass"))
       {
-        groupObjectClass = parameters.get("GroupObjectClass");
+        groupObjectClass = UserDirectoryParameter.getStringValue(parameters, "GroupObjectClass");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupObjectClass configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No GroupObjectClass parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupNameAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupNameAttribute"))
       {
-        groupNameAttribute = parameters.get("GroupNameAttribute");
+        groupNameAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupNameAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupNameAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No GroupNameAttribute parameter found for the user directory (%s)", userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupMemberAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupMemberAttribute"))
       {
-        groupMemberAttribute = parameters.get("GroupMemberAttribute");
+        groupMemberAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupMemberAttribute");
 
         groupMemberAttributeArray = new String[] { groupMemberAttribute };
       }
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupMemberAttribute configuration parameter found for the user directory (%s)",
+            "No GroupMemberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
-      if (parameters.containsKey("GroupDescriptionAttribute"))
+      if (UserDirectoryParameter.contains(parameters, "GroupDescriptionAttribute"))
       {
-        groupDescriptionAttribute = parameters.get("GroupDescriptionAttribute");
+        groupDescriptionAttribute = UserDirectoryParameter.getStringValue(parameters,
+            "GroupDescriptionAttribute");
       }
 
-      if (parameters.containsKey("MaxPasswordAttempts"))
+      if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts"))
       {
-        maxPasswordAttempts = Integer.parseInt(parameters.get("MaxPasswordAttempts"));
+        maxPasswordAttempts = UserDirectoryParameter.getIntegerValue(parameters,
+            "MaxPasswordAttempts");
       }
       else
       {
         maxPasswordAttempts = DEFAULT_MAX_PASSWORD_ATTEMPTS;
       }
 
-      if (parameters.containsKey("PasswordExpiryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths"))
       {
-        passwordExpiryMonths = Integer.parseInt(parameters.get("PasswordExpiryMonths"));
+        passwordExpiryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordExpiryMonths");
       }
       else
       {
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      supportPasswordHistory = parameters.containsKey("SupportPasswordHistory")
-          && Boolean.parseBoolean(parameters.get("SupportPasswordHistory"));
+      supportPasswordHistory = UserDirectoryParameter.contains(parameters, "SupportPasswordHistory")
+          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters,
+              "SupportPasswordHistory"));
 
-      if (parameters.containsKey("PasswordHistoryMonths"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
       {
-        passwordHistoryMonths = Integer.parseInt(parameters.get("PasswordHistoryMonths"));
+        passwordHistoryMonths = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordHistoryMonths");
       }
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
       }
 
-      if (parameters.containsKey("PasswordHistoryMaxLength"))
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMaxLength"))
       {
-        passwordHistoryMaxLength = Integer.parseInt(parameters.get("PasswordHistoryMaxLength"));
+        passwordHistoryMaxLength = UserDirectoryParameter.getIntegerValue(parameters,
+            "PasswordHistoryMaxLength");
       }
       else
       {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MAX_LENGTH;
       }
 
-      if (parameters.containsKey("MaxFilteredUsers"))
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers"))
       {
-        maxFilteredUsers = Integer.parseInt(parameters.get("MaxFilteredUsers"));
+        maxFilteredUsers = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredUsers");
       }
       else
       {
         maxFilteredUsers = DEFAULT_MAX_FILTERED_USERS;
       }
 
-      if (parameters.containsKey("MaxFilteredGroups"))
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroups"))
       {
-        maxFilteredGroups = Integer.parseInt(parameters.get("MaxFilteredGroups"));
+        maxFilteredGroups = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredGroups");
       }
       else
       {

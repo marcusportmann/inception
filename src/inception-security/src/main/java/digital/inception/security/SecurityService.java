@@ -1801,7 +1801,7 @@ public class SecurityService
           }
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-              userDirectoryClass.getConstructor(UUID.class, Map.class);
+              userDirectoryClass.getConstructor(UUID.class, List.class);
 
           if (userDirectoryClassConstructor == null)
           {

@@ -221,6 +221,11 @@ public class CodesRestController
   @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
+    if (true)
+    {
+      throw new CodesServiceException("Testing 1.. 2.. 3..");
+    }
+
     if (codeCategoryId == null)
     {
       throw new InvalidArgumentException("codeCategoryId");
