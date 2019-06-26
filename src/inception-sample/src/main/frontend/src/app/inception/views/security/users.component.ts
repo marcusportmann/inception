@@ -100,6 +100,9 @@ export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
               private dialogService: DialogService, private spinnerService: SpinnerService) {
   }
 
+
+  sort on usernasmr bsckend
+
   deleteUser(userId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
