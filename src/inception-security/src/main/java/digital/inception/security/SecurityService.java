@@ -1142,13 +1142,13 @@ public class SecurityService
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   * associated with the user directory.
+   * the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   *         associated with the user directory
+   *         the user directory is associated with
    */
   @Override
   public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
@@ -1306,12 +1306,12 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the organizations associated with the user directory.
+   * Retrieve the organizations the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organizations associated with the user directory
+   * @return the organizations the user directory is associated with
    */
   @Override
   public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
@@ -1642,6 +1642,74 @@ public class SecurityService
     {
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the user directory ID for the user (%s): %s", username,
+          e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Retrieve the summaries for the user directories the organization is associated with.
+   *
+   * @param organizationId                      the Universally Unique Identifier (UUID) used to
+   *                                            uniquely identify the organization
+   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   *
+   * @return the summaries for the user directories the organization is associated with
+   */
+  @Override
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId,
+      boolean includeDefaultInternalUserDirectory)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    String getUserDirectorySummariesForOrganizationSQL =
+        "SELECT ud.id, ud.type_id, ud.name FROM security.user_directories ud "
+        + "INNER JOIN security.user_directory_to_organization_map udtom "
+        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
+        + "ON udtom.organization_id = o.id WHERE o.id=?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+          getUserDirectorySummariesForOrganizationSQL))
+    {
+      if (!organizationExists(connection, organizationId))
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectorySummary> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          UserDirectorySummary userDirectorySummary = buildUserDirectorySummaryFromResultSet(rs);
+
+          if (userDirectorySummary.getId().equals(SecurityService
+              .DEFAULT_INTERNAL_USER_DIRECTORY_ID))
+          {
+            if (includeDefaultInternalUserDirectory)
+            {
+              list.add(userDirectorySummary);
+            }
+          }
+          else
+          {
+            list.add(userDirectorySummary);
+          }
+        }
+
+        return list;
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format("Failed to retrieve the summaries for the"
+          + " user directories associated with the organization (%s): %s", organizationId,
           e.getMessage()), e);
     }
   }
@@ -2131,6 +2199,26 @@ public class SecurityService
     userDirectory.setConfiguration(rs.getString(4));
 
     return userDirectory;
+  }
+
+  /**
+   * Create a new <code>UserDirectorySummary</code> instance and populate it with the contents of
+   * the current row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>UserDirectorySummary</code> instance
+   *
+   * @return the populated <code>UserDirectorySummary</code> instance
+   */
+  private UserDirectorySummary buildUserDirectorySummaryFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    UserDirectorySummary userDirectorySummary = new UserDirectorySummary();
+    userDirectorySummary.setId(UUID.fromString(rs.getString(1)));
+    userDirectorySummary.setTypeId(UUID.fromString(rs.getString(2)));
+    userDirectorySummary.setName(rs.getString(3));
+
+    return userDirectorySummary;
   }
 
   /**

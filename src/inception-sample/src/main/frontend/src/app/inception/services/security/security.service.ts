@@ -19,7 +19,11 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
-import {OrganizationNotFoundError, SecurityServiceError} from './security.service.errors';
+import {
+  OrganizationNotFoundError,
+  SecurityServiceError,
+  UserDirectoryNotFoundError
+} from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -29,6 +33,7 @@ import {SortDirection} from './sort-direction';
 import {Organizations} from './organizations';
 import {Users} from "./users";
 import {User} from "./user";
+import {UserDirectorySummary} from "./user-directory-summary";
 
 /**
  * The Security Service implementation.
@@ -142,8 +147,77 @@ export class SecurityService {
     }));
   }
 
+  /**
+   * Retrieve the organizations the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return the organizations the user directory is associated with
+   */
+  getOrganizationsForUserDirectory(userDirectoryId: string) : Observable<Organization[]> {
+    return this.httpClient.get<Organization[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations', {reportProgress: true})
+      .pipe(map((organizations: Organization[]) => {
+        return organizations;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
+          if (apiError.status === 404) {
+            return throwError(new OrganizationNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@codes_service_failed_to_retrieve_the_organizations_associated_with_the_user_directory',
+              value: 'Failed to retrieve the organizations associated with the user directory.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
 
+  /**
+   * Retrieve the summaries for the user directories the organization is associated with.
+   *
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
+   *
+   * @return The summaries for the user directories the organization is associated with.
+   */
+  getUserDirectorySummariesForOrganization(organizationId: string) : Observable<UserDirectorySummary[]> {
+    return this.httpClient.get<UserDirectorySummary[]>(
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries', {reportProgress: true})
+      .pipe(map((codeCategories: UserDirectorySummary[]) => {
+        return codeCategories;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new OrganizationNotFoundError(this.i18n({
+              id: '@@security_service_the_organization_could_not_be_found',
+              value: 'The organization could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@codes_service_failed_to_retrieve_the_summaries_for_the_user_directories_associated_with_the_organization',
+              value: 'Failed to retrieve the summaries for the user directories associated with the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
 
   /**
    * Retrieve the users.
@@ -192,13 +266,17 @@ export class SecurityService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-
-        console.log(apiError.stackTrace);
-
-        return throwError(new SecurityServiceError(this.i18n({
-          id: '@@security_service_failed_to_retrieve_the_users',
-          value: 'Failed to retrieve the users.'
-        }), apiError));
+        if (apiError.status === 404) {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_users',
+            value: 'Failed to retrieve the users.'
+          }), apiError));
+        }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse, this.i18n));
       } else {
@@ -206,6 +284,4 @@ export class SecurityService {
       }
     }));
   }
-
-
 }

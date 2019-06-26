@@ -35,7 +35,7 @@ import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
         <i class="fa fa-search"></i>
       </div>
       <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..." autocomplete="off">
-      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async" (click)="resetValue()">
+      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async" (click)="reset(true)">
         <i class="fa fa-times"></i>
       </button>
     </div>
@@ -112,9 +112,11 @@ export class TableFilter implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  resetValue(): void {
+  reset(emitEvent: boolean): void {
     this.filter = '';
     this.tableFilterInput.nativeElement.value = this.filter;
-    this.changed.emit(this.filter);
+    if (emitEvent) {
+      this.changed.emit(this.filter);
+    }
   }
 }

@@ -62,11 +62,6 @@ export class Session {
   refreshToken: string;
 
   /**
-   * The organizations for the user, the user session is associated with.
-   */
-  organizations: Organization[];
-
-  /**
    * The selected organization for the user session.
    */
   organization: Organization;
@@ -80,20 +75,18 @@ export class Session {
    * @param scopes            The OAuth2 scopes for the user session.
    * @param functionCodes     The codes identifying the functions the user associated with the user
    *                          session has access to.
-   * @param organizations     The organizations for the user, the user session is associated with.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
    * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(username: string, userDirectoryId: string, scopes: string[], functionCodes: string[],
-              organizations: Organization[], accessToken: string, accessTokenExpiry: Date,
+              accessToken: string, accessTokenExpiry: Date,
               refreshToken: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.scopes = scopes;
     this.functionCodes = functionCodes;
-    this.organizations = organizations;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;

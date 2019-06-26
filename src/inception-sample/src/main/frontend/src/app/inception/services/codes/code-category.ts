@@ -15,7 +15,7 @@
  */
 
 /**
- * The CodeCategory class stores the information for a code category.
+ * The CodeCategory class holds the information for a code category.
  *
  * @author Marcus Portmann
  */

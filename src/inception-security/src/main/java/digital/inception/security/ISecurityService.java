@@ -320,13 +320,13 @@ public interface ISecurityService
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   * associated with the user directory.
+   * the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   *         associated with the user directory
+   *         the user directory is associated with
    */
   List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -354,12 +354,12 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
-   * Retrieve the organizations associated with the user directory.
+   * Retrieve the organizations the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organizations associated with the user directory
+   * @return the organizations the user directory is associated with
    */
   List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -434,6 +434,19 @@ public interface ISecurityService
    */
   UUID getUserDirectoryIdForUser(String username)
     throws SecurityServiceException;
+
+  /**
+   * Retrieve the summaries for the user directories the organization is associated with.
+   *
+   * @param organizationId                      the Universally Unique Identifier (UUID) used to
+   *                                            uniquely identify the organization
+   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   *
+   * @return the summaries for the user directories the organization is associated with
+   */
+  List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId,
+      boolean includeDefaultInternalUserDirectory)
+    throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory types.

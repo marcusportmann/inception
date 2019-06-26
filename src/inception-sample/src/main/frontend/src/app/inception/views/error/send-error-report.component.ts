@@ -23,7 +23,7 @@ import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {MatDialogRef} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import {InformationDialogComponent} from '../../components/dialogs';
 
 /**

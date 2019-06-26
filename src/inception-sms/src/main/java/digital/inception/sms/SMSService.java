@@ -80,6 +80,9 @@ public class SMSService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
 
+  /* The name of the SMS Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
+
   /**
    * The Spring application context.
    */
@@ -94,9 +97,6 @@ public class SMSService
    * The ID generator.
    */
   private IDGenerator idGenerator;
-
-  /* The name of the SMS Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
   /**
    * The maximum number of times sending will be attempted for a SMS.

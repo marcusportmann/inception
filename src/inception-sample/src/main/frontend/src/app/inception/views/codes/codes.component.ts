@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Code} from '../../services/codes/code';
 import {CodesService} from '../../services/codes/codes.service';
 import {DialogService} from '../../services/dialog/dialog.service';
@@ -41,17 +44,17 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnInit {
+export class CodesComponent implements AfterViewInit, OnDestroy, OnInit {
 
   codeCategoryId: string;
 
-  dataSource = new MatTableDataSource<Code>();
+  dataSource: MatTableDataSource<Code>;
 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
@@ -104,7 +107,7 @@ export class CodesComponent implements AfterViewInit, OnInit {
   loadCodes(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodeCategoryCodes(this.codeCategoryId)
+    this.codesService.getCodes(this.codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codes: Code[]) => {
         this.dataSource.data = codes;
@@ -117,12 +120,6 @@ export class CodesComponent implements AfterViewInit, OnInit {
           this.dialogService.showErrorDialog(error);
         }
       });
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function (data, filter): boolean {
-      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
-    };
   }
 
   newCode(): void {
@@ -131,11 +128,22 @@ export class CodesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
     this.loadCodes();
+  }
+
+  ngOnDestroy(): void {
   }
 
   ngOnInit(): void {
     this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    this.dataSource = new MatTableDataSource<Code>();
+    this.dataSource.filterPredicate = function (data, filter): boolean {
+      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+    };
   }
 }
 

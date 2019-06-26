@@ -17,7 +17,7 @@
 import {OrganizationStatus} from './organization-status';
 
 /**
- * The Organization class stores the information for an organization.
+ * The Organization class holds the information for an organization.
  *
  * @author Marcus Portmann
  */

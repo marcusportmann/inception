@@ -21,7 +21,7 @@ package digital.inception.security;
 import java.util.UUID;
 
 /**
- * The <code>UserDirectoryType</code> class stores the information for a user directory type.
+ * The <code>UserDirectoryType</code> class holds the information for a user directory type.
  *
  * @author Marcus Portmann
  */

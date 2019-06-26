@@ -15,7 +15,7 @@
  */
 
 /**
- * The Code class stores the information for a code.
+ * The Code class holds the information for a code.
  *
  * @author Marcus Portmann
  */

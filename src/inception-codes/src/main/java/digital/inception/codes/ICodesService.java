@@ -119,36 +119,6 @@ public interface ICodesService
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
-   * Retrieve the codes for the code category.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
-   * @return the codes for the code category
-   */
-  List<Code> getCodeCategoryCodes(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException;
-
-  /**
-   * Retrieve the codes for the code category using the specified parameters.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param parameters     the parameters
-   *
-   * @return the codes for the code category
-   */
-  List<Code> getCodeCategoryCodesWithParameters(String codeCategoryId, Map<String,
-      String> parameters)
-    throws CodeCategoryNotFoundException, CodesServiceException;
-
-  /**
    * Retrieve the XML or JSON data for the code category.
    * <p/>
    * NOTE: This will also attempt to retrieve the data from the appropriate code provider that has
@@ -196,6 +166,35 @@ public interface ICodesService
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
+   * Retrieve the codes for the code category.
+   * <p/>
+   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the codes for the code category
+   */
+  List<Code> getCodes(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodesServiceException;
+
+  /**
+   * Retrieve the codes for the code category using the specified parameters.
+   * <p/>
+   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param parameters     the parameters
+   *
+   * @return the codes for the code category
+   */
+  List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
+    throws CodeCategoryNotFoundException, CodesServiceException;
+
+  /**
    * Returns the number of code categories.
    *
    * @return the number of code categories
@@ -210,7 +209,7 @@ public interface ICodesService
    *
    * @return the number of codes for the code category
    */
-  int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  int getNumberOfCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**

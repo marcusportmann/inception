@@ -1,9 +1,31 @@
 <mat-card class="flex flex-column flex-auto">
+  <div class="select-user-directory-container" [hidden]="userDirectories.length < 2">
+    <span class="mat-header-label" i18n="@@users_component_user_directory">User Directory :</span>
+    <mat-form-field class="mat-form-field-slim">
+      <mat-select #userDirectorySelect required="true" i18n-placeholder="@@users_component_placeholder_select_a_user_directory" placeholder="Select a user directory">
+        <mat-option *ngFor="let userDirectory of userDirectories" [value]="userDirectory.id">
+          {{userDirectory.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="mat-table-header">
     <button mat-flat-button color="primary" (click)="newUser()" i18n="@@users_component_button_new">New</button>
     <table-filter></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+
+    <!-- Username Column -->
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@users_component_table_header_username">Username</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.username}}</mat-cell>
+    </ng-container>
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+      <mat-header-cell class="d-none d-md-table-cell" *matHeaderCellDef i18n="@@users_component_table_header_first_name">First Name</mat-header-cell>
+      <mat-cell class="d-none d-md-table-cell" *matCellDef="let row">{{row.firstName}}</mat-cell>
+    </ng-container>
 
     <!-- Last Name Column -->
     <ng-container matColumnDef="lastName">
@@ -11,11 +33,6 @@
       <mat-cell class="d-none d-md-table-cell" *matCellDef="let row">{{row.lastName}}</mat-cell>
     </ng-container>
 
-    <!-- First Name Column -->
-    <ng-container matColumnDef="firstName">
-      <mat-header-cell class="d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@users_component_table_header_first_name">First Name</mat-header-cell>
-      <mat-cell class="d-none d-md-table-cell" *matCellDef="let row">{{row.firstName}}</mat-cell>
-    </ng-container>
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
@@ -48,3 +65,5 @@
   </mat-menu>
 
 </mat-card>
+
+

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
@@ -37,7 +37,7 @@ import {ConfigurationServiceError} from "../../services/configuration/configurat
   templateUrl: 'new-configuration.component.html',
   styleUrls: ['new-configuration.component.css'],
 })
-export class NewConfigurationComponent implements OnInit {
+export class NewConfigurationComponent {
 
   newConfigurationForm: FormGroup;
 
@@ -63,9 +63,6 @@ export class NewConfigurationComponent implements OnInit {
 
   get valueFormControl(): AbstractControl {
     return this.newConfigurationForm.get('value');
-  }
-
-  ngOnInit(): void {
   }
 
   onCancel(): void {

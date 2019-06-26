@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {ReplaySubject, Subject} from 'rxjs';
 
 /**
  * The Title Service implementation.
@@ -25,7 +25,7 @@ import {BehaviorSubject} from 'rxjs';
 @Injectable()
 export class TitleService {
 
-  title: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  title: Subject<string> = new ReplaySubject<string>();
 
   /**
    * Constructs a new TitleService.

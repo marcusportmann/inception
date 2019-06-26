@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>User</code> class stores the information for a user.
+ * The <code>User</code> class holds the information for a user.
  *
  * @author Marcus Portmann
  */

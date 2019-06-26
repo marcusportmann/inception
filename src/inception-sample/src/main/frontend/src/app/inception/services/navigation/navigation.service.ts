@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {NavigationItem} from './navigation-item';
-import {BehaviorSubject} from 'rxjs';
+import {ReplaySubject, Subject} from 'rxjs';
 import {SessionService} from '../session/session.service';
 import {map} from 'rxjs/operators';
 import {Session} from '../session/session';
@@ -29,7 +29,7 @@ import {Session} from '../session/session';
 @Injectable()
 export class NavigationService {
 
-  userNavigation: BehaviorSubject<NavigationItem[]> = new BehaviorSubject<Object[]>([]);
+  userNavigation: Subject<NavigationItem[]> = new ReplaySubject<Object[]>();
 
   private navigation: NavigationItem[];
 

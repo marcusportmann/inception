@@ -26,10 +26,12 @@ import {SpinnerService} from '../../services/layout/spinner.service';
 import {SessionServiceError} from '../../services/session/session.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {MatDialogRef} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
+import {Session} from "../../services/session/session";
+import {Organization} from "../../services/security/organization";
 
 /**
  * The LoginComponent class implements the login component.
@@ -123,16 +125,31 @@ export class LoginComponent {
 
       this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
         .pipe(first())
-        .subscribe(session => {
-          this.spinnerService.hideSpinner();
+        .subscribe((session: Session)  => {
+          this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
+            .pipe(first())
+            .subscribe((organizations: Organization[]) => {
 
-          if (session.organizations.length === 1) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          } else {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
-          }
+              this.spinnerService.hideSpinner();
+
+              if (organizations.length === 1) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['/']);
+              } else {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute, state: {organizations: organizations}});
+              }
+            }, (error:Error) => {
+              this.spinnerService.hideSpinner();
+
+              if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 

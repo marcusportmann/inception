@@ -2,6 +2,7 @@
 
 @include mat-core();
 
+
 $inception-palette-base:  #20a8d8 !default;
 
 $inception-palette-50:  #e4f5fa !default;
@@ -431,7 +432,7 @@ label {
       {
         border-top: 0;
         min-height: 0 !important;
-        padding: 0;
+        padding: 0.25em 0;
       }
     }
 
@@ -534,6 +535,19 @@ mat-cell, mat-footer-cell, mat-header-cell {
 
   min-height: 0;
 }
+
+.mat-header-label {
+  $foreground: map-get($inception-theme, foreground);
+
+  color: mat-color($foreground, secondary-text);
+  //font-size:
+  font-weight: mat-font-weight($inception-typography, body-2);
+}
+
+
+
+
+
 
 
 mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
@@ -981,6 +995,12 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
   }
 }
+
+
+
+
+
+
 
 /*
 .mat-header-row {

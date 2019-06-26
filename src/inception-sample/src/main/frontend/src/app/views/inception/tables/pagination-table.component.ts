@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 export interface PeriodicElement {
   name: string;
@@ -135,16 +136,23 @@ const ELEMENT_DATA: PeriodicElement[] = [{
 @Component({
   templateUrl: 'pagination-table.component.html'
 })
-export class PaginationTableComponent implements AfterViewInit {
+export class PaginationTableComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource: MatTableDataSource<PeriodicElement>;
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   }
 }
 

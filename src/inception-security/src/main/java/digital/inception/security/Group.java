@@ -16,21 +16,26 @@
 
 package digital.inception.security;
 
-//~--- JDK imports ------------------------------------------------------------
+//~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
+
 /**
- * The <code>Group</code> class stores the information for a security group.
+ * The <code>Group</code> class holds the information for a security group.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +44,7 @@ import java.util.UUID;
 @JsonPropertyOrder({ "id", "userDirectoryId", "groupName", "description" })
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
 @XmlType(name = "Group", namespace = "http://security.inception.digital",
-  propOrder = { "id", "userDirectoryId", "groupName", "description" })
+    propOrder = { "id", "userDirectoryId", "groupName", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Group
   implements java.io.Serializable
@@ -58,7 +63,9 @@ public class Group
   /**
    * The name of the security group uniquely identifying the security group.
    */
-  @ApiModelProperty(value = "The name of the security group uniquely identifying the security group", required = true)
+  @ApiModelProperty(
+      value = "The name of the security group uniquely identifying the security group",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
   @NotNull
@@ -69,8 +76,8 @@ public class Group
    * The Universally Unique Identifier (UUID) used to uniquely identify the security group.
    */
   @ApiModelProperty(
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the security group",
-    required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the security group",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -81,8 +88,8 @@ public class Group
    * security group is associated with
    */
   @ApiModelProperty(
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
-    required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull

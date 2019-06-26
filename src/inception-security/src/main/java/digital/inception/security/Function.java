@@ -35,7 +35,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>Function</code> class stores the information for an authorised function that can be
+ * The <code>Function</code> class holds the information for an authorised function that can be
  * assigned to <code>Role</code>s.
  *
  * @author Marcus Portmann

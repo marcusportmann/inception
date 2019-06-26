@@ -15,7 +15,7 @@
  */
 
 /**
- * The CodeCategorySummary class stores the summary information for a code category.
+ * The CodeCategorySummary class holds the summary information for a code category.
  *
  * @author Marcus Portmann
  */

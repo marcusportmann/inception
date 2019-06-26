@@ -304,7 +304,7 @@ export class CodesService {
    *
    * @return the codes for the code category
    */
-  getCodeCategoryCodes(codeCategoryId: string): Observable<Code[]> {
+  getCodes(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes',
       {reportProgress: true}).pipe(map((codes: Code[]) => {

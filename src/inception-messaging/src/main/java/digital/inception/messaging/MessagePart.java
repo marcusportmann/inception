@@ -30,7 +30,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * The <code>MessagePart</code> class stores the information for a message part.
+ * The <code>MessagePart</code> class holds the information for a message part.
  *
  * @author Marcus Portmann
  */

@@ -53,6 +53,9 @@ public class SchedulerService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
+  /* The name of the Scheduler Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
+
   /**
    * The Spring application context.
    */
@@ -62,9 +65,6 @@ public class SchedulerService
    * The data source used to provide connections to the application database.
    */
   private DataSource dataSource;
-
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.

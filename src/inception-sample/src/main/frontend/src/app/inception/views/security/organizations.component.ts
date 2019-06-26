@@ -15,7 +15,9 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {finalize, first, tap} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -44,7 +46,7 @@ import {TableFilter} from "../../components/controls";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy {
+export class OrganizationsComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -52,16 +54,15 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
 
   displayedColumns: string[] = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  @ViewChild(TableFilter, { static: true }) tableFilter: TableFilter;
+  @ViewChild(TableFilter, {static: true}) tableFilter: TableFilter;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
-
   }
 
   deleteOrganization(organizationId: string): void {
@@ -102,7 +103,6 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   loadOrganizations(): void {
-
     let filter: string = '';
 
     if (!!this.tableFilter.filter) {
@@ -123,20 +123,15 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
   }
 
   ngAfterViewInit(): void {
-    this.loadOrganizations();
-
     this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
 
     this.subscriptions.add(this.tableFilter.changed.subscribe(() => this.paginator.pageIndex = 0));
 
-    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadOrganizations();
-      })).subscribe());
-  }
-
-  ngOnInit(): void {
-    this.dataSource = new OrganizationDatasource(this.securityService);
+    this.subscriptions.add(
+      merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+        .pipe(tap(() => {
+          this.loadOrganizations();
+        })).subscribe());
 
     this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
       if (next) {
@@ -153,10 +148,16 @@ export class OrganizationsComponent implements AfterViewInit, OnInit, OnDestroy 
         this.dialogService.showErrorDialog(error);
       }
     }));
+
+    this.loadOrganizations();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.dataSource = new OrganizationDatasource(this.securityService);
   }
 }
 

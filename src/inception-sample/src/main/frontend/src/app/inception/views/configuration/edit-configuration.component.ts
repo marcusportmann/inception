@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from "@angular/router";
 import {DialogService} from "../../services/dialog/dialog.service";
@@ -37,7 +37,7 @@ import {ConfigurationServiceError} from "../../services/configuration/configurat
   templateUrl: 'edit-configuration.component.html',
   styleUrls: ['edit-configuration.component.css'],
 })
-export class EditConfigurationComponent implements OnInit {
+export class EditConfigurationComponent implements AfterViewInit {
 
   editConfigurationForm: FormGroup;
 
@@ -69,7 +69,7 @@ export class EditConfigurationComponent implements OnInit {
     return this.editConfigurationForm.get('value');
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     let key: string = this.activatedRoute.snapshot.paramMap.get('key');
 
     this.spinnerService.showSpinner();

@@ -293,8 +293,6 @@ public class CodesRestController
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
-    // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     return codesService.getCodeCategories();
   }
 
@@ -328,39 +326,6 @@ public class CodesRestController
     }
 
     return codesService.getCodeCategory(codeCategoryId);
-  }
-
-  /**
-   * Retrieve the codes for a code category
-   *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
-   * @return the codes for the code category
-   */
-  @ApiOperation(value = "Retrieve the codes for a code category",
-      notes = "Retrieve the codes for a code category")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-      @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
-  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
-  public List<Code> getCodeCategoryCodes(@ApiParam(name = "codeCategoryId",
-      value = "The ID used to uniquely identify the code category", required = true)
-  @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (codeCategoryId == null)
-    {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    return codesService.getCodeCategoryCodes(codeCategoryId);
   }
 
   /**
@@ -453,6 +418,39 @@ public class CodesRestController
     }
 
     return codesService.getCodeCategoryUpdated(codeCategoryId);
+  }
+
+  /**
+   * Retrieve the codes for a code category
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the codes for the code category
+   */
+  @ApiOperation(value = "Retrieve the codes for a code category",
+      notes = "Retrieve the codes for a code category")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  public List<Code> getCodes(@ApiParam(name = "codeCategoryId",
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
+    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
+  {
+    if (codeCategoryId == null)
+    {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    return codesService.getCodes(codeCategoryId);
   }
 
   /**

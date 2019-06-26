@@ -54,32 +54,22 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
- * The <code>UserDirectory</code> class holds the information for a user directory.
+ * The <code>UserDirectorySummary</code> class holds the summary information for a user directory.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserDirectory")
+@ApiModel(value = "UserDirectorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "typeId", "name", "parameters" })
-@XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
-@XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
-    propOrder = { "id", "typeId", "name", "parameters" })
+@JsonPropertyOrder({ "id", "typeId", "name" })
+@XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")
+@XmlType(name = "UserDirectorySummary", namespace = "http://security.inception.digital",
+    propOrder = { "id", "typeId", "name" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class UserDirectory
+public class UserDirectorySummary
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
-
-  /**
-   * The parameters for the user directory.
-   */
-  @ApiModelProperty(value = "The parameters for the user directory", required = true)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Parameters", required = true)
-  @XmlElement(name = "Parameter", required = true)
-  @Valid
-  private List<UserDirectoryParameter> parameters = new ArrayList<>();
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
@@ -114,37 +104,9 @@ public class UserDirectory
   private UUID typeId;
 
   /**
-   * Constructs a new <code>UserDirectory</code>.
+   * Constructs a new <code>UserDirectorySummary</code>.
    */
-  public UserDirectory() {}
-
-  /**
-   * Returns the XML configuration data for the user directory.
-   *
-   * @return the XML configuration data for the user directory
-   */
-  public String getConfiguration()
-  {
-    StringBuilder buffer = new StringBuilder();
-
-    buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    buffer.append(
-        "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
-
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      buffer.append("<parameter>");
-      buffer.append("<name>").append(parameter.getName()).append("</name>");
-      buffer.append("<value>").append(StringUtils.isEmpty(parameter.getValue())
-          ? ""
-          : parameter.getValue()).append("</value>");
-      buffer.append("</parameter>");
-    }
-
-    buffer.append("</userDirectory>");
-
-    return buffer.toString();
-  }
+  public UserDirectorySummary() {}
 
   /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
@@ -167,16 +129,6 @@ public class UserDirectory
   }
 
   /**
-   * Returns the parameters for the user directory.
-   *
-   * @return the parameters for the user directory
-   */
-  public List<UserDirectoryParameter> getParameters()
-  {
-    return parameters;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * type.
    *
@@ -186,52 +138,6 @@ public class UserDirectory
   public UUID getTypeId()
   {
     return typeId;
-  }
-
-  /**
-   * Set the XML configuration data for the user directory.
-   *
-   * @param configuration the XML configuration data for the user directory
-   */
-  public void setConfiguration(String configuration)
-    throws SecurityServiceException
-  {
-    try
-    {
-      // Parse the XML configuration data
-      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-
-      builderFactory.setValidating(true);
-
-      DocumentBuilder builder = builderFactory.newDocumentBuilder();
-
-      builder.setEntityResolver(new DtdJarResolver("UserDirectoryConfiguration.dtd",
-          "META-INF/UserDirectoryConfiguration.dtd"));
-      builder.setErrorHandler(new XmlParserErrorHandler());
-
-      InputSource inputSource = new InputSource(new ByteArrayInputStream(configuration.getBytes()));
-      Document document = builder.parse(inputSource);
-
-      Element rootElement = document.getDocumentElement();
-
-      // Read the user directory parameters configuration
-      parameters = new ArrayList<>();
-
-      NodeList parameterElements = rootElement.getElementsByTagName("parameter");
-
-      for (int i = 0; i < parameterElements.getLength(); i++)
-      {
-        Element parameterElement = (Element) parameterElements.item(i);
-
-        parameters.add(new UserDirectoryParameter(XmlUtil.getChildElementText(parameterElement,
-            "name"), XmlUtil.getChildElementText(parameterElement, "value")));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(
-          "Failed to parse the XML configuration data for the user directory", e);
-    }
   }
 
   /**
@@ -252,16 +158,6 @@ public class UserDirectory
   public void setName(String name)
   {
     this.name = name;
-  }
-
-  /**
-   * Set the parameters for the user directory.
-   *
-   * @param parameters the parameters for the user directory
-   */
-  public void setParameters(List<UserDirectoryParameter> parameters)
-  {
-    this.parameters = parameters;
   }
 
   /**

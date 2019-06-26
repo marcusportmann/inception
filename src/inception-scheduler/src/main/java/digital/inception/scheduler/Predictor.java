@@ -47,6 +47,11 @@ import java.util.TimeZone;
 public class Predictor
 {
   /**
+   * The time zone for the prediction.
+   */
+  private TimeZone timeZone = TimeZone.getDefault();
+
+  /**
    * The scheduling pattern on which the predictor works.
    */
   private SchedulingPattern schedulingPattern;
@@ -55,11 +60,6 @@ public class Predictor
    * The start time for the next prediction.
    */
   private long time;
-
-  /**
-   * The time zone for the prediction.
-   */
-  private TimeZone timeZone = TimeZone.getDefault();
 
   /**
    * Constructs a new <code>SchedulingPattern</code>.

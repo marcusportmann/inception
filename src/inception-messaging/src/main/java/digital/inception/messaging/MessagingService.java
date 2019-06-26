@@ -96,6 +96,9 @@ public class MessagingService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
 
+  /* The name of the Messaging Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
+
   /**
    * The Spring application context.
    */
@@ -116,9 +119,6 @@ public class MessagingService
    * The AES encryption master key used to derive the device/user encryption keys.
    */
   private byte[] encryptionMasterKey;
-
-  /* The name of the Messaging Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
 
   /**
    * The maximum number of times processing will be attempted for a message.

@@ -28,6 +28,7 @@ import {OverviewComponent} from './overview.component';
 import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 import {UsersComponent} from './users.component';
 
+
 const routes: Routes = [{
   path: '',
   redirectTo: 'overview'

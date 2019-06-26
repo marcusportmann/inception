@@ -499,96 +499,6 @@ public class CodesService
   }
 
   /**
-   * Retrieve the codes for the code category.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
-   * @return the codes for the code category
-   */
-  @Override
-  public List<Code> getCodeCategoryCodes(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try (Connection connection = dataSource.getConnection())
-    {
-      if (codeCategoryExists(connection, codeCategoryId))
-      {
-        return getCodesForCodeCategory(connection, codeCategoryId);
-      }
-
-      // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
-          return codeProvider.getCodesForCodeCategory(codeCategoryId);
-        }
-      }
-
-      throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
-    }
-  }
-
-  /**
-   * Retrieve the codes for the code category using the specified parameters.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param parameters     the parameters
-   *
-   * @return the codes for the code category
-   */
-  @Override
-  public List<Code> getCodeCategoryCodesWithParameters(String codeCategoryId, Map<String,
-      String> parameters)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try (Connection connection = dataSource.getConnection())
-    {
-      if (codeCategoryExists(connection, codeCategoryId))
-      {
-        return getCodesForCodeCategory(connection, codeCategoryId);
-      }
-
-      // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
-          return codeProvider.getCodesForCodeCategoryWithParameters(codeCategoryId, parameters);
-        }
-      }
-
-      throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
-    }
-  }
-
-  /**
    * Retrieve the XML or JSON data for the code category.
    * <p/>
    * NOTE: This will also attempt to retrieve the data from the appropriate code provider that has
@@ -790,6 +700,95 @@ public class CodesService
   }
 
   /**
+   * Retrieve the codes for the code category.
+   * <p/>
+   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the codes for the code category
+   */
+  @Override
+  public List<Code> getCodes(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodesServiceException
+  {
+    try (Connection connection = dataSource.getConnection())
+    {
+      if (codeCategoryExists(connection, codeCategoryId))
+      {
+        return getCodesForCodeCategory(connection, codeCategoryId);
+      }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders)
+      {
+        if (codeProvider.codeCategoryExists(codeCategoryId))
+        {
+          return codeProvider.getCodesForCodeCategory(codeCategoryId);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    }
+    catch (CodeCategoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+    }
+  }
+
+  /**
+   * Retrieve the codes for the code category using the specified parameters.
+   * <p/>
+   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param parameters     the parameters
+   *
+   * @return the codes for the code category
+   */
+  @Override
+  public List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
+    throws CodeCategoryNotFoundException, CodesServiceException
+  {
+    try (Connection connection = dataSource.getConnection())
+    {
+      if (codeCategoryExists(connection, codeCategoryId))
+      {
+        return getCodesForCodeCategory(connection, codeCategoryId);
+      }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders)
+      {
+        if (codeProvider.codeCategoryExists(codeCategoryId))
+        {
+          return codeProvider.getCodesForCodeCategoryWithParameters(codeCategoryId, parameters);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    }
+    catch (CodeCategoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new CodesServiceException(String.format(
+          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+    }
+  }
+
+  /**
    * Returns the number of code categories.
    *
    * @return the number of code categories
@@ -831,7 +830,7 @@ public class CodesService
    * @return the number of codes for the code category
    */
   @Override
-  public int getNumberOfCodesForCodeCategory(String codeCategoryId)
+  public int getNumberOfCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     String getNumberOfCodesForCodeCategorySQL =

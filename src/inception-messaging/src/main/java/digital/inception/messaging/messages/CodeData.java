@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
 import java.io.Serializable;
 
 /**
- * The <code>CodeData</code> class stores the information for a code.
+ * The <code>CodeData</code> class holds the information for a code.
  *
  * @author Marcus Portmann
  */

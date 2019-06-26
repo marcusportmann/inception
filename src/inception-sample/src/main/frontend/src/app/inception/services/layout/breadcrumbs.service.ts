@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {ReplaySubject, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import * as format from 'string-template';
 
@@ -28,7 +28,7 @@ import * as format from 'string-template';
 @Injectable()
 export class BreadcrumbsService {
 
-  breadcrumbs: BehaviorSubject<Array<Object>> = new BehaviorSubject<Object[]>(new Array<Object>());
+  breadcrumbs: Subject<Array<Object>> = new ReplaySubject<Object[]>();
 
   /**
    * Constructs a new BreadcrumbsService.
