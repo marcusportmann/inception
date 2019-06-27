@@ -289,11 +289,31 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the number of organizations
+   *
+   * @param filter the optional filter to apply to the organizations
+   *
+   * @return the number of organizations
+   */
+  int getNumberOfOrganizations(String filter)
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the number of user directories
    *
    * @return the number of user directories
    */
   int getNumberOfUserDirectories()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the number of user directories
+   *
+   * @param filter the optional filter to apply to the user directories
+   *
+   * @return the number of user directories
+   */
+  int getNumberOfUserDirectories(String filter)
     throws SecurityServiceException;
 
   /**
@@ -305,6 +325,18 @@ public interface ISecurityService
    * @return the number of users
    */
   int getNumberOfUsers(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of users.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param filter          the optional filter to apply to the users
+   *
+   * @return the number of users
+   */
+  int getNumberOfUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
@@ -436,6 +468,20 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the summaries for the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directories
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the summaries for the user directories
+   */
+  List<UserDirectorySummary> getUserDirectorySummaries(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
    * @param organizationId                      the Universally Unique Identifier (UUID) used to
@@ -473,14 +519,15 @@ public interface ISecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
+   * @param sortBy          the optional method used to sort the users e.g. by last name
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
    *
    * @return the users
    */
-  List<User> getUsers(UUID userDirectoryId, String filter, SortDirection sortDirection,
-      Integer pageIndex, Integer pageSize)
+  List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**

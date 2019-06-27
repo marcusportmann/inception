@@ -110,12 +110,12 @@ export class AppModule extends InceptionAppModule {
         ])
     ]));
 
-    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', ['Security.OrganizationAdministration', 'Codes.CodeAdministration', 'Configuration.ConfigurationAdministration'],
-      [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', ['Security.OrganizationAdministration'],
+    navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', ['Codes.CodeAdministration', 'Configuration.ConfigurationAdministration', 'Security.GroupAdministration', 'Security.OrganizationAdministration', 'Security.ResetUserPassword', 'Security.UserAdministration', 'Security.UserGroups'],
+      [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', ['Security.GroupAdministration', 'Security.OrganizationAdministration', 'Security.ResetUserPassword', 'Security.UserAdministration', 'Security.UserGroups'],
         [new NavigationItem('far fa-building', 'Organizations',
           '/administration/security/organizations', ['Security.OrganizationAdministration']),
           new NavigationItem('fas fa-users', 'Users',
-            '/administration/security/users', ['Security.UserAdministration'])
+            '/administration/security/users', ['Security.ResetUserPassword', 'Security.UserAdministration', 'Security.UserGroups'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',
         ['Codes.CodeAdministration', 'Configuration.ConfigurationAdministration'],
         [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',

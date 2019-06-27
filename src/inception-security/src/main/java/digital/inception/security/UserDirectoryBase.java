@@ -130,8 +130,8 @@ public abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the security group (%s) with the ID (%s) for the user directory (%s): %s",
-          groupName, groupId, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the security group (%s) with the ID (%s) for the user directory (%s)",
+          groupName, groupId, getUserDirectoryId()), e);
     }
   }
 
@@ -156,8 +156,7 @@ public abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to generate a SHA-256 hash of the password (%s): %s", password, e.getMessage()),
-          e);
+          "Failed to generate a SHA-256 hash of the password (%s)", password), e);
     }
   }
 
@@ -199,8 +198,8 @@ public abstract class UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
     }
   }
 

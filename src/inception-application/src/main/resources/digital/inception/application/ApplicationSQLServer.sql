@@ -1314,12 +1314,14 @@ INSERT INTO "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (user_directory_id, 
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
 INSERT INTO "SECURITY"."INTERNAL_USERS" (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
 INSERT INTO "SECURITY"."INTERNAL_GROUPS" (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
 INSERT INTO "SECURITY"."INTERNAL_GROUPS" (id, user_directory_id, groupname, description)
   VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators', 'Organization Administrators');
+INSERT INTO "SECURITY"."INTERNAL_GROUPS" (id, user_directory_id, groupname, description)
+  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters', 'Password Resetters');
 
 INSERT INTO "SECURITY"."INTERNAL_USER_TO_INTERNAL_GROUP_MAP" (internal_user_id, internal_group_id)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
@@ -1328,6 +1330,8 @@ INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, groupname)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
 INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, groupname)
   VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators');
+INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, groupname)
+  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters');
 
 INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
@@ -1369,11 +1373,12 @@ INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
 INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
   VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
 
-
 INSERT INTO "SECURITY"."ROLES" (id, name, description)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO "SECURITY"."ROLES" (id, name, description)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
+INSERT INTO "SECURITY"."ROLES" (id, name, description)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
 
 INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Application.SecureHome
@@ -1421,10 +1426,19 @@ INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
 INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
   VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Reporting.ViewReport
 
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
+  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
+  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
+  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+
 INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_id, group_id)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_id, group_id)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
+INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_id, group_id)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', '5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c');
 
 INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
   VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');

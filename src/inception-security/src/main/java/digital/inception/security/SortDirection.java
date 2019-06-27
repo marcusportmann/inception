@@ -40,8 +40,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
 public enum SortDirection
 {
+  /**
+   * Sort ascending.
+   */
   @XmlEnumValue("Ascending")
   ASCENDING("asc", "Ascending"),
+
+  /**
+   * Sort descending.
+   */
   @XmlEnumValue("Descending")
   DESCENDING("desc", "Descending");
 

@@ -20,6 +20,7 @@ package digital.inception.rs.oauth;
 
 import digital.inception.security.ISecurityService;
 import digital.inception.security.Organization;
+import digital.inception.security.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -97,7 +99,32 @@ public class TokenEnhancer
 
       UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
-      additionalInfo.put("userDirectoryId", userDirectoryId.toString());
+      additionalInfo.put("user_directory_id", userDirectoryId.toString());
+
+      User user = User.class.isInstance(authentication.getUserAuthentication().getDetails())
+          ? User.class.cast(authentication.getUserAuthentication().getDetails())
+          : null;
+
+      if (user != null)
+      {
+        if ((!StringUtils.isEmpty(user.getFirstName()))
+            && (!StringUtils.isEmpty(user.getFirstName())))
+        {
+          additionalInfo.put("user_full_name", user.getFirstName() + " " + user.getLastName());
+        }
+        else if (!StringUtils.isEmpty(user.getFirstName()))
+        {
+          additionalInfo.put("user_full_name", user.getFirstName());
+        }
+        else if (!StringUtils.isEmpty(user.getEmail()))
+        {
+          additionalInfo.put("user_full_name", user.getEmail());
+        }
+        else
+        {
+          additionalInfo.put("user_full_name", user.getUsername());
+        }
+      }
     }
     catch (Throwable e)
     {

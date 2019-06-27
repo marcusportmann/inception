@@ -175,9 +175,11 @@ interface IUserDirectory
   /**
    * Retrieve the number of users.
    *
+   * @param filter the optional filter to apply to the users
+   *
    * @return the number of users
    */
-  int getNumberOfUsers()
+  int getNumberOfUsers(String filter)
     throws SecurityServiceException;
 
   /**
@@ -202,14 +204,15 @@ interface IUserDirectory
    * Retrieve the users.
    *
    * @param filter        the optional filter to apply to the users
+   * @param sortBy        the optional method used to sort the users e.g. by last name
    * @param sortDirection the optional sort direction to apply to the users
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
    * @return the users
    */
-  List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
-      Integer pageSize)
+  List<User> getUsers(String filter, UserSortBy sortBy, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException;
 
   /**

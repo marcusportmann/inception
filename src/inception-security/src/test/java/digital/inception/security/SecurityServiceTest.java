@@ -1081,7 +1081,7 @@ public class SecurityServiceTest
     compareUsers(user, retrievedUsers.get(0), true);
 
     List<User> retrievedFilteredUsers = securityService.getUsers(userDirectory.getId(), "Test",
-        SortDirection.ASCENDING, null, null);
+        UserSortBy.USERNAME, SortDirection.ASCENDING, null, null);
 
     assertEquals("The correct number of filtered users (1) was not retrieved", 1,
         retrievedFilteredUsers.size());

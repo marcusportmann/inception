@@ -35,7 +35,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -81,9 +80,10 @@ public class SecurityRestController
   }
 
   /**
-   * Create the organization.
+   * Create the new organization.
    *
-   * @param organization the organization to create
+   * @param organization        the organization
+   * @param createUserDirectory should a new internal user directory be created for the organization
    */
   @ApiOperation(value = "Create the organization", notes = "Create the organization")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -254,10 +254,103 @@ public class SecurityRestController
     throws SecurityServiceException
   {
     var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations()));
+    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations(
+        filter)));
 
     return new ResponseEntity<>(securityService.getOrganizations(filter, sortDirection, pageIndex,
         pageSize), httpHeaders, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieve the organizations the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return the organizations the user directory is associated with
+   */
+  @ApiOperation(value = "Retrieve the organizations the user directory is associated with",
+      notes = "Retrieve the organizations the user directory is associated with")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/organizations",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(@ApiParam(
+      name = "userDirectoryId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
+  @PathVariable UUID userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    if (!authentication.isAuthenticated())
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+        + ")");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
+        userDirectoryId);
+
+    return new ResponseEntity<>(organizations, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieve the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directories
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the user directories
+   */
+  @ApiOperation(value = "Retrieve the user directories", notes = "Retrieve the user directories")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  public ResponseEntity<List<UserDirectory>> getUserDirectories(@ApiParam(name = "filter",
+      value = "The optional filter to apply to the user directories")
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+      value = "The optional sort direction to apply to the user directories")
+  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
+      name = "pageIndex",
+      value = "The optional page index", example = "0")
+  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
+      name = "pageSize",
+      value = "The optional page size", example = "0")
+  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+    throws SecurityServiceException
+  {
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
+        filter)));
+
+    return new ResponseEntity<>(securityService.getUserDirectories(filter, sortDirection,
+        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
   }
 
   /**
@@ -312,57 +405,47 @@ public class SecurityRestController
     return new ResponseEntity<>(filteredUserDirectories, HttpStatus.OK);
   }
 
-
-
-
   /**
-   * Retrieve the organizations the user directory is associated with.
+   * Retrieve the summaries for the user directories.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directories
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
    *
-   * @return the organizations the user directory is associated with
+   * @return the summaries for the user directories
    */
-  @ApiOperation(value = "Retrieve the organizations the user directory is associated with",
-    notes = "Retrieve the organizations the user directory is associated with")
+  @ApiOperation(value = "Retrieve the summaries for the user directories",
+      notes = "Retrieve the summaries for the user directories")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-    @ApiResponse(code = 404, message = "The user directory could not be found",
-      response = RestControllerError.class) ,
-    @ApiResponse(code = 500,
-      message = "An error has occurred and the service is unable to process the request at this time",
-      response = RestControllerError.class) })
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/organizations",
-    method = RequestMethod.GET, produces = "application/json")
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directory-summaries", method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(@ApiParam(
-    name = "userDirectoryId",
-    value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-    required = true)
-  @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(@ApiParam(
+      name = "filter",
+      value = "The optional filter to apply to the user directories")
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+      value = "The optional sort direction to apply to the user directories")
+  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
+      name = "pageIndex",
+      value = "The optional page index", example = "0")
+  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
+      name = "pageSize",
+      value = "The optional page size", example = "0")
+  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+    throws SecurityServiceException
   {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
+        filter)));
 
-    if (userDirectoryId == null)
-    {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-        + ")");
-    }
-
-    List<Organization> organizations = securityService.getOrganizationsForUserDirectory(userDirectoryId);
-
-    return new ResponseEntity<>(organizations, HttpStatus.OK);
+    return new ResponseEntity<>(securityService.getUserDirectorySummaries(filter, sortDirection,
+        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
   }
-
-
-
-
 
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
@@ -386,7 +469,7 @@ public class SecurityRestController
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasAuthority('Security.OrganizationAdministration') or hasAuthority('Security.UserAdministration') or hasAuthority('Security.GroupAdministration')")
+      "hasAuthority('Security.OrganizationAdministration') or hasAuthority('Security.ResetUserPassword') or hasAuthority('Security.UserAdministration') or hasAuthority('Security.UserGroups')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
       @ApiParam(name = "organizationId",
           value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
@@ -424,6 +507,7 @@ public class SecurityRestController
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
+   * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
@@ -447,7 +531,10 @@ public class SecurityRestController
       required = true)
   @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
       value = "The optional filter to apply to the users")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortBy",
+      value = "The optional method used to sort the users e.g. by last name")
+  @RequestParam(value = "sortBy", required = false) UserSortBy sortBy, @ApiParam(
+      name = "sortDirection",
       value = "The optional sort direction to apply to the users")
   @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
       name = "pageIndex",
@@ -473,10 +560,10 @@ public class SecurityRestController
 
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUsers(
-        userDirectoryId)));
+        userDirectoryId, filter)));
 
-    return new ResponseEntity<>(securityService.getUsers(userDirectoryId, filter, sortDirection,
-        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(securityService.getUsers(userDirectoryId, filter, sortBy,
+        sortDirection, pageIndex, pageSize), httpHeaders, HttpStatus.OK);
   }
 
   /**
@@ -511,12 +598,7 @@ public class SecurityRestController
       }
     }
 
-    if (isAdministrator(authentication))
-    {
-      return true;
-    }
-
-    return false;
+    return isAdministrator(authentication);
   }
 
   /**
@@ -537,7 +619,7 @@ public class SecurityRestController
       if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
       {
         UUID userDirectoryIdAuthority = UUID.fromString(authority.getAuthority().substring(
-          "USER_DIRECTORY_ID_".length()));
+            "USER_DIRECTORY_ID_".length()));
 
         if (userDirectoryIdAuthority.equals(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID))
         {
@@ -549,7 +631,7 @@ public class SecurityRestController
       {
         String roleAuthority = authority.getAuthority().substring("ROLE_".length());
 
-        if (roleAuthority.equalsIgnoreCase(ADMINISTRATORS_GROUP_NAME))
+        if (roleAuthority.equalsIgnoreCase(SecurityService.ADMINISTRATORS_GROUP_NAME))
         {
           isMemberOfAdministratorsGroup = true;
         }
@@ -591,10 +673,4 @@ public class SecurityRestController
 
     return false;
   }
-
-
-  /**
-   * The name of the Administrators group.
-   */
-  public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
 }

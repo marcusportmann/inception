@@ -88,7 +88,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: UsersComponent,
     data: {
-      functionCodes: ['Security.UserAdministration']
+      functionCodes: ['Security.OrganizationAdministration', 'Security.ResetUserPassword', 'Security.UserAdministration', 'Security.UserGroups']
     }
   },
 

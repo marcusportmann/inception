@@ -85,12 +85,18 @@ public class SecurityServiceAuthenticationManager
   {
     try
     {
+      // Authenticate the user
       UUID userDirectoryId = securityService.authenticate(authentication.getPrincipal().toString(),
           authentication.getCredentials().toString());
 
+      // Retrieve the details for the user
+      User user = securityService.getUser(userDirectoryId, authentication.getPrincipal().toString());
+
+      // Retrieve the function codes for the user
       List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
           authentication.getPrincipal().toString());
 
+      // Build the list of granted authorities
       List<GrantedAuthority> authorities = new ArrayList<>();
 
       authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_" + userDirectoryId));
@@ -108,8 +114,15 @@ public class SecurityServiceAuthenticationManager
         authorities.add(new SimpleGrantedAuthority("ROLE_" + groupName));
       }
 
-      return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
+      // Create the Spring authentication token
+      UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+        new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
           authentication.getCredentials(), authorities);
+
+      // Save the user's details as part of the token
+      usernamePasswordAuthenticationToken.setDetails(user);
+
+      return usernamePasswordAuthenticationToken;
     }
     catch (AuthenticationFailedException | UserNotFoundException e)
     {

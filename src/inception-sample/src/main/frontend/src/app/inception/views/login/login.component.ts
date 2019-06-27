@@ -133,6 +133,7 @@ export class LoginComponent {
               this.spinnerService.hideSpinner();
 
               if (organizations.length === 1) {
+                session.organization = organizations[0];
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigate(['/']);
               } else {

@@ -242,8 +242,7 @@ public class SchedulingPattern
       catch (Exception e)
       {
         throw new InvalidSchedulingPatternException(String.format(
-            "Invalid pattern \"%s\". Error parsing minutes field: %s", localPattern,
-            e.getMessage()));
+            "Invalid pattern \"%s\". Error parsing minutes field", localPattern), e);
       }
 
       try
@@ -253,7 +252,7 @@ public class SchedulingPattern
       catch (Exception e)
       {
         throw new InvalidSchedulingPatternException(String.format(
-            "Invalid pattern \"%s\". Error parsing hours field: %s", localPattern, e.getMessage()));
+            "Invalid pattern \"%s\". Error parsing hours field", localPattern), e);
       }
 
       try
@@ -263,8 +262,7 @@ public class SchedulingPattern
       catch (Exception e)
       {
         throw new InvalidSchedulingPatternException(String.format(
-            "Invalid pattern \"%s\". Error parsing days of month field: %s", localPattern,
-            e.getMessage()));
+            "Invalid pattern \"%s\". Error parsing days of month field", localPattern), e);
       }
 
       try
@@ -274,8 +272,7 @@ public class SchedulingPattern
       catch (Exception e)
       {
         throw new InvalidSchedulingPatternException(String.format(
-            "Invalid pattern \"%s\". Error parsing months field: %s", localPattern,
-            e.getMessage()));
+            "Invalid pattern \"%s\". Error parsing months field", localPattern), e);
       }
 
       try
@@ -285,8 +282,7 @@ public class SchedulingPattern
       catch (Exception e)
       {
         throw new InvalidSchedulingPatternException(String.format(
-            "Invalid pattern \"%s\". Error parsing days of week field: %s", localPattern,
-            e.getMessage()));
+            "Invalid pattern \"%s\". Error parsing days of week field", localPattern), e);
       }
 
       matcherSize++;

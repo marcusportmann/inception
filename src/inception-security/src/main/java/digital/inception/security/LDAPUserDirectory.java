@@ -43,6 +43,7 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
+import javax.naming.ldap.SortControl;
 
 import javax.sql.DataSource;
 
@@ -447,7 +448,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to initialize the user directory (%s): %s", userDirectoryId, e.getMessage()), e);
+          "Failed to initialize the user directory (%s)", userDirectoryId), e);
     }
   }
 
@@ -518,8 +519,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to add the user (%s) to the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to add the user (%s) to the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -629,8 +630,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to change the password for the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -720,8 +721,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to authenticate the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to authenticate the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -876,8 +877,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the security group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the security group (%s) for the user directory (%s)",
+          group.getGroupName(), getUserDirectoryId()), e);
     }
     finally
     {
@@ -1018,8 +1019,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the user (%s) for the user directory (%s): %s", user.getUsername(),
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the user (%s) for the user directory (%s)", user.getUsername(),
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1066,8 +1067,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1106,8 +1107,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to delete the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1189,8 +1190,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to find the users for the user directory (%s): %s", getUserDirectoryId(),
-          e.getMessage()), e);
+          "Failed to find the users for the user directory (%s)", getUserDirectoryId()), e);
     }
     finally
     {
@@ -1300,8 +1300,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the function codes for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the function codes for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1353,8 +1353,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1419,8 +1419,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group names for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security group names for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1466,8 +1466,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security groups for the user directory (%s)",
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1526,8 +1526,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security groups for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1589,10 +1589,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * Retrieve the number of users.
    *
+   * @param filter the optional filter to apply to the users
+   *
    * @return the number of users
    */
   @Override
-  public int getNumberOfUsers()
+  public int getNumberOfUsers(String filter)
     throws SecurityServiceException
   {
     DirContext dirContext = null;
@@ -1604,6 +1606,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      if (!StringUtils.isEmpty(filter))
+      {
+        searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
+            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
+            userLastNameAttribute, filter);
+      }
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1683,8 +1692,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1740,8 +1749,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the users for the user directory (%s): %s", getUserDirectoryId(),
-          e.getMessage()), e);
+          "Failed to retrieve the users for the user directory (%s)", getUserDirectoryId()), e);
     }
     finally
     {
@@ -1755,14 +1763,15 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve the users.
    *
    * @param filter        the optional filter to apply to the users
+   * @param sortBy        the optional method used to sort the users e.g. by last name
    * @param sortDirection the optional sort direction to apply to the users
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
    * @return the users
    */
-  public List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
-      Integer pageSize)
+  public List<User> getUsers(String filter, UserSortBy sortBy, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
     DirContext dirContext = null;
@@ -1786,6 +1795,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredUsers);
+
+      // TODO: Implement sorting of users for LDAP queries -- MARCUS
 
       List<User> users = new ArrayList<>();
 
@@ -1811,8 +1822,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the filtered users for the user directory (%s)",
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1940,8 +1951,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -2018,8 +2029,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -2086,8 +2097,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(groupDN, modificationItems.toArray(
-            new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(groupDN, modificationItems.toArray(new ModificationItem[0]));
       }
     }
     catch (GroupNotFoundException e)
@@ -2097,8 +2107,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to update the security group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+          "Failed to update the security group (%s) for the user directory (%s)",
+          group.getGroupName(), getUserDirectoryId()), e);
     }
     finally
     {
@@ -2212,8 +2222,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(userDN, modificationItems.toArray(
-            new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
       }
     }
     catch (UserNotFoundException e)
@@ -2653,8 +2662,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       throw new SecurityServiceException(String.format(
           "Failed to check whether the password hash (%s) is in the password history for the user "
-          + "(%s) for the user directory (%s): %s", passwordHash, username, getUserDirectoryId(),
-          e.getMessage()), e);
+          + "(%s) for the user directory (%s)", passwordHash, username, getUserDirectoryId()), e);
     }
 
     return false;
@@ -2693,8 +2701,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s): %s",
-          passwordHash, username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s)",
+          passwordHash, username, getUserDirectoryId()), e);
     }
   }
 }

@@ -34,6 +34,7 @@ import {Organizations} from './organizations';
 import {Users} from "./users";
 import {User} from "./user";
 import {UserDirectorySummary} from "./user-directory-summary";
+import {UserSortBy} from "./user-sort-by";
 
 /**
  * The Security Service implementation.
@@ -155,9 +156,10 @@ export class SecurityService {
    *
    * @return the organizations the user directory is associated with
    */
-  getOrganizationsForUserDirectory(userDirectoryId: string) : Observable<Organization[]> {
+  getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations', {reportProgress: true})
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations',
+      {reportProgress: true})
       .pipe(map((organizations: Organization[]) => {
         return organizations;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -191,9 +193,10 @@ export class SecurityService {
    *
    * @return The summaries for the user directories the organization is associated with.
    */
-  getUserDirectorySummariesForOrganization(organizationId: string) : Observable<UserDirectorySummary[]> {
+  getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries', {reportProgress: true})
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries',
+      {reportProgress: true})
       .pipe(map((codeCategories: UserDirectorySummary[]) => {
         return codeCategories;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -225,19 +228,25 @@ export class SecurityService {
    * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory.
    * @param filter          The optional filter to apply to the users.
+   * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   The optional sort direction to apply to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    *
    * @return The organizations.
    */
-  getUsers(userDirectoryId: string, filter?: string, sortDirection?: SortDirection,
-           pageIndex?: number, pageSize?: number): Observable<Users> {
+  getUsers(userDirectoryId: string, filter?: string, sortBy?: UserSortBy,
+           sortDirection?: SortDirection, pageIndex?: number,
+           pageSize?: number): Observable<Users> {
 
     let params = new HttpParams();
 
     if (filter !== null) {
       params = params.append('filter', filter);
+    }
+
+    if (sortBy !== null) {
+      params = params.append('sortBy', String(sortBy));
     }
 
     if (sortDirection !== null) {
@@ -253,7 +262,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<User[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users' , {
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
         observe: 'response',
         params: params,
         reportProgress: true,

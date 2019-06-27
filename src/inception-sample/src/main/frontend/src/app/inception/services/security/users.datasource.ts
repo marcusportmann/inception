@@ -23,6 +23,7 @@ import {first} from "rxjs/operators";
 import {User} from "./user";
 import {Users} from "./users";
 import {SessionService} from "../session/session.service";
+import {UserSortBy} from "./user-sort-by";
 
 /**
  * The UserDatasource class implements the user data source.
@@ -59,15 +60,16 @@ export class UserDatasource implements DataSource<User> {
    * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory the users are associated with.
    * @param filter          The optional filter to apply to the users.
+   * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   The optional sort direction to apply to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId, filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+  load(userDirectoryId, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection, pageIndex?: number,
        pageSize?: number): void {
     this.loadingSubject.next(true);
 
-    this.securityService.getUsers(userDirectoryId, filter, sortDirection, pageIndex, pageSize)
+    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(first())
       .subscribe((users: Users) => {
         this.loadingSubject.next(false);

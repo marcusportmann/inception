@@ -295,12 +295,14 @@ INSERT INTO security.user_directory_to_organization_map (user_directory_id, orga
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
 INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
 INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
   VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators', 'Organization Administrators');
+INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
+  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters', 'Password Resetters');
 
 INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
@@ -309,6 +311,8 @@ INSERT INTO security.groups (id, user_directory_id, groupname)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
 INSERT INTO security.groups (id, user_directory_id, groupname)
   VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators');
+INSERT INTO security.groups (id, user_directory_id, groupname)
+  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters');
 
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
@@ -355,6 +359,8 @@ INSERT INTO security.roles (id, name, description)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO security.roles (id, name, description)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
+INSERT INTO security.roles (id, name, description)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
 
 INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.Dashboard function to the Administrator role
@@ -402,7 +408,16 @@ INSERT INTO security.function_to_role_map (function_id, role_id)
 INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
 
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+
 INSERT INTO security.role_to_group_map (role_id, group_id)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 INSERT INTO security.role_to_group_map (role_id, group_id)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
+INSERT INTO security.role_to_group_map (role_id, group_id)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', '5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c');

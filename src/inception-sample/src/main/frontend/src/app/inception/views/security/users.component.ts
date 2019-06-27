@@ -38,6 +38,7 @@ import {Session} from "../../services/session/session";
 import {UserDirectorySummary} from "../../services/security/user-directory-summary";
 import {FormBuilder} from "@angular/forms";
 import {MatSelect, MatSelectChange} from "@angular/material";
+import {UserSortBy} from "../../services/security/user-sort-by";
 
 /**
  * The UsersComponent class implements the users component.
@@ -80,7 +81,7 @@ export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
 
   dataSource: UserDatasource;
 
-  displayedColumns: string[] = ['username', 'lastName', 'firstName', 'actions'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'username', 'actions'];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -101,7 +102,7 @@ export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
 
-  //sort on usernasmr bsckend
+  //sort on usernasme in backend not last name
 
   deleteUser(userId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
@@ -152,7 +153,17 @@ export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
       filter = filter.toLowerCase();
     }
 
-    this.dataSource.load(this.userDirectoryId, filter,
+    let sortBy: UserSortBy = UserSortBy.Username;
+
+    if (!!this.sort.active) {
+      if (this.sort.active == 'firstName') {
+        sortBy = UserSortBy.FirstName;
+      } else if (this.sort.active == 'lastName') {
+        sortBy = UserSortBy.LastName;
+      }
+    }
+
+    this.dataSource.load(this.userDirectoryId, filter, sortBy,
       this.sort.direction == 'asc' ? SortDirection.Ascending : SortDirection.Descending,
       this.paginator.pageIndex,
       this.paginator.pageSize);
