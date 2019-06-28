@@ -63,6 +63,8 @@ export class DialogService {
    * @param error The error.
    */
   showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
+    console.log('Error: ', error);
+
     return this.dialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog-panel',
       data: {error: error}

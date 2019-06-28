@@ -20,16 +20,18 @@ package digital.inception.security;
 
 import digital.inception.core.util.Base64Util;
 
+import org.springframework.util.StringUtils;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.nio.charset.StandardCharsets;
 
 import java.security.MessageDigest;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -60,7 +62,6 @@ public abstract class UserDirectoryBase
    * @param parameters      the parameters for the user directory
    */
   public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
-    throws SecurityServiceException
   {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
@@ -92,18 +93,20 @@ public abstract class UserDirectoryBase
    * If a security group with the specified group name already exists the ID for this existing
    * security group will be returned.
    *
-   * @param connection the existing database connection
-   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   security group
-   * @param groupName  the group name uniquely identifying the security group
+   * @param connection       the existing database connection
+   * @param groupId          the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         security group
+   * @param groupName        the group name uniquely identifying the security group
+   * @param groupDescription a description for the group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    */
-  protected UUID createGroup(Connection connection, UUID groupId, String groupName)
-    throws SecurityServiceException
+  protected UUID createGroup(Connection connection, UUID groupId, String groupName,
+      String groupDescription)
+    throws SQLException
   {
     String createGroupSQL =
-        "INSERT INTO security.groups (id, user_directory_id, groupname) VALUES (?, ?, ?)";
+        "INSERT INTO security.groups (id, user_directory_id, groupname, description) VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
@@ -118,20 +121,23 @@ public abstract class UserDirectoryBase
       statement.setObject(2, getUserDirectoryId());
       statement.setString(3, groupName);
 
+      if (StringUtils.isEmpty(groupDescription))
+      {
+        statement.setNull(4, Types.VARCHAR);
+      }
+      else
+      {
+        statement.setString(4, groupDescription);
+      }
+
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityServiceException(String.format(
+        throw new SQLException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
             createGroupSQL));
       }
 
       return groupId;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to create the security group (%s) with the ID (%s) for the user directory (%s)",
-          groupName, groupId, getUserDirectoryId()), e);
     }
   }
 
@@ -149,7 +155,7 @@ public abstract class UserDirectoryBase
     {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-      md.update(password.getBytes("iso-8859-1"), 0, password.length());
+      md.update(password.getBytes(StandardCharsets.ISO_8859_1), 0, password.length());
 
       return Base64Util.encodeBytes(md.digest());
     }
@@ -171,7 +177,7 @@ public abstract class UserDirectoryBase
    *         found
    */
   protected UUID deleteGroup(Connection connection, String groupName)
-    throws SecurityServiceException
+    throws SQLException
   {
     String deleteGroupSQL = "DELETE FROM security.groups WHERE user_directory_id=? "
         + "AND UPPER(groupname)=UPPER(CAST(? AS VARCHAR(100)))";
@@ -187,7 +193,7 @@ public abstract class UserDirectoryBase
 
         if (statement.executeUpdate() <= 0)
         {
-          throw new SecurityServiceException(String.format(
+          throw new SQLException(String.format(
               "No rows were affected as a result of executing the SQL statement (%s)",
               deleteGroupSQL));
         }
@@ -195,37 +201,39 @@ public abstract class UserDirectoryBase
 
       return groupId;
     }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
-    }
   }
 
   /**
-   * Checks whether the specified value is <code>null</code> or blank.
+   * Retrieve the security group.
    *
-   * @param value the value to check
+   * @param connection the existing database connection
+   * @param groupName  the name of the security group uniquely identifying the security group
    *
-   * @return true if the value is <code>null</code> or blank
+   * @return the group
    */
-  protected boolean isNullOrEmpty(Object value)
+  protected Group getGroup(Connection connection, String groupName)
+    throws GroupNotFoundException, SQLException
   {
-    if (value == null)
-    {
-      return true;
-    }
+    String getGroupSQL = "SELECT id, groupname, description FROM security.groups "
+        + "WHERE user_directory_id=? AND UPPER(groupname)=UPPER(CAST(? AS VARCHAR(100)))";
 
-    if (value instanceof String)
+    try (PreparedStatement statement = connection.prepareStatement(getGroupSQL))
     {
-      if (String.class.cast(value).length() == 0)
+      statement.setObject(1, getUserDirectoryId());
+      statement.setString(2, groupName);
+
+      try (ResultSet rs = statement.executeQuery())
       {
-        return true;
+        if (rs.next())
+        {
+          return buildGroupFromResultSet(rs);
+        }
+        else
+        {
+          throw new GroupNotFoundException(groupName);
+        }
       }
     }
-
-    return false;
   }
 
   /**
@@ -238,8 +246,8 @@ public abstract class UserDirectoryBase
    *         or <code>null</code> if a security group with the specified group name could not be
    *         found
    */
-  private UUID getGroupId(Connection connection, String groupName)
-    throws SecurityServiceException
+  protected UUID getGroupId(Connection connection, String groupName)
+    throws SQLException
   {
     String getGroupIdSQL = "SELECT id FROM security.groups WHERE user_directory_id=? AND "
         + "UPPER(groupname)=UPPER(CAST(? AS VARCHAR(100)))";
@@ -261,11 +269,154 @@ public abstract class UserDirectoryBase
         }
       }
     }
+  }
+
+  /**
+   * Retrieve all the security groups.
+   *
+   * @param connection the existing database connection
+   *
+   * @return the security groups
+   */
+  protected List<Group> getGroups(Connection connection)
+    throws SecurityServiceException
+  {
+    String getGroupsSQL = "SELECT id, groupname, description FROM "
+        + "security.groups WHERE user_directory_id=? ORDER BY groupname";
+
+    try (PreparedStatement statement = connection.prepareStatement(getGroupsSQL))
+    {
+      statement.setObject(1, getUserDirectoryId());
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<Group> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildGroupFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the ID for the security group (%s) for the user directory (%s)",
-          groupName, getUserDirectoryId()), e);
+          "Failed to retrieve the security groups for the user directory (%s)",
+          getUserDirectoryId()), e);
     }
+  }
+
+  /**
+   * Retrieve the number of security groups.
+   *
+   * @param connection the existing database connection to use
+   *
+   * @return the number of security groups
+   */
+  protected int getNumberOfGroups(Connection connection)
+    throws SQLException
+  {
+    String getNumberOfGroupsSQL = "SELECT COUNT(id) FROM security.groups WHERE user_directory_id=?";
+
+    try (PreparedStatement statement = connection.prepareStatement(getNumberOfGroupsSQL))
+    {
+      statement.setObject(1, getUserDirectoryId());
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getInt(1);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+  }
+
+  /**
+   * Checks whether the specified value is <code>null</code> or blank.
+   *
+   * @param value the value to check
+   *
+   * @return true if the value is <code>null</code> or blank
+   */
+  protected boolean isNullOrEmpty(Object value)
+  {
+    if (value == null)
+    {
+      return true;
+    }
+
+    if (value instanceof String)
+    {
+      return ((String) value).length() == 0;
+    }
+
+    return false;
+  }
+
+  /**
+   * Update the security group.
+   *
+   * @param connection       the existing database connection
+   * @param groupId          the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                         security group
+   * @param groupName        the group name uniquely identifying the security group
+   * @param groupDescription a description for the group
+   */
+  protected void updateGroup(Connection connection, UUID groupId, String groupName,
+      String groupDescription)
+    throws SQLException
+  {
+    String updateGroupSQL =
+        "UPDATE security.groups SET description=? WHERE user_directory_id=? AND id=?";
+
+    try (PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
+    {
+      statement.setString(1,
+          StringUtils.isEmpty(groupDescription)
+          ? ""
+          : groupDescription);
+      statement.setObject(2, getUserDirectoryId());
+      statement.setObject(3, groupId);
+
+      if (statement.executeUpdate() <= 0)
+      {
+        throw new SQLException(String.format(
+            "No rows were affected as a result of executing the SQL statement (%s)",
+            updateGroupSQL));
+      }
+    }
+  }
+
+  /**
+   * Create a new <code>Group</code> instance and populate it with the contents of the current
+   * row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>Group</code> instance
+   *
+   * @return the populated <code>Group</code> instance
+   */
+  private Group buildGroupFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    Group group = new Group(rs.getString(2));
+
+    group.setId(UUID.fromString(rs.getString(1)));
+    group.setUserDirectoryId(getUserDirectoryId());
+
+    String description = rs.getString(3);
+
+    group.setDescription(StringUtils.isEmpty(description)
+        ? ""
+        : description);
+
+    return group;
   }
 }

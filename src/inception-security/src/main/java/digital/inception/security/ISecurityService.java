@@ -397,6 +397,18 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param username        the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  List<String> getRoleNamesForUser(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -433,14 +445,12 @@ public interface ISecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the user directories the organization is associated with
    */
-  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
@@ -468,6 +478,19 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
+   * user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
+   *         directories the organization is associated with
+   */
+  List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the summaries for the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
@@ -484,14 +507,12 @@ public interface ISecurityService
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the summaries for the user directories the organization is associated with
    */
-  List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**

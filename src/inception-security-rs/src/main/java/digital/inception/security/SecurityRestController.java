@@ -19,33 +19,31 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityRestController</code> class.
@@ -54,8 +52,8 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/security")
-@SuppressWarnings({ "unused" })
-public class SecurityRestController
+@SuppressWarnings({ "unused", "WeakerAccess" })
+public class SecurityRestController extends SecureRestController
 {
   /**
    * The Security Service.
@@ -98,7 +96,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void createOrganization(@ApiParam(name = "organization", value = "The organization",
       required = true)
   @RequestBody Organization organization, @ApiParam(name = "createUserDirectory",
@@ -145,7 +143,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Security.UserAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void createUser(@ApiParam(name = "userDirectoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
@@ -206,7 +204,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void deleteOrganization(@ApiParam(name = "organizationId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
@@ -239,7 +237,7 @@ public class SecurityRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
       value = "The optional filter to apply to the organizations")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
@@ -331,7 +329,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public ResponseEntity<List<UserDirectory>> getUserDirectories(@ApiParam(name = "filter",
       value = "The optional filter to apply to the user directories")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
@@ -374,7 +372,7 @@ public class SecurityRestController
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasAuthority('Security.OrganizationAdministration') or hasAuthority('Security.UserAdministration') or hasAuthority('Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(@ApiParam(
       name = "organizationId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
@@ -390,7 +388,7 @@ public class SecurityRestController
     }
 
     List<UserDirectory> userDirectories = securityService.getUserDirectoriesForOrganization(
-        organizationId, isAdministrator(SecurityContextHolder.getContext().getAuthentication()));
+        organizationId);
 
     List<UserDirectory> filteredUserDirectories = new ArrayList<>();
 
@@ -424,7 +422,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directory-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Security.OrganizationAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(@ApiParam(
       name = "filter",
       value = "The optional filter to apply to the user directories")
@@ -469,7 +467,7 @@ public class SecurityRestController
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasAuthority('Security.OrganizationAdministration') or hasAuthority('Security.ResetUserPassword') or hasAuthority('Security.UserAdministration') or hasAuthority('Security.UserGroups')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
       @ApiParam(name = "organizationId",
           value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
@@ -485,8 +483,7 @@ public class SecurityRestController
     }
 
     List<UserDirectorySummary> userDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organizationId, isAdministrator(
-        SecurityContextHolder.getContext().getAuthentication()));
+        securityService.getUserDirectorySummariesForOrganization(organizationId);
 
     List<UserDirectorySummary> filteredUserDirectorySummaries = new ArrayList<>();
 
@@ -525,7 +522,7 @@ public class SecurityRestController
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Security.UserAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public ResponseEntity<List<User>> getUsers(@ApiParam(name = "userDirectoryId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
@@ -566,6 +563,7 @@ public class SecurityRestController
         sortDirection, pageIndex, pageSize), httpHeaders, HttpStatus.OK);
   }
 
+
   /**
    * Confirm that the user associated with the authenticated request has access to the user
    * directory.
@@ -577,100 +575,61 @@ public class SecurityRestController
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *         the user directory or <code>false</code> otherwise
    */
-  private boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
+  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
+    throws AccessDeniedException
   {
+    // If the user is not authenticated then they cannot have access
     if (!authentication.isAuthenticated())
     {
       return false;
     }
 
-    for (GrantedAuthority authority : authentication.getAuthorities())
+    // If the user has the "Administrator" role they always have access
+    if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_NAME))
     {
-      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
-      {
-        UUID userDirectoryIdAuthority = UUID.fromString(authority.getAuthority().substring(
-            "USER_DIRECTORY_ID_".length()));
-
-        if (userDirectoryIdAuthority.equals(userDirectoryId))
-        {
-          return true;
-        }
-      }
+      return true;
     }
 
-    return isAdministrator(authentication);
-  }
+    // If the user is directly associated with the user directory then they have access
+    String userDirectoryIdAuthorityValue = getValueForAuthorityWithPrefix(authentication, "USER_DIRECTORY_ID_");
 
-  /**
-   * Confirm that the user associated with the authenticated request is an administrator.
-   *
-   * @param authentication  the authenticated principal
-   *
-   * @return <code>true</code> if the user associated with the authenticated request is an
-   *         administrator or <code>false</code> otherwise.
-   */
-  private boolean isAdministrator(Authentication authentication)
-  {
-    boolean isAssociatedWithDefaultInternalUserDirectory = false;
-    boolean isMemberOfAdministratorsGroup = false;
-
-    for (GrantedAuthority authority : authentication.getAuthorities())
-    {
-      if (authority.getAuthority().startsWith("USER_DIRECTORY_ID_"))
-      {
-        UUID userDirectoryIdAuthority = UUID.fromString(authority.getAuthority().substring(
-            "USER_DIRECTORY_ID_".length()));
-
-        if (userDirectoryIdAuthority.equals(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID))
-        {
-          isAssociatedWithDefaultInternalUserDirectory = true;
-        }
-      }
-
-      if (authority.getAuthority().startsWith("ROLE_"))
-      {
-        String roleAuthority = authority.getAuthority().substring("ROLE_".length());
-
-        if (roleAuthority.equalsIgnoreCase(SecurityService.ADMINISTRATORS_GROUP_NAME))
-        {
-          isMemberOfAdministratorsGroup = true;
-        }
-      }
-    }
-
-    return (isAssociatedWithDefaultInternalUserDirectory && isMemberOfAdministratorsGroup);
-  }
-
-  /**
-   * Confirm that the user associated with the authenticated request is a member of the specified
-   * security group.
-   *
-   * @param authentication  the authenticated principal
-   * @param groupName       the name of the group
-   *
-   * @return <code>true</code> if the user associated with the authenticated request is a member of
-   *         the specified group or <code>false</code> otherwise
-   */
-  private boolean isInGroup(Authentication authentication, String groupName)
-  {
-    if (!authentication.isAuthenticated())
+    if (StringUtils.isEmpty(userDirectoryIdAuthorityValue))
     {
       return false;
     }
-
-    for (GrantedAuthority authority : authentication.getAuthorities())
+    else if (userDirectoryId.equals(UUID.fromString(userDirectoryIdAuthorityValue)))
     {
-      if (authority.getAuthority().startsWith("ROLE_"))
-      {
-        String roleAuthority = authority.getAuthority().substring("ROLE_".length());
+      return true;
+    }
 
-        if (roleAuthority.equalsIgnoreCase(groupName))
+    /*
+     * If the user is associated with a particular user directory, and that user directory is
+     * associated with a particular organization, and that organization is associated with another
+     * user directory, then the user has the same access to this other user directory.
+     */
+    try
+    {
+      var organizationIds = securityService.getOrganizationIdsForUserDirectory(UUID.fromString(userDirectoryIdAuthorityValue));
+
+      for (UUID organizationId: organizationIds)
+      {
+        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(organizationId);
+
+        for (UUID userDirectoryIdForOrganization: userDirectoryIdsForOrganization)
         {
-          return true;
+          if (userDirectoryIdForOrganization.equals(userDirectoryId))
+          {
+            return true;
+          }
         }
       }
+    }
+    catch (Throwable e)
+    {
+      throw new AccessDeniedException("Failed to check whether the user (" + authentication.getPrincipal() + ") has access to the user directory (" + userDirectoryId + ")", e);
     }
 
     return false;
   }
+
 }

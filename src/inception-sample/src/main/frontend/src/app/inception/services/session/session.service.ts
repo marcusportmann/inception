@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError, timer} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Session} from './session';

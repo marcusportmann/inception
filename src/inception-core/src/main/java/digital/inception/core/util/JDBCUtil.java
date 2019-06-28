@@ -303,7 +303,7 @@ public class JDBCUtil
         }
       }
 
-      if (multiLineBuffer != null)
+      if ((multiLineBuffer != null) && (!StringUtils.isEmpty(multiLineBuffer.toString())))
       {
         throw new IOException("Failed to process the last SQL statement from the file ("
             + url.getPath() + ") since it was not terminated by a ';'");

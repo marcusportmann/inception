@@ -77,7 +77,7 @@ COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id 
 COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 
-CREATE TABLE security.internal_users (
+CREATE TABLE security.users (
   id                UUID          NOT NULL,
   user_directory_id UUID          NOT NULL,
   username          VARCHAR(4000) NOT NULL,
@@ -92,108 +92,69 @@ CREATE TABLE security.internal_users (
   password_expiry   TIMESTAMP,
 
   PRIMARY KEY (id),
-  CONSTRAINT internal_users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
+  CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
 );
 
-CREATE INDEX internal_users_user_directory_id_ix ON security.internal_users(user_directory_id);
+CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
-CREATE UNIQUE INDEX internal_users_username_ix ON security.internal_users(username);
+CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-COMMENT ON COLUMN security.internal_users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.internal_users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal user is associated with';
+COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with';
 
-COMMENT ON COLUMN security.internal_users.username IS 'The username for the internal user';
+COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
-COMMENT ON COLUMN security.internal_users.status IS 'The status for the internal user';
+COMMENT ON COLUMN security.users.status IS 'The status for the user';
 
-COMMENT ON COLUMN security.internal_users.first_name IS 'The first name for the internal user';
+COMMENT ON COLUMN security.users.first_name IS 'The first name for the user';
 
-COMMENT ON COLUMN security.internal_users.last_name IS 'The last name for the internal user';
+COMMENT ON COLUMN security.users.last_name IS 'The last name for the user';
 
-COMMENT ON COLUMN security.internal_users.phone IS 'The phone number for the internal user';
+COMMENT ON COLUMN security.users.phone IS 'The phone number for the user';
 
-COMMENT ON COLUMN security.internal_users.mobile IS 'The mobile number for the internal user';
+COMMENT ON COLUMN security.users.mobile IS 'The mobile number for the user';
 
-COMMENT ON COLUMN security.internal_users.email IS 'The e-mail address for the internal user';
+COMMENT ON COLUMN security.users.email IS 'The e-mail address for the user';
 
-COMMENT ON COLUMN security.internal_users.password IS 'The password for the internal user';
+COMMENT ON COLUMN security.users.password IS 'The password for the user';
 
-COMMENT ON COLUMN security.internal_users.password_attempts IS 'The number of failed attempts to authenticate the internal user';
+COMMENT ON COLUMN security.users.password_attempts IS 'The number of failed attempts to authenticate the user';
 
-COMMENT ON COLUMN security.internal_users.password_expiry IS 'The date and time that the internal user''s password expires';
+COMMENT ON COLUMN security.users.password_expiry IS 'The date and time that the user''s password expires';
 
 
-CREATE TABLE security.internal_users_password_history (
-  id               UUID      NOT NULL,
-  internal_user_id UUID      NOT NULL,
-  changed          TIMESTAMP NOT NULL,
-  password         VARCHAR(4000),
+CREATE TABLE security.users_password_history (
+  id       UUID      NOT NULL,
+  user_id  UUID      NOT NULL,
+  changed  TIMESTAMP NOT NULL,
+  password VARCHAR(4000),
 
   PRIMARY KEY (id),
-  CONSTRAINT internal_users_password_history_internal_user_id_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(id) ON DELETE CASCADE
+  CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE
 );
 
-CREATE INDEX internal_users_password_history_internal_user_id_ix ON security.internal_users_password_history(internal_user_id);
+CREATE INDEX users_password_history_user_id_ix ON security.users_password_history(user_id);
 
-CREATE INDEX internal_users_password_history_changed_ix ON security.internal_users_password_history(changed);
+CREATE INDEX users_password_history_changed_ix ON security.users_password_history(changed);
 
-COMMENT ON COLUMN security.internal_users_password_history.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
+COMMENT ON COLUMN security.users_password_history.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
 
-COMMENT ON COLUMN security.internal_users_password_history.internal_user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+COMMENT ON COLUMN security.users_password_history.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.internal_users_password_history.changed IS 'When the password change took place for the internal user';
+COMMENT ON COLUMN security.users_password_history.changed IS 'When the password change took place for the user';
 
-COMMENT ON COLUMN security.internal_users_password_history.password IS 'The password for the internal user';
-
-
-CREATE TABLE security.internal_groups (
-  id                UUID          NOT NULL,
-  user_directory_id UUID          NOT NULL,
-  groupname         VARCHAR(4000) NOT NULL,
-  description       VARCHAR(4000),
-
-  PRIMARY KEY (id),
-  CONSTRAINT internal_groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
-);
-
-CREATE INDEX internal_groups_user_directory_id_ix ON security.internal_groups(user_directory_id);
-
-CREATE INDEX internal_groups_groupname_ix ON security.internal_groups(groupname);
-
-COMMENT ON COLUMN security.internal_groups.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
-
-COMMENT ON COLUMN security.internal_groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal group is associated with';
-
-COMMENT ON COLUMN security.internal_groups.groupname IS 'The group name for the internal group';
-
-COMMENT ON COLUMN security.internal_groups.description IS 'A description for the internal group';
-
-
-CREATE TABLE security.internal_user_to_internal_group_map (
-  internal_user_id  UUID NOT NULL,
-  internal_group_id UUID NOT NULL,
-
-  PRIMARY KEY (internal_user_id, internal_group_id),
-  CONSTRAINT internal_user_to_internal_group_map_internal_user_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(id) ON DELETE CASCADE,
-  CONSTRAINT internal_user_to_internal_group_map_internal_group_fk FOREIGN KEY (internal_group_id) REFERENCES security.internal_groups(id) ON DELETE CASCADE
-);
-
-CREATE INDEX internal_user_to_internal_group_map_internal_user_id_ix ON security.internal_user_to_internal_group_map(internal_user_id);
-
-CREATE INDEX internal_user_to_internal_group_map_internal_group_id_ix ON security.internal_user_to_internal_group_map(internal_group_id);
-
-COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
-
-COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
+COMMENT ON COLUMN security.users_password_history.password IS 'The password for the user';
 
 
 CREATE TABLE security.groups (
   id                UUID          NOT NULL,
   user_directory_id UUID          NOT NULL,
   groupname         VARCHAR(4000) NOT NULL,
+  description       VARCHAR(4000),
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
 );
 
 CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
@@ -205,6 +166,26 @@ COMMENT ON COLUMN security.groups.id IS 'The Universally Unique Identifier (UUID
 COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN security.groups.groupname IS 'The group name for the group';
+
+COMMENT ON COLUMN security.groups.description IS 'A description for the group';
+
+
+CREATE TABLE security.user_to_group_map (
+  user_id  UUID NOT NULL,
+  group_id UUID NOT NULL,
+
+  PRIMARY KEY (user_id, group_id),
+  CONSTRAINT user_to_group_map_user_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE,
+  CONSTRAINT user_to_group_map_group_fk FOREIGN KEY (group_id) REFERENCES security.groups(id) ON DELETE CASCADE
+);
+
+CREATE INDEX user_to_group_map_user_id_ix ON security.user_to_group_map(user_id);
+
+CREATE INDEX user_to_group_map_group_id_ix ON security.user_to_group_map(group_id);
+
+COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+
+COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 CREATE TABLE security.functions (
@@ -281,7 +262,7 @@ COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The Universally Unique
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO security.organizations (id, name, status)
-  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
+  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
 INSERT INTO security.user_directory_types (id, name, user_directory_class)
   VALUES ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
@@ -289,59 +270,40 @@ INSERT INTO security.user_directory_types (id, name, user_directory_class)
   VALUES ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type_id, name, configuration)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Administration User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
-  VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators', 'Organization Administrators');
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
-  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters', 'Password Resetters');
 
-INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
+INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
-
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators');
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Password Resetters');
 
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Codes.CodeAdministration', 'Code Administration', 'Code Administration');
-
 INSERT INTO security.functions (id, code, name, description)
-  VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration',
-          'Configuration Administration', 'Configuration Administration');
-
+  VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Process.ViewProcess', 'View Process', 'View Process');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Reporting.ViewReport', 'View Report', 'View Report');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Security.GroupAdministration', 'Group Administration', 'Group Administration');
 INSERT INTO security.functions (id, code, name, description)
@@ -353,6 +315,8 @@ INSERT INTO security.functions (id, code, name, description)
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration', 'User Administration');
 INSERT INTO security.functions (id, code, name, description)
+  VALUES ('545be1e3-71fe-4441-8dd5-416dc6200066', 'Security.UserDirectoryAdministration', 'User Directory Administration', 'User Directory Administration');
+INSERT INTO security.functions (id, code, name, description)
   VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
 
 INSERT INTO security.roles (id, name, description)
@@ -361,39 +325,6 @@ INSERT INTO security.roles (id, name, description)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
 INSERT INTO security.roles (id, name, description)
   VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
-
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.Dashboard function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.SecureHome function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Codes.CodeAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Configuration.ConfigurationAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Error.ErrorReportAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ProcessDefinitionAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ViewProcess function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ReportDefinitionAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ViewReport function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Scheduler.SchedulerAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.GroupAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.OrganizationAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.ResetUserPassword function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.SecurityAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserGroups function to the Administrator role
 
 INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
@@ -416,8 +347,4 @@ INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
 
 INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', '5e5b0d4d-f9c6-4b05-aaad-2ae20ca0cb8c');
+  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group

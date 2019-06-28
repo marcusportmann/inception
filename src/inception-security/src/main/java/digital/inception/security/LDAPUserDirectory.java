@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.JNDIUtil;
 
 import org.slf4j.Logger;
@@ -43,7 +44,6 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.*;
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.SortControl;
 
 import javax.sql.DataSource;
 
@@ -52,7 +52,7 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused", "WeakerAccess", "SpringJavaAutowiredMembersInspection" })
 public class LDAPUserDirectory extends UserDirectoryBase
 {
   /**
@@ -105,6 +105,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String groupNameAttribute;
   private String groupObjectClass;
   private String host;
+
+  /**
+   * The ID generator.
+   */
+  @Autowired
+  private IDGenerator idGenerator;
   private int maxFilteredGroups;
   private int maxFilteredUsers;
   private int maxPasswordAttempts;
@@ -620,8 +626,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      dirContext.modifyAttributes(userDN, modificationItems.toArray(
-          new ModificationItem[modificationItems.size()]));
+      dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
     }
     catch (UserNotFoundException e)
     {
@@ -841,7 +846,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -869,6 +874,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + ","
           + groupBaseDN.toString(), dirContext, attributes);
+
+      // Create the corresponding group in the database that will be used to map to one or more roles
+      UUID groupId = idGenerator.nextUUID();
+
+      createGroup(connection, groupId, group.getGroupName(), group.getDescription());
+
+      group.setId(groupId);
+      group.setUserDirectoryId(getUserDirectoryId());
     }
     catch (DuplicateGroupException e)
     {
@@ -1039,7 +1052,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -1059,6 +1072,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       dirContext.destroySubcontext(groupDN);
+
+      // Delete the corresponding group in the database
+      deleteGroup(connection, groupName);
     }
     catch (GroupNotFoundException | ExistingGroupMembersException e)
     {
@@ -1660,6 +1676,115 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  @Override
+  public List<String> getRoleNamesForUser(String username)
+    throws UserNotFoundException, SecurityServiceException
+  {
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
+          groupMemberAttribute, userDN.toString());
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<String> groupNames = new ArrayList<>();
+
+      while (searchResults.hasMore())
+      {
+        SearchResult searchResult = searchResults.next();
+
+        if (searchResult.getAttributes().get(groupNameAttribute) != null)
+        {
+          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
+              .get()));
+        }
+      }
+
+      /*
+       * Build the SQL statement used to retrieve the function codes associated with the LDAP
+       * groups the user is a member of.
+       *
+       * NOTE: This is not the ideal solution as a carefully crafted group name in the LDAP
+       *       directory can be used to perpetrate a SQL injection attack. A better option
+       *       would to be to use the ANY operator in the WHERE clause but this is not
+       *       supported by H2.
+       */
+      String getFunctionCodesForGroupsSQL = "SELECT DISTINCT r.name FROM security.roles r "
+          + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
+          + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
+
+      StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
+      buffer.append(" WHERE g.user_directory_id='").append(getUserDirectoryId());
+      buffer.append("' AND g.groupname IN (");
+
+      for (int i = 0; i < groupNames.size(); i++)
+      {
+        if (i > 0)
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("'").append(groupNames.get(i).replaceAll("'", "''")).append("'");
+      }
+
+      buffer.append(")");
+
+      List<String> roleNames = new ArrayList<>();
+
+      try (Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement())
+      {
+        try (ResultSet rs = statement.executeQuery(buffer.toString()))
+        {
+          while (rs.next())
+          {
+            roleNames.add(rs.getString(1));
+          }
+        }
+      }
+
+      return roleNames;
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the role names for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
+  }
+
+  /**
    * Retrieve the user.
    *
    * @param username the username identifying the user
@@ -2073,7 +2198,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -2099,6 +2224,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         dirContext.modifyAttributes(groupDN, modificationItems.toArray(new ModificationItem[0]));
       }
+
+      // Update the corresponding group in the database
+      UUID groupId = getGroupId(connection, group.getGroupName());
+
+      updateGroup(connection, groupId, group.getGroupName(), group.getDescription());
     }
     catch (GroupNotFoundException e)
     {

@@ -47,9 +47,9 @@ export class Session {
   scopes: string[];
 
   /**
-   * The codes identifying the functions the user, associated with the user session, has access to.
+   * The authorities for the user session associated with the session.
    */
-  functionCodes: string[];
+  authorities: string[];
 
   /**
    * The base-64 encoded OAuth2 JWT access token for the user session.
@@ -79,25 +79,68 @@ export class Session {
    *                          user directory the user is associated with.
    * @param userFullName      The full name for the user.
    * @param scopes            The OAuth2 scopes for the user session.
-   * @param functionCodes     The codes identifying the functions the user associated with the user
-   *                          session has access to.
+   * @param authorities       The The authorities for the user session associated with the session.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
    * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
-              functionCodes: string[],
-              accessToken: string, accessTokenExpiry: Date,
+              authorities: string[], accessToken: string, accessTokenExpiry: Date,
               refreshToken: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.userFullName = userFullName;
     this.scopes = scopes;
-    this.functionCodes = functionCodes;
+    this.authorities = authorities;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
     this.organization = null;
+  }
+
+  /**
+   * Confirm that the user associated with the session has the specified authority.
+   *
+   * @param authority The authority.
+   *
+   * @return True if the user associated with the session has the specified authority or false
+   *         otherwise.
+   */
+  hasAuthority(authority: string): boolean {
+
+    authority = authority.toLowerCase();
+
+    for (let i = 0; i < this.authorities.length; i++) {
+      if (this.authorities[i].toLowerCase() === authority) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Confirm that the user associated with the session has access to the specified function code.
+   *
+   * @param functionCode The function code.
+   *
+   * @return True if the user associated with the session has access to the specified function code
+   *         or false otherwise.
+   */
+  hasFunctionCode(functionCode: string): boolean {
+    return this.hasAuthority('FUNCTION_' + functionCode);
+  }
+
+  /**
+   * Confirm that the user associated with the session has the specified role.
+   *
+   * @param roleName The name of the role.
+   *
+   * @return True if the user associated with the session has the specified role or false
+   *         otherwise.
+   */
+  hasRole(roleName: string): boolean {
+    return this.hasAuthority('ROLE_' + roleName);
   }
 }

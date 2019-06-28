@@ -24,11 +24,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityServiceAuthenticationManager</code> provides an authentication manager
@@ -90,7 +90,8 @@ public class SecurityServiceAuthenticationManager
           authentication.getCredentials().toString());
 
       // Retrieve the details for the user
-      User user = securityService.getUser(userDirectoryId, authentication.getPrincipal().toString());
+      User user = securityService.getUser(userDirectoryId, authentication.getPrincipal()
+          .toString());
 
       // Retrieve the function codes for the user
       List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
@@ -101,22 +102,30 @@ public class SecurityServiceAuthenticationManager
 
       authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_" + userDirectoryId));
 
-      for (String functionCode : functionCodes)
+      List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
+          userDirectoryId);
+
+      for (UUID organizationId : organizationIds)
       {
-        authorities.add(new SimpleGrantedAuthority(functionCode));
+        authorities.add(new SimpleGrantedAuthority("ORGANIZATION_ID_" + organizationId));
       }
 
-      List<String> groupNames = securityService.getGroupNamesForUser(userDirectoryId,
+      for (String functionCode : functionCodes)
+      {
+        authorities.add(new SimpleGrantedAuthority("FUNCTION_" + functionCode));
+      }
+
+      List<String> roleNames = securityService.getRoleNamesForUser(userDirectoryId,
           authentication.getPrincipal().toString());
 
-      for (String groupName : groupNames)
+      for (String roleName : roleNames)
       {
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + groupName));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName));
       }
 
       // Create the Spring authentication token
       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-        new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
+          new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
           authentication.getCredentials(), authorities);
 
       // Save the user's details as part of the token

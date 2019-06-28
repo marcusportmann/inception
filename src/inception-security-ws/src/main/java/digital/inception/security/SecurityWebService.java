@@ -144,7 +144,7 @@ public class SecurityWebService
   @XmlElement(required = true) UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    return securityService.getUserDirectoriesForOrganization(organizationId, true);
+    return securityService.getUserDirectoriesForOrganization(organizationId);
   }
 
   private void validateOrganization(Organization organization)

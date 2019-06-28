@@ -79,34 +79,14 @@ public class TokenEnhancer
 
     try
     {
-      Object principal = authentication.getPrincipal();
-
-      String username;
-
-      if (principal instanceof String)
-      {
-        username = principal.toString();
-      }
-      else if (principal instanceof UserDetails)
-      {
-        username = ((UserDetails) principal).getUsername();
-      }
-      else
-      {
-        throw new RuntimeException("Unexpected principal type (" + principal.getClass().getName()
-            + ")");
-      }
-
-      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
-
-      additionalInfo.put("user_directory_id", userDirectoryId.toString());
-
       User user = User.class.isInstance(authentication.getUserAuthentication().getDetails())
           ? User.class.cast(authentication.getUserAuthentication().getDetails())
           : null;
 
       if (user != null)
       {
+        additionalInfo.put("user_directory_id", user.getUserDirectoryId().toString());
+
         if ((!StringUtils.isEmpty(user.getFirstName()))
             && (!StringUtils.isEmpty(user.getFirstName())))
         {

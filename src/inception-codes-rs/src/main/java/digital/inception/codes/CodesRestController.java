@@ -19,6 +19,7 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
@@ -50,7 +51,7 @@ import javax.validation.Validator;
 @RestController
 @RequestMapping(value = "/api/codes")
 @SuppressWarnings({ "unused" })
-public class CodesRestController
+public class CodesRestController extends SecureRestController
 {
   /**
    * The Codes Service.
@@ -93,7 +94,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCode(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId, @ApiParam(name = "code", value = "The code", required = true)
@@ -139,7 +140,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCodeCategory(@ApiParam(name = "codeCategory", value = "The code category",
       required = true)
   @RequestBody CodeCategory codeCategory)
@@ -177,7 +178,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCode(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
@@ -215,17 +216,12 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (true)
-    {
-      throw new CodesServiceException("Testing 1.. 2.. 3..");
-    }
-
     if (codeCategoryId == null)
     {
       throw new InvalidArgumentException("codeCategoryId");
@@ -254,7 +250,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public Code getCode(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category the code is associated with",
       required = true)
@@ -289,7 +285,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
@@ -314,7 +310,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public CodeCategory getCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
@@ -347,7 +343,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/data", method = RequestMethod.GET)
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryData(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
@@ -379,7 +375,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-category-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategorySummary> getCodeCategorySummaries()
     throws CodesServiceException
   {
@@ -406,7 +402,7 @@ public class CodesRestController
       produces = "application/json")
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public LocalDateTime getCodeCategoryUpdated(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
@@ -439,7 +435,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<Code> getCodes(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
@@ -471,7 +467,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCode(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
@@ -524,7 +520,7 @@ public class CodesRestController
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasAuthority('Codes.CodeAdministration')")
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId, @ApiParam(name = "codeCategory", value = "The code category",

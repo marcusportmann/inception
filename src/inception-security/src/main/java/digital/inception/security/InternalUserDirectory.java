@@ -166,45 +166,44 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    String addInternalUserToInternalGroupSQL =
-        "INSERT INTO security.internal_user_to_internal_group_map "
-        + "(internal_user_id, internal_group_id) VALUES (?, ?)";
+    String addUserToGroupSQL = "INSERT INTO security.user_to_group_map "
+        + "(user_id, group_id) VALUES (?, ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(addInternalUserToInternalGroupSQL))
+      PreparedStatement statement = connection.prepareStatement(addUserToGroupSQL))
     {
-      // Get the ID of the internal user with the specified username
-      UUID internalUserId;
+      // Get the ID of the user with the specified username
+      UUID userId;
 
-      if ((internalUserId = getInternalUserId(connection, username)) == null)
+      if ((userId = getUserId(connection, username)) == null)
       {
         throw new UserNotFoundException(username);
       }
 
       // Get the ID of the internal security group with the specified group name
-      UUID internalGroupId;
+      UUID groupId;
 
-      if ((internalGroupId = getInternalGroupId(connection, groupName)) == null)
+      if ((groupId = getGroupId(connection, groupName)) == null)
       {
         throw new GroupNotFoundException(groupName);
       }
 
       // Check if the user has already been added to the security group for the user directory
-      if (isInternalUserInInternalGroup(connection, internalUserId, internalGroupId))
+      if (isUserInGroup(connection, userId, groupId))
       {
         // The user is already a member of the specified security group do nothing
         return;
       }
 
       // Add the user to the security group
-      statement.setObject(1, internalUserId);
-      statement.setObject(2, internalGroupId);
+      statement.setObject(1, userId);
+      statement.setObject(2, groupId);
 
       if (statement.executeUpdate() != 1)
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            addInternalUserToInternalGroupSQL));
+            addUserToGroupSQL));
       }
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -234,12 +233,12 @@ public class InternalUserDirectory extends UserDirectoryBase
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityServiceException
   {
-    String changeInternalUserPasswordSQL =
-        "UPDATE security.internal_users SET password=?, password_attempts=?, password_expiry=? "
+    String changeUserPasswordSQL =
+        "UPDATE security.users SET password=?, password_attempts=?, password_expiry=? "
         + "WHERE user_directory_id=? AND id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
+      PreparedStatement statement = connection.prepareStatement(changeUserPasswordSQL))
     {
       User user = getUser(connection, username);
 
@@ -295,7 +294,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            changeInternalUserPasswordSQL));
+            changeUserPasswordSQL));
       }
 
       savePasswordHistory(connection, user.getId(), passwordHash);
@@ -379,12 +378,12 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
   {
-    String changeInternalUserPasswordSQL =
-        "UPDATE security.internal_users SET password=?, password_attempts=?, password_expiry=? "
+    String changeUserPasswordSQL =
+        "UPDATE security.users SET password=?, password_attempts=?, password_expiry=? "
         + "WHERE user_directory_id=? AND id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changeInternalUserPasswordSQL))
+      PreparedStatement statement = connection.prepareStatement(changeUserPasswordSQL))
     {
       User user = getUser(connection, username);
 
@@ -445,7 +444,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            changeInternalUserPasswordSQL));
+            changeUserPasswordSQL));
       }
 
       savePasswordHistory(connection, user.getId(), newPasswordHash);
@@ -472,35 +471,19 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void createGroup(Group group)
     throws DuplicateGroupException, SecurityServiceException
   {
-    String createInternalGroupSQL = "INSERT INTO security.internal_groups "
-        + "(id, user_directory_id, groupname, description) VALUES (?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createInternalGroupSQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      if (getInternalGroupId(connection, group.getGroupName()) != null)
+      if (getGroupId(connection, group.getGroupName()) != null)
       {
         throw new DuplicateGroupException(group.getGroupName());
       }
 
-      UUID internalGroupId = idGenerator.nextUUID();
+      UUID groupId = idGenerator.nextUUID();
 
-      statement.setObject(1, internalGroupId);
-      statement.setObject(2, getUserDirectoryId());
-      statement.setString(3, group.getGroupName());
-      statement.setString(4, group.getDescription());
+      createGroup(connection, groupId, group.getGroupName(), group.getDescription());
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createInternalGroupSQL));
-      }
-
-      group.setId(internalGroupId);
+      group.setId(groupId);
       group.setUserDirectoryId(getUserDirectoryId());
-
-      createGroup(connection, group.getId(), group.getGroupName());
     }
     catch (DuplicateGroupException e)
     {
@@ -525,21 +508,21 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityServiceException
   {
-    String createInternalUserSQL = "INSERT INTO security.internal_users "
+    String createUserSQL = "INSERT INTO security.users "
         + "(id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, "
         + "password, password_attempts, password_expiry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createInternalUserSQL))
+      PreparedStatement statement = connection.prepareStatement(createUserSQL))
     {
-      if (getInternalUserId(connection, user.getUsername()) != null)
+      if (getUserId(connection, user.getUsername()) != null)
       {
         throw new DuplicateUserException(user.getUsername());
       }
 
-      UUID internalUserId = idGenerator.nextUUID();
+      UUID userId = idGenerator.nextUUID();
 
-      statement.setObject(1, internalUserId);
+      statement.setObject(1, userId);
       statement.setObject(2, getUserDirectoryId());
       statement.setString(3, user.getUsername());
       statement.setInt(4, user.getStatus().code());
@@ -609,16 +592,16 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            createInternalUserSQL));
+            createUserSQL));
       }
 
-      user.setId(internalUserId);
+      user.setId(userId);
       user.setUserDirectoryId(getUserDirectoryId());
 
       // Save the password in the password history if one was specified
       if (passwordHash != null)
       {
-        savePasswordHistory(connection, internalUserId, passwordHash);
+        savePasswordHistory(connection, userId, passwordHash);
       }
     }
     catch (DuplicateUserException e)
@@ -642,32 +625,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
   {
-    String deleteInternalGroupSQL = "DELETE FROM security.internal_groups "
-        + "WHERE user_directory_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteInternalGroupSQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      UUID internalGroupId = getInternalGroupId(connection, groupName);
+      UUID groupId = getGroupId(connection, groupName);
 
-      if (internalGroupId == null)
+      if (groupId == null)
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (getNumberOfInternalUsersForInternalGroup(connection, internalGroupId) > 0)
+      if (getNumberOfUsersForGroup(connection, groupId) > 0)
       {
         throw new ExistingGroupMembersException(groupName);
-      }
-
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalGroupId);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteInternalGroupSQL));
       }
 
       deleteGroup(connection, groupName);
@@ -693,27 +662,26 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void deleteUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    String deleteInternalUserSQL =
-        "DELETE FROM security.internal_users WHERE user_directory_id=? AND id=?";
+    String deleteUserSQL = "DELETE FROM security.users WHERE user_directory_id=? AND id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteInternalUserSQL))
+      PreparedStatement statement = connection.prepareStatement(deleteUserSQL))
     {
-      UUID internalUserId = getInternalUserId(connection, username);
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
       statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
+      statement.setObject(2, userId);
 
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteInternalUserSQL));
+            deleteUserSQL));
       }
     }
     catch (UserNotFoundException e)
@@ -783,14 +751,14 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID internalUserId = getInternalUserId(connection, username);
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
-      return getFunctionCodesForUserId(connection, internalUserId);
+      return getFunctionCodesForUserId(connection, userId);
     }
     catch (UserNotFoundException e)
     {
@@ -815,37 +783,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   public Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityServiceException
   {
-    String getInternalGroupSQL = "SELECT id, groupname, description FROM security.internal_groups "
-        + "WHERE user_directory_id=? AND UPPER(groupname)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getInternalGroupSQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setString(2, groupName);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(UUID.fromString(rs.getString(1)));
-          group.setUserDirectoryId(getUserDirectoryId());
-
-          String description = rs.getString(3);
-
-          group.setDescription(StringUtils.isEmpty(description)
-              ? ""
-              : description);
-
-          return group;
-        }
-        else
-        {
-          throw new GroupNotFoundException(groupName);
-        }
-      }
+      return getGroup(connection, groupName);
     }
     catch (GroupNotFoundException e)
     {
@@ -872,15 +812,15 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      // Get the ID of the internal user with the specified username
-      UUID internalUserId = getInternalUserId(connection, username);
+      // Get the ID of the user with the specified username
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
-      return getGroupNamesForUser(connection, internalUserId);
+      return getGroupNamesForUser(connection, userId);
     }
     catch (UserNotFoundException e)
     {
@@ -903,35 +843,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<Group> getGroups()
     throws SecurityServiceException
   {
-    String getInternalGroupsSQL = "SELECT id, groupname, description FROM "
-        + "security.internal_groups WHERE user_directory_id=? ORDER BY groupname";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getInternalGroupsSQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      statement.setObject(1, getUserDirectoryId());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Group> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(UUID.fromString(rs.getString(1)));
-          group.setUserDirectoryId(getUserDirectoryId());
-
-          String description = rs.getString(3);
-
-          group.setDescription(StringUtils.isEmpty(description)
-              ? ""
-              : description);
-          list.add(group);
-        }
-
-        return list;
-      }
+      return getGroups(connection);
     }
     catch (Throwable e)
     {
@@ -955,15 +869,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID internalUserId = getInternalUserId(connection, username);
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
       // Get the groups the user is associated with
-      return getInternalGroupsForInternalUser(connection, internalUserId);
+      return getGroupsForUser(connection, userId);
     }
     catch (UserNotFoundException e)
     {
@@ -978,7 +892,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the number of security groups
+   * Retrieve the number of security groups.
    *
    * @return the number of security groups
    */
@@ -986,25 +900,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   public int getNumberOfGroups()
     throws SecurityServiceException
   {
-    String getNumberOfInternalGroupsSQL =
-        "SELECT COUNT(id) FROM security.internal_groups WHERE user_directory_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfInternalGroupsSQL))
+    try (Connection connection = dataSource.getConnection())
     {
-      statement.setObject(1, getUserDirectoryId());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
+      return getNumberOfGroups(connection);
     }
     catch (Throwable e)
     {
@@ -1025,21 +923,21 @@ public class InternalUserDirectory extends UserDirectoryBase
   public int getNumberOfUsers(String filter)
     throws SecurityServiceException
   {
-    String getNumberOfInternalUsersSQL = "SELECT COUNT(id) FROM security.internal_users";
+    String getNumberOfUsersSQL = "SELECT COUNT(id) FROM security.users";
 
     if (StringUtils.isEmpty(filter))
     {
-      getNumberOfInternalUsersSQL += " WHERE user_directory_id=?";
+      getNumberOfUsersSQL += " WHERE user_directory_id=?";
     }
     else
     {
-      getNumberOfInternalUsersSQL +=
+      getNumberOfUsersSQL +=
           " WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) "
           + "OR (UPPER(last_name) LIKE ?))";
     }
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(getNumberOfUsersSQL))
     {
       if (StringUtils.isEmpty(filter))
       {
@@ -1075,6 +973,41 @@ public class InternalUserDirectory extends UserDirectoryBase
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the number of users for the user directory (%s)",
           getUserDirectoryId()), e);
+    }
+  }
+
+  /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  @Override
+  public List<String> getRoleNamesForUser(String username)
+    throws UserNotFoundException, SecurityServiceException
+  {
+    try (Connection connection = dataSource.getConnection())
+    {
+      // Get the ID of the user with the specified username
+      UUID userId = getUserId(connection, username);
+
+      if (userId == null)
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      return getRoleNamesForUserId(connection, userId);
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the role names for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
   }
 
@@ -1123,12 +1056,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<User> getUsers()
     throws SecurityServiceException
   {
-    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
+    String getUsersSQL = "SELECT id, username, status, first_name, "
         + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users WHERE user_directory_id=? ORDER BY username";
+        + "FROM security.users WHERE user_directory_id=? ORDER BY username";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
     {
       statement.setObject(1, getUserDirectoryId());
 
@@ -1169,17 +1102,17 @@ public class InternalUserDirectory extends UserDirectoryBase
       Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getInternalUsersSQL = "SELECT id, username, status, first_name, "
+    String getUsersSQL = "SELECT id, username, status, first_name, "
         + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.internal_users";
+        + "FROM security.users";
 
     if (StringUtils.isEmpty(filter))
     {
-      getInternalUsersSQL += " WHERE user_directory_id=?";
+      getUsersSQL += " WHERE user_directory_id=?";
     }
     else
     {
-      getInternalUsersSQL +=
+      getUsersSQL +=
           " WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) "
           + "OR (UPPER(last_name) LIKE ?))";
     }
@@ -1188,38 +1121,38 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (sortBy == UserSortBy.FIRST_NAME)
       {
-        getInternalUsersSQL += " ORDER BY first_name";
+        getUsersSQL += " ORDER BY first_name";
       }
       else if (sortBy == UserSortBy.LAST_NAME)
       {
-        getInternalUsersSQL += " ORDER BY last_name";
+        getUsersSQL += " ORDER BY last_name";
       }
       else if (sortBy == UserSortBy.USERNAME)
       {
-        getInternalUsersSQL += " ORDER BY username";
+        getUsersSQL += " ORDER BY username";
       }
 
       if (sortDirection == SortDirection.ASCENDING)
       {
-        getInternalUsersSQL += " ASC";
+        getUsersSQL += " ASC";
       }
       else
       {
-        getInternalUsersSQL += " DESC";
+        getUsersSQL += " DESC";
       }
     }
 
     if ((pageIndex != null) && (pageSize != null))
     {
-      getInternalUsersSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
+      getUsersSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
     }
     else
     {
-      getInternalUsersSQL += " LIMIT " + maxFilteredUsers;
+      getUsersSQL += " LIMIT " + maxFilteredUsers;
     }
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getInternalUsersSQL))
+      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
     {
       statement.setMaxRows(maxFilteredUsers);
 
@@ -1276,7 +1209,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      return (getInternalUserId(connection, username) != null);
+      return (getUserId(connection, username) != null);
     }
     catch (Throwable e)
     {
@@ -1301,24 +1234,24 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      // Get the ID of the internal user with the specified username
-      UUID internalUserId = getInternalUserId(connection, username);
+      // Get the ID of the user with the specified username
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
       // Get the ID of the internal security group with the specified group name
-      UUID internalGroupId = getInternalGroupId(connection, groupName);
+      UUID groupId = getGroupId(connection, groupName);
 
-      if (internalGroupId == null)
+      if (groupId == null)
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      // Get the current internal security groups for the internal user
-      return isInternalUserInInternalGroup(connection, internalUserId, internalGroupId);
+      // Get the current internal security groups for the user
+      return isUserInGroup(connection, userId, groupId);
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -1342,33 +1275,31 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    String removeInternalUserFromInternalGroupSQL =
-        "DELETE FROM security.internal_user_to_internal_group_map "
-        + "WHERE internal_user_id=? AND internal_group_id=?";
+    String removeUserFromGroupSQL = "DELETE FROM security.user_to_group_map "
+        + "WHERE user_id=? AND group_id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          removeInternalUserFromInternalGroupSQL))
+      PreparedStatement statement = connection.prepareStatement(removeUserFromGroupSQL))
     {
-      // Get the ID of the internal user with the specified username
-      UUID internalUserId = getInternalUserId(connection, username);
+      // Get the ID of the user with the specified username
+      UUID userId = getUserId(connection, username);
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
-      // Get the ID of the internal group with the specified group name
-      UUID internalGroupId = getInternalGroupId(connection, groupName);
+      // Get the ID of the group with the specified group name
+      UUID groupId = getGroupId(connection, groupName);
 
-      if (internalGroupId == null)
+      if (groupId == null)
       {
         throw new GroupNotFoundException(groupName);
       }
 
       // Remove the user from the group
-      statement.setObject(1, internalUserId);
-      statement.setObject(2, internalGroupId);
+      statement.setObject(1, userId);
+      statement.setObject(2, groupId);
       statement.executeUpdate();
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1416,15 +1347,15 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityServiceException
   {
-    String updateInternalGroupSQL =
-        "UPDATE security.internal_groups SET description=? WHERE user_directory_id=? AND id=?";
+    String updateGroupSQL =
+        "UPDATE security.groups SET description=? WHERE user_directory_id=? AND id=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateInternalGroupSQL))
+      PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
     {
-      UUID internalGroupId = getInternalGroupId(connection, group.getGroupName());
+      UUID groupId = getGroupId(connection, group.getGroupName());
 
-      if (internalGroupId == null)
+      if (groupId == null)
       {
         throw new GroupNotFoundException(group.getGroupName());
       }
@@ -1436,13 +1367,13 @@ public class InternalUserDirectory extends UserDirectoryBase
           ? ""
           : description);
       statement.setObject(2, getUserDirectoryId());
-      statement.setObject(3, internalGroupId);
+      statement.setObject(3, groupId);
 
       if (statement.executeUpdate() <= 0)
       {
         throw new SecurityServiceException(String.format(
             "No rows were affected as a result of executing the SQL statement (%s)",
-            updateInternalGroupSQL));
+            updateGroupSQL));
       }
     }
     catch (GroupNotFoundException e)
@@ -1470,16 +1401,16 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      UUID internalUserId = getInternalUserId(connection, user.getUsername());
+      UUID userId = getUserId(connection, user.getUsername());
 
-      if (internalUserId == null)
+      if (userId == null)
       {
         throw new UserNotFoundException(user.getUsername());
       }
 
       StringBuilder buffer = new StringBuilder();
 
-      buffer.append("UPDATE security.internal_users ");
+      buffer.append("UPDATE security.users ");
 
       StringBuilder fieldsBuffer = new StringBuilder();
 
@@ -1626,7 +1557,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         parameterIndex++;
 
-        statement.setObject(parameterIndex, internalUserId);
+        statement.setObject(parameterIndex, userId);
 
         if (statement.executeUpdate() != 1)
         {
@@ -1650,15 +1581,13 @@ public class InternalUserDirectory extends UserDirectoryBase
 
   /**
    * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
-   * in the INTERNAL_USERS table using the values of the specified attributes as the selection
-   * criteria.
+   * in the USERS table using the values of the specified attributes as the selection criteria.
    *
    * @param connection the existing database connection to use
    * @param attributes the attributes to be used as the selection criteria
    *
    * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   *         INTERNAL_USERS table using the values of the specified attributes as the selection
-   *         criteria
+   *         USERS table using the values of the specified attributes as the selection criteria
    */
   private PreparedStatement buildFindUsersStatement(Connection connection,
       List<Attribute> attributes)
@@ -1668,7 +1597,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     StringBuilder buffer = new StringBuilder();
 
     buffer.append("SELECT id, username, status, first_name, last_name, phone, mobile, email, ");
-    buffer.append("password, password_attempts, password_expiry FROM security.internal_users");
+    buffer.append("password, password_attempts, password_expiry FROM security.users");
 
     if (attributes.size() > 0)
     {
@@ -1839,31 +1768,27 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the authorised function codes for the internal user.
+   * Retrieve the authorised function codes for the user.
    *
-   * @param connection     the existing database connection to use
-   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       internal user
+   * @param connection the existing database connection to use
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
-   * @return the authorised function codes for the internal user
+   * @return the authorised function codes for the user
    */
-  private List<String> getFunctionCodesForUserId(Connection connection, UUID internalUserId)
+  private List<String> getFunctionCodesForUserId(Connection connection, UUID userId)
     throws SQLException
   {
     String getFunctionCodesForUserIdSQL = "SELECT DISTINCT f.code FROM security.functions f "
         + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_id = f.id "
         + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = ftrm.role_id "
         + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
-        + "INNER JOIN security.internal_groups ig "
-        + "ON ig.user_directory_id = g.user_directory_id AND ig.id = g.id "
-        + "INNER JOIN security.internal_user_to_internal_group_map iutigm "
-        + "ON iutigm.internal_group_id = ig.ID WHERE iutigm.internal_user_id=?";
+        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
 
     List<String> functionCodes = new ArrayList<>();
 
     try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
     {
-      statement.setObject(1, internalUserId);
+      statement.setObject(1, userId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1878,26 +1803,24 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names for all the security groups that the internal user with the specific numeric
+   * Retrieve the names for all the security groups that the user with the specific numeric
    * ID is associated with.
    *
-   * @param connection     the existing database connection
-   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       internal user
+   * @param connection the existing database connection
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the security groups
    */
-  private List<String> getGroupNamesForUser(Connection connection, UUID internalUserId)
+  private List<String> getGroupNamesForUser(Connection connection, UUID userId)
     throws SQLException
   {
-    String getInternalGroupNamesForInternalUserSQL = "SELECT groupname FROM "
-        + "security.internal_groups ig, security.internal_user_to_internal_group_map iutigm "
-        + "WHERE ig.id = iutigm.internal_group_id AND iutigm.internal_user_id=? ORDER BY ig.groupname";
+    String getGroupNamesForUserSQL = "SELECT groupname FROM "
+        + "security.groups g, security.user_to_group_map utgm "
+        + "WHERE g.id = utgm.group_id AND utgm.user_id=? ORDER BY g.groupname";
 
-    try (PreparedStatement statement = connection.prepareStatement(
-        getInternalGroupNamesForInternalUserSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
     {
-      statement.setObject(1, internalUserId);
+      statement.setObject(1, userId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1914,68 +1837,24 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal
-   * security group with the specified group name.
-   *
-   * @param connection the existing database connection to use
-   * @param groupName  the group name uniquely identifying the internal security group
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal
-   *         security group with the specified group name
-   */
-  private UUID getInternalGroupId(Connection connection, String groupName)
-    throws SecurityServiceException
-  {
-    String getInternalGroupIdSQL = "SELECT id FROM security.internal_groups "
-        + "WHERE user_directory_id=? AND UPPER(groupname)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (PreparedStatement statement = connection.prepareStatement(getInternalGroupIdSQL))
-    {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setString(2, groupName);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return UUID.fromString(rs.getString(1));
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the ID for the security group (%s) for the user directory (%s)",
-          groupName, getUserDirectoryId()), e);
-    }
-  }
-
-  /**
-   * Retrieve all the internal security groups that the internal user with the specific numeric ID
+   * Retrieve all the internal security groups that the user with the specific numeric ID
    * is associated with.
    *
-   * @param connection     the existing database connection
-   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       internal user
+   * @param connection the existing database connection
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the internal security groups
    */
-  private List<Group> getInternalGroupsForInternalUser(Connection connection, UUID internalUserId)
+  private List<Group> getGroupsForUser(Connection connection, UUID userId)
     throws SQLException
   {
-    String getInternalGroupsForInternalUserSQL = "SELECT id, groupname, description FROM "
-        + "security.internal_groups ig, security.internal_user_to_internal_group_map iutigm "
-        + "WHERE ig.id = iutigm.internal_group_id AND iutigm.internal_user_id=? "
-        + "ORDER BY ig.groupname";
+    String getGroupsForUserSQL = "SELECT id, groupname, description FROM "
+        + "security.groups g, security.user_to_group_map utgm "
+        + "WHERE g.id = utgm.group_id AND utgm.user_id=? " + "ORDER BY g.groupname";
 
-    try (PreparedStatement statement = connection.prepareStatement(
-        getInternalGroupsForInternalUserSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
     {
-      statement.setObject(1, internalUserId);
+      statement.setObject(1, userId);
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1997,22 +1876,124 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   * Retrieve the number of users for the internal security group.
+   *
+   * @param connection the existing database connection
+   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   internal security group
+   *
+   * @return the IDs for all the users that are associated with the internal security group
+   *         with the specified ID
+   */
+  private long getNumberOfUsersForGroup(Connection connection, UUID groupId)
+    throws SQLException
+  {
+    String getNumberOfUsersForGroupSQL = "SELECT COUNT (user_id) FROM security.user_to_group_map "
+        + "WHERE group_id=?";
+
+    try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
+    {
+      statement.setObject(1, groupId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return rs.getLong(1);
+        }
+        else
+        {
+          return 0;
+        }
+      }
+    }
+  }
+
+  /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param connection the existing database connection to use
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   *
+   * @return the the names for the roles that the user has been assigned
+   */
+  private List<String> getRoleNamesForUserId(Connection connection, UUID userId)
+    throws SQLException
+  {
+    String getRoleNamesForUserIdSQL = "SELECT DISTINCT r.name FROM security.roles r "
+        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
+        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
+        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
+
+    List<String> functionCodes = new ArrayList<>();
+
+    try (PreparedStatement statement = connection.prepareStatement(getRoleNamesForUserIdSQL))
+    {
+      statement.setObject(1, userId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        while (rs.next())
+        {
+          functionCodes.add(rs.getString(1));
+        }
+
+        return functionCodes;
+      }
+    }
+  }
+
+  /**
+   * Retrieve the information for the user with the specified username.
+   *
+   * @param connection the existing database connection to use
+   * @param username   the username identifying the user
+   *
+   * @return the <code>User</code> or <code>null</code> if the user could not be found
+   */
+  private User getUser(Connection connection, String username)
+    throws SQLException
+  {
+    String getUserSQL = "SELECT id, username, status, first_name, last_name, phone, "
+        + "mobile, email, password, password_attempts, password_expiry FROM security.users "
+        + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
+
+    try (PreparedStatement statement = connection.prepareStatement(getUserSQL))
+    {
+      statement.setObject(1, getUserDirectoryId());
+      statement.setString(2, username);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return buildUserFromResultSet(rs);
+        }
+        else
+        {
+          return null;
+        }
+      }
+    }
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user
    * with the specified username.
    *
    * @param connection the existing database connection to use
-   * @param username   the username uniquely identifying the internal user
+   * @param username   the username uniquely identifying the user
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
    *         with the specified username
    */
-  private UUID getInternalUserId(Connection connection, String username)
+  private UUID getUserId(Connection connection, String username)
     throws SecurityServiceException
   {
-    String getInternalUserIdSQL = "SELECT id FROM security.internal_users "
+    String getUserIdSQL = "SELECT id FROM security.users "
         + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
 
-    try (PreparedStatement statement = connection.prepareStatement(getInternalUserIdSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getUserIdSQL))
     {
       statement.setObject(1, getUserDirectoryId());
       statement.setString(2, username);
@@ -2038,92 +2019,21 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the number of internal users for the internal security group.
-   *
-   * @param connection      the existing database connection
-   * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        internal security group
-   *
-   * @return the IDs for all the internal users that are associated with the internal security group
-   *         with the specified ID
-   */
-  private long getNumberOfInternalUsersForInternalGroup(Connection connection, UUID internalGroupId)
-    throws SQLException
-  {
-    String getNumberOfInternalUsersForInternalGroupSQL =
-        "SELECT COUNT (internal_user_id) FROM security.internal_user_to_internal_group_map "
-        + "WHERE internal_group_id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(
-        getNumberOfInternalUsersForInternalGroupSQL))
-    {
-      statement.setObject(1, internalGroupId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-  }
-
-  /**
-   * Retrieve the information for the internal user with the specified username.
-   *
-   * @param connection the existing database connection to use
-   * @param username   the username identifying the internal user
-   *
-   * @return the <code>User</code> or <code>null</code> if the internal user could not be found
-   */
-  private User getUser(Connection connection, String username)
-    throws SQLException
-  {
-    String getInternalUserSQL = "SELECT id, username, status, first_name, last_name, phone, "
-        + "mobile, email, password, password_attempts, password_expiry FROM security.internal_users "
-        + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (PreparedStatement statement = connection.prepareStatement(getInternalUserSQL))
-    {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setString(2, username);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return buildUserFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-  }
-
-  /**
    * Increment the password attempts for the user.
    *
-   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       internal user
+   * @param userId the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  private void incrementPasswordAttempts(UUID internalUserId)
+  private void incrementPasswordAttempts(UUID userId)
     throws SecurityServiceException
   {
-    String incrementPasswordAttemptsSQL = "UPDATE security.internal_users "
+    String incrementPasswordAttemptsSQL = "UPDATE security.users "
         + "SET password_attempts = password_attempts + 1 WHERE user_directory_id=? AND id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))
     {
       statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, internalUserId);
+      statement.setObject(2, userId);
 
       if (statement.executeUpdate() != 1)
       {
@@ -2135,41 +2045,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format("Failed to increment the password attempts "
-          + "for the user (%s) for the user directory (%s)", internalUserId, getUserDirectoryId()),
-          e);
-    }
-  }
-
-  /**
-   * Is the user in the security group?
-   *
-   * @param connection      the existing database connection
-   * @param internalUserId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        internal user
-   * @param internalGroupId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        internal security group
-   *
-   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
-   *         otherwise
-   */
-  private boolean isInternalUserInInternalGroup(Connection connection, UUID internalUserId,
-      UUID internalGroupId)
-    throws SQLException
-  {
-    String isInternalUserInInternalGroupSQL = "SELECT internal_user_id FROM "
-        + "security.internal_user_to_internal_group_map WHERE internal_user_id=? AND "
-        + "internal_group_id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(
-        isInternalUserInInternalGroupSQL))
-    {
-      statement.setObject(1, internalUserId);
-      statement.setObject(2, internalGroupId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
+          + "for the user (%s) for the user directory (%s)", userId, getUserDirectoryId()), e);
     }
   }
 
@@ -2177,31 +2053,28 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Is the password, given by the specified password hash, a historical password that cannot
    * be reused for a period of time i.e. was the password used previously in the last X months.
    *
-   * @param connection     the existing database connection
-   * @param internalUserId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       internal user
-   * @param passwordHash   the password hash
+   * @param connection   the existing database connection
+   * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
    *         period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(Connection connection, UUID internalUserId,
-      String passwordHash)
+  private boolean isPasswordInHistory(Connection connection, UUID userId, String passwordHash)
     throws SQLException
   {
-    String isPasswordInInternalUserPasswordHistorySQL =
-        "SELECT id FROM  security.internal_users_password_history "
-        + "WHERE internal_user_id=? AND changed > ? AND password=?";
+    String isPasswordInUserPasswordHistorySQL = "SELECT id FROM  security.users_password_history "
+        + "WHERE user_id=? AND changed > ? AND password=?";
 
     try (PreparedStatement statement = connection.prepareStatement(
-        isPasswordInInternalUserPasswordHistorySQL))
+        isPasswordInUserPasswordHistorySQL))
     {
       Calendar calendar = Calendar.getInstance();
 
       calendar.setTime(new Date());
       calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
 
-      statement.setObject(1, internalUserId);
+      statement.setObject(1, userId);
       statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
       statement.setString(3, passwordHash);
 
@@ -2212,20 +2085,47 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  private void savePasswordHistory(Connection connection, UUID internalUserId, String passwordHash)
+  /**
+   * Is the user in the security group?
+   *
+   * @param connection the existing database connection
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   internal security group
+   *
+   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   *         otherwise
+   */
+  private boolean isUserInGroup(Connection connection, UUID userId, UUID groupId)
     throws SQLException
   {
-    String saveInternalUserPasswordHistorySQL =
-        "INSERT INTO security.internal_users_password_history "
-        + "(id, internal_user_id, changed, password) VALUES (?, ?, ?, ?)";
+    String isUserInGroupSQL = "SELECT user_id FROM "
+        + "security.user_to_group_map WHERE user_id=? AND " + "group_id=?";
 
-    try (PreparedStatement statement = connection.prepareStatement(
-        saveInternalUserPasswordHistorySQL))
+    try (PreparedStatement statement = connection.prepareStatement(isUserInGroupSQL))
+    {
+      statement.setObject(1, userId);
+      statement.setObject(2, groupId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next();
+      }
+    }
+  }
+
+  private void savePasswordHistory(Connection connection, UUID userId, String passwordHash)
+    throws SQLException
+  {
+    String saveUserPasswordHistorySQL = "INSERT INTO security.users_password_history "
+        + "(id, user_id, changed, password) VALUES (?, ?, ?, ?)";
+
+    try (PreparedStatement statement = connection.prepareStatement(saveUserPasswordHistorySQL))
     {
       UUID id = idGenerator.nextUUID();
 
       statement.setObject(1, id);
-      statement.setObject(2, internalUserId);
+      statement.setObject(2, userId);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setString(4, passwordHash);
       statement.execute();

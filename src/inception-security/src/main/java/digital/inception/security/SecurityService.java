@@ -63,10 +63,21 @@ public class SecurityService
   public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default internal user
+   * The name of the Administrator role.
+   */
+  public static final String ADMINISTRATOR_ROLE_NAME = "Administrator";
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the Administrators group.
+   */
+  public static final UUID ADMINISTRATORS_GROUP_ID = UUID.fromString(
+      "a9e01fa2-f017-46e2-8187-424bf50a4f33");
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the Administration user
    * directory.
    */
-  public static final UUID DEFAULT_INTERNAL_USER_DIRECTORY_ID = UUID.fromString(
+  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID = UUID.fromString(
       "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
@@ -501,21 +512,6 @@ public class SecurityService
                   "No rows were affected as a result of executing the SQL statement (%s)",
                   addUserDirectoryToOrganizationSQL));
             }
-          }
-        }
-
-        // Link the new organization to the default user directory
-        try (PreparedStatement statement = connection.prepareStatement(
-            addUserDirectoryToOrganizationSQL))
-        {
-          statement.setObject(1, DEFAULT_INTERNAL_USER_DIRECTORY_ID);
-          statement.setObject(2, organization.getId());
-
-          if (statement.executeUpdate() != 1)
-          {
-            throw new SecurityServiceException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                addUserDirectoryToOrganizationSQL));
           }
         }
       }
@@ -1422,6 +1418,29 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param username        the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  @Override
+  public List<String> getRoleNamesForUser(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getRoleNamesForUser(username);
+  }
+
+  /**
    * Retrieve the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -1543,24 +1562,75 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
+   * user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
+   *         directories the organization is associated with
+   */
+  @Override
+  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    String getUserDirectoryIdsForOrganizationSQL =
+      "SELECT udtom.user_directory_id FROM security.user_directory_to_organization_map udtom "
+        + "WHERE udtom.organization_id = ?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        getUserDirectoryIdsForOrganizationSQL))
+    {
+      if (!organizationExists(connection, organizationId))
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UUID> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(UUID.fromString(rs.getString(1)));
+        }
+
+        return list;
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+        "Failed to retrieve the IDs for the user directories associated with the organization (%s)",
+        organizationId), e);
+    }
+  }
+
+
+  /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectoriesForOrganizationSQL =
         "SELECT ud.id, ud.type_id, ud.name, ud.configuration FROM security.user_directories ud "
         + "INNER JOIN security.user_directory_to_organization_map udtom "
-        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
-        + "ON udtom.organization_id = o.id WHERE o.id=?";
+        + "ON ud.id = udtom.user_directory_id WHERE udtom.organization_id = ?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
@@ -1579,19 +1649,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          UserDirectory userDirectory = buildUserDirectoryFromResultSet(rs);
-
-          if (userDirectory.getId().equals(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID))
-          {
-            if (includeDefaultInternalUserDirectory)
-            {
-              list.add(userDirectory);
-            }
-          }
-          else
-          {
-            list.add(userDirectory);
-          }
+          list.add(buildUserDirectoryFromResultSet(rs));
         }
 
         return list;
@@ -1775,15 +1833,13 @@ public class SecurityService
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the summaries for the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectorySummariesForOrganizationSQL =
@@ -1809,20 +1865,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          UserDirectorySummary userDirectorySummary = buildUserDirectorySummaryFromResultSet(rs);
-
-          if (userDirectorySummary.getId().equals(SecurityService
-              .DEFAULT_INTERNAL_USER_DIRECTORY_ID))
-          {
-            if (includeDefaultInternalUserDirectory)
-            {
-              list.add(userDirectorySummary);
-            }
-          }
-          else
-          {
-            list.add(userDirectorySummary);
-          }
+          list.add(buildUserDirectorySummaryFromResultSet(rs));
         }
 
         return list;
@@ -2394,7 +2437,7 @@ public class SecurityService
     throws SecurityServiceException
   {
     String getInternalUserDirectoryIdForUserSQL = "SELECT user_directory_id FROM "
-        + "security.internal_users WHERE UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
+        + "security.users WHERE UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(

@@ -18,6 +18,8 @@ package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.rs.SecureRestController;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +35,7 @@ import javax.validation.Validator;
 @RestController
 @RequestMapping(value = "/api/scheduler")
 @SuppressWarnings({ "unused", "WeakerAccess" })
-public class SchedulerRestController
+public class SchedulerRestController extends SecureRestController
 {
   /**
    * The Scheduler Service.

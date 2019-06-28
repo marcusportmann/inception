@@ -183,6 +183,16 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  List<String> getRoleNamesForUser(String username)
+    throws UserNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the user.
    *
    * @param username the username identifying the user

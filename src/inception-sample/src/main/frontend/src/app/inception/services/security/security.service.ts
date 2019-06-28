@@ -106,19 +106,19 @@ export class SecurityService {
 
     let params = new HttpParams();
 
-    if (filter !== null) {
+    if (!!filter) {
       params = params.append('filter', filter);
     }
 
-    if (sortDirection !== null) {
+    if (!!sortDirection) {
       params = params.append('sortDirection', sortDirection);
     }
 
-    if (pageIndex !== null) {
+    if (!!pageIndex) {
       params = params.append('pageIndex', String(pageIndex));
     }
 
-    if (pageSize !== null) {
+    if (!!pageSize) {
       params = params.append('pageSize', String(pageSize));
     }
 
@@ -241,23 +241,23 @@ export class SecurityService {
 
     let params = new HttpParams();
 
-    if (filter !== null) {
+    if (!!filter) {
       params = params.append('filter', filter);
     }
 
-    if (sortBy !== null) {
+    if (!!sortBy) {
       params = params.append('sortBy', String(sortBy));
     }
 
-    if (sortDirection !== null) {
+    if (!!sortDirection) {
       params = params.append('sortDirection', sortDirection);
     }
 
-    if (pageIndex !== null) {
+    if (!!pageIndex) {
       params = params.append('pageIndex', String(pageIndex));
     }
 
-    if (pageSize !== null) {
+    if (!!pageSize) {
       params = params.append('pageSize', String(pageSize));
     }
 

@@ -19,6 +19,7 @@ package digital.inception.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
@@ -53,7 +54,7 @@ import javax.validation.Validator;
 @RestController
 @RequestMapping(value = "/api/reporting")
 @SuppressWarnings({ "unused" })
-public class ReportingRestController
+public class ReportingRestController extends SecureRestController
 {
   /**
    * The data source used to provide connections to the application database.

@@ -47,13 +47,10 @@ export class NavigationService {
     })).subscribe();
   }
 
-  private static hasAccessToNavigationItem(navigationItemFunctionCodes: string[],
-                                           sessionFunctionCodes: string[]): boolean {
-    for (let i = 0; i < navigationItemFunctionCodes.length; i++) {
-      for (let j = 0; j < sessionFunctionCodes.length; j++) {
-        if (navigationItemFunctionCodes[i] === sessionFunctionCodes[j]) {
-          return true;
-        }
+  private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
+    for (let i = 0; i < authorities.length; i++) {
+      if (session.hasAuthority(authorities[i])) {
+        return true;
       }
     }
 
@@ -81,18 +78,18 @@ export class NavigationService {
     for (let i = 0; i < navigationItems.length; i++) {
       const navigationItem: NavigationItem = navigationItems[i];
 
-      const functionCodes = (navigationItem.functionCodes == null) ? [] :
-        navigationItem.functionCodes;
+      const authorities = (navigationItem.authorities == null) ? [] :
+        navigationItem.authorities;
 
-      if (functionCodes.length > 0) {
+      if (authorities.length > 0) {
         if (session) {
-          if (NavigationService.hasAccessToNavigationItem(functionCodes, session.functionCodes)) {
+          if (NavigationService.hasAccessToNavigationItem(authorities, session)) {
             const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
               navigationItem.children, session);
 
             filteredNavigationItems.push(
               new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
-                navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+                navigationItem.authorities, filteredChildNavigationItems, navigationItem.cssClass,
                 navigationItem.variant, navigationItem.badge, navigationItem.divider,
                 navigationItem.title));
           }
@@ -103,7 +100,7 @@ export class NavigationService {
 
         filteredNavigationItems.push(
           new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
-            navigationItem.functionCodes, filteredChildNavigationItems, navigationItem.cssClass,
+            navigationItem.authorities, filteredChildNavigationItems, navigationItem.cssClass,
             navigationItem.variant, navigationItem.badge, navigationItem.divider,
             navigationItem.title));
       }

@@ -34,7 +34,7 @@ const routes: Routes = [{
   component: ConfigurationsComponent,
   data: {
     title: '',
-    functionCodes: ['Configuration.ConfigurationAdministration']
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
   }
 }, {
   path: 'new-configuration',
@@ -42,7 +42,7 @@ const routes: Routes = [{
   component: NewConfigurationComponent,
   data: {
     title: 'New Configuration',
-    functionCodes: ['Configuration.ConfigurationAdministration']
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
   }
 }, {
   path: ':key',
@@ -50,7 +50,7 @@ const routes: Routes = [{
   component: EditConfigurationComponent,
   data: {
     title: '{key}',
-    functionCodes: ['Configuration.ConfigurationAdministration']
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
   }
 }
 ];
