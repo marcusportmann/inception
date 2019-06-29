@@ -386,8 +386,7 @@ public class MessagingServlet extends HttpServlet
             message.getId(), message.getUsername(), message.getDeviceId()), e);
 
         MessageResult messageResult = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
-            String.format("Failed to process the message (%s): %s", message.getId(),
-            e.getMessage()), e);
+            String.format("Failed to process the message (%s)", message.getId()), e);
 
         writeResponseDocument(messageResult.toWBXML(), response);
 

@@ -18,7 +18,7 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {InceptionModule} from '../../inception.module';
 import {SecurityService} from '../../services/security/security.service';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {SessionService} from '../../services/session/session.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
@@ -26,10 +26,13 @@ import {SpinnerService} from '../../services/layout/spinner.service';
 import {SessionServiceError} from '../../services/session/session.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {MatDialogRef} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
+import {Session} from "../../services/session/session";
+import {Organization} from "../../services/security/organization";
+import {Organizations} from "../../services/security/organizations";
 
 /**
  * The LoginComponent class implements the login component.
@@ -123,15 +126,51 @@ export class LoginComponent {
 
       this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
         .pipe(first())
-        .subscribe(session => {
-          this.spinnerService.hideSpinner();
+        .subscribe((session: Session)  => {
 
-          if (session.organizations.length === 1) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          } else {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute});
+          if (session.hasRole('Administrator')) {
+            this.securityService.getOrganizations()
+              .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+              .subscribe((organizations: Organizations) => {
+                if (organizations.total === 1) {
+                  session.organization = organizations.organizations[0];
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigate(['/']);
+                } else {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute, state: {organizations: organizations.organizations}});
+                }
+              }, (error:Error) => {
+                if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+                  (error instanceof SystemUnavailableError)) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              })
+          }
+          else {
+            this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
+              .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+              .subscribe((organizations: Organization[]) => {
+                if (organizations.length === 1) {
+                  session.organization = organizations[0];
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigate(['/']);
+                } else {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute, state: {organizations: organizations}});
+                }
+              }, (error:Error) => {
+                if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+                  (error instanceof SystemUnavailableError)) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              });
           }
         }, (error: Error) => {
           this.spinnerService.hideSpinner();

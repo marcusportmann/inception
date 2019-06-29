@@ -15,7 +15,10 @@
  */
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {finalize, first} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -47,9 +50,9 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['key', 'value', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private configurationService: ConfigurationService,

@@ -48,11 +48,10 @@ DROP TABLE IF EXISTS security.role_to_group_map CASCADE;
 DROP TABLE IF EXISTS security.function_to_role_map CASCADE;
 DROP TABLE IF EXISTS security.roles CASCADE;
 DROP TABLE IF EXISTS security.functions CASCADE;
+DROP TABLE IF EXISTS security.user_to_group_map CASCADE;
 DROP TABLE IF EXISTS security.groups CASCADE;
-DROP TABLE IF EXISTS security.internal_user_to_internal_group_map CASCADE;
-DROP TABLE IF EXISTS security.internal_groups CASCADE;
-DROP TABLE IF EXISTS security.internal_users_password_history CASCADE;
-DROP TABLE IF EXISTS security.internal_users CASCADE;
+DROP TABLE IF EXISTS security.users_password_history CASCADE;
+DROP TABLE IF EXISTS security.users CASCADE;
 DROP TABLE IF EXISTS security.user_directory_to_organization_map CASCADE;
 DROP TABLE IF EXISTS security.user_directories CASCADE;
 DROP TABLE IF EXISTS security.user_directory_types CASCADE;
@@ -556,7 +555,7 @@ COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id 
 COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 
-CREATE TABLE security.internal_users (
+CREATE TABLE security.users (
   id                UUID    NOT NULL,
   user_directory_id UUID    NOT NULL,
   username          TEXT    NOT NULL,
@@ -571,108 +570,69 @@ CREATE TABLE security.internal_users (
   password_expiry   TIMESTAMP,
 
   PRIMARY KEY (id),
-  CONSTRAINT internal_users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
+  CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
 );
 
-CREATE INDEX internal_users_user_directory_id_ix ON security.internal_users(user_directory_id);
+CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
-CREATE UNIQUE INDEX internal_users_username_ix ON security.internal_users(username);
+CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-COMMENT ON COLUMN security.internal_users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.internal_users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal user is associated with';
+COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with';
 
-COMMENT ON COLUMN security.internal_users.username IS 'The username for the internal user';
+COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
-COMMENT ON COLUMN security.internal_users.status IS 'The status for the internal user';
+COMMENT ON COLUMN security.users.status IS 'The status for the user';
 
-COMMENT ON COLUMN security.internal_users.first_name IS 'The first name for the internal user';
+COMMENT ON COLUMN security.users.first_name IS 'The first name for the user';
 
-COMMENT ON COLUMN security.internal_users.last_name IS 'The last name for the internal user';
+COMMENT ON COLUMN security.users.last_name IS 'The last name for the user';
 
-COMMENT ON COLUMN security.internal_users.phone IS 'The phone number for the internal user';
+COMMENT ON COLUMN security.users.phone IS 'The phone number for the user';
 
-COMMENT ON COLUMN security.internal_users.mobile IS 'The mobile number for the internal user';
+COMMENT ON COLUMN security.users.mobile IS 'The mobile number for the user';
 
-COMMENT ON COLUMN security.internal_users.email IS 'The e-mail address for the internal user';
+COMMENT ON COLUMN security.users.email IS 'The e-mail address for the user';
 
-COMMENT ON COLUMN security.internal_users.password IS 'The password for the internal user';
+COMMENT ON COLUMN security.users.password IS 'The password for the user';
 
-COMMENT ON COLUMN security.internal_users.password_attempts IS 'The number of failed attempts to authenticate the internal user';
+COMMENT ON COLUMN security.users.password_attempts IS 'The number of failed attempts to authenticate the user';
 
-COMMENT ON COLUMN security.internal_users.password_expiry IS 'The date and time that the internal user''s password expires';
+COMMENT ON COLUMN security.users.password_expiry IS 'The date and time that the user''s password expires';
 
 
-CREATE TABLE security.internal_users_password_history (
+CREATE TABLE security.users_password_history (
   id               UUID      NOT NULL,
-  internal_user_id UUID      NOT NULL,
+  user_id UUID      NOT NULL,
   changed          TIMESTAMP NOT NULL,
   password         TEXT,
 
   PRIMARY KEY (id),
-  CONSTRAINT internal_users_password_history_internal_user_id_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(id) ON DELETE CASCADE
+  CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE
 );
 
-CREATE INDEX internal_users_password_history_internal_user_id_ix ON security.internal_users_password_history(internal_user_id);
+CREATE INDEX users_password_history_user_id_ix ON security.users_password_history(user_id);
 
-CREATE INDEX internal_users_password_history_changed_ix ON security.internal_users_password_history(changed);
+CREATE INDEX users_password_history_changed_ix ON security.users_password_history(changed);
 
-COMMENT ON COLUMN security.internal_users_password_history.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
+COMMENT ON COLUMN security.users_password_history.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
 
-COMMENT ON COLUMN security.internal_users_password_history.internal_user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
+COMMENT ON COLUMN security.users_password_history.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.internal_users_password_history.changed IS 'When the password change took place for the internal user';
+COMMENT ON COLUMN security.users_password_history.changed IS 'When the password change took place for the user';
 
-COMMENT ON COLUMN security.internal_users_password_history.password IS 'The password for the internal user';
-
-
-CREATE TABLE security.internal_groups (
-  id                UUID NOT NULL,
-  user_directory_id UUID NOT NULL,
-  groupname         TEXT NOT NULL,
-  description       TEXT,
-
-  PRIMARY KEY (id),
-  CONSTRAINT internal_groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
-);
-
-CREATE INDEX internal_groups_user_directory_id_ix ON security.internal_groups(user_directory_id);
-
-CREATE INDEX internal_groups_groupname_ix ON security.internal_groups(groupname);
-
-COMMENT ON COLUMN security.internal_groups.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
-
-COMMENT ON COLUMN security.internal_groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the internal group is associated with';
-
-COMMENT ON COLUMN security.internal_groups.groupname IS 'The group name for the internal group';
-
-COMMENT ON COLUMN security.internal_groups.description IS 'A description for the internal group';
-
-
-CREATE TABLE security.internal_user_to_internal_group_map (
-  internal_user_id  UUID NOT NULL,
-  internal_group_id UUID NOT NULL,
-
-  PRIMARY KEY (internal_user_id, internal_group_id),
-  CONSTRAINT internal_user_to_internal_group_map_internal_user_fk FOREIGN KEY (internal_user_id) REFERENCES security.internal_users(id) ON DELETE CASCADE,
-  CONSTRAINT internal_user_to_internal_group_map_internal_group_fk FOREIGN KEY (internal_group_id) REFERENCES security.internal_groups(id) ON DELETE CASCADE
-);
-
-CREATE INDEX internal_user_to_internal_group_map_internal_user_id_ix ON security.internal_user_to_internal_group_map(internal_user_id);
-
-CREATE INDEX internal_user_to_internal_group_map_internal_group_id_ix ON security.internal_user_to_internal_group_map(internal_group_id);
-
-COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal user';
-
-COMMENT ON COLUMN security.internal_user_to_internal_group_map.internal_group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the internal group';
+COMMENT ON COLUMN security.users_password_history.password IS 'The password for the user';
 
 
 CREATE TABLE security.groups (
   id                UUID NOT NULL,
   user_directory_id UUID NOT NULL,
   groupname         TEXT NOT NULL,
+  description       TEXT,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
 );
 
 CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
@@ -684,6 +644,26 @@ COMMENT ON COLUMN security.groups.id IS 'The Universally Unique Identifier (UUID
 COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN security.groups.groupname IS 'The group name for the group';
+
+COMMENT ON COLUMN security.groups.description IS 'A description for the group';
+
+
+CREATE TABLE security.user_to_group_map (
+  user_id  UUID NOT NULL,
+  group_id UUID NOT NULL,
+
+  PRIMARY KEY (user_id, group_id),
+  CONSTRAINT user_to_group_map_user_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE,
+  CONSTRAINT user_to_group_map_group_fk FOREIGN KEY (group_id) REFERENCES security.groups(id) ON DELETE CASCADE
+);
+
+CREATE INDEX user_to_group_map_user_id_ix ON security.user_to_group_map(user_id);
+
+CREATE INDEX user_to_group_map_group_id_ix ON security.user_to_group_map(group_id);
+
+COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+
+COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 CREATE TABLE security.functions (
@@ -901,7 +881,7 @@ COMMENT ON COLUMN sample.data.timestamp_value IS 'The timestamp value for the da
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO security.organizations (id, name, status)
-  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'MMP', 1);
+  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
 INSERT INTO security.user_directory_types (id, name, user_directory_class)
   VALUES ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
@@ -909,54 +889,40 @@ INSERT INTO security.user_directory_types (id, name, user_directory_class)
   VALUES ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type_id, name, configuration)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Administration User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
   VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
-  VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators', 'Organization Administrators');
 
-INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
+INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
-
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators');
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('758c0a2a-f3a3-4561-bebc-90569291976e', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Organization Administrators');
 
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Codes.CodeAdministration', 'Code Administration', 'Code Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Process.ViewProcess', 'View Process', 'View Process');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Reporting.ViewReport', 'View Report', 'View Report');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
-
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Security.GroupAdministration', 'Group Administration', 'Group Administration');
 INSERT INTO security.functions (id, code, name, description)
@@ -968,45 +934,16 @@ INSERT INTO security.functions (id, code, name, description)
 INSERT INTO security.functions (id, code, name, description)
   VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration', 'User Administration');
 INSERT INTO security.functions (id, code, name, description)
+  VALUES ('545be1e3-71fe-4441-8dd5-416dc6200066', 'Security.UserDirectoryAdministration', 'User Directory Administration', 'User Directory Administration');
+INSERT INTO security.functions (id, code, name, description)
   VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
 
 INSERT INTO security.roles (id, name, description)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
 INSERT INTO security.roles (id, name, description)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
-
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.Dashboard function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Application.SecureHome function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Codes.CodeAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Configuration.ConfigurationAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Error.ErrorReportAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ProcessDefinitionAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Process.ViewProcess function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ReportDefinitionAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Reporting.ViewReport function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Scheduler.SchedulerAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.GroupAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.OrganizationAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.ResetUserPassword function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.SecurityAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserAdministration function to the Administrator role
-INSERT INTO security.function_to_role_map (function_id, role_id)
-  VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '100fafb4-783a-4204-a22d-9e27335dc2ea'); -- Assign the Security.UserGroups function to the Administrator role
+INSERT INTO security.roles (id, name, description)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
 
 INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
@@ -1021,10 +958,15 @@ INSERT INTO security.function_to_role_map (function_id, role_id)
 INSERT INTO security.function_to_role_map (function_id, role_id)
   VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
 
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
+INSERT INTO security.function_to_role_map (function_id, role_id)
+  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+
 INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '758c0a2a-f3a3-4561-bebc-90569291976e');
+  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
 
 INSERT INTO messaging.message_types (id, name)
   VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
@@ -1094,43 +1036,90 @@ INSERT INTO test.test_data (id, name, value)
   VALUES (8, 'Sample Name 8', 'Sample Value 8');
 INSERT INTO test.test_data (id, name, value)
   VALUES (9, 'Sample Name 9', 'Sample Value 9');
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
 INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b64d', 'Sample', 1);
 
 INSERT INTO security.user_directories (id, type_id, name, configuration)
-  VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Sample Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Sample User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 --INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, CONFIGURATION) VALUES
 --  ('595d13ac-22d6-4ce2-b898-3add4658a748', 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>sds.inception.digital</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>uid=system,ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=test,ou=applications,o=MMP</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>SharedBaseDN</name><value>ou=staff,o=MMP</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserPasswordExpiryAttribute</name><value>passwordexpiry</value></parameter><parameter><name>UserPasswordAttemptsAttribute</name><value>passwordattempts</value></parameter><parameter><name>UserPasswordHistoryAttribute</name><value>passwordhistory</value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>SupportPasswordHistory</name><value>true</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>PasswordHistoryMaxLength</name><value>128</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', '204e5b8f-48e7-4354-bd15-753e6543b64d');
-INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 --INSERT INTO SECURITY.USER_DIRECTORY_TO_ORGANIZATION_MAP (USER_DIRECTORY_ID, ORGANIZATION_ID) VALUES
 --  ('595d13ac-22d6-4ce2-b898-3add4658a748', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 
-INSERT INTO security.internal_users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sample', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, NULL);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'joe', 1, 'Joe', 'Bloggs', '', '', 'joe@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sally', 1, 'Sally', 'Smith', '', '', 'sally@sample.guru', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('01166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Bob.Smith@peoples.com'), 1, 'Bob', 'Smith', '', '', 'Bob.Smith@peoples.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('02166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Jamiya.Stuart@advantageepic.com'), 1, 'Jamiya', 'Stuart', '', '', 'Jamiya.Stuart@advantageepic.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('03166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Melany.Reed@bulkmailsweetpotato.com'), 1, 'Melany', 'Reed', '', '', 'Melany.Reed@bulkmailsweetpotato.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('04166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Brendan.Best@chromaticvalley.com'), 1, 'Brendan', 'Best', '', '', 'Brendan.Best@chromaticvalley.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('05166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Reuben.Ali@cove.com'), 1, 'Reuben', 'Ali', '', '', 'Reuben.Ali@cove.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('06166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Jairo.Hull@turbineluster.com'), 1, 'Jairo', 'Hull', '', '', 'Jairo.Hull@turbineluster.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('07166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Nickolas.Sampson@leafblower.com'), 1, 'Nickolas', 'Sampson', '', '', 'Nickolas.Sampson@leafblower.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('08166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amiah.Sanford@ dating.com'), 1, 'Amiah', 'Sanford', '', '', 'Amiah.Sanford@ dating.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('09166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Janae.Reeves@jollyfracture.com'), 1, 'Janae', 'Reeves', '', '', 'Janae.Reeves@jollyfracture.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('10166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Sara.Meza@bestsellerprices.com'), 1, 'Sara', 'Meza', '', '', 'Sara.Meza@bestsellerprices.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('11166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Gauge.Barrera@perspectivedealer.com'), 1, 'Gauge', 'Barrera', '', '', 'Gauge.Barrera@perspectivedealer.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('12166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Nickolas.Stone@healing.com'), 1, 'Nickolas', 'Stone', '', '', 'Nickolas.Stone@healing.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('13166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Nayeli.Mcknight@retro.com'), 1, 'Nayeli', 'Mcknight', '', '', 'Nayeli.Mcknight@retro.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('14166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Cristofer.Singleton@glowing.com'), 1, 'Cristofer', 'Singleton', '', '', 'Cristofer.Singleton@glowing.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('15166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Gunnar.Manning@assets.com'), 1, 'Gunnar', 'Manning', '', '', 'Gunnar.Manning@assets.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('16166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Adalyn.Doyle@tadpole.com'), 1, 'Adalyn', 'Doyle', '', '', 'Adalyn.Doyle@tadpole.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('17166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Oliver.Hoffman@beam.com'), 1, 'Oliver', 'Hoffman', '', '', 'Oliver.Hoffman@beam.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('18166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Ayana.Mccarty@cucumber.com'), 1, 'Ayana', 'Mccarty', '', '', 'Ayana.Mccarty@cucumber.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('19166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Nigel.Cohen@recordplayer.com'), 1, 'Nigel', 'Cohen', '', '', 'Nigel.Cohen@recordplayer.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('20166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Andrew.Wheeler@greatplainsfinances.com'), 1, 'Andrew', 'Wheeler', '', '', 'Andrew.Wheeler@greatplainsfinances.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('21166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amelia.May@opera.com'), 1, 'Amelia', 'May', '', '', 'Amelia.May@opera.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('22166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amir.Wells@refrigeratorsignal.com'), 1, 'Amir', 'Wells', '', '', 'Amir.Wells@refrigeratorsignal.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
-INSERT INTO security.internal_groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
   VALUES ('956c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Organization Administrators', 'Organization Administrators');
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
+  VALUES ('146c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Password Resetters', 'Password Resetters');
 
-INSERT INTO security.internal_user_to_internal_group_map (internal_user_id, internal_group_id)
+INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '956c5550-cd3d-42de-8660-7749e1b4df52');
-
-INSERT INTO security.groups (id, user_directory_id, groupname)
-  VALUES ('956c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Organization Administrators');
+INSERT INTO security.user_to_group_map (user_id, group_id)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
 INSERT INTO security.role_to_group_map (role_id, group_id)
   VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '956c5550-cd3d-42de-8660-7749e1b4df52');
+INSERT INTO security.role_to_group_map (role_id, group_id)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
 INSERT INTO sample.data (id, name, string_value)
   VALUES (1, 'Sample Name 1', 'Sample Value 1');
@@ -1284,13 +1273,13 @@ INSERT INTO security.organizations (id, name, status)
 INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b609', 'Test 9', 1);
 INSERT INTO security.organizations (id, name, status)
-  VALUES ('204e5b8f-48e7-4354-bd15-753e6543b610', 'Test 10', 1);  
-  
-  
-  
-  
-  
-  
+  VALUES ('204e5b8f-48e7-4354-bd15-753e6543b610', 'Test 10', 1);
+
+
+
+
+
+
 
 -- -------------------------------------------------------------------------------------------------
 -- SET PERMISSIONS
@@ -1324,11 +1313,10 @@ GRANT ALL ON table security.organizations TO sample;
 GRANT ALL ON table security.user_directory_types TO sample;
 GRANT ALL ON table security.user_directories TO sample;
 GRANT ALL ON table security.user_directory_to_organization_map TO sample;
-GRANT ALL ON table security.internal_users TO sample;
-GRANT ALL ON table security.internal_users_password_history TO sample;
-GRANT ALL ON table security.internal_groups TO sample;
-GRANT ALL ON table security.internal_user_to_internal_group_map TO sample;
+GRANT ALL ON table security.users TO sample;
+GRANT ALL ON table security.users_password_history TO sample;
 GRANT ALL ON table security.groups TO sample;
+GRANT ALL ON table security.user_to_group_map TO sample;
 GRANT ALL ON table security.functions TO sample;
 GRANT ALL ON table security.roles TO sample;
 GRANT ALL ON table security.function_to_role_map TO sample;

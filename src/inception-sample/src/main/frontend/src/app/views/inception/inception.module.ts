@@ -25,25 +25,25 @@ const routes: Routes = [{
   redirectTo: 'components/buttons'
 }, {
   path: 'components',
-  loadChildren: './components/components.module#ComponentsModule',
+  loadChildren: () => import('./components/components.module').then(m => m.ComponentsModule),
   data: {
     title: 'Components',
   }
 }, {
   path: 'form',
-  loadChildren: './form/form.module#FormModule',
+  loadChildren: () => import('./form/form.module').then(m => m.FormModule),
   data: {
     title: 'Form',
   }
 }, {
   path: 'tables',
-  loadChildren: './tables/tables.module#TablesModule',
+  loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
   data: {
     title: 'Tables',
   }
 }, {
   path: 'theme',
-  loadChildren: './theme/theme.module#ThemeModule',
+  loadChildren: () => import('./theme/theme.module').then(m => m.ThemeModule),
   data: {
     title: 'Theme',
   }

@@ -19,15 +19,17 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import java.util.UUID;
 
 /**
  * A <code>DuplicateUserDirectoryException</code> is thrown to indicate that a security operation
@@ -38,9 +40,10 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-  reason = "An organization with the specified name already exists")
-@WebFault(name = "DuplicateUserDirectoryException", targetNamespace = "http://security.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+    reason = "An organization with the specified name already exists")
+@WebFault(name = "DuplicateUserDirectoryException",
+    targetNamespace = "http://security.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class DuplicateUserDirectoryException extends ServiceException

@@ -743,7 +743,7 @@ public class WebServiceClientSecurityHelper
   }
 
   /**
-   * The <code>WebServiceClient</code> class stores the information for a web service
+   * The <code>WebServiceClient</code> class holds the information for a web service
    * client.
    *
    * @author Marcus Portmann

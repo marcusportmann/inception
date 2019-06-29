@@ -17,7 +17,7 @@
 import {UserStatus} from "./user-status";
 
 /**
- * The User class stores the information for a user.
+ * The User class holds the information for a user.
  *
  * @author Marcus Portmann
  */

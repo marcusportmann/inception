@@ -20,33 +20,33 @@ export const routes: Routes = [{
       ],
       data: {
         title: 'Dashboard',
-        functionCodes: ['Application.Dashboard']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Application.Dashboard']
       },
-      loadChildren: './views/dashboard/dashboard.module#DashboardModule'
+      loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
     }, {
       path: 'inception',
       data: {
         title: 'Inception'
       },
-      loadChildren: './views/inception/inception.module#InceptionModule'
+      loadChildren: () => import('./views/inception/inception.module').then(m => m.InceptionModule)
     }, {
       path: 'menu1',
       data: {
         title: 'Menu 1'
       },
-      loadChildren: './views/menu1/menu1.module#Menu1Module'
+      loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
     }, {
       path: 'menu2',
       data: {
         title: 'Menu 2'
       },
-      loadChildren: './views/menu2/menu2.module#Menu2Module'
+      loadChildren: () => import('./views/menu2/menu2.module').then(m => m.Menu2Module)
     }, {
       path: 'menu3',
       data: {
         title: 'Menu 3'
       },
-      loadChildren: './views/menu3/menu3.module#Menu3Module'
+      loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
     },
 
       // Administration routes
@@ -65,13 +65,13 @@ export const routes: Routes = [{
             data: {
               title: 'Code Categories'
             },
-            loadChildren: './inception/views/codes/codes.module#CodesModule'
+            loadChildren: () => import('./inception/views/codes/codes.module').then(m => m.CodesModule)
           }, {
             path: 'configuration',
             data: {
               title: 'Configuration'
             },
-            loadChildren: './inception/views/configuration/configuration.module#ConfigurationModule'
+            loadChildren: () => import('./inception/views/configuration/configuration.module').then(m => m.ConfigurationModule)
           }
           ]
         }, {
@@ -79,7 +79,7 @@ export const routes: Routes = [{
           data: {
             title: 'Security'
           },
-          loadChildren: './inception/views/security/security.module#SecurityModule'
+          loadChildren: () => import('./inception/views/security/security.module').then(m => m.SecurityModule)
         }
         ]
       }
@@ -90,14 +90,14 @@ export const routes: Routes = [{
   {
     path: 'login',
     component: SimpleContainerComponent,
-    loadChildren: './inception/views/login/login.module#LoginModule'
+    loadChildren: () => import('./inception/views/login/login.module').then(m => m.LoginModule)
   },
 
   // Send Error Report route
   {
     path: 'error',
     component: SimpleContainerComponent,
-    loadChildren: './inception/views/error/error.module#ErrorModule'
+    loadChildren: () => import('./inception/views/error/error.module').then(m => m.ErrorModule)
   },
 
   // Default route for invalid paths

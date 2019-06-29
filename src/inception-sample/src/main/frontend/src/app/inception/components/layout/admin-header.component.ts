@@ -66,7 +66,7 @@ import {Session} from '../../services/session/session';
         <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-full-name d-md-down-none">{{ username() | async }}</span>
+            <span class="user-full-name d-md-down-none">{{ userFullName() | async }}</span>
           </a>
         </li>
 
@@ -164,10 +164,10 @@ export class AdminHeaderComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  username(): Observable<string> {
+  userFullName(): Observable<string> {
     return this.sessionService.session.pipe(map((session: Session) => {
       if (session) {
-        return session.username;
+        return session.userFullName;
       } else {
         return '';
       }

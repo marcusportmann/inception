@@ -15,7 +15,7 @@
  */
 
 /**
- * The ErrorReportSummary class stores the summary information for an error report.
+ * The ErrorReportSummary class holds the summary information for an error report.
  *
  * @author Marcus Portmann
  */

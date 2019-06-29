@@ -121,7 +121,7 @@ public class IDGenerator
             catch (Throwable e)
             {
               throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the "
-                  + "entity of type (%s) from the idgenerator table: %s", type, e.getMessage()), e);
+                  + "entity of type (%s) from the idgenerator table", type), e);
             }
           }
           );
@@ -129,7 +129,7 @@ public class IDGenerator
     catch (TransactionException e)
     {
       throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the entity "
-          + "of type (%s) from the idgenerator table: %s", type, e.getMessage()), e);
+          + "of type (%s) from the idgenerator table", type), e);
     }
   }
 

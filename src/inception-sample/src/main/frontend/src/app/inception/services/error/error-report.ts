@@ -15,7 +15,7 @@
  */
 
 /**
- * The ErrorReport class stores the information for an error report.
+ * The ErrorReport class holds the information for an error report.
  *
  * @author Marcus Portmann
  */

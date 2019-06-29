@@ -58,10 +58,26 @@ public class SecurityService
   implements ISecurityService, InitializingBean
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the default internal user
+   * The name of the Administrators group.
+   */
+  public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
+
+  /**
+   * The name of the Administrator role.
+   */
+  public static final String ADMINISTRATOR_ROLE_NAME = "Administrator";
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the Administrators group.
+   */
+  public static final UUID ADMINISTRATORS_GROUP_ID = UUID.fromString(
+      "a9e01fa2-f017-46e2-8187-424bf50a4f33");
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the Administration user
    * directory.
    */
-  public static final UUID DEFAULT_INTERNAL_USER_DIRECTORY_ID = UUID.fromString(
+  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID = UUID.fromString(
       "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
@@ -265,8 +281,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to authenticate the user (%s): %s",
-          username, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to authenticate the user (%s)",
+          username), e);
     }
   }
 
@@ -341,7 +357,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s): %s", username, e.getMessage()), e);
+          "Failed to change the password for the user (%s)", username), e);
     }
   }
 
@@ -384,8 +400,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to create the function (%s): %s",
-          function.getCode(), e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to create the function (%s)",
+          function.getCode()), e);
     }
   }
 
@@ -498,21 +514,6 @@ public class SecurityService
             }
           }
         }
-
-        // Link the new organization to the default user directory
-        try (PreparedStatement statement = connection.prepareStatement(
-            addUserDirectoryToOrganizationSQL))
-        {
-          statement.setObject(1, DEFAULT_INTERNAL_USER_DIRECTORY_ID);
-          statement.setObject(2, organization.getId());
-
-          if (statement.executeUpdate() != 1)
-          {
-            throw new SecurityServiceException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                addUserDirectoryToOrganizationSQL));
-          }
-        }
       }
 
       try
@@ -532,8 +533,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to create the organization (%s): %s", organization.getId(), e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to create the organization (%s)",
+          organization.getId()), e);
     }
   }
 
@@ -603,9 +604,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to create the user directory (%s): %s", userDirectory.getName(), e.getMessage()),
-          e);
+      throw new SecurityServiceException(String.format("Failed to create the user directory (%s)",
+          userDirectory.getName()), e);
     }
   }
 
@@ -643,8 +643,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the function (%s): %s",
-          code, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to delete the function (%s)", code),
+          e);
     }
   }
 
@@ -705,8 +705,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to delete the organization (%s): %s", organizationId, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to delete the organization (%s)",
+          organizationId), e);
     }
   }
 
@@ -768,8 +768,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to delete the user directory (%s): %s", userDirectoryId, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to delete the user directory (%s)",
+          userDirectoryId), e);
     }
   }
 
@@ -836,8 +836,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the function (%s): %s",
-          code, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to retrieve the function (%s)",
+          code), e);
     }
   }
 
@@ -892,8 +892,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the functions: %s",
-          e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the functions", e);
     }
   }
 
@@ -1019,11 +1018,35 @@ public class SecurityService
   public int getNumberOfOrganizations()
     throws SecurityServiceException
   {
+    return getNumberOfOrganizations(null);
+  }
+
+  /**
+   * Retrieve the number of organizations
+   *
+   * @param filter the optional filter to apply to the organizations
+   *
+   * @return the number of organizations
+   */
+  @Override
+  public int getNumberOfOrganizations(String filter)
+    throws SecurityServiceException
+  {
     String getNumberOfOrganizationsSQL = "SELECT COUNT(id) FROM security.organizations";
+
+    if (!StringUtils.isEmpty(filter))
+    {
+      getNumberOfOrganizationsSQL += " WHERE (UPPER(name) LIKE ?)";
+    }
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfOrganizationsSQL))
     {
+      if (!StringUtils.isEmpty(filter))
+      {
+        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
+      }
+
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -1038,8 +1061,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of organizations: %s", e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the number of organizations", e);
     }
   }
 
@@ -1052,11 +1074,35 @@ public class SecurityService
   public int getNumberOfUserDirectories()
     throws SecurityServiceException
   {
+    return getNumberOfUserDirectories(null);
+  }
+
+  /**
+   * Retrieve the number of user directories
+   *
+   * @param filter the optional filter to apply to the user directories
+   *
+   * @return the number of user directories
+   */
+  @Override
+  public int getNumberOfUserDirectories(String filter)
+    throws SecurityServiceException
+  {
     String getNumberOfUserDirectoriesSQL = "SELECT COUNT(id) FROM security.user_directories";
+
+    if (!StringUtils.isEmpty(filter))
+    {
+      getNumberOfUserDirectoriesSQL += " WHERE (UPPER(name) LIKE ?)";
+    }
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getNumberOfUserDirectoriesSQL))
     {
+      if (!StringUtils.isEmpty(filter))
+      {
+        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
+      }
+
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
@@ -1071,8 +1117,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of user directories: %s", e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the number of user directories", e);
     }
   }
 
@@ -1088,6 +1133,22 @@ public class SecurityService
   public int getNumberOfUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
+    return getNumberOfUsers(userDirectoryId, null);
+  }
+
+  /**
+   * Retrieve the number of users.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param filter          the optional filter to apply to the users
+   *
+   * @return the number of users
+   */
+  @Override
+  public int getNumberOfUsers(UUID userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null)
@@ -1095,7 +1156,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getNumberOfUsers();
+    return userDirectory.getNumberOfUsers(filter);
   }
 
   /**
@@ -1135,20 +1196,20 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the organization (%s): %s", organizationId, e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to retrieve the organization (%s)",
+          organizationId), e);
     }
   }
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   * associated with the user directory.
+   * the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   *         associated with the user directory
+   *         the user directory is associated with
    */
   @Override
   public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
@@ -1188,8 +1249,8 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the IDs for the organizations for the user directory (%s): %s",
-          userDirectoryId, e.getMessage()), e);
+          "Failed to retrieve the IDs for the organizations for the user directory (%s)",
+          userDirectoryId), e);
     }
   }
 
@@ -1222,8 +1283,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the organizations: %s",
-          e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the organizations", e);
     }
   }
 
@@ -1306,12 +1366,12 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the organizations associated with the user directory.
+   * Retrieve the organizations the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organizations associated with the user directory
+   * @return the organizations the user directory is associated with
    */
   @Override
   public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
@@ -1352,9 +1412,32 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the organizations associated with the user directory (%s): %s",
-          userDirectoryId, e.getMessage()), e);
+          "Failed to retrieve the organizations associated with the user directory (%s)",
+          userDirectoryId), e);
     }
+  }
+
+  /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param username        the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  @Override
+  public List<String> getRoleNamesForUser(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getRoleNamesForUser(username);
   }
 
   /**
@@ -1409,8 +1492,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directories: %s", e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the user directories", e);
     }
   }
 
@@ -1475,30 +1557,80 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered user directories: %s", e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the filtered user directories", e);
     }
   }
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
+   * user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
+   *         directories the organization is associated with
+   */
+  @Override
+  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    String getUserDirectoryIdsForOrganizationSQL =
+      "SELECT udtom.user_directory_id FROM security.user_directory_to_organization_map udtom "
+        + "WHERE udtom.organization_id = ?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+        getUserDirectoryIdsForOrganizationSQL))
+    {
+      if (!organizationExists(connection, organizationId))
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UUID> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(UUID.fromString(rs.getString(1)));
+        }
+
+        return list;
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+        "Failed to retrieve the IDs for the user directories associated with the organization (%s)",
+        organizationId), e);
+    }
+  }
+
+
+  /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectoriesForOrganizationSQL =
         "SELECT ud.id, ud.type_id, ud.name, ud.configuration FROM security.user_directories ud "
         + "INNER JOIN security.user_directory_to_organization_map udtom "
-        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
-        + "ON udtom.organization_id = o.id WHERE o.id=?";
+        + "ON ud.id = udtom.user_directory_id WHERE udtom.organization_id = ?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(
@@ -1517,19 +1649,7 @@ public class SecurityService
 
         while (rs.next())
         {
-          UserDirectory userDirectory = buildUserDirectoryFromResultSet(rs);
-
-          if (userDirectory.getId().equals(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID))
-          {
-            if (includeDefaultInternalUserDirectory)
-            {
-              list.add(userDirectory);
-            }
-          }
-          else
-          {
-            list.add(userDirectory);
-          }
+          list.add(buildUserDirectoryFromResultSet(rs));
         }
 
         return list;
@@ -1542,8 +1662,8 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directories associated with the organization (%s): %s",
-          organizationId, e.getMessage()), e);
+          "Failed to retrieve the user directories associated with the organization (%s)",
+          organizationId), e);
     }
   }
 
@@ -1586,7 +1706,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory (%s): %s", userDirectoryId, e.getMessage()), e);
+          "Failed to retrieve the user directory (%s)", userDirectoryId), e);
     }
   }
 
@@ -1641,8 +1761,124 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory ID for the user (%s): %s", username,
-          e.getMessage()), e);
+          "Failed to retrieve the user directory ID for the user (%s)", username), e);
+    }
+  }
+
+  /**
+   * Retrieve the summaries for the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directories
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the summaries for the user directories
+   */
+  @Override
+  public List<UserDirectorySummary> getUserDirectorySummaries(String filter,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+    throws SecurityServiceException
+  {
+    String getUserDirectorySummariesSQL = "SELECT id, type_id, name FROM security.user_directories";
+
+    if (!StringUtils.isEmpty(filter))
+    {
+      getUserDirectorySummariesSQL += " WHERE (UPPER(name) LIKE ?)";
+    }
+
+    getUserDirectorySummariesSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
+        ? "DESC"
+        : "ASC");
+
+    if ((pageIndex != null) && (pageSize != null))
+    {
+      getUserDirectorySummariesSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
+
+    }
+    else
+    {
+      getUserDirectorySummariesSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+    }
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(getUserDirectorySummariesSQL))
+    {
+      if (!StringUtils.isEmpty(filter))
+      {
+        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
+
+        statement.setString(1, filterBuffer);
+      }
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectorySummary> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildUserDirectorySummaryFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(
+          "Failed to retrieve the filtered summaries for the user directories", e);
+    }
+  }
+
+  /**
+   * Retrieve the summaries for the user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   *
+   * @return the summaries for the user directories the organization is associated with
+   */
+  @Override
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    String getUserDirectorySummariesForOrganizationSQL =
+        "SELECT ud.id, ud.type_id, ud.name FROM security.user_directories ud "
+        + "INNER JOIN security.user_directory_to_organization_map udtom "
+        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
+        + "ON udtom.organization_id = o.id WHERE o.id=?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+          getUserDirectorySummariesForOrganizationSQL))
+    {
+      if (!organizationExists(connection, organizationId))
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UserDirectorySummary> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(buildUserDirectorySummaryFromResultSet(rs));
+        }
+
+        return list;
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format("Failed to retrieve the summaries for the"
+          + " user directories associated with the organization (%s)", organizationId), e);
     }
   }
 
@@ -1676,8 +1912,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory types: %s", e.getMessage()), e);
+      throw new SecurityServiceException("Failed to retrieve the user directory types", e);
     }
   }
 
@@ -1709,6 +1944,7 @@ public class SecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
+   * @param sortBy          the optional method used to sort the users e.g. by last name
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
@@ -1716,8 +1952,8 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(UUID userDirectoryId, String filter, SortDirection sortDirection,
-      Integer pageIndex, Integer pageSize)
+  public List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1727,7 +1963,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getUsers(filter, sortDirection, pageIndex, pageSize);
+    return userDirectory.getUsers(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -1941,8 +2177,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to update the function (%s): %s",
-          function.getCode(), e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to update the function (%s)",
+          function.getCode()), e);
     }
   }
 
@@ -2003,8 +2239,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to update the organization (%s): %s", organization.getId(), e.getMessage()), e);
+      throw new SecurityServiceException(String.format("Failed to update the organization (%s)",
+          organization.getId()), e);
     }
   }
 
@@ -2052,16 +2288,17 @@ public class SecurityService
 
       if (statement.executeUpdate() != 1)
       {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            updateUserDirectorySQL));
+        throw new UserDirectoryNotFoundException(userDirectory.getId());
       }
+    }
+    catch (UserDirectoryNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to update the user directory (%s): %s", userDirectory.getName(), e.getMessage()),
-          e);
+      throw new SecurityServiceException(String.format("Failed to update the user directory (%s)",
+          userDirectory.getName()), e);
     }
   }
 
@@ -2134,6 +2371,26 @@ public class SecurityService
   }
 
   /**
+   * Create a new <code>UserDirectorySummary</code> instance and populate it with the contents of
+   * the current row in the specified <code>ResultSet</code>.
+   *
+   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+   *           <code>UserDirectorySummary</code> instance
+   *
+   * @return the populated <code>UserDirectorySummary</code> instance
+   */
+  private UserDirectorySummary buildUserDirectorySummaryFromResultSet(ResultSet rs)
+    throws SQLException
+  {
+    UserDirectorySummary userDirectorySummary = new UserDirectorySummary();
+    userDirectorySummary.setId(UUID.fromString(rs.getString(1)));
+    userDirectorySummary.setTypeId(UUID.fromString(rs.getString(2)));
+    userDirectorySummary.setName(rs.getString(3));
+
+    return userDirectorySummary;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function with
    * the specified code.
    *
@@ -2180,7 +2437,7 @@ public class SecurityService
     throws SecurityServiceException
   {
     String getInternalUserDirectoryIdForUserSQL = "SELECT user_directory_id FROM "
-        + "security.internal_users WHERE UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
+        + "security.users WHERE UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(

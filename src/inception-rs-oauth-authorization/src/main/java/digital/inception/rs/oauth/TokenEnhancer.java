@@ -20,6 +20,7 @@ package digital.inception.rs.oauth;
 
 import digital.inception.security.ISecurityService;
 import digital.inception.security.Organization;
+import digital.inception.security.User;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -77,32 +79,32 @@ public class TokenEnhancer
 
     try
     {
-      Object principal = authentication.getPrincipal();
+      User user = User.class.isInstance(authentication.getUserAuthentication().getDetails())
+          ? User.class.cast(authentication.getUserAuthentication().getDetails())
+          : null;
 
-      String username;
-
-      if (principal instanceof String)
+      if (user != null)
       {
-        username = principal.toString();
+        additionalInfo.put("user_directory_id", user.getUserDirectoryId().toString());
+
+        if ((!StringUtils.isEmpty(user.getFirstName()))
+            && (!StringUtils.isEmpty(user.getFirstName())))
+        {
+          additionalInfo.put("user_full_name", user.getFirstName() + " " + user.getLastName());
+        }
+        else if (!StringUtils.isEmpty(user.getFirstName()))
+        {
+          additionalInfo.put("user_full_name", user.getFirstName());
+        }
+        else if (!StringUtils.isEmpty(user.getEmail()))
+        {
+          additionalInfo.put("user_full_name", user.getEmail());
+        }
+        else
+        {
+          additionalInfo.put("user_full_name", user.getUsername());
+        }
       }
-      else if (principal instanceof UserDetails)
-      {
-        username = ((UserDetails) principal).getUsername();
-      }
-      else
-      {
-        throw new RuntimeException("Unexpected principal type (" + principal.getClass().getName()
-            + ")");
-      }
-
-      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
-
-      additionalInfo.put("userDirectoryId", userDirectoryId.toString());
-
-      List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
-          userDirectoryId);
-
-      additionalInfo.put("organizations", organizations);
     }
     catch (Throwable e)
     {

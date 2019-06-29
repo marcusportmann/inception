@@ -11,7 +11,7 @@ CREATE TABLE error.error_reports (
   application_id      VARCHAR(100)  NOT NULL,
   application_version VARCHAR(50)   NOT NULL,
   description         VARCHAR(4000) NOT NULL,
-  detail              VARCHAR(4000) NOT NULL,
+  detail              CLOB          NOT NULL,
   created             TIMESTAMP     NOT NULL,
   who                 VARCHAR(1000),
   device_id           VARCHAR(50),

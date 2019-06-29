@@ -28,6 +28,7 @@ import {OverviewComponent} from './overview.component';
 import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
 import {UsersComponent} from './users.component';
 
+
 const routes: Routes = [{
   path: '',
   redirectTo: 'overview'
@@ -48,7 +49,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: OrganizationsComponent,
     data: {
-      functionCodes: ['Security.OrganizationAdministration']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
     }
   },
 
@@ -61,7 +62,7 @@ const routes: Routes = [{
       component: NewOrganizationComponent,
       data: {
         title: 'New Organization',
-        functionCodes: ['Security.OrganizationAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
       }
     },
     {
@@ -72,7 +73,7 @@ const routes: Routes = [{
       component: EditOrganizationComponent,
       data: {
         title: '{organizationId}',
-        functionCodes: ['Security.OrganizationAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
       }
     }
     */
@@ -87,7 +88,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: UsersComponent,
     data: {
-      functionCodes: ['Security.UserAdministration']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']
     }
   },
 
@@ -100,7 +101,7 @@ const routes: Routes = [{
       component: NewUserComponent,
       data: {
         title: 'New User',
-        functionCodes: ['Security.UserAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserAdministration']
       }
     },
     {
@@ -111,7 +112,7 @@ const routes: Routes = [{
       component: EditUserComponent,
       data: {
         title: '{username}',
-        functionCodes: ['Security.UserAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserAdministration']
       }
     }
     */

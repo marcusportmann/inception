@@ -18,8 +18,8 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.xml.DtdJarResolver;
@@ -27,6 +27,7 @@ import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import org.springframework.util.StringUtils;
 
@@ -40,14 +41,20 @@ import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import javax.xml.bind.annotation.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
- * The <code>UserDirectory</code> class stores the information for a user directory.
+ * The <code>UserDirectory</code> class holds the information for a user directory.
  *
  * @author Marcus Portmann
  */
@@ -63,13 +70,47 @@ public class UserDirectory
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The parameters for the user directory.
+   */
+  @ApiModelProperty(value = "The parameters for the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Parameters", required = true)
+  @XmlElement(name = "Parameter", required = true)
+  @Valid
+  private List<UserDirectoryParameter> parameters = new ArrayList<>();
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
   private UUID id;
+
+  /**
+   * The name of the user directory.
+   */
+  @ApiModelProperty(value = "The name of the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
   private String name;
 
   /**
-   * The configuration parameters for the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
    */
-  private List<UserDirectoryParameter> parameters = new ArrayList<>();
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory type",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TypeId", required = true)
+  @NotNull
   private UUID typeId;
 
   /**
@@ -82,8 +123,6 @@ public class UserDirectory
    *
    * @return the XML configuration data for the user directory
    */
-  @JsonIgnore
-  @XmlTransient
   public String getConfiguration()
   {
     StringBuilder buffer = new StringBuilder();
@@ -92,13 +131,13 @@ public class UserDirectory
     buffer.append(
         "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
-    for (UserDirectoryParameter userDirectoryParameter : parameters)
+    for (UserDirectoryParameter parameter : parameters)
     {
       buffer.append("<parameter>");
-      buffer.append("<name>").append(userDirectoryParameter.getName()).append("</name>");
-      buffer.append("<value>").append(StringUtils.isEmpty(userDirectoryParameter.getStringValue())
+      buffer.append("<name>").append(parameter.getName()).append("</name>");
+      buffer.append("<value>").append(StringUtils.isEmpty(parameter.getValue())
           ? ""
-          : userDirectoryParameter.getStringValue()).append("</value>");
+          : parameter.getValue()).append("</value>");
       buffer.append("</parameter>");
     }
 
@@ -128,9 +167,9 @@ public class UserDirectory
   }
 
   /**
-   * Returns the configuration parameters for the user directory.
+   * Returns the parameters for the user directory.
    *
-   * @return the configuration parameters for the user directory
+   * @return the parameters for the user directory
    */
   public List<UserDirectoryParameter> getParameters()
   {
@@ -216,9 +255,9 @@ public class UserDirectory
   }
 
   /**
-   * Set the configuration parameters for the user directory.
+   * Set the parameters for the user directory.
    *
-   * @param parameters the configuration parameters for the user directory
+   * @param parameters the parameters for the user directory
    */
   public void setParameters(List<UserDirectoryParameter> parameters)
   {

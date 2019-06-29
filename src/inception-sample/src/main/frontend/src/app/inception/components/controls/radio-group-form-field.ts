@@ -28,16 +28,9 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import {
-  CanColor,
-  LabelOptions,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MAT_LABEL_GLOBAL_OPTIONS,
-  MatFormField,
-  matFormFieldAnimations,
-  MatFormFieldDefaultOptions,
-  MatRadioGroup
-} from '@angular/material';
+import { CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions } from '@angular/material/form-field';
+import { MatRadioGroup } from '@angular/material/radio';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {startWith} from 'rxjs/operators';
 import {Directionality} from '@angular/cdk/bidi';
@@ -124,7 +117,7 @@ export class RadioGroupFormField extends MatFormField implements AfterContentIni
   /**
    * The radio group associated with the radio group form field.
    */
-  @ContentChild(MatRadioGroup) radioGroup: MatRadioGroup;
+  @ContentChild(MatRadioGroup, {static: false}) radioGroup: MatRadioGroup;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,

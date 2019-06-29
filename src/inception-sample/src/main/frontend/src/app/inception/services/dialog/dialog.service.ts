@@ -23,7 +23,7 @@ import {
   WarningDialogComponent
 } from '../../components/dialogs';
 
-import {MatDialog, MatDialogRef} from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import {Error} from '../../errors/error';
 import {DialogData} from '../../components/dialogs/dialog-data';
@@ -63,6 +63,8 @@ export class DialogService {
    * @param error The error.
    */
   showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
+    console.log('Error: ', error);
+
     return this.dialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog-panel',
       data: {error: error}

@@ -289,11 +289,31 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the number of organizations
+   *
+   * @param filter the optional filter to apply to the organizations
+   *
+   * @return the number of organizations
+   */
+  int getNumberOfOrganizations(String filter)
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the number of user directories
    *
    * @return the number of user directories
    */
   int getNumberOfUserDirectories()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the number of user directories
+   *
+   * @param filter the optional filter to apply to the user directories
+   *
+   * @return the number of user directories
+   */
+  int getNumberOfUserDirectories(String filter)
     throws SecurityServiceException;
 
   /**
@@ -305,6 +325,18 @@ public interface ISecurityService
    * @return the number of users
    */
   int getNumberOfUsers(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of users.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param filter          the optional filter to apply to the users
+   *
+   * @return the number of users
+   */
+  int getNumberOfUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
@@ -320,13 +352,13 @@ public interface ISecurityService
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   * associated with the user directory.
+   * the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   *         associated with the user directory
+   *         the user directory is associated with
    */
   List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -354,15 +386,27 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
-   * Retrieve the organizations associated with the user directory.
+   * Retrieve the organizations the user directory is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    *
-   * @return the organizations associated with the user directory
+   * @return the organizations the user directory is associated with
    */
   List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param username        the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  List<String> getRoleNamesForUser(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user.
@@ -401,14 +445,12 @@ public interface ISecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId                      the Universally Unique Identifier (UUID) used to
-   *                                            uniquely identify the organization
-   * @param includeDefaultInternalUserDirectory include the default internal user directory
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the user directories the organization is associated with
    */
-  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId,
-      boolean includeDefaultInternalUserDirectory)
+  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
@@ -436,6 +478,44 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
+   * user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
+   *         directories the organization is associated with
+   */
+  List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the summaries for the user directories.
+   *
+   * @param filter        the optional filter to apply to the user directories
+   * @param sortDirection the optional sort direction to apply to the user directories
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the summaries for the user directories
+   */
+  List<UserDirectorySummary> getUserDirectorySummaries(String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the summaries for the user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   *
+   * @return the summaries for the user directories the organization is associated with
+   */
+  List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the user directory types.
    *
    * @return the user directory types
@@ -460,14 +540,15 @@ public interface ISecurityService
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    * @param filter          the optional filter to apply to the users
+   * @param sortBy          the optional method used to sort the users e.g. by last name
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
    *
    * @return the users
    */
-  List<User> getUsers(UUID userDirectoryId, String filter, SortDirection sortDirection,
-      Integer pageIndex, Integer pageSize)
+  List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**

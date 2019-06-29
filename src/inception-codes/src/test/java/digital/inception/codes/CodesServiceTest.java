@@ -174,7 +174,7 @@ public class CodesServiceTest
     compareCodes(code, retrievedCode);
 
     assertEquals("The correct number of codes (1) was not retrieved", 1,
-        codesService.getNumberOfCodesForCodeCategory(codeCategory.getId()));
+        codesService.getNumberOfCodes(codeCategory.getId()));
 
     codesService.deleteCode(codeCategory.getId(), code.getId());
 
@@ -212,16 +212,16 @@ public class CodesServiceTest
       codesService.createCode(code);
     }
 
-    int numberOfCodes = codesService.getNumberOfCodesForCodeCategory(codeCategory.getId());
+    int numberOfCodes = codesService.getNumberOfCodes(codeCategory.getId());
 
     assertEquals("The correct number of codes (" + codes.size() + ") was not retrieved",
         codes.size(), numberOfCodes);
 
-    List<Code> retrievedCodes = codesService.getCodeCategoryCodes(codeCategory.getId());
+    List<Code> retrievedCodes = codesService.getCodes(codeCategory.getId());
 
     compareCodes(codes, retrievedCodes);
 
-    retrievedCodes = codesService.getCodeCategoryCodesWithParameters(codeCategory.getId(),
+    retrievedCodes = codesService.getCodesWithParameters(codeCategory.getId(),
         new HashMap<>());
 
     compareCodes(codes, retrievedCodes);
@@ -308,6 +308,7 @@ public class CodesServiceTest
     return code;
   }
 
+  @SuppressWarnings("unused")
   private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId)
   {
     codeCount++;

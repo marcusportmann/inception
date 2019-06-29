@@ -15,7 +15,9 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort} from '@angular/material';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {finalize, first, tap} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -32,6 +34,11 @@ import {merge, Subscription} from "rxjs";
 import {TableFilter} from "../../components/controls";
 import {UserDatasource} from "../../services/security/users.datasource";
 import {SessionService} from "../../services/session/session.service";
+import {Session} from "../../services/session/session";
+import {UserDirectorySummary} from "../../services/security/user-directory-summary";
+import {FormBuilder} from "@angular/forms";
+import {MatSelect, MatSelectChange} from "@angular/material";
+import {UserSortBy} from "../../services/security/user-sort-by";
 
 /**
  * The UsersComponent class implements the users component.
@@ -43,27 +50,59 @@ import {SessionService} from "../../services/session/session.service";
   styleUrls: ['users.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
-  }
+  },
+  styles: [`
+    .select-user-directory-container
+    {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #c2cfd6;
+      padding: 8px !important;
+    }
+
+    .select-user-directory-container > span
+    {
+      white-space: nowrap;
+      flex: 0;
+      padding-right: 8px;
+    }
+
+    .select-user-directory-container > .mat-form-field
+    {
+      flex: 1;
+    }
+  `
+  ]
 })
-export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
+export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
   dataSource: UserDatasource;
 
-  displayedColumns: string[] = ['lastName', 'firstName', 'actions'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'username', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  @ViewChild(TableFilter) tableFilter: TableFilter;
+  @ViewChild(TableFilter, {static: true}) tableFilter: TableFilter;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+  userDirectoryId: string;
+
+  userDirectories: UserDirectorySummary[] = new Array();
+
+  @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect: MatSelect;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService, private sessionService: SessionService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
-
   }
+
+
+  //sort on usernasme in backend not last name
 
   deleteUser(userId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
@@ -106,7 +145,6 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   loadUsers(): void {
-
     let filter: string = '';
 
     if (!!this.tableFilter.filter) {
@@ -115,7 +153,17 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       filter = filter.toLowerCase();
     }
 
-    this.dataSource.load(filter,
+    let sortBy: UserSortBy = UserSortBy.Username;
+
+    if (!!this.sort.active) {
+      if (this.sort.active == 'firstName') {
+        sortBy = UserSortBy.FirstName;
+      } else if (this.sort.active == 'lastName') {
+        sortBy = UserSortBy.LastName;
+      }
+    }
+
+    this.dataSource.load(this.userDirectoryId, filter, sortBy,
       this.sort.direction == 'asc' ? SortDirection.Ascending : SortDirection.Descending,
       this.paginator.pageIndex,
       this.paginator.pageSize);
@@ -127,21 +175,6 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.loadUsers();
-
-    this.subscriptions.add(this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0));
-
-    this.subscriptions.add(this.tableFilter.changed.subscribe(() => this.paginator.pageIndex = 0));
-
-    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadUsers();
-      })).subscribe());
-  }
-
-  ngOnInit(): void {
-    this.dataSource = new UserDatasource(this.sessionService, this.securityService);
-
     this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
@@ -157,10 +190,72 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
         this.dialogService.showErrorDialog(error);
       }
     }));
+
+    this.subscriptions.add(this.userDirectorySelect.selectionChange.subscribe(
+      (matSelectChange: MatSelectChange) => {
+        this.userDirectoryId = matSelectChange.value;
+        this.tableFilter.reset(false);
+        this.paginator.pageIndex = 0;
+        this.sort.active = ''; this.sort.direction = 'asc' as SortDirection;
+        this.sort.sortChange.emit();
+      }));
+
+    this.subscriptions.add(
+      this.sort.sortChange.subscribe(() => {
+        this.paginator.pageIndex = 0
+      }));
+
+    this.subscriptions.add(
+      this.tableFilter.changed.subscribe(() => {
+        this.paginator.pageIndex = 0
+      }));
+
+    /*
+     * NOTE: Changing the selected user directory will generate a "sort change" event, which will
+     *       trigger the load of the users. If we also merged the "selection change" event from the
+     *       userDirectorySelect MatSelect component instance we would trigger an unnecessary
+     *       duplicate reload of the users.
+     */
+    this.subscriptions.add(
+      merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+        .pipe(tap(() => {
+          if (!!this.userDirectoryId) {
+            this.loadUsers();
+          }
+        })).subscribe());
+
+    this.sessionService.session.pipe(first()).subscribe((session: Session) => {
+      if (session) {
+        this.spinnerService.showSpinner();
+
+        this.securityService.getUserDirectorySummariesForOrganization(session.organization.id)
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe((userDirectories: UserDirectorySummary[]) => {
+            this.userDirectories = userDirectories;
+
+            if (userDirectories.length == 1) {
+              this.userDirectoryId = userDirectories[0].id;
+              this.loadUsers();
+            }
+          }, (error: Error) => {
+            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+              (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.dataSource = new UserDatasource(this.sessionService, this.securityService);
   }
 }
 

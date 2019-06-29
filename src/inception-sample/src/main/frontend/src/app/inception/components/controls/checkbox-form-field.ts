@@ -29,16 +29,9 @@ import {
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import {
-  CanColor,
-  LabelOptions,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MAT_LABEL_GLOBAL_OPTIONS,
-  MatCheckbox,
-  MatFormField,
-  matFormFieldAnimations,
-  MatFormFieldDefaultOptions
-} from '@angular/material';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions } from '@angular/material/form-field';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {startWith} from 'rxjs/operators';
 import {Directionality} from '@angular/cdk/bidi';

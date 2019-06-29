@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 export interface PeriodicElement {
   name: string;
@@ -135,16 +136,23 @@ const ELEMENT_DATA: PeriodicElement[] = [{
 @Component({
   templateUrl: 'sortable-table.component.html'
 })
-export class SortableTableComponent implements AfterViewInit {
+export class SortableTableComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  dataSource: MatTableDataSource<PeriodicElement>;
 
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
   }
 }
 

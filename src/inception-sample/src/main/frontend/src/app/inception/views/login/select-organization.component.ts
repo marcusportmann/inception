@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first, flatMap, map, startWith} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {first, map, startWith} from 'rxjs/operators';
+import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {Organization} from '../../services/security/organization';
 import {SessionService} from '../../services/session/session.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Session} from '../../services/session/session';
 
@@ -32,13 +32,16 @@ import {Session} from '../../services/session/session';
 @Component({
   templateUrl: 'select-organization.component.html'
 })
-export class SelectOrganizationComponent implements OnInit {
+export class SelectOrganizationComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Subscription = new Subscription();
 
   selectOrganizationForm: FormGroup;
 
-  filteredOrganizations: Observable<Organization[]>;
+  filteredOrganizations: Subject<Organization[]> = new ReplaySubject<Organization[]>();
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private i18n: I18n,
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
     this.selectOrganizationForm = this.formBuilder.group({
       organization: [{value: ''}, Validators.required]
@@ -55,12 +58,33 @@ export class SelectOrganizationComponent implements OnInit {
 
   isOrganizationSelected(): boolean {
     return this.selectOrganizationForm.valid &&
-      (typeof this.organizationFormControl.value === 'object');
+      (typeof this.organizationFormControl.value === 'object') &&
+      (!!this.organizationFormControl.value.id);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   ngOnInit(): void {
-    this.filteredOrganizations = this.organizationFormControl.valueChanges.pipe(startWith(''),
-      flatMap((value) => this.filterOrganizations(value)));
+    this.activatedRoute.paramMap
+      .pipe(first(), map((state: any) => window.history.state))
+      .subscribe((state: any) => {
+        if (state.organizations) {
+          this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''),
+            map((value:any, index: number) => {
+              this.filteredOrganizations.next(this.filterOrganizations(state.organizations, value));
+            }
+            )).subscribe());
+        } else {
+          console.log('No organizations found, invalidating session and redirecting to the application root');
+
+          // TODO: Invalidate session -- MARCUS
+
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   onOk(): void {
@@ -71,7 +95,6 @@ export class SelectOrganizationComponent implements OnInit {
       this.sessionService.session
         .pipe(first())
         .subscribe((session: Session) => {
-
           session.organization = selectedOrganization;
 
           // noinspection JSIgnoredPromiseFromCall
@@ -80,7 +103,7 @@ export class SelectOrganizationComponent implements OnInit {
     }
   }
 
-  private filterOrganizations(value: string | object): Observable<Organization[]> {
+  private filterOrganizations(organizations: Organization[], value: string | object): Organization[] {
     let filterValue = '';
 
     if (typeof value === 'string') {
@@ -89,15 +112,7 @@ export class SelectOrganizationComponent implements OnInit {
       filterValue = (<Organization>value).name.toLowerCase();
     }
 
-    return this.sessionService.session.pipe(map((session: Session) => {
-      if (session) {
-        return session.organizations.filter(
-          organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
-      } else {
-        // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/login']);
-        return [];
-      }
-    }));
+    return organizations.filter(
+      organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }

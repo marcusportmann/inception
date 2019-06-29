@@ -44,9 +44,9 @@ export class NavigationItem {
   divider?: boolean;
 
   /**
-   * The optional function codes that are used to restrict access to the navigation item.
+   * The optional authorities that are used to restrict access to the navigation item.
    */
-  functionCodes?: string[];
+  authorities?: string[];
 
   /**
    * The optional icon associated with the navigation item.
@@ -76,25 +76,24 @@ export class NavigationItem {
   /**
    * Constructs a new NavigationItem.
    *
-   * @param icon          The icon associated with the navigation item.
-   * @param name          The name of navigation item.
-   * @param url           The url associated with the navigation item.
-   * @param functionCodes The function codes that are used to restrict access to the navigation
-   *                      item.
-   * @param children      The optional child navigation items.
-   * @param cssClass      The optional CSS class to apply to the navigation item.
-   * @param variant       The optional variant to apply to the navigation item.
-   * @param badge         The optional navigation badge associated with the navigation item.
-   * @param divider       The optional divider indicator.
-   * @param title         The optional title indicator.
+   * @param icon        The icon associated with the navigation item.
+   * @param name        The name of navigation item.
+   * @param url         The url associated with the navigation item.
+   * @param authorities The authorities that are used to restrict access to the navigation item.
+   * @param children    The optional child navigation items.
+   * @param cssClass    The optional CSS class to apply to the navigation item.
+   * @param variant     The optional variant to apply to the navigation item.
+   * @param badge       The optional navigation badge associated with the navigation item.
+   * @param divider     The optional divider indicator.
+   * @param title       The optional title indicator.
    */
-  constructor(icon: string, name: string, url: string, functionCodes: string[],
+  constructor(icon: string, name: string, url: string, authorities: string[],
               children?: NavigationItem[], cssClass?: string, variant?: string,
               badge?: NavigationBadge, divider?: boolean, title?: boolean) {
     this.icon = icon;
     this.name = name;
     this.url = url;
-    this.functionCodes = functionCodes;
+    this.authorities = authorities;
     this.children = children;
     this.cssClass = cssClass;
     this.variant = variant;

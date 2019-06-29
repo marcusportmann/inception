@@ -19,6 +19,7 @@ package digital.inception.error;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
@@ -47,7 +48,7 @@ import javax.validation.Validator;
 @RestController
 @RequestMapping(value = "/api/error")
 @SuppressWarnings({ "unused" })
-public class ErrorRestController
+public class ErrorRestController extends SecureRestController
 {
   /**
    * The Error Service.
@@ -91,6 +92,14 @@ public class ErrorRestController
   @RequestBody ErrorReport errorReport)
     throws InvalidArgumentException, ErrorServiceException
   {
+    // Truncate the detail if required
+    if ((errorReport.getDetail() != null)
+        && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE))
+    {
+      errorReport.setDetail(errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3)
+          + "...");
+    }
+
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null)

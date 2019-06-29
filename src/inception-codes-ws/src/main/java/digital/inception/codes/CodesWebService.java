@@ -25,12 +25,9 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -44,9 +41,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * The <code>CodesWebService</code> class.
@@ -224,7 +218,7 @@ public class CodesWebService
    *
    * @return the codes for the code category
    */
-  @WebMethod(operationName = "GetCodeCategoryCodes")
+  @WebMethod(operationName = "GetCodes")
   @WebResult(name = "Code")
   public List<Code> getCodeCategoryCodes(@WebParam(name = "CodeCategoryId")
   @XmlElement(required = true) String codeCategoryId)
@@ -235,7 +229,7 @@ public class CodesWebService
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return codesService.getCodeCategoryCodes(codeCategoryId);
+    return codesService.getCodes(codeCategoryId);
   }
 
   /**

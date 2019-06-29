@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, throwError, timer} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Session} from './session';
@@ -37,7 +37,7 @@ export class SessionService {
   /**
    * The current active session.
    */
-  session: BehaviorSubject<Session> = new BehaviorSubject<Session>(null);
+  session: Subject<Session> = new BehaviorSubject<Session>(null);
 
   /**
    * Constructs a new SessionService.
@@ -88,9 +88,9 @@ export class SessionService {
 
         const accessTokenExpiry: Date = helper.getTokenExpirationDate(tokenResponse.access_token);
 
-        const session: Session = new Session(token.user_name, token.userDirectoryId, token.scope,
-          token.authorities, token.organizations, tokenResponse.access_token, accessTokenExpiry,
-          tokenResponse.refresh_token);
+        const session: Session = new Session(token.user_name, token.user_directory_id,
+          token.user_full_name, token.scope, token.authorities, tokenResponse.access_token,
+          accessTokenExpiry, tokenResponse.refresh_token);
 
         this.session.next(session);
 
@@ -164,8 +164,8 @@ export class SessionService {
               const accessTokenExpiry: Date = helper.getTokenExpirationDate(
                 tokenResponse.access_token);
 
-              const refreshedSession: Session = new Session(token.user_name, token.userDirectoryId,
-                token.scope, token.authorities, token.organizations, tokenResponse.access_token,
+              const refreshedSession: Session = new Session(token.user_name, token.user_directory_id,
+                token.user_full_name, token.scope, token.authorities, tokenResponse.access_token,
                 accessTokenExpiry, tokenResponse.refresh_token);
 
               refreshedSession.organization = selectedOrganization;

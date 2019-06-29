@@ -15,7 +15,7 @@
  */
 
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 
@@ -23,7 +23,7 @@ import {first} from "rxjs/operators";
 import {User} from "./user";
 import {Users} from "./users";
 import {SessionService} from "../session/session.service";
-import {Session} from "../session/session";
+import {UserSortBy} from "./user-sort-by";
 
 /**
  * The UserDatasource class implements the user data source.
@@ -32,11 +32,11 @@ import {Session} from "../session/session";
  */
 export class UserDatasource implements DataSource<User> {
 
-  private totalSubject = new BehaviorSubject<number>(0);
+  private totalSubject: Subject<number> = new ReplaySubject<number>();
 
-  private dataSubject = new BehaviorSubject<User[]>([]);
+  private dataSubject: Subject<User[]> = new ReplaySubject<User[]>();
 
-  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private loadingSubject: Subject<boolean> = new ReplaySubject<boolean>();
 
   total = this.totalSubject.asObservable();
 
@@ -57,33 +57,32 @@ export class UserDatasource implements DataSource<User> {
   /**
    * Load the users.
    *
-   * @param filter        The optional filter to apply to the users.
-   * @param sortDirection The optional sort direction to apply to the users.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the users are associated with.
+   * @param filter          The optional filter to apply to the users.
+   * @param sortBy          The optional method used to sort the users e.g. by last name.
+   * @param sortDirection   The optional sort direction to apply to the users.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
    */
-  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+  load(userDirectoryId, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection, pageIndex?: number,
        pageSize?: number): void {
     this.loadingSubject.next(true);
 
-    this.sessionService.session.pipe(first()).subscribe((session: Session) => {
-      if (session) {
-        this.securityService.getUsers(session.userDirectoryId, filter, sortDirection, pageIndex, pageSize)
-          .pipe(first())
-          .subscribe((users: Users) => {
-            this.loadingSubject.next(false);
+    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize)
+      .pipe(first())
+      .subscribe((users: Users) => {
+        this.loadingSubject.next(false);
 
-            this.totalSubject.next(users.total);
+        this.totalSubject.next(users.total);
 
-            this.dataSubject.next(users.users);
-          }, (error: Error) => {
-            this.loadingSubject.next(false);
+        this.dataSubject.next(users.users);
+      }, (error: Error) => {
+        this.loadingSubject.next(false);
 
-            this.totalSubject.next(0);
+        this.totalSubject.next(0);
 
-            this.loadingSubject.error(error);
-          });
-      }
-    });
+        this.loadingSubject.error(error);
+      });
   }
 }

@@ -85,8 +85,8 @@ public class SecurityWebService
   {
     validateOrganization(organization);
 
-    securityService.createOrganization(organization,
-      (createUserDirectory != null) && createUserDirectory);
+    securityService.createOrganization(organization, (createUserDirectory != null)
+        && createUserDirectory);
   }
 
   /**
@@ -130,7 +130,6 @@ public class SecurityWebService
     return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
-
   /**
    * Retrieve the user directories the organization is associated with.
    *
@@ -142,13 +141,11 @@ public class SecurityWebService
   @WebMethod(operationName = "GetUserDirectoriesForOrganization")
   @WebResult(name = "UserDirectory")
   public List<UserDirectory> getUserDirectoriesForOrganization(@WebParam(name = "OrganizationId")
-  @XmlElement(required = true)UUID organizationId)
+  @XmlElement(required = true) UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    return securityService.getUserDirectoriesForOrganization(organizationId, true);
+    return securityService.getUserDirectoriesForOrganization(organizationId);
   }
-
-
 
   private void validateOrganization(Organization organization)
     throws InvalidArgumentException

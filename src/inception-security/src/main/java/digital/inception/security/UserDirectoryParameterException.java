@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * A <code>UserDirectoryParameterException</code> is thrown to indicate an invalid operation was
+ * An <code>UserDirectoryParameterException</code> is thrown to indicate an invalid operation was
  * performed on a <code>UserDirectoryParameter</code> instance.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.

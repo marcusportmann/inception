@@ -51,3 +51,21 @@ export class SecurityServiceError extends Error {
     super(message, cause);
   }
 }
+
+/**
+ * The UserDirectoryNotFoundError class holds the information for a user directory not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserDirectoryNotFoundError extends Error {
+
+  /**
+   * Constructs a new UserDirectoryNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: any) {
+    super(message, cause);
+  }
+}

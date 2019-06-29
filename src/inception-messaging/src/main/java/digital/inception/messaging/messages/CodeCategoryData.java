@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The <code>CodeCategoryData</code> class stores the information for a code category.
+ * The <code>CodeCategoryData</code> class holds the information for a code category.
  *
  * @author Marcus Portmann
  */

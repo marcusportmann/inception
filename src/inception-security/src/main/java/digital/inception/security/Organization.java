@@ -35,7 +35,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>Organization</code> class stores the information for an organization.
+ * The <code>Organization</code> class holds the information for an organization.
  *
  * @author Marcus Portmann
  */

@@ -43,16 +43,11 @@ export class CanActivateFunctionGuard implements CanActivate {
     return this.sessionService.session.pipe(map((session: Session) => {
       if (activatedRouteSnapshot) {
         if (activatedRouteSnapshot.data) {
-          if (activatedRouteSnapshot.data.functionCodes) {
-
-            // TODO: Confirm that route.data.functionCodes is an array of strings -- MARCUS
-
+          if (activatedRouteSnapshot.data.authorities) {
             if (session) {
-              for (let i = 0; i < activatedRouteSnapshot.data.functionCodes.length; i++) {
-                for (let j = 0; j < session.functionCodes.length; j++) {
-                  if (activatedRouteSnapshot.data.functionCodes[i] === session.functionCodes[j]) {
-                    return true;
-                  }
+              for (let i = 0; i < activatedRouteSnapshot.data.authorities.length; i++) {
+                if (session.hasAuthority(activatedRouteSnapshot.data.authorities[i])) {
+                  return true;
                 }
               }
 

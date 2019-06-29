@@ -566,25 +566,23 @@ public class SecurityServiceTest
   {
     User user = getTestUserDetails();
 
-    securityService.createUser(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID, user, false,
+    securityService.createUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, user, false,
         false);
 
-    securityService.addUserToGroup(SecurityService.DEFAULT_INTERNAL_USER_DIRECTORY_ID,
+    securityService.addUserToGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
         user.getUsername(), "Administrators");
 
     List<String> groupNamesForUser = securityService.getGroupNamesForUser(SecurityService
-        .DEFAULT_INTERNAL_USER_DIRECTORY_ID, user.getUsername());
+        .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
     assertEquals("The correct number of group names (1) was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNamesForUser.size());
 
     List<String> functionCodesForUser = securityService.getFunctionCodesForUser(SecurityService
-        .DEFAULT_INTERNAL_USER_DIRECTORY_ID, user.getUsername());
+        .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
-    List<Function> functions = securityService.getFunctions();
-
-    assertEquals("The correct number of function codes (" + functions.size()
-        + ") was not retrieved for the user (" + user.getUsername() + ")", functions.size(),
+    assertEquals("The correct number of function codes (" + 0
+        + ") was not retrieved for the user (" + user.getUsername() + ")", 0,
         functionCodesForUser.size());
   }
 
@@ -924,10 +922,10 @@ public class SecurityServiceTest
         organizationIdsForUserDirectory.size());
 
     List<UserDirectory> userDirectoriesForOrganization =
-        securityService.getUserDirectoriesForOrganization(organization.getId(), true);
+        securityService.getUserDirectoriesForOrganization(organization.getId());
 
     assertEquals(
-        "The correct number of user directories (2) was not retrieved for the organization", 2,
+        "The correct number of user directories (1) was not retrieved for the organization", 1,
         userDirectoriesForOrganization.size());
   }
 
@@ -1081,7 +1079,7 @@ public class SecurityServiceTest
     compareUsers(user, retrievedUsers.get(0), true);
 
     List<User> retrievedFilteredUsers = securityService.getUsers(userDirectory.getId(), "Test",
-        SortDirection.ASCENDING, null, null);
+        UserSortBy.USERNAME, SortDirection.ASCENDING, null, null);
 
     assertEquals("The correct number of filtered users (1) was not retrieved", 1,
         retrievedFilteredUsers.size());

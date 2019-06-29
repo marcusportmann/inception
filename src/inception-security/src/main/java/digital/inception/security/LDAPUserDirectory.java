@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.JNDIUtil;
 
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused", "WeakerAccess", "SpringJavaAutowiredMembersInspection" })
 public class LDAPUserDirectory extends UserDirectoryBase
 {
   /**
@@ -104,6 +105,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String groupNameAttribute;
   private String groupObjectClass;
   private String host;
+
+  /**
+   * The ID generator.
+   */
+  @Autowired
+  private IDGenerator idGenerator;
   private int maxFilteredGroups;
   private int maxFilteredUsers;
   private int maxPasswordAttempts;
@@ -132,7 +139,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
-   * @param parameters      the key-value configuration parameters for the user directory
+   * @param parameters      the parameters for the user directory
    */
   public LDAPUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
@@ -148,7 +155,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No Host configuration parameter found for the user directory (%s)", userDirectoryId));
+            "No Host parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "Port"))
@@ -158,11 +165,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No Port configuration parameter found for the user directory (%s)", userDirectoryId));
+            "No Port parameter found for the user directory (%s)", userDirectoryId));
       }
 
       useSSL = UserDirectoryParameter.contains(parameters, "UseSSL")
-          && UserDirectoryParameter.getBooleanValue(parameters, "UseSSL");
+          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters, "UseSSL"));
 
       if (UserDirectoryParameter.contains(parameters, "BindDN"))
       {
@@ -171,8 +178,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No BindDN parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "BindPassword"))
@@ -182,8 +188,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindPassword configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No BindPassword parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "BaseDN"))
@@ -193,8 +198,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No BindDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No BindDN parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserBaseDN"))
@@ -204,8 +208,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserBaseDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No UserBaseDN parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "GroupBaseDN"))
@@ -216,8 +219,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupBaseDN configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No GroupBaseDN parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if ((UserDirectoryParameter.contains(parameters, "SharedBaseDN"))
@@ -235,8 +237,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserObjectClass configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No UserObjectClass parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserUsernameAttribute"))
@@ -247,7 +248,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserUsernameAttribute configuration parameter found for the user directory (%s)",
+            "No UserUsernameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -259,8 +260,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPasswordExpiryAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
+            "No UserPasswordExpiryAttribute parameter found for the user directory " + "(%s)",
+            userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserPasswordAttemptsAttribute"))
@@ -271,8 +272,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPasswordAttemptsAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
+            "No UserPasswordAttemptsAttribute parameter found for the user directory " + "(%s)",
+            userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserPasswordHistoryAttribute"))
@@ -284,8 +285,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPasswordHistoryAttribute configuration parameter found for the user directory "
-            + "(%s)", userDirectoryId));
+            "No UserPasswordHistoryAttribute parameter found for the user directory " + "(%s)",
+            userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserFirstNameAttribute"))
@@ -296,7 +297,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserFirstNameAttribute configuration parameter found for the user directory (%s)",
+            "No UserFirstNameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -308,7 +309,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserLastNameAttribute configuration parameter found for the user directory (%s)",
+            "No UserLastNameAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -320,7 +321,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserPhoneNumberAttribute configuration parameter found for the user directory (%s)",
+            "No UserPhoneNumberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -332,7 +333,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserMobileNumberAttribute configuration parameter found for the user directory (%s)",
+            "No UserMobileNumberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -344,8 +345,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No UserEmailAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No UserEmailAttribute parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "GroupObjectClass"))
@@ -355,8 +355,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupObjectClass configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No GroupObjectClass parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "GroupNameAttribute"))
@@ -367,8 +366,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupNameAttribute configuration parameter found for the user directory (%s)",
-            userDirectoryId));
+            "No GroupNameAttribute parameter found for the user directory (%s)", userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "GroupMemberAttribute"))
@@ -381,7 +379,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       else
       {
         throw new SecurityServiceException(String.format(
-            "No GroupMemberAttribute configuration parameter found for the user directory (%s)",
+            "No GroupMemberAttribute parameter found for the user directory (%s)",
             userDirectoryId));
       }
 
@@ -412,7 +410,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       supportPasswordHistory = UserDirectoryParameter.contains(parameters, "SupportPasswordHistory")
-          && UserDirectoryParameter.getBooleanValue(parameters, "SupportPasswordHistory");
+          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters,
+              "SupportPasswordHistory"));
 
       if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
       {
@@ -455,7 +454,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to initialize the user directory (%s): %s", userDirectoryId, e.getMessage()), e);
+          "Failed to initialize the user directory (%s)", userDirectoryId), e);
     }
   }
 
@@ -526,8 +525,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to add the user (%s) to the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to add the user (%s) to the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -627,8 +626,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      dirContext.modifyAttributes(userDN, modificationItems.toArray(
-          new ModificationItem[modificationItems.size()]));
+      dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
     }
     catch (UserNotFoundException e)
     {
@@ -637,8 +635,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to change the password for the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -728,8 +726,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to authenticate the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to authenticate the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -848,7 +846,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -876,6 +874,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + ","
           + groupBaseDN.toString(), dirContext, attributes);
+
+      // Create the corresponding group in the database that will be used to map to one or more roles
+      UUID groupId = idGenerator.nextUUID();
+
+      createGroup(connection, groupId, group.getGroupName(), group.getDescription());
+
+      group.setId(groupId);
+      group.setUserDirectoryId(getUserDirectoryId());
     }
     catch (DuplicateGroupException e)
     {
@@ -884,8 +890,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the security group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the security group (%s) for the user directory (%s)",
+          group.getGroupName(), getUserDirectoryId()), e);
     }
     finally
     {
@@ -1026,8 +1032,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the user (%s) for the user directory (%s): %s", user.getUsername(),
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to create the user (%s) for the user directory (%s)", user.getUsername(),
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1046,7 +1052,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -1066,6 +1072,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       dirContext.destroySubcontext(groupDN);
+
+      // Delete the corresponding group in the database
+      deleteGroup(connection, groupName);
     }
     catch (GroupNotFoundException | ExistingGroupMembersException e)
     {
@@ -1074,8 +1083,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1114,8 +1123,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to delete the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1197,8 +1206,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to find the users for the user directory (%s): %s", getUserDirectoryId(),
-          e.getMessage()), e);
+          "Failed to find the users for the user directory (%s)", getUserDirectoryId()), e);
     }
     finally
     {
@@ -1308,8 +1316,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the function codes for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the function codes for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1361,8 +1369,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group (%s) for the user directory (%s): %s", groupName,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security group (%s) for the user directory (%s)", groupName,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1427,8 +1435,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group names for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security group names for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1474,8 +1482,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security groups for the user directory (%s)",
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1534,8 +1542,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user (%s) for the user directory (%s): %s",
-          username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the security groups for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
     }
     finally
     {
@@ -1597,10 +1605,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
   /**
    * Retrieve the number of users.
    *
+   * @param filter the optional filter to apply to the users
+   *
    * @return the number of users
    */
   @Override
-  public int getNumberOfUsers()
+  public int getNumberOfUsers(String filter)
     throws SecurityServiceException
   {
     DirContext dirContext = null;
@@ -1612,6 +1622,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
       dirContext = getDirContext(bindDN, bindPassword);
 
       String searchFilter = "(objectClass=" + userObjectClass + ")";
+
+      if (!StringUtils.isEmpty(filter))
+      {
+        searchFilter = String.format("(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
+            userObjectClass, userUsernameAttribute, filter, userFirstNameAttribute, filter,
+            userLastNameAttribute, filter);
+      }
 
       SearchControls searchControls = new SearchControls();
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
@@ -1659,6 +1676,115 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Retrieve the names for the roles that the user has been assigned.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the names for the roles that the user has been assigned
+   */
+  @Override
+  public List<String> getRoleNamesForUser(String username)
+    throws UserNotFoundException, SecurityServiceException
+  {
+    DirContext dirContext = null;
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try
+    {
+      dirContext = getDirContext(bindDN, bindPassword);
+
+      LdapName userDN = getUserDN(dirContext, username);
+
+      if (userDN == null)
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      String searchFilter = String.format("(&(objectClass=%s)(%s=%s))", groupObjectClass,
+          groupMemberAttribute, userDN.toString());
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      List<String> groupNames = new ArrayList<>();
+
+      while (searchResults.hasMore())
+      {
+        SearchResult searchResult = searchResults.next();
+
+        if (searchResult.getAttributes().get(groupNameAttribute) != null)
+        {
+          groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
+              .get()));
+        }
+      }
+
+      /*
+       * Build the SQL statement used to retrieve the function codes associated with the LDAP
+       * groups the user is a member of.
+       *
+       * NOTE: This is not the ideal solution as a carefully crafted group name in the LDAP
+       *       directory can be used to perpetrate a SQL injection attack. A better option
+       *       would to be to use the ANY operator in the WHERE clause but this is not
+       *       supported by H2.
+       */
+      String getFunctionCodesForGroupsSQL = "SELECT DISTINCT r.name FROM security.roles r "
+          + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
+          + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
+
+      StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
+      buffer.append(" WHERE g.user_directory_id='").append(getUserDirectoryId());
+      buffer.append("' AND g.groupname IN (");
+
+      for (int i = 0; i < groupNames.size(); i++)
+      {
+        if (i > 0)
+        {
+          buffer.append(",");
+        }
+
+        buffer.append("'").append(groupNames.get(i).replaceAll("'", "''")).append("'");
+      }
+
+      buffer.append(")");
+
+      List<String> roleNames = new ArrayList<>();
+
+      try (Connection connection = dataSource.getConnection();
+        Statement statement = connection.createStatement())
+      {
+        try (ResultSet rs = statement.executeQuery(buffer.toString()))
+        {
+          while (rs.next())
+          {
+            roleNames.add(rs.getString(1));
+          }
+        }
+      }
+
+      return roleNames;
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the role names for the user (%s) for the user directory (%s)",
+          username, getUserDirectoryId()), e);
+    }
+    finally
+    {
+      JNDIUtil.close(searchResults);
+      JNDIUtil.close(dirContext);
+    }
+  }
+
+  /**
    * Retrieve the user.
    *
    * @param username the username identifying the user
@@ -1691,8 +1817,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user (%s) for the user directory (%s): %s", username,
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the user (%s) for the user directory (%s)", username,
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1748,8 +1874,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the users for the user directory (%s): %s", getUserDirectoryId(),
-          e.getMessage()), e);
+          "Failed to retrieve the users for the user directory (%s)", getUserDirectoryId()), e);
     }
     finally
     {
@@ -1763,14 +1888,15 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * Retrieve the users.
    *
    * @param filter        the optional filter to apply to the users
+   * @param sortBy        the optional method used to sort the users e.g. by last name
    * @param sortDirection the optional sort direction to apply to the users
    * @param pageIndex     the optional page index
    * @param pageSize      the optional page size
    *
    * @return the users
    */
-  public List<User> getUsers(String filter, SortDirection sortDirection, Integer pageIndex,
-      Integer pageSize)
+  public List<User> getUsers(String filter, UserSortBy sortBy, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
     DirContext dirContext = null;
@@ -1794,6 +1920,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredUsers);
+
+      // TODO: Implement sorting of users for LDAP queries -- MARCUS
 
       List<User> users = new ArrayList<>();
 
@@ -1819,8 +1947,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered users for the user directory (%s): %s",
-          getUserDirectoryId(), e.getMessage()), e);
+          "Failed to retrieve the filtered users for the user directory (%s)",
+          getUserDirectoryId()), e);
     }
     finally
     {
@@ -1948,8 +2076,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -2026,8 +2154,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s): %s",
-          username, groupName, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s)",
+          username, groupName, getUserDirectoryId()), e);
     }
     finally
     {
@@ -2070,7 +2198,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   {
     DirContext dirContext = null;
 
-    try
+    try (Connection connection = dataSource.getConnection())
     {
       dirContext = getDirContext(bindDN, bindPassword);
 
@@ -2094,9 +2222,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(groupDN, modificationItems.toArray(
-            new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(groupDN, modificationItems.toArray(new ModificationItem[0]));
       }
+
+      // Update the corresponding group in the database
+      UUID groupId = getGroupId(connection, group.getGroupName());
+
+      updateGroup(connection, groupId, group.getGroupName(), group.getDescription());
     }
     catch (GroupNotFoundException e)
     {
@@ -2105,8 +2237,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to update the security group (%s) for the user directory (%s): %s",
-          group.getGroupName(), getUserDirectoryId(), e.getMessage()), e);
+          "Failed to update the security group (%s) for the user directory (%s)",
+          group.getGroupName(), getUserDirectoryId()), e);
     }
     finally
     {
@@ -2220,8 +2352,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (modificationItems.size() > 0)
       {
-        dirContext.modifyAttributes(userDN, modificationItems.toArray(
-            new ModificationItem[modificationItems.size()]));
+        dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
       }
     }
     catch (UserNotFoundException e)
@@ -2661,8 +2792,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       throw new SecurityServiceException(String.format(
           "Failed to check whether the password hash (%s) is in the password history for the user "
-          + "(%s) for the user directory (%s): %s", passwordHash, username, getUserDirectoryId(),
-          e.getMessage()), e);
+          + "(%s) for the user directory (%s)", passwordHash, username, getUserDirectoryId()), e);
     }
 
     return false;
@@ -2701,8 +2831,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s): %s",
-          passwordHash, username, getUserDirectoryId(), e.getMessage()), e);
+          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s)",
+          passwordHash, username, getUserDirectoryId()), e);
     }
   }
 }

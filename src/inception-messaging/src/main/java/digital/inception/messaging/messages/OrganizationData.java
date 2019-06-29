@@ -30,7 +30,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * The <code>OrganizationData</code> class stores the information for an organization.
+ * The <code>OrganizationData</code> class holds the information for an organization.
  *
  * @author Marcus Portmann
  */

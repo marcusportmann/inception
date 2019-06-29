@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialogRef, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {CodesService} from '../../services/codes/codes.service';
 import {finalize, first} from 'rxjs/operators';
 import {CodesServiceError} from '../../services/codes/codes.service.errors';
@@ -41,15 +44,15 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodeCategoriesComponent implements AfterViewInit, OnInit {
+export class CodeCategoriesComponent implements AfterViewInit, OnDestroy, OnInit {
 
-  dataSource = new MatTableDataSource<CodeCategorySummary>();
+  dataSource: MatTableDataSource<CodeCategorySummary>;
 
   displayedColumns: string[] = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
@@ -120,12 +123,6 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
           this.dialogService.showErrorDialog(error);
         }
       });
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function (data, filter): boolean {
-      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
-    };
   }
 
   newCodeCategory(): void {
@@ -134,10 +131,20 @@ export class CodeCategoriesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
     this.loadCodeCategorySummaries();
   }
 
+  ngOnDestroy(): void {
+  }
+
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<CodeCategorySummary>();
+    this.dataSource.filterPredicate = function (data, filter): boolean {
+      return data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
+    };
   }
 }
 

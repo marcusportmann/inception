@@ -37,7 +37,7 @@ const routes: Routes = [{
   component: CodeCategoriesComponent,
   data: {
     title: 'Code Categories',
-    functionCodes: ['Codes.CodeAdministration']
+    authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
   }
 }, {
   path: 'new-code-category',
@@ -45,7 +45,7 @@ const routes: Routes = [{
   component: NewCodeCategoryComponent,
   data: {
     title: 'New Code Category',
-    functionCodes: ['Codes.CodeAdministration']
+    authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
   }
 }, {
   path: ':codeCategoryId',
@@ -57,7 +57,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: EditCodeCategoryComponent,
     data: {
-      functionCodes: ['Codes.CodeAdministration']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
     }
   }, {
     path: 'codes',
@@ -69,7 +69,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: CodesComponent,
       data: {
-        functionCodes: ['Codes.CodeAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
       }
     }, {
       path: 'new-code',
@@ -77,7 +77,7 @@ const routes: Routes = [{
       component: NewCodeComponent,
       data: {
         title: 'New Code',
-        functionCodes: ['Codes.CodeAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
       }
     }, {
       path: ':codeId',
@@ -85,7 +85,7 @@ const routes: Routes = [{
       component: EditCodeComponent,
       data: {
         title: '{codeId}',
-        functionCodes: ['Codes.CodeAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
       }
     }
     ]

@@ -52,8 +52,7 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "CdiManagedBeanInconsistencyInspection",
-    "SpringJavaAutowiredMembersInspection" })
+@SuppressWarnings({ "unused", "SpringJavaAutowiredMembersInspection" })
 public class SystemMessageHandler extends MessageHandler
 {
   /* Logger */
@@ -308,11 +307,11 @@ public class SystemMessageHandler extends MessageHandler
 
         if (requestData.getParameters().isEmpty())
         {
-          codes = codesService.getCodeCategoryCodes(requestData.getCodeCategoryId());
+          codes = codesService.getCodes(requestData.getCodeCategoryId());
         }
         else
         {
-          codes = codesService.getCodeCategoryCodesWithParameters(requestData.getCodeCategoryId(),
+          codes = codesService.getCodesWithParameters(requestData.getCodeCategoryId(),
               requestData.getParameters());
         }
 

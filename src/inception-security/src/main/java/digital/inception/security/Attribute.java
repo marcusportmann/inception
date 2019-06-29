@@ -38,6 +38,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -52,7 +53,7 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Attribute", namespace = "http://security.inception.digital",
     propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class Attribute
   implements Serializable
 {
@@ -153,6 +154,30 @@ public class Attribute
   {
     this.name = name;
     this.value = value;
+  }
+
+  /**
+   * Returns whether the list of <code>Attribute</code> instances contains an instance whose name
+   * matches the specified name.
+   *
+   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *             the specified name
+   * @param name the name for the attribute
+   *
+   * @return <code>true</code> if the list of <code>Attribute</code> instances contains an instance
+   *         whose name matches the specified name or <code>false</code> otherwise
+   */
+  public static boolean contains(List<Attribute> list, String name)
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -257,6 +282,41 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the double value for the attribute (%s): "
+        + "The attribute could not be found", name));
+  }
+
+  /**
+   * Returns the <int>long</code> value for the <code>Attribute</code> instance with the specified
+   * name in the specified list.
+   *
+   * @param list the <code>Attribute</code> instances to search for the
+   *             <code>Attribute</code> with the specified name
+   * @param name the name for the attribute
+   *
+   * @return the <code>int</code> value for the <code>Attribute</code> instance with the specified
+   *         name in the specified list
+   */
+  public static int getIntegerValue(List<Attribute> list, String name)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        try
+        {
+          return Integer.parseInt(attribute.value);
+        }
+        catch (Throwable e)
+        {
+          throw new AttributeException(String.format(
+              "Failed to retrieve the integer value for the attribute (%s)", attribute.name));
+        }
+      }
+    }
+
+    throw new AttributeException(String.format(
+        "Failed to retrieve the integer value for the attribute (%s): "
         + "The attribute could not be found", name));
   }
 
@@ -419,6 +479,33 @@ public class Attribute
   }
 
   /**
+   * Set the <code>int</code> value for the <code>Attribute</code> instance with the specified name
+   * in the specified list.
+   *
+   * @param list  the <code>Attribute</code> instances to search for the
+   *              <code>Attribute</code> with the specified name
+   * @param name  the name for the attribute
+   * @param value the <code>int</code> value for the attribute
+   */
+  public static void setIntegerValue(List<Attribute> list, String name, int value)
+    throws AttributeException
+  {
+    for (Attribute attribute : list)
+    {
+      if (attribute.name.equalsIgnoreCase(name))
+      {
+        attribute.setIntegerValue(value);
+
+        return;
+      }
+    }
+
+    throw new AttributeException(String.format(
+        "Failed to set the integer value for the attribute (%s): "
+        + "The attribute could not be found", name));
+  }
+
+  /**
    * Set the <code>long</code> value for the <code>Attribute</code> instance with the specified name
    * in the specified list.
    *
@@ -530,6 +617,25 @@ public class Attribute
   }
 
   /**
+   * Returns the <code>int</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>int</code> value for the <code>Attribute</code> instance
+   */
+  public int getIntegerValue()
+    throws AttributeException
+  {
+    try
+    {
+      return Integer.parseInt(value);
+    }
+    catch (Throwable e)
+    {
+      throw new AttributeException(String.format(
+          "Failed to retrieve the integer value for the attribute (%s)", name));
+    }
+  }
+
+  /**
    * Returns the <code>long</code> value for the <code>Attribute</code> instance.
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance
@@ -619,7 +725,17 @@ public class Attribute
   }
 
   /**
-   * Set the <code>Long</code> value for the attribute.
+   * Set the <code>int</code> value for the attribute.
+   *
+   * @param value the <code>int</code> value for the attribute
+   */
+  public void setIntegerValue(int value)
+  {
+    this.value = String.valueOf(value);
+  }
+
+  /**
+   * Set the <code>long</code> value for the attribute.
    *
    * @param value the <code>long</code> value for the attribute
    */
