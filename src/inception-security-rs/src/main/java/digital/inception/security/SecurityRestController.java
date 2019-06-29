@@ -22,10 +22,12 @@ import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +38,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 /**
  * The <code>SecurityRestController</code> class.
@@ -96,7 +99,8 @@ public class SecurityRestController extends SecureRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void createOrganization(@ApiParam(name = "organization", value = "The organization",
       required = true)
   @RequestBody Organization organization, @ApiParam(name = "createUserDirectory",
@@ -204,7 +208,8 @@ public class SecurityRestController extends SecureRestController
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void deleteOrganization(@ApiParam(name = "organizationId",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
@@ -237,7 +242,8 @@ public class SecurityRestController extends SecureRestController
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
       value = "The optional filter to apply to the organizations")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
@@ -296,7 +302,7 @@ public class SecurityRestController extends SecureRestController
     if (!authentication.isAuthenticated())
     {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-        + ")");
+          + ")");
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId))
@@ -329,7 +335,8 @@ public class SecurityRestController extends SecureRestController
   @RequestMapping(value = "/user-directories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public ResponseEntity<List<UserDirectory>> getUserDirectories(@ApiParam(name = "filter",
       value = "The optional filter to apply to the user directories")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
@@ -422,7 +429,8 @@ public class SecurityRestController extends SecureRestController
   @RequestMapping(value = "/user-directory-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(@ApiParam(
       name = "filter",
       value = "The optional filter to apply to the user directories")
@@ -555,14 +563,16 @@ public class SecurityRestController extends SecureRestController
           + ")");
     }
 
+    var users = securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
+        pageSize);
+
+    var numberOfUsers = securityService.getNumberOfUsers(userDirectoryId, filter);
+
     var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUsers(
-        userDirectoryId, filter)));
+    httpHeaders.add("x-total-count", String.valueOf(numberOfUsers));
 
-    return new ResponseEntity<>(securityService.getUsers(userDirectoryId, filter, sortBy,
-        sortDirection, pageIndex, pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(users, httpHeaders, HttpStatus.OK);
   }
-
 
   /**
    * Confirm that the user associated with the authenticated request has access to the user
@@ -591,7 +601,8 @@ public class SecurityRestController extends SecureRestController
     }
 
     // If the user is directly associated with the user directory then they have access
-    String userDirectoryIdAuthorityValue = getValueForAuthorityWithPrefix(authentication, "USER_DIRECTORY_ID_");
+    String userDirectoryIdAuthorityValue = getValueForAuthorityWithPrefix(authentication,
+        "USER_DIRECTORY_ID_");
 
     if (StringUtils.isEmpty(userDirectoryIdAuthorityValue))
     {
@@ -609,13 +620,15 @@ public class SecurityRestController extends SecureRestController
      */
     try
     {
-      var organizationIds = securityService.getOrganizationIdsForUserDirectory(UUID.fromString(userDirectoryIdAuthorityValue));
+      var organizationIds = securityService.getOrganizationIdsForUserDirectory(UUID.fromString(
+          userDirectoryIdAuthorityValue));
 
-      for (UUID organizationId: organizationIds)
+      for (UUID organizationId : organizationIds)
       {
-        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(organizationId);
+        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
+            organizationId);
 
-        for (UUID userDirectoryIdForOrganization: userDirectoryIdsForOrganization)
+        for (UUID userDirectoryIdForOrganization : userDirectoryIdsForOrganization)
         {
           if (userDirectoryIdForOrganization.equals(userDirectoryId))
           {
@@ -626,10 +639,11 @@ public class SecurityRestController extends SecureRestController
     }
     catch (Throwable e)
     {
-      throw new AccessDeniedException("Failed to check whether the user (" + authentication.getPrincipal() + ") has access to the user directory (" + userDirectoryId + ")", e);
+      throw new AccessDeniedException("Failed to check whether the user ("
+          + authentication.getPrincipal() + ") has access to the user directory ("
+          + userDirectoryId + ")", e);
     }
 
     return false;
   }
-
 }
