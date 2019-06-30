@@ -36,7 +36,6 @@ export class UserDirectorySummary {
    */
   typeId: string;
 
-
   /**
    * Constructs a new UserDirectorySummary.
    *

@@ -20,9 +20,7 @@ import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
-  OrganizationNotFoundError,
-  SecurityServiceError,
-  UserDirectoryNotFoundError
+  OrganizationNotFoundError, SecurityServiceError, UserDirectoryNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
@@ -31,10 +29,11 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {environment} from '../../../../environments/environment';
 import {SortDirection} from './sort-direction';
 import {Organizations} from './organizations';
-import {Users} from "./users";
-import {User} from "./user";
-import {UserDirectorySummary} from "./user-directory-summary";
-import {UserSortBy} from "./user-sort-by";
+import {Users} from './users';
+import {User} from './user';
+import {UserDirectorySummary} from './user-directory-summary';
+import {UserSortBy} from './user-sort-by';
+import {UserDirectorySummaries} from './user-directory-summaries';
 
 /**
  * The Security Service implementation.
@@ -151,15 +150,15 @@ export class SecurityService {
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
-   * @return the organizations the user directory is associated with
+   * @return The organizations the user directory is associated with.
    */
   getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations',
-      {reportProgress: true})
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId +
+      '/organizations', {reportProgress: true})
       .pipe(map((organizations: Organization[]) => {
         return organizations;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -195,8 +194,8 @@ export class SecurityService {
    */
   getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries',
-      {reportProgress: true})
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId +
+      '/user-directory-summaries', {reportProgress: true})
       .pipe(map((codeCategories: UserDirectorySummary[]) => {
         return codeCategories;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -233,7 +232,7 @@ export class SecurityService {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    *
-   * @return The organizations.
+   * @return The users.
    */
   getUsers(userDirectoryId: string, filter?: string, sortBy?: UserSortBy,
            sortDirection?: SortDirection, pageIndex?: number,
@@ -269,8 +268,8 @@ export class SecurityService {
       }).pipe(map((response: HttpResponse<User[]>) => {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
-      return new Users(response.body, totalCount, filter, sortDirection, pageIndex,
-        pageSize);
+      return new Users(userDirectoryId, response.body, totalCount, filter, sortBy, sortDirection,
+        pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -286,6 +285,64 @@ export class SecurityService {
             value: 'Failed to retrieve the users.'
           }), apiError));
         }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+
+  /**
+   * Retrieve the user directory summaries.
+   *
+   * @param filter        The optional filter to apply to the user directory summaries.
+   * @param sortDirection The optional sort direction to apply to the user directory summaries.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
+   *
+   * @return The user directory summaries.
+   */
+  getUserDirectorySummaries(filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
+                            pageIndex?: number, pageSize?: number): Observable<UserDirectorySummaries> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<UserDirectorySummary[]>(
+      environment.securityServiceUrlPrefix + '/user-directory-summaries', {
+        observe: 'response',
+        params: params,
+        reportProgress: true,
+      }).pipe(map((response: HttpResponse<UserDirectorySummary[]>) => {
+      const totalCount = Number(response.headers.get('X-Total-Count'));
+
+      return new UserDirectorySummaries(response.body, totalCount, filter, sortDirection, pageIndex,
+        pageSize);
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new SecurityServiceError(this.i18n({
+          id: '@@security_service_failed_to_retrieve_the_user_directory_summaries',
+          value: 'Failed to retrieve the user directory summaries.'
+        }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse, this.i18n));
       } else {
