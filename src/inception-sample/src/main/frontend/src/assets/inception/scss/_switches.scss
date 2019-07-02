@@ -145,15 +145,15 @@
 
 @each $color, $value in $theme-colors {
   //normal style
-  .switch-#{$color} {
+  .switch-#{"" + $color} {
     @include switch-variant($value);
   }
   //outline style
-  .switch-outline-#{$color} {
+  .switch-outline-#{"" + $color} {
     @include switch-outline-variant($value);
   }
   //outline alternative style
-  .switch-outline-#{$color}-alt {
+  .switch-outline-#{"" + $color}-alt {
     @include switch-outline-variant-alt($value);
   }
 }

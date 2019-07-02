@@ -1320,8 +1320,6 @@ INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
 INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
   VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Security.ResetUserPassword', 'Reset User Password', 'Reset User Password');
 INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('baf9c29a-cb9e-415e-a575-c8cd6fcb29ea', 'Security.RoleAdministration', 'Role Administration', 'Role Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
   VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Security.SecurityAdministration', 'Security Administration', 'Security Administration');
 INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
   VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration', 'User Administration');
