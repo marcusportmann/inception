@@ -32,7 +32,7 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {SortDirection} from "../../services/security/sort-direction";
 import {merge, Subscription} from "rxjs";
 import {TableFilter} from "../../components/controls";
-import {UserDatasource} from "../../services/security/users.datasource";
+import {UserDatasource} from "../../services/security/user.datasource";
 import {SessionService} from "../../services/session/session.service";
 import {Session} from "../../services/session/session";
 import {UserDirectorySummary} from "../../services/security/user-directory-summary";

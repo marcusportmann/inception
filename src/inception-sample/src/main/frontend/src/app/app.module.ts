@@ -112,8 +112,12 @@ export class AppModule extends InceptionAppModule {
 
     navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration', ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration', 'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups'],
       [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security', ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups'],
-        [new NavigationItem('far fa-building', 'Organizations','/administration/security/organizations', ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']),
-          new NavigationItem('fas fa-users', 'Users', '/administration/security/users', ['ROLE_Administrator', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups'])
+        [
+          new NavigationItem('fas fa-user', 'Users', '/administration/security/users', ['ROLE_Administrator', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']),
+          new NavigationItem('fas fa-users', 'Groups', '/administration/security/groups', ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']),
+          new NavigationItem('far fa-building', 'Organizations','/administration/security/organizations', ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']),
+          new NavigationItem('fas fa-user-tag', 'Roles','/administration/security/roles', ['ROLE_Administrator', 'FUNCTION_Security.RoleAdministration']),
+          new NavigationItem('far fa-address-book', 'User Directories', '/administration/security/user-directories', ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system', ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration'],
         [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories', ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
           new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration', ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration'])

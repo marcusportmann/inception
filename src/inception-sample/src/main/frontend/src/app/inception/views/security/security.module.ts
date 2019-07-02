@@ -25,7 +25,8 @@ import {RouterModule, Routes} from '@angular/router';
 // Import Inception components
 import {OrganizationsComponent} from './organizations.component';
 import {OverviewComponent} from './overview.component';
-import {CanActivateFunctionGuard} from "../../routing/can-activate-function-guard";
+import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
+import {UserDirectoriesComponent} from './user-directories.component'
 import {UsersComponent} from './users.component';
 
 
@@ -117,7 +118,47 @@ const routes: Routes = [{
     }
     */
   ]
-}
+},
+  {
+    path: 'user-directories',
+    data: {
+      title: 'User Directories'
+    },
+    children: [{
+      path: '',
+      canActivate: [CanActivateFunctionGuard],
+      component: UserDirectoriesComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+      }
+    },
+
+      /*
+      {
+        path: 'new-user-directory',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: NewUserDirectoryComponent,
+        data: {
+          title: 'New User Directory',
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+        }
+      },
+      {
+        path: ':userDirectoryId',
+        canActivate: [
+          CanActivateFunctionGuard
+        ],
+        component: EditUserDirectoryComponent,
+        data: {
+          title: '{userDirectoryId}',
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+        }
+      }
+      */
+    ]
+  }
 ];
 
 @NgModule({
@@ -125,7 +166,7 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [OrganizationsComponent, OverviewComponent, UsersComponent]
+  declarations: [OrganizationsComponent, OverviewComponent, UserDirectoriesComponent, UsersComponent]
 })
 export class SecurityModule {
 }

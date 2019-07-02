@@ -89,6 +89,41 @@ export class SecurityService {
     }));
   }
 
+  /**
+   * Delete the user directory.
+   *
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   *
+   * @return True if the user directory was deleted or false otherwise.
+   */
+  deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId,
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_delete_the_user_directory',
+            value: 'Failed to delete the user directory.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
 
   /**
    * Retrieve the organizations.
@@ -304,8 +339,8 @@ export class SecurityService {
    *
    * @return The user directory summaries.
    */
-  getUserDirectorySummaries(filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
-                            pageIndex?: number, pageSize?: number): Observable<UserDirectorySummaries> {
+  getUserDirectorySummaries(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+                            pageSize?: number): Observable<UserDirectorySummaries> {
 
     let params = new HttpParams();
 

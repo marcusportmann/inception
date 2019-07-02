@@ -225,6 +225,42 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Delete the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   */
+  @ApiOperation(value = "Delete the user directory", notes = "Delete the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+    message = "The user directory was deleted successfully") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 404, message = "The user directory could not be found",
+      response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.DELETE,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+    "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public void deleteUserDirectory(@ApiParam(name = "userDirectoryId",
+    value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+    required = true)
+  @PathVariable UUID userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    securityService.deleteUserDirectory(userDirectoryId);
+  }
+
+
+
+  /**
    * Retrieve the organizations.
    *
    * @param filter        the optional filter to apply to the organizations
