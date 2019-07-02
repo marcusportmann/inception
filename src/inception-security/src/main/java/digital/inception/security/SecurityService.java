@@ -2494,7 +2494,7 @@ public class SecurityService
 
     userDirectory.setId(idGenerator.nextUUID());
     userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
-    userDirectory.setName(organization.getName() + " User Directory");
+    userDirectory.setName(organization.getName() + " Internal User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
         + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"

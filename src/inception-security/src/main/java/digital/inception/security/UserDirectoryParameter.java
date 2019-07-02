@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -576,6 +577,7 @@ public class UserDirectoryParameter
    *
    * @return the binary value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public byte[] getBinaryValue()
     throws UserDirectoryParameterException
   {
@@ -595,6 +597,7 @@ public class UserDirectoryParameter
    *
    * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public BigDecimal getDecimalValue()
     throws UserDirectoryParameterException
   {
@@ -614,6 +617,7 @@ public class UserDirectoryParameter
    *
    * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public double getDoubleValue()
     throws UserDirectoryParameterException
   {
@@ -633,6 +637,7 @@ public class UserDirectoryParameter
    *
    * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public int getIntegerValue()
     throws UserDirectoryParameterException
   {
@@ -652,6 +657,7 @@ public class UserDirectoryParameter
    *
    * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public long getLongValue()
     throws UserDirectoryParameterException
   {
@@ -681,6 +687,7 @@ public class UserDirectoryParameter
    *
    * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
    */
+  @JsonIgnore
   public String getStringValue()
   {
     return value;
@@ -701,6 +708,7 @@ public class UserDirectoryParameter
    *
    * @param value the binary value for the user directory parameter
    */
+  @JsonIgnore
   public void setBinaryValue(BinaryBuffer value)
   {
     this.value = Base64Util.encodeBytes(value.getData());
@@ -711,6 +719,7 @@ public class UserDirectoryParameter
    *
    * @param value the binary value for the user directory parameter
    */
+  @JsonIgnore
   public void setBinaryValue(byte[] value)
   {
     this.value = Base64Util.encodeBytes(value);
@@ -721,6 +730,7 @@ public class UserDirectoryParameter
    *
    * @param value the <code>BigDecimal</code> value for the user directory parameter
    */
+  @JsonIgnore
   public void setDecimalValue(BigDecimal value)
   {
     this.value = String.valueOf(value);
@@ -731,6 +741,7 @@ public class UserDirectoryParameter
    *
    * @param value the <code>double</code> value for the user directory parameter
    */
+  @JsonIgnore
   public void setDoubleValue(double value)
   {
     this.value = String.valueOf(value);
@@ -741,6 +752,7 @@ public class UserDirectoryParameter
    *
    * @param value the <code>int</code> value for the user directory parameter
    */
+  @JsonIgnore
   public void setIntegerValue(int value)
   {
     this.value = String.valueOf(value);
@@ -751,6 +763,7 @@ public class UserDirectoryParameter
    *
    * @param value the <code>long</code> value for the user directory parameter
    */
+  @JsonIgnore
   public void setLongValue(long value)
   {
     this.value = String.valueOf(value);
@@ -771,7 +784,18 @@ public class UserDirectoryParameter
    *
    * @param value the <code>String</code> value for the user directory parameter
    */
+  @JsonIgnore
   public void setStringValue(String value)
+  {
+    this.value = value;
+  }
+
+  /**
+   * Set the <code>String</code> value for the user directory parameter.
+   *
+   * @param value the <code>String</code> value for the user directory parameter
+   */
+  public void setValue(String value)
   {
     this.value = value;
   }

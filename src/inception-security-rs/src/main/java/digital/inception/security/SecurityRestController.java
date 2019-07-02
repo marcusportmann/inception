@@ -600,50 +600,12 @@ public class SecurityRestController extends SecureRestController
       return true;
     }
 
-    // If the user is directly associated with the user directory then they have access
-    String userDirectoryIdAuthorityValue = getValueForAuthorityWithPrefix(authentication,
-        "USER_DIRECTORY_ID_");
+    // If the user is associated with the user directory then they have access
+    List<String> userDirectoryAuthorityValues = getValuesForAuthoritiesWithPrefix(authentication,
+        "USER_DIRECTORY_");
 
-    if (StringUtils.isEmpty(userDirectoryIdAuthorityValue))
-    {
-      return false;
-    }
-    else if (userDirectoryId.equals(UUID.fromString(userDirectoryIdAuthorityValue)))
-    {
-      return true;
-    }
-
-    /*
-     * If the user is associated with a particular user directory, and that user directory is
-     * associated with a particular organization, and that organization is associated with another
-     * user directory, then the user has the same access to this other user directory.
-     */
-    try
-    {
-      var organizationIds = securityService.getOrganizationIdsForUserDirectory(UUID.fromString(
-          userDirectoryIdAuthorityValue));
-
-      for (UUID organizationId : organizationIds)
-      {
-        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
-            organizationId);
-
-        for (UUID userDirectoryIdForOrganization : userDirectoryIdsForOrganization)
-        {
-          if (userDirectoryIdForOrganization.equals(userDirectoryId))
-          {
-            return true;
-          }
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new AccessDeniedException("Failed to check whether the user ("
-          + authentication.getPrincipal() + ") has access to the user directory ("
-          + userDirectoryId + ")", e);
-    }
-
-    return false;
+    return userDirectoryAuthorityValues.stream().anyMatch(
+      userDirectoryAuthorityValue -> userDirectoryId.equals(
+        UUID.fromString(userDirectoryAuthorityValue)));
   }
 }

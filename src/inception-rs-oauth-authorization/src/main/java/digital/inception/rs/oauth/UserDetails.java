@@ -53,12 +53,12 @@ public class UserDetails
 
     this.authorities = new ArrayList<>();
 
-    this.authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_"
+    this.authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_"
         + user.getUserDirectoryId()));
 
     for (String functionCode : functionCodes)
     {
-      this.authorities.add(new SimpleGrantedAuthority(functionCode));
+      this.authorities.add(new SimpleGrantedAuthority("FUNCTION_" + functionCode));
     }
 
     for (String groupName : groupNames)

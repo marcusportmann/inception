@@ -24,11 +24,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.*;
 
 /**
  * The <code>SecurityServiceAuthenticationManager</code> provides an authentication manager
@@ -86,42 +84,54 @@ public class SecurityServiceAuthenticationManager
     try
     {
       // Authenticate the user
-      UUID userDirectoryId = securityService.authenticate(authentication.getPrincipal().toString(),
-          authentication.getCredentials().toString());
+      UUID authenticationUserDirectoryId = securityService.authenticate(
+          authentication.getPrincipal().toString(), authentication.getCredentials().toString());
 
       // Retrieve the details for the user
-      User user = securityService.getUser(userDirectoryId, authentication.getPrincipal()
-          .toString());
+      User user = securityService.getUser(authenticationUserDirectoryId,
+          authentication.getPrincipal().toString());
 
       // Retrieve the function codes for the user
-      List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
+      List<String> functionCodes = securityService.getFunctionCodesForUser(
+          authenticationUserDirectoryId, authentication.getPrincipal().toString());
+
+      // Retrieve the list of IDs for the organizations the user is associated with
+      List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
+          authenticationUserDirectoryId);
+
+      /*
+       * Retrieve the list of IDs for the user directories the user is associated with as a result
+       * of being associated with one or more organizations.
+       */
+      Set<UUID> userDirectoryIds = new HashSet<>();
+
+      for (var organizationId : organizationIds)
+      {
+        // Retrieve the list of user directories associated with the organization
+        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
+            organizationId);
+
+        userDirectoryIds.addAll(userDirectoryIdsForOrganization);
+      }
+
+      // Retrieve the list of roles for the user
+      List<String> roleNames = securityService.getRoleNamesForUser(authenticationUserDirectoryId,
           authentication.getPrincipal().toString());
 
       // Build the list of granted authorities
       List<GrantedAuthority> authorities = new ArrayList<>();
 
-      authorities.add(new SimpleGrantedAuthority("USER_DIRECTORY_ID_" + userDirectoryId));
+      organizationIds.stream().map(organizationId -> new SimpleGrantedAuthority("ORGANIZATION_"
+          + organizationId)).forEach(authorities::add);
 
-      List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
-          userDirectoryId);
+      userDirectoryIds.stream().map(userDirectoryId -> new SimpleGrantedAuthority("USER_DIRECTORY_"
+          + userDirectoryId)).forEach(authorities::add);
 
-      for (UUID organizationId : organizationIds)
-      {
-        authorities.add(new SimpleGrantedAuthority("ORGANIZATION_ID_" + organizationId));
-      }
+      functionCodes.stream().map(functionCode -> new SimpleGrantedAuthority("FUNCTION_"
+          + functionCode)).forEach(authorities::add);
 
-      for (String functionCode : functionCodes)
-      {
-        authorities.add(new SimpleGrantedAuthority("FUNCTION_" + functionCode));
-      }
-
-      List<String> roleNames = securityService.getRoleNamesForUser(userDirectoryId,
-          authentication.getPrincipal().toString());
-
-      for (String roleName : roleNames)
-      {
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName));
-      }
+      roleNames.stream().map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName)).forEach(
+          authorities::add);
 
       // Create the Spring authentication token
       UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

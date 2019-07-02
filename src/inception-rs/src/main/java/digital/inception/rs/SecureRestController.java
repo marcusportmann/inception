@@ -33,6 +33,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public abstract class SecureRestController
 {
   /**
@@ -82,6 +83,21 @@ public abstract class SecureRestController
   }
 
   /**
+   * Confirm that the user associated with the authenticated request has access to the specified
+   * function.
+   *
+   * @param authentication the authenticated principal associated with the authenticated request
+   * @param functionCode   the function code identifying the function
+   *
+   * @return <code>true</code> if the user associated with the authenticated request has access to
+   *         the function identified by the specified function code or <code>false</code> otherwise
+   */
+  protected boolean hasAccessToFunction(Authentication authentication, String functionCode)
+  {
+    return hasAuthority(authentication, "FUNCTION_" + functionCode);
+  }
+
+  /**
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
    * @param authentication the authenticated principal associated with the authenticated request
@@ -111,21 +127,6 @@ public abstract class SecureRestController
     }
 
     return false;
-  }
-
-  /**
-   * Confirm that the user associated with the authenticated request has access to the specified
-   * function code.
-   *
-   * @param authentication the authenticated principal associated with the authenticated request
-   * @param functionCode   the function code
-   *
-   * @return <code>true</code> if the user associated with the authenticated request has access to
-   *         the specified function code or <code>false</code> otherwise
-   */
-  protected boolean hasFunctionCode(Authentication authentication, String functionCode)
-  {
-    return hasAuthority(authentication, "FUNCTION_CODE_" + functionCode);
   }
 
   /**

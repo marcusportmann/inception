@@ -36,7 +36,7 @@ INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b64d', 'Sample', 1);
 
 INSERT INTO security.user_directories (id, type_id, name, configuration)
-  VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Sample User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Sample Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 --INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, CONFIGURATION) VALUES
 --  ('595d13ac-22d6-4ce2-b898-3add4658a748', 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>sds.inception.digital</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>uid=system,ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=test,ou=applications,o=MMP</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>SharedBaseDN</name><value>ou=staff,o=MMP</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserPasswordExpiryAttribute</name><value>passwordexpiry</value></parameter><parameter><name>UserPasswordAttemptsAttribute</name><value>passwordattempts</value></parameter><parameter><name>UserPasswordHistoryAttribute</name><value>passwordhistory</value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>SupportPasswordHistory</name><value>true</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>PasswordHistoryMaxLength</name><value>128</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
@@ -263,3 +263,49 @@ INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b609', 'Test 9', 1);
 INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b610', 'Test 10', 1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO security.user_directories (id, type_id, name, configuration)
+  VALUES ('2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Another Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+
+INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+  VALUES ('2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', '204e5b8f-48e7-4354-bd15-753e6543b64d');
+
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('f4292748-7b98-4b6b-94bf-2abed5ccb0eb', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'jonas', 1, 'Jonas', 'Lang', '', '', 'jonas@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('963c604a-bcaf-4262-9e94-a2f2c55c029d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'denise', 1, 'Denise', 'Rasmussen', '', '', 'denise@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
+  VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'davis', 1, 'Davis', 'Parks', '', '', 'davis@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
+  VALUES ('69aea0f3-5798-4ee8-9082-6c41feba3472', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Organization Administrators', 'Organization Administrators');
+INSERT INTO security.groups (id, user_directory_id, groupname, description)
+  VALUES ('dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Password Resetters', 'Password Resetters');
+
+INSERT INTO security.user_to_group_map (user_id, group_id)
+  VALUES ('f4292748-7b98-4b6b-94bf-2abed5ccb0eb', '69aea0f3-5798-4ee8-9082-6c41feba3472');
+INSERT INTO security.user_to_group_map (user_id, group_id)
+  VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
+
+INSERT INTO security.role_to_group_map (role_id, group_id)
+  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '69aea0f3-5798-4ee8-9082-6c41feba3472');
+INSERT INTO security.role_to_group_map (role_id, group_id)
+  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
+
+
+
