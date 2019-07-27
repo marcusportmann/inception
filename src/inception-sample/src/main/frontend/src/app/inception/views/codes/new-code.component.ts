@@ -27,6 +27,7 @@ import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {Code} from "../../services/codes/code";
 import {AccessDeniedError} from "../../errors/access-denied-error";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The NewCodeComponent class implements the new code component.
@@ -37,7 +38,7 @@ import {AccessDeniedError} from "../../errors/access-denied-error";
   templateUrl: 'new-code.component.html',
   styleUrls: ['new-code.component.css'],
 })
-export class NewCodeComponent implements OnInit {
+export class NewCodeComponent extends AdminContainerView implements OnInit {
 
   codeCategoryId: string;
 
@@ -47,6 +48,8 @@ export class NewCodeComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
+
     this.newCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: ['', [Validators.required, Validators.maxLength(100)]],

@@ -33,6 +33,7 @@ import {OrganizationDatasource} from '../../services/security/organization.datas
 import {SortDirection} from "../../services/security/sort-direction";
 import {merge, Subscription} from "rxjs";
 import {TableFilter} from "../../components/controls";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The OrganizationsComponent class implements the organizations component.
@@ -46,7 +47,7 @@ import {TableFilter} from "../../components/controls";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class OrganizationsComponent implements AfterViewInit, OnDestroy, OnInit {
+export class OrganizationsComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -63,6 +64,7 @@ export class OrganizationsComponent implements AfterViewInit, OnDestroy, OnInit 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
   }
 
   deleteOrganization(organizationId: string): void {

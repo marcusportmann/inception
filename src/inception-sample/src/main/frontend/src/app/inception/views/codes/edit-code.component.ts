@@ -27,6 +27,7 @@ import {finalize, first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The EditCodeComponent class implements the edit code category component.
@@ -37,7 +38,7 @@ import {AccessDeniedError} from "../../errors/access-denied-error";
   templateUrl: 'edit-code.component.html',
   styleUrls: ['edit-code.component.css'],
 })
-export class EditCodeComponent implements OnInit {
+export class EditCodeComponent extends AdminContainerView implements OnInit {
 
   codeCategoryId: string;
 
@@ -47,6 +48,8 @@ export class EditCodeComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
+
     this.editCodeForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: [{

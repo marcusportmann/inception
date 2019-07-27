@@ -112,7 +112,7 @@ export class AdminHeaderComponent implements OnInit {
    *
    * @param elementRef     The element reference.
    * @param router         The router.
-   * @param sessionService The Session Service.
+   * @param sessionService The session service.
    */
   constructor(private elementRef: ElementRef, private router: Router,
               private sessionService: SessionService) {

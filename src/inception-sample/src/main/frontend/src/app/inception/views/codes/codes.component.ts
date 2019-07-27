@@ -31,6 +31,7 @@ import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {AccessDeniedError} from '../../errors/access-denied-error';
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The CodesComponent class implements the codes component.
@@ -44,7 +45,7 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodesComponent implements AfterViewInit, OnDestroy, OnInit {
+export class CodesComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   codeCategoryId: string;
 
@@ -59,6 +60,7 @@ export class CodesComponent implements AfterViewInit, OnDestroy, OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
   }
 
   applyFilter(filterValue: string): void {

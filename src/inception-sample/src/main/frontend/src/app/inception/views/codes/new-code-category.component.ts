@@ -27,6 +27,7 @@ import {finalize, first} from "rxjs/operators";
 import {CodesServiceError} from "../../services/codes/codes.service.errors";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {AccessDeniedError} from "../../errors/access-denied-error";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -37,7 +38,7 @@ import {AccessDeniedError} from "../../errors/access-denied-error";
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
 })
-export class NewCodeCategoryComponent implements OnInit {
+export class NewCodeCategoryComponent extends AdminContainerView implements OnInit {
 
   newCodeCategoryForm: FormGroup;
 
@@ -45,6 +46,8 @@ export class NewCodeCategoryComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
+
     this.newCodeCategoryForm = this.formBuilder.group({
       // tslint:disable-next-line
       id: ['', [Validators.required, Validators.maxLength(100)]],

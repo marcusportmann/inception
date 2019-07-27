@@ -35,7 +35,7 @@ export class SessionInterceptor implements HttpInterceptor {
   /**
    * Constructs a new SessionInterceptor.
    *
-   * @param sessionService The Session Service.
+   * @param sessionService The session service.
    */
   constructor(private sessionService: SessionService) {
   }

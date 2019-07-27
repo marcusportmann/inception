@@ -111,7 +111,7 @@ label {
 
   padding: 0px!important;
   border-radius: $card-border-radius;
-  margin-bottom: 1rem;
+  //margin-bottom: 1rem;
 
   .mat-card-actions {
     .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
@@ -212,7 +212,6 @@ label {
     .mat-menu-item {
 
       color: $gray-600;
-      /*font-size: 0.875rem;*/
       white-space: nowrap;
       text-decoration: none;
 
@@ -302,14 +301,6 @@ label {
     background-image: none !important;
   }
 }
-
-/*
-.mat-input-element, .mat-form-field-label {
-  line-height: 1.25rem !important;
-}
-*/
-
-
 
 .mat-radio-label-content {
   padding-left: 0.4em !important;

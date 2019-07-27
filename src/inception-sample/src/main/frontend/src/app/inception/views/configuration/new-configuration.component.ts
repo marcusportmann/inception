@@ -27,6 +27,7 @@ import {AccessDeniedError} from "../../errors/access-denied-error";
 import {ConfigurationService} from "../../services/configuration/configuration.service";
 import {Configuration} from "../../services/configuration/configuration";
 import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The NewConfigurationComponent class implements the new configuration component.
@@ -37,7 +38,7 @@ import {ConfigurationServiceError} from "../../services/configuration/configurat
   templateUrl: 'new-configuration.component.html',
   styleUrls: ['new-configuration.component.css'],
 })
-export class NewConfigurationComponent {
+export class NewConfigurationComponent extends AdminContainerView {
 
   newConfigurationForm: FormGroup;
 
@@ -45,6 +46,8 @@ export class NewConfigurationComponent {
               private formBuilder: FormBuilder, private i18n: I18n,
               private configurationService: ConfigurationService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
+    super();
+
     this.newConfigurationForm = this.formBuilder.group({
       // tslint:disable-next-line
       key: ['', [Validators.required, Validators.maxLength(4000)]],

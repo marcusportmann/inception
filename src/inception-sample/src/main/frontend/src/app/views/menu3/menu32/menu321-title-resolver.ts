@@ -14,23 +14,30 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {AdminContainerView} from "../../components/layout/admin-container-view";
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
+import {Observable, of} from "rxjs";
 
 /**
- * The OverviewComponent class implements the overview component.
+ * The Menu321TitleResolver class provides a title resolver for the Menu321Component.
  *
  * @author Marcus Portmann
  */
-@Component({
-  template: `Overview`
-})
-export class OverviewComponent extends AdminContainerView {
+export class Menu321TitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new OverviewComponent.
+   * Constructs a new Menu321TitleResolver.
    */
   constructor() {
-    super();
+  }
+
+  /**
+   * Resolve the title.
+   *
+   * @param activatedRouteSnapshot The activate route snapshot.
+   * @param routerStateSnapshot    The router state snapshot.
+   */
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
+    Observable<string> {
+    return of('Custom Menu 3.2.1 Title');
   }
 }

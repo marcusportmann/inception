@@ -27,6 +27,7 @@ import {AccessDeniedError} from "../../errors/access-denied-error";
 import {ConfigurationService} from "../../services/configuration/configuration.service";
 import {Configuration} from "../../services/configuration/configuration";
 import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The EditConfigurationComponent class implements the edit configuration component.
@@ -37,7 +38,7 @@ import {ConfigurationServiceError} from "../../services/configuration/configurat
   templateUrl: 'edit-configuration.component.html',
   styleUrls: ['edit-configuration.component.css'],
 })
-export class EditConfigurationComponent implements AfterViewInit {
+export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit {
 
   editConfigurationForm: FormGroup;
 
@@ -45,6 +46,8 @@ export class EditConfigurationComponent implements AfterViewInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private configurationService: ConfigurationService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
+    super();
+
     this.editConfigurationForm = this.formBuilder.group({
       // tslint:disable-next-line
       key: [{

@@ -14,39 +14,30 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
+import {Observable, of} from "rxjs";
 
 /**
- * The Title Service implementation.
+ * The Menu322TitleResolver class provides a title resolver for the Menu322Component.
  *
  * @author Marcus Portmann
  */
-@Injectable()
-export class TitleService {
-
-  title: Subject<string> = new ReplaySubject<string>();
+export class Menu322TitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new TitleService.
+   * Constructs a new Menu322TitleResolver.
    */
   constructor() {
-    console.log('Initializing the Title Service');
   }
 
   /**
-   * Clear the current title
-   */
-  clearTitle(): void {
-    this.title.next(null);
-  }
-
-  /**
-   * Set the current title.
+   * Resolve the title.
    *
-   * @param title the current title
+   * @param activatedRouteSnapshot The activate route snapshot.
+   * @param routerStateSnapshot    The router state snapshot.
    */
-  setTitle(title: string): void {
-    this.title.next(title);
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
+    Observable<string> {
+    return of('Custom Menu 3.2.2 Title');
   }
 }

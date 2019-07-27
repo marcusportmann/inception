@@ -14,56 +14,41 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {AdminContainerView} from '../../../inception/components/layout/admin-container-view';
-import {BackNavigation} from '../../../inception/components/layout/back-navigation';
-import {ActivatedRoute} from '@angular/router';
+import {BackNavigation} from './back-navigation';
 
 /**
- * The Menu322Component class implements the menu 3.2.2 component.
+ * The AdminContainerView class provides the abstract base class that all admin container view
+ * components should be derived from.
  *
  * @author Marcus Portmann
  */
-@Component({
-  template: `Menu 3.2.2`
-})
-export class Menu322Component extends AdminContainerView {
-
-  /**
-   * Constructs a new Menu322Component.
-   *
-   * @param activatedRoute The activated route.
-   */
-  constructor(private activatedRoute: ActivatedRoute) {
-    super();
-  }
+export abstract class AdminContainerView {
 
   /**
    * Tne back navigation for admin container view.
    */
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Menu 3.2.1', ['../menu321'], {relativeTo: this.activatedRoute});
+    return null;
   }
 
   /**
    * Does the admin container view have a back navigation option?
    */
   get hasBackNavigation(): boolean {
-    return true;
+    return false;
   }
 
   /**
    * Does the admin container view have a title?
    */
   get hasTitle(): boolean {
-    return true;
+    return false;
   }
 
   /**
    * The title for the admin container view.
    */
   get title(): string {
-    return 'Custom Menu 3.2.2 Title';
+    return null;
   }
 }

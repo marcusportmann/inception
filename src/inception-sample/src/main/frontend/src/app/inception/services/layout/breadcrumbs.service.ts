@@ -40,7 +40,7 @@ export class BreadcrumbsService {
     console.log('Initializing the Breadcrumbs Service');
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event) => {
+      .subscribe(() => {
         const breadcrumbs = [];
         let currentRoute = this.activatedRoute.root, url = '';
 

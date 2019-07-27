@@ -33,6 +33,7 @@ import {SortDirection} from "../../services/security/sort-direction";
 import {merge, Subscription} from "rxjs";
 import {TableFilter} from "../../components/controls";
 import {UserDirectorySummaryDatasource} from "../../services/security/user-directory-summary.datasource";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The UserDirectoriesComponent class implements the user directories component.
@@ -46,7 +47,7 @@ import {UserDirectorySummaryDatasource} from "../../services/security/user-direc
     'class': 'flex flex-column flex-fill',
   }
 })
-export class UserDirectoriesComponent implements AfterViewInit, OnDestroy, OnInit {
+export class UserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -63,6 +64,7 @@ export class UserDirectoriesComponent implements AfterViewInit, OnDestroy, OnIni
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
   }
 
   deleteUserDirectory(userDirectoryId: string): void {

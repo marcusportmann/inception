@@ -30,10 +30,6 @@
 
           .main {
 
-            .breadcrumb {
-
-            }
-
             .container-fluid {
 
             }
@@ -262,37 +258,28 @@ admin-root {
   }
 }
 
-/*
-.admin-body {
 
-  .main {
-
-    .container-fluid {
-
-      min-height: calc(100% - (2 * #{$breadcrumb-padding-y} + #{$font-size-base} + 1.5 * #{$spacer}));
-
-    }
-
-  }
-
-
-}
-*/
 
 
 
 .admin-body {
-  .main {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
 
+  .main {
     display: flex;
     flex-direction: column;
-    flex: auto;
+    flex: 1;
+    min-width: 0;
+
+    .title-bar {
+      border-bottom: 1px solid $body-bg;
+      cursor: pointer;
+    }
 
     .breadcrumb {
-      font-size: $breadcrumb-font-size;
-
-      /*flex: 0 0 42px;*/
-
+      border-bottom: 1px solid $body-bg;
     }
 
     .container-fluid {
@@ -302,6 +289,8 @@ admin-root {
       display: flex;
       flex-direction: column;
       flex: auto;
+
+      padding: 16px;
 
       ng-component {
 
@@ -321,7 +310,6 @@ admin-root {
     }
   }
 }
-
 
 @include media-breakpoint-down(md) {
   .admin-header {
@@ -364,26 +352,14 @@ admin-root {
   @include borders($admin-footer-borders);
 }
 
-.admin-body {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
-  /*overflow-x: hidden;*/
 
-  .main {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .sidebar {
-    // $sidebar-width is the width of the columns
-    flex: 0 0 $sidebar-width;
-    // put the nav on the left
-    order: -1;
-  }
-}
 
 .sidebar {
+  // $sidebar-width is the width of the columns
+  flex: 0 0 $sidebar-width;
+  // put the nav on the left
+  order: -1;
+
   margin-left: - $sidebar-width;
 
   sidebar-nav-item {
@@ -391,13 +367,92 @@ admin-root {
   }
 }
 
-//body > admin-container > div > main > ol > li.breadcrumb-item.active.ng-star-inserted > span
+
+
+.title-bar {
+  background-color: $title-bar-bg;
+  color: $title-bar-color;
+  //padding-top: $title-bar-padding-y;
+  padding: 0 15px;
+  //padding-bottom: $title-bar-padding-y;
+
+  //line-height: $title-bar-height;
+
+  .back {
+    position: absolute;
+    x: 0;
+    y: 0;
+    color: $title-bar-back-color;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: $title-bar-back-font-size;
+    //line-height: ($font-size-base * $line-height-base) !important;
+    line-height: $title-bar-height;
+  }
+
+  .title {
+    text-align: center;
+    white-space: nowrap;
+    line-height: $title-bar-height;
+  }
+}
+
+.title-bar-fixed {
+  .main {
+    padding-top: $title-bar-height;
+  }
+
+  .title-bar {
+    $title-bar-top: $admin-header-height;
+    position: fixed;
+    top: $title-bar-top;
+    left:  0;
+    right: 0;
+    z-index: $zindex-sticky - 3;
+  }
+}
 
 
 
+//
+// Breadcrumb
+//
+.breadcrumb {
+  font-size: $breadcrumb-font-size;
+  padding: 0 15px;
 
+  .breadcrumb-item {
+    line-height: $breadcrumb-height;
+  }
 
+}
 
+.breadcrumbs-fixed {
+  .main {
+    padding-top: $breadcrumb-height;
+  }
+
+  .breadcrumb {
+    $breadcrumb-top: $admin-header-height;
+    position: fixed;
+    top: $breadcrumb-top;
+    left: 0;
+    right: 0;
+    z-index: $zindex-sticky - 3;
+  }
+}
+
+.breadcrumbs-fixed.title-bar-fixed {
+  .main {
+    padding-top: $title-bar-height + $breadcrumb-height;
+  }
+
+  .breadcrumb {
+    $breadcrumb-top: $admin-header-height + $title-bar-height;
+    top: $breadcrumb-top;
+    margin-top: 1px;
+  }
+}
 
 
 
@@ -432,7 +487,6 @@ admin-root {
     }
 
     .admin-header + .admin-body {
-      /*min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
       min-height: calc(100vh - #{$admin-header-height}  - #{$admin-footer-height});
     }
   }
@@ -440,16 +494,11 @@ admin-root {
   .sidebar-fixed.admin-footer-fixed {
 
     .admin-header + .admin-body .sidebar {
-      /* TODO: REMOVE THIS */
-      /*height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});*/
     }
 
 
     .admin-header + .admin-body {
       min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
-
-      /* TODO: REMOVE THIS */
-      /*border: 1px solid red;*/
     }
   }
 
@@ -509,23 +558,8 @@ admin-root {
 
 
 
-//
-// Breadcrumb
-//
-.breadcrumbs-fixed {
-  .main {
-    $breadcrumb-height: 2 * $breadcrumb-padding-y + $font-size-base + 1.5 * $spacer;
-    padding-top: $breadcrumb-height;
-  }
 
-  .breadcrumb {
-    position: fixed;
-    top: $admin-header-height;
-    right: 0;
-    left: 0;
-    z-index: $zindex-sticky - 3;
-  }
-}
+
 
 @each $breakpoint in map-keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
@@ -554,6 +588,17 @@ admin-root {
             }
           }
         }
+        .breadcrumb {
+          left: $sidebar-width;
+        }
+        .title-bar {
+          left: $sidebar-width;
+        }
+        &.sidebar-minimized {
+          .title-bar {
+            left: $sidebar-minimized-width;
+          }
+        }
         &.breadcrumbs-fixed {
           .breadcrumb {
             left: $sidebar-width;
@@ -569,6 +614,21 @@ admin-root {
             }
           }
         }
+        &.title-bar-fixed {
+          .title-bar {
+            left: $sidebar-width;
+          }
+          &.sidebar-compact {
+            .title-bar {
+              left: $sidebar-compact-width;
+            }
+          }
+          &.sidebar-minimized {
+            .title-bar {
+              left: $sidebar-minimized-width;
+            }
+          }
+        }
       }
     }
 
@@ -579,6 +639,9 @@ admin-root {
       }
 
       @include media-breakpoint-down(xs) {
+
+
+
         .main {
           position: relative;
           &::before {
@@ -668,6 +731,10 @@ admin-root {
     margin-top: $admin-header-height;
   }
 
+  .title-bar {
+    left: 0;
+  }
+
   .sidebar {
     position: fixed;
     z-index: $zindex-sticky - 1;
@@ -689,7 +756,7 @@ admin-root {
 
     .main {
       ol.breadcrumb {
-        font-size: 0.8125rem !important;
+        /*font-size: 0.8125rem !important;*/
 
         .breadcrumb-item {
           max-width: 340px;

@@ -19,8 +19,11 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 // Import Angular classes
 import {RouterModule, Routes} from "@angular/router";
+// Import Inception classes
 import {Menu321Component} from "./menu321.component";
 import {Menu322Component} from "./menu322.component";
+import {Menu321TitleResolver} from "./menu321-title-resolver";
+import {Menu322TitleResolver} from "./menu322-title-resolver";
 
 const routes: Routes = [{
   path: '',
@@ -28,14 +31,14 @@ const routes: Routes = [{
 }, {
   path: 'menu321',
   component: Menu321Component,
-  data: {
-    title: 'Menu 3.2.1',
+  resolve: {
+    title: Menu321TitleResolver
   }
 }, {
   path: 'menu322',
   component: Menu322Component,
-  data: {
-    title: 'Menu 3.2.2',
+  resolve: {
+    title: Menu322TitleResolver
   }
 }
 ];
@@ -51,7 +54,8 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [Menu321Component, Menu322Component]
+  declarations: [Menu321Component, Menu322Component],
+  providers: [Menu321TitleResolver, Menu322TitleResolver]
 })
 export class Menu32Module {
 }

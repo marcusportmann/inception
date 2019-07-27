@@ -15,6 +15,13 @@
  */
 
 import {Component} from '@angular/core';
+import {AdminContainerView} from "./admin-container-view";
+import {BackNavigation} from "./back-navigation";
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+} from "@angular/router";
+import {TitleBarService} from "../../services/layout/title-bar.service";
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -37,9 +44,10 @@ import {Component} from '@angular/core';
         <sidebar-minimizer></sidebar-minimizer>
       </sidebar>
       <main class="main">
-        <breadcrumbs></breadcrumbs>
+        <title-bar [fixed]="true"></title-bar>
+        <breadcrumbs [fixed]="true"></breadcrumbs>
         <div class="container-fluid">
-          <router-outlet></router-outlet>
+          <router-outlet (activate)="onRouterOutletActive($event)" (deactivate)="onRouterOutletDeactive($event)"></router-outlet>
         </div>
       </main>
     </div>
@@ -58,8 +66,11 @@ export class AdminContainerComponent {
 
   /**
    * Constructs a new AdminContainerComponent.
+   *
+   * @param activatedRoute  The activated route.
+   * @param titleBarService The title bar service.
    */
-  constructor() {
+  constructor(private activatedRoute: ActivatedRoute, private titleBarService: TitleBarService) {
     this.changes = new MutationObserver(() => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
@@ -67,5 +78,53 @@ export class AdminContainerComponent {
     this.changes.observe(<Element>this.element, {
       attributes: true
     });
+  }
+
+  /**
+   * Process the router outlet activate event.
+   *
+   * @param childComponent The child component.
+   */
+  onRouterOutletActive(childComponent: any) {
+
+    let backNavigation: BackNavigation = null;
+    let title: string = null;
+
+    // Try and retrieve the title from the data for activated route
+    let activateRouteSnapshot: ActivatedRouteSnapshot = this.activatedRoute.snapshot.firstChild;
+
+    while (activateRouteSnapshot.firstChild) activateRouteSnapshot = activateRouteSnapshot.firstChild;
+
+    if (activateRouteSnapshot.data) {
+      if (!!activateRouteSnapshot.data.title) {
+        title = activateRouteSnapshot.data.title;
+      }
+    }
+
+    // Try and retrieve the back navigation and title from the admin container view if present
+    if (childComponent instanceof AdminContainerView) {
+
+      if (childComponent.hasBackNavigation) {
+        backNavigation = childComponent.backNavigation;
+      }
+
+      if (childComponent.hasTitle) {
+        title = childComponent.title;
+      }
+    }
+
+    // Set the back navigation
+    this.titleBarService.setBackNavigation(backNavigation);
+
+    // Set the title
+    this.titleBarService.setTitle(title);
+  }
+
+  /**
+   * Process the router outlet deactivate event.
+   *
+   * @param childComponent The child component.
+   */
+  onRouterOutletDeactive(childComponent: any) {
   }
 }

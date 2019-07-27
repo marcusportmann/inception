@@ -31,6 +31,7 @@ import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {CodeCategorySummary} from '../../services/codes/code-category-summary';
 import {AccessDeniedError} from '../../errors/access-denied-error';
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The CodeCategoriesComponent class implements the code categories component.
@@ -44,7 +45,7 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
     'class': 'flex flex-column flex-fill',
   }
 })
-export class CodeCategoriesComponent implements AfterViewInit, OnDestroy, OnInit {
+export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   dataSource: MatTableDataSource<CodeCategorySummary>;
 
@@ -57,6 +58,7 @@ export class CodeCategoriesComponent implements AfterViewInit, OnDestroy, OnInit
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
+    super();
   }
 
   applyFilter(filterValue: string): void {

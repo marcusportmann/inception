@@ -49,7 +49,8 @@ import {
   SidebarNavDropdownComponent,
   SidebarNavItemComponent,
   SimpleContainerComponent,
-  SpinnerComponent
+  SpinnerComponent,
+  TitleBarComponent
 } from './components/layout';
 // Import Inception interceptors
 import {SessionInterceptor} from "./services/session/session.interceptor";
@@ -60,7 +61,7 @@ import {ConfigurationService} from "./services/configuration/configuration.servi
 import {DialogService} from "./services/dialog/dialog.service";
 import {ErrorService} from './services/error/error.service';
 import {SpinnerService} from './services/layout/spinner.service'
-import {TitleService} from './services/layout/title.service';
+import {TitleBarService} from './services/layout/title-bar.service';
 import {NavigationService} from "./services/navigation/navigation.service";
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
@@ -175,7 +176,7 @@ export const INCEPTION_DATE_FORMATS = {
     NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
     SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
     SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
-    SpinnerComponent,
+    SpinnerComponent, TitleBarComponent,
 
     // Inception dialogs
     ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
@@ -240,7 +241,7 @@ export class InceptionModule {
         CanActivateFunctionGuard,
 
         BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService,
-        SpinnerService, TitleService, NavigationService, SecurityService, SessionService
+        SpinnerService, TitleBarService, NavigationService, SecurityService, SessionService
       ]
     }
   }

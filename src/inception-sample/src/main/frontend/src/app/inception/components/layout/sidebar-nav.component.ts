@@ -44,7 +44,7 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
   /**
    * Constructs a new SidebarNavComponent.
    *
-   * @param navigationService The Navigation Service.
+   * @param navigationService The navigation service.
    */
   constructor(private navigationService: NavigationService) {
     this.navItems = new Array<NavigationItem>();

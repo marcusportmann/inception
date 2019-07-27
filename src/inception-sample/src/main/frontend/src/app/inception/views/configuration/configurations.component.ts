@@ -31,6 +31,7 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
 import {Configuration} from "../../services/configuration/configuration";
 import {ConfigurationService} from "../../services/configuration/configuration.service";
 import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The ConfigurationsComponent class implements the configurations component.
@@ -44,7 +45,7 @@ import {ConfigurationServiceError} from "../../services/configuration/configurat
     'class': 'flex flex-column flex-fill',
   }
 })
-export class ConfigurationsComponent implements AfterViewInit, OnInit {
+export class ConfigurationsComponent extends AdminContainerView implements AfterViewInit, OnInit {
 
   dataSource = new MatTableDataSource<Configuration>();
 
@@ -57,6 +58,7 @@ export class ConfigurationsComponent implements AfterViewInit, OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private configurationService: ConfigurationService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
+    super();
   }
 
   applyFilter(filterValue: string): void {

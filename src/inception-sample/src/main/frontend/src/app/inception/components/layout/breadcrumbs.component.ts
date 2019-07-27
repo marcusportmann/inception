@@ -18,7 +18,6 @@ import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../shared';
 import {BreadcrumbsService} from '../../services/layout/breadcrumbs.service';
 import {Observable} from 'rxjs';
-import {TitleService} from '../../services/layout/title.service';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -29,30 +28,16 @@ import {TitleService} from '../../services/layout/title.service';
   // tslint:disable-next-line
   selector: 'breadcrumbs',
   template: `
-    <ol *ngIf="title | async as title; else noTitle" class="breadcrumb">
-      <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async">
+    <ol class="breadcrumb">
+      <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
         <li class="breadcrumb-item"
-            *ngIf="(breadcrumb.label)">
-          <a [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+            *ngIf="(breadcrumb.label)"
+            [ngClass]="{active: last}">
+          <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+          <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
         </li>
       </ng-template>
-      <li class="breadcrumb-item">
-        <span>{{title}}</span>
-      </li>
     </ol>
-
-    <ng-template #noTitle>
-      <ol class="breadcrumb">
-        <ng-template ngFor let-breadcrumb [ngForOf]="breadcrumbs | async" let-last=last>
-          <li class="breadcrumb-item"
-              *ngIf="(breadcrumb.label)"
-              [ngClass]="{active: last}">
-            <a *ngIf="!last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
-            <span *ngIf="last" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</span>
-          </li>
-        </ng-template>
-      </ol>
-    </ng-template>
   `
 })
 export class BreadcrumbsComponent implements OnInit {
@@ -65,18 +50,9 @@ export class BreadcrumbsComponent implements OnInit {
    * Constructs a new BreadcrumbsComponent.
    *
    * @param elementRef         The element reference.
-   * @param breadcrumbsService The Breadcrumbs Service.
-   * @param titleService       The Title Service.
+   * @param breadcrumbsService The breadcrumbs service.
    */
-  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService,
-              private titleService: TitleService) {
-  }
-
-  /**
-   * The current title from the Title Service.
-   */
-  get title(): Observable<string> {
-    return this.titleService.title;
+  constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) {
   }
 
   ngOnInit(): void {

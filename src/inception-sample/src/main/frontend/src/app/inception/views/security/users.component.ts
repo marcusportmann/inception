@@ -39,6 +39,7 @@ import {UserDirectorySummary} from "../../services/security/user-directory-summa
 import {FormBuilder} from "@angular/forms";
 import {MatSelect, MatSelectChange} from "@angular/material";
 import {UserSortBy} from "../../services/security/user-sort-by";
+import {AdminContainerView} from "../../components/layout/admin-container-view";
 
 /**
  * The UsersComponent class implements the users component.
@@ -75,7 +76,7 @@ import {UserSortBy} from "../../services/security/user-sort-by";
   `
   ]
 })
-export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
+export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -99,6 +100,7 @@ export class UsersComponent implements AfterViewInit, OnDestroy, OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService, private sessionService: SessionService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
+    super();
   }
 
   deleteUser(userId: string): void {
