@@ -99,13 +99,16 @@ import {Session} from '../../services/session/session';
 })
 export class AdminHeaderComponent implements OnInit {
 
-  @Input() brandFull: any;
+  // tslint:disable-next-line
+  @Input() brandFull?: any;
 
-  @Input() brandMinimized: any;
+  // tslint:disable-next-line
+  @Input() brandMinimized?: any;
 
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
-  @Input() sidebarToggler: any;
+  // tslint:disable-next-line
+  @Input() sidebarToggler?: any;
 
   /**
    * Constructs a new AdminHeaderComponent.
@@ -118,6 +121,7 @@ export class AdminHeaderComponent implements OnInit {
               private sessionService: SessionService) {
   }
 
+  // tslint:disable-next-line
   static breakpoint(breakpoint: any): any {
     console.log(breakpoint);
     return breakpoint ? breakpoint : '';
@@ -125,30 +129,39 @@ export class AdminHeaderComponent implements OnInit {
 
   ngOnInit(): void {
     Replace(this.elementRef);
+
     if (this.fixed) {
-      document.querySelector('body').classList.add('admin-header-fixed');
+      const bodySelector = document.querySelector('body');
+
+      if (bodySelector) {
+        bodySelector.classList.add('admin-header-fixed')
+      }
     }
   }
 
+  // tslint:disable-next-line
   imgSrc(brand: any): string {
     return brand.src ? brand.src : '';
   }
 
+  // tslint:disable-next-line
   imgWidth(brand: any): number | string {
     return brand.width ? brand.width : 'auto';
   }
 
+  // tslint:disable-next-line
   imgHeight(brand: any): number | string {
     return brand.height ? brand.height : 'auto';
   }
 
+  // tslint:disable-next-line
   imgAlt(brand: any): string {
     return brand.alt ? brand.alt : '';
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session.pipe(map((session: Session) => {
-      return (session != null);
+    return this.sessionService.session.pipe(map((session: Session | null) => {
+      return (!!session);
     }));
   }
 
@@ -165,8 +178,8 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   userFullName(): Observable<string> {
-    return this.sessionService.session.pipe(map((session: Session) => {
-      if (session) {
+    return this.sessionService.session.pipe(map((session: Session | null) => {
+      if (!!session) {
         return session.userFullName;
       } else {
         return '';

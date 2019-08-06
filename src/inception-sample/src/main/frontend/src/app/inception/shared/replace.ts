@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
+// tslint:disable-next-line
 export function Replace(el: any): any {
   const nativeElement: HTMLElement = el.nativeElement;
-  const parentElement: HTMLElement = nativeElement.parentElement;
-  // move all children out of the element
-  while (nativeElement.firstChild) {
-    parentElement.insertBefore(nativeElement.firstChild, nativeElement);
+  const parentElement: HTMLElement | null = nativeElement.parentElement;
+  if (parentElement) {
+    // move all children out of the element
+    while (nativeElement.firstChild) {
+      parentElement.insertBefore(nativeElement.firstChild, nativeElement);
+    }
+
+    // remove the empty element(the host)
+    parentElement.removeChild(nativeElement);
   }
-  // remove the empty element(the host)
-  parentElement.removeChild(nativeElement);
 }

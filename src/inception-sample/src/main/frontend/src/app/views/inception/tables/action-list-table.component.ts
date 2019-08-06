@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -203,15 +203,15 @@ const USER_DATA: User[] = [{
   templateUrl: 'action-list-table.component.html',
   styleUrls: ['action-list-table.component.css']
 })
-export class ActionListTableComponent implements AfterViewInit, OnDestroy, OnInit {
+export class ActionListTableComponent implements AfterViewInit {
 
-  dataSource: MatTableDataSource<User>;
+  dataSource = new MatTableDataSource<User>(USER_DATA);
 
-  displayedColumns: string[] = ['firstNames', 'lastName', 'email', 'actions'];
+  displayedColumns = ['firstNames', 'lastName', 'email', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -220,15 +220,13 @@ export class ActionListTableComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
 
-  ngOnDestroy(): void {
-  }
-
-  ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<User>(USER_DATA);
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
   }
 }
 

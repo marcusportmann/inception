@@ -148,7 +148,7 @@ public class ErrorService
 
       if (errorReport.getData() != null)
       {
-        statement.setBytes(10, errorReport.getData());
+        statement.setString(10, errorReport.getData());
       }
       else
       {
@@ -324,13 +324,9 @@ public class ErrorService
   private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
     throws SQLException
   {
-    byte[] data = rs.getBytes(10);
-
     return new ErrorReport(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(3),
         rs.getString(4), rs.getString(5), rs.getTimestamp(6).toLocalDateTime(), rs.getString(7),
-        rs.getString(8), rs.getString(9), (data == null)
-        ? new byte[0]
-        : data);
+        rs.getString(8), rs.getString(9), rs.getString(10));
   }
 
   private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)

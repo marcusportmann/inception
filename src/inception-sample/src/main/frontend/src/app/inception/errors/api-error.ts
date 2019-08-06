@@ -96,7 +96,7 @@ export class ApiError {
     this.stackTrace = httpErrorResponse.error.stackTrace;
     this.name = httpErrorResponse.error.name;
     this.validationErrors = httpErrorResponse.error.validationErrors;
-    this.url = httpErrorResponse.url;
+    this.url = (!!httpErrorResponse.url) ? httpErrorResponse.url : '';
   }
 
   /**

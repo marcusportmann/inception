@@ -1190,7 +1190,7 @@ CREATE TABLE "ERROR"."ERROR_REPORTS" (
   who                 NVARCHAR(1000),
   device_id           NVARCHAR(50),
   feedback            NVARCHAR(4000),
-  data                VARBINARY(MAX),
+  data                NVARCHAR(MAX),
 
   PRIMARY KEY (id)
 );
@@ -1238,7 +1238,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'FEEDBACK';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The optional data associated with the error report' ,
+@name=N'MS_Description', @value=N'The optional base-64 encoded data associated with the error report' ,
 @level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DATA';
 GO
 

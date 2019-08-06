@@ -18,10 +18,13 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.Base64Util;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -29,14 +32,14 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ErrorServiceTest</code> class contains the implementation of the JUnit
@@ -90,9 +93,9 @@ public class ErrorServiceTest
 
   private static synchronized ErrorReport getTestErrorReport()
   {
-    return new ErrorReport(UUID.randomUUID(), "ApplicationId",
-        "ApplicationVersion", "Description", "Detail", LocalDateTime.now(), "Who", "DeviceId",
-        "Feedback", "Data".getBytes());
+    return new ErrorReport(UUID.randomUUID(), "ApplicationId", "ApplicationVersion", "Description",
+        "Detail", LocalDateTime.now(), "Who", "DeviceId", "Feedback", Base64Util.encodeBytes(
+        "Data".getBytes()));
   }
 
   private void compareErrorReportAndErrorReportSummary(ErrorReport errorReport,
@@ -134,7 +137,7 @@ public class ErrorServiceTest
         errorReport1.getDeviceId(), errorReport2.getDeviceId());
     assertEquals("The feedback values for the two error reports do not match",
         errorReport1.getFeedback(), errorReport2.getFeedback());
-    assertArrayEquals("The data values for the two error reports do not match",
-        errorReport1.getData(), errorReport2.getData());
+    assertEquals("The data values for the two error reports do not match", errorReport1.getData(),
+        errorReport2.getData());
   }
 }

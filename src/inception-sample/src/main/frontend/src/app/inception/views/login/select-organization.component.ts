@@ -15,7 +15,7 @@
  */
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {first, map, startWith} from 'rxjs/operators';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {Organization} from '../../services/security/organization';
@@ -36,6 +36,8 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  organizationFormControl: FormControl;
+
   selectOrganizationForm: FormGroup;
 
   filteredOrganizations: Subject<Organization[]> = new ReplaySubject<Organization[]>();
@@ -43,13 +45,13 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
-    this.selectOrganizationForm = this.formBuilder.group({
-      organization: [{value: ''}, Validators.required]
-    });
-  }
+    // Initialise form controls
+    this.organizationFormControl = new FormControl('', Validators.required);
 
-  get organizationFormControl(): AbstractControl {
-    return this.selectOrganizationForm.get('organization');
+    // Initialise form
+    this.selectOrganizationForm = new FormGroup({
+      organization: this.organizationFormControl
+    });
   }
 
   displayOrganization(organization: Organization): string {
@@ -57,9 +59,15 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   }
 
   isOrganizationSelected(): boolean {
-    return this.selectOrganizationForm.valid &&
-      (typeof this.organizationFormControl.value === 'object') &&
-      (!!this.organizationFormControl.value.id);
+    if (this.selectOrganizationForm.valid) {
+      if (this.organizationFormControl.value as Organization) {
+        if (!!this.organizationFormControl.value.id) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   ngOnDestroy(): void {
@@ -68,16 +76,17 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(first(), map((state: any) => window.history.state))
-      .subscribe((state: any) => {
+      .pipe(first(), map(() => window.history.state))
+      .subscribe((state) => {
         if (state.organizations) {
           this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''),
-            map((value:any, index: number) => {
-              this.filteredOrganizations.next(this.filterOrganizations(state.organizations, value));
-            }
+            map((value) => {
+                this.filteredOrganizations.next(this.filterOrganizations(state.organizations, value));
+              }
             )).subscribe());
         } else {
-          console.log('No organizations found, invalidating session and redirecting to the application root');
+          console.log(
+            'No organizations found, invalidating session and redirecting to the application root');
 
           // TODO: Invalidate session -- MARCUS
 
@@ -88,28 +97,29 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   }
 
   onOk(): void {
-    if (this.selectOrganizationForm.valid &&
-      (typeof this.organizationFormControl.value === 'object')) {
-      const selectedOrganization: Organization = <Organization>this.organizationFormControl.value;
-
+    if (this.selectOrganizationForm.valid) {
       this.sessionService.session
         .pipe(first())
-        .subscribe((session: Session) => {
-          session.organization = selectedOrganization;
+        .subscribe((session: Session | null) => {
+          if (session) {
+            if (typeof this.organizationFormControl.value === 'object') {
+              session.organization = (this.organizationFormControl.value as Organization);
 
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['/']);
+            }
+          }
         });
     }
   }
 
-  private filterOrganizations(organizations: Organization[], value: string | object): Organization[] {
+  private filterOrganizations(organizations: Organization[], value: string | Organization): Organization[] {
     let filterValue = '';
 
     if (typeof value === 'string') {
-      filterValue = (<string>value).toLowerCase();
+      filterValue = (value as string).toLowerCase();
     } else if (typeof value === 'object') {
-      filterValue = (<Organization>value).name.toLowerCase();
+      filterValue = (value as Organization).name.toLowerCase();
     }
 
     return organizations.filter(

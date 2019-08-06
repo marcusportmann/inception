@@ -15,8 +15,8 @@
  */
 
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
-import {BackNavigation} from "../../components/layout/back-navigation";
+import {ReplaySubject, Subject} from 'rxjs';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The Title Bar Service implementation.
@@ -29,12 +29,12 @@ export class TitleBarService {
   /**
    * The back navigation.
    */
-  backNavigation: Subject<BackNavigation> = new ReplaySubject<BackNavigation>();
+  backNavigation: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>();
 
   /**
    * The title.
    */
-  title: Subject<string> = new ReplaySubject<string>();
+  title: Subject<string | null> = new ReplaySubject<string | null>();
 
   /**
    * Constructs a new TitleBarService.
@@ -46,9 +46,9 @@ export class TitleBarService {
   /**
    * Set the back navigation.
    *
-   * @param title the back navigation
+   * @param backNavigation the back navigation
    */
-  setBackNavigation(backNavigation: BackNavigation): void {
+  setBackNavigation(backNavigation: BackNavigation | null): void {
     this.backNavigation.next(backNavigation);
   }
 
@@ -57,7 +57,7 @@ export class TitleBarService {
    *
    * @param title the title
    */
-  setTitle(title: string): void {
+  setTitle(title: string | null): void {
     this.title.next(title);
   }
 }

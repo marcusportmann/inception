@@ -39,7 +39,7 @@ import {NavigationItem} from '../../services/navigation/navigation-item';
 })
 export class SidebarNavDropdownComponent {
 
-  @Input() navItem: NavigationItem;
+  @Input() navItem?: NavigationItem;
 
   /**
    * Constructs a new SidebarNavDropdownComponent.
@@ -48,10 +48,10 @@ export class SidebarNavDropdownComponent {
   }
 
   hasBadge(): boolean {
-    return !!this.navItem.badge;
+    return !!this.navItem && !!this.navItem.badge;
   }
 
   hasIcon(): boolean {
-    return !!this.navItem.icon;
+    return !!this.navItem && !!this.navItem.icon;
   }
 }

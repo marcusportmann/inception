@@ -9,7 +9,8 @@ import {environment} from './environments/environment';
 import {TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
 
 // Use the require method provided by webpack
-declare const require;
+// tslint:disable-next-line
+declare const require: any;
 
 // We use the webpack raw-loader to return the content as a string
 const translations = require('raw-loader!./locale/messages.en.xlf');

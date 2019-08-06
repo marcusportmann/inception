@@ -15,19 +15,24 @@
  */
 
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from "@angular/router";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Error} from "../../errors/error";
-import {first} from "rxjs/operators";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {AccessDeniedError} from "../../errors/access-denied-error";
-import {ConfigurationService} from "../../services/configuration/configuration.service";
-import {Configuration} from "../../services/configuration/configuration";
-import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
-import {AdminContainerView} from "../../components/layout/admin-container-view";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Error} from '../../errors/error';
+import {first} from 'rxjs/operators';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {AccessDeniedError} from '../../errors/access-denied-error';
+import {ConfigurationService} from '../../services/configuration/configuration.service';
+import {Configuration} from '../../services/configuration/configuration';
+import {ConfigurationServiceError} from '../../services/configuration/configuration.service.errors';
+import {AdminContainerView} from '../../components/layout/admin-container-view';
 
 /**
  * The EditConfigurationComponent class implements the edit configuration component.
@@ -38,9 +43,15 @@ import {AdminContainerView} from "../../components/layout/admin-container-view";
   templateUrl: 'edit-configuration.component.html',
   styleUrls: ['edit-configuration.component.css'],
 })
-export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit {
+export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit, OnInit {
+
+  descriptionFormControl: FormControl;
 
   editConfigurationForm: FormGroup;
+
+  keyFormControl: FormControl;
+
+  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -48,36 +59,26 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    this.editConfigurationForm = this.formBuilder.group({
-      // tslint:disable-next-line
-      key: [{
-        value: '',
-        disabled: true
-      }, [Validators.required, Validators.maxLength(4000)]
-      ],
-      value: ['', [Validators.required, Validators.maxLength(4000)]],
-      description: ['']
+    // Initialise form controls
+    this.descriptionFormControl = new FormControl('');
+
+    this.keyFormControl = new FormControl({value: '', disabled: true},
+      [Validators.required, Validators.maxLength(4000)]);
+
+    this.valueFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
+
+    // Initialise form
+    this.editConfigurationForm = new FormGroup({
+      description: this.descriptionFormControl,
+      key: this.keyFormControl,
+      value: this.valueFormControl
     });
   }
 
-  get descriptionFormControl(): AbstractControl {
-    return this.editConfigurationForm.get('description');
-  }
-
-  get keyFormControl(): AbstractControl {
-    return this.editConfigurationForm.get('key');
-  }
-
-  get valueFormControl(): AbstractControl {
-    return this.editConfigurationForm.get('value');
-  }
-
   ngAfterViewInit(): void {
-    let key: string = this.activatedRoute.snapshot.paramMap.get('key');
-
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfiguration(key)
+    this.configurationService.getConfiguration(this.keyFormControl.value)
       .pipe(first())
       .subscribe((configuration: Configuration) => {
         this.spinnerService.hideSpinner();
@@ -87,15 +88,23 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
         this.descriptionFormControl.setValue(configuration.description);
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
-
+        // noinspection SuspiciousTypeOfGuard
         if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
           (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
           this.dialogService.showErrorDialog(error);
         }
       });
+  }
+
+  ngOnInit(): void {
+    const key: string | null = this.activatedRoute.snapshot.paramMap.get('key');
+
+    if (!!key) {
+      this.keyFormControl.setValue(key);
+    }
   }
 
   onCancel(): void {
@@ -105,7 +114,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   onOK(): void {
     if (this.editConfigurationForm.valid) {
-      let configuration: Configuration = new Configuration(this.keyFormControl.value,
+      const configuration: Configuration = new Configuration(this.keyFormControl.value,
         this.valueFormControl.value, this.descriptionFormControl.value);
 
       this.spinnerService.showSpinner();
@@ -119,11 +128,11 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
-
+          // noinspection SuspiciousTypeOfGuard
           if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
             (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
             this.dialogService.showErrorDialog(error);
           }

@@ -40,7 +40,9 @@ export class SessionInterceptor implements HttpInterceptor {
   constructor(private sessionService: SessionService) {
   }
 
+  // tslint:disable-next-line
   intercept(httpRequest: HttpRequest<any>,
+            // tslint:disable-next-line
             nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
       return this.sessionService.session.pipe(flatMap(session => {

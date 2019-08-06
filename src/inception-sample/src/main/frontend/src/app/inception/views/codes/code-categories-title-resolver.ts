@@ -19,14 +19,18 @@ import {Observable, of} from "rxjs";
 import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
- * The Menu321TitleResolver class provides the resolver for the Menu321Component.
+ * The CodeCategoriesTitleResolver class provides the route data resolver that resolves the
+ * title for the "Code Categories" route in the navigation hierarchy.
+ *
+ * This is required since it is not possible to override a resolver provided title in a parent
+ * route with a static title specified as part of a child route's data.
  *
  * @author Marcus Portmann
  */
-export class Menu321TitleResolver implements Resolve<string> {
+export class CodeCategoriesTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new Menu321TitleResolver.
+   * Constructs a new CodeCategoryTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,8 +46,8 @@ export class Menu321TitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: "@@menu_321_title_resolver_title",
-      value: "Custom Menu 3.2.1 Title"
+      id: "@@code_categories_title_resolver_title",
+      value: "Codes"
     }));
   }
 }

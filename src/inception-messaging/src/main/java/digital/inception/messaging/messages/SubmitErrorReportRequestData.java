@@ -68,9 +68,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   private LocalDateTime created;
 
   /**
-   * The data associated with the error report.
+   * The optional base-64 encoded data associated with the error report.
    */
-  private byte[] data;
+  private String data;
 
   /**
    * The description of the error.
@@ -125,11 +125,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @param who                the username identifying the user associated with the error report
    * @param deviceId           the ID used to uniquely identify the device the error report
    *                           originated from
-   * @param data               the data associated with the error report
+   * @param data               the optional Base-64 encoded data associated with the error report
    */
   public SubmitErrorReportRequestData(UUID id, String applicationId, String applicationVersion,
       String description, String detail, String feedback, LocalDateTime created, String who,
-      String deviceId, byte[] data)
+      String deviceId, String data)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -174,8 +174,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
         || (!rootElement.hasChild("Feedback"))
         || (!rootElement.hasChild("Created"))
         || (!rootElement.hasChild("Who"))
-        || (!rootElement.hasChild("DeviceId"))
-        || (!rootElement.hasChild("Data")))
+        || (!rootElement.hasChild("DeviceId")))
     {
       return false;
     }
@@ -209,7 +208,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
 
     this.who = rootElement.getChildText("Who");
     this.deviceId = rootElement.getChildText("DeviceId");
-    this.data = rootElement.getChildOpaque("Data");
+
+    if (rootElement.hasChild("Data"))
+    {
+      this.data = rootElement.getChildText("Data");
+    }
 
     return true;
   }
@@ -245,11 +248,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the data associated with the error report.
+   * Returns the optional base-64 encoded data associated with the error report.
    *
-   * @return the data associated with the error report
+   * @return the optional base-64 encoded data associated with the error report
    */
-  public byte[] getData()
+  public String getData()
   {
     return data;
   }
@@ -329,25 +332,32 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
     rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("ApplicationId", applicationId));
     rootElement.addContent(new Element("ApplicationVersion", applicationVersion));
-    rootElement.addContent(new Element("Description", StringUtils.isEmpty(description)
+    rootElement.addContent(new Element("Description",
+        StringUtils.isEmpty(description)
         ? ""
         : description));
-    rootElement.addContent(new Element("Detail", StringUtils.isEmpty(detail)
+    rootElement.addContent(new Element("Detail",
+        StringUtils.isEmpty(detail)
         ? ""
         : detail));
-    rootElement.addContent(new Element("Feedback", StringUtils.isEmpty(feedback)
+    rootElement.addContent(new Element("Feedback",
+        StringUtils.isEmpty(feedback)
         ? ""
         : feedback));
-    rootElement.addContent(new Element("Created", (created == null)
+    rootElement.addContent(new Element("Created",
+        (created == null)
         ? ISO8601Util.now()
         : ISO8601Util.fromLocalDateTime(created)));
-    rootElement.addContent(new Element("Who", StringUtils.isEmpty(who)
+    rootElement.addContent(new Element("Who",
+        StringUtils.isEmpty(who)
         ? ""
         : who));
     rootElement.addContent(new Element("DeviceId", deviceId));
-    rootElement.addContent(new Element("Data", (data != null)
-        ? data
-        : new byte[0]));
+
+    if (data != null)
+    {
+      rootElement.addContent(new Element("Data", data));
+    }
 
     Document document = new Document(rootElement);
 

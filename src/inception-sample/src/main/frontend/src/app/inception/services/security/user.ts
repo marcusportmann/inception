@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {UserStatus} from "./user-status";
+import {UserStatus} from './user-status';
 
 /**
  * The User class holds the information for a user.

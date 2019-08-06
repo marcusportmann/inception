@@ -15,6 +15,7 @@
  */
 
 import {BackNavigation} from './back-navigation';
+import {Observable} from 'rxjs';
 
 /**
  * The AdminContainerView class provides the abstract base class that all admin container view
@@ -27,28 +28,14 @@ export abstract class AdminContainerView {
   /**
    * Tne back navigation for admin container view.
    */
-  get backNavigation(): BackNavigation {
+  get backNavigation(): BackNavigation | null {
     return null;
-  }
-
-  /**
-   * Does the admin container view have a back navigation option?
-   */
-  get hasBackNavigation(): boolean {
-    return false;
-  }
-
-  /**
-   * Does the admin container view have a title?
-   */
-  get hasTitle(): boolean {
-    return false;
   }
 
   /**
    * The title for the admin container view.
    */
-  get title(): string {
+  get title(): string | Observable<string> | null {
     return null;
   }
 }

@@ -37,7 +37,7 @@ export class SessionService {
   /**
    * The current active session.
    */
-  session: Subject<Session> = new BehaviorSubject<Session>(null);
+  session: Subject<Session | null> = new BehaviorSubject<Session | null>(null);
 
   /**
    * Constructs a new SessionService.
@@ -50,9 +50,8 @@ export class SessionService {
 
     // Start the session refresher
     timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
-      .subscribe((refreshedSession: Session) => {
-
-        if (refreshedSession != null) {
+      .subscribe((refreshedSession: Session | null) => {
+        if (refreshedSession) {
           console.log('Successfully refreshed session: ', refreshedSession);
         }
       });
@@ -66,7 +65,7 @@ export class SessionService {
    *
    * @return The current active session.
    */
-  login(username: string, password: string): Observable<Session> {
+  login(username: string, password: string): Observable<Session | null> {
 
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
@@ -84,13 +83,21 @@ export class SessionService {
       .pipe(flatMap((tokenResponse: TokenResponse) => {
         const helper = new JwtHelperService();
 
+        // tslint:disable-next-line
         const token: any = helper.decodeToken(tokenResponse.access_token);
 
-        const accessTokenExpiry: Date = helper.getTokenExpirationDate(tokenResponse.access_token);
+        const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(
+          tokenResponse.access_token);
 
-        const session: Session = new Session(token.user_name, token.user_directory_id,
-          token.user_full_name, token.scope, token.authorities, tokenResponse.access_token,
-          accessTokenExpiry, tokenResponse.refresh_token);
+        const session: Session = new Session(
+          (!!token.user_name) ? token.user_name : '',
+          (!!token.user_directory_id) ? token.user_directory_id : '',
+          (!!token.user_full_name) ? token.user_full_name : '',
+          (!!token.scope) ? token.scope : [],
+          (!!token.authorities) ? token.authorities : [],
+          tokenResponse.access_token,
+          (!!accessTokenExpiry) ? accessTokenExpiry : undefined,
+          tokenResponse.refresh_token);
 
         this.session.next(session);
 
@@ -137,7 +144,7 @@ export class SessionService {
   }
 
   private refreshSession(): Observable<Session | null> {
-    return this.session.pipe(mergeMap((currentSession: Session) => {
+    return this.session.pipe(mergeMap((currentSession: Session | null) => {
       if (currentSession) {
         const selectedOrganization = currentSession.organization;
 
@@ -159,14 +166,21 @@ export class SessionService {
               body.toString(), options).pipe(map((tokenResponse: TokenResponse) => {
               const helper = new JwtHelperService();
 
+              // tslint:disable-next-line
               const token: any = helper.decodeToken(tokenResponse.access_token);
 
-              const accessTokenExpiry: Date = helper.getTokenExpirationDate(
+              const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(
                 tokenResponse.access_token);
 
-              const refreshedSession: Session = new Session(token.user_name, token.user_directory_id,
-                token.user_full_name, token.scope, token.authorities, tokenResponse.access_token,
-                accessTokenExpiry, tokenResponse.refresh_token);
+              const refreshedSession: Session = new Session(
+                (!!token.user_name) ? token.user_name : '',
+                (!!token.user_directory_id) ? token.user_directory_id : '',
+                (!!token.user_full_name) ? token.user_full_name : '',
+                (!!token.scope) ? token.scope : [],
+                (!!token.authorities) ? token.authorities : [],
+                tokenResponse.access_token,
+                (!!accessTokenExpiry) ? accessTokenExpiry : undefined,
+                tokenResponse.refresh_token);
 
               refreshedSession.organization = selectedOrganization;
 

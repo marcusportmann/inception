@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-import {Directive, HostListener} from '@angular/core';
-
 /**
- * The SidebarMinimizerDirective class implements the sidebar minimizer directive.
+ * The Breadcrumb class.
  *
  * @author Marcus Portmann
  */
-@Directive({
-  // tslint:disable-next-line
-  selector: '[sidebarMinimizer]'
-})
-export class SidebarMinimizerDirective {
+
+export class Breadcrumb {
 
   /**
-   * Constructs a new SidebarMinimizerDirective.
+   * The label for the breadcrumb.
    */
-  constructor() {
-  }
+  label: string;
 
-  // tslint:disable-next-line
-  @HostListener('click', ['$event']) toggleOpen($event: any): void {
-    $event.preventDefault();
+  /**
+   * The url for the breadcrumb.
+   */
+  url: string;
 
-    const bodySelector = document.querySelector('body');
-
-    if (bodySelector) {
-      bodySelector.classList.toggle('sidebar-minimized');
-    }
+  /**
+   * Constructs a new Breadcrumb.
+   *
+   * @param label The label for the breadcrumb.
+   * @param url   The url for the breadcrumb.
+   */
+  constructor(label: string, url: string) {
+    this.label = label;
+    this.url = url;
   }
 }

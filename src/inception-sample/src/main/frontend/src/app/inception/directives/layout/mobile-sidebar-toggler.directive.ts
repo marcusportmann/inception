@@ -33,8 +33,14 @@ export class MobileSidebarTogglerDirective {
   constructor() {
   }
 
+  // tslint:disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
-    document.querySelector('body').classList.toggle('sidebar-mobile-show');
+
+    const bodySelector = document.querySelector('body');
+
+    if (bodySelector) {
+      bodySelector.classList.toggle('sidebar-mobile-show');
+    }
   }
 }

@@ -1,16 +1,19 @@
 {
+  "extends": "./tsconfig-google.json",
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
     "downlevelIteration": true,
     "outDir": "../resources/public/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "module": "esnext",
+    //"sourceMap": true, -- Original same as Google
+    //"declaration": false, -- Original, Google is true
+    //"module": "esnext", -- Original
+    "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2015",
+    //"target": "es2015", -- Original
+    "target": "es2017",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -18,7 +21,8 @@
       "hammerjs"
     ],
     "lib": [
-      "es2018",
+      // "es2018", -- Original
+      "es2016",
       "dom"
     ]
   }

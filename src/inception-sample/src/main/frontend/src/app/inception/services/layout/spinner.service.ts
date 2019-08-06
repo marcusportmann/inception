@@ -27,9 +27,9 @@ import {ComponentPortal} from '@angular/cdk/portal';
 @Injectable()
 export class SpinnerService {
 
-  private overlayRef: OverlayRef;
+  private overlayRef?: OverlayRef;
 
-  private spinnerComponentPortal: ComponentPortal<SpinnerComponent>;
+  private spinnerComponentPortal?: ComponentPortal<SpinnerComponent>;
 
   /**
    * Constructs a new SpinnerService.
@@ -38,16 +38,24 @@ export class SpinnerService {
    */
   constructor(private overlay: Overlay) {
     console.log('Initializing the Spinner Service');
+
+    // Create ComponentPortal that can be attached to a PortalHost
+    this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
+
   }
 
   /**
    * Hide the spinner.
    */
   hideSpinner(): void {
+    if (this.spinnerComponentPortal) {
+      //this.spinnerComponentPortal.detach();
+      //this.spinnerComponentPortal = undefined;
+    }
+
     if (this.overlayRef) {
       this.overlayRef.dispose();
-
-      this.overlayRef = null;
+      this.overlayRef = undefined;
     }
   }
 
@@ -59,8 +67,8 @@ export class SpinnerService {
       // Returns an OverlayRef (which is a PortalHost)
       this.overlayRef = this.overlay.create();
 
-      // Create ComponentPortal that can be attached to a PortalHost
-      this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
+      // // Create ComponentPortal that can be attached to a PortalHost
+      // this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
 
       // Attach ComponentPortal to PortalHost
       this.overlayRef.attach(this.spinnerComponentPortal);

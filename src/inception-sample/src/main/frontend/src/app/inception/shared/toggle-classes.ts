@@ -14,11 +14,47 @@
  * limitations under the License.
  */
 
+
+
+/* tslint:disable */
+
+
+function removeClasses(classNames: string[]): boolean {
+  const bodySelector = document.querySelector('body');
+
+  if (bodySelector) {
+    const matchClasses = classNames.map((value) => bodySelector.classList.contains(value));
+
+    return matchClasses.indexOf(true) !== -1;
+  } else {
+    return false;
+  }
+}
+
+function toggleClasses(toggle: string, classNames: string[]): void {
+  const level = classNames.indexOf(toggle);
+  const newClassNames = classNames.slice(0, level + 1);
+
+  const bodySelector = document.querySelector('body');
+
+  if (bodySelector) {
+    if (removeClasses(newClassNames)) {
+      newClassNames.map((value) => bodySelector.classList.remove(value));
+    } else {
+      bodySelector.classList.add(toggle);
+    }
+  }
+}
+
+
+
+/*
 const RemoveClasses = (NewClassNames) => {
   const MatchClasses = NewClassNames.map(
     (Class) => document.querySelector('body').classList.contains(Class));
   return MatchClasses.indexOf(true) !== -1;
 };
+
 
 export const ToggleClasses = (Toggle, ClassNames) => {
   const Level = ClassNames.indexOf(Toggle);
@@ -30,3 +66,4 @@ export const ToggleClasses = (Toggle, ClassNames) => {
     document.querySelector('body').classList.add(Toggle);
   }
 };
+*/

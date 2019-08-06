@@ -69,7 +69,11 @@ export class ValidatedFormDirective implements AfterViewInit {
       const form = this.formGroupDirective.control;
 
       Object.keys(form.controls).forEach(key => {
-        form.get(key).markAsTouched();
+        const formControl = form.get(key);
+
+        if (formControl) {
+          formControl.markAsTouched();
+        }
       });
     }
 
@@ -77,6 +81,7 @@ export class ValidatedFormDirective implements AfterViewInit {
     return !this.checkForInvalidFormControlAndSetFocus(this.viewContainerRef.element.nativeElement);
   }
 
+  // tslint:disable-next-line
   private checkForInvalidFormControlAndSetFocus(nativeElement: any): boolean {
     if (nativeElement.children && (nativeElement.children.length > 0)) {
       for (let i = 0; i < nativeElement.children.length; i++) {

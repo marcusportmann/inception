@@ -63,7 +63,7 @@ export class CodesService {
   createCode(code: Code): Observable<boolean> {
     return this.httpClient.post<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes',
-      code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -102,7 +102,7 @@ export class CodesService {
    */
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.post<boolean>(environment.codesServiceUrlPrefix + '/code-categories',
-      codeCategory, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      codeCategory, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -139,7 +139,7 @@ export class CodesService {
   deleteCode(codeCategoryId: string, codeId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId + '/codes/' + codeId,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -174,7 +174,7 @@ export class CodesService {
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategoryId,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -370,7 +370,7 @@ export class CodesService {
   updateCode(code: Code): Observable<boolean> {
     return this.httpClient.put<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + code.codeCategoryId + '/codes/' +
-      code.id, code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      code.id, code, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -405,7 +405,7 @@ export class CodesService {
   updateCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.put<boolean>(
       environment.codesServiceUrlPrefix + '/code-categories/' + codeCategory.id, codeCategory,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

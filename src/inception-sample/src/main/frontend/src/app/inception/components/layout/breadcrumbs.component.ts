@@ -17,7 +17,7 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../shared';
 import {BreadcrumbsService} from '../../services/layout/breadcrumbs.service';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -42,9 +42,9 @@ import {Observable} from 'rxjs';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  breadcrumbs: Observable<Array<Object>>;
+  breadcrumbs: Observable<Array<{}>>;
 
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
   /**
    * Constructs a new BreadcrumbsComponent.
@@ -53,15 +53,18 @@ export class BreadcrumbsComponent implements OnInit {
    * @param breadcrumbsService The breadcrumbs service.
    */
   constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) {
+    this.breadcrumbs = this.breadcrumbsService.breadcrumbs;
   }
 
   ngOnInit(): void {
     Replace(this.elementRef);
 
     if (this.fixed) {
-      document.querySelector('body').classList.add('breadcrumbs-fixed');
-    }
+      const bodySelector = document.querySelector('body');
 
-    this.breadcrumbs = this.breadcrumbsService.breadcrumbs;
+      if (bodySelector) {
+        bodySelector.classList.add('breadcrumbs-fixed')
+      }
+    }
   }
 }

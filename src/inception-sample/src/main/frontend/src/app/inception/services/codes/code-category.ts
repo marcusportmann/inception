@@ -24,7 +24,7 @@ export class CodeCategory {
   /**
    * The optional code data for the code category.
    */
-  data: string;
+  data?: string;
 
   /**
    * The ID used to uniquely identify the code category.
@@ -39,7 +39,7 @@ export class CodeCategory {
   /**
    * The date and time the code category was updated.
    */
-  updated: Date;
+  updated?: Date;
 
   /**
    * Constructs a new CodeCategory.

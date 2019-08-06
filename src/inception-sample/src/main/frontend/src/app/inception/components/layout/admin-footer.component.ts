@@ -33,7 +33,7 @@ import {Replace} from '../../shared';
 })
 export class AdminFooterComponent implements OnInit {
 
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
   /**
    * Constructs a new AdminFooterComponent.
@@ -47,7 +47,11 @@ export class AdminFooterComponent implements OnInit {
     Replace(this.elementRef);
 
     if (this.fixed) {
-      document.querySelector('body').classList.add('admin-footer-fixed');
+      const bodySelector = document.querySelector('body');
+
+      if (bodySelector) {
+        bodySelector.classList.add('admin-footer-fixed')
+      }
     }
   }
 }

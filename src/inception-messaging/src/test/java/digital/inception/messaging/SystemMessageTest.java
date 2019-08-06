@@ -21,6 +21,7 @@ package digital.inception.messaging;
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
+import digital.inception.core.util.Base64Util;
 import digital.inception.messaging.messages.*;
 import digital.inception.test.TestClassRunner;
 
@@ -392,7 +393,7 @@ public class SystemMessageTest
   {
     SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
         "ApplicationId", "1.0.0", "Test Description", "Test Detail", "Test Feedback",
-        LocalDateTime.now(), "Administrator", "DeviceId", "Test Data".getBytes());
+        LocalDateTime.now(), "Administrator", "DeviceId", Base64Util.encodeBytes("Test Data".getBytes()));
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 

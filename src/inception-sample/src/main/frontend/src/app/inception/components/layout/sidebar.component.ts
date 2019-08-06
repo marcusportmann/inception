@@ -30,17 +30,17 @@ import {sidebarCssClasses} from '../../shared';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input() compact: boolean;
+  @Input() compact?: boolean;
 
-  @Input() display: any;
+  @Input() display?: string;
 
-  @Input() fixed: boolean;
+  @Input() fixed?: boolean;
 
-  @Input() minimized: boolean;
+  @Input() minimized?: boolean;
 
-  @Input() offCanvas: boolean;
+  @Input() offCanvas?: boolean;
 
-  @HostBinding('class.sidebar') true;
+  @HostBinding('class.sidebar') get sidebar() { return true; };
 
   /**
    * Constructs a new SidebarComponent.
@@ -49,26 +49,32 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.display !== false) {
-      let cssClass;
-      this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
-      document.querySelector('body').classList.add(cssClass);
-    }
 
-    if (this.compact) {
-      document.querySelector('body').classList.add('sidebar-compact');
-    }
+    const bodySelector = document.querySelector('body');
 
-    if (this.fixed) {
-      document.querySelector('body').classList.add('sidebar-fixed');
-    }
+    if (bodySelector) {
 
-    if (this.minimized) {
-      document.querySelector('body').classList.add('sidebar-minimized');
-    }
+      if (!!this.display) {
+        let cssClass;
+        this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
+        bodySelector.classList.add(cssClass);
+      }
 
-    if (this.offCanvas) {
-      document.querySelector('body').classList.add('sidebar-off-canvas');
+      if (!!this.compact) {
+        bodySelector.classList.add('sidebar-compact');
+      }
+
+      if (!!this.fixed) {
+        bodySelector.classList.add('sidebar-fixed');
+      }
+
+      if (!!this.minimized) {
+        bodySelector.classList.add('sidebar-minimized');
+      }
+
+      if (!!this.offCanvas) {
+        bodySelector.classList.add('sidebar-off-canvas');
+      }
     }
   }
 }

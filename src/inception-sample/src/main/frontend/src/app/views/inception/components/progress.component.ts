@@ -26,12 +26,12 @@ import {Component} from '@angular/core';
 })
 export class ProgressComponent {
 
-  bufferValue: string;
+  bufferValue?: string;
 
-  color: string;
+  color?: string;
 
-  mode: string;
+  mode?: string;
 
-  value: string;
+  value?: string;
 
 }

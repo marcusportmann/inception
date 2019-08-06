@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import {HttpErrorResponse} from '@angular/common/http';
+import {HttpError} from '../../errors/http-error';
 import {Error} from '../../errors/error';
+import {ApiError} from '../../errors/api-error';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
@@ -29,7 +32,7 @@ export class CodeCategoryNotFoundError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -47,7 +50,7 @@ export class CodeNotFoundError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -65,7 +68,7 @@ export class CodeProviderError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -83,7 +86,7 @@ export class CodesServiceError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -101,7 +104,7 @@ export class DuplicateCodeCategoryError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -119,7 +122,7 @@ export class DuplicateCodeError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }

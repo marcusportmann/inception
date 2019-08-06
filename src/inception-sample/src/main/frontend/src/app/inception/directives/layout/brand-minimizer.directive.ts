@@ -33,8 +33,14 @@ export class BrandMinimizerDirective {
   constructor() {
   }
 
+  // tslint:disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
-    document.querySelector('body').classList.toggle('admin-brand-minimized');
+
+    const bodySelector = document.querySelector('body');
+
+    if (bodySelector) {
+      bodySelector.classList.toggle('admin-brand-minimized');
+    }
   }
 }

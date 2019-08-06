@@ -28,7 +28,7 @@ export class Error {
   /**
    * The optional cause of the error.
    */
-  cause?: any;
+  cause?: ApiError | HttpErrorResponse | HttpError;
 
   /**
    * The error message.
@@ -46,31 +46,29 @@ export class Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
-    if ((cause) && (cause instanceof ApiError)) {
-      this.timestamp = (<ApiError>cause).timestamp;
-    } else {
-      this.timestamp = new Date();
-    }
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
 
     this.message = message;
+    this.timestamp = new Date();
 
-    if (cause instanceof HttpErrorResponse) {
-
-      const httpErrorResponse: HttpErrorResponse = (<HttpErrorResponse>cause);
-
-      if (httpErrorResponse.error) {
-        this.cause =
-          new HttpError(httpErrorResponse.error.error ? httpErrorResponse.error.error : '',
-            httpErrorResponse.error.error_description ? httpErrorResponse.error.error_description :
-              '', httpErrorResponse.message, httpErrorResponse.status, httpErrorResponse.statusText,
-            httpErrorResponse.url);
+    if (cause) {
+      if (cause instanceof ApiError) {
+        this.timestamp = cause.timestamp;
+        this.cause = cause;
+      } else if (cause instanceof HttpErrorResponse) {
+        if (cause.error) {
+          this.cause =
+            new HttpError(cause.error.error ? cause.error.error : '',
+              cause.error.error_description ? cause.error.error_description :
+                '', cause.message, cause.status, cause.statusText,
+              cause.url ? cause.url : '');
+        } else {
+          this.cause = new HttpError('', '', cause.message, cause.status,
+            cause.statusText, cause.url ? cause.url : '');
+        }
       } else {
-        this.cause = new HttpError('', '', httpErrorResponse.message, httpErrorResponse.status,
-          httpErrorResponse.statusText, httpErrorResponse.url);
+        this.cause = cause;
       }
-    } else {
-      this.cause = cause;
     }
   }
 }

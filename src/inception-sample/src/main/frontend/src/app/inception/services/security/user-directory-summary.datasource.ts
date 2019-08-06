@@ -18,9 +18,9 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
-import {first} from "rxjs/operators";
-import {UserDirectorySummary} from "./user-directory-summary";
-import {UserDirectorySummaries} from "./user-directory-summaries";
+import {first} from 'rxjs/operators';
+import {UserDirectorySummary} from './user-directory-summary';
+import {UserDirectorySummaries} from './user-directory-summaries';
 
 /**
  * The UserDirectorySummaryDatasource class implements the user directory summary data source.

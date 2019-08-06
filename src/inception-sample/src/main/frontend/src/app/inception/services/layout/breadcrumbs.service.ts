@@ -19,6 +19,7 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {ReplaySubject, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import * as format from 'string-template';
+import {Breadcrumb} from './breadcrumb';
 
 /**
  * The Breadcrumbs Service implementation.
@@ -28,7 +29,7 @@ import * as format from 'string-template';
 @Injectable()
 export class BreadcrumbsService {
 
-  breadcrumbs: Subject<Array<Object>> = new ReplaySubject<Object[]>();
+  breadcrumbs: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>();
 
   /**
    * Constructs a new BreadcrumbsService.
@@ -41,8 +42,8 @@ export class BreadcrumbsService {
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        const breadcrumbs = [];
-        let currentRoute = this.activatedRoute.root, url = '';
+        const breadcrumbs: Breadcrumb[] = [];
+        let currentRoute: ActivatedRoute | null = this.activatedRoute.root, url = '';
 
         do {
           const childrenRoutes = currentRoute.children;
@@ -56,10 +57,8 @@ export class BreadcrumbsService {
                 url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
                 if (routeSnapshot.data.title) {
-                  breadcrumbs.push({
-                    label: format(routeSnapshot.data.title, routeSnapshot.params),
-                    url: url
-                  });
+                  breadcrumbs.push(
+                    new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
                 }
               }
               currentRoute = route;
@@ -67,7 +66,7 @@ export class BreadcrumbsService {
           });
         } while (currentRoute);
 
-        this.breadcrumbs.next(Object.assign([], breadcrumbs));
+        this.breadcrumbs.next(breadcrumbs);
 
         return breadcrumbs;
       });

@@ -41,11 +41,13 @@ export class HasAuthorityDirective  {
    * @param viewContainer  The view container for the element this directive is attached to.
    * @param sessionService The session service.
    */
+  // tslint:disable-next-line
   constructor(private templateRef: TemplateRef<any>,
         private viewContainer: ViewContainerRef,
         private sessionService: SessionService) {
   }
 
+  // tslint:disable-next-line
   @Input() set hasAuthority(authority: any) {
 
 

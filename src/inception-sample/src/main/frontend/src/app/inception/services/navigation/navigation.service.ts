@@ -29,9 +29,9 @@ import {Session} from '../session/session';
 @Injectable()
 export class NavigationService {
 
-  userNavigation: Subject<NavigationItem[]> = new ReplaySubject<Object[]>();
+  userNavigation: Subject<NavigationItem[]> = new ReplaySubject<NavigationItem[]>();
 
-  private navigation: NavigationItem[];
+  private navigation: NavigationItem[] = [];
 
   /**
    * Constructs a new NavigationService.
@@ -41,7 +41,7 @@ export class NavigationService {
   constructor(private sessionService: SessionService) {
     console.log('Initializing the Navigation Service');
 
-    this.sessionService.session.pipe(map((session: Session) => {
+    this.sessionService.session.pipe(map((session: Session | null) => {
       this.userNavigation.next(
         Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();
@@ -68,7 +68,7 @@ export class NavigationService {
   }
 
   private filterNavigationItems(navigationItems: NavigationItem[],
-                                session: Session): NavigationItem[] {
+                                session: Session | null): NavigationItem[] {
     if (!navigationItems) {
       return navigationItems;
     }

@@ -117,20 +117,20 @@ export class RadioGroupFormField extends MatFormField implements AfterContentIni
   /**
    * The radio group associated with the radio group form field.
    */
-  @ContentChild(MatRadioGroup, {static: false}) radioGroup: MatRadioGroup;
+  @ContentChild(MatRadioGroup, {static: false}) radioGroup?: MatRadioGroup;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
               @Optional() directionality: Directionality, @Optional() @Inject(
       MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              platform?: Platform, zone?: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
+              platform: Platform, zone: NgZone,
+              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode: string) {
     super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
       platform, zone, animationMode);
 
     this.changeDetectorRef = changeDetectorRef;
 
-    if (labelOptions) {
+    if (labelOptions && labelOptions.float) {
       this.floatLabel = labelOptions.float;
     } else {
       this.floatLabel = 'always';

@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import {HttpErrorResponse} from '@angular/common/http';
+import {HttpError} from '../../errors/http-error';
 import {Error} from '../../errors/error';
+import {ApiError} from '../../errors/api-error';
 
 /**
  * The OrganizationNotFoundError class holds the information for an organization not found error.
@@ -29,7 +32,7 @@ export class OrganizationNotFoundError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -47,7 +50,7 @@ export class SecurityServiceError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }
@@ -65,7 +68,7 @@ export class UserDirectoryNotFoundError extends Error {
    * @param message The error message.
    * @param cause   The optional cause of the error.
    */
-  constructor(message: string, cause?: any) {
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
   }
 }

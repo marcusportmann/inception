@@ -26,7 +26,7 @@ export interface TokenResponse {
   /**
    * The base-64 encoded OAuth2 JWT access token.
    */
-  access_token?: string;
+  access_token: string;
 
   /**
    * The epoch timestamp, for the local timezone, giving the date and time the OAuth2 JWT access
@@ -52,5 +52,5 @@ export interface TokenResponse {
   /**
    * The OAuth2 token type e.g. bearer.
    */
-  token_type?: string;
+  token_type: string;
 }

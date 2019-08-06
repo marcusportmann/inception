@@ -16,15 +16,9 @@
 
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from "rxjs";
 import {map, startWith} from 'rxjs/operators';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 
-
-export interface StateGroup {
-  letter: string;
-  names: string[];
-}
 
 /**
  * The ExampleFormComponent class implements the example form component.
@@ -42,7 +36,7 @@ export class ExampleFormComponent implements OnInit {
 
   exampleForm: FormGroup;
 
-  titles: Array<any> = [{
+  titles: Array<{}> = [{
     name: 'Mr',
     value: 'Mr'
   }, {
@@ -54,11 +48,11 @@ export class ExampleFormComponent implements OnInit {
   }
   ];
 
-  countryOptions: string[] = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland',
+  countryOptions = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland',
     'Zimbabwe'
   ];
 
-  filteredCountryOptions: Observable<string[]>;
+  //filteredCountryOptions: Observable<string[]>;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
@@ -84,13 +78,20 @@ export class ExampleFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredCountryOptions = this.exampleForm.get('favoriteCountry').valueChanges
-      .pipe(startWith(''), map(value => this.filter(value)));
+    const favoriteCountryControl = this.exampleForm.get('favoriteCountry');
+
+    if (favoriteCountryControl) {
+      favoriteCountryControl.valueChanges
+        .pipe(startWith(''), map(value => this.filter(value)));
+    }
   }
 
   onSubmit(): void {
+    const favorityColorControl = this.exampleForm.get('favoriteColor');
 
-    console.log('favorite color = ', this.exampleForm.get('favoriteColor').value);
+    if (favorityColorControl) {
+      console.log('favorite color = ', favorityColorControl.value);
+    }
   }
 
   private filter(value: string): string[] {

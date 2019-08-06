@@ -101,12 +101,12 @@ public class ErrorReport
   private LocalDateTime created;
 
   /**
-   * The data associated with the error report.
+   * The base-64 encoded data associated with the error report.
    */
-  @ApiModelProperty(value = "The data associated with the error report")
+  @ApiModelProperty(value = "The base-64 encoded data associated with the error report")
   @JsonProperty
   @XmlElement(name = "Data")
-  private byte[] data;
+  private String data;
 
   /**
    * The description of the error.
@@ -182,7 +182,7 @@ public class ErrorReport
    * @param applicationVersion the version of the application that generated the error report
    * @param description        the description of the error
    * @param detail             the error detail
-   * @param created               the date and time the error report was created
+   * @param created            the date and time the error report was created
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
       String detail, LocalDateTime created)
@@ -211,11 +211,11 @@ public class ErrorReport
    * @param deviceId           the optional ID used to uniquely identify the device the error report
    *                           originated from
    * @param feedback           the optional feedback provided by the user for the error
-   * @param data               the optional data associated with the error report
+   * @param data               the optional base-64 encoded data associated with the error report
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
       String detail, LocalDateTime created, String who, String deviceId, String feedback,
-      byte[] data)
+      String data)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -260,11 +260,11 @@ public class ErrorReport
   }
 
   /**
-   * Returns the optional data associated with the error report.
+   * Returns the optional base-64 encoded data associated with the error report.
    *
-   * @return the optional data associated with the error report
+   * @return the optional base-64 encoded data associated with the error report
    */
-  public byte[] getData()
+  public String getData()
   {
     return data;
   }
@@ -300,9 +300,9 @@ public class ErrorReport
   }
 
   /**
-   * Returns the feedback provided by the user for the error.
+   * Returns the optional feedback provided by the user for the error.
    *
-   * @return the feedback provided by the user for the error
+   * @return the optional feedback provided by the user for the error
    */
   public String getFeedback()
   {
@@ -361,11 +361,11 @@ public class ErrorReport
   }
 
   /**
-   * Set the data associated with the error report.
+   * Set the optional base-64 encoded data associated with the error report.
    *
-   * @param data the data associated with the error report
+   * @param data the optional base-64 encoded data associated with the error report
    */
-  public void setData(byte[] data)
+  public void setData(String data)
   {
     this.data = data;
   }

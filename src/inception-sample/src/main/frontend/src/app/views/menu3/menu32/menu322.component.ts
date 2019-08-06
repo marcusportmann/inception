@@ -19,6 +19,7 @@ import {Observable, of} from 'rxjs';
 import {AdminContainerView} from '../../../inception/components/layout/admin-container-view';
 import {BackNavigation} from '../../../inception/components/layout/back-navigation';
 import {ActivatedRoute} from '@angular/router';
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
  * The Menu322Component class implements the menu 3.2.2 component.
@@ -34,8 +35,9 @@ export class Menu322Component extends AdminContainerView {
    * Constructs a new Menu322Component.
    *
    * @param activatedRoute The activated route.
+   * @param i18n           The internationalization service.
    */
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute, private i18n: I18n) {
     super();
   }
 
@@ -43,27 +45,19 @@ export class Menu322Component extends AdminContainerView {
    * Tne back navigation for admin container view.
    */
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Menu 3.2.1', ['../menu321'], {relativeTo: this.activatedRoute});
-  }
-
-  /**
-   * Does the admin container view have a back navigation option?
-   */
-  get hasBackNavigation(): boolean {
-    return true;
-  }
-
-  /**
-   * Does the admin container view have a title?
-   */
-  get hasTitle(): boolean {
-    return true;
+    return new BackNavigation(this.i18n({
+      id: '@@menu_322_component_back_title',
+      value: 'Menu 3.1.1'
+    }), ['../menu321'], {relativeTo: this.activatedRoute});
   }
 
   /**
    * The title for the admin container view.
    */
-  get title(): string {
-    return 'Custom Menu 3.2.2 Title';
+  get title(): string | Observable<string> {
+    return this.i18n({
+      id: '@@menu_322_component_title',
+      value: 'Custom Menu 3.2.2 Title'
+    });
   }
 }

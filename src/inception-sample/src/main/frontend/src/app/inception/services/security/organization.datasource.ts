@@ -20,7 +20,7 @@ import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 import {Organizations} from './organizations';
-import {first} from "rxjs/operators";
+import {first} from 'rxjs/operators';
 
 /**
  * The OrganizationDatasource class implements the organization data source.

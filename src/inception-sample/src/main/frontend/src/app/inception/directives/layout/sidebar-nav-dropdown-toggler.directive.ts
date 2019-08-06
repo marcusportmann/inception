@@ -37,6 +37,7 @@ export class SidebarNavDropdownTogglerDirective {
   constructor(private dropdown: SidebarNavDropdownDirective) {
   }
 
+  // tslint:disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     this.dropdown.toggle();

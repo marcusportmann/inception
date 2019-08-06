@@ -51,18 +51,17 @@ export class ErrorService {
   /**
    * Send the error report for the error.
    *
-   * @param email    The e-mail address of the user submitting the error report.
-   * @param feedback The feedback from the user submitting the error report.
    * @param error    The error.
+   * @param email    The optional e-mail address of the user submitting the error report.
+   * @param feedback The optional feedback from the user submitting the error report.
    */
-  sendErrorReport(email: string, feedback: string, error: Error): Observable<boolean> {
+  sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
     const errorReport: ErrorReport = new ErrorReport(uuid(), environment.applicationId,
       environment.applicationVersion, error.message, error.cause ? JSON.stringify(error.cause) : '',
-      error.timestamp, (!email || 0 === email.length) ? null : email, null,
-      (!feedback || 0 === feedback.length) ? null : feedback);
+      error.timestamp, email, feedback);
 
     return this.httpClient.post<boolean>(environment.errorServiceUrlPrefix + '/error-reports',
-      errorReport, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      errorReport, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

@@ -59,17 +59,17 @@ export class Session {
   /**
    * The date and time the OAuth2 JWT access token for the user session will expire.
    */
-  accessTokenExpiry: Date;
+  accessTokenExpiry?: Date;
 
   /**
    * The base-64 encoded OAuth2 refresh token for the user session.
    */
-  refreshToken: string;
+  refreshToken?: string;
 
   /**
    * The selected organization for the user session.
    */
-  organization: Organization;
+  organization?: Organization;
 
   /**
    * Constructs a new Session.
@@ -86,8 +86,8 @@ export class Session {
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
-              authorities: string[], accessToken: string, accessTokenExpiry: Date,
-              refreshToken: string) {
+              authorities: string[], accessToken: string, accessTokenExpiry?: Date,
+              refreshToken?: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.userFullName = userFullName;
@@ -96,7 +96,6 @@ export class Session {
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
-    this.organization = null;
   }
 
   /**

@@ -22,8 +22,8 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {fromEvent, Subscription} from "rxjs";
-import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
+import {fromEvent, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line
@@ -85,13 +85,13 @@ import {debounceTime, distinctUntilChanged, tap} from "rxjs/operators";
 }) // tslint:disable-next-line
 export class TableFilter implements OnInit, OnDestroy {
 
-  private tableFilterInputSubscription: Subscription;
+  private tableFilterInputSubscription?: Subscription;
 
   @Output() changed: EventEmitter<string> = new EventEmitter<string>();
 
-  filter: string;
+  filter = '';
 
-  @ViewChild('tableFilterInput', { static: true }) tableFilterInput: ElementRef;
+  @ViewChild('tableFilterInput', { static: true }) tableFilterInput?: ElementRef;
 
   ngOnDestroy(): void {
     if (this.tableFilterInputSubscription) {
@@ -100,21 +100,27 @@ export class TableFilter implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement,'keyup')
-      .pipe(
-        debounceTime(250),
-        distinctUntilChanged(),
-        tap(() => {
-          this.filter = this.tableFilterInput.nativeElement.value;
-          this.changed.emit(this.filter);
-        })
-      )
-      .subscribe();
+    if (this.tableFilterInput) {
+      this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
+        .pipe(
+          debounceTime(250),
+          distinctUntilChanged(),
+          tap(() => {
+            if (this.tableFilterInput) {
+              this.filter = this.tableFilterInput.nativeElement.value;
+              this.changed.emit(this.filter);
+            }
+          })
+        )
+        .subscribe();
+    }
   }
 
   reset(emitEvent: boolean): void {
     this.filter = '';
-    this.tableFilterInput.nativeElement.value = this.filter;
+    if (this.tableFilterInput) {
+      this.tableFilterInput.nativeElement.value = this.filter;
+    }
     if (emitEvent) {
       this.changed.emit(this.filter);
     }

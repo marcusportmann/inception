@@ -32,14 +32,16 @@ export class ColorsComponent implements OnInit {
   }
 
   getCssCustomProperties() {
-    var cssCustomProperties = {};
-    var sheets: any = document.styleSheets;
-    var cssText = '';
+    // tslint:disable-next-line
+    const cssCustomProperties: any = {};
+    // tslint:disable-next-line
+    const sheets: any = document.styleSheets;
+    let cssText = '';
 
-    for (var i = sheets.length - 1; i > -1; i--) {
-      var rules = sheets[i].cssRules;
+    for (let i = sheets.length - 1; i > -1; i--) {
+      const rules = sheets[i].cssRules;
 
-      for (var j = rules.length - 1; j > -1; j--) {
+      for (let j = rules.length - 1; j > -1; j--) {
         if (rules[j].selectorText === '.ie-custom-properties') {
           cssText = rules[j].cssText;
           break;
@@ -52,28 +54,30 @@ export class ColorsComponent implements OnInit {
     }
 
     cssText = cssText.substring(cssText.lastIndexOf('{') + 1, cssText.lastIndexOf('}'));
+    // tslint:disable-next-line
     cssText.split(';').forEach(function (property) {
       if (property) {
-        var name = property.split(': ')[0];
-        var value = property.split(': ')[1];
+        const name = property.split(': ')[0];
+        const value = property.split(': ')[1];
 
         if (name && value) {
-          cssCustomProperties["--" + name.trim()] = value.trim();
+          cssCustomProperties['--' + name.trim()] = value.trim();
         }
       }
     });
     return cssCustomProperties;
   };
 
-  getStyle(property, element): string {
+  // tslint:disable-next-line
+  getStyle(property: any, element: any): string {
     if (element === void 0) {
       element = document.body;
     }
 
-    var style;
+    let style = '';
 
     if (this.isCustomProperty(property) && this.isIE1x()) {
-      var cssCustomProperties = this.getCssCustomProperties();
+      const cssCustomProperties = this.getCssCustomProperties();
       style = cssCustomProperties[property];
     } else {
       style = window.getComputedStyle(element, null).getPropertyValue(property).replace(/^\s/, '');
@@ -82,12 +86,14 @@ export class ColorsComponent implements OnInit {
     return style;
   };
 
-  isCustomProperty(property): boolean {
+  // tslint:disable-next-line
+  isCustomProperty(property: any): boolean {
     return property.match(/^--.*/i);
   };
 
   isIE1x(): boolean {
-    var anyDocument: any = document;
+    // tslint:disable-next-line
+    const anyDocument: any = document;
     return Boolean(anyDocument.documentMode) && anyDocument.documentMode >= this.minIEVersion;
   };
 
@@ -95,30 +101,34 @@ export class ColorsComponent implements OnInit {
     this.themeColors();
   }
 
-  rgbToHex(color): string {
+  // tslint:disable-next-line
+  rgbToHex(color: any): string {
     if (typeof color === 'undefined') {
       throw new Error('Hex color is not defined');
     }
 
-    var rgb = color.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+    const rgb = color.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
 
     if (!rgb) {
-      throw new Error(color + " is not a valid rgb color");
+      throw new Error(color + ' is not a valid rgb color');
     }
 
-    var r = "0" + parseInt(rgb[1], 10).toString(16);
-    var g = "0" + parseInt(rgb[2], 10).toString(16);
-    var b = "0" + parseInt(rgb[3], 10).toString(16);
-    return "#" + r.slice(-2) + g.slice(-2) + b.slice(-2);
+    // tslint:disable-next-line
+    const r = '0' + parseInt(rgb[1], 10).toString(16);
+    // tslint:disable-next-line
+    const g = '0' + parseInt(rgb[2], 10).toString(16);
+    // tslint:disable-next-line
+    const b = '0' + parseInt(rgb[3], 10).toString(16);
+    return '#' + r.slice(-2) + g.slice(-2) + b.slice(-2);
   };
 
   themeColors(): void {
     Array.from(document.querySelectorAll('.theme-color')).forEach((el) => {
-      let elem = document.getElementsByClassName(el.classList[0])[0];
+      const elem = document.getElementsByClassName(el.classList[0])[0];
 
-      let background = this.getStyle('background-color', elem);
+      const background = this.getStyle('background-color', elem);
 
-      let table = document.createElement('table');
+      const table = document.createElement('table');
       table.innerHTML = `
         <table class="w-100">
           <tr>
@@ -132,7 +142,9 @@ export class ColorsComponent implements OnInit {
         </table>
       `;
 
-      el.parentNode.appendChild(table);
+      if (el.parentNode) {
+        el.parentNode.appendChild(table);
+      }
     });
   }
 }

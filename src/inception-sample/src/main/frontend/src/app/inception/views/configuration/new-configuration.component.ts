@@ -15,19 +15,19 @@
  */
 
 import {Component} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from "@angular/router";
-import {DialogService} from "../../services/dialog/dialog.service";
-import {SpinnerService} from "../../services/layout/spinner.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
-import {Error} from "../../errors/error";
-import {first} from "rxjs/operators";
-import {SystemUnavailableError} from "../../errors/system-unavailable-error";
-import {AccessDeniedError} from "../../errors/access-denied-error";
-import {ConfigurationService} from "../../services/configuration/configuration.service";
-import {Configuration} from "../../services/configuration/configuration";
-import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
-import {AdminContainerView} from "../../components/layout/admin-container-view";
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DialogService} from '../../services/dialog/dialog.service';
+import {SpinnerService} from '../../services/layout/spinner.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Error} from '../../errors/error';
+import {first} from 'rxjs/operators';
+import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {AccessDeniedError} from '../../errors/access-denied-error';
+import {ConfigurationService} from '../../services/configuration/configuration.service';
+import {Configuration} from '../../services/configuration/configuration';
+import {ConfigurationServiceError} from '../../services/configuration/configuration.service.errors';
+import {AdminContainerView} from '../../components/layout/admin-container-view';
 
 /**
  * The NewConfigurationComponent class implements the new configuration component.
@@ -40,7 +40,13 @@ import {AdminContainerView} from "../../components/layout/admin-container-view";
 })
 export class NewConfigurationComponent extends AdminContainerView {
 
+  descriptionFormControl: FormControl;
+
+  keyFormControl: FormControl;
+
   newConfigurationForm: FormGroup;
+
+  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -48,24 +54,20 @@ export class NewConfigurationComponent extends AdminContainerView {
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    this.newConfigurationForm = this.formBuilder.group({
-      // tslint:disable-next-line
-      key: ['', [Validators.required, Validators.maxLength(4000)]],
-      value: ['', [Validators.required, Validators.maxLength(4000)]],
-      description: [''],
+    // Initialise form controls
+    this.descriptionFormControl = new FormControl('',
+      [Validators.required, Validators.maxLength(4000)]);
+
+    this.keyFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
+
+    this.valueFormControl = new FormControl('');
+
+    // Initialise form
+    this.newConfigurationForm = new FormGroup({
+      description: this.descriptionFormControl,
+      key: this.keyFormControl,
+      value: this.valueFormControl
     });
-  }
-
-  get descriptionFormControl(): AbstractControl {
-    return this.newConfigurationForm.get('description');
-  }
-
-  get keyFormControl(): AbstractControl {
-    return this.newConfigurationForm.get('key');
-  }
-
-  get valueFormControl(): AbstractControl {
-    return this.newConfigurationForm.get('value');
   }
 
   onCancel(): void {
@@ -76,7 +78,7 @@ export class NewConfigurationComponent extends AdminContainerView {
   onOK(): void {
     if (this.newConfigurationForm.valid) {
 
-      let configuration: Configuration = new Configuration(this.keyFormControl.value,
+      const configuration: Configuration = new Configuration(this.keyFormControl.value,
         this.valueFormControl.value, this.descriptionFormControl.value);
 
       this.spinnerService.showSpinner();
@@ -90,11 +92,11 @@ export class NewConfigurationComponent extends AdminContainerView {
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
-
+          // noinspection SuspiciousTypeOfGuard
           if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
             (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
             this.dialogService.showErrorDialog(error);
           }

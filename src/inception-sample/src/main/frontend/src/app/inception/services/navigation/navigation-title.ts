@@ -29,6 +29,6 @@ export class NavigationTitle extends NavigationItem {
    * @param name The name of navigation title.
    */
   constructor(name: string) {
-    super(null, name, null, [], null, null, null, null, false, true);
+    super('', name, '');
   }
 }

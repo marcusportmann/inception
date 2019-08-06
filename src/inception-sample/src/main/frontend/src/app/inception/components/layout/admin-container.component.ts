@@ -15,13 +15,13 @@
  */
 
 import {Component} from '@angular/core';
-import {AdminContainerView} from "./admin-container-view";
-import {BackNavigation} from "./back-navigation";
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-} from "@angular/router";
-import {TitleBarService} from "../../services/layout/title-bar.service";
+import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+
+import {Observable, Subscription} from 'rxjs';
+
+import {AdminContainerView} from './admin-container-view';
+import {TitleBarService} from '../../services/layout/title-bar.service';
+
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -62,6 +62,8 @@ export class AdminContainerComponent {
 
   sidebarMinimized = true;
 
+  private adminContainerViewTitleSubscription?: Subscription;
+
   private changes: MutationObserver;
 
   /**
@@ -75,7 +77,7 @@ export class AdminContainerComponent {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
 
-    this.changes.observe(<Element>this.element, {
+    this.changes.observe(this.element, {
       attributes: true
     });
   }
@@ -85,39 +87,54 @@ export class AdminContainerComponent {
    *
    * @param childComponent The child component.
    */
+  // tslint:disable-next-line
   onRouterOutletActive(childComponent: any) {
 
-    let backNavigation: BackNavigation = null;
-    let title: string = null;
-
-    // Try and retrieve the title from the data for activated route
-    let activateRouteSnapshot: ActivatedRouteSnapshot = this.activatedRoute.snapshot.firstChild;
-
-    while (activateRouteSnapshot.firstChild) activateRouteSnapshot = activateRouteSnapshot.firstChild;
-
-    if (activateRouteSnapshot.data) {
-      if (!!activateRouteSnapshot.data.title) {
-        title = activateRouteSnapshot.data.title;
-      }
-    }
+    let usingAdminContainerViewTitle = false;
 
     // Try and retrieve the back navigation and title from the admin container view if present
     if (childComponent instanceof AdminContainerView) {
 
-      if (childComponent.hasBackNavigation) {
-        backNavigation = childComponent.backNavigation;
+      if (childComponent.backNavigation) {
+        this.titleBarService.setBackNavigation(childComponent.backNavigation);
       }
 
-      if (childComponent.hasTitle) {
-        title = childComponent.title;
+      const title: string | Observable<string> | null = childComponent.title;
+
+      if (title) {
+        usingAdminContainerViewTitle = true;
+
+        if (typeof (title) === 'string') {
+          this.titleBarService.setTitle(title);
+        } else {
+          this.adminContainerViewTitleSubscription = title.subscribe(
+            (title: string) => {
+              this.titleBarService.setTitle(title);
+            });
+        }
       }
     }
 
-    // Set the back navigation
-    this.titleBarService.setBackNavigation(backNavigation);
+    /*
+     * If we are not using a title provided by the admin container view, attempt to retrieve the
+     * title from the activated route.
+     */
+    if (!usingAdminContainerViewTitle) {
+      let activateRouteSnapshot: ActivatedRouteSnapshot | null = this.activatedRoute.snapshot.firstChild;
 
-    // Set the title
-    this.titleBarService.setTitle(title);
+      if (activateRouteSnapshot) {
+
+        while (activateRouteSnapshot.firstChild) {
+          activateRouteSnapshot = activateRouteSnapshot.firstChild;
+        }
+
+        if (activateRouteSnapshot.data) {
+          if (!!activateRouteSnapshot.data.title) {
+            this.titleBarService.setTitle(activateRouteSnapshot.data.title);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -125,6 +142,16 @@ export class AdminContainerComponent {
    *
    * @param childComponent The child component.
    */
+  // tslint:disable-next-line
   onRouterOutletDeactive(childComponent: any) {
+    // Unsubscribe from the title for the admin container view if required
+    if (this.adminContainerViewTitleSubscription) {
+      this.adminContainerViewTitleSubscription.unsubscribe();
+      this.adminContainerViewTitleSubscription = undefined;
+    }
+
+    // Clear the back navigation and title
+    this.titleBarService.setBackNavigation(null);
+    this.titleBarService.setTitle(null);
   }
 }

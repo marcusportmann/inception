@@ -34,7 +34,7 @@ export class CodeCategorySummary {
   /**
    * The date and time the code category was updated.
    */
-  updated: Date;
+  updated?: Date;
 
   /**
    * Constructs a new CodeCategorySummary.

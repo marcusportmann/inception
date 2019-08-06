@@ -31,7 +31,7 @@ export class NavigationItem {
   /**
    * The optional child navigation items.
    */
-  children?: NavigationItem[];
+  children: NavigationItem[];
 
   /**
    * The optional class associated with the navigation item.
@@ -41,32 +41,32 @@ export class NavigationItem {
   /**
    * The optional divider indicator.
    */
-  divider?: boolean;
+  divider = false;
 
   /**
    * The optional authorities that are used to restrict access to the navigation item.
    */
-  authorities?: string[];
+  authorities: string[];
 
   /**
    * The optional icon associated with the navigation item.
    */
-  icon?: string;
+  icon: string;
 
   /**
    * The optional name of navigation item.
    */
-  name?: string;
+  name: string;
 
   /**
    * The optional title indicator.
    */
-  title?: boolean;
+  title = false;
 
   /**
    * The optional url associated with the navigation item.
    */
-  url?: string;
+  url: string;
 
   /**
    * The optional variant to apply to the navigation item.
@@ -79,7 +79,7 @@ export class NavigationItem {
    * @param icon        The icon associated with the navigation item.
    * @param name        The name of navigation item.
    * @param url         The url associated with the navigation item.
-   * @param authorities The authorities that are used to restrict access to the navigation item.
+   * @param authorities The optional authorities that are used to restrict access to the navigation item.
    * @param children    The optional child navigation items.
    * @param cssClass    The optional CSS class to apply to the navigation item.
    * @param variant     The optional variant to apply to the navigation item.
@@ -87,18 +87,22 @@ export class NavigationItem {
    * @param divider     The optional divider indicator.
    * @param title       The optional title indicator.
    */
-  constructor(icon: string, name: string, url: string, authorities: string[],
+  constructor(icon: string, name: string, url: string, authorities?: string[],
               children?: NavigationItem[], cssClass?: string, variant?: string,
               badge?: NavigationBadge, divider?: boolean, title?: boolean) {
     this.icon = icon;
     this.name = name;
     this.url = url;
-    this.authorities = authorities;
-    this.children = children;
+    this.authorities = (!!authorities) ? authorities : [];
+    this.children = (!!children) ? children : [];
     this.cssClass = cssClass;
     this.variant = variant;
     this.badge = badge;
-    this.divider = divider;
-    this.title = title;
+    if (divider) {
+      this.divider = divider;
+    }
+    if (title) {
+      this.title = title;
+    }
   }
 }

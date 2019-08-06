@@ -55,7 +55,10 @@ export class CommunicationError extends Error {
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;
-    this.url = httpErrorResponse.url;
+
+    if (httpErrorResponse.url) {
+      this.url = httpErrorResponse.url;
+    }
   }
 
   /**

@@ -64,7 +64,7 @@ export class SecurityService {
   deleteOrganization(organizationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.securityServiceUrlPrefix + '/organizations/' + organizationId,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -100,7 +100,7 @@ export class SecurityService {
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -159,12 +159,13 @@ export class SecurityService {
     return this.httpClient.get<Organization[]>(
       environment.securityServiceUrlPrefix + '/organizations', {
         observe: 'response',
-        params: params,
+        params,
         reportProgress: true,
       }).pipe(map((response: HttpResponse<Organization[]>) => {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
-      return new Organizations(response.body, totalCount, filter, sortDirection, pageIndex,
+      return new Organizations(response.body ? response.body : [], totalCount, filter,
+        sortDirection, pageIndex,
         pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -298,12 +299,13 @@ export class SecurityService {
     return this.httpClient.get<User[]>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
         observe: 'response',
-        params: params,
+        params,
         reportProgress: true,
       }).pipe(map((response: HttpResponse<User[]>) => {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
-      return new Users(userDirectoryId, response.body, totalCount, filter, sortBy, sortDirection,
+      return new Users(userDirectoryId, response.body ? response.body : [], totalCount, filter,
+        sortBy, sortDirection,
         pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -363,12 +365,13 @@ export class SecurityService {
     return this.httpClient.get<UserDirectorySummary[]>(
       environment.securityServiceUrlPrefix + '/user-directory-summaries', {
         observe: 'response',
-        params: params,
+        params,
         reportProgress: true,
       }).pipe(map((response: HttpResponse<UserDirectorySummary[]>) => {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
-      return new UserDirectorySummaries(response.body, totalCount, filter, sortDirection, pageIndex,
+      return new UserDirectorySummaries(response.body ? response.body : [], totalCount, filter,
+        sortDirection, pageIndex,
         pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

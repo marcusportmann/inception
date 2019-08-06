@@ -44,7 +44,7 @@ export class ErrorReportSummary {
   /**
    * The optional ID used to uniquely identify the device the error report originated from.
    */
-  deviceId: string;
+  deviceId?: string;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
@@ -54,7 +54,7 @@ export class ErrorReportSummary {
   /**
    * The optional username identifying the user associated with the error report.
    */
-  who: string;
+  who?: string;
 
   /**
    * Constructs a new ErrorReportSummary.

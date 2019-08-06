@@ -23,7 +23,7 @@ import {
   WarningDialogComponent
 } from '../../components/dialogs';
 
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 import {Error} from '../../errors/error';
 import {DialogData} from '../../components/dialogs/dialog-data';
@@ -53,7 +53,7 @@ export class DialogService {
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
     return this.dialog.open(ConfirmationDialogComponent, {
       panelClass: 'confirmation-dialog-panel',
-      data: data
+      data
     });
   }
 
@@ -67,7 +67,7 @@ export class DialogService {
 
     return this.dialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog-panel',
-      data: {error: error}
+      data: {error}
     });
   }
 
@@ -79,7 +79,7 @@ export class DialogService {
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
     return this.dialog.open(InformationDialogComponent, {
       panelClass: 'information-dialog-panel',
-      data: data
+      data
     });
   }
 
@@ -91,7 +91,7 @@ export class DialogService {
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialogComponent> {
     return this.dialog.open(WarningDialogComponent, {
       panelClass: 'warning-dialog-panel',
-      data: data
+      data
     });
   }
 }

@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {InceptionModule} from '../../inception.module';
 import {SecurityService} from '../../services/security/security.service';
 import {finalize, first} from 'rxjs/operators';
@@ -26,13 +26,13 @@ import {SpinnerService} from '../../services/layout/spinner.service';
 import {SessionServiceError} from '../../services/session/session.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {Session} from "../../services/session/session";
-import {Organization} from "../../services/security/organization";
-import {Organizations} from "../../services/security/organizations";
+import {Session} from '../../services/session/session';
+import {Organization} from '../../services/security/organization';
+import {Organizations} from '../../services/security/organizations';
 
 /**
  * The LoginComponent class implements the login component.
@@ -45,6 +45,10 @@ import {Organizations} from "../../services/security/organizations";
 export class LoginComponent {
 
   loginForm: FormGroup;
+
+  passwordFormControl: FormControl;
+
+  usernameFormControl: FormControl;
 
   /**
    * Constructs a new LoginComponent.
@@ -62,20 +66,16 @@ export class LoginComponent {
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private spinnerService: SpinnerService) {
-    this.loginForm = this.formBuilder.group({
-      // TODO: Implement pattern validator for username
-      // tslint:disable-next-line
-      username: ['Administrator', Validators.required],
-      password: ['Password1', Validators.required]
+    // Initialise form controls
+    this.passwordFormControl = new FormControl('Password1', Validators.required);
+
+    this.usernameFormControl = new FormControl('Administrator', Validators.required);
+
+    // Initialise form
+    this.loginForm = new FormGroup({
+      username: this.usernameFormControl,
+      password: this.passwordFormControl
     });
-  }
-
-  get passwordFormControl(): AbstractControl {
-    return this.loginForm.get('password');
-  }
-
-  get usernameFormControl(): AbstractControl {
-    return this.loginForm.get('username');
   }
 
   static isForgottenPasswordEnabled(): boolean {
@@ -102,7 +102,7 @@ export class LoginComponent {
 
     dialogRef.afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean) => {
+      .subscribe((confirmation: boolean | undefined) => {
 
         console.log('confirmation = ', confirmation);
 
@@ -126,59 +126,71 @@ export class LoginComponent {
 
       this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
         .pipe(first())
-        .subscribe((session: Session)  => {
+        .subscribe((session: Session | null) => {
+          if (session) {
+            if (session.hasRole('Administrator')) {
+              this.securityService.getOrganizations()
+                .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+                .subscribe((organizations: Organizations) => {
+                  if (organizations.total === 1) {
+                    session.organization = organizations.organizations[0];
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigate(['/']);
+                  } else {
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigate(['select-organization'], {
+                      relativeTo: this.activatedRoute,
+                      state: {organizations: organizations.organizations}
+                    });
+                  }
+                }, (error: Error) => {
+                  // noinspection SuspiciousTypeOfGuard
+                  if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+                    (error instanceof SystemUnavailableError)) {
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+                  } else {
+                    this.dialogService.showErrorDialog(error);
+                  }
+                })
+            } else {
+              this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
+                .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+                .subscribe((organizations: Organization[]) => {
+                  if (organizations.length === 1) {
+                    session.organization = organizations[0];
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigate(['/']);
+                  } else {
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigate(['select-organization'],
+                      {relativeTo: this.activatedRoute, state: {organizations}});
+                  }
+                }, (error: Error) => {
+                  // noinspection SuspiciousTypeOfGuard
+                  if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
+                    (error instanceof SystemUnavailableError)) {
+                    // noinspection JSIgnoredPromiseFromCall
+                    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+                  } else {
+                    this.dialogService.showErrorDialog(error);
+                  }
+                });
+            }
+          } else {
+            this.spinnerService.hideSpinner();
 
-          if (session.hasRole('Administrator')) {
-            this.securityService.getOrganizations()
-              .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-              .subscribe((organizations: Organizations) => {
-                if (organizations.total === 1) {
-                  session.organization = organizations.organizations[0];
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigate(['/']);
-                } else {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute, state: {organizations: organizations.organizations}});
-                }
-              }, (error:Error) => {
-                if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
-                  (error instanceof SystemUnavailableError)) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              })
-          }
-          else {
-            this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
-              .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-              .subscribe((organizations: Organization[]) => {
-                if (organizations.length === 1) {
-                  session.organization = organizations[0];
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigate(['/']);
-                } else {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigate(['select-organization'], {relativeTo: this.activatedRoute, state: {organizations: organizations}});
-                }
-              }, (error:Error) => {
-                if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
-                  (error instanceof SystemUnavailableError)) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              });
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['/']);
           }
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
 
+          // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
             (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
             this.dialogService.showErrorDialog(error);
           }

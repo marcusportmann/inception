@@ -69,7 +69,7 @@ import {Router} from '@angular/router';
 })
 export class SidebarNavItemComponent {
 
-  @Input() navItem: NavigationItem;
+  @Input() navItem?: NavigationItem;
 
   /**
    * Constructs a new SidebarNavItemComponent.
@@ -81,19 +81,19 @@ export class SidebarNavItemComponent {
   }
 
   hasBadge(): boolean {
-    return !!this.navItem.badge;
+    return !!this.navItem && !!this.navItem.badge;
   }
 
   hasClass(): boolean {
-    return !!this.navItem.cssClass;
+    return !!this.navItem && !!this.navItem.cssClass;
   }
 
   hasIcon(): boolean {
-    return !!this.navItem.icon;
+    return !!this.navItem && !!this.navItem.icon;
   }
 
   hasVariant(): boolean {
-    return !!this.navItem.variant;
+    return !!this.navItem && !!this.navItem.variant;
   }
 
   hideMobile() {
@@ -103,36 +103,22 @@ export class SidebarNavItemComponent {
   }
 
   isActive(): boolean {
-    if (this.navItem.url) {
-      return this.router.isActive(this.thisUrl(), false);
-    } else {
-      return false;
-    }
+    return !!this.navItem && !!this.navItem.url && this.router.isActive(this.navItem.url, false);
   }
 
   isDivider(): boolean {
-    return this.navItem.divider;
+    return !!this.navItem && this.navItem.divider;
   }
 
   isDropdown(): boolean {
-    return !!this.navItem.children;
+    return !!this.navItem && this.navItem.children.length > 0;
   }
 
   isExternalLink(): boolean {
-    if (this.navItem) {
-      if (this.navItem.url) {
-        return this.navItem.url.substring(0, 4) === 'http';
-      }
-    }
-
-    return false;
+    return !!this.navItem && !!this.navItem.url && (this.navItem.url.substring(0, 4) === 'http');
   }
 
   isTitle(): boolean {
-    return this.navItem.title;
-  }
-
-  thisUrl(): string {
-    return this.navItem.url;
+    return !!this.navItem && this.navItem.title;
   }
 }

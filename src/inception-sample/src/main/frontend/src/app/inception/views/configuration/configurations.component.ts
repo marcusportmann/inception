@@ -15,10 +15,10 @@
  */
 
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import {MatDialogRef} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {finalize, first} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -28,10 +28,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {Configuration} from "../../services/configuration/configuration";
-import {ConfigurationService} from "../../services/configuration/configuration.service";
-import {ConfigurationServiceError} from "../../services/configuration/configuration.service.errors";
-import {AdminContainerView} from "../../components/layout/admin-container-view";
+import {Configuration} from '../../services/configuration/configuration';
+import {ConfigurationService} from '../../services/configuration/configuration.service';
+import {ConfigurationServiceError} from '../../services/configuration/configuration.service.errors';
+import {AdminContainerView} from '../../components/layout/admin-container-view';
 
 /**
  * The ConfigurationsComponent class implements the configurations component.
@@ -49,11 +49,11 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   dataSource = new MatTableDataSource<Configuration>();
 
-  displayedColumns: string[] = ['key', 'value', 'actions'];
+  displayedColumns = ['key', 'value', 'actions'];
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private configurationService: ConfigurationService,
@@ -68,40 +68,45 @@ export class ConfigurationsComponent extends AdminContainerView implements After
   }
 
   deleteConfiguration(key: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@configurations_component_confirm_delete_configuration',
-          value: 'Are you sure you want to delete the configuration?'
-        })
-      });
+    if (!!key) {
+      const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+        {
+          message: this.i18n({
+            id: '@@configurations_component_confirm_delete_configuration',
+            value: 'Are you sure you want to delete the configuration?'
+          })
+        });
 
-    dialogRef.afterClosed()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((confirmation: boolean) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+      dialogRef.afterClosed()
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe((confirmation: boolean | undefined) => {
+          if (confirmation === true) {
+            this.spinnerService.showSpinner();
 
-          this.configurationService.deleteConfiguration(key)
-            .pipe(first())
-            .subscribe(() => {
-              this.loadConfigurations();
-            }, (error: Error) => {
-              if ((error instanceof ConfigurationServiceError) ||
-                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+            this.configurationService.deleteConfiguration(key)
+              .pipe(first())
+              .subscribe(() => {
+                this.loadConfigurations();
+              }, (error: Error) => {
+                // noinspection SuspiciousTypeOfGuard
+                if ((error instanceof ConfigurationServiceError) ||
+                  (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+                  // noinspection JSIgnoredPromiseFromCall
+                  this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+                } else {
+                  this.dialogService.showErrorDialog(error);
+                }
+              });
+          }
+        });
+    }
   }
 
   editConfiguration(key: string): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([key], {relativeTo: this.activatedRoute});
+    if (!!key) {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate([key], {relativeTo: this.activatedRoute});
+    }
   }
 
   loadConfigurations(): void {
@@ -112,20 +117,26 @@ export class ConfigurationsComponent extends AdminContainerView implements After
       .subscribe((configurations: Configuration[]) => {
         this.dataSource.data = configurations;
       }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
         if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
           (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
           this.dialogService.showErrorDialog(error);
         }
       });
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = function (data, filter): boolean {
-      return data.key.toLowerCase().includes(filter);
-    };
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+
+    this.dataSource.filterPredicate = (data, filter): boolean => data.key.toLowerCase().includes(
+      filter);
   }
 
   newConfiguration(): void {

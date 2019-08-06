@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {NavigationExtras} from "@angular/router";
+import {NavigationExtras} from '@angular/router';
 
 /**
  * The BackNavigation class holds the information for the back navigation for an admin container
@@ -27,7 +27,8 @@ export class BackNavigation {
   /**
    * The router navigation commands for the back navigation.
    */
-  commands: any[]
+  // tslint:disable-next-line
+  commands: any[];
 
   /**
    * The optional router navigation extras for the back navigation.
@@ -46,6 +47,7 @@ export class BackNavigation {
    * @param commands The router navigation commands for the back navigation.
    * @param extras   The optional router navigation extras for the back navigation.
    */
+  // tslint:disable-next-line
   constructor(title: string, commands: any[], extras?: NavigationExtras) {
     this.title = title;
     this.commands = commands;

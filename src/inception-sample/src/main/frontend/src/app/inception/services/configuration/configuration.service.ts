@@ -57,7 +57,7 @@ export class ConfigurationService {
   deleteConfiguration(key: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.configurationServiceUrlPrefix + '/configurations/' + key, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<any>) => {
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
@@ -188,7 +188,7 @@ export class ConfigurationService {
   saveConfiguration(configuration: Configuration): Observable<boolean> {
     return this.httpClient.post<boolean>(
       environment.configurationServiceUrlPrefix + '/configurations', configuration,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<any>) => {
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

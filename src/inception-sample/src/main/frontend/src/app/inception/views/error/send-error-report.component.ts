@@ -15,7 +15,12 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import {ErrorService} from '../../services/error/error.service';
 import {first, map} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -36,42 +41,43 @@ import {InformationDialogComponent} from '../../components/dialogs';
 })
 export class SendErrorReportComponent implements OnInit {
 
-  sendErrorReportForm: FormGroup;
+  emailFormControl: FormControl;
 
-  error: Error;
+  error: Error | null = null;
+
+  feedbackFormControl: FormControl;
+
+  messageFormControl: FormControl;
+
+  sendErrorReportForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private errorService: ErrorService,
               private spinnerService: SpinnerService) {
-    this.sendErrorReportForm = this.formBuilder.group({
-      // tslint:disable-next-line
-      message: [''],
-      email: ['', Validators.email],
-      feedback: ['']
+    // Initialise form controls
+    this.emailFormControl = new FormControl('', Validators.email);
+
+    this.feedbackFormControl = new FormControl('');
+
+    this.messageFormControl = new FormControl('');
+
+    // Initialise form
+    this.sendErrorReportForm = new FormGroup({
+      message: this.messageFormControl,
+      email: this.emailFormControl,
+      feedback: this.feedbackFormControl
     });
-  }
-
-  get emailFormControl(): AbstractControl {
-    return this.sendErrorReportForm.get('email');
-  }
-
-  get feedbackFormControl(): AbstractControl {
-    return this.sendErrorReportForm.get('feedback');
-  }
-
-  get messageFormControl(): AbstractControl {
-    return this.sendErrorReportForm.get('message');
   }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(first(), map((state: any) => window.history.state))
-      .subscribe((state: any) => {
+      .pipe(first(), map(() => window.history.state))
+      .subscribe((state) => {
         if (state.error) {
           this.error = state.error;
 
-          this.messageFormControl.setValue(this.error.message);
+          this.messageFormControl.setValue(state.error.message);
 
           console.log('Error: ', this.error);
         } else {
@@ -84,13 +90,13 @@ export class SendErrorReportComponent implements OnInit {
   }
 
   onSendErrorReport(): void {
-    if (this.sendErrorReportForm.valid) {
+    if (this.sendErrorReportForm.valid && this.error) {
       this.spinnerService.showSpinner();
 
-      this.errorService.sendErrorReport(this.emailFormControl.value, this.feedbackFormControl.value,
-        this.error)
+      this.errorService.sendErrorReport(this.error, this.emailFormControl.value,
+        this.feedbackFormControl.value)
         .pipe(first())
-        .subscribe(result => {
+        .subscribe(() => {
           this.spinnerService.hideSpinner();
 
           const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
@@ -103,7 +109,8 @@ export class SendErrorReportComponent implements OnInit {
 
           dialogRef.afterClosed()
             .pipe(first())
-            .subscribe((confirmation: boolean) => {
+            .subscribe(() => {
+              // noinspection JSIgnoredPromiseFromCall
               this.router.navigate(['/']);
             });
         }, (error: Error) => {

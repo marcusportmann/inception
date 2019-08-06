@@ -37,9 +37,12 @@ import {map} from 'rxjs/operators';
 export class SidebarNavComponent implements OnInit, OnDestroy {
 
   navItems: NavigationItem[];
-  @HostBinding('class.sidebar-nav') true;
+
+  @HostBinding('class.sidebar-nav') sidebarNav() { return true; };
+
   @HostBinding('attr.role') role = 'nav';
-  private userNavigationSubscription: Subscription;
+
+  private userNavigationSubscription?: Subscription;
 
   /**
    * Constructs a new SidebarNavComponent.

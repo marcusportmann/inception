@@ -38,6 +38,7 @@ export class SidebarOffCanvasCloseDirective {
    *
    * @return True if the element has a class with the specified name or false otherwise.
    */
+  // tslint:disable-next-line
   private static hasClass(target: any, className: string): boolean {
     return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
   }
@@ -48,6 +49,7 @@ export class SidebarOffCanvasCloseDirective {
    * @param element   The element.
    * @param className The class name.
    */
+  // tslint:disable-next-line
   private static toggleClass(element: any, className: string): void {
     let newClass = ' ' + element.className.replace(/[\t\r\n]/g, ' ') + ' ';
     if (SidebarOffCanvasCloseDirective.hasClass(element, className)) {
@@ -60,6 +62,7 @@ export class SidebarOffCanvasCloseDirective {
     }
   }
 
+  // tslint:disable-next-line
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
 
