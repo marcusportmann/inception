@@ -145,9 +145,7 @@ export class SortableTableComponent implements AfterViewInit {
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
   ngAfterViewInit(): void {
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-    }
+    this.dataSource.sort = this.sort!;
   }
 }
 

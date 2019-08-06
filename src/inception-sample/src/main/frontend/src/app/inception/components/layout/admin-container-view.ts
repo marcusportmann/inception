@@ -35,7 +35,5 @@ export abstract class AdminContainerView {
   /**
    * The title for the admin container view.
    */
-  get title(): string | Observable<string> | null {
-    return null;
-  }
+  abstract get title(): string | Observable<string>;
 }

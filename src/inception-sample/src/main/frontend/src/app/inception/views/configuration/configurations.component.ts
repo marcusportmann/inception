@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -45,7 +45,7 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
     'class': 'flex flex-column flex-fill',
   }
 })
-export class ConfigurationsComponent extends AdminContainerView implements AfterViewInit, OnInit {
+export class ConfigurationsComponent extends AdminContainerView implements AfterViewInit {
 
   dataSource = new MatTableDataSource<Configuration>();
 
@@ -59,6 +59,17 @@ export class ConfigurationsComponent extends AdminContainerView implements After
               private configurationService: ConfigurationService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Set the data source filter
+    this.dataSource.filterPredicate = (data, filter): boolean => data.key.toLowerCase().includes(
+      filter);
+  }
+
+  get title(): string {
+    return this.i18n({
+      id: '@@configurations_component_title',
+      value: 'Configurations'
+    })
   }
 
   applyFilter(filterValue: string): void {
@@ -68,45 +79,41 @@ export class ConfigurationsComponent extends AdminContainerView implements After
   }
 
   deleteConfiguration(key: string): void {
-    if (!!key) {
-      const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-        {
-          message: this.i18n({
-            id: '@@configurations_component_confirm_delete_configuration',
-            value: 'Are you sure you want to delete the configuration?'
-          })
-        });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+      {
+        message: this.i18n({
+          id: '@@configurations_component_confirm_delete_configuration',
+          value: 'Are you sure you want to delete the configuration?'
+        })
+      });
 
-      dialogRef.afterClosed()
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe((confirmation: boolean | undefined) => {
-          if (confirmation === true) {
-            this.spinnerService.showSpinner();
+    dialogRef.afterClosed()
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          this.spinnerService.showSpinner();
 
-            this.configurationService.deleteConfiguration(key)
-              .pipe(first())
-              .subscribe(() => {
-                this.loadConfigurations();
-              }, (error: Error) => {
-                // noinspection SuspiciousTypeOfGuard
-                if ((error instanceof ConfigurationServiceError) ||
-                  (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-                  // noinspection JSIgnoredPromiseFromCall
-                  this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-                } else {
-                  this.dialogService.showErrorDialog(error);
-                }
-              });
-          }
-        });
-    }
+          this.configurationService.deleteConfiguration(key)
+            .pipe(first())
+            .subscribe(() => {
+              this.loadConfigurations();
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof ConfigurationServiceError) ||
+                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
+        }
+      });
   }
 
   editConfiguration(key: string): void {
-    if (!!key) {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate([key], {relativeTo: this.activatedRoute});
-    }
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate([key], {relativeTo: this.activatedRoute});
   }
 
   loadConfigurations(): void {
@@ -126,29 +133,18 @@ export class ConfigurationsComponent extends AdminContainerView implements After
           this.dialogService.showErrorDialog(error);
         }
       });
-
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-    }
-
-    this.dataSource.filterPredicate = (data, filter): boolean => data.key.toLowerCase().includes(
-      filter);
   }
 
   newConfiguration(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new-configuration'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../new-configuration'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    this.loadConfigurations();
-  }
+    this.dataSource.paginator = this.paginator!;
+    this.dataSource.sort = this.sort!;
 
-  ngOnInit(): void {
+    this.loadConfigurations();
   }
 }
 

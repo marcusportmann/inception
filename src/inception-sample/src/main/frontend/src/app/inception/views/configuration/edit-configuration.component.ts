@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -43,11 +43,13 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
   templateUrl: 'edit-configuration.component.html',
   styleUrls: ['edit-configuration.component.css'],
 })
-export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit, OnInit {
+export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit {
 
   descriptionFormControl: FormControl;
 
   editConfigurationForm: FormGroup;
+
+  key: string;
 
   keyFormControl: FormControl;
 
@@ -59,10 +61,13 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
+    // Retrieve parameters
+    this.key = this.activatedRoute.snapshot.paramMap.get('key')!;
+
     // Initialise form controls
     this.descriptionFormControl = new FormControl('');
 
-    this.keyFormControl = new FormControl({value: '', disabled: true},
+    this.keyFormControl = new FormControl({value: this.key, disabled: true},
       [Validators.required, Validators.maxLength(4000)]);
 
     this.valueFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
@@ -75,10 +80,17 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
     });
   }
 
+  get title(): string {
+    return this.i18n({
+      id: '@@edit_configuration_component_title',
+      value: 'Edit Configuration'
+    })
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfiguration(this.keyFormControl.value)
+    this.configurationService.getConfiguration(this.key)
       .pipe(first())
       .subscribe((configuration: Configuration) => {
         this.spinnerService.hideSpinner();
@@ -99,14 +111,6 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
       });
   }
 
-  ngOnInit(): void {
-    const key: string | null = this.activatedRoute.snapshot.paramMap.get('key');
-
-    if (!!key) {
-      this.keyFormControl.setValue(key);
-    }
-  }
-
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
@@ -114,7 +118,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   onOK(): void {
     if (this.editConfigurationForm.valid) {
-      const configuration: Configuration = new Configuration(this.keyFormControl.value,
+      const configuration: Configuration = new Configuration(this.key,
         this.valueFormControl.value, this.descriptionFormControl.value);
 
       this.spinnerService.showSpinner();

@@ -213,20 +213,15 @@ export class ActionListTableComponent implements AfterViewInit {
 
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
-  ngAfterViewInit() {
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
-
-    if (this.sort) {
-      this.dataSource.sort = this.sort;
-    }
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator!;
+    this.dataSource.sort = this.sort!;
   }
 }
 

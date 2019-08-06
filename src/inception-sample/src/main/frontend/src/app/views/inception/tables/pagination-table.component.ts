@@ -146,9 +146,7 @@ export class PaginationTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
   ngAfterViewInit(): void {
-    if (this.paginator) {
-      this.dataSource.paginator = this.paginator;
-    }
+    this.dataSource.paginator = this.paginator!;
   }
 }
 

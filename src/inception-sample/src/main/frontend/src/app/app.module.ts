@@ -145,7 +145,7 @@ export class AppModule extends InceptionAppModule {
             ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',
         ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration'],
-        [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
+        [new NavigationItem('fa fa-list', 'Codes', '/administration/system/codes',
           ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
           new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration',
             ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration'])

@@ -61,9 +61,9 @@ export const routes: Routes = [{
             title: 'System'
           },
           children: [{
-            path: 'code-categories',
+            path: 'codes',
             data: {
-              title: 'Code Categories'
+              title: 'Codes'
             },
             loadChildren: () => import('./inception/views/codes/codes.module').then(m => m.CodesModule)
           }, {

@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {Observable, of} from "rxjs";
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The CodesTitleResolver class provides the route data resolver that resolves the
  * title for the "Codes" route in the navigation hierarchy.
- *
- * This is required since it is not possible to override a resolver provided title in a parent
- * route with a static title specified as part of a child route's data.
  *
  * @author Marcus Portmann
  */
 export class CodesTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new CodeCategoryTitleResolver.
+   * Constructs a new CodesTitleResolver.
    *
    * @param i18n The internationalization service.
    */
-  constructor() {
+  constructor(private i18n: I18n) {
   }
-
+  
   /**
    * Resolve the title.
    *
@@ -44,6 +42,9 @@ export class CodesTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    return of('Codes');
+    return of(this.i18n({
+      id: '@@codes_title_resolver_title',
+      value: 'Codes'
+    }));
   }
 }

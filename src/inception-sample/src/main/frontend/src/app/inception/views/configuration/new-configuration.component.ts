@@ -70,9 +70,16 @@ export class NewConfigurationComponent extends AdminContainerView {
     });
   }
 
+  get title(): string {
+    return this.i18n({
+      id: '@@new_configuration_component_title',
+      value: 'New Configuration'
+    })
+  }
+
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../configurations'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -89,7 +96,7 @@ export class NewConfigurationComponent extends AdminContainerView {
           this.spinnerService.hideSpinner();
 
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+          this.router.navigate(['../configurations'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
           // noinspection SuspiciousTypeOfGuard

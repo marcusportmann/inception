@@ -15,22 +15,31 @@
  */
 
 import {Component} from '@angular/core';
-import {AdminContainerView} from "../../components/layout/admin-container-view";
+import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {ActivatedRoute, Router} from '@angular/router';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The OverviewComponent class implements the overview component.
+ * The SecurityOverviewComponent class implements the security overview component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  template: `Overview`
+  template: `Security Overview`
 })
-export class OverviewComponent extends AdminContainerView {
+export class SecurityOverviewComponent extends AdminContainerView {
 
   /**
-   * Constructs a new OverviewComponent.
+   * Constructs a new SecurityOverviewComponent.
    */
-  constructor() {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n) {
     super();
+  }
+
+  get title(): string {
+    return this.i18n({
+      id: '@@security_overview_component_title',
+      value: 'Security Overview'
+    })
   }
 }

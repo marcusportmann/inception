@@ -27,30 +27,39 @@ import {ConfigurationsComponent} from './configurations.component';
 import {EditConfigurationComponent} from './edit-configuration.component';
 import {NewConfigurationComponent} from './new-configuration.component';
 import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
+import {ConfigurationsTitleResolver} from './configurations-title-resolver';
+import {NewConfigurationTitleResolver} from './new-configuration-title-resolver';
+import {EditConfigurationTitleResolver} from './edit-configuration-title-resolver';
 
 const routes: Routes = [{
-  path: '',
+  path: 'configuration',
   canActivate: [CanActivateFunctionGuard],
   component: ConfigurationsComponent,
   data: {
-    title: '',
     authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+  },
+  resolve: {
+    title: ConfigurationsTitleResolver
+  }
+}, {
+  path: 'configuration/:key/edit',
+  canActivate: [CanActivateFunctionGuard],
+  component: EditConfigurationComponent,
+  data: {
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+  },
+  resolve: {
+    title: EditConfigurationTitleResolver
   }
 }, {
   path: 'new-configuration',
   canActivate: [CanActivateFunctionGuard],
   component: NewConfigurationComponent,
   data: {
-    title: 'New Configuration',
     authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-  }
-}, {
-  path: ':key',
-  canActivate: [CanActivateFunctionGuard],
-  component: EditConfigurationComponent,
-  data: {
-    title: '{key}',
-    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+  },
+  resolve: {
+    title: NewConfigurationTitleResolver
   }
 }
 ];
@@ -60,7 +69,8 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ConfigurationsComponent, EditConfigurationComponent, NewConfigurationComponent]
+  declarations: [ConfigurationsComponent, EditConfigurationComponent, NewConfigurationComponent],
+  providers: [ConfigurationsTitleResolver, EditConfigurationTitleResolver, NewConfigurationTitleResolver]
 })
 export class ConfigurationModule {
 }
