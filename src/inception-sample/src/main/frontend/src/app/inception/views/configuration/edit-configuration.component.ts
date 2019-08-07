@@ -113,7 +113,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -129,7 +129,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
           this.spinnerService.hideSpinner();
 
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
           // noinspection SuspiciousTypeOfGuard

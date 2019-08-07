@@ -79,7 +79,7 @@ export class NewConfigurationComponent extends AdminContainerView {
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../configurations'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -96,7 +96,7 @@ export class NewConfigurationComponent extends AdminContainerView {
           this.spinnerService.hideSpinner();
 
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../configurations'], {relativeTo: this.activatedRoute});
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
           // noinspection SuspiciousTypeOfGuard

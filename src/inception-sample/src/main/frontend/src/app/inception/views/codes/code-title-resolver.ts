@@ -42,6 +42,7 @@ export class CodeTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    return of('CODE NAME');
+    // TODO: Retrieve the actual name of the code and return here -- MARCUS
+    return of(activatedRouteSnapshot.paramMap.get('codeId')!);
   }
 }

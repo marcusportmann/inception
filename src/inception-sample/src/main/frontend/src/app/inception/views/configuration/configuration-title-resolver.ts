@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The CodeCategoryTitleResolver class provides the route data resolver that resolves the
- * title for the "Code Category" route in the navigation hierarchy.
+ * The ConfigurationTitleResolver class provides the route data resolver that resolves the
+ * title for the "Configuration" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class CodeCategoryTitleResolver implements Resolve<string> {
+export class ConfigurationTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new CodeCategoryTitleResolver.
+   * Constructs a new ConfigurationTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,7 +42,7 @@ export class CodeCategoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    // TODO: Retrieve the actual name of the code category and return here -- MARCUS
-    return of(activatedRouteSnapshot.paramMap.get('codeCategoryId')!);
+    // TODO: Retrieve the actual name of the configuration and return here -- MARCUS
+    return of(activatedRouteSnapshot.paramMap.get('key')!);
   }
 }

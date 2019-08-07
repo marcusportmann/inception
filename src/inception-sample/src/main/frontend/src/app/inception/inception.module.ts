@@ -101,6 +101,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 // Import Material miscellaneous
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from "@angular/material-moment-adapter";
+import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 
 // Import 3rd party components
 
@@ -238,7 +239,7 @@ export class InceptionModule {
           useValue: 'en-GB'
         },
 
-        CanActivateFunctionGuard,
+        CanActivateFunctionGuard, DisabledFunctionGuard,
 
         BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService,
         SpinnerService, TitleBarService, NavigationService, SecurityService, SessionService

@@ -57,9 +57,6 @@ export class BreadcrumbsService {
                 url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
                 if (routeSnapshot.data.title) {
-
-                  console.log('Adding breadcrumb with title (' + routeSnapshot.data.title + '), url (' + url + ') and component: ', routeSnapshot.component );
-
                   breadcrumbs.push(
                     new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
                 }

@@ -1,14 +1,14 @@
 /*
  * Copyright 2019 Marcus Portmann
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -30,37 +30,57 @@ import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guar
 import {ConfigurationsTitleResolver} from './configurations-title-resolver';
 import {NewConfigurationTitleResolver} from './new-configuration-title-resolver';
 import {EditConfigurationTitleResolver} from './edit-configuration-title-resolver';
+import {ConfigurationTitleResolver} from './configuration-title-resolver';
+import {DisabledFunctionGuard} from '../../routing/disabled-function-guard';
 
 const routes: Routes = [{
-  path: 'configuration',
-  canActivate: [CanActivateFunctionGuard],
-  component: ConfigurationsComponent,
-  data: {
-    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-  },
+  path: '',
+  pathMatch: 'full',
+  redirectTo: 'configurations',
+},  {
+  path: 'configurations',
   resolve: {
     title: ConfigurationsTitleResolver
-  }
-}, {
-  path: 'configuration/:key/edit',
-  canActivate: [CanActivateFunctionGuard],
-  component: EditConfigurationComponent,
-  data: {
-    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
   },
-  resolve: {
-    title: EditConfigurationTitleResolver
-  }
-}, {
-  path: 'new-configuration',
-  canActivate: [CanActivateFunctionGuard],
-  component: NewConfigurationComponent,
-  data: {
-    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-  },
-  resolve: {
-    title: NewConfigurationTitleResolver
-  }
+  children: [{
+    path: '',
+    canActivate: [CanActivateFunctionGuard],
+    component: ConfigurationsComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+    }
+  }, {
+    path: 'new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewConfigurationComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+    },
+    resolve: {
+      title: NewConfigurationTitleResolver
+    }
+  }, {
+    path: ':key',
+    pathMatch: 'full',
+    redirectTo: ':key/edit'
+  }, {
+    path: ':key',
+    resolve: {
+      title: ConfigurationTitleResolver
+    },
+    children: [{
+      path: 'edit',
+      canActivate: [CanActivateFunctionGuard],
+      component: EditConfigurationComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+      },
+      resolve: {
+        title: EditConfigurationTitleResolver
+      }
+    }]
+  }]
 }
 ];
 
@@ -70,7 +90,7 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
   declarations: [ConfigurationsComponent, EditConfigurationComponent, NewConfigurationComponent],
-  providers: [ConfigurationsTitleResolver, EditConfigurationTitleResolver, NewConfigurationTitleResolver]
+  providers: [ConfigurationTitleResolver, ConfigurationsTitleResolver, EditConfigurationTitleResolver, NewConfigurationTitleResolver]
 })
 export class ConfigurationModule {
 }

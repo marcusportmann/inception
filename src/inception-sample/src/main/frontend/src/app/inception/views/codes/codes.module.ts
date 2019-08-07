@@ -36,8 +36,8 @@ import {CodesTitleResolver} from './codes-title-resolver';
 import {NewCodeCategoryTitleResolver} from './new-code-category-title-resolver';
 import {EditCodeCategoryTitleResolver} from './edit-code-category-title-resolver';
 import {NewCodeTitleResolver} from './new-code-title-resolver';
-import {CodeTitleResolver} from "./code-title-resolver";
-import {EditCodeTitleResolver} from "./edit-code-title-resolver";
+import {CodeTitleResolver} from './code-title-resolver';
+import {EditCodeTitleResolver} from './edit-code-title-resolver';
 
 
 const routes: Routes = [{
@@ -67,6 +67,10 @@ const routes: Routes = [{
     resolve: {
       title: NewCodeCategoryTitleResolver
     }
+  }, {
+    path: ':codeCategoryId',
+    pathMatch: 'full',
+    redirectTo: ':codeCategoryId/edit'
   }, {
     path: ':codeCategoryId',
     resolve: {
@@ -105,6 +109,10 @@ const routes: Routes = [{
         resolve: {
           title: NewCodeTitleResolver
         }
+      }, {
+        path: ':codeId',
+        pathMatch: 'full',
+        redirectTo: ':codeId/edit'
       }, {
         path: ':codeId',
         resolve: {

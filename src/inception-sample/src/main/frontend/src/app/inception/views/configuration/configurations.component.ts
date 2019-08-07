@@ -113,7 +113,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   editConfiguration(key: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([key], {relativeTo: this.activatedRoute});
+    this.router.navigate([key + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadConfigurations(): void {
@@ -137,7 +137,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   newConfiguration(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../new-configuration'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
