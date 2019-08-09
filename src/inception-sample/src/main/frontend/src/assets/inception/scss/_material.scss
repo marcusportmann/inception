@@ -2,7 +2,6 @@
 
 @include mat-core();
 
-
 $inception-palette-base:  #20a8d8 !default;
 
 $inception-palette-50:  #e4f5fa !default;
@@ -60,8 +59,6 @@ $inception-theme: mat-light-theme($custom-primary, $custom-accent);
 
 @include angular-material-theme($inception-theme);
 
-
-
 $inception-typography: mat-typography-config(
   $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
   $display-4:     mat-typography-level(112px, 112px, 300),
@@ -78,8 +75,6 @@ $inception-typography: mat-typography-config(
   $button:        mat-typography-level(1rem, 14px, 500),
     // Line-height must be unit-less fraction of the font-size.
   $input:         mat-typography-level(1rem, 1.125, 400)
-
-
 );
 
 @include angular-material-typography($inception-typography);
@@ -99,10 +94,7 @@ label {
   z-index: 10000;
 }
 
-
-
 .mat-card {
-
   display: flex !important;
   flex-direction: column !important;
 
@@ -111,13 +103,11 @@ label {
 
   padding: 0px!important;
   border-radius: $card-border-radius;
-  //margin-bottom: 1rem;
 
   .mat-card-actions {
     .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
       margin-right: 10px;
     }
-
     &.align-right {
       display: flex;
       flex-direction: row;
@@ -189,14 +179,7 @@ label {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-
 }
-
-
-
-
-
-
 
 .mat-menu-panel {
   border-radius: 0;
@@ -206,11 +189,9 @@ label {
   border-right: 1px solid $gray-300;
 
   .mat-menu-content {
-
     padding: 0;
 
     .mat-menu-item {
-
       color: $gray-600;
       white-space: nowrap;
       text-decoration: none;
@@ -258,12 +239,10 @@ label {
   &[disabled] {
     border: 1px solid rgba(0, 0, 0, 0.26) !important;
   }
-
 }
 
 .mat-expansion-panel
 {
-
   .mat-expansion-panel-header
   {
     font-size: 1rem;
@@ -283,13 +262,11 @@ label {
   }
 }
 
-
 .mat-form-field {
   width: 100%;
 }
 
 .mat-form-field.static {
-
   .mat-input-element {
     -webkit-text-fill-color: rgba(0, 0, 0, 0.87);
     color: rgba(0, 0, 0, 0.87);
@@ -311,7 +288,6 @@ label {
 }
 
 .mat-radio-group {
-
   padding-top: 2px !important;
 
   .mat-radio-button:not(:last-child) {
@@ -321,15 +297,10 @@ label {
   }
 }
 
-
 .mat-form-field {
-
   .mat-form-field-wrapper {
-
     .mat-form-field-flex {
-
       .mat-form-field-infix {
-
         input {
           min-height: 1.3rem;
         }
@@ -341,45 +312,18 @@ label {
     }
   }
 
-  /*
-  &.mat-form-field-invalid {
-
-    .mat-radio-outer-circle {
-      border-color: #f44336;
-    }
-
-    .mat-radio-label-content {
-      color: #f44336;
-    }
-  }
-  */
-
   &.mat-form-field-should-float {
-
     .mat-form-field-label {
       font-weight: 600;
     }
   }
 
   &.static, &.mat-form-field-disabled {
-
     .mat-form-field-wrapper {
-
-      /*padding-bottom: 0.75em !important;*/
-
       .mat-form-field-underline {
-
-        /*bottom: 0.75em !important;*/
       }
     }
   }
-
-  /*
-  .mat-radio-group {
-    position: relative;
-    top: 4px;
-  }
-  */
 
   .mat-form-field-subscript-wrapper {
     margin-top: 5px !important;
@@ -395,23 +339,15 @@ label {
   display: none;
 }
 
-
 .mat-form-field-infix {
-  /*min-height: 3.2em !important;*/
 }
 
 .mat-form-field-appearance-standard .mat-form-field-ripple {
   height: 1px !important;
 }
 
-
-
-
-
 .mat-form-field.mat-form-field-slim {
-
   .mat-form-field-wrapper {
-
     padding-bottom: 0;
 
     .mat-form-field-flex
@@ -437,7 +373,6 @@ label {
   }
 }
 
-
 .mat-datepicker-toggle {
   button {
     display: inline-block !important;
@@ -447,16 +382,9 @@ label {
   }
 }
 
-
-
-
-
-
-
 .mat-paginator  {
   .mat-paginator-container {
     .mat-paginator-page-size {
-
       margin-right: 32px !important;
 
       .mat-paginator-page-size-select {
@@ -473,53 +401,13 @@ label {
   }
 }
 
-
-/*
-.mat-table {
-  overflow: auto;
-
-  .mat-header-cell, .mat-cell {
-
-    min-width: 0;
-    border: 1px solid green;
-    overflow: hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-    width: 100px !important;
-    max-width: 100px !important;
-    flex-basis: 50%;
-  }
-}
-*/
-
-/*
-.table-responsivex {
-  display: flex;
-  flex-direction: column;
-}
-*/
-
-
-
-
-
-
-/*
-mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
-  padding-left: 12px !important;
-}
-*/
-
 mat-cell, mat-footer-cell, mat-header-cell {
   padding-left: 12px !important;
 }
 
-
 .mat-header-cell, .mat-cell {
   display: inline-block;
-
   font-size: 1rem;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -535,31 +423,13 @@ mat-cell, mat-footer-cell, mat-header-cell {
   font-weight: mat-font-weight($inception-typography, body-2);
 }
 
-
-
-
-
-
-
 mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
   padding-right: 12px !important;
 }
 
-
-/*
-mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not(:last-child) {
-  padding-right: 12px !important;
-}
-*/
-
-
 .mat-sort-header-container {
   display: inline-flex !important;
 }
-
-
-
-
 
 .mat-cell-one-action {
   min-width: 82px;
@@ -616,12 +486,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   }
 }
 
-
-
-
-
 .mat-menu-panel.mat-action-menu {
-
   .mat-menu-content:not(:empty) {
     padding: 0 !important;
 
@@ -636,15 +501,9 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   border-bottom: 1px solid $gray-200;
-
-
-  /*color: #fff;*/
-  /*background-color: rgb(58, 66, 72);*/
   background-color: $gray-100;
   padding: 8px !important;
-
   color: $gray-800;
 
   .table-filter-container {
@@ -658,75 +517,23 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
       width: 10em;
     }
   }
-
-
-
 }
-
-
-/*
-.mat-button:focus .mat-button-focus-overlay { background-color: transparent; }
-*/
-
-
-/*
-@include media-breakpoint-down(xs){
-
-  .mat-paginator  {
-    .mat-paginator-container {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-
-      justify-content: space-between;
-
-      .mat-paginator-page-size {
-        margin-right: 0 !important;
-
-        .mat-paginator-page-size-label {
-          margin-right: 0;
-        }
-
-        .mat-paginator-page-size-select {
-          .mat-form-field-infix {
-            min-height: 0;
-          }
-        }
-      }
-
-      .mat-paginator-range-label {
-        margin-left: 0 !important;
-        margin-right: 5px !important;
-      }
-
-    }
-  }
-}
-*/
-
-
-
 
 .mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab {
-  /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
-  /*font-size: $font-size-base;*/
   font-weight: 500;
 }
 
-
 .mat-dialog-container {
-
   .mat-dialog-title {
     margin: 0 0 10px;
   }
 
   .mat-form-field-wrapper {
-
     padding-bottom: 0;
 
     .mat-form-field-flex
     {
       padding-top: 2em;
-      /*padding-bottom: 1em;*/
 
       .mat-form-field-infix
       {
@@ -744,10 +551,8 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
         }
 
         textarea.mat-input-element {
-
           padding: 0;
           margin-bottom: 4px;
-
         }
       }
     }
@@ -771,23 +576,6 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   }
 }
 
-
-/*
-.mat-menu-item {
-  font-size: 1rem;
-}
-
-
-.mat-list .mat-list-item, .mat-nav-list .mat-list-item, .mat-selection-list .mat-list-item {
-  font-size: 1rem;
-}
-*/
-
-
-
-
-
-
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
@@ -802,15 +590,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
-
-
-
-
-
-
-
 .mat-dialog-container {
-
   .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
     display: block;
     padding: 0;
@@ -899,7 +679,6 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   }
 }
 
-
 .checkbox-form-field .mat-form-field-wrapper .mat-form-field-infix {
   display: inline-flex !important;
 }
@@ -908,36 +687,18 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
   display: inline-flex !important;
 }
 
-
-.col-sm {
-  /*border: 1px solid red;*/
-}
-
-.mat-form-field {
-  /*border: 1px solid green;*/
-}
-
-
 .mat-menu-panel.user-menu {
-
   position: absolute !important;
   right: 0px !important;
   top: 0 !important;
 
   border-top: none !important;
-  border-right: none !important;
-
   border-top-left-radius: 0 !important;
+  border-right: none !important;
   border-bottom-right-radius: 0 !important;
 
   min-width: 150px;
 }
-
-/*
-.flex-fill + .mat-paginator {
-  flex: 0;
-}
-*/
 
 .mat-paginator  {
   .mat-paginator-container {
@@ -980,26 +741,7 @@ mat-cell:not(:last-child), mat-footer-cell:not(:last-child), mat-header-cell:not
 
     .mat-paginator-range-actions {
       .mat-button-wrapper {
-        /*height: 28px;*/
       }
     }
-
   }
 }
-
-
-
-
-
-
-
-/*
-.mat-header-row {
-  min-height: 48px !important;
-}
-
-.mat-footer-row, mat-row {
-  min-height: 42px !important;
-}
-*/
-

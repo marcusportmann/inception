@@ -24,30 +24,6 @@
   }
 }
 
-/*
-@mixin avatar($width, $status-width) {
-  position: relative;
-  display: inline-block;
-  width: $width;
-
-  .img-avatar {
-    width: $width;
-    height: $width;
-  }
-
-  .avatar-status {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    display: block;
-    width: $status-width;
-    height: $status-width;
-    border: 1px solid #fff;
-    border-radius: 50em;
-  }
-}
-*/
-
 @mixin borders($borders) {
   @each $border in $borders {
     $direction: nth($border, 1);
@@ -116,13 +92,6 @@
   border-top-width: 2px;
   border-top-color: $color;
 }
-
-
-
-
-
-
-
 
 @mixin switch-size($width, $height, $font-size, $handle-margin) {
   width: $width;

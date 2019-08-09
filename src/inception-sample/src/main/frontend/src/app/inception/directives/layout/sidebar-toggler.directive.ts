@@ -16,6 +16,7 @@
 
 import {Directive, HostListener, Input, OnInit} from '@angular/core';
 import {sidebarCssClasses} from '../../shared';
+import {toggleClasses} from '../../shared/toggle-classes';
 
 
 /**

@@ -57,13 +57,10 @@ hr {
   border-top: $hr-border-width solid $hr-border-color;
 }
 
-
 //
 // Emphasis
 //
-
-small,
-.small {
+small, .small {
   font-size: $small-font-size;
   font-weight: $font-weight-normal;
 }
@@ -71,7 +68,6 @@ small,
 //
 // Lists
 //
-
 .list-unstyled {
   @include list-unstyled;
 }
@@ -87,12 +83,6 @@ small,
     margin-right: $list-inline-padding;
   }
 }
-
-
-//
-// Misc
-//
-
 
 // Blockquotes
 .blockquote {
@@ -147,12 +137,6 @@ small,
 .font-5xl {
   font-size: 2.5rem !important;
 }
-
-
-
-
-
-
 
 .text-white .text-muted {
   color: rgba(255, 255, 255, .6) !important;

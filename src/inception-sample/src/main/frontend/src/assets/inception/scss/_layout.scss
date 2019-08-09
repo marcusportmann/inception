@@ -5,7 +5,6 @@
     flex-direction: column;
 
     body {
-
       height: 100%;
       -ms-overflow-x: hidden;
       overflow-x: hidden;
@@ -13,86 +12,14 @@
       overflow-y: scroll;
 
       admin-container {
-
-        .admin-header {
-
-        }
-
         .admin-body {
-
           -ms-overflow-style: none;
           -ms-overflow-y: hidden;
           min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
-
-          .sidebar {
-
-          }
-
-          .main {
-
-            .container-fluid {
-
-            }
-          }
-        }
-
-        .admin-footer {
-
         }
       }
     }
   }
-
-
-  body.admin-header-fixed.sidebar-fixed {
-
-    /*-ms-overflow-style: none;*/
-
-    /*
-    .admin-body {
-      -ms-overflow-style: auto;
-    }
-
-    .admin-header + .admin-body {
-      height: calc(100vh - #{$admin-header-height});
-    }
-    */
-
-
-    admin-container {
-      /*border: 1px solid red;*/
-      /*-ms-overflow-style: auto;*/
-      /*height: 100%;*/
-    }
-
-
-    .admin-header + .admin-body {
-      /*height: calc(100vh - #{$admin-header-height} - #{$admin-header-height});*/
-      /*height: 100%;*/
-    }
-
-
-
-    .admin-body {
-      /*-ms-overflow-style: none;*/
-    }
-
-  }
-
-
-  body.admin-header-fixed.sidebar-fixed.admin-footer-fixed {
-
-    .admin-body {
-
-      /*height: calc(100vh - (#{$admin-header-height} + #{$admin-footer-height} + 100px));*/
-
-      /*height: 100px;*/
-
-      /*border: 1px solid green;*/
-
-    }
-  }
-
 }
 
 // stylelint-disable selector-type-no-unknown, no-duplicate-selectors, selector-no-qualifying-type
@@ -104,7 +31,6 @@ admin-root {
   flex-direction: column;
   min-height: 100vh;
 }
-
 
 .admin-header {
   position: relative;
@@ -258,10 +184,6 @@ admin-root {
   }
 }
 
-
-
-
-
 .admin-body {
   display: flex;
   flex-direction: row;
@@ -274,18 +196,16 @@ admin-root {
     min-width: 0;
 
     .title-bar {
-      border-bottom: 1px solid $body-bg;
+      border-bottom: 1px solid $border-color;
       cursor: pointer;
     }
 
     .breadcrumb {
-      border-bottom: 1px solid $body-bg;
+      @include borders($breadcrumb-borders);
+      background-color: $breadcrumb-bg;
     }
 
     .container-fluid {
-
-      /*border: 1px solid red;*/
-
       display: flex;
       flex-direction: column;
       flex: auto;
@@ -293,20 +213,10 @@ admin-root {
       padding: 16px;
 
       ng-component {
-
-        /*border: 1px solid green;*/
-
         display: flex;
         flex-direction: column;
         flex: auto;
-
       }
-
-      /*
-      -ms-overflow-y: visible;
-      -ms-overflow-style: auto;
-      overflow-y: visible;
-      */
     }
   }
 }
@@ -318,7 +228,6 @@ admin-root {
     }
   }
 }
-
 
 @include media-breakpoint-up(lg) {
   .admin-brand-minimized {
@@ -352,8 +261,6 @@ admin-root {
   @include borders($admin-footer-borders);
 }
 
-
-
 .sidebar {
   // $sidebar-width is the width of the columns
   flex: 0 0 $sidebar-width;
@@ -367,16 +274,10 @@ admin-root {
   }
 }
 
-
-
 .title-bar {
   background-color: $title-bar-bg;
   color: $title-bar-color;
-  //padding-top: $title-bar-padding-y;
   padding: 0 15px;
-  //padding-bottom: $title-bar-padding-y;
-
-  //line-height: $title-bar-height;
 
   .back {
     position: absolute;
@@ -386,7 +287,6 @@ admin-root {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: $title-bar-back-font-size;
-    //line-height: ($font-size-base * $line-height-base) !important;
     line-height: $title-bar-height;
   }
 
@@ -412,8 +312,6 @@ admin-root {
   }
 }
 
-
-
 //
 // Breadcrumb
 //
@@ -424,7 +322,6 @@ admin-root {
   .breadcrumb-item {
     line-height: $breadcrumb-height;
   }
-
 }
 
 .breadcrumbs-fixed {
@@ -453,8 +350,6 @@ admin-root {
     margin-top: 1px;
   }
 }
-
-
 
 @include media-breakpoint-up(lg) {
   //
@@ -492,10 +387,8 @@ admin-root {
   }
 
   .sidebar-fixed.admin-footer-fixed {
-
     .admin-header + .admin-body .sidebar {
     }
-
 
     .admin-header + .admin-body {
       min-height: calc(100vh - #{$admin-header-height} - #{$admin-footer-height});
@@ -554,12 +447,6 @@ admin-root {
     }
   }
 }
-
-
-
-
-
-
 
 @each $breakpoint in map-keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
@@ -639,9 +526,6 @@ admin-root {
       }
 
       @include media-breakpoint-down(xs) {
-
-
-
         .main {
           position: relative;
           &::before {
@@ -747,16 +631,12 @@ admin-root {
   }
 }
 
-
-
 @include media-breakpoint-down(xs) {
-
   .admin-body {
     margin-top: $admin-header-height;
 
     .main {
       ol.breadcrumb {
-        /*font-size: 0.8125rem !important;*/
 
         .breadcrumb-item {
           max-width: 340px;
@@ -779,7 +659,6 @@ admin-root {
 }
 
 @include media-breakpoint-down(xs) {
-
   .confirmation-dialog-panel, .error-dialog-panel, .information-dialog-panel, .warning-dialog-panel {
     min-width: 300px !important;
     max-width: 300px !important;
@@ -793,7 +672,6 @@ admin-root {
 }
 
 @include media-breakpoint-up(sm) {
-
   .confirmation-dialog-panel, .error-dialog-panel, .information-dialog-panel, .warning-dialog-panel {
     min-width: 360px !important;
     max-width: 360px !important;
@@ -809,7 +687,6 @@ admin-root {
 
 // Sidebar needs to be bigger on mobile devices
 @include media-breakpoint-down(sm) {
-
   .sidebar {
     flex: 0 0 $mobile-sidebar-width !important;
     width: $mobile-sidebar-width !important;
@@ -826,16 +703,12 @@ admin-root {
   }
 }
 
-
-
 .background-image-container {
-
   position: relative;
   width: 100%;
   padding-top: 100%;
 
   .background-image {
-
     position: absolute;
     left: 0;
     top: 0;
@@ -845,7 +718,6 @@ admin-root {
     background-repeat: no-repeat;
   }
 }
-
 
 simple-container {
   display: flex;

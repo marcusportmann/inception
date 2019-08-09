@@ -45,7 +45,6 @@ import {TitleBarService} from '../../services/layout/title-bar.service';
       </sidebar>
       <main class="main">
         <title-bar [fixed]="true"></title-bar>
-        <breadcrumbs [fixed]="true"></breadcrumbs>
         <div class="container-fluid">
           <router-outlet (activate)="onRouterOutletActive($event)" (deactivate)="onRouterOutletDeactive($event)"></router-outlet>
         </div>

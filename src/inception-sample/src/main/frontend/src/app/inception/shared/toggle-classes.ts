@@ -19,7 +19,7 @@
 /* tslint:disable */
 
 
-function removeClasses(classNames: string[]): boolean {
+export const removeClasses = (classNames: string[]): boolean => {
   const bodySelector = document.querySelector('body');
 
   if (bodySelector) {
@@ -31,7 +31,7 @@ function removeClasses(classNames: string[]): boolean {
   }
 }
 
-function toggleClasses(toggle: string, classNames: string[]): void {
+export const toggleClasses = (toggle: string, classNames: string[]): void => {
   const level = classNames.indexOf(toggle);
   const newClassNames = classNames.slice(0, level + 1);
 

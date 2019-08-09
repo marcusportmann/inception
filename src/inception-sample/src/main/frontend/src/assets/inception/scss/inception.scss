@@ -38,8 +38,6 @@
 @import "~node_modules/bootstrap/scss/utilities";
 @import "~node_modules/bootstrap/scss/print";
 
-//@import "~node_modules/bootstrap/scss/bootstrap";
-
 // Variables
 @import "variables";
 @import "mixins";
@@ -51,55 +49,7 @@
 @import "layout";
 @import "logo";
 @import "material";
-//@import "nav"; TODO: CONFIRM IF THIS IS NEEDED...
 @import "sidebar";
 @import "switches";
 @import "typography";
 
-
-
-//
-//
-//// Components
-////@import "align";
-////@import "background";
-////@import "badge";
-//@import "borders";
-//@import "breadcrumb";
-//@import "clearfix";
-//@import "display";
-//
-//@import "float";
-//
-//@import "nav";
-//@import "sidebar";
-//@import "spacing";
-//@import "spinner";
-//@import "switches";
-//@import "text";
-//@import "typography";
-//
-//// Custom Properties support for Internet Explorer
-//@import "ie-custom-properties";
-//
-//
-//
-//
-//@import "grid";
-//@import "flex";
-
-
-/*
-@supports not (-webkit-overflow-scrolling: touch) {
-  html, body {
-    font-size: 14px !important;
-  }
-}
-*/
-
-
-/*
-.mat-form-field-infix {
-  min-height: 3rem;
-}
-*/
