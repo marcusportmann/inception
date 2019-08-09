@@ -44,7 +44,7 @@ export class ConfigurationsTitleResolver implements Resolve<string> {
     Observable<string> {
     return of(this.i18n({
       id: '@@configurations_title_resolver_title',
-      value: 'Configurations'
+      value: 'Configuration'
     }));
   }
 }

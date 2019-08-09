@@ -13,7 +13,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     //"target": "es2015", -- Original
-    "target": "es2017",
+    //"target": "es2017",
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],

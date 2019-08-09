@@ -68,7 +68,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
   get title(): string {
     return this.i18n({
       id: '@@configurations_component_title',
-      value: 'Configurations'
+      value: 'Configuration'
     })
   }
 

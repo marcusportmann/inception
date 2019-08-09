@@ -36,8 +36,49 @@ import {DisabledFunctionGuard} from '../../routing/disabled-function-guard';
 const routes: Routes = [{
   path: '',
   pathMatch: 'full',
-  redirectTo: 'configurations',
-},  {
+  canActivate: [CanActivateFunctionGuard],
+  component: ConfigurationsComponent,
+  data: {
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+  }
+}, {
+  path: 'new',
+  pathMatch: 'full',
+  canActivate: [CanActivateFunctionGuard],
+  component: NewConfigurationComponent,
+  data: {
+    authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+  },
+  resolve: {
+    title: NewConfigurationTitleResolver
+  }
+}, {
+  path: ':key',
+  pathMatch: 'full',
+  redirectTo: ':key/edit'
+}, {
+  path: ':key',
+  resolve: {
+    title: ConfigurationTitleResolver
+  },
+  children: [{
+    path: 'edit',
+    canActivate: [CanActivateFunctionGuard],
+    component: EditConfigurationComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
+    },
+    resolve: {
+      title: EditConfigurationTitleResolver
+    }
+  }]
+}
+
+
+
+
+  /*
+  {
   path: 'configurations',
   resolve: {
     title: ConfigurationsTitleResolver
@@ -82,6 +123,7 @@ const routes: Routes = [{
     }]
   }]
 }
+*/
 ];
 
 @NgModule({
