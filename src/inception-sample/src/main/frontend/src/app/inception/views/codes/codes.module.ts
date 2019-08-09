@@ -43,6 +43,98 @@ import {EditCodeTitleResolver} from './edit-code-title-resolver';
 const routes: Routes = [{
   path: '',
   pathMatch: 'full',
+  canActivate: [CanActivateFunctionGuard],
+  component: CodeCategoriesComponent,
+  data: {
+    authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+  }
+}, {
+  path: 'new',
+  pathMatch: 'full',
+  canActivate: [CanActivateFunctionGuard],
+  component: NewCodeCategoryComponent,
+  data: {
+    authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+  },
+  resolve: {
+    title: NewCodeCategoryTitleResolver
+  }
+}, {
+  path: ':codeCategoryId',
+  pathMatch: 'full',
+  redirectTo: ':codeCategoryId/edit'
+}, {
+  path: ':codeCategoryId',
+  resolve: {
+    title: CodeCategoryTitleResolver
+  },
+  children: [{
+    path: 'edit',
+    canActivate: [CanActivateFunctionGuard],
+    component: EditCodeCategoryComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+    },
+    resolve: {
+      title: EditCodeCategoryTitleResolver
+    }
+  }, {
+    path: 'codes',
+    resolve: {
+      title: CodesTitleResolver
+    },
+    children: [{
+      path: '',
+      canActivate: [CanActivateFunctionGuard],
+      component: CodesComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+      }
+    }, {
+      path: 'new',
+      pathMatch: 'full',
+      canActivate: [CanActivateFunctionGuard],
+      component: NewCodeComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+      },
+      resolve: {
+        title: NewCodeTitleResolver
+      }
+    }, {
+      path: ':codeId',
+      pathMatch: 'full',
+      redirectTo: ':codeId/edit'
+    }, {
+      path: ':codeId',
+      resolve: {
+        title: CodeTitleResolver
+      },
+      children: [{
+        path: 'edit',
+        canActivate: [CanActivateFunctionGuard],
+        component: EditCodeComponent,
+        data: {
+          authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
+        },
+        resolve: {
+          title: EditCodeTitleResolver
+        }
+      }]
+    }]
+  }]
+}];
+
+
+
+
+
+
+
+/*
+  {
+  path: '',
+  pathMatch: 'full',
   redirectTo: 'code-categories',
 }, {
   path: 'code-categories',
@@ -56,84 +148,14 @@ const routes: Routes = [{
     data: {
       authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
     }
-  }, {
-    path: 'new',
-    pathMatch: 'full',
-    canActivate: [CanActivateFunctionGuard],
-    component: NewCodeCategoryComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-    },
-    resolve: {
-      title: NewCodeCategoryTitleResolver
-    }
-  }, {
-    path: ':codeCategoryId',
-    pathMatch: 'full',
-    redirectTo: ':codeCategoryId/edit'
-  }, {
-    path: ':codeCategoryId',
-    resolve: {
-      title: CodeCategoryTitleResolver
-    },
-    children: [{
-      path: 'edit',
-      canActivate: [CanActivateFunctionGuard],
-      component: EditCodeCategoryComponent,
-      data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-      },
-      resolve: {
-        title: EditCodeCategoryTitleResolver
-      }
-    }, {
-      path: 'codes',
-      resolve: {
-        title: CodesTitleResolver
-      },
-      children: [{
-        path: '',
-        canActivate: [CanActivateFunctionGuard],
-        component: CodesComponent,
-        data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-        }
-      }, {
-        path: 'new',
-        pathMatch: 'full',
-        canActivate: [CanActivateFunctionGuard],
-        component: NewCodeComponent,
-        data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-        },
-        resolve: {
-          title: NewCodeTitleResolver
-        }
-      }, {
-        path: ':codeId',
-        pathMatch: 'full',
-        redirectTo: ':codeId/edit'
-      }, {
-        path: ':codeId',
-        resolve: {
-          title: CodeTitleResolver
-        },
-        children: [{
-          path: 'edit',
-          canActivate: [CanActivateFunctionGuard],
-          component: EditCodeComponent,
-          data: {
-            authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-          },
-          resolve: {
-            title: EditCodeTitleResolver
-          }
-        }]
-      }]
-    }]
-  }]
+  },
+
+
+
+  ,
 }
-];
+*/
+//];
 
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,

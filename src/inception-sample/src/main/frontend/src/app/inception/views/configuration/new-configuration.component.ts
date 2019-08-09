@@ -28,6 +28,7 @@ import {ConfigurationService} from '../../services/configuration/configuration.s
 import {Configuration} from '../../services/configuration/configuration';
 import {ConfigurationServiceError} from '../../services/configuration/configuration.service.errors';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The NewConfigurationComponent class implements the new configuration component.
@@ -68,6 +69,13 @@ export class NewConfigurationComponent extends AdminContainerView {
       key: this.keyFormControl,
       value: this.valueFormControl
     });
+  }
+
+  get backNavigation(): BackNavigation {
+    return new BackNavigation(this.i18n({
+      id: '@@edit_configuration_component_back_title',
+      value: 'Configuration'
+    }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {

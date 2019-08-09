@@ -72,59 +72,7 @@ const routes: Routes = [{
       title: EditConfigurationTitleResolver
     }
   }]
-}
-
-
-
-
-  /*
-  {
-  path: 'configurations',
-  resolve: {
-    title: ConfigurationsTitleResolver
-  },
-  children: [{
-    path: '',
-    canActivate: [CanActivateFunctionGuard],
-    component: ConfigurationsComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-    }
-  }, {
-    path: 'new',
-    pathMatch: 'full',
-    canActivate: [CanActivateFunctionGuard],
-    component: NewConfigurationComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-    },
-    resolve: {
-      title: NewConfigurationTitleResolver
-    }
-  }, {
-    path: ':key',
-    pathMatch: 'full',
-    redirectTo: ':key/edit'
-  }, {
-    path: ':key',
-    resolve: {
-      title: ConfigurationTitleResolver
-    },
-    children: [{
-      path: 'edit',
-      canActivate: [CanActivateFunctionGuard],
-      component: EditConfigurationComponent,
-      data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']
-      },
-      resolve: {
-        title: EditConfigurationTitleResolver
-      }
-    }]
-  }]
-}
-*/
-];
+}];
 
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,

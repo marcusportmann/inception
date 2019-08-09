@@ -91,7 +91,7 @@ export class NewCodeCategoryComponent extends AdminContainerView {
       const data = this.dataFormControl.value;
 
       const codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
-        this.nameFormControl.value, (!!data) ? null : data);
+        this.nameFormControl.value, (!!data) ? data : null);
 
       this.spinnerService.showSpinner();
 

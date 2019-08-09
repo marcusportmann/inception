@@ -149,7 +149,7 @@ $title-bar-padding-y:                 .75rem !default;
 $title-bar-height:                    45px;
 
 // Breadcrumb
-$breadcrumb-height:                   45px;
+$breadcrumb-height:                   35px;
 $breadcrumb-borders: (
   bottom: (
     size:                             1px,
@@ -157,8 +157,8 @@ $breadcrumb-borders: (
     color:                            $border-color
   )
 ) !default;
-$breadcrumb-font-size:              0.875rem;
-$breadcrumb-padding-y:              .75rem !default;
+$breadcrumb-font-size:                0.8125rem;
+$breadcrumb-padding-y:                .75rem !default;
 
 // Aside
 $aside-menu-width:                    250px !default;

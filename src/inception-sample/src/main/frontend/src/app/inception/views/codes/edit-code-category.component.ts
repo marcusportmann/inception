@@ -112,7 +112,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       const data = this.dataFormControl.value;
 
       const codeCategory: CodeCategory = new CodeCategory(this.codeCategoryId,
-        this.nameFormControl.value, (!data || 0 === data.length) ? null : data);
+        this.nameFormControl.value, (!!data) ? data : null);
 
       this.spinnerService.showSpinner();
 

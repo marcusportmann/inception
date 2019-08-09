@@ -33,6 +33,8 @@ import {NavigationTitle} from './inception/services/navigation/navigation-title'
 // TODO: Remove the lines below when Angular provides support for I18N in source natively -- MARCUS
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
+import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
+
 // Use the require method provided by webpack
 // tslint:disable-next-line
 declare const require: any;
@@ -62,7 +64,8 @@ export {translations};
   }, {
     provide: TRANSLATIONS_FORMAT,
     useValue: 'xlf2'
-  }, I18n
+  }, I18n,
+    AdministrationTitleResolver
   ],
 
   bootstrap: [AppComponent]
@@ -145,7 +148,7 @@ export class AppModule extends InceptionAppModule {
             ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',
         ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration'],
-        [new NavigationItem('fa fa-list', 'Codes', '/administration/system/codes',
+        [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
           ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
           new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration',
             ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration'])
