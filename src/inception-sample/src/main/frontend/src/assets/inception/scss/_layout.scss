@@ -203,6 +203,21 @@ admin-root {
     .breadcrumb {
       @include borders($breadcrumb-borders);
       background-color: $breadcrumb-bg;
+
+      .breadcrumb-item {
+        max-width: 300px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .breadcrumb-item + .breadcrumb-item {
+        padding-left: 0.4rem;
+      }
+
+      .breadcrumb-item + .breadcrumb-item::before {
+        padding-right: 0.4rem !important;
+      }
     }
 
     .container-fluid {
@@ -455,7 +470,8 @@ admin-root {
       .sidebar {
         margin-left: 0;
       }
-      @include media-breakpoint-up(sm) {
+
+      @include media-breakpoint-up(lg) {
         &.sidebar-fixed {
           .main,
           .admin-footer {
@@ -525,7 +541,8 @@ admin-root {
         100% { opacity: 1; }
       }
 
-      @include media-breakpoint-down(xs) {
+      // Changed xs to md
+      @include media-breakpoint-down(md) {
         .main {
           position: relative;
           &::before {
@@ -619,6 +636,10 @@ admin-root {
     left: 0;
   }
 
+  .breadcrumb {
+    display: none !important;
+  }
+
   .sidebar {
     position: fixed;
     z-index: $zindex-sticky - 1;
@@ -629,32 +650,15 @@ admin-root {
   .sidebar-minimizer {
     display: none;
   }
+
+  .main {
+    padding-top: $title-bar-height !important;
+  }
 }
 
 @include media-breakpoint-down(xs) {
   .admin-body {
     margin-top: $admin-header-height;
-
-    .main {
-      ol.breadcrumb {
-
-        .breadcrumb-item {
-          max-width: 340px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .breadcrumb-item + .breadcrumb-item {
-          padding-left: 0.3rem;
-        }
-
-        .breadcrumb-item + .breadcrumb-item::before {
-          padding-right: 0.3rem !important;
-        }
-      }
-
-    }
   }
 }
 

@@ -28,6 +28,7 @@ import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The EditCodeCategoryComponent class implements the edit code category component.
@@ -72,6 +73,13 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       id: this.idFormControl,
       name: this.nameFormControl
     });
+  }
+
+  get backNavigation(): BackNavigation {
+    return new BackNavigation(this.i18n({
+      id: '@@edit_code_category_component_back_title',
+      value: 'Code Categories'
+    }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {

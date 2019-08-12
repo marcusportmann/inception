@@ -32,6 +32,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The CodesComponent class implements the codes component.
@@ -68,6 +69,13 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
       filter) || data.name.toLowerCase().includes(filter);
+  }
+
+  get backNavigation(): BackNavigation {
+    return new BackNavigation(this.i18n({
+      id: '@@codes_component_back_title',
+      value: 'Code Categories'
+    }), ['../../../../../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {

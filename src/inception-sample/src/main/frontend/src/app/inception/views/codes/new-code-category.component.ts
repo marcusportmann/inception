@@ -33,6 +33,7 @@ import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The NewCodeCategoryComponent class implements the new code category component.
@@ -72,6 +73,13 @@ export class NewCodeCategoryComponent extends AdminContainerView {
       data: this.dataFormControl,
       name: this.nameFormControl
     })
+  }
+
+  get backNavigation(): BackNavigation {
+    return new BackNavigation(this.i18n({
+      id: '@@new_code_category_back_title',
+      value: 'Code Categories'
+    }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {

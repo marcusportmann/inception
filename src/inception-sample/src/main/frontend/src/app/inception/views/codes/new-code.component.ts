@@ -33,6 +33,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {Code} from '../../services/codes/code';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The NewCodeComponent class implements the new code component.
@@ -83,6 +84,13 @@ export class NewCodeComponent extends AdminContainerView {
       name: this.nameFormControl,
       value: this.valueFormControl,
     });
+  }
+
+  get backNavigation(): BackNavigation {
+    return new BackNavigation(this.i18n({
+      id: '@@new_code_component_back_title',
+      value: 'Codes'
+    }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
