@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The UsersTitleResolver class provides the route data resolver that resolves the
- * title for the "Users" route in the navigation hierarchy.
+ * The UserTitleResolver class provides the route data resolver that resolves the
+ * title for the "User" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class UsersTitleResolver implements Resolve<string> {
+export class UserTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new UsersTitleResolver.
+   * Constructs a new UserTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,15 +42,7 @@ export class UsersTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    const userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
-
-    if (!!userDirectoryId) {
-      return of (userDirectoryId);
-    } else {
-      return of(this.i18n({
-        id: '@@users_title_resolver_title',
-        value: 'Users'
-      }));
-    }
+    // TODO: Retrieve the full name of the user and return here -- MARCUS
+    return of(activatedRouteSnapshot.paramMap.get('username')!);
   }
 }

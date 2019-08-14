@@ -31,23 +31,23 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
- * The NewConfigurationComponent class implements the new configuration component.
+ * The EditUserComponent class implements the edit user component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'new-configuration.component.html',
-  styleUrls: ['new-configuration.component.css'],
+  templateUrl: 'edit-user.component.html',
+  styleUrls: ['edit-user.component.css'],
 })
-export class NewConfigurationComponent extends AdminContainerView {
+export class EditUserComponent extends AdminContainerView {
 
-  descriptionFormControl: FormControl;
+  // xxxFormControl: FormControl;
 
-  keyFormControl: FormControl;
+  editUserForm: FormGroup;
 
-  newConfigurationForm: FormGroup;
+  userDirectoryId: string;
 
-  valueFormControl: FormControl;
+  username: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -55,67 +55,65 @@ export class NewConfigurationComponent extends AdminContainerView {
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
+    // Retrieve parameters
+    this.userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!;
+    this.username = this.activatedRoute.snapshot.paramMap.get('username')!;
+
     // Initialise form controls
-    this.descriptionFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
-
-    this.keyFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
-
-    this.valueFormControl = new FormControl('');
+    // this.xxxFormControl = new FormControl('',
+    //   [Validators.required, Validators.maxLength(4000)]);
 
     // Initialise form
-    this.newConfigurationForm = new FormGroup({
-      description: this.descriptionFormControl,
-      key: this.keyFormControl,
-      value: this.valueFormControl
+    this.editUserForm = new FormGroup({
+//      xxx: this.xxxFormControl,
     });
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_configuration_component_back_title',
-      value: 'Configuration'
-    }), ['..'], {relativeTo: this.activatedRoute});
+      id: '@@edit_user_component_back_title',
+      value: 'Users'
+    }), ['../../..'], {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@new_configuration_component_title',
-      value: 'New Configuration'
+      id: '@@edit_user_component_title',
+      value: 'Edit User'
     })
   }
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../../..'], {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
   }
 
   onOK(): void {
-    if (this.newConfigurationForm.valid) {
+    if (this.editUserForm.valid) {
 
-      const configuration: Configuration = new Configuration(this.keyFormControl.value,
-        this.valueFormControl.value, this.descriptionFormControl.value);
+      // const configuration: Configuration = new Configuration(this.keyFormControl.value,
+      //   this.valueFormControl.value, this.descriptionFormControl.value);
 
-      this.spinnerService.showSpinner();
+      // this.spinnerService.showSpinner();
 
-      this.configurationService.saveConfiguration(configuration)
-        .pipe(first())
-        .subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+      // this.configurationService.saveConfiguration(configuration)
+      //   .pipe(first())
+      //   .subscribe(() => {
+      //     this.spinnerService.hideSpinner();
+      //
+      //     // noinspection JSIgnoredPromiseFromCall
+      //     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+      //   }, (error: Error) => {
+      //     this.spinnerService.hideSpinner();
+      //     // noinspection SuspiciousTypeOfGuard
+      //     if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+      //       (error instanceof SystemUnavailableError)) {
+      //       // noinspection JSIgnoredPromiseFromCall
+      //       this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      //     } else {
+      //       this.dialogService.showErrorDialog(error);
+      //     }
+      //   });
     }
   }
 }

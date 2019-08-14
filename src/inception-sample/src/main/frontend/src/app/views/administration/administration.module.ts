@@ -25,6 +25,7 @@ import {AdministrationTitleResolver} from './administration-title-resolver';
 import {SystemTitleResolver} from './system-title-resolver';
 import {CodeCategoriesTitleResolver} from '../../inception/views/codes/code-categories-title-resolver';
 import {ConfigurationsTitleResolver} from '../../inception/views/configuration/configurations-title-resolver';
+import {SecurityTitleResolver} from './security-title-resolver';
 
 const routes: Routes = [{
   path: '',
@@ -54,8 +55,8 @@ const routes: Routes = [{
   }]
 }, {
   path: 'security',
-  data: {
-    title: 'Security'
+  resolve: {
+    title: SecurityTitleResolver
   },
   loadChildren: () => import('../../inception/views/security/security.module').then(
     m => m.SecurityModule)
@@ -66,7 +67,7 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
   declarations: [AdministrationComponent],
-  providers: [AdministrationTitleResolver, CodeCategoriesTitleResolver, ConfigurationsTitleResolver, SystemTitleResolver]
+  providers: [AdministrationTitleResolver, CodeCategoriesTitleResolver, ConfigurationsTitleResolver, SecurityTitleResolver, SystemTitleResolver]
 })
 export class AdministrationModule {
 }

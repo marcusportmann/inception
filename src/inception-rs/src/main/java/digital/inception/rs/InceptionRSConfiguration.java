@@ -41,10 +41,48 @@ import java.util.Collections;
 public class InceptionRSConfiguration
 {
   /**
+   * Instruct browsers to expose the response to frontend JavaScript code when the request's
+   * credentials mode (Request.credentials) is "include".
+   */
+  @Value("${server.cors.allowCredentials:#{false}}")
+  private boolean corsAllowCredentials;
+
+  /**
+   * Instruct browsers to allow the specified headers.
+   */
+  @Value("${server.cors.allowedHeaders:#{false}}")
+  private String[] corsAllowedHeaders;
+
+  /**
+   * Instruct browsers to allow the specified methods.
+   */
+  @Value("${server.cors.allowedMethods:#{false}}")
+  private String[] corsAllowedMethods;
+
+  /**
+   * Instruct browsers to allow code from the specified origins.
+   */
+  @Value("${server.cors.allowedOrigins:#{false}}")
+  private String[] corsAllowedOrigins;
+
+  /**
    * Enable cross-origin resource sharing (CORS).
    */
-  @Value("${server.enableCORS:#{false}}")
-  private boolean isCORSEnabled;
+  @Value("${server.cors.enabled:#{false}}")
+  private boolean corsEnabled;
+
+  /**
+   * Instruct browsers to expose the specified headers.
+   */
+  @Value("${server.cors.exposedHeaders:#{false}}")
+  private String[] corsExposedHeaders;
+
+  /**
+   * How long the results of a preflight request (that is the information contained in the
+   * Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.
+   */
+  @Value("${server.cors.maxAge:#{3600}}")
+  private long corsMaxAge;
 
   /**
    * Returns the cross-origin resource sharing (CORS) filter registration bean.
@@ -56,16 +94,16 @@ public class InceptionRSConfiguration
   {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-    if (isCORSEnabled)
+    if (corsEnabled)
     {
       CorsConfiguration config = new CorsConfiguration();
       config.applyPermitDefaultValues();
-      config.setAllowCredentials(true);
-      config.setAllowedOrigins(Collections.singletonList("*"));
-      config.setAllowedHeaders(Collections.singletonList("*"));
-      config.setAllowedMethods(Collections.singletonList("*"));
-      config.setExposedHeaders(Arrays.asList("Content-Length", "X-Total-Count"));
-      config.setMaxAge(3600L);
+      config.setAllowCredentials(corsAllowCredentials);
+      config.setAllowedOrigins(Arrays.asList(corsAllowedOrigins));
+      config.setAllowedHeaders(Arrays.asList(corsAllowedHeaders));
+      config.setAllowedMethods(Arrays.asList(corsAllowedMethods));
+      config.setExposedHeaders(Arrays.asList(corsExposedHeaders));
+      config.setMaxAge(corsMaxAge);
       source.registerCorsConfiguration("/**", config);
     }
 

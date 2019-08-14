@@ -25,6 +25,7 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import {CommunicationError} from '../../errors/communication-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
+import {environment} from '../../../../environments/environment';
 
 /**
  * The Session Service implementation.
@@ -78,28 +79,10 @@ export class SessionService {
 
     const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-    return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
-      body.toString(), options)
+    return this.httpClient.post<TokenResponse>(environment.oauthTokenUrl, body.toString(), options)
       .pipe(flatMap((tokenResponse: TokenResponse) => {
-        const helper = new JwtHelperService();
-
-        // tslint:disable-next-line
-        const token: any = helper.decodeToken(tokenResponse.access_token);
-
-        const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(
-          tokenResponse.access_token);
-
-        const session: Session = new Session(
-          (!!token.user_name) ? token.user_name : '',
-          (!!token.user_directory_id) ? token.user_directory_id : '',
-          (!!token.user_full_name) ? token.user_full_name : '',
-          (!!token.scope) ? token.scope : [],
-          (!!token.authorities) ? token.authorities : [],
-          tokenResponse.access_token,
-          (!!accessTokenExpiry) ? accessTokenExpiry : undefined,
-          tokenResponse.refresh_token);
-
-        this.session.next(session);
+        this.session.next(this.createSessionFromAccessToken(tokenResponse.access_token,
+          tokenResponse.refresh_token));
 
         return this.session;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -143,6 +126,27 @@ export class SessionService {
     this.session.next(null);
   }
 
+  private createSessionFromAccessToken(accessToken: string,
+                                       refreshToken: string | undefined): Session {
+    const helper = new JwtHelperService();
+
+    // tslint:disable-next-line
+    const token: any = helper.decodeToken(accessToken);
+
+    const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(
+      accessToken);
+
+    return new Session(
+      (!!token.user_name) ? token.user_name : '',
+      (!!token.user_directory_id) ? token.user_directory_id : '',
+      (!!token.user_full_name) ? token.user_full_name : '',
+      (!!token.scope) ? token.scope : [],
+      (!!token.authorities) ? token.authorities : [],
+      accessToken,
+      (!!accessTokenExpiry) ? accessTokenExpiry : undefined,
+      refreshToken);
+  }
+
   private refreshSession(): Observable<Session | null> {
     return this.session.pipe(mergeMap((currentSession: Session | null) => {
       if (currentSession) {
@@ -162,25 +166,10 @@ export class SessionService {
 
             const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
-            return this.httpClient.post<TokenResponse>('http://localhost:20000/oauth/token',
-              body.toString(), options).pipe(map((tokenResponse: TokenResponse) => {
-              const helper = new JwtHelperService();
-
-              // tslint:disable-next-line
-              const token: any = helper.decodeToken(tokenResponse.access_token);
-
-              const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(
-                tokenResponse.access_token);
-
-              const refreshedSession: Session = new Session(
-                (!!token.user_name) ? token.user_name : '',
-                (!!token.user_directory_id) ? token.user_directory_id : '',
-                (!!token.user_full_name) ? token.user_full_name : '',
-                (!!token.scope) ? token.scope : [],
-                (!!token.authorities) ? token.authorities : [],
-                tokenResponse.access_token,
-                (!!accessTokenExpiry) ? accessTokenExpiry : undefined,
-                tokenResponse.refresh_token);
+            return this.httpClient.post<TokenResponse>(environment.oauthTokenUrl, body.toString(),
+              options).pipe(map((tokenResponse: TokenResponse) => {
+              const refreshedSession: Session = this.createSessionFromAccessToken(
+                tokenResponse.access_token, currentSession.refreshToken);
 
               refreshedSession.organization = selectedOrganization;
 

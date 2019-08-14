@@ -9,13 +9,14 @@ export const environment = {
   applicationId: 'digital.inception.sample.angular',
   applicationVersion: '1.0.0',
 
+  // OAuth Token URL
+  oauthTokenUrl: 'http://localhost:8080/oauth/token',
+
   // Inception API URLs
-  codesServiceUrlPrefix: 'http://localhost:20000/api/codes',
-  configurationServiceUrlPrefix: 'http://localhost:20000/api/configuration',
-  errorServiceUrlPrefix: 'http://localhost:20000/api/error',
-  securityServiceUrlPrefix: 'http://localhost:20000/api/security'
-
-
+  codesServiceUrlPrefix: 'http://localhost:8080/api/codes',
+  configurationServiceUrlPrefix: 'http://localhost:8080/api/configuration',
+  errorServiceUrlPrefix: 'http://localhost:8080/api/error',
+  securityServiceUrlPrefix: 'http://localhost:8080/api/security'
 };
 
 /*

@@ -125,38 +125,6 @@ const routes: Routes = [{
   }]
 }];
 
-
-
-
-
-
-
-/*
-  {
-  path: '',
-  pathMatch: 'full',
-  redirectTo: 'code-categories',
-}, {
-  path: 'code-categories',
-  resolve: {
-    title: CodeCategoriesTitleResolver
-  },
-  children: [{
-    path: '',
-    canActivate: [CanActivateFunctionGuard],
-    component: CodeCategoriesComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']
-    }
-  },
-
-
-
-  ,
-}
-*/
-//];
-
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,
 

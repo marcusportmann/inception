@@ -1,6 +1,15 @@
 server:
   port: 8080
 
+  cors:
+    enabled: true
+    allowCredentials: false
+    allowedOrigins: http://localhost:4200,http://localhost:8080,http://localhost:20000
+    allowedHeaders: "*"
+    allowedMethods: "*"
+    exposedHeaders: Content-Length, X-Total-Count
+    maxAge: 3600
+
   enableCORS: true
 
   security:

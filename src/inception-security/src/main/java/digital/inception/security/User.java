@@ -36,6 +36,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -68,6 +69,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Email", required = true)
   @NotNull
+  @Size(max = 4000)
   private String email;
 
   /**
@@ -85,6 +87,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "FirstName", required = true)
   @NotNull
+  @Size(max = 4000)
   private String firstName;
 
   /**
@@ -105,6 +108,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "LastName", required = true)
   @NotNull
+  @Size(max = 4000)
   private String lastName;
 
   /**
@@ -114,6 +118,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
+  @Size(max = 4000)
   private String mobileNumber;
 
   /**
@@ -123,6 +128,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Password", required = true)
   @NotNull
+  @Size(max = 4000)
   private String password;
 
   /**
@@ -153,6 +159,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "PhoneNumber", required = true)
   @NotNull
+  @Size(max = 4000)
   private String phoneNumber;
 
   /**
@@ -192,6 +199,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
+  @Size(max = 4000)
   private String username;
 
   /**

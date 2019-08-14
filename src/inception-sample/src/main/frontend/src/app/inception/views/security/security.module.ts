@@ -32,7 +32,11 @@ import {SecurityOverviewTitleResolver} from './security-overview-title-resolver'
 import {OrganizationsTitleResolver} from './organizations-title-resolver';
 import {UsersTitleResolver} from './users-title-resolver';
 import {UserDirectoriesTitleResolver} from './user-directories-title-resolver';
-
+import {NewUserTitleResolver} from './new-user-title-resolver';
+import {EditUserTitleResolver} from './edit-user-title-resolver';
+import {UserTitleResolver} from './user-title-resolver';
+import {NewUserComponent} from './new-user.component';
+import {EditUserComponent} from './edit-user.component';
 
 const routes: Routes = [{
   path: '',
@@ -48,123 +52,75 @@ const routes: Routes = [{
   }
 }, {
   path: 'organizations',
+  resolve: {
+    title: OrganizationsTitleResolver
+  },
   children: [{
     path: '',
     canActivate: [CanActivateFunctionGuard],
     component: OrganizationsComponent,
     data: {
       authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
-    },
-    resolve: {
-      title: OrganizationsTitleResolver
     }
-  },
-
-    /*
-    {
-      path: 'new-organization',
-      canActivate: [
-        CanActivateFunctionGuard
-      ],
-      component: NewOrganizationComponent,
-      data: {
-        title: 'New Organization',
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
-      }
-    },
-    {
-      path: ':organizationId',
-      canActivate: [
-        CanActivateFunctionGuard
-      ],
-      component: EditOrganizationComponent,
-      data: {
-        title: '{organizationId}',
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
-      }
-    }
-    */
-  ]
+  }]
 }, {
   path: 'users',
+  resolve: {
+    title: UsersTitleResolver
+  },
   children: [{
     path: '',
     canActivate: [CanActivateFunctionGuard],
     component: UsersComponent,
     data: {
       authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']
+    }
+  }, {
+    path: ':userDirectoryId/new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewUserComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
     },
     resolve: {
-      title: UsersTitleResolver
+      title: NewUserTitleResolver
     }
-  },
-
-    /*
-    {
-      path: 'new-user',
-      canActivate: [
-        CanActivateFunctionGuard
-      ],
-      component: NewUserComponent,
-      data: {
-        title: 'New User',
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserAdministration']
-      }
+  }, {
+    path: ':userDirectoryId/:username',
+    pathMatch: 'full',
+    redirectTo: ':userDirectoryId/:username/edit'
+  }, {
+    path: ':userDirectoryId/:username',
+    resolve: {
+      title: UserTitleResolver
     },
-    {
-      path: ':username',
-      canActivate: [
-        CanActivateFunctionGuard
-      ],
+    children: [{
+      path: 'edit',
+      canActivate: [CanActivateFunctionGuard],
       component: EditUserComponent,
       data: {
-        title: '{username}',
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
+      },
+      resolve: {
+        title: EditUserTitleResolver
       }
-    }
-    */
-  ]
+    }]
+  }]
 },
   {
     path: 'user-directories',
+    resolve: {
+      title: UserDirectoriesTitleResolver
+    },
     children: [{
       path: '',
       canActivate: [CanActivateFunctionGuard],
       component: UserDirectoriesComponent,
       data: {
         authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
-      },
-      resolve: {
-        title: UserDirectoriesTitleResolver
       }
-
-    },
-
-      /*
-      {
-        path: 'new-user-directory',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: NewUserDirectoryComponent,
-        data: {
-          title: 'New User Directory',
-          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
-        }
-      },
-      {
-        path: ':userDirectoryId',
-        canActivate: [
-          CanActivateFunctionGuard
-        ],
-        component: EditUserDirectoryComponent,
-        data: {
-          title: '{userDirectoryId}',
-          authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
-        }
-      }
-      */
-    ]
+    }]
   }
 ];
 
@@ -174,8 +130,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
-  providers: [OrganizationsTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UsersTitleResolver]
+  declarations: [EditUserComponent, NewUserComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
+  providers: [EditUserTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }

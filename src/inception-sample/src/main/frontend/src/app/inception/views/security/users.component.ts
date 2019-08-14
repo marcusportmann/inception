@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {finalize, first, tap} from 'rxjs/operators';
+import {finalize, first, map, tap} from 'rxjs/operators';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -76,7 +76,7 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
   `
   ]
 })
-export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -112,8 +112,12 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     })
   }
 
+  get isUserDirectorySelected(): boolean {
+    return (!!this.userDirectoryId);
+  }
+
   // noinspection JSUnusedLocalSymbols
-  deleteUser(userId: string): void {
+  deleteUser(username: string): void {
     // noinspection JSUnusedLocalSymbols
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
@@ -150,9 +154,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   }
 
-  editUser(userId: string): void {
+  editUser(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([userId], {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId + '/' + encodeURIComponent(username) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadUsers(): void {
@@ -182,7 +186,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   newUser(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new-user'], {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId + '/new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -243,6 +247,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
             this.loadUsers();
           }
         })).subscribe());
+
     this.sessionService.session.pipe(first()).subscribe((session: Session | null) => {
       if (session && session.organization) {
         this.spinnerService.showSpinner();
@@ -252,9 +257,20 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
           .subscribe((userDirectories: UserDirectorySummary[]) => {
             this.userDirectories = userDirectories;
 
+            /*
+             * If we only have one user directory available then load its users, otherwise if we
+             * have a pre-selected user directory and it is one of the available user directories
+             * then load its users.
+             */
             if (userDirectories.length === 1) {
               this.userDirectoryId = userDirectories[0].id;
               this.loadUsers();
+            } else if (!!this.userDirectoryId) {
+              userDirectories.forEach((userDirectory: UserDirectorySummary) => {
+                if (userDirectory.id === this.userDirectoryId) {
+                  this.loadUsers();
+                }
+              });
             }
           }, (error: Error) => {
             // noinspection SuspiciousTypeOfGuard
@@ -273,5 +289,15 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-}
 
+  ngOnInit(): void {
+    // If a user directory ID has been passed in then select the appropriate user directory
+    this.activatedRoute.paramMap
+      .pipe(first(), map(() => window.history.state))
+      .subscribe((state) => {
+        if (state.userDirectoryId) {
+          this.userDirectoryId = state.userDirectoryId;
+        }
+      });
+  }
+}

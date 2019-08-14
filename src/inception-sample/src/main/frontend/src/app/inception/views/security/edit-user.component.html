@@ -1,0 +1,14 @@
+<form [formGroup]="editUserForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+
+
+
+
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@edit_user_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!editUserForm.valid" (click)="onOK()" i18n="@@edit_user_component_button_ok">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
