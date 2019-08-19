@@ -37,7 +37,7 @@ export class CodeCategory {
   name: string;
 
   /**
-   * The date and time the code category was updated.
+   * The date and time the code category was last updated.
    */
   updated?: Date;
 
@@ -47,7 +47,7 @@ export class CodeCategory {
    * @param id      The ID used to uniquely identify the code category.
    * @param name    The name of the code category.
    * @param data    The optional code data for the code category.
-   * @param updated The date and time the code category was updated.
+   * @param updated The date and time the code category was last updated.
    */
   constructor(id: string, name: string, data?: string, updated?: Date) {
     this.id = id;

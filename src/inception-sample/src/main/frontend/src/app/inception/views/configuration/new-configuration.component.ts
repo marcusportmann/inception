@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
@@ -39,7 +39,9 @@ import {BackNavigation} from '../../components/layout/back-navigation';
   templateUrl: 'new-configuration.component.html',
   styleUrls: ['new-configuration.component.css'],
 })
-export class NewConfigurationComponent extends AdminContainerView {
+export class NewConfigurationComponent extends AdminContainerView implements AfterViewInit {
+
+  configuration?: Configuration;
 
   descriptionFormControl: FormControl;
 
@@ -56,12 +58,11 @@ export class NewConfigurationComponent extends AdminContainerView {
     super();
 
     // Initialise form controls
-    this.descriptionFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
+    this.descriptionFormControl = new FormControl('', [Validators.maxLength(4000)]);
 
     this.keyFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
 
-    this.valueFormControl = new FormControl('');
+    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialise form
     this.newConfigurationForm = new FormGroup({
@@ -85,20 +86,27 @@ export class NewConfigurationComponent extends AdminContainerView {
     })
   }
 
+  ngAfterViewInit(): void {
+    // Construct the new configuration
+    this.configuration = new Configuration('', '', '');
+
+    // Initialise the form controls
+  }
+
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
-    if (this.newConfigurationForm.valid) {
-
-      const configuration: Configuration = new Configuration(this.keyFormControl.value,
-        this.valueFormControl.value, this.descriptionFormControl.value);
+    if (this.configuration && this.newConfigurationForm.valid) {
+      this.configuration.description = this.descriptionFormControl.value;
+      this.configuration.key = this.keyFormControl.value;
+      this.configuration.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.configurationService.saveConfiguration(configuration)
+      this.configurationService.saveConfiguration(this.configuration)
         .pipe(first())
         .subscribe(() => {
           this.spinnerService.hideSpinner();

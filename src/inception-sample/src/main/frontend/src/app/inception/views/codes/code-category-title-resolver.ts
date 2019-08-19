@@ -43,6 +43,6 @@ export class CodeCategoryTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     // TODO: Retrieve the actual name of the code category and return here -- MARCUS
-    return of(activatedRouteSnapshot.paramMap.get('codeCategoryId')!);
+    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeCategoryId')!));
   }
 }

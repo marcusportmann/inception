@@ -23,14 +23,14 @@ import digital.inception.codes.CodesWebService;
 import digital.inception.codes.ICodesService;
 import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.configuration.IConfigurationService;
-import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.error.ErrorWebService;
 import digital.inception.error.IErrorService;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
-import digital.inception.sample.api.SampleServiceController;
+import digital.inception.sample.api.SampleWebService;
+import digital.inception.sample.model.ISampleService;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityWebService;
 
@@ -56,12 +56,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.text.SimpleDateFormat;
-
-import java.time.LocalDateTime;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import javax.sql.DataSource;
@@ -111,9 +106,9 @@ public class SampleApplication extends Application
   private IReportingService reportingService;
 
   /**
-   * The Sample Service Controller.
+   * The Sample Service.
    */
-  private SampleServiceController sampleServiceController;
+  private ISampleService sampleService;
 
   /**
    * The Security Service.
@@ -135,15 +130,15 @@ public class SampleApplication extends Application
    * @param configurationService    the Configuration Service
    * @param errorService            the Error Service
    * @param reportingService        the Reporting Service
+   * @param sampleService           the Sample Service
    * @param securityService         the Security Service
-   * @param sampleServiceController the Sample Service Controller
    * @param validator               the JSR-303 validator
    */
   public SampleApplication(ApplicationContext applicationContext, @Qualifier(
       "applicationDataSource") DataSource dataSource, ICodesService codesService,
       IConfigurationService configurationService, IErrorService errorService,
-      IReportingService reportingService, ISecurityService securityService,
-      SampleServiceController sampleServiceController, Validator validator)
+      IReportingService reportingService, ISampleService sampleService,
+      ISecurityService securityService, Validator validator)
   {
     super(applicationContext);
 
@@ -152,8 +147,8 @@ public class SampleApplication extends Application
     this.configurationService = configurationService;
     this.errorService = errorService;
     this.reportingService = reportingService;
+    this.sampleService = sampleService;
     this.securityService = securityService;
-    this.sampleServiceController = sampleServiceController;
     this.validator = validator;
   }
 
@@ -263,10 +258,9 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Sample Service web service
    */
   @Bean
-  @DependsOn("sampleServiceController")
   protected Endpoint sampleWebService()
   {
-    return createWebServiceEndpoint("SampleService", sampleServiceController);
+    return createWebServiceEndpoint("SampleService", new SampleWebService(sampleService));
   }
 
 ///**

@@ -85,7 +85,7 @@ public class Job
   private JobStatus status;
 
   /**
-   * The date and time the job was updated.
+   * The date and time the job was last updated.
    */
   private Date updated;
 
@@ -109,7 +109,7 @@ public class Job
    * @param lockName          the name of the entity that has locked the job for execution
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
-   * @param updated           the date and time the job was updated
+   * @param updated           the date and time the job was last updated
    */
   public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean isEnabled,
       JobStatus status, int executionAttempts, String lockName, Date lastExecuted,
@@ -229,9 +229,9 @@ public class Job
   }
 
   /**
-   * Returns the date and time the job was updated.
+   * Returns the date and time the job was last updated.
    *
-   * @return the date and time the job was updated
+   * @return the date and time the job was last updated
    */
   public Date getUpdated()
   {
@@ -342,9 +342,9 @@ public class Job
   }
 
   /**
-   * Set the date and time the job was updated.
+   * Set the date and time the job was last updated.
    *
-   * @param updated the date and time the job was updated
+   * @param updated the date and time the job was last updated
    */
   public void setUpdated(Date updated)
   {

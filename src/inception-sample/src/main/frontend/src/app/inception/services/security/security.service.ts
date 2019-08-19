@@ -20,6 +20,7 @@ import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
+  DuplicateUserError,
   OrganizationNotFoundError, SecurityServiceError, UserDirectoryNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
@@ -34,6 +35,13 @@ import {User} from './user';
 import {UserDirectorySummary} from './user-directory-summary';
 import {UserSortBy} from './user-sort-by';
 import {UserDirectorySummaries} from './user-directory-summaries';
+import {Code} from '../codes/code';
+import {
+  CodeCategoryNotFoundError,
+  CodesServiceError,
+  DuplicateCodeError
+} from '../codes/codes.service.errors';
+import {CodeCategory} from '../codes/code-category';
 
 /**
  * The Security Service implementation.
@@ -54,6 +62,55 @@ export class SecurityService {
   }
 
   /**
+   * Create a user.
+   *
+   * @param user            The user to create.
+   * @param expiredPassword Create the user with its password expired?
+   * @param userLocked      Create the user locked?
+   *
+   * @return True if the user was created successfully or false otherwise.
+   */
+  createUser(user: User, expiredPassword?: boolean, userLocked?: boolean): Observable<boolean> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('expiredPassword',
+      expiredPassword === undefined ? 'false' : (expiredPassword ? 'true' : 'false'));
+    httpParams = httpParams.append(
+      'userLocked', userLocked === undefined ? 'false' : (userLocked ? 'true' : 'false'));
+
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(user.userDirectoryId) + '/users',
+      user, {params: httpParams, observe: 'response'}).pipe(
+      map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else if (apiError.status === 409) {
+            return throwError(new DuplicateUserError(this.i18n({
+              id: '@@security_service_the_user_already_exists',
+              value: 'A user with the specified username already exists.'
+            }), apiError));
+          } else {
+            return throwError(new CodesServiceError(this.i18n({
+              id: '@@security_service_failed_to_create_the_user',
+              value: 'Failed to create the user.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
    * Delete the organization.
    *
    * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
@@ -63,7 +120,7 @@ export class SecurityService {
    */
   deleteOrganization(organizationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/organizations/' + organizationId,
+      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId),
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -99,7 +156,7 @@ export class SecurityService {
    */
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId,
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId),
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -193,7 +250,7 @@ export class SecurityService {
    */
   getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId +
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) +
       '/organizations', {reportProgress: true})
       .pipe(map((organizations: Organization[]) => {
         return organizations;
@@ -221,6 +278,46 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve the user.
+   *
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   * @param username        The username identifying the user.
+   *
+   * @return The user.
+   */
+  getUser(userDirectoryId: string, username: string): Observable<User> {
+    return this.httpClient.get<User>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) + '/users/' + encodeURIComponent(username),
+      {reportProgress: true}).pipe(map((user: User) => {
+
+        console.log('user = ', user);
+
+      return user;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new CodeCategoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_user',
+            value: 'Failed to retrieve the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
    * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
@@ -230,7 +327,7 @@ export class SecurityService {
    */
   getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      environment.securityServiceUrlPrefix + '/organizations/' + organizationId +
+      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId) +
       '/user-directory-summaries', {reportProgress: true})
       .pipe(map((codeCategories: UserDirectorySummary[]) => {
         return codeCategories;
@@ -297,7 +394,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<User[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) + '/users', {
         observe: 'response',
         params,
         reportProgress: true,

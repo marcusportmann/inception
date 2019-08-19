@@ -883,7 +883,7 @@ public class CodesService
   public Code updateCode(Code code)
     throws CodeNotFoundException, CodesServiceException
   {
-    String updateCodeSQL = "UPDATE codes.codes SET NAME=?, VALUE=? WHERE ID=?";
+    String updateCodeSQL = "UPDATE codes.codes SET name=?, value=? WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateCodeSQL))

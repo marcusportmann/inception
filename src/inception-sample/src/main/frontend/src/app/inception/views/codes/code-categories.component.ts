@@ -80,7 +80,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   codesAdministration(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([codeCategoryId + '/codes'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeCategoryId) + '/codes'], {relativeTo: this.activatedRoute});
   }
 
   deleteCodeCategory(codeCategoryId: string): void {
@@ -118,7 +118,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   editCodeCategory(codeCategoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([codeCategoryId + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeCategoryId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadCodeCategorySummaries(): void {

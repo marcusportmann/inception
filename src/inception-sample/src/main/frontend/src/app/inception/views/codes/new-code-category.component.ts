@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import {AfterViewInit, Component} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -44,7 +39,9 @@ import {BackNavigation} from '../../components/layout/back-navigation';
   templateUrl: 'new-code-category.component.html',
   styleUrls: ['new-code-category.component.css'],
 })
-export class NewCodeCategoryComponent extends AdminContainerView {
+export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
+
+  codeCategory?: CodeCategory;
 
   dataFormControl: FormControl;
 
@@ -89,21 +86,27 @@ export class NewCodeCategoryComponent extends AdminContainerView {
     })
   }
 
+  ngAfterViewInit(): void {
+    // Construct the new code category
+    this.codeCategory = new CodeCategory('', '');
+
+    // Initialise the form controls
+  }
+
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
-    if (this.newCodeCategoryForm.valid) {
-      const data = this.dataFormControl.value;
-
-      const codeCategory: CodeCategory = new CodeCategory(this.idFormControl.value,
-        this.nameFormControl.value, (!!data) ? data : null);
+    if (this.codeCategory && this.newCodeCategoryForm.valid) {
+      this.codeCategory.id = this.idFormControl.value;
+      this.codeCategory.name = this.nameFormControl.value;
+      this.codeCategory.data = (!!this.dataFormControl.value) ? this.dataFormControl.value : null;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(codeCategory)
+      this.codesService.createCodeCategory(this.codeCategory)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

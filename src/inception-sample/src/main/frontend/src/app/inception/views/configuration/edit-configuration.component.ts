@@ -15,18 +15,13 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {ConfigurationService} from '../../services/configuration/configuration.service';
@@ -46,6 +41,8 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 })
 export class EditConfigurationComponent extends AdminContainerView implements AfterViewInit {
 
+  configuration?: Configuration;
+
   descriptionFormControl: FormControl;
 
   editConfigurationForm: FormGroup;
@@ -62,16 +59,16 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.key = this.activatedRoute.snapshot.paramMap.get('key')!;
+    // Retrieve the parameters
+    this.key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
 
     // Initialise form controls
     this.descriptionFormControl = new FormControl('');
 
-    this.keyFormControl = new FormControl({value: this.key, disabled: true},
+    this.keyFormControl = new FormControl({value: '', disabled: true},
       [Validators.required, Validators.maxLength(4000)]);
 
-    this.valueFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
+    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialise form
     this.editConfigurationForm = new FormGroup({
@@ -98,10 +95,11 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
+    // Retrieve the existing configuration and initialise the form controls
     this.configurationService.getConfiguration(this.key)
-      .pipe(first())
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((configuration: Configuration) => {
-        this.spinnerService.hideSpinner();
+        this.configuration = configuration;
 
         this.keyFormControl.setValue(configuration.key);
         this.valueFormControl.setValue(configuration.value);
@@ -125,21 +123,18 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   onOK(): void {
-    if (this.editConfigurationForm.valid) {
-      const configuration: Configuration = new Configuration(this.key,
-        this.valueFormControl.value, this.descriptionFormControl.value);
+    if (this.configuration && this.editConfigurationForm.valid) {
+      this.configuration.description = this.descriptionFormControl.value;
+      this.configuration.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.configurationService.saveConfiguration(configuration)
-        .pipe(first())
+      this.configurationService.saveConfiguration(this.configuration)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          this.spinnerService.hideSpinner();
-
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
-          this.spinnerService.hideSpinner();
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
             (error instanceof SystemUnavailableError)) {

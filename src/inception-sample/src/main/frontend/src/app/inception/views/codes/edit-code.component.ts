@@ -41,9 +41,9 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 })
 export class EditCodeComponent extends AdminContainerView implements AfterViewInit {
 
-  codeCategoryId: string;
+  code?: Code;
 
-  codeCategoryIdFormControl: FormControl;
+  codeCategoryId: string;
 
   codeId: string;
 
@@ -61,14 +61,12 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!;
-    this.codeId = this.activatedRoute.snapshot.paramMap.get('codeId')!;
+    // Retrieve the parameters
+    this.codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    this.codeId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeId')!);
 
     // Initialise form controls
-    this.codeCategoryIdFormControl = new FormControl({value: '', disabled: true},
-      [Validators.required, Validators.maxLength(100)]);
-
     this.idFormControl = new FormControl({value: '', disabled: true},
       [Validators.required, Validators.maxLength(100)]);
 
@@ -78,7 +76,6 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
     // Initialise form
     this.editCodeForm = new FormGroup({
-      codeCategoryId: this.codeCategoryIdFormControl,
       id: this.idFormControl,
       name: this.nameFormControl,
       value: this.valueFormControl
@@ -102,11 +99,12 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
+    // Retrieve the existing code and initialise the form controls
     this.codesService.getCode(this.codeCategoryId, this.codeId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((code: Code) => {
+        this.code = code;
         this.idFormControl.setValue(code.id);
-        this.codeCategoryIdFormControl.setValue(code.codeCategoryId);
         this.nameFormControl.setValue(code.name);
         this.valueFormControl.setValue(code.value);
       }, (error: Error) => {
@@ -127,13 +125,13 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   onOK(): void {
-    if (this.editCodeForm.valid) {
-      const code: Code = new Code(this.codeId, this.codeCategoryIdFormControl.value,
-        this.nameFormControl.value, this.valueFormControl.value);
+    if (this.code && this.editCodeForm.valid) {
+      this.code.name = this.nameFormControl.value;
+      this.code.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCode(code)
+      this.codesService.updateCode(this.code)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

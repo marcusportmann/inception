@@ -43,6 +43,6 @@ export class UserTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     // TODO: Retrieve the full name of the user and return here -- MARCUS
-    return of(activatedRouteSnapshot.paramMap.get('username')!);
+    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('username')!));
   }
 }

@@ -137,7 +137,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODE_CATEGORIES', @level2type=N'COLUMN', @level2name=N'DATA';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the code category was updated' ,
+@name=N'MS_Description', @value=N'The date and time the code category was last updated' ,
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODE_CATEGORIES', @level2type=N'COLUMN', @level2name=N'UPDATED';
 GO
 

@@ -23,10 +23,7 @@ import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -45,6 +42,7 @@ import javax.validation.Validator;
  *
  * @author Marcus Portmann
  */
+@Api(tags = "Error API")
 @RestController
 @RequestMapping(value = "/api/error")
 @SuppressWarnings({ "unused" })

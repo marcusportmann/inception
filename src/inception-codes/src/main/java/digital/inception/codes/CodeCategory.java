@@ -85,7 +85,7 @@ public class CodeCategory
   private String name;
 
   /**
-   * The date and time the code category was updated.
+   * The date and time the code category was last updated.
    */
   @ApiModelProperty(value = "The date and time the code category was last updated")
   @JsonProperty
@@ -131,7 +131,7 @@ public class CodeCategory
    * @param id      the ID used to uniquely identify the code category
    * @param name    the name of the code category
    * @param data    the optional code data for the code category
-   * @param updated the date and time the code category was updated
+   * @param updated the date and time the code category was last updated
    */
   public CodeCategory(String id, String name, String data, LocalDateTime updated)
   {
@@ -172,9 +172,9 @@ public class CodeCategory
   }
 
   /**
-   * Returns the date and time the code category was updated.
+   * Returns the date and time the code category was last updated.
    *
-   * @return the date and time the code category was updated
+   * @return the date and time the code category was last updated
    */
   public LocalDateTime getUpdated()
   {
@@ -212,9 +212,9 @@ public class CodeCategory
   }
 
   /**
-   * Set the date and time the code category was updated.
+   * Set the date and time the code category was last updated.
    *
-   * @param updated the date and time the code category was updated
+   * @param updated the date and time the code category was last updated
    */
   public void setUpdated(LocalDateTime updated)
   {

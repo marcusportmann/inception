@@ -21,7 +21,7 @@ COMMENT ON COLUMN codes.code_categories.name IS 'The name of the code category';
 
 COMMENT ON COLUMN codes.code_categories.data IS 'The code data for the code category';
 
-COMMENT ON COLUMN codes.code_categories.updated IS 'The date and time the code category was updated';
+COMMENT ON COLUMN codes.code_categories.updated IS 'The date and time the code category was last updated';
 
 
 CREATE TABLE codes.codes (

@@ -156,7 +156,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   editUser(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([this.userDirectoryId + '/' + encodeURIComponent(username) + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate(
+      [encodeURIComponent(this.userDirectoryId) + '/' + encodeURIComponent(username) + '/edit'],
+      {relativeTo: this.activatedRoute});
   }
 
   loadUsers(): void {
@@ -186,7 +188,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   newUser(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([this.userDirectoryId + '/new'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(this.userDirectoryId) + '/new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {

@@ -111,7 +111,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
 
   editUserDirectory(userDirectoryId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([userDirectoryId], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(userDirectoryId)], {relativeTo: this.activatedRoute});
   }
 
   loadUserDirectorySummaries(): void {

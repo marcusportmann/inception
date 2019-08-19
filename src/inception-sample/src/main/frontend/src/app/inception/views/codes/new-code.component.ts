@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -44,11 +44,11 @@ import {BackNavigation} from '../../components/layout/back-navigation';
   templateUrl: 'new-code.component.html',
   styleUrls: ['new-code.component.css'],
 })
-export class NewCodeComponent extends AdminContainerView {
+export class NewCodeComponent extends AdminContainerView implements AfterViewInit {
+
+  code?: Code;
 
   codeCategoryId: string;
-
-  codeCategoryIdFormControl: FormControl;
 
   idFormControl: FormControl;
 
@@ -64,13 +64,10 @@ export class NewCodeComponent extends AdminContainerView {
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!;
+    // Retrieve the parameters
+    this.codeCategoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
     // Initialise form controls
-    this.codeCategoryIdFormControl = new FormControl({value: this.codeCategoryId, disabled: true},
-      [Validators.required, Validators.maxLength(100)]);
-
     this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -79,7 +76,6 @@ export class NewCodeComponent extends AdminContainerView {
 
     // Initialise form
     this.newCodeForm = new FormGroup({
-      codeCategoryId: this.codeCategoryIdFormControl,
       id: this.idFormControl,
       name: this.nameFormControl,
       value: this.valueFormControl,
@@ -100,19 +96,27 @@ export class NewCodeComponent extends AdminContainerView {
     })
   }
 
+  ngAfterViewInit(): void {
+    // Construct the new code
+    this.code = new Code('', this.codeCategoryId, '', '');
+
+    // Initialise the form controls
+  }
+
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
-    if (this.newCodeForm.valid) {
-      const code: Code = new Code(this.idFormControl.value, this.codeCategoryId,
-        this.nameFormControl.value, this.valueFormControl.value);
+    if (this.code && this.newCodeForm.valid) {
+      this.code.id = this.idFormControl.value;
+      this.code.name = this.nameFormControl.value;
+      this.code.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCode(code)
+      this.codesService.createCode(this.code)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

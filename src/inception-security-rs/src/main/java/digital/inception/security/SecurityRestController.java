@@ -23,10 +23,7 @@ import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -53,6 +50,7 @@ import javax.validation.Validator;
  *
  * @author Marcus Portmann
  */
+@Api(tags = "Security API")
 @RestController
 @RequestMapping(value = "/api/security")
 @SuppressWarnings({ "unused", "WeakerAccess" })
@@ -644,4 +642,63 @@ public class SecurityRestController extends SecureRestController
       userDirectoryAuthorityValue -> userDirectoryId.equals(
         UUID.fromString(userDirectoryAuthorityValue)));
   }
+
+
+
+
+  /**
+   * Retrieve the user.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param username        the username identifying the user
+   *
+   * @return the user
+   */
+  @ApiOperation(value = "Retrieve the user", notes = "Retrieve the user")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 404, message = "The user directory or user could not be found",
+      response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}", method = RequestMethod.GET,
+    produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
+  public User getUser(@ApiParam(name = "userDirectoryId",
+    value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId,
+    @ApiParam(name = "username",
+      value = "The username identifying the user", required = true)
+    @PathVariable String username
+    )
+    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+        + ")");
+    }
+
+    return securityService.getUser(userDirectoryId, username);
+  }
+
+
+
+
+
 }

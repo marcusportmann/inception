@@ -20,6 +20,7 @@ package digital.inception.sms;
 
 import digital.inception.rs.SecureRestController;
 
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,7 @@ import javax.validation.Validator;
  *
  * @author Marcus Portmann
  */
+@Api(tags = "SMS API")
 @RestController
 @RequestMapping(value = "/api/sms")
 @SuppressWarnings({ "unused", "WeakerAccess" })

@@ -23,10 +23,6 @@ import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
 import digital.inception.validation.ValidationError;
 
-import io.swagger.annotations.*;
-
-import org.springframework.web.bind.annotation.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDate;
@@ -44,27 +40,24 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * The <code>SampleServiceController</code> class.
+ * The <code>SampleWebService</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Sample API", description = "Sample Service Controller")
-@RestController
-@RequestMapping(value = "/api/sample")
 @WebService(serviceName = "SampleService", name = "ISampleService",
     targetNamespace = "http://sample.inception.digital")
 @SOAPBinding
 @SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
-public class SampleServiceController
+public class SampleWebService
 {
   private ISampleService sampleService;
 
   /**
-   * Constructs a new <code>SampleServiceController</code>.
+   * Constructs a new <code>SampleWebService</code>.
    *
    * @param sampleService the Sample Service
    */
-  public SampleServiceController(ISampleService sampleService)
+  public SampleWebService(ISampleService sampleService)
   {
     this.sampleService = sampleService;
   }
@@ -74,7 +67,6 @@ public class SampleServiceController
    *
    * @return all the data
    */
-  @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
   @WebMethod(operationName = "GetAllData")
   @WebResult(name = "Data")
   public List<Data> allData()
@@ -84,14 +76,13 @@ public class SampleServiceController
   }
 
   /**
-   * The data RESTful web service.
+   * Retrieve the data.
    *
    * @return the data
    */
-  @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
   @WebMethod(operationName = "GetData")
   @WebResult(name = "Data")
-  public Data data()
+  public Data getData()
     throws SampleServiceException
   {
     long id = System.currentTimeMillis();
@@ -109,7 +100,6 @@ public class SampleServiceController
   /**
    * Test the exception handling.
    */
-  @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
   @WebMethod(operationName = "TestExceptionHandling")
   public void testExceptionHandling()
     throws SampleServiceException
@@ -122,16 +112,8 @@ public class SampleServiceController
    *
    * @param localDateTime the local date time
    */
-  @ApiOperation(value = "Test the local date time serialization",
-      notes = "Test the local date time serialization")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-  @RequestMapping(value = "/test-local-date-time", method = RequestMethod.GET,
-      produces = "application/json")
   @WebMethod(operationName = "TestLocalDateTime")
-  public LocalDateTime testLocalDateTime(@ApiParam(name = "localDateTime",
-      value = "The local date time", required = true)
-  @RequestParam("localDateTime")
-  @WebParam(name = "LocalDateTime")
+  public LocalDateTime testLocalDateTime(@WebParam(name = "LocalDateTime")
   @XmlElement(required = true) LocalDateTime localDateTime)
     throws SampleServiceException
   {
@@ -150,16 +132,8 @@ public class SampleServiceController
    *
    * @param zonedDateTime the zoned date time
    */
-  @ApiOperation(value = "Test the zoned date time serialization",
-      notes = "Test the zoned date time serialization")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") })
-  @RequestMapping(value = "/test-zoned-date-time", method = RequestMethod.GET,
-      produces = "application/json")
   @WebMethod(operationName = "TestZonedDateTime")
-  public ZonedDateTime testZonedDateTime(@ApiParam(name = "zonedDateTime",
-      value = "The zoned date time", required = true)
-  @RequestParam("zonedDateTime")
-  @WebParam(name = "ZonedDateTime")
+  public ZonedDateTime testZonedDateTime(@WebParam(name = "ZonedDateTime")
   @XmlElement(required = true) ZonedDateTime zonedDateTime)
     throws SampleServiceException
   {
@@ -176,16 +150,9 @@ public class SampleServiceController
   /**
    * Validate the data.
    */
-  @ApiOperation(value = "Validate the data", notes = "Validate the data")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ValidationError.class,
-      responseContainer = "List") })
-  @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
   @WebMethod(operationName = "Validate")
   @WebResult(name = "ValidationError")
-  public List<ValidationError> validate(@ApiParam(name = "data", value = "The data",
-      required = true)
-  @RequestBody
-  @WebParam(name = "Data")
+  public List<ValidationError> validate(@WebParam(name = "Data")
   @XmlElement(required = true) Data data)
     throws SampleServiceException
   {

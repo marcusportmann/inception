@@ -64,7 +64,8 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     super();
 
     // Retrieve parameters
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!;
+    this.codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
     // Set the data source filter
     this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
@@ -126,7 +127,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   editCode(codeId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([codeId + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(codeId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadCodes(): void {

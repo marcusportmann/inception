@@ -20,6 +20,24 @@ import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
 
 /**
+ * The DuplicateUserError class holds the information for a duplicate user error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateUserError extends Error {
+
+  /**
+   * Constructs a new DuplicateUserError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The OrganizationNotFoundError class holds the information for an organization not found error.
  *
  * @author Marcus Portmann

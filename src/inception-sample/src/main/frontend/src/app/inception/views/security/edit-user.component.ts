@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
-import {first} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {ConfigurationService} from '../../services/configuration/configuration.service';
@@ -29,6 +29,13 @@ import {Configuration} from '../../services/configuration/configuration';
 import {ConfigurationServiceError} from '../../services/configuration/configuration.service.errors';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
+import {User} from '../../services/security/user';
+import {v4 as uuid} from 'uuid/interfaces';
+import {UserStatus} from '../../services/security/user-status';
+import {SecurityServiceError} from '../../services/security/security.service.errors';
+import {Code} from '../../services/codes/code';
+import {CodesServiceError} from '../../services/codes/codes.service.errors';
+import {SecurityService} from '../../services/security/security.service';
 
 /**
  * The EditUserComponent class implements the edit user component.
@@ -39,11 +46,23 @@ import {BackNavigation} from '../../components/layout/back-navigation';
   templateUrl: 'edit-user.component.html',
   styleUrls: ['edit-user.component.css'],
 })
-export class EditUserComponent extends AdminContainerView {
+export class EditUserComponent extends AdminContainerView implements AfterViewInit {
 
-  // xxxFormControl: FormControl;
+  emailFormControl: FormControl;
+
+  firstNameFormControl: FormControl;
+
+  lastNameFormControl: FormControl;
+
+  mobileNumberFormControl: FormControl;
+
+  phoneNumberFormControl: FormControl;
+
+  usernameFormControl: FormControl;
 
   editUserForm: FormGroup;
+
+  user?: User;
 
   userDirectoryId: string;
 
@@ -51,29 +70,51 @@ export class EditUserComponent extends AdminContainerView {
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private configurationService: ConfigurationService,
+              private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!;
-    this.username = this.activatedRoute.snapshot.paramMap.get('username')!;
+    // Retrieve the parameters
+    this.userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
 
     // Initialise form controls
-    // this.xxxFormControl = new FormControl('',
-    //   [Validators.required, Validators.maxLength(4000)]);
+    this.emailFormControl = new FormControl('',
+      [Validators.maxLength(4000)]);
+
+    this.firstNameFormControl = new FormControl('',
+      [Validators.maxLength(4000)]);
+
+    this.lastNameFormControl = new FormControl('',
+      [Validators.maxLength(4000)]);
+
+    this.mobileNumberFormControl = new FormControl('',
+      [Validators.maxLength(4000)]);
+
+    this.phoneNumberFormControl = new FormControl('',
+      [Validators.maxLength(4000)]);
+
+    this.usernameFormControl = new FormControl('',
+      [Validators.required, Validators.maxLength(4000)]);
 
     // Initialise form
     this.editUserForm = new FormGroup({
-//      xxx: this.xxxFormControl,
+      email: this.emailFormControl,
+      firstName: this.firstNameFormControl,
+      lastName: this.lastNameFormControl,
+      mobileNumber: this.mobileNumberFormControl,
+      phoneNumber: this.phoneNumberFormControl,
+      username: this.usernameFormControl
     });
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_user_component_back_title',
-      value: 'Users'
-    }), ['../../..'], {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+        id: '@@edit_user_component_back_title',
+        value: 'Users'
+      }), ['../../..'],
+      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
   }
 
   get title(): string {
@@ -83,37 +124,63 @@ export class EditUserComponent extends AdminContainerView {
     })
   }
 
+  ngAfterViewInit(): void {
+    // Retrieve the existing user and initialise the form fields
+    this.spinnerService.showSpinner();
+
+    this.securityService.getUser(this.userDirectoryId, this.username)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((user: User) => {
+        this.emailFormControl.setValue(user.email);
+        this.firstNameFormControl.setValue(user.firstName);
+        this.lastNameFormControl.setValue(user.lastName);
+        this.mobileNumberFormControl.setValue(user.mobileNumber);
+        this.phoneNumberFormControl.setValue(user.phoneNumber);
+        this.usernameFormControl.setValue(user.username);
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
+  }
+
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../..'], {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+    this.router.navigate(['../../..'],
+      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
   }
 
   onOK(): void {
-    if (this.editUserForm.valid) {
-
-      // const configuration: Configuration = new Configuration(this.keyFormControl.value,
-      //   this.valueFormControl.value, this.descriptionFormControl.value);
-
-      // this.spinnerService.showSpinner();
-
-      // this.configurationService.saveConfiguration(configuration)
-      //   .pipe(first())
-      //   .subscribe(() => {
-      //     this.spinnerService.hideSpinner();
-      //
-      //     // noinspection JSIgnoredPromiseFromCall
-      //     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-      //   }, (error: Error) => {
-      //     this.spinnerService.hideSpinner();
-      //     // noinspection SuspiciousTypeOfGuard
-      //     if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
-      //       (error instanceof SystemUnavailableError)) {
-      //       // noinspection JSIgnoredPromiseFromCall
-      //       this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-      //     } else {
-      //       this.dialogService.showErrorDialog(error);
-      //     }
-      //   });
-    }
+    // if (this.user && this.editUserForm.valid) {
+    //   this.user.firstName = this.firstNameFormControl.value;
+    //   this.user.lastName = this.lastNameFormControl.value;
+    //   this.user.mobileNumber = this.mobileNumberFormControl.value;
+    //   this.user.phoneNumber = this.phoneNumberFormControl.value;
+    //   this.user.email = this.emailFormControl.value;
+    //
+    //   this.spinnerService.showSpinner();
+    //
+    //   this.securityService.updateUser(this.user, false, false)
+    //     .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    //     .subscribe(() => {
+    //       // noinspection JSIgnoredPromiseFromCall
+    //       this.router.navigate(['../..'],
+    //         {relativeTo: this.activatedRoute, state: {this.userDirectoryId}});
+    //     }, (error: Error) => {
+    //       // noinspection SuspiciousTypeOfGuard
+    //       if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+    //         (error instanceof SystemUnavailableError)) {
+    //         // noinspection JSIgnoredPromiseFromCall
+    //         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+    //       } else {
+    //         this.dialogService.showErrorDialog(error);
+    //       }
+    //     });
+    // }
   }
 }

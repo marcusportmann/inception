@@ -138,7 +138,7 @@ public class Message
   private UUID typeId;
 
   /**
-   * The date and time the message was updated.
+   * The date and time the message was last updated.
    */
   private LocalDateTime updated;
 
@@ -279,7 +279,7 @@ public class Message
    * @param status           the message status e.g. Initialized, Sending, etc
    * @param created          the date and time the message was created
    * @param persisted        the date and time the message was persisted
-   * @param updated          the date and time the message was updated
+   * @param updated          the date and time the message was last updated
    * @param sendAttempts     the number of times that the sending of the message was attempted
    * @param processAttempts  the number of times that the processing of the message was attempted
    * @param downloadAttempts the number of times that downloading of the message was attempted
@@ -507,9 +507,9 @@ public class Message
   }
 
   /**
-   * Returns the date and time the message was updated.
+   * Returns the date and time the message was last updated.
    *
-   * @return the date and time the message was updated
+   * @return the date and time the message was last updated
    */
   public LocalDateTime getUpdated()
   {
@@ -730,9 +730,9 @@ public class Message
   }
 
   /**
-   * Set the date and time the message was updated.
+   * Set the date and time the message was last updated.
    *
-   * @param updated the date and time the message was updated
+   * @param updated the date and time the message was last updated
    */
   public void setUpdated(LocalDateTime updated)
   {

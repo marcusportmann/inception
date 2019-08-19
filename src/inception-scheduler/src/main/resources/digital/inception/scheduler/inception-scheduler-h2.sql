@@ -42,7 +42,7 @@ COMMENT ON COLUMN scheduler.jobs.last_executed IS 'The date and time the job was
 
 COMMENT ON COLUMN scheduler.jobs.next_execution IS 'The date and time created the job will next be executed';
 
-COMMENT ON COLUMN scheduler.jobs.updated IS 'The date and time the job was updated';
+COMMENT ON COLUMN scheduler.jobs.updated IS 'The date and time the job was last updated';
 
 
 CREATE TABLE scheduler.job_parameters (

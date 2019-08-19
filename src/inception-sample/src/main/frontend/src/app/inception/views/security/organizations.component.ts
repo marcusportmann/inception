@@ -111,7 +111,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   editOrganization(organizationId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([organizationId], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(organizationId)], {relativeTo: this.activatedRoute});
   }
 
   loadOrganizations(): void {

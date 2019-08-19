@@ -41,6 +41,8 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 })
 export class EditCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
 
+  codeCategory?: CodeCategory;
+
   codeCategoryId: string;
 
   dataFormControl: FormControl;
@@ -57,13 +59,15 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!;
+    // Retrieve the parameters
+    this.codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
     // Initialise form controls
     this.dataFormControl = new FormControl('');
 
-    this.idFormControl = new FormControl({value: '', disabled: true}, [Validators.required, Validators.maxLength(100)]);
+    this.idFormControl = new FormControl({value: '', disabled: true},
+      [Validators.required, Validators.maxLength(100)]);
 
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
@@ -92,9 +96,11 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
+    // Retrieve the existing code category and initialise the form controls
     this.codesService.getCodeCategory(this.codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: CodeCategory) => {
+        this.codeCategory = codeCategory;
         this.idFormControl.setValue(codeCategory.id);
         this.nameFormControl.setValue(codeCategory.name);
         this.dataFormControl.setValue(codeCategory.data);
@@ -116,15 +122,13 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   onOK(): void {
-    if (this.editCodeCategoryForm.valid) {
-      const data = this.dataFormControl.value;
-
-      const codeCategory: CodeCategory = new CodeCategory(this.codeCategoryId,
-        this.nameFormControl.value, (!!data) ? data : null);
+    if (this.codeCategory && this.editCodeCategoryForm.valid) {
+      this.codeCategory.name = this.nameFormControl.value;
+      this.codeCategory.data = (!!this.dataFormControl.value) ? this.dataFormControl.value : null;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.updateCodeCategory(codeCategory)
+      this.codesService.updateCodeCategory(this.codeCategory)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
