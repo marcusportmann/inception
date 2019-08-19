@@ -153,8 +153,8 @@ export class SessionService {
         const selectedOrganization = currentSession.organization;
 
         /*
-         * If the access token will expire with 60 seconds then obtain a new one using the refresh token
-         * if it exists.
+         * If the access token will expire with 60 seconds then obtain a new one using the refresh
+         * token if it exists.
          */
         if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
           if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {

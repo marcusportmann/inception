@@ -43,15 +43,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   configuration?: Configuration;
 
-  descriptionFormControl: FormControl;
-
   editConfigurationForm: FormGroup;
-
-  key: string;
-
-  keyFormControl: FormControl;
-
-  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -59,22 +51,12 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
-
-    // Initialise form controls
-    this.descriptionFormControl = new FormControl('');
-
-    this.keyFormControl = new FormControl({value: '', disabled: true},
-      [Validators.required, Validators.maxLength(4000)]);
-
-    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
-
     // Initialise form
     this.editConfigurationForm = new FormGroup({
-      description: this.descriptionFormControl,
-      key: this.keyFormControl,
-      value: this.valueFormControl
+      description: new FormControl(''),
+      key: new FormControl({value: '', disabled: true},
+        [Validators.required, Validators.maxLength(4000)]),
+      value: new FormControl('', [Validators.maxLength(4000)])
     });
   }
 
@@ -93,17 +75,19 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
+    const key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
+
     this.spinnerService.showSpinner();
 
     // Retrieve the existing configuration and initialise the form controls
-    this.configurationService.getConfiguration(this.key)
+    this.configurationService.getConfiguration(key)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((configuration: Configuration) => {
         this.configuration = configuration;
 
-        this.keyFormControl.setValue(configuration.key);
-        this.valueFormControl.setValue(configuration.value);
-        this.descriptionFormControl.setValue(configuration.description);
+        this.editConfigurationForm.get('key')!.setValue(configuration.key);
+        this.editConfigurationForm.get('value')!.setValue(configuration.value);
+        this.editConfigurationForm.get('description')!.setValue(configuration.description);
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
         // noinspection SuspiciousTypeOfGuard
@@ -124,8 +108,8 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   onOK(): void {
     if (this.configuration && this.editConfigurationForm.valid) {
-      this.configuration.description = this.descriptionFormControl.value;
-      this.configuration.value = this.valueFormControl.value;
+      this.configuration.description = this.editConfigurationForm.get('description')!.value;
+      this.configuration.value = this.editConfigurationForm.get('value')!.value;
 
       this.spinnerService.showSpinner();
 

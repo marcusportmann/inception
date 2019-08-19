@@ -48,25 +48,9 @@ import {SecurityService} from '../../services/security/security.service';
 })
 export class EditUserComponent extends AdminContainerView implements AfterViewInit {
 
-  emailFormControl: FormControl;
-
-  firstNameFormControl: FormControl;
-
-  lastNameFormControl: FormControl;
-
-  mobileNumberFormControl: FormControl;
-
-  phoneNumberFormControl: FormControl;
-
-  usernameFormControl: FormControl;
-
   editUserForm: FormGroup;
 
   user?: User;
-
-  userDirectoryId: string;
-
-  username: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -74,47 +58,26 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
-
-    // Initialise form controls
-    this.emailFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.firstNameFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.lastNameFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.mobileNumberFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.phoneNumberFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.usernameFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
-
     // Initialise form
     this.editUserForm = new FormGroup({
-      email: this.emailFormControl,
-      firstName: this.firstNameFormControl,
-      lastName: this.lastNameFormControl,
-      mobileNumber: this.mobileNumberFormControl,
-      phoneNumber: this.phoneNumberFormControl,
-      username: this.usernameFormControl
+      email: new FormControl('', [Validators.maxLength(4000)]),
+      firstName: new FormControl('', [Validators.maxLength(4000)]),
+      lastName: new FormControl('', [Validators.maxLength(4000)]),
+      mobileNumber: new FormControl('', [Validators.maxLength(4000)]),
+      phoneNumber: new FormControl('', [Validators.maxLength(4000)]),
+      username: new FormControl('', [Validators.required, Validators.maxLength(4000)])
     });
   }
 
   get backNavigation(): BackNavigation {
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
     return new BackNavigation(this.i18n({
         id: '@@edit_user_component_back_title',
         value: 'Users'
       }), ['../../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
   }
 
   get title(): string {
@@ -125,18 +88,22 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getUser(this.userDirectoryId, this.username)
+    this.securityService.getUser(userDirectoryId, username)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((user: User) => {
-        this.emailFormControl.setValue(user.email);
-        this.firstNameFormControl.setValue(user.firstName);
-        this.lastNameFormControl.setValue(user.lastName);
-        this.mobileNumberFormControl.setValue(user.mobileNumber);
-        this.phoneNumberFormControl.setValue(user.phoneNumber);
-        this.usernameFormControl.setValue(user.username);
+        this.editUserForm.get('email')!.setValue(user.email);
+        this.editUserForm.get('firstName')!.setValue(user.firstName);
+        this.editUserForm.get('lastName')!.setValue(user.lastName);
+        this.editUserForm.get('mobileNumber')!.setValue(user.mobileNumber);
+        this.editUserForm.get('phoneNumber')!.setValue(user.phoneNumber);
+        this.editUserForm.get('username')!.setValue(user.username);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -150,9 +117,12 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   onCancel(): void {
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
   }
 
   onOK(): void {

@@ -21,12 +21,11 @@ package digital.inception.security;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.*;
+import java.util.UUID;
 
 /**
  * The <code>SecurityServiceAuthenticationManager</code> provides an authentication manager
@@ -44,13 +43,21 @@ public class SecurityServiceAuthenticationManager
   private ISecurityService securityService;
 
   /**
+   * The User Details Service.
+   */
+  private UserDetailsService userDetailsService;
+
+  /**
    * Constructs a new <code>SecurityServiceAuthenticationManager</code>.
    *
-   * @param securityService the Security Service
+   * @param securityService    the Security Service
+   * @param userDetailsService the User Details Service
    */
-  public SecurityServiceAuthenticationManager(ISecurityService securityService)
+  public SecurityServiceAuthenticationManager(ISecurityService securityService,
+      UserDetailsService userDetailsService)
   {
     this.securityService = securityService;
+    this.userDetailsService = userDetailsService;
   }
 
   /**
@@ -88,60 +95,10 @@ public class SecurityServiceAuthenticationManager
           authentication.getPrincipal().toString(), authentication.getCredentials().toString());
 
       // Retrieve the details for the user
-      User user = securityService.getUser(authenticationUserDirectoryId,
-          authentication.getPrincipal().toString());
+      UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getPrincipal()
+          .toString());
 
-      // Retrieve the function codes for the user
-      List<String> functionCodes = securityService.getFunctionCodesForUser(
-          authenticationUserDirectoryId, authentication.getPrincipal().toString());
-
-      // Retrieve the list of IDs for the organizations the user is associated with
-      List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
-          authenticationUserDirectoryId);
-
-      /*
-       * Retrieve the list of IDs for the user directories the user is associated with as a result
-       * of being associated with one or more organizations.
-       */
-      Set<UUID> userDirectoryIds = new HashSet<>();
-
-      for (var organizationId : organizationIds)
-      {
-        // Retrieve the list of user directories associated with the organization
-        var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
-            organizationId);
-
-        userDirectoryIds.addAll(userDirectoryIdsForOrganization);
-      }
-
-      // Retrieve the list of roles for the user
-      List<String> roleNames = securityService.getRoleNamesForUser(authenticationUserDirectoryId,
-          authentication.getPrincipal().toString());
-
-      // Build the list of granted authorities
-      List<GrantedAuthority> authorities = new ArrayList<>();
-
-      organizationIds.stream().map(organizationId -> new SimpleGrantedAuthority("ORGANIZATION_"
-          + organizationId)).forEach(authorities::add);
-
-      userDirectoryIds.stream().map(userDirectoryId -> new SimpleGrantedAuthority("USER_DIRECTORY_"
-          + userDirectoryId)).forEach(authorities::add);
-
-      functionCodes.stream().map(functionCode -> new SimpleGrantedAuthority("FUNCTION_"
-          + functionCode)).forEach(authorities::add);
-
-      roleNames.stream().map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName)).forEach(
-          authorities::add);
-
-      // Create the Spring authentication token
-      UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-          new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
-          authentication.getCredentials(), authorities);
-
-      // Save the user's details as part of the token
-      usernamePasswordAuthenticationToken.setDetails(user);
-
-      return usernamePasswordAuthenticationToken;
+      return new AuthenticationToken(userDetails);
     }
     catch (AuthenticationFailedException | UserNotFoundException e)
     {

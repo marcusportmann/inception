@@ -43,15 +43,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   codeCategory?: CodeCategory;
 
-  codeCategoryId: string;
-
-  dataFormControl: FormControl;
-
   editCodeCategoryForm: FormGroup;
-
-  idFormControl: FormControl;
-
-  nameFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -59,23 +51,11 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-
-    // Initialise form controls
-    this.dataFormControl = new FormControl('');
-
-    this.idFormControl = new FormControl({value: '', disabled: true},
-      [Validators.required, Validators.maxLength(100)]);
-
-    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
     // Initialise form
     this.editCodeCategoryForm = new FormGroup({
-      data: this.dataFormControl,
-      id: this.idFormControl,
-      name: this.nameFormControl
+      data: new FormControl(''),
+      id: new FormControl({value: '', disabled: true},       [Validators.required, Validators.maxLength(100)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }
 
@@ -94,16 +74,19 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
+    const codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+
     this.spinnerService.showSpinner();
 
     // Retrieve the existing code category and initialise the form controls
-    this.codesService.getCodeCategory(this.codeCategoryId)
+    this.codesService.getCodeCategory(codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: CodeCategory) => {
         this.codeCategory = codeCategory;
-        this.idFormControl.setValue(codeCategory.id);
-        this.nameFormControl.setValue(codeCategory.name);
-        this.dataFormControl.setValue(codeCategory.data);
+        this.editCodeCategoryForm.get('id')!.setValue(codeCategory.id);
+        this.editCodeCategoryForm.get('name')!.setValue(codeCategory.name);
+        this.editCodeCategoryForm.get('data')!.setValue(codeCategory.data);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
@@ -123,8 +106,10 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   onOK(): void {
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
-      this.codeCategory.name = this.nameFormControl.value;
-      this.codeCategory.data = (!!this.dataFormControl.value) ? this.dataFormControl.value : null;
+      const data = this.editCodeCategoryForm.get('data')!.value;
+
+      this.codeCategory.name = this.editCodeCategoryForm.get('name')!.value;
+      this.codeCategory.data = (!!data) ? data : null;
 
       this.spinnerService.showSpinner();
 

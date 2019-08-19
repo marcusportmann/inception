@@ -22,6 +22,7 @@ import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityServiceAuthenticationManager;
 
+import digital.inception.security.UserDetailsService;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -174,7 +175,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     // Set the authentication manager
     SecurityServiceAuthenticationManager authenticationManager =
-        new SecurityServiceAuthenticationManager(securityService);
+        new SecurityServiceAuthenticationManager(securityService, userDetailsService());
     endpoints.authenticationManager(authenticationManager);
 
     // Set the access token converter
@@ -214,10 +215,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   }
 
   /**
-   * Configure the ClientDetailsService, e.g. declaring individual clients and their properties. Note that password
-   * grant is not enabled (even if some clients are allowed it) unless an AuthenticationManager is supplied to the
-   * configure(AuthorizationServerEndpointsConfigurer). At least one client, or a fully formed custom
-   * ClientDetailsService must be declared or the server will not start.
+   * Configure the ClientDetailsService, e.g. declaring individual clients and their properties.
+   * Note that password grant is not enabled (even if some clients are allowed it) unless an
+   * AuthenticationManager is supplied to the configure(AuthorizationServerEndpointsConfigurer).
+   * At least one client, or a fully formed custom ClientDetailsService must be declared or the
+   * server will not start.
    *
    * @param clients the client details service configurer
    */

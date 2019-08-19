@@ -43,12 +43,6 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   codeCategory?: CodeCategory;
 
-  dataFormControl: FormControl;
-
-  idFormControl: FormControl;
-
-  nameFormControl: FormControl;
-
   newCodeCategoryForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -57,18 +51,11 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form controls
-    this.dataFormControl = new FormControl('');
-
-    this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
-    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
     // Initialise form
     this.newCodeCategoryForm = new FormGroup({
-      id: this.idFormControl,
-      data: this.dataFormControl,
-      name: this.nameFormControl
+      data: new FormControl(''),
+      id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     })
   }
 
@@ -87,10 +74,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   }
 
   ngAfterViewInit(): void {
-    // Construct the new code category
     this.codeCategory = new CodeCategory('', '');
-
-    // Initialise the form controls
   }
 
   onCancel(): void {
@@ -100,9 +84,11 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   onOK(): void {
     if (this.codeCategory && this.newCodeCategoryForm.valid) {
-      this.codeCategory.id = this.idFormControl.value;
-      this.codeCategory.name = this.nameFormControl.value;
-      this.codeCategory.data = (!!this.dataFormControl.value) ? this.dataFormControl.value : null;
+      const data = this.newCodeCategoryForm.get('data')!.value;
+
+      this.codeCategory.id = this.newCodeCategoryForm.get('id')!.value;
+      this.codeCategory.name = this.newCodeCategoryForm.get('name')!.value;
+      this.codeCategory.data = (!!data) ? data : null;
 
       this.spinnerService.showSpinner();
 

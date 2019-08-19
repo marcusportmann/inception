@@ -48,15 +48,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   code?: Code;
 
-  codeCategoryId: string;
-
-  idFormControl: FormControl;
-
-  nameFormControl: FormControl;
-
   newCodeForm: FormGroup;
-
-  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -64,21 +56,11 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.codeCategoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-
-    // Initialise form controls
-    this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
-    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
-    this.valueFormControl = new FormControl('', Validators.required);
-
     // Initialise form
     this.newCodeForm = new FormGroup({
-      id: this.idFormControl,
-      name: this.nameFormControl,
-      value: this.valueFormControl,
+      id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      value: new FormControl('', Validators.required),
     });
   }
 
@@ -97,10 +79,10 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    // Construct the new code
-    this.code = new Code('', this.codeCategoryId, '', '');
+    const codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
-    // Initialise the form controls
+    this.code = new Code('', codeCategoryId, '', '');
   }
 
   onCancel(): void {
@@ -110,9 +92,9 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   onOK(): void {
     if (this.code && this.newCodeForm.valid) {
-      this.code.id = this.idFormControl.value;
-      this.code.name = this.nameFormControl.value;
-      this.code.value = this.valueFormControl.value;
+      this.code.id = this.newCodeForm.get('id')!.value;
+      this.code.name = this.newCodeForm.get('name')!.value;
+      this.code.value = this.newCodeForm.get('value')!.value;
 
       this.spinnerService.showSpinner();
 

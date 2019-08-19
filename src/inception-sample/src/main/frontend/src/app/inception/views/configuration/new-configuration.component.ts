@@ -43,13 +43,7 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
 
   configuration?: Configuration;
 
-  descriptionFormControl: FormControl;
-
-  keyFormControl: FormControl;
-
   newConfigurationForm: FormGroup;
-
-  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -57,18 +51,11 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form controls
-    this.descriptionFormControl = new FormControl('', [Validators.maxLength(4000)]);
-
-    this.keyFormControl = new FormControl('', [Validators.required, Validators.maxLength(4000)]);
-
-    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
-
     // Initialise form
     this.newConfigurationForm = new FormGroup({
-      description: this.descriptionFormControl,
-      key: this.keyFormControl,
-      value: this.valueFormControl
+      description: new FormControl('', [Validators.maxLength(4000)]),
+      key: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      value: new FormControl('', [Validators.maxLength(4000)])
     });
   }
 
@@ -87,10 +74,7 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    // Construct the new configuration
     this.configuration = new Configuration('', '', '');
-
-    // Initialise the form controls
   }
 
   onCancel(): void {
@@ -100,9 +84,9 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
 
   onOK(): void {
     if (this.configuration && this.newConfigurationForm.valid) {
-      this.configuration.description = this.descriptionFormControl.value;
-      this.configuration.key = this.keyFormControl.value;
-      this.configuration.value = this.valueFormControl.value;
+      this.configuration.description = this.newConfigurationForm.get('description')!.value;
+      this.configuration.key = this.newConfigurationForm.get('key')!.value;
+      this.configuration.value = this.newConfigurationForm.get('value')!.value;
 
       this.spinnerService.showSpinner();
 

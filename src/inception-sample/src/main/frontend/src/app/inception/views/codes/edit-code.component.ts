@@ -43,17 +43,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   code?: Code;
 
-  codeCategoryId: string;
-
-  codeId: string;
-
   editCodeForm: FormGroup;
-
-  idFormControl: FormControl;
-
-  nameFormControl: FormControl;
-
-  valueFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -61,24 +51,12 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-    this.codeId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeId')!);
-
-    // Initialise form controls
-    this.idFormControl = new FormControl({value: '', disabled: true},
-      [Validators.required, Validators.maxLength(100)]);
-
-    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-
-    this.valueFormControl = new FormControl('', Validators.required);
-
     // Initialise form
     this.editCodeForm = new FormGroup({
-      id: this.idFormControl,
-      name: this.nameFormControl,
-      value: this.valueFormControl
+      id: new FormControl({value: '', disabled: true},
+        [Validators.required, Validators.maxLength(100)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      value: new FormControl('', Validators.required)
     });
   }
 
@@ -97,16 +75,20 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
+    const codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    const codeId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeId')!);
+
     this.spinnerService.showSpinner();
 
     // Retrieve the existing code and initialise the form controls
-    this.codesService.getCode(this.codeCategoryId, this.codeId)
+    this.codesService.getCode(codeCategoryId, codeId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((code: Code) => {
         this.code = code;
-        this.idFormControl.setValue(code.id);
-        this.nameFormControl.setValue(code.name);
-        this.valueFormControl.setValue(code.value);
+        this.editCodeForm.get('id')!.setValue(code.id);
+        this.editCodeForm.get('name')!.setValue(code.name);
+        this.editCodeForm.get('value')!.setValue(code.value);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
@@ -126,8 +108,8 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   onOK(): void {
     if (this.code && this.editCodeForm.valid) {
-      this.code.name = this.nameFormControl.value;
-      this.code.value = this.valueFormControl.value;
+      this.code.name = this.editCodeForm.get('name')!.value;
+      this.code.value = this.editCodeForm.get('value')!.value;
 
       this.spinnerService.showSpinner();
 

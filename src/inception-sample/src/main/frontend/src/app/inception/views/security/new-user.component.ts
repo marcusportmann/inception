@@ -43,31 +43,9 @@ import {v4 as uuid} from 'uuid';
 })
 export class NewUserComponent extends AdminContainerView implements AfterViewInit {
 
-  confirmPasswordFormControl: FormControl;
-
-  emailFormControl: FormControl;
-
-  expiredPasswordFormControl: FormControl;
-
-  firstNameFormControl: FormControl;
-
-  lastNameFormControl: FormControl;
-
-  mobileNumberFormControl: FormControl;
-
   newUserForm: FormGroup;
 
-  passwordFormControl: FormControl;
-
-  phoneNumberFormControl: FormControl;
-
   user?: User;
-
-  userDirectoryId: string;
-
-  userLockedFormControl: FormControl;
-
-  usernameFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -75,60 +53,30 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve the parameters
-    this.userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
-    // Initialise form controls
-    this.confirmPasswordFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
-
-    this.emailFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.expiredPasswordFormControl = new FormControl(false);
-
-    this.firstNameFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.lastNameFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.mobileNumberFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.passwordFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
-
-    this.phoneNumberFormControl = new FormControl('',
-      [Validators.maxLength(4000)]);
-
-    this.userLockedFormControl = new FormControl(false);
-
-    this.usernameFormControl = new FormControl('',
-      [Validators.required, Validators.maxLength(4000)]);
-
     // Initialise form
     this.newUserForm = new FormGroup({
-      confirmPassword: this.confirmPasswordFormControl,
-      email: this.emailFormControl,
-      expiredPassword: this.expiredPasswordFormControl,
-      firstName: this.firstNameFormControl,
-      lastName: this.lastNameFormControl,
-      mobileNumber: this.mobileNumberFormControl,
-      password: this.passwordFormControl,
-      phoneNumber: this.phoneNumberFormControl,
-      userLocked: this.userLockedFormControl,
-      username: this.usernameFormControl
+      confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      email: new FormControl('', [Validators.maxLength(4000)]),
+      expiredPassword: new FormControl(false),
+      firstName: new FormControl('',       [Validators.maxLength(4000)]),
+      lastName: new FormControl('', [Validators.maxLength(4000)]),
+      mobileNumber: new FormControl('', [Validators.maxLength(4000)]),
+      password: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      phoneNumber: new FormControl('', [Validators.maxLength(4000)]),
+      userLocked: new FormControl(false),
+      username: new FormControl('', [Validators.required, Validators.maxLength(4000)])
     });
   }
 
   get backNavigation(): BackNavigation {
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
     return new BackNavigation(this.i18n({
         id: '@@new_user_component_back_title',
         value: 'Users'
       }), ['../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
   }
 
   get title(): string {
@@ -139,23 +87,26 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    // Construct the new user
-    this.user = new User(uuid(), this.userDirectoryId, '', '', '', '', '', '', '', 0,
-      UserStatus.Active);
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
-    // Initialise the form controls
+    this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', '', 0,
+      UserStatus.Active);
   }
 
   onCancel(): void {
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
   }
 
   onOK(): void {
     if (this.user && this.newUserForm.valid) {
       // Check that the password and confirmation password match
-      if (this.passwordFormControl.value !== this.confirmPasswordFormControl.value) {
+      if (this.newUserForm.get('password')!.value !== this.newUserForm.get('confirmPassword')!.value) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
           id: '@@new_user_component_passwords_do_not_match',
           value: 'The passwords do not match.'
@@ -164,23 +115,26 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
         return;
       }
 
-      this.user.username = this.usernameFormControl.value;
-      this.user.firstName = this.firstNameFormControl.value;
-      this.user.lastName = this.lastNameFormControl.value;
-      this.user.mobileNumber = this.mobileNumberFormControl.value;
-      this.user.phoneNumber = this.phoneNumberFormControl.value;
-      this.user.email = this.emailFormControl.value;
-      this.user.password = this.passwordFormControl.value;
+      this.user.username = this.newUserForm.get('username')!.value;
+      this.user.firstName = this.newUserForm.get('firstName')!.value;
+      this.user.lastName = this.newUserForm.get('lastName')!.value;
+      this.user.mobileNumber = this.newUserForm.get('mobileNumber')!.value;
+      this.user.phoneNumber = this.newUserForm.get('phoneNumber')!.value;
+      this.user.email = this.newUserForm.get('email')!.value;
+      this.user.password = this.newUserForm.get('password')!.value;
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createUser(this.user, this.expiredPasswordFormControl.value,
-        this.userLockedFormControl.value)
+      this.securityService.createUser(this.user, this.newUserForm.get('expiredPassword')!.value,
+        this.newUserForm.get('userLocked')!.value)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
+          const userDirectoryId = decodeURIComponent(
+            this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../..'],
-            {relativeTo: this.activatedRoute, state: {userDirectoryId: this.userDirectoryId}});
+            {relativeTo: this.activatedRoute, state: {userDirectoryId}});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

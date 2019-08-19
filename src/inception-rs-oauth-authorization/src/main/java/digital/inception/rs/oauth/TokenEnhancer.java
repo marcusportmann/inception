@@ -22,12 +22,15 @@ import digital.inception.security.ISecurityService;
 import digital.inception.security.Organization;
 import digital.inception.security.User;
 
+import digital.inception.security.UserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -79,12 +82,16 @@ public class TokenEnhancer
 
     try
     {
-      User user = User.class.isInstance(authentication.getUserAuthentication().getDetails())
-          ? User.class.cast(authentication.getUserAuthentication().getDetails())
+      UserDetails userDetails =
+
+        UserDetails.class.isInstance(authentication.getPrincipal())
+          ? UserDetails.class.cast(authentication.getPrincipal())
           : null;
 
-      if (user != null)
+      if (userDetails != null)
       {
+        User user = userDetails.getUser();
+
         additionalInfo.put("user_directory_id", user.getUserDirectoryId().toString());
 
         if ((!StringUtils.isEmpty(user.getFirstName()))
