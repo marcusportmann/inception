@@ -20,6 +20,7 @@ package digital.inception.security;
 
 import digital.inception.core.persistence.IDGenerator;
 
+import digital.inception.core.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
@@ -555,7 +556,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       else
       {
-        passwordHash = createPasswordHash("");
+        passwordHash = createPasswordHash(PasswordUtil.generateRandomPassword());
       }
 
       statement.setString(10, passwordHash);
@@ -1456,13 +1457,15 @@ public class InternalUserDirectory extends UserDirectoryBase
             : ", password=?");
       }
 
-      fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET password_attempts=?"
-          : ", password_attempts=?");
+      if (lockUser || (user.getPasswordAttempts() != null))
+      {
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET password_attempts=?" : ", password_attempts=?");
+      }
 
-      fieldsBuffer.append((fieldsBuffer.length() == 0)
-          ? "SET password_expiry=?"
-          : ", password_expiry=?");
+      if (expirePassword || (user.getPasswordExpiry() != null))
+      {
+        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET password_expiry=?" : ", password_expiry=?");
+      }
 
       buffer.append(fieldsBuffer.toString());
       buffer.append(" WHERE user_directory_id=? AND id=?");
@@ -1517,41 +1520,27 @@ public class InternalUserDirectory extends UserDirectoryBase
           parameterIndex++;
         }
 
-        if (user.getPasswordAttempts() == null)
+        if (lockUser)
         {
-          statement.setNull(parameterIndex, Types.INTEGER);
+          statement.setInt(parameterIndex, maxPasswordAttempts);
+          parameterIndex++;
         }
-        else
+        else if (user.getPasswordAttempts() != null)
         {
-          if (lockUser)
-          {
-            statement.setInt(parameterIndex, maxPasswordAttempts);
-          }
-          else
-          {
-            statement.setInt(parameterIndex, user.getPasswordAttempts());
-          }
+          statement.setInt(parameterIndex, user.getPasswordAttempts());
+          parameterIndex++;
         }
 
-        parameterIndex++;
-
-        if (user.getPasswordExpiry() == null)
+        if (expirePassword)
         {
-          statement.setNull(parameterIndex, Types.TIMESTAMP);
+          statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
+          parameterIndex++;
         }
-        else
+        else if (user.getPasswordExpiry() != null)
         {
-          if (expirePassword)
-          {
-            statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
-          }
-          else
-          {
-            statement.setTimestamp(parameterIndex, Timestamp.valueOf(user.getPasswordExpiry()));
-          }
+          statement.setTimestamp(parameterIndex, Timestamp.valueOf(user.getPasswordExpiry()));
+          parameterIndex++;
         }
-
-        parameterIndex++;
 
         statement.setObject(parameterIndex, getUserDirectoryId());
 

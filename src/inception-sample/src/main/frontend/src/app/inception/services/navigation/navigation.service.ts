@@ -42,7 +42,6 @@ export class NavigationService {
     console.log('Initializing the Navigation Service');
 
     this.sessionService.session.pipe(map((session: Session | null) => {
-      console.log('Recalculating the navigation using the session: ', session);
       this.userNavigation.next(
         Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();

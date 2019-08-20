@@ -6,9 +6,9 @@
           <mat-form-field>
             <mat-label i18n="@@new_code_category_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id" required="true" autofocus>
-            <mat-error *ngIf="idFormControl.errors && !idFormControl.untouched">
-              <span *ngIf="idFormControl.errors?.required" i18n="@@new_code_category_component_error_id_required">An ID is required.</span>
-              <span *ngIf="idFormControl.errors?.maxlength" i18n="@@new_code_category_component_error_id_maxlength">ID must not exceed 100 characters.</span>
+            <mat-error *ngIf="newCodeCategoryForm.get('id').errors && !newCodeCategoryForm.get('id').untouched">
+              <span *ngIf="newCodeCategoryForm.get('id').errors?.required" i18n="@@new_code_category_component_error_id_required">An ID is required.</span>
+              <span *ngIf="newCodeCategoryForm.get('id').errors?.maxlength" i18n="@@new_code_category_component_error_id_maxlength">ID must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -18,9 +18,9 @@
           <mat-form-field>
             <mat-label i18n="@@new_code_category_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
-            <mat-error *ngIf="nameFormControl.errors && !nameFormControl.untouched">
-              <span *ngIf="nameFormControl.errors?.required" i18n="@@new_code_category_component_error_name_required">A name is required.</span>
-              <span *ngIf="nameFormControl.errors?.maxlength" i18n="@@new_code_category_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            <mat-error *ngIf="newCodeCategoryForm.get('name').errors && !newCodeCategoryForm.get('name').untouched">
+              <span *ngIf="newCodeCategoryForm.get('name').errors?.required" i18n="@@new_code_category_component_error_name_required">A name is required.</span>
+              <span *ngIf="newCodeCategoryForm.get('name').errors?.maxlength" i18n="@@new_code_category_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

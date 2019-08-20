@@ -117,7 +117,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeId)
     throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -140,7 +140,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -164,12 +164,12 @@ public class CodesWebService
   @XmlElement(required = true) String codeId)
     throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (codeId == null)
+    if (StringUtils.isEmpty(codeId))
     {
       throw new InvalidArgumentException("codeId");
     }
@@ -203,7 +203,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -224,7 +224,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -245,7 +245,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -283,7 +283,7 @@ public class CodesWebService
   @XmlElement(required = true) String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
   {
-    if (codeCategoryId == null)
+    if (StringUtils.isEmpty(codeCategoryId))
     {
       throw new InvalidArgumentException("codeCategoryId");
     }

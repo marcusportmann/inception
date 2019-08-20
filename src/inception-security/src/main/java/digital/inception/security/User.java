@@ -124,10 +124,9 @@ public class User
   /**
    * The password or password hash for the user.
    */
-  @ApiModelProperty(value = "The password or password hash for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Password", required = true)
-  @NotNull
+  @ApiModelProperty(value = "The password or password hash for the user")
+  @JsonProperty
+  @XmlElement(name = "Password")
   @Size(max = 4000)
   private String password;
 
@@ -136,10 +135,9 @@ public class User
    */
   @ApiModelProperty(
       value = "The number of failed authentication attempts as a result of an incorrect password for the user",
-      example = "0", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PasswordAttempts", required = true)
-  @NotNull
+      example = "0")
+  @JsonProperty
+  @XmlElement(name = "PasswordAttempts")
   private Integer passwordAttempts;
 
   /**

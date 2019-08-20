@@ -21,7 +21,7 @@ import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/
 import {Organization} from './organization';
 import {
   DuplicateUserError,
-  OrganizationNotFoundError, SecurityServiceError, UserDirectoryNotFoundError
+  OrganizationNotFoundError, SecurityServiceError, UserDirectoryNotFoundError, UserNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
@@ -35,13 +35,9 @@ import {User} from './user';
 import {UserDirectorySummary} from './user-directory-summary';
 import {UserSortBy} from './user-sort-by';
 import {UserDirectorySummaries} from './user-directory-summaries';
-import {Code} from '../codes/code';
 import {
-  CodeCategoryNotFoundError,
   CodesServiceError,
-  DuplicateCodeError
 } from '../codes/codes.service.errors';
-import {CodeCategory} from '../codes/code-category';
 
 /**
  * The Security Service implementation.
@@ -299,7 +295,7 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.status === 404) {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
+          return throwError(new UserNotFoundError(this.i18n({
             id: '@@security_service_the_user_could_not_be_found',
             value: 'The user could not be found.'
           }), apiError));
@@ -427,7 +423,6 @@ export class SecurityService {
     }));
   }
 
-
   /**
    * Retrieve the user directory summaries.
    *
@@ -485,4 +480,51 @@ export class SecurityService {
       }
     }));
   }
+
+  /**
+   * Update the user.
+   *
+   * @param user           The user to update.
+   * @param expirePassword Expire the user's password?
+   * @param lockUser       Lock the user?
+   *
+   * @return True if the user was updated successfully or false otherwise.
+   */
+  updateUser(user: User, expirePassword?: boolean, lockUser?: boolean): Observable<boolean> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('expirePassword',
+      expirePassword === undefined ? 'false' : (expirePassword ? 'true' : 'false'));
+    httpParams = httpParams.append(
+      'lockUser', lockUser === undefined ? 'false' : (lockUser ? 'true' : 'false'));
+
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(user.userDirectoryId) + '/users/' +
+      encodeURIComponent(user.username), user, {params: httpParams, observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_update_the_user',
+            value: 'Failed to update the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+
+
+
 }

@@ -74,6 +74,24 @@ export class SecurityServiceError extends Error {
 }
 
 /**
+ * The UserNotFoundError class holds the information for a user not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserNotFoundError extends Error {
+
+  /**
+   * Constructs a new UserNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The UserDirectoryNotFoundError class holds the information for a user directory not found error.
  *
  * @author Marcus Portmann
