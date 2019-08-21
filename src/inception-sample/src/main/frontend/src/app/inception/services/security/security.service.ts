@@ -58,7 +58,50 @@ export class SecurityService {
   }
 
   /**
-   * Create a user.
+   * Create the new organization.
+   *
+   * @param organization        The organization to create.
+   * @param createUserDirectory Should a new internal user directory be created for the
+   *                            organization?
+   *
+   * @return True if the organization was created successfully or false otherwise.
+   */
+  createOrganization(organization: Organization,
+                     createUserDirectory?: boolean): Observable<boolean> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.append('createUserDirectory',
+      createUserDirectory === undefined ? 'false' : (createUserDirectory ? 'true' : 'false'));
+
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/organizations',
+      organization, {params: httpParams, observe: 'response'}).pipe(
+      map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 409) {
+            return throwError(new DuplicateUserError(this.i18n({
+              id: '@@security_service_the_organization_already_exists',
+              value: 'An organization with the specified ID or name already exists.'
+            }), apiError));
+          } else {
+            return throwError(new CodesServiceError(this.i18n({
+              id: '@@security_service_failed_to_create_the_organization',
+              value: 'Failed to create the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Create the new user.
    *
    * @param user            The user to create.
    * @param expiredPassword Create the user with its password expired?
@@ -74,7 +117,8 @@ export class SecurityService {
       'userLocked', userLocked === undefined ? 'false' : (userLocked ? 'true' : 'false'));
 
     return this.httpClient.post<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(user.userDirectoryId) + '/users',
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      user.userDirectoryId) + '/users',
       user, {params: httpParams, observe: 'response'}).pipe(
       map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
@@ -152,7 +196,8 @@ export class SecurityService {
    */
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId),
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId),
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -168,6 +213,80 @@ export class SecurityService {
           return throwError(new SecurityServiceError(this.i18n({
             id: '@@security_service_failed_to_delete_the_user_directory',
             value: 'Failed to delete the user directory.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Delete the user.
+   *
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   * @param username        The username identifying the user.
+   *
+   * @return True if the user was deleted or false otherwise.
+   */
+  deleteUser(userDirectoryId: string, username: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId) + '/users/' + encodeURIComponent(username),
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new OrganizationNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_delete_the_user',
+            value: 'Failed to delete the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the organization.
+   *
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
+   *
+   * @return The organization.
+   */
+  getOrganization(organizationId: string): Observable<Organization> {
+    return this.httpClient.get<Organization>(
+      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId),
+      {reportProgress: true}).pipe(map((organization: Organization) => {
+      return organization;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new OrganizationNotFoundError(this.i18n({
+            id: '@@security_service_the_organization_could_not_be_found',
+            value: 'The organization could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_organization',
+            value: 'Failed to retrieve the organization.'
           }), apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -246,7 +365,8 @@ export class SecurityService {
    */
   getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) +
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId) +
       '/organizations', {reportProgress: true})
       .pipe(map((organizations: Organization[]) => {
         return organizations;
@@ -284,11 +404,9 @@ export class SecurityService {
    */
   getUser(userDirectoryId: string, username: string): Observable<User> {
     return this.httpClient.get<User>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) + '/users/' + encodeURIComponent(username),
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId) + '/users/' + encodeURIComponent(username),
       {reportProgress: true}).pipe(map((user: User) => {
-
-        console.log('user = ', user);
-
       return user;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -323,7 +441,8 @@ export class SecurityService {
    */
   getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId) +
+      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(
+      organizationId) +
       '/user-directory-summaries', {reportProgress: true})
       .pipe(map((codeCategories: UserDirectorySummary[]) => {
         return codeCategories;
@@ -390,7 +509,8 @@ export class SecurityService {
     }
 
     return this.httpClient.get<User[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId) + '/users', {
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId) + '/users', {
         observe: 'response',
         params,
         reportProgress: true,
@@ -482,6 +602,42 @@ export class SecurityService {
   }
 
   /**
+   * Update the organization.
+   *
+   * @param organization The organization to update.
+   *
+   * @return True if the organization was updated successfully or false otherwise.
+   */
+  updateOrganization(organization: Organization): Observable<boolean> {
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(
+      organization.id), organization, {observe: 'response'}).pipe(
+      map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_organization_could_not_be_found',
+              value: 'The organization could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_update_the_organization',
+              value: 'Failed to update the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
    * Update the user.
    *
    * @param user           The user to update.
@@ -498,33 +654,33 @@ export class SecurityService {
       'lockUser', lockUser === undefined ? 'false' : (lockUser ? 'true' : 'false'));
 
     return this.httpClient.put<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(user.userDirectoryId) + '/users/' +
-      encodeURIComponent(user.username), user, {params: httpParams, observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      user.userDirectoryId) + '/users/' +
+      encodeURIComponent(user.username), user, {params: httpParams, observe: 'response'}).pipe(
+      map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          if (apiError.status === 404) {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_user_could_not_be_found',
+              value: 'The user could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_update_the_user',
+              value: 'Failed to update the user.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_update_the_user',
-            value: 'Failed to update the user.'
-          }), apiError));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+      }));
   }
-
-
 
 
 }

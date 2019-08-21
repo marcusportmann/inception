@@ -127,31 +127,27 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
         })
       });
 
-    /*
     dialogRef.afterClosed()
       .pipe(first())
-      .subscribe((confirmation: boolean) => {
+      .subscribe((confirmation: boolean | undefined) => {
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.deleteUser(userId)
+          this.securityService.deleteUser(this.userDirectoryId, username)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.dataSource.load('', SortDirection.Ascending, 0, 10);
+              this.loadUsers();
             }, (error: Error) => {
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
                 (error instanceof SystemUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error: error}});
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
                 this.dialogService.showErrorDialog(error);
               }
             });
         }
       });
-
-     */
-
   }
 
   editUser(username: string): void {

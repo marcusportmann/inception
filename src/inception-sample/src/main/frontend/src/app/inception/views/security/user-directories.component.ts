@@ -94,7 +94,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
           this.securityService.deleteUserDirectory(userDirectoryId)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.dataSource.load('', SortDirection.Ascending, 0, 10);
+              this.loadUserDirectorySummaries();
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

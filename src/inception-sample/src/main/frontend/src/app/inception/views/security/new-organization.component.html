@@ -1,0 +1,30 @@
+<form [formGroup]="newOrganizationForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@new_organization_component_label_name">Name</mat-label>
+            <input type="text" matInput formControlName="name" required="true" autofocus>
+            <mat-error *ngIf="newOrganizationForm.get('name').errors && !newOrganizationForm.get('name').untouched">
+              <span *ngIf="newOrganizationForm.get('name').errors?.required" i18n="@@new_organization_component_error_name_required">A name is required.</span>
+              <span *ngIf="newOrganizationForm.get('name').errors?.maxlength" i18n="@@new_organization_component_error_name_maxlength">Name must not exceed 4000 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <checkbox-form-field>
+            <mat-label i18n="@@new_organization_component_label_options">Options</mat-label>
+            <mat-checkbox formControlName="createUserDirectory" i18n="@@new_organization_component_label_create_user_directory">Create User Directory?</mat-checkbox>
+          </checkbox-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_organization_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!newOrganizationForm.valid" (click)="onOK()" i18n="@@new_organization_component_button_ok">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

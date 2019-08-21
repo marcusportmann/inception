@@ -94,7 +94,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
           this.securityService.deleteOrganization(organizationId)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.dataSource.load('', SortDirection.Ascending, 0, 10);
+              this.loadOrganizations();
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -111,7 +111,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   editOrganization(organizationId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(organizationId)], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(organizationId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadOrganizations(): void {
@@ -131,7 +131,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   newOrganization(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new-organization'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {

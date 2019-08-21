@@ -37,6 +37,11 @@ import {EditUserTitleResolver} from './edit-user-title-resolver';
 import {UserTitleResolver} from './user-title-resolver';
 import {NewUserComponent} from './new-user.component';
 import {EditUserComponent} from './edit-user.component';
+import {NewOrganizationComponent} from './new-organization.component';
+import {NewOrganizationTitleResolver} from './new-organization-title-resolver';
+import {EditOrganizationComponent} from './edit-organization.component';
+import {EditOrganizationTitleResolver} from './edit-organization-title-resolver';
+import {OrganizationTitleResolver} from './organization-title-resolver';
 
 const routes: Routes = [{
   path: '',
@@ -62,6 +67,37 @@ const routes: Routes = [{
     data: {
       authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
     }
+  }, {
+    path: 'new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewOrganizationComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+    },
+    resolve: {
+      title: NewOrganizationTitleResolver
+    }
+  }, {
+    path: ':organizationId',
+    pathMatch: 'full',
+    redirectTo: ':organizationId/edit'
+  }, {
+    path: ':organizationId',
+    resolve: {
+      title: OrganizationTitleResolver
+    },
+    children: [{
+      path: 'edit',
+      canActivate: [CanActivateFunctionGuard],
+      component: EditOrganizationComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+      },
+      resolve: {
+        title: EditOrganizationTitleResolver
+      }
+    }]
   }]
 }, {
   path: 'users',
@@ -130,8 +166,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditUserComponent, NewUserComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
-  providers: [EditUserTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UsersTitleResolver, UserTitleResolver]
+  declarations: [EditOrganizationComponent, EditUserComponent, NewOrganizationComponent, NewUserComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
+  providers: [EditOrganizationTitleResolver, EditUserTitleResolver, NewOrganizationTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }
