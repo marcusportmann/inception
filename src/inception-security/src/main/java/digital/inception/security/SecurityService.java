@@ -106,6 +106,8 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * The Spring application context.
@@ -121,8 +123,6 @@ public class SecurityService
    * The ID generator.
    */
   private IDGenerator idGenerator;
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private Map<UUID, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -569,7 +569,7 @@ public class SecurityService
    */
   @Override
   public void createUserDirectory(UserDirectory userDirectory)
-    throws SecurityServiceException
+    throws DuplicateUserDirectoryException, SecurityServiceException
   {
     String createUserDirectorySQL = "INSERT INTO security.user_directories "
         + "(id, type_id, name, configuration) VALUES (?, ?, ?, ?)";
@@ -577,9 +577,17 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
     {
-      UUID userDirectoryId = idGenerator.nextUUID();
+      if (userDirectoryWithIdExists(connection, userDirectory.getId()))
+      {
+        throw new DuplicateUserDirectoryException(userDirectory.getId());
+      }
 
-      statement.setObject(1, userDirectoryId);
+      if (userDirectoryWithNameExists(connection, userDirectory.getName()))
+      {
+        throw new DuplicateUserDirectoryException(userDirectory.getName());
+      }
+
+      statement.setObject(1, userDirectory.getId());
       statement.setObject(2, userDirectory.getTypeId());
       statement.setString(3, userDirectory.getName());
       statement.setString(4, userDirectory.getConfiguration());
@@ -591,8 +599,6 @@ public class SecurityService
             createUserDirectorySQL));
       }
 
-      userDirectory.setId(userDirectoryId);
-
       try
       {
         reloadUserDirectories();
@@ -601,6 +607,10 @@ public class SecurityService
       {
         logger.error("Failed to reload the user directories", e);
       }
+    }
+    catch (DuplicateUserDirectoryException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -1562,60 +1572,6 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
-   * user directories the organization is associated with.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        organization
-   *
-   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
-   *         directories the organization is associated with
-   */
-  @Override
-  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    String getUserDirectoryIdsForOrganizationSQL =
-      "SELECT udtom.user_directory_id FROM security.user_directory_to_organization_map udtom "
-        + "WHERE udtom.organization_id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-        getUserDirectoryIdsForOrganizationSQL))
-    {
-      if (!organizationExists(connection, organizationId))
-      {
-        throw new OrganizationNotFoundException(organizationId);
-      }
-
-      statement.setObject(1, organizationId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UUID> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(UUID.fromString(rs.getString(1)));
-        }
-
-        return list;
-      }
-    }
-    catch (OrganizationNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-        "Failed to retrieve the IDs for the user directories associated with the organization (%s)",
-        organizationId), e);
-    }
-  }
-
-
-  /**
    * Retrieve the user directories the organization is associated with.
    *
    * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -1762,6 +1718,59 @@ public class SecurityService
     {
       throw new SecurityServiceException(String.format(
           "Failed to retrieve the user directory ID for the user (%s)", username), e);
+    }
+  }
+
+  /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) used to uniquely identify the
+   * user directories the organization is associated with.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   *
+   * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
+   *         directories the organization is associated with
+   */
+  @Override
+  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    String getUserDirectoryIdsForOrganizationSQL =
+        "SELECT udtom.user_directory_id FROM security.user_directory_to_organization_map udtom "
+        + "WHERE udtom.organization_id = ?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+          getUserDirectoryIdsForOrganizationSQL))
+    {
+      if (!organizationExists(connection, organizationId))
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+
+      statement.setObject(1, organizationId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        List<UUID> list = new ArrayList<>();
+
+        while (rs.next())
+        {
+          list.add(UUID.fromString(rs.getString(1)));
+        }
+
+        return list;
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the IDs for the user directories associated with the organization (%s)",
+          organizationId), e);
     }
   }
 
@@ -2668,6 +2677,72 @@ public class SecurityService
     {
       throw new SecurityServiceException(String.format(
           "Failed to check whether the user_directory (%s) exists", userDirectoryId), e);
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if a user directory with the specified ID exists or
+   * <code>false</code> otherwise.
+   *
+   * @param connection      the existing database connection to use
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return <code>true</code> if a user directory with the specified ID exists or
+   *         <code>false</code> otherwise
+   */
+  private boolean userDirectoryWithIdExists(Connection connection, UUID userDirectoryId)
+    throws SecurityServiceException
+  {
+    String userDirectoryWithIdExistsSQL =
+        "SELECT COUNT(id) FROM security.user_directories WHERE id = ?";
+
+    try (PreparedStatement statement = connection.prepareStatement(userDirectoryWithIdExistsSQL))
+    {
+      statement.setObject(1, userDirectoryId);
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next() && (rs.getInt(1) > 0);
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to check whether a user directory with the ID (%s) exists",
+          userDirectoryId.toString()), e);
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if a user directory with the specified name exists or
+   * <code>false</code> otherwise.
+   *
+   * @param connection the existing database connection to use
+   * @param name       the user directory name
+   *
+   * @return <code>true</code> if a user directory with the specified name exists or
+   *         <code>false</code> otherwise
+   */
+  private boolean userDirectoryWithNameExists(Connection connection, String name)
+    throws SecurityServiceException
+  {
+    String userDirectoryWithNameExistsSQL =
+        "SELECT COUNT(id) FROM security.user_directories WHERE (UPPER(name) LIKE ?)";
+
+    try (PreparedStatement statement = connection.prepareStatement(userDirectoryWithNameExistsSQL))
+    {
+      statement.setString(1, name.toUpperCase());
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        return rs.next() && (rs.getInt(1) > 0);
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to check whether a user directory with the name (%s) exists", name), e);
     }
   }
 }

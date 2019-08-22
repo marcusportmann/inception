@@ -189,6 +189,48 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Create the new user directory.
+   *
+   * @param userDirectory the user directory
+   */
+  @ApiOperation(value = "Create the user directory", notes = "Create the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The user directory was created successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 409,
+          message = "A user directory with the specified ID or name already exists",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories", method = RequestMethod.POST,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public void createUserDirectory(@ApiParam(name = "userDirectory", value = "The user directory",
+      required = true)
+  @RequestBody UserDirectory userDirectory)
+    throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException
+  {
+    if (userDirectory == null)
+    {
+      throw new InvalidArgumentException("userDirectory");
+    }
+
+    Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
+        userDirectory);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
+          constraintViolations));
+    }
+
+    securityService.createUserDirectory(userDirectory);
+  }
+
+  /**
    * Delete the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
@@ -579,6 +621,43 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   *
+   * @return the user directory
+   */
+  @ApiOperation(value = "Retrieve the user directory", notes = "Retrieve the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public UserDirectory getUserDirectory(@ApiParam(name = "userDirectoryId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
+  @PathVariable UUID userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    return securityService.getUserDirectory(userDirectoryId);
+  }
+
+  /**
    * Retrieve the summaries for the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
@@ -873,6 +952,64 @@ public class SecurityRestController extends SecureRestController
 
     securityService.updateUser(userDirectoryId, user, (expirePassword != null)
         && expirePassword, (lockUser != null) && lockUser);
+  }
+
+  /**
+   * Update the user directory.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
+   * @param userDirectory   the user directory
+   */
+  @ApiOperation(value = "Update the user directory", notes = "Update the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The user directory was updated successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public void updateUserDirectory(@ApiParam(name = "userDirectoryId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "userDirectory",
+      value = "The user directory", required = true)
+  @RequestBody UserDirectory userDirectory)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (userDirectory == null)
+    {
+      throw new InvalidArgumentException("userDirectory");
+    }
+
+    if (!userDirectory.getId().equals(userDirectoryId))
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
+        userDirectory);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
+          constraintViolations));
+    }
+
+    securityService.updateUserDirectory(userDirectory);
   }
 
   /**

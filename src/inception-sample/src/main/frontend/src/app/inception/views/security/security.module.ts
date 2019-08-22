@@ -42,6 +42,11 @@ import {NewOrganizationTitleResolver} from './new-organization-title-resolver';
 import {EditOrganizationComponent} from './edit-organization.component';
 import {EditOrganizationTitleResolver} from './edit-organization-title-resolver';
 import {OrganizationTitleResolver} from './organization-title-resolver';
+import {EditUserDirectoryComponent} from './edit-user-directory.component';
+import {NewUserDirectoryTitleResolver} from './new-user-directory-title-resolver';
+import {EditUserDirectoryTitleResolver} from './edit-user-directory-title-resolver';
+import {UserDirectoryTitleResolver} from './user-directory-title-resolver';
+import {NewUserDirectoryComponent} from './new-user-directory.component';
 
 const routes: Routes = [{
   path: '',
@@ -143,21 +148,51 @@ const routes: Routes = [{
       }
     }]
   }]
-},
-  {
-    path: 'user-directories',
+}, {
+  path: 'user-directories',
+  resolve: {
+    title: UserDirectoriesTitleResolver
+  },
+  children: [{
+    path: '',
+    canActivate: [CanActivateFunctionGuard],
+    component: UserDirectoriesComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+    }
+  }, {
+    path: 'new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewUserDirectoryComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+    },
     resolve: {
-      title: UserDirectoriesTitleResolver
+      title: NewUserDirectoryTitleResolver
+    }
+  }, {
+    path: ':userDirectoryId',
+    pathMatch: 'full',
+    redirectTo: ':userDirectoryId/edit'
+  }, {
+    path: ':userDirectoryId',
+    resolve: {
+      title: UserDirectoryTitleResolver
     },
     children: [{
-      path: '',
+      path: 'edit',
       canActivate: [CanActivateFunctionGuard],
-      component: UserDirectoriesComponent,
+      component: EditUserDirectoryComponent,
       data: {
         authorities: ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration']
+      },
+      resolve: {
+        title: EditUserDirectoryTitleResolver
       }
     }]
-  }
+  }]
+}
 ];
 
 @NgModule({
@@ -166,8 +201,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditOrganizationComponent, EditUserComponent, NewOrganizationComponent, NewUserComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
-  providers: [EditOrganizationTitleResolver, EditUserTitleResolver, NewOrganizationTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UsersTitleResolver, UserTitleResolver]
+  declarations: [EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
+  providers: [EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }

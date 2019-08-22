@@ -20,6 +20,42 @@ import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
 
 /**
+ * The DuplicateOrganizationError class holds the information for a duplicate organization error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateOrganizationError extends Error {
+
+  /**
+   * Constructs a new DuplicateOrganizationError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The DuplicateUserDirectoryError class holds the information for a duplicate user directory error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateUserDirectoryError extends Error {
+
+  /**
+   * Constructs a new DuplicateUserDirectoryError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The DuplicateUserError class holds the information for a duplicate user error.
  *
  * @author Marcus Portmann
@@ -74,6 +110,24 @@ export class SecurityServiceError extends Error {
 }
 
 /**
+ * The UserDirectoryNotFoundError class holds the information for a user directory not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserDirectoryNotFoundError extends Error {
+
+  /**
+   * Constructs a new UserDirectoryNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The UserNotFoundError class holds the information for a user not found error.
  *
  * @author Marcus Portmann
@@ -91,20 +145,4 @@ export class UserNotFoundError extends Error {
   }
 }
 
-/**
- * The UserDirectoryNotFoundError class holds the information for a user directory not found error.
- *
- * @author Marcus Portmann
- */
-export class UserDirectoryNotFoundError extends Error {
 
-  /**
-   * Constructs a new UserDirectoryNotFoundError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}

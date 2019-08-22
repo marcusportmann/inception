@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The OrganizationTitleResolver class provides the route data resolver that resolves the
- * title for the "Organization" route in the navigation hierarchy.
+ * The UserDirectoryTitleResolver class provides the route data resolver that resolves the
+ * title for the "User Directory" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class OrganizationTitleResolver implements Resolve<string> {
+export class UserDirectoryTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new OrganizationTitleResolver.
+   * Constructs a new UserDirectoryTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,7 +42,7 @@ export class OrganizationTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    // TODO: Retrieve the name of the organization and return here -- MARCUS
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('organizationId')!));
+    // TODO: Retrieve the name of the user directory and return here -- MARCUS
+    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('userDirectoryId')!));
   }
 }

@@ -40,7 +40,7 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-    reason = "An organization with the specified name already exists")
+    reason = "A user directory with the specified ID or name already exists")
 @WebFault(name = "DuplicateUserDirectoryException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
@@ -53,20 +53,21 @@ public class DuplicateUserDirectoryException extends ServiceException
   /**
    * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
-   * @param name the name of the organization
+   * @param name the name of the user directory
    */
   public DuplicateUserDirectoryException(String name)
   {
-    super(String.format("The organization with the name (%s) already exists", name));
+    super(String.format("The user directory with the name (%s) already exists", name));
   }
 
   /**
    * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   *           directory
    */
   public DuplicateUserDirectoryException(UUID id)
   {
-    super(String.format("The organization with the ID (%s) already exists", id.toString()));
+    super(String.format("The user directory with the ID (%s) already exists", id.toString()));
   }
 }

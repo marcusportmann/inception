@@ -131,7 +131,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
 
   newUserDirectory(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['new-user-directory'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
