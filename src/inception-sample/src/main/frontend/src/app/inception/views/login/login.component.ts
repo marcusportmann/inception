@@ -66,12 +66,12 @@ export class LoginComponent {
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private spinnerService: SpinnerService) {
-    // Initialise form controls
+    // Initialise the form controls
     this.passwordFormControl = new FormControl('Password1', Validators.required);
 
     this.usernameFormControl = new FormControl('Administrator', Validators.required);
 
-    // Initialise form
+    // Initialise the form
     this.loginForm = new FormGroup({
       username: this.usernameFormControl,
       password: this.passwordFormControl

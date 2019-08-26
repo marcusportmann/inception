@@ -51,7 +51,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editUserForm = new FormGroup({
       email: new FormControl('', [Validators.maxLength(4000)]),
       expirePassword: new FormControl(false),

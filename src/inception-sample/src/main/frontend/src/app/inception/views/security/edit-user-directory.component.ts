@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
-import {finalize, first} from 'rxjs/operators';
+import {finalize, first, pairwise, startWith} from 'rxjs/operators';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
@@ -29,6 +29,9 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserDirectory} from '../../services/security/user-directory';
+import {UserDirectoryType} from '../../services/security/user-directory-type';
+import {combineLatest, Subscription} from 'rxjs';
+import {UserDirectoryUtil} from '../../services/security/user-directory-util';
 
 /**
  * The EditUserDirectoryComponent class implements the edit user directory component.
@@ -39,22 +42,45 @@ import {UserDirectory} from '../../services/security/user-directory';
   templateUrl: 'edit-user-directory.component.html',
   styleUrls: ['edit-user-directory.component.css'],
 })
-export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit {
+export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+
+  private subscriptions: Subscription = new Subscription();
 
   editUserDirectoryForm: FormGroup;
 
   userDirectory?: UserDirectory;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+  userDirectoryTypes: UserDirectoryType[] = [];
+
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editUserDirectoryForm = new FormGroup({
-      name: new FormControl('',       [Validators.maxLength(4000)])
+      name: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      userDirectoryType: new FormControl('', [Validators.required])
     });
+
+    this.subscriptions.add(
+      this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
+        .pipe(startWith(null), pairwise())
+        .subscribe(
+        ([previousUserDirectoryTypeId, currentUserDirectoryTypeId]: [string, string]) => {
+          this.onUserDirectoryTypeSelected(previousUserDirectoryTypeId, currentUserDirectoryTypeId);
+        }));
+
+    // this.subscriptions.add(
+    //   this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges.subscribe(
+    //     (userDirectoryTypeId: string) => {
+    //
+    //       console.log('userDirectoryType value = ', userDirectoryTypeId);
+    //
+    //       this.onUserDirectoryTypeSelected(userDirectoryTypeId);
+    //     }));
   }
 
   get backNavigation(): BackNavigation {
@@ -76,15 +102,18 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     const userDirectoryId = decodeURIComponent(
       this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
-    // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getUserDirectory(userDirectoryId)
+    combineLatest([
+      this.securityService.getUserDirectoryTypes(),
+      this.securityService.getUserDirectory(userDirectoryId)
+    ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectory: UserDirectory) => {
-        this.userDirectory = userDirectory;
-
-        this.editUserDirectoryForm.get('name')!.setValue(userDirectory.name);
+      .subscribe((results: [UserDirectoryType[], UserDirectory]) => {
+        this.userDirectoryTypes = results[0];
+        this.userDirectory = results[1];
+        this.editUserDirectoryForm.get('name')!.setValue(results[1].name);
+        this.editUserDirectoryForm.get('userDirectoryType')!.setValue(results[1].typeId);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -95,6 +124,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
           this.dialogService.showErrorDialog(error);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   onCancel(): void {
@@ -127,4 +160,44 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
         });
     }
   }
+
+  onUserDirectoryTypeSelected(previousUserDirectoryTypeId: string, currentUserDirectoryTypeId: string): void {
+    // Clear the user directory parameters if required
+    if (!!previousUserDirectoryTypeId) {
+      this.userDirectory!.parameters = [];
+    }
+
+    // Remove the controls for the user directory types
+    this.editUserDirectoryForm.removeControl('internalUserDirectory');
+    this.editUserDirectoryForm.removeControl('ldapUserDirectory');
+
+    // Add the appropriate control for the user directory type that was selected
+    if (currentUserDirectoryTypeId === 'b43fda33-d3b0-4f80-a39a-110b8e530f4f') {
+      const state = {
+        maxPasswordAttempts: UserDirectoryUtil.hasParameter(this.userDirectory!,
+          'MaxPasswordAttempts') ? UserDirectoryUtil.getParameter(this.userDirectory!,
+          'MaxPasswordAttempts') : '',
+        passwordExpiryMonths: UserDirectoryUtil.hasParameter(this.userDirectory!,
+          'PasswordExpiryMonths') ? UserDirectoryUtil.getParameter(this.userDirectory!,
+          'PasswordExpiryMonths') : '',
+        passwordHistoryMonths: UserDirectoryUtil.hasParameter(this.userDirectory!,
+          'PasswordHistoryMonths') ? UserDirectoryUtil.getParameter(this.userDirectory!,
+          'PasswordHistoryMonths') : '',
+        maxFilteredUsers: UserDirectoryUtil.hasParameter(this.userDirectory!,
+          'MaxFilteredUsers') ? UserDirectoryUtil.getParameter(this.userDirectory!,
+          'MaxFilteredUsers') : ''
+      };
+
+      this.editUserDirectoryForm.addControl('internalUserDirectory', new FormControl(state));
+
+    } else if (currentUserDirectoryTypeId === 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e') {
+      // TODO: Construct the form control state from the user directory parameters
+
+      this.editUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
+    }
+
+    this.changeDetectorRef.detectChanges();
+  }
+
+
 }

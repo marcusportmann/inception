@@ -53,10 +53,10 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.newOrganizationForm = new FormGroup({
       createUserDirectory: new FormControl(false),
-      name: new FormControl('',       [Validators.maxLength(4000)])
+      name: new FormControl('',       [Validators.required, Validators.maxLength(4000)])
     });
   }
 

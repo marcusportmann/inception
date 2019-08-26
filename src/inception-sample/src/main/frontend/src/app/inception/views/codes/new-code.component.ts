@@ -56,7 +56,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.newCodeForm = new FormGroup({
       id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       name: new FormControl('', [Validators.required, Validators.maxLength(100)]),

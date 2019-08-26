@@ -45,10 +45,10 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
-    // Initialise form controls
+    // Initialise the form controls
     this.organizationFormControl = new FormControl('', Validators.required);
 
-    // Initialise form
+    // Initialise the form
     this.selectOrganizationForm = new FormGroup({
       organization: this.organizationFormControl
     });

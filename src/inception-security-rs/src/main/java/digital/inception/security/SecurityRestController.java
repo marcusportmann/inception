@@ -754,6 +754,28 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the user directory types.
+   *
+   * @return the user directory types
+   */
+  @ApiOperation(value = "Retrieve the user directory types",
+      notes = "Retrieve the user directory types")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directory-types", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public List<UserDirectoryType> getUserDirectoryTypes()
+    throws SecurityServiceException
+  {
+    return securityService.getUserDirectoryTypes();
+  }
+
+  /**
    * Retrieve the users.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the

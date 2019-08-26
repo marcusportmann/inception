@@ -16,24 +16,84 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>UserDirectoryType</code> class holds the information for a user directory type.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "UserDirectoryType")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "name", "userDirectoryClassName" })
+@XmlRootElement(name = "UserDirectoryType", namespace = "http://security.inception.digital")
+@XmlType(name = "UserDirectoryType", namespace = "http://security.inception.digital",
+    propOrder = { "id", "name", "userDirectoryClassName" })
+@XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectoryType
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory type",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
   private UUID id;
+
+  /**
+   * The name of the user directory type.
+   */
+  @ApiModelProperty(value = "The name of the user directory type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
   private String name;
+
+  /**
+   * The Java class that implements the user directory type.
+   */
   private transient Class userDirectoryClass;
+
+  /**
+   * The fully qualified name of the Java class that implements the user directory type.
+   */
+  @ApiModelProperty(
+      value = "The fully qualified name of the Java class that implements the user directory type",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "UserDirectoryClassName", required = true)
+  @NotNull
+  @Size(min = 1, max = 4000)
   private String userDirectoryClassName;
+
+  /**
+   * Constructs a new <code>UserDirectoryType</code>.
+   */
+  public UserDirectoryType() {}
 
   /**
    * Constructs a new <code>UserDirectoryType</code>.

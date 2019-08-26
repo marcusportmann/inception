@@ -51,7 +51,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.newCodeCategoryForm = new FormGroup({
       data: new FormControl(''),
       id: new FormControl('', [Validators.required, Validators.maxLength(100)]),

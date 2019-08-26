@@ -53,7 +53,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.newUserForm = new FormGroup({
       confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
       email: new FormControl('', [Validators.maxLength(4000)]),

@@ -55,14 +55,14 @@ export class SendErrorReportComponent implements OnInit {
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private errorService: ErrorService,
               private spinnerService: SpinnerService) {
-    // Initialise form controls
+    // Initialise the form controls
     this.emailFormControl = new FormControl('', Validators.email);
 
     this.feedbackFormControl = new FormControl('');
 
     this.messageFormControl = new FormControl('');
 
-    // Initialise form
+    // Initialise the form
     this.sendErrorReportForm = new FormGroup({
       message: this.messageFormControl,
       email: this.emailFormControl,

@@ -51,7 +51,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editCodeForm = new FormGroup({
       id: new FormControl({value: '', disabled: true},
         [Validators.required, Validators.maxLength(100)]),

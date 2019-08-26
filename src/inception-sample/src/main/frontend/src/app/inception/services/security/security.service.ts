@@ -37,6 +37,9 @@ import {UserDirectorySummary} from './user-directory-summary';
 import {UserSortBy} from './user-sort-by';
 import {UserDirectorySummaries} from './user-directory-summaries';
 import {UserDirectory} from './user-directory';
+import {CodeCategory} from '../codes/code-category';
+import {CodesServiceError} from '../codes/codes.service.errors';
+import {UserDirectoryType} from './user-directory-type';
 
 /**
  * The Security Service implementation.
@@ -532,6 +535,32 @@ export class SecurityService {
               value: 'Failed to retrieve the summaries for the user directories associated with the organization.'
             }), apiError));
           }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the user directory types.
+   *
+   * @return The user directory types.
+   */
+  getUserDirectoryTypes(): Observable<UserDirectoryType[]> {
+    return this.httpClient.get<UserDirectoryType[]>(
+      environment.securityServiceUrlPrefix + '/user-directory-types', {reportProgress: true})
+      .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
+        return userDirectoryTypes;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_user_directory_types',
+            value: 'Failed to retrieve the user directory types.'
+          }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {

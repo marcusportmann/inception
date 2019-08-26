@@ -47,6 +47,8 @@ import {NewUserDirectoryTitleResolver} from './new-user-directory-title-resolver
 import {EditUserDirectoryTitleResolver} from './edit-user-directory-title-resolver';
 import {UserDirectoryTitleResolver} from './user-directory-title-resolver';
 import {NewUserDirectoryComponent} from './new-user-directory.component';
+import {InternalUserDirectoryComponent} from './internal-user-directory.component';
+import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
 
 const routes: Routes = [{
   path: '',
@@ -201,7 +203,7 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
+  declarations: [EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
   providers: [EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {

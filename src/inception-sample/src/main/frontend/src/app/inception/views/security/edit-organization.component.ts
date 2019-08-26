@@ -54,9 +54,9 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editOrganizationForm = new FormGroup({
-      name: new FormControl('',       [Validators.maxLength(4000)])
+      name: new FormControl('',       [Validators.required, Validators.maxLength(4000)])
     });
   }
 

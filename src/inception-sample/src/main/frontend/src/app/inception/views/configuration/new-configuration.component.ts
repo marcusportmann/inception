@@ -51,7 +51,7 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.newConfigurationForm = new FormGroup({
       description: new FormControl('', [Validators.maxLength(4000)]),
       key: new FormControl('', [Validators.required, Validators.maxLength(4000)]),

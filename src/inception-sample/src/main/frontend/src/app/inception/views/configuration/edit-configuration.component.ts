@@ -51,7 +51,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editConfigurationForm = new FormGroup({
       description: new FormControl(''),
       key: new FormControl({value: '', disabled: true},

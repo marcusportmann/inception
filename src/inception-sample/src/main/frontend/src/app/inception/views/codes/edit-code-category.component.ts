@@ -51,7 +51,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
               private spinnerService: SpinnerService) {
     super();
 
-    // Initialise form
+    // Initialise the form
     this.editCodeCategoryForm = new FormGroup({
       data: new FormControl(''),
       id: new FormControl({value: '', disabled: true},       [Validators.required, Validators.maxLength(100)]),
