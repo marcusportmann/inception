@@ -1,0 +1,116 @@
+dn: uid=sample,ou=users,ou=sample,ou=applications,o=sample
+changetype: delete
+
+dn: ou=users,ou=sample,ou=applications,o=sample
+changetype: delete
+
+dn: cn=sample,ou=groups,ou=sample,ou=applications,o=sample
+changetype: delete
+
+dn: ou=groups,ou=sample,ou=applications,o=sample
+changetype: delete
+
+dn: ou=sample,ou=applications,o=sample
+changetype: delete
+
+dn: ou=applications,o=sample
+changetype: delete
+
+dn: uid=sample_service_account,ou=service_accounts,o=sample
+changetype: delete
+
+dn: ou=service_accounts,o=sample
+changetype: delete
+
+dn: cn=admins,o=sample
+changetype: delete
+
+dn: uid=admin,o=sample
+changetype: delete
+
+dn: o=sample
+changetype: add
+objectClass: top
+objectClass: organization
+o: Sample
+
+dn: uid=admin,o=sample
+changetype: add
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: person
+objectClass: organizationalPerson
+uid: test
+userPassword: Password1
+cn: Administrator
+givenName: Administrator
+sn: Administrator
+
+dn: cn=admins,o=sample
+changetype: add
+objectclass: groupOfNames
+objectclass: top
+member: uid=admin,o=sample
+cn: admins
+
+dn: ou=service_accounts,o=sample
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: service_accounts
+
+dn: ou=applications,o=sample
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: applications
+
+dn: uid=sample_service_account,ou=service_accounts,o=sample
+changetype: add
+objectclass: inetOrgPerson
+objectclass: person
+objectclass: top
+objectclass: organizationalPerson
+userpassword: Password1
+uid: sample_service_account
+cn: Sample Service Account
+sn: Sample Service Account
+
+dn: ou=sample,ou=applications, o=sample
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: test
+
+dn: ou=users,ou=sample,ou=applications,o=sample
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: users
+
+dn: uid=sample,ou=users,ou=sample,ou=applications,o=sample
+changetype: add
+objectclass: inetOrgPerson
+objectclass: person
+objectclass: top
+objectclass: organizationalPerson
+givenname: FirstName
+sn: LastName
+userpassword: Password1
+mail: sample@sample.com
+uid: sample
+cn: FirstName LastName
+
+dn: ou=groups,ou=sample,ou=applications,o=sample
+changetype: add
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+dn: cn=sample,ou=groups,ou=sample,ou=applications,o=sample
+changetype: add
+objectclass: groupOfNames
+objectclass: top
+description: Sample Group
+member: uid=sample,ou=users,ou=sample,ou=applications,o=sample
+cn: sample
