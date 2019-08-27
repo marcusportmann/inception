@@ -82,12 +82,12 @@ public class SecurityService
    * The ID used to uniquely identify the internal user directory type.
    */
   public static final String INTERNAL_USER_DIRECTORY_TYPE_ID =
-      "b43fda33-d3b0-4f80-a39a-110b8e530f4f";
+      "InternalUserDirectory";
 
   /**
    * The ID used to uniquely identify the LDAP user directory type.
    */
-  public static final String LDAP_USER_DIRECTORY_TYPE_ID = "e5741a89-c87b-4406-8a60-2cc0b0a5fa3e";
+  public static final String LDAP_USER_DIRECTORY_TYPE_ID = "LDAPUserDirectory";
 
   /**
    * The maximum number of filtered organizations.
@@ -365,20 +365,19 @@ public class SecurityService
 
   {
     String createFunctionSQL =
-        "INSERT INTO security.functions (id, code, name, description) VALUES (?, ?, ?, ?)";
+        "INSERT INTO security.functions (code, name, description) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createFunctionSQL))
     {
-      if (getFunctionId(connection, function.getCode()) != null)
+      if (functionExists(connection, function.getCode()))
       {
         throw new DuplicateFunctionException(function.getCode());
       }
 
-      statement.setObject(1, UUID.fromString(function.getId()));
-      statement.setString(2, function.getCode());
-      statement.setString(3, function.getName());
-      statement.setString(4, function.getDescription());
+      statement.setString(1, function.getCode());
+      statement.setString(2, function.getName());
+      statement.setString(3, function.getDescription());
 
       if (statement.executeUpdate() != 1)
       {
@@ -479,7 +478,7 @@ public class SecurityService
           try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
           {
             statement.setObject(1, UUID.fromString(userDirectory.getId()));
-            statement.setObject(2, UUID.fromString(userDirectory.getTypeId()));
+            statement.setString(2, userDirectory.getTypeId());
             statement.setString(3, userDirectory.getName());
             statement.setString(4, userDirectory.getConfiguration());
 
@@ -579,7 +578,7 @@ public class SecurityService
       }
 
       statement.setObject(1, UUID.fromString(userDirectory.getId()));
-      statement.setObject(2, UUID.fromString(userDirectory.getTypeId()));
+      statement.setString(2, userDirectory.getTypeId());
       statement.setString(3, userDirectory.getName());
       statement.setString(4, userDirectory.getConfiguration());
 
@@ -613,10 +612,10 @@ public class SecurityService
   /**
    * Delete the authorised function.
    *
-   * @param code the code identifying the authorised function
+   * @param functionCode the code used to uniquely identify the function
    */
   @Override
-  public void deleteFunction(String code)
+  public void deleteFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
     String deleteFunctionSQL = "DELETE FROM security.functions WHERE code=?";
@@ -624,12 +623,12 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
     {
-      if (getFunctionId(connection, code) == null)
+      if (!functionExists(connection, functionCode))
       {
-        throw new FunctionNotFoundException(code);
+        throw new FunctionNotFoundException(functionCode);
       }
 
-      statement.setString(1, code);
+      statement.setString(1, functionCode);
 
       if (statement.executeUpdate() <= 0)
       {
@@ -644,7 +643,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the function (%s)", code),
+      throw new SecurityServiceException(String.format("Failed to delete the function (%s)", functionCode),
           e);
     }
   }
@@ -795,23 +794,23 @@ public class SecurityService
   /**
    * Retrieve the authorised function.
    *
-   * @param code the code identifying the function
+   * @param functionCode the code used to uniquely identify the function
    *
    * @return the authorised function
    */
   @Override
-  public Function getFunction(String code)
+  public Function getFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
     String getFunctionSQL =
-        "SELECT id, code, name, description FROM security.functions WHERE code=?";
+        "SELECT code, name, description FROM security.functions WHERE code=?";
 
     try
     {
       try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(getFunctionSQL))
       {
-        statement.setString(1, code);
+        statement.setString(1, functionCode);
 
         try (ResultSet rs = statement.executeQuery())
         {
@@ -821,7 +820,7 @@ public class SecurityService
           }
           else
           {
-            throw new FunctionNotFoundException(code);
+            throw new FunctionNotFoundException(functionCode);
           }
         }
       }
@@ -833,7 +832,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format("Failed to retrieve the function (%s)",
-          code), e);
+          functionCode), e);
     }
   }
 
@@ -868,7 +867,7 @@ public class SecurityService
   public List<Function> getFunctions()
     throws SecurityServiceException
   {
-    String getFunctionsSQL = "SELECT id, code, name, description FROM security.functions";
+    String getFunctionsSQL = "SELECT code, name, description FROM security.functions";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getFunctionsSQL))
@@ -2122,7 +2121,7 @@ public class SecurityService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
     {
-      if (getFunctionId(connection, function.getCode()) == null)
+      if (!functionExists(connection, function.getCode()))
       {
         throw new FunctionNotFoundException(function.getCode());
       }
@@ -2285,11 +2284,10 @@ public class SecurityService
   {
     Function function = new Function();
 
-    function.setId(rs.getString(1));
-    function.setCode(rs.getString(2));
-    function.setName(rs.getString(3));
+    function.setCode(rs.getString(1));
+    function.setName(rs.getString(2));
 
-    String description = rs.getString(4);
+    String description = rs.getString(3);
 
     function.setDescription(StringUtils.isEmpty(description)
         ? ""
@@ -2360,32 +2358,32 @@ public class SecurityService
   }
 
   /**
-   * Returns the ID used to uniquely identify the function with the specified code.
+   * Returns whether a function with the specified ID already exists.
    *
-   * @param connection the existing database connection to use
-   * @param code       the code uniquely identifying the function
+   * @param connection   the existing database connection to use
+   * @param functionCode the code used to uniquely identify the function
    *
-   * @return the ID used to uniquely identify the function or <code>null</code> if a function with
-   *         the specified code cannot be found
+   * @return <code>true</code> if a function with the specified code already exists or
+   *         <code>false</code> otherwise
    */
-  private String getFunctionId(Connection connection, String code)
+  private boolean functionExists(Connection connection, String functionCode)
     throws SQLException
   {
-    String getFunctionIdSQL = "SELECT id FROM security.functions WHERE code=?";
+    String getFunctionCodeSQL = "SELECT code FROM security.functions WHERE code=?";
 
-    try (PreparedStatement statement = connection.prepareStatement(getFunctionIdSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodeSQL))
     {
-      statement.setString(1, code);
+      statement.setString(1, functionCode);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return rs.getString(1);
+          return true;
         }
         else
         {
-          return null;
+          return false;
         }
       }
     }
@@ -2461,7 +2459,7 @@ public class SecurityService
     UserDirectory userDirectory = new UserDirectory();
 
     userDirectory.setId(idGenerator.nextUUID().toString());
-    userDirectory.setTypeId("b43fda33-d3b0-4f80-a39a-110b8e530f4f");
+    userDirectory.setTypeId("InternalUserDirectory");
     userDirectory.setName(organization.getName() + " Internal User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "

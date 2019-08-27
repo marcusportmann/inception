@@ -177,9 +177,9 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.editUserDirectoryForm.removeControl('ldapUserDirectory');
 
     // Add the appropriate control for the user directory type that was selected
-    if (currentUserDirectoryTypeId === 'b43fda33-d3b0-4f80-a39a-110b8e530f4f') {
+    if (currentUserDirectoryTypeId === 'InternalUserDirectory') {
       this.editUserDirectoryForm.addControl('internalUserDirectory', new FormControl(''));
-    } else if (currentUserDirectoryTypeId === 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e') {
+    } else if (currentUserDirectoryTypeId === 'LDAPUserDirectory') {
       this.editUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
     }
 

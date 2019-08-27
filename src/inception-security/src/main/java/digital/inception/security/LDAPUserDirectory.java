@@ -126,6 +126,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private LdapName userBaseDN;
   private String userEmailAttribute;
   private String userFirstNameAttribute;
+  private String userFullNameAttribute;
   private String userLastNameAttribute;
   private String userMobileNumberAttribute;
   private String userObjectClass;
@@ -133,7 +134,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userPasswordHistoryAttribute;
   private String[] userPasswordHistoryAttributeArray;
   private String userPasswordLastChangedAttribute;
-  private String userFullNameAttribute;
   private String userPhoneNumberAttribute;
   private String userUsernameAttribute;
 
@@ -281,13 +281,13 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (UserDirectoryParameter.contains(parameters, "UserFullNameAttribute"))
       {
         userFullNameAttribute = UserDirectoryParameter.getStringValue(parameters,
-          "UserFullNameAttribute");
+            "UserFullNameAttribute");
       }
       else
       {
         throw new SecurityServiceException(String.format(
-          "No UserFullNameAttribute parameter found for the user directory (%s)",
-          userDirectoryId));
+            "No UserFullNameAttribute parameter found for the user directory (%s)",
+            userDirectoryId));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserPhoneNumberAttribute"))
@@ -1349,7 +1349,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
        *       supported by H2.
        */
       String getFunctionCodesForGroupsSQL = "SELECT DISTINCT f.code FROM security.functions f "
-          + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_id = f.id "
+          + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_code = f.code "
           + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = ftrm.role_id "
           + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
 
@@ -1799,19 +1799,19 @@ public class LDAPUserDirectory extends UserDirectoryBase
       }
 
       /*
-       * Build the SQL statement used to retrieve the function codes associated with the LDAP
-       * groups the user is a member of.
+       * Build the SQL statement used to retrieve the roles associated with the LDAP groups the
+       * user is a member of.
        *
        * NOTE: This is not the ideal solution as a carefully crafted group name in the LDAP
        *       directory can be used to perpetrate a SQL injection attack. A better option
        *       would to be to use the ANY operator in the WHERE clause but this is not
        *       supported by H2.
        */
-      String getFunctionCodesForGroupsSQL = "SELECT DISTINCT r.name FROM security.roles r "
+      String getRoleNamesForGroupsSQL = "SELECT DISTINCT r.name FROM security.roles r "
           + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
           + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
 
-      StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
+      StringBuilder buffer = new StringBuilder(getRoleNamesForGroupsSQL);
       buffer.append(" WHERE g.user_directory_id='").append(getUserDirectoryId());
       buffer.append("' AND g.groupname IN (");
 
@@ -2369,7 +2369,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       if (!StringUtils.isEmpty(userFullNameAttribute))
       {
         modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-          userFullNameAttribute, (StringUtils.isEmpty(user.getFirstName())
+            userFullNameAttribute, (StringUtils.isEmpty(user.getFirstName())
             ? ""
             : user.getFirstName()) + ((!StringUtils.isEmpty(user.getFirstName())
                 && (!StringUtils.isEmpty(user.getLastName())))
@@ -2490,8 +2490,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
     User user = new User();
 
-    user.setId(new LdapName(searchResult.getNameInNamespace()
-      .toLowerCase()).toString());    user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
+    user.setId(new LdapName(searchResult.getNameInNamespace().toLowerCase()).toString());
+    user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setReadOnly(readOnly);
     user.setPassword("");
@@ -2836,9 +2836,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
           && (user.getPasswordAttempts() != null)
           && (user.getPasswordAttempts() != -1))
       {
-        dirContext.modifyAttributes(user.getId(), new ModificationItem[] {
-            new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userPasswordFailuresAttribute, String.valueOf(user.getPasswordAttempts() + 1))) });
+        dirContext.modifyAttributes(user.getId(), new ModificationItem[] { new ModificationItem(
+            DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPasswordFailuresAttribute,
+            String.valueOf(user.getPasswordAttempts() + 1))) });
       }
     }
     catch (Throwable e)

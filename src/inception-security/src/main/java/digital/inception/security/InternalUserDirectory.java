@@ -1767,7 +1767,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     throws SQLException
   {
     String getFunctionCodesForUserIdSQL = "SELECT DISTINCT f.code FROM security.functions f "
-        + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_id = f.id "
+        + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_code = f.code "
         + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = ftrm.role_id "
         + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
         + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
@@ -1911,7 +1911,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
         + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
 
-    List<String> functionCodes = new ArrayList<>();
+    List<String> roleNames = new ArrayList<>();
 
     try (PreparedStatement statement = connection.prepareStatement(getRoleNamesForUserIdSQL))
     {
@@ -1921,10 +1921,10 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         while (rs.next())
         {
-          functionCodes.add(rs.getString(1));
+          roleNames.add(rs.getString(1));
         }
 
-        return functionCodes;
+        return roleNames;
       }
     }
   }

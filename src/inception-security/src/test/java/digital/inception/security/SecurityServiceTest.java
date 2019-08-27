@@ -500,7 +500,7 @@ public class SecurityServiceTest
   {
     Function function = getTestFunctionDetails();
 
-    Function copyFunction = new Function(function.getId(), function.getCode(), function.getName(),
+    Function copyFunction = new Function(function.getCode(), function.getName(),
         function.getDescription());
 
     compareFunctions(function, copyFunction);
@@ -581,9 +581,8 @@ public class SecurityServiceTest
     List<String> functionCodesForUser = securityService.getFunctionCodesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
-    assertEquals("The correct number of function codes (" + 0
-        + ") was not retrieved for the user (" + user.getUsername() + ")", 0,
-        functionCodesForUser.size());
+    assertEquals("The correct number of function codes (" + 0 + ") was not retrieved for the user ("
+        + user.getUsername() + ")", 0, functionCodesForUser.size());
   }
 
   /**
@@ -709,7 +708,7 @@ public class SecurityServiceTest
 //  assertEquals("The correct number of function codes (1) was not retrieved for the group ("
 //      + group.getGroupName() + ")", 1, functionCodes.size());
 //  assertEquals("The function (" + function.getCode() + ") was not assigned to the group ("
-//      + group.getGroupName() + ")", function.getCode(), functionCodes.get(0));
+//      + group.getGroupName() + ")", function.getId(), functionCodes.get(0));
 //  securityService.revokeFunctionForGroup(group.getGroupName(), function.getCode());
 //  functionCodes = securityService.getFunctionCodesForGroup(group.getGroupName());
 //  assertEquals("The correct number of function codes (0) was not retrieved for the group ("
@@ -914,8 +913,8 @@ public class SecurityServiceTest
         "The correct number of organizations (1) was not retrieved for the user directory", 1,
         organizationsForUserDirectory.size());
 
-    List<String> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
-        userDirectory.getId());
+    List<String> organizationIdsForUserDirectory =
+        securityService.getOrganizationIdsForUserDirectory(userDirectory.getId());
 
     assertEquals(
         "The correct number of organization IDs (1) was not retrieved for the user directory", 1,
@@ -1137,8 +1136,7 @@ public class SecurityServiceTest
 
     Function function = new Function();
 
-    function.setId(UUID.randomUUID().toString());
-    function.setCode("Test Function Code " + functionCount);
+    function.setCode("TestFunctionCode" + functionCount);
     function.setName("Test Function Name " + functionCount);
     function.setDescription("Test Function Description " + functionCount);
 
@@ -1160,8 +1158,8 @@ public class SecurityServiceTest
   {
     organizationCount++;
 
-    return new Organization(UUID.randomUUID().toString(), "Test Organization Name " + organizationCount,
-        OrganizationStatus.ACTIVE);
+    return new Organization(UUID.randomUUID().toString(), "Test Organization Name "
+        + organizationCount, OrganizationStatus.ACTIVE);
   }
 
   private static synchronized User getTestUserDetails()
@@ -1209,11 +1207,9 @@ public class SecurityServiceTest
   private void compareFunctions(Function function1, Function function2)
   {
     assertEquals("The code values for the two functions do not match", function1.getCode(),
-        function2.getCode());
+      function2.getCode());
     assertEquals("The description values for the two functions do not match",
         function1.getDescription(), function2.getDescription());
-    assertEquals("The ID values for the two functions do not match", function1.getId(),
-        function2.getId());
     assertEquals("The name values for the two functions do not match", function1.getName(),
         function2.getName());
   }

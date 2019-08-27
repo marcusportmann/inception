@@ -87,7 +87,7 @@ public abstract class SecureRestController
    * function.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param functionCode   the function code identifying the function
+   * @param functionCode   the code used to uniquely identify the function
    *
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *         the function identified by the specified function code or <code>false</code> otherwise

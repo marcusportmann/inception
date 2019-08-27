@@ -57,6 +57,6 @@ public class DuplicateOrganizationException extends ServiceException
    */
   public DuplicateOrganizationException(String idOrName)
   {
-    super(String.format("The organization (%s) already exists", idOrName));
+    super(String.format("An organization with the ID or name (%s) already exists", idOrName));
   }
 }

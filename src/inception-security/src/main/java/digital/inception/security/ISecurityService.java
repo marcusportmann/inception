@@ -131,9 +131,9 @@ public interface ISecurityService
   /**
    * Delete the authorised function.
    *
-   * @param code the code identifying the authorised function
+   * @param functionCode the code used to uniquely identify the function
    */
-  void deleteFunction(String code)
+  void deleteFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException;
 
   /**
@@ -185,11 +185,11 @@ public interface ISecurityService
   /**
    * Retrieve the authorised function.
    *
-   * @param code the code identifying the function
+   * @param functionCode the code used to uniquely identify the function
    *
    * @return the authorised function
    */
-  Function getFunction(String code)
+  Function getFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException;
 
   /**

@@ -49,10 +49,10 @@ public class FunctionNotFoundException extends ServiceException
   /**
    * Constructs a new <code>FunctionNotFoundException</code>.
    *
-   * @param code the code identifying the authorised function
+   * @param functionCode the code used to uniquely identify the function
    */
-  public FunctionNotFoundException(String code)
+  public FunctionNotFoundException(String functionCode)
   {
-    super(String.format("A function with the code (%s) could not be found", code));
+    super(String.format("A function with the code (%s) could not be found", functionCode));
   }
 }

@@ -119,14 +119,14 @@ export class Session {
   }
 
   /**
-   * Confirm that the user associated with the session has access to the specified function code.
+   * Confirm that the user associated with the session has access to the specified function.
    *
-   * @param functionCode The function code.
+   * @param functionCode The code used to uniquely identify the function.
    *
-   * @return True if the user associated with the session has access to the specified function code
+   * @return True if the user associated with the session has access to the specified function
    *         or false otherwise.
    */
-  hasFunctionCode(functionCode: string): boolean {
+  hasFunction(functionCode: string): boolean {
     return this.hasAuthority('FUNCTION_' + functionCode);
   }
 

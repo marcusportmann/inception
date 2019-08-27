@@ -57,6 +57,6 @@ public class DuplicateUserDirectoryException extends ServiceException
    */
   public DuplicateUserDirectoryException(String idOrName)
   {
-    super(String.format("The user directory (%s) already exists", idOrName));
+    super(String.format("A user directory with the ID or name (%s) already exists", idOrName));
   }
 }

@@ -675,9 +675,9 @@ GO
 
 
 CREATE TABLE "SECURITY"."USER_DIRECTORY_TYPES" (
-  id                   UNIQUEIDENTIFIER NOT NULL,
-  name                 NVARCHAR(256)    NOT NULL,
-  user_directory_class NVARCHAR(1024)   NOT NULL,
+  id                   NVARCHAR(100)   NOT NULL,
+  name                 NVARCHAR(100)   NOT NULL,
+  user_directory_class NVARCHAR(1000)  NOT NULL,
 
   PRIMARY KEY (id)
 );
@@ -698,8 +698,8 @@ EXEC sys.sp_addextendedproperty
 
 CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
   id      UNIQUEIDENTIFIER NOT NULL,
-  type_id UNIQUEIDENTIFIER NOT NULL,
-  name    NVARCHAR(256)    NOT NULL,
+  type_id NVARCHAR(100)    NOT NULL,
+  name    NVARCHAR(100)    NOT NULL,
   config  NVARCHAR(MAX)    NOT NULL,
 
   PRIMARY KEY (id),
@@ -939,22 +939,15 @@ DELETE
 
 
 CREATE TABLE "SECURITY"."FUNCTIONS" (
-  id          UNIQUEIDENTIFIER NOT NULL,
-  code        NVARCHAR(256)    NOT NULL,
-  name        NVARCHAR(256)    NOT NULL,
-  description NVARCHAR(512),
+  code        NVARCHAR(100)    NOT NULL,
+  name        NVARCHAR(100)    NOT NULL,
+  description NVARCHAR(1000),
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
-CREATE UNIQUE INDEX functions_code_ix ON "SECURITY"."FUNCTIONS"(code);
-
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the function' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTIONS', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The unique code used to identify the function' ,
+@name=N'MS_Description', @value=N'The code used to uniquely identify the function' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTIONS', @level2type=N'COLUMN', @level2name=N'CODE';
 
 EXEC sys.sp_addextendedproperty
@@ -992,19 +985,19 @@ GO
 
 
 CREATE TABLE "SECURITY"."FUNCTION_TO_ROLE_MAP" (
-  function_id UNIQUEIDENTIFIER NOT NULL,
-  role_id     UNIQUEIDENTIFIER NOT NULL,
+  function_code NVARCHAR(100) NOT NULL,
+  role_id       UNIQUEIDENTIFIER NOT NULL,
 
-  PRIMARY KEY (function_id, role_id)
+  PRIMARY KEY (function_code, role_id)
 );
 
-CREATE INDEX function_to_role_map_function_id_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(function_id);
+CREATE INDEX function_to_role_map_function_code_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(function_code);
 
 CREATE INDEX function_to_role_map_role_id_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(role_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the function' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'FUNCTION_ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the function' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'FUNCTION_CODE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
@@ -1013,16 +1006,16 @@ GO
 
 CREATE TRIGGER functions_on_delete_function_to_role_map_trigger
   ON "SECURITY"."FUNCTIONS"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
-SELECT deleted.id
+  FOR DELETE AS BEGIN DECLARE @CODE NVARCHAR(100) DECLARE C CURSOR FOR
+SELECT deleted.code
   FROM deleted open C FETCH NEXT
   FROM C
-  INTO @ID WHILE @@FETCH_STATUS = 0 BEGIN
+  INTO @CODE WHILE @@FETCH_STATUS = 0 BEGIN
 DELETE
   FROM "SECURITY"."FUNCTION_TO_ROLE_MAP"
-  WHERE function_id = @id FETCH NEXT
+  WHERE function_code = @CODE FETCH NEXT
   FROM C
-  INTO @ID END CLOSE C DEALLOCATE C END GO
+  INTO @CODE END CLOSE C DEALLOCATE C END GO
 
 CREATE TRIGGER roles_on_delete_function_to_role_map_trigger
   ON "SECURITY"."ROLES"
@@ -1274,12 +1267,12 @@ INSERT INTO "SECURITY"."ORGANIZATIONS" (id, name, status)
   VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
 INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (id, name, user_directory_class)
-  VALUES ('b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
+  VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
 INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (id, name, user_directory_class)
-  VALUES ('e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
+  VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO "SECURITY"."USER_DIRECTORIES" (id, type_id, name, config)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (user_directory_id, organization_id)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
@@ -1293,40 +1286,40 @@ INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, groupname, description)
 INSERT INTO "SECURITY"."USER_TO_GROUP_MAP" (user_id, group_id)
   VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
 
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'Application.SecureHome', 'Secure Home', 'Secure Home');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'Application.Dashboard', 'Dashboard', 'Dashboard');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('4e6bc7c4-ee29-4cd7-b4d7-3be42db73dd6', 'Codes.CodeAdministration', 'Code Administration', 'Code Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('b233ed4a-b30f-4356-a5d3-1c660aa69f00', 'Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('97f0f870-a871-48de-a3e0-a32a95770f12', 'Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('180c84f9-9816-48d0-9762-dc753b2228b1', 'Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('d2854c65-9a59-40b8-9dc7-a882c64b2610', 'Process.ViewProcess', 'View Process', 'View Process');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('3a17959c-5dfc-43a2-9587-48a1eb95a22a', 'Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', 'Reporting.ViewReport', 'View Report', 'View Report');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('4d60aed6-2d4b-4a91-a178-ac06d4b1769a', 'Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('2d52b029-920f-4b15-b646-5b9955c188e3', 'Security.OrganizationAdministration', 'Organization Administration', 'Organization Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('ef03f384-24f7-43eb-a29c-f5c5b838698d', 'Security.GroupAdministration', 'Group Administration', 'Group Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'Security.ResetUserPassword', 'Reset User Password', 'Reset User Password');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('9105fb6d-1629-4014-bf4c-1990a92db276', 'Security.SecurityAdministration', 'Security Administration', 'Security Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', 'Security.UserAdministration', 'User Administration', 'User Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('545be1e3-71fe-4441-8dd5-416dc6200066', 'Security.UserDirectoryAdministration', 'User Directory Administration', 'User Directory Administration');
-INSERT INTO "SECURITY"."FUNCTIONS" (id, code, name, description)
-  VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', 'Security.UserGroups', 'User Groups', 'User Groups');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Application.SecureHome', 'Secure Home', 'Secure Home');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Application.Dashboard', 'Dashboard', 'Dashboard');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Codes.CodeAdministration', 'Code Administration', 'Code Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Process.ViewProcess', 'View Process', 'View Process');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Reporting.ViewReport', 'View Report', 'View Report');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.OrganizationAdministration', 'Organization Administration', 'Organization Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.GroupAdministration', 'Group Administration', 'Group Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.ResetUserPassword', 'Reset User Password', 'Reset User Password');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.SecurityAdministration', 'Security Administration', 'Security Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.UserAdministration', 'User Administration', 'User Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.UserDirectoryAdministration', 'User Directory Administration', 'User Directory Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Security.UserGroups', 'User Groups', 'User Groups');
 
 INSERT INTO "SECURITY"."ROLES" (id, name, description)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
@@ -1336,25 +1329,25 @@ INSERT INTO "SECURITY"."ROLES" (id, name, description)
   VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
 
 
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.Dashboard function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('539fceb8-da82-4170-ab1a-ae6b04001c03', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Reporting.ViewReport function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.ResetUserPassword function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('567d7e55-f3d0-4191-bc4c-12d357900fa3', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserAdministration function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('7a54a71e-3680-4d49-b87d-29604a247413', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Application.SecureHome', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Application.Dashboard', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.Dashboard function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Reporting.ViewReport', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Reporting.ViewReport function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Security.ResetUserPassword', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.ResetUserPassword function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Security.UserAdministration', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserAdministration function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Security.UserGroups', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
 
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('2a43152c-d8ae-4b08-8ad9-2448ec5debd5', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('f4e3b387-8cd1-4c56-a2da-fe39a78a56d9', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_id, role_id)
-  VALUES ('029b9a06-0241-4a44-a234-5c489f2017ba', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Application.SecureHome', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Application.Dashboard', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
+  VALUES ('Security.ResetUserPassword', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
 
 INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_id, group_id)
   VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
