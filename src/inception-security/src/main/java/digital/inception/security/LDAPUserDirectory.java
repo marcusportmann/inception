@@ -2494,6 +2494,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
     user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setReadOnly(readOnly);
+
+    // TODO: Correctly process LDAP attributes for user to set status -- MARCUS
+    user.setStatus(UserStatus.ACTIVE);
     user.setPassword("");
 
     if ((!StringUtils.isEmpty(userFirstNameAttribute))
