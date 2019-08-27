@@ -32,20 +32,20 @@ export class UserDirectorySummary {
   name: string;
 
   /**
-   * The ID used to uniquely identify the user directory type.
+   * The code used to uniquely identify the user directory type.
    */
-  typeId: string;
+  type: string;
 
   /**
    * Constructs a new UserDirectorySummary.
    *
-   * @param id     The ID used to uniquely identify the user directory.
-   * @param name   The name of the user directory.
-   * @param typeId The ID used to uniquely identify the user directory type.
+   * @param id   The ID used to uniquely identify the user directory.
+   * @param name The name of the user directory.
+   * @param type The code used to uniquely identify the user directory type.
    */
-  constructor(id: string, name: string, typeId: string) {
+  constructor(id: string, name: string, type: string) {
     this.id = id;
     this.name = name;
-    this.typeId = typeId;
+    this.type = type;
   }
 }

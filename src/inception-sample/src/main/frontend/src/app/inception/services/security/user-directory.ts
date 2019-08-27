@@ -34,9 +34,9 @@ export class UserDirectory {
   name: string;
 
   /**
-   * The ID used to uniquely identify the user directory type.
+   * The code used to uniquely identify the user directory type.
    */
-  typeId: string;
+  type: string;
 
   /**
    * The parameters for the user directory.
@@ -48,13 +48,13 @@ export class UserDirectory {
    *
    * @param id         The ID used to uniquely identify the user directory.
    * @param name       The name of the user directory.
-   * @param typeId     The ID used to uniquely identify the user directory type.
+   * @param type       The code used to uniquely identify the user directory type.
    * @param parameters The parameters for the user directory.
    */
-  constructor(id: string, name: string, typeId: string, parameters?: UserDirectoryParameter[]) {
+  constructor(id: string, name: string, type: string, parameters?: UserDirectoryParameter[]) {
     this.id = id;
     this.name = name;
-    this.typeId = typeId;
+    this.type = type;
     this.parameters = (!parameters) ? [] : parameters;
   }
 }

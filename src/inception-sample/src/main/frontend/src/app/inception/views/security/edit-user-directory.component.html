@@ -18,7 +18,7 @@
           <mat-form-field class="mat-form-field-slim">
             <mat-label i18n="@@edit_user_directory_component_label_type">Type</mat-label>
             <mat-select formControlName="userDirectoryType"  required="true" i18n-placeholder="@@edit_user_component_placeholder_select_a_user_directory_type" placeholder="Select a user directory type">
-              <mat-option *ngFor="let userDirectoryType of userDirectoryTypes" [value]="userDirectoryType.id">
+              <mat-option *ngFor="let userDirectoryType of userDirectoryTypes" [value]="userDirectoryType.code">
                 {{userDirectoryType.name}}
               </mat-option>
             </mat-select>

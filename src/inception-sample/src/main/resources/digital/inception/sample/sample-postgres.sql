@@ -502,14 +502,14 @@ COMMENT ON COLUMN security.organizations.status IS 'The status for the organizat
 
 
 CREATE TABLE security.user_directory_types (
-  id                   TEXT NOT NULL,
+  code                 TEXT NOT NULL,
   name                 TEXT NOT NULL,
   user_directory_class TEXT NOT NULL,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
-COMMENT ON COLUMN security.user_directory_types.id IS 'The ID used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directory_types.code IS 'The code used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directory_types.name IS 'The name of the user directory type';
 
@@ -518,19 +518,19 @@ COMMENT ON COLUMN security.user_directory_types.user_directory_class IS 'The ful
 
 CREATE TABLE security.user_directories (
   id            UUID NOT NULL,
-  type_id       TEXT NOT NULL,
+  type          TEXT NOT NULL,
   name          TEXT NOT NULL,
   configuration TEXT NOT NULL,
 
   PRIMARY KEY (id),
-  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type_id) REFERENCES security.user_directory_types(id) ON DELETE CASCADE
+  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES security.user_directory_types(code) ON DELETE CASCADE
 );
 
 CREATE INDEX user_directories_name_ix ON security.user_directories(name);
 
 COMMENT ON COLUMN security.user_directories.id IS 'The ID used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directories.type_id IS 'The ID used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directories.type IS 'The code used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directories.name IS 'The name of the user directory';
 
@@ -878,12 +878,12 @@ COMMENT ON COLUMN sample.data.timestamp_value IS 'The timestamp value for the da
 INSERT INTO security.organizations (id, name, status)
   VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
-INSERT INTO security.user_directory_types (id, name, user_directory_class)
+INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
-INSERT INTO security.user_directory_types (id, name, user_directory_class)
+INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
-INSERT INTO security.user_directories (id, type_id, name, configuration)
+INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
@@ -1041,10 +1041,10 @@ INSERT INTO test.test_data (id, name, value)
 INSERT INTO security.organizations (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b64d', 'Sample', 1);
 
-INSERT INTO security.user_directories (id, type_id, name, configuration)
+INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'InternalUserDirectory', 'Sample Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
---INSERT INTO security.user_directories (id, type_id, name, configuration)
+--INSERT INTO security.user_directories (id, type, name, configuration)
 --  VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>SupportPasswordLockout</name><value>false</value></parameter><parameter><name>SupportPasswordExpiry</name><value>false</value></parameter><parameter><name>SupportPasswordHistory</name><value>false</value></parameter><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>uid=sample_service_account,ou=service_accounts,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>SharedBaseDN</name><value></value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserPasswordLastChangedAttribute</name><value></value></parameter><parameter><name>UserPasswordFailuresAttribute</name><value></value></parameter><parameter><name>UserPasswordHistoryAttribute</name><value></value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserFullNameAttribute</name><value>cn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>PasswordHistoryMaxLength</name><value>128</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)

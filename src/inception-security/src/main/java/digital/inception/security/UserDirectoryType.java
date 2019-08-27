@@ -41,10 +41,10 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "UserDirectoryType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "userDirectoryClassName" })
+@JsonPropertyOrder({ "code", "name", "userDirectoryClassName" })
 @XmlRootElement(name = "UserDirectoryType", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectoryType", namespace = "http://security.inception.digital",
-    propOrder = { "id", "name", "userDirectoryClassName" })
+    propOrder = { "code", "name", "userDirectoryClassName" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectoryType
@@ -53,15 +53,15 @@ public class UserDirectoryType
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the user directory type.
+   * The code used to uniquely identify the user directory type.
    */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory type",
+  @ApiModelProperty(value = "The code used to uniquely identify the user directory type",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
+  @XmlElement(name = "Code", required = true)
   @NotNull
-  private String id;
+  @Size(min = 1, max = 100)
+  private String code;
 
   /**
    * The name of the user directory type.
@@ -98,26 +98,26 @@ public class UserDirectoryType
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param id                      the ID used to uniquely identify the user directory type
+   * @param code                    the code used to uniquely identify the user directory type
    * @param name                    the name of the user directory type
    * @param userDirectoryClassName  the fully qualified name of the Java class that implements the
    *                                user directory type
    */
-  UserDirectoryType(String id, String name, String userDirectoryClassName)
+  UserDirectoryType(String code, String name, String userDirectoryClassName)
   {
-    this.id = id;
+    this.code = code;
     this.name = name;
     this.userDirectoryClassName = userDirectoryClassName;
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory type.
+   * Returns the code used to uniquely identify the user directory type.
    *
-   * @return the ID used to uniquely identify the user directory type
+   * @return the code used to uniquely identify the user directory type
    */
-  public String getId()
+  public String getCode()
   {
-    return id;
+    return code;
   }
 
   /**

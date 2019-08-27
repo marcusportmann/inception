@@ -22,36 +22,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.core.xml.DtdJarResolver;
-import digital.inception.core.xml.XmlParserErrorHandler;
-import digital.inception.core.xml.XmlUtil;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import org.springframework.util.StringUtils;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import org.xml.sax.InputSource;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayInputStream;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import javax.xml.bind.annotation.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>UserDirectorySummary</code> class holds the summary information for a user directory.
@@ -60,10 +39,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 @ApiModel(value = "UserDirectorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "typeId", "name" })
+@JsonPropertyOrder({ "id", "type", "name" })
 @XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectorySummary", namespace = "http://security.inception.digital",
-    propOrder = { "id", "typeId", "name" })
+    propOrder = { "id", "type", "name" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class UserDirectorySummary
@@ -74,9 +53,7 @@ public class UserDirectorySummary
   /**
    * The ID used to uniquely identify the user directory.
    */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -93,15 +70,15 @@ public class UserDirectorySummary
   private String name;
 
   /**
-   * The ID used to uniquely identify the user directory type.
+   * The code used to uniquely identify the user directory type.
    */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory type",
+  @ApiModelProperty(value = "The code used to uniquely identify the user directory type",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "TypeId", required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
-  private String typeId;
+  @Size(min = 1, max = 100)
+  private String type;
 
   /**
    * Constructs a new <code>UserDirectorySummary</code>.
@@ -129,13 +106,13 @@ public class UserDirectorySummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory type.
+   * Returns the code used to uniquely identify the user directory type.
    *
-   * @return the ID used to uniquely identify the user directory type
+   * @return the code used to uniquely identify the user directory type
    */
-  public String getTypeId()
+  public String getType()
   {
-    return typeId;
+    return type;
   }
 
   /**
@@ -159,12 +136,12 @@ public class UserDirectorySummary
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory type.
+   * Set the code used to uniquely identify the user directory type.
    *
-   * @param typeId the ID used to uniquely identify the user directory type
+   * @param type the code used to uniquely identify the user directory type
    */
-  public void setTypeId(String typeId)
+  public void setType(String type)
   {
-    this.typeId = typeId;
+    this.type = type;
   }
 }

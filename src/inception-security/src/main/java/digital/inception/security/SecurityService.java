@@ -81,13 +81,12 @@ public class SecurityService
   /**
    * The ID used to uniquely identify the internal user directory type.
    */
-  public static final String INTERNAL_USER_DIRECTORY_TYPE_ID =
-      "InternalUserDirectory";
+  public static final String INTERNAL_USER_DIRECTORY_TYPE = "InternalUserDirectory";
 
   /**
    * The ID used to uniquely identify the LDAP user directory type.
    */
-  public static final String LDAP_USER_DIRECTORY_TYPE_ID = "LDAPUserDirectory";
+  public static final String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
 
   /**
    * The maximum number of filtered organizations.
@@ -473,12 +472,12 @@ public class SecurityService
           userDirectory = newInternalUserDirectoryForOrganization(organization);
 
           String createUserDirectorySQL = "INSERT INTO security.user_directories "
-              + "(id, type_id, name, configuration) VALUES (?, ?, ?, ?)";
+              + "(id, type, name, configuration) VALUES (?, ?, ?, ?)";
 
           try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
           {
             statement.setObject(1, UUID.fromString(userDirectory.getId()));
-            statement.setString(2, userDirectory.getTypeId());
+            statement.setString(2, userDirectory.getType());
             statement.setString(3, userDirectory.getName());
             statement.setString(4, userDirectory.getConfiguration());
 
@@ -562,7 +561,7 @@ public class SecurityService
     throws DuplicateUserDirectoryException, SecurityServiceException
   {
     String createUserDirectorySQL = "INSERT INTO security.user_directories "
-        + "(id, type_id, name, configuration) VALUES (?, ?, ?, ?)";
+        + "(id, type, name, configuration) VALUES (?, ?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
@@ -578,7 +577,7 @@ public class SecurityService
       }
 
       statement.setObject(1, UUID.fromString(userDirectory.getId()));
-      statement.setString(2, userDirectory.getTypeId());
+      statement.setString(2, userDirectory.getType());
       statement.setString(3, userDirectory.getName());
       statement.setString(4, userDirectory.getConfiguration());
 
@@ -643,8 +642,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the function (%s)", functionCode),
-          e);
+      throw new SecurityServiceException(String.format("Failed to delete the function (%s)",
+          functionCode), e);
     }
   }
 
@@ -802,8 +801,7 @@ public class SecurityService
   public Function getFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
-    String getFunctionSQL =
-        "SELECT code, name, description FROM security.functions WHERE code=?";
+    String getFunctionSQL = "SELECT code, name, description FROM security.functions WHERE code=?";
 
     try
     {
@@ -1455,7 +1453,7 @@ public class SecurityService
     throws SecurityServiceException
   {
     String getUserDirectoriesSQL =
-        "SELECT id, type_id, name, configuration FROM security.user_directories";
+        "SELECT id, type, name, configuration FROM security.user_directories";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
@@ -1494,7 +1492,7 @@ public class SecurityService
     throws SecurityServiceException
   {
     String getUserDirectoriesSQL =
-        "SELECT id, type_id, name, configuration FROM security.user_directories";
+        "SELECT id, type, name, configuration FROM security.user_directories";
 
     if (!StringUtils.isEmpty(filter))
     {
@@ -1555,7 +1553,7 @@ public class SecurityService
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectoriesForOrganizationSQL =
-        "SELECT ud.id, ud.type_id, ud.name, ud.configuration FROM security.user_directories ud "
+        "SELECT ud.id, ud.type, ud.name, ud.configuration FROM security.user_directories ud "
         + "INNER JOIN security.user_directory_to_organization_map udtom "
         + "ON ud.id = udtom.user_directory_id WHERE udtom.organization_id = ?";
 
@@ -1605,7 +1603,7 @@ public class SecurityService
   public UserDirectory getUserDirectory(String userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String getUserDirectorySQL = "SELECT id, type_id, name, configuration "
+    String getUserDirectorySQL = "SELECT id, type, name, configuration "
         + "FROM security.user_directories WHERE id=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -1757,7 +1755,7 @@ public class SecurityService
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getUserDirectorySummariesSQL = "SELECT id, type_id, name FROM security.user_directories";
+    String getUserDirectorySummariesSQL = "SELECT id, type, name FROM security.user_directories";
 
     if (!StringUtils.isEmpty(filter))
     {
@@ -1819,7 +1817,7 @@ public class SecurityService
     throws OrganizationNotFoundException, SecurityServiceException
   {
     String getUserDirectorySummariesForOrganizationSQL =
-        "SELECT ud.id, ud.type_id, ud.name FROM security.user_directories ud "
+        "SELECT ud.id, ud.type, ud.name FROM security.user_directories ud "
         + "INNER JOIN security.user_directory_to_organization_map udtom "
         + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
         + "ON udtom.organization_id = o.id WHERE o.id=?";
@@ -1867,7 +1865,7 @@ public class SecurityService
   public List<UserDirectoryType> getUserDirectoryTypes()
     throws SecurityServiceException
   {
-    String getUserDirectoryTypesSQL = "SELECT id, name, user_directory_class "
+    String getUserDirectoryTypesSQL = "SELECT code, name, user_directory_class "
         + "FROM security.user_directory_types";
 
     try (Connection connection = dataSource.getConnection();
@@ -1982,14 +1980,14 @@ public class SecurityService
         UserDirectoryType userDirectoryType;
 
         userDirectoryType = userDirectoryTypes.stream().filter(
-            possibleUserDirectoryType -> possibleUserDirectoryType.getId().equals(
-            userDirectory.getTypeId())).findFirst().orElse(null);
+            possibleUserDirectoryType -> possibleUserDirectoryType.getCode().equals(
+            userDirectory.getType())).findFirst().orElse(null);
 
         if (userDirectoryType == null)
         {
           logger.error(String.format(
               "Failed to load the user directory (%s): The user directory type (%s) was not loaded",
-              userDirectory.getId(), userDirectory.getTypeId()));
+              userDirectory.getId(), userDirectory.getType()));
 
           continue;
         }
@@ -2330,7 +2328,7 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
     userDirectory.setId(rs.getString(1));
-    userDirectory.setTypeId(rs.getString(2));
+    userDirectory.setType(rs.getString(2));
     userDirectory.setName(rs.getString(3));
     userDirectory.setConfiguration(rs.getString(4));
 
@@ -2351,7 +2349,7 @@ public class SecurityService
   {
     UserDirectorySummary userDirectorySummary = new UserDirectorySummary();
     userDirectorySummary.setId(rs.getString(1));
-    userDirectorySummary.setTypeId(rs.getString(2));
+    userDirectorySummary.setType(rs.getString(2));
     userDirectorySummary.setName(rs.getString(3));
 
     return userDirectorySummary;
@@ -2377,14 +2375,7 @@ public class SecurityService
 
       try (ResultSet rs = statement.executeQuery())
       {
-        if (rs.next())
-        {
-          return true;
-        }
-        else
-        {
-          return false;
-        }
+        return rs.next();
       }
     }
   }
@@ -2459,7 +2450,7 @@ public class SecurityService
     UserDirectory userDirectory = new UserDirectory();
 
     userDirectory.setId(idGenerator.nextUUID().toString());
-    userDirectory.setTypeId("InternalUserDirectory");
+    userDirectory.setType("InternalUserDirectory");
     userDirectory.setName(organization.getName() + " Internal User Directory");
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
@@ -2532,8 +2523,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check whether an organization with the ID (%s) exists",
-          organizationId.toString()), e);
+          "Failed to check whether an organization with the ID (%s) exists", organizationId), e);
     }
   }
 
@@ -2589,12 +2579,12 @@ public class SecurityService
         {
           logger.error(String.format("Failed to load the user directory type (%s): "
               + "Failed to retrieve the user directory class for the user directory type",
-              userDirectoryType.getId()), e);
+              userDirectoryType.getCode()), e);
 
           continue;
         }
 
-        reloadedUserDirectoryTypes.put(userDirectoryType.getId(), userDirectoryType);
+        reloadedUserDirectoryTypes.put(userDirectoryType.getCode(), userDirectoryType);
       }
 
       this.userDirectoryTypes = reloadedUserDirectoryTypes;
@@ -2662,8 +2652,7 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check whether a user directory with the ID (%s) exists",
-          userDirectoryId.toString()), e);
+          "Failed to check whether a user directory with the ID (%s) exists", userDirectoryId), e);
     }
   }
 

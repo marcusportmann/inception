@@ -863,7 +863,7 @@ public class SecurityServiceTest
 
     for (UserDirectoryType userDirectoryType : userDirectoryTypes)
     {
-      if (userDirectoryType.getId().equals(SecurityService.INTERNAL_USER_DIRECTORY_TYPE_ID))
+      if (userDirectoryType.getCode().equals(SecurityService.INTERNAL_USER_DIRECTORY_TYPE))
       {
         foundInternalUserDirectoryType = true;
 
@@ -874,14 +874,14 @@ public class SecurityServiceTest
     if (!foundInternalUserDirectoryType)
     {
       fail("Failed to find the internal user directory type (" + SecurityService
-          .INTERNAL_USER_DIRECTORY_TYPE_ID + ") in the list of user directory types");
+          .INTERNAL_USER_DIRECTORY_TYPE + ") in the list of user directory types");
     }
 
     boolean foundLdapUserDirectoryType = false;
 
     for (UserDirectoryType userDirectoryType : userDirectoryTypes)
     {
-      if (userDirectoryType.getId().equals(SecurityService.LDAP_USER_DIRECTORY_TYPE_ID))
+      if (userDirectoryType.getCode().equals(SecurityService.LDAP_USER_DIRECTORY_TYPE))
       {
         foundLdapUserDirectoryType = true;
 
@@ -892,7 +892,7 @@ public class SecurityServiceTest
     if (!foundLdapUserDirectoryType)
     {
       fail("Failed to find the internal user directory type (" + SecurityService
-          .LDAP_USER_DIRECTORY_TYPE_ID + ") in the list of user directory types");
+          .LDAP_USER_DIRECTORY_TYPE + ") in the list of user directory types");
     }
   }
 
@@ -1205,7 +1205,7 @@ public class SecurityServiceTest
     UserDirectory userDirectory = new UserDirectory();
 
     userDirectory.setId(UUID.randomUUID().toString());
-    userDirectory.setTypeId(SecurityService.INTERNAL_USER_DIRECTORY_TYPE_ID);
+    userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
@@ -1255,7 +1255,7 @@ public class SecurityServiceTest
     assertEquals("The name values for the two user directories do not match",
         userDirectory1.getName(), userDirectory2.getName());
     assertEquals("The type ID values for the two user directories do not match",
-        userDirectory1.getTypeId(), userDirectory2.getTypeId());
+        userDirectory1.getType(), userDirectory2.getType());
     assertEquals("The configuration values for the two user directories do not match",
         userDirectory1.getConfiguration(), userDirectory2.getConfiguration());
   }

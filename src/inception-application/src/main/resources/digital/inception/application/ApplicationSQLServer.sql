@@ -675,16 +675,16 @@ GO
 
 
 CREATE TABLE "SECURITY"."USER_DIRECTORY_TYPES" (
-  id                   NVARCHAR(100)   NOT NULL,
+  code                 NVARCHAR(100)   NOT NULL,
   name                 NVARCHAR(100)   NOT NULL,
   user_directory_class NVARCHAR(1000)  NOT NULL,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory type' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TYPES', @level2type=N'COLUMN', @level2name=N'ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the user directory type' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TYPES', @level2type=N'COLUMN', @level2name=N'CODE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the user directory type' ,
@@ -698,12 +698,12 @@ EXEC sys.sp_addextendedproperty
 
 CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
   id      UNIQUEIDENTIFIER NOT NULL,
-  type_id NVARCHAR(100)    NOT NULL,
+  type    NVARCHAR(100)    NOT NULL,
   name    NVARCHAR(100)    NOT NULL,
   config  NVARCHAR(MAX)    NOT NULL,
 
   PRIMARY KEY (id),
-  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type_id) REFERENCES "SECURITY"."USER_DIRECTORY_TYPES"(id) ON DELETE CASCADE
+  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES "SECURITY"."USER_DIRECTORY_TYPES"(code) ON DELETE CASCADE
 );
 
 CREATE INDEX user_directories_name_ix ON "SECURITY"."USER_DIRECTORIES"(name);
@@ -713,8 +713,8 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory type' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the user directory type' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'TYPE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the user directory' ,
@@ -1266,12 +1266,12 @@ GO
 INSERT INTO "SECURITY"."ORGANIZATIONS" (id, name, status)
   VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
-INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (id, name, user_directory_class)
+INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
-INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (id, name, user_directory_class)
+INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
-INSERT INTO "SECURITY"."USER_DIRECTORIES" (id, type_id, name, config)
+INSERT INTO "SECURITY"."USER_DIRECTORIES" (id, type, name, config)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (user_directory_id, organization_id)

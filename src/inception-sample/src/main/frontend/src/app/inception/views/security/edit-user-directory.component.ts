@@ -76,9 +76,9 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
       this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
         .pipe(startWith(null), pairwise())
         .subscribe(
-          ([previousUserDirectoryTypeId, currentUserDirectoryTypeId]: [string, string]) => {
-            this.onUserDirectoryTypeSelected(previousUserDirectoryTypeId,
-              currentUserDirectoryTypeId);
+          ([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
+            this.onUserDirectoryTypeSelected(previousUserDirectoryType,
+              currentUserDirectoryType);
           }));
   }
 
@@ -112,7 +112,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
         this.userDirectoryTypes = results[0];
         this.userDirectory = results[1];
         this.editUserDirectoryForm.get('name')!.setValue(results[1].name);
-        this.editUserDirectoryForm.get('userDirectoryType')!.setValue(results[1].typeId);
+        this.editUserDirectoryForm.get('userDirectoryType')!.setValue(results[1].type);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -138,7 +138,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   onOK(): void {
     if (this.userDirectory && this.editUserDirectoryForm.valid) {
       this.userDirectory.name = this.editUserDirectoryForm.get('name')!.value;
-      this.userDirectory.typeId = this.editUserDirectoryForm.get('userDirectoryType')!.value;
+      this.userDirectory.type = this.editUserDirectoryForm.get('userDirectoryType')!.value;
 
       if (this.internalUserDirectory) {
         this.userDirectory.parameters = this.internalUserDirectory.getParameters();
@@ -165,10 +165,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     }
   }
 
-  onUserDirectoryTypeSelected(previousUserDirectoryTypeId: string,
-                              currentUserDirectoryTypeId: string): void {
+  onUserDirectoryTypeSelected(previousUserDirectoryType: string,
+                              currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
-    if (!!previousUserDirectoryTypeId) {
+    if (!!previousUserDirectoryType) {
       this.userDirectory!.parameters = [];
     }
 
@@ -177,9 +177,9 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.editUserDirectoryForm.removeControl('ldapUserDirectory');
 
     // Add the appropriate control for the user directory type that was selected
-    if (currentUserDirectoryTypeId === 'InternalUserDirectory') {
+    if (currentUserDirectoryType === 'InternalUserDirectory') {
       this.editUserDirectoryForm.addControl('internalUserDirectory', new FormControl(''));
-    } else if (currentUserDirectoryTypeId === 'LDAPUserDirectory') {
+    } else if (currentUserDirectoryType === 'LDAPUserDirectory') {
       this.editUserDirectoryForm.addControl('ldapUserDirectory', new FormControl(''));
     }
 

@@ -24,14 +24,14 @@ COMMENT ON COLUMN security.organizations.status IS 'The status for the organizat
 
 
 CREATE TABLE security.user_directory_types (
-  id                   VARCHAR(100)  NOT NULL,
+  code                 VARCHAR(100)  NOT NULL,
   name                 VARCHAR(100) NOT NULL,
   user_directory_class VARCHAR(1000) NOT NULL,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
-COMMENT ON COLUMN security.user_directory_types.id IS 'The ID used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directory_types.code IS 'The code used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directory_types.name IS 'The name of the user directory type';
 
@@ -40,19 +40,19 @@ COMMENT ON COLUMN security.user_directory_types.user_directory_class IS 'The ful
 
 CREATE TABLE security.user_directories (
   id            UUID          NOT NULL,
-  type_id       VARCHAR(100)  NOT NULL,
+  type          VARCHAR(100)  NOT NULL,
   name          VARCHAR(100) NOT NULL,
   configuration VARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (id),
-  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type_id) REFERENCES security.user_directory_types(id) ON DELETE CASCADE
+  CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES security.user_directory_types(code) ON DELETE CASCADE
 );
 
 CREATE INDEX user_directories_name_ix ON security.user_directories(name);
 
 COMMENT ON COLUMN security.user_directories.id IS 'The ID used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directories.type_id IS 'The ID used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directories.type IS 'The code used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directories.name IS 'The name of the user directory';
 
@@ -259,12 +259,12 @@ COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquel
 INSERT INTO security.organizations (id, name, status)
   VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
 
-INSERT INTO security.user_directory_types (id, name, user_directory_class)
+INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
-INSERT INTO security.user_directory_types (id, name, user_directory_class)
+INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
-INSERT INTO security.user_directories (id, type_id, name, configuration)
+INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)

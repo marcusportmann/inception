@@ -22,9 +22,9 @@
 export class UserDirectoryType {
 
   /**
-   * The ID used to uniquely identify the user directory type.
+   * The code used to uniquely identify the user directory type.
    */
-  id: string;
+  code: string;
 
   /**
    * The name of the user directory type.
@@ -39,12 +39,13 @@ export class UserDirectoryType {
   /**
    * Constructs a new UserDirectoryParameter.
    *
-   * @param id                     The ID used to uniquely identify the user directory type.
+   * @param code                   The code used to uniquely identify the user directory type.
    * @param name                   The name of the user directory type.
-   * @param userDirectoryClassName The fully qualified name of the Java class that implements the user directory type.
+   * @param userDirectoryClassName The fully qualified name of the Java class that implements the
+   *                               user directory type.
    */
-  constructor(id: string, name: string, userDirectoryClassName: string) {
-    this.id = id;
+  constructor(code: string, name: string, userDirectoryClassName: string) {
+    this.code = code;
     this.name = name;
     this.userDirectoryClassName = userDirectoryClassName;
   }
