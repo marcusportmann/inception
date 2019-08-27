@@ -21,7 +21,6 @@ package digital.inception.scheduler;
 import java.io.Serializable;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * The <code>Job</code> class holds the information for a job.
@@ -40,9 +39,9 @@ public class Job
   private int executionAttempts;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * The ID used to uniquely identify the job.
    */
-  private UUID id;
+  private String id;
 
   /**
    * Is the job enabled for execution.
@@ -97,8 +96,7 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the job
+   * @param id                the ID used to uniquely identify the job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
@@ -111,7 +109,7 @@ public class Job
    * @param nextExecution     the date and time when the job will next be executed
    * @param updated           the date and time the job was last updated
    */
-  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean isEnabled,
+  public Job(String id, String name, String schedulingPattern, String jobClass, boolean isEnabled,
       JobStatus status, int executionAttempts, String lockName, Date lastExecuted,
       Date nextExecution, Date updated)
   {
@@ -139,11 +137,11 @@ public class Job
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Returns the ID used to uniquely identify the job.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @return the ID used to uniquely identify the job
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -250,12 +248,11 @@ public class Job
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Set the ID used to uniquely identify the job.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the scheduled
-   *           job
+   * @param id the ID used to uniquely identify the scheduled job
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

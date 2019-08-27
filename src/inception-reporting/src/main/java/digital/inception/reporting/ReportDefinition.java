@@ -29,8 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -55,15 +53,14 @@ public class ReportDefinition
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The name of the report definition.
@@ -93,25 +90,11 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
+   * @param id       the ID used to uniquely identify the report definition
    * @param name     the name of the report definition
    * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(String name, byte[] template)
-  {
-    this.id = UUID.randomUUID();
-    this.name = name;
-    this.template = template;
-  }
-
-  /**
-   * Constructs a new <code>ReportDefinition</code>.
-   *
-   * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *                 definition
-   * @param name     the name of the report definition
-   * @param template the JasperReports template for the report definition
-   */
-  public ReportDefinition(UUID id, String name, byte[] template)
+  public ReportDefinition(String id, String name, byte[] template)
   {
     this.id = id;
     this.name = name;
@@ -119,13 +102,11 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
-   * definition.
+   * Returns the ID used to uniquely identify the report definition.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   * definition
+   * @return the ID used to uniquely identify the report definition
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -151,12 +132,11 @@ public class ReportDefinition
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * Set the ID used to uniquely identify the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *           definition
+   * @param id the ID used to uniquely identify the report definition
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

@@ -19,7 +19,6 @@ package digital.inception.scheduler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler
@@ -49,9 +48,9 @@ public interface ISchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
-  void deleteJob(UUID jobId)
+  void deleteJob(String jobId)
     throws SchedulerServiceException;
 
   /**
@@ -75,21 +74,21 @@ public interface ISchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the job or <code>null</code> if the job could not be found
    */
-  Job getJob(UUID jobId)
+  Job getJob(String jobId)
     throws SchedulerServiceException;
 
   /**
    * Retrieve the parameters for the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the parameters for the job
    */
-  List<JobParameter> getJobParameters(UUID jobId)
+  List<JobParameter> getJobParameters(String jobId)
     throws SchedulerServiceException;
 
   /**
@@ -137,29 +136,28 @@ public interface ISchedulerService
   /**
    * Increment the execution attempts for the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
-  void incrementJobExecutionAttempts(UUID jobId)
+  void incrementJobExecutionAttempts(String jobId)
     throws SchedulerServiceException;
 
   /**
    * Lock a job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the locked job
    */
-  void lockJob(UUID jobId, JobStatus status)
+  void lockJob(String jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the job
+   * @param jobId             the ID used to uniquely identify the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
-  void rescheduleJob(UUID jobId, String schedulingPattern)
+  void rescheduleJob(String jobId, String schedulingPattern)
     throws SchedulerServiceException;
 
   /**
@@ -185,19 +183,19 @@ public interface ISchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the job
    */
-  void setJobStatus(UUID jobId, JobStatus status)
+  void setJobStatus(String jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
-  void unlockJob(UUID jobId, JobStatus status)
+  void unlockJob(String jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**

@@ -33,6 +33,8 @@ import {
   Validator, Validators
 } from '@angular/forms';
 import {Observable, of} from 'rxjs';
+import {UserDirectoryParameter} from '../../services/security/user-directory-parameter';
+import {UserDirectoryUtil} from '../../services/security/user-directory-util';
 
 @Component({
   selector: 'internal-user-directory',
@@ -58,11 +60,29 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
   constructor() {
     // Initialise the form
     this.internalUserDirectoryForm = new FormGroup({
-      maxPasswordAttempts: new FormControl('', [Validators.required]),
-      passwordExpiryMonths: new FormControl('', [Validators.required]),
-      passwordHistoryMonths: new FormControl('', [Validators.required]),
-      maxFilteredUsers: new FormControl('', [Validators.required])
+      maxPasswordAttempts: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
+      passwordExpiryMonths: new FormControl('',
+        [Validators.required, Validators.pattern('^\\d+$')]),
+      passwordHistoryMonths: new FormControl('',
+        [Validators.required, Validators.pattern('^\\d+$')]),
+      maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')])
     });
+  }
+
+  getParameters(): UserDirectoryParameter[] {
+
+    const parameters: UserDirectoryParameter[] = [];
+
+    UserDirectoryUtil.setParameter(parameters, 'MaxPasswordAttempts',
+      this.internalUserDirectoryForm.get('maxPasswordAttempts')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'PasswordExpiryMonths',
+      this.internalUserDirectoryForm.get('passwordExpiryMonths')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'PasswordHistoryMonths',
+      this.internalUserDirectoryForm.get('passwordHistoryMonths')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredUsers',
+      this.internalUserDirectoryForm.get('maxFilteredUsers')!.value);
+
+    return parameters;
   }
 
   ngOnInit() {
@@ -70,13 +90,6 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
 
   onTouched: () => void = () => {
   };
-
-  // tslint:disable-next-line:no-any
-  writeValue(val: any): void {
-    if (val) {
-      this.internalUserDirectoryForm.setValue(val, {emitEvent: false});
-    }
-  }
 
   // tslint:disable-next-line:no-any
   registerOnChange(fn: any): void {
@@ -92,6 +105,25 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
     isDisabled ? this.internalUserDirectoryForm.disable() : this.internalUserDirectoryForm.enable();
   }
 
+  setParameters(parameters: UserDirectoryParameter[]) {
+    this.internalUserDirectoryForm.get('maxPasswordAttempts')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters,
+        'MaxPasswordAttempts') ? UserDirectoryUtil.getParameter(parameters,
+        'MaxPasswordAttempts') : '');
+    this.internalUserDirectoryForm.get('passwordExpiryMonths')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters,
+        'PasswordExpiryMonths') ? UserDirectoryUtil.getParameter(parameters,
+        'PasswordExpiryMonths') : '');
+    this.internalUserDirectoryForm.get('passwordHistoryMonths')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters,
+        'PasswordHistoryMonths') ? UserDirectoryUtil.getParameter(parameters,
+        'PasswordHistoryMonths') : '');
+    this.internalUserDirectoryForm.get('maxFilteredUsers')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters,
+        'MaxFilteredUsers') ? UserDirectoryUtil.getParameter(parameters,
+        'MaxFilteredUsers') : '');
+  }
+
   validate(c: AbstractControl): ValidationErrors | null {
     return this.internalUserDirectoryForm.valid ? null : {
       invalidForm: {
@@ -99,6 +131,13 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
         message: 'internalUserDirectoryForm fields are invalid'
       }
     };
+  }
+
+  // tslint:disable-next-line:no-any
+  writeValue(val: any): void {
+    if (val) {
+      this.internalUserDirectoryForm.setValue(val, {emitEvent: false});
+    }
   }
 }
 

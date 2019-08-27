@@ -251,7 +251,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    UUID userDirectoryId = securityService.changePassword(user.getUsername(), user.getPassword(),
+    String userDirectoryId = securityService.changePassword(user.getUsername(), user.getPassword(),
         "Password2");
 
     assertEquals("The correct user directory ID was not returned", userDirectory.getId(),
@@ -914,7 +914,7 @@ public class SecurityServiceTest
         "The correct number of organizations (1) was not retrieved for the user directory", 1,
         organizationsForUserDirectory.size());
 
-    List<UUID> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
+    List<String> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
         userDirectory.getId());
 
     assertEquals(
@@ -1059,7 +1059,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
+    String userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
 
     assertEquals("The correct user directory ID was not retrieved for the user",
         userDirectory.getId(), userDirectoryId);
@@ -1137,7 +1137,7 @@ public class SecurityServiceTest
 
     Function function = new Function();
 
-    function.setId(UUID.randomUUID());
+    function.setId(UUID.randomUUID().toString());
     function.setCode("Test Function Code " + functionCount);
     function.setName("Test Function Name " + functionCount);
     function.setDescription("Test Function Description " + functionCount);
@@ -1160,7 +1160,7 @@ public class SecurityServiceTest
   {
     organizationCount++;
 
-    return new Organization(UUID.randomUUID(), "Test Organization Name " + organizationCount,
+    return new Organization(UUID.randomUUID().toString(), "Test Organization Name " + organizationCount,
         OrganizationStatus.ACTIVE);
   }
 
@@ -1189,8 +1189,8 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(UUID.randomUUID());
-    userDirectory.setTypeId(UUID.fromString("b43fda33-d3b0-4f80-a39a-110b8e530f4f"));
+    userDirectory.setId(UUID.randomUUID().toString());
+    userDirectory.setTypeId(SecurityService.INTERNAL_USER_DIRECTORY_TYPE_ID);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
     String buffer = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "

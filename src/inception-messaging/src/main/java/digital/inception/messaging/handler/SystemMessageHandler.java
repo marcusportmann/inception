@@ -183,7 +183,7 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(),
+        String userDirectoryId = securityService.authenticate(requestData.getUsername(),
             requestData.getPassword());
 
         List<Organization> organizations = securityService.getOrganizationsForUserDirectory(

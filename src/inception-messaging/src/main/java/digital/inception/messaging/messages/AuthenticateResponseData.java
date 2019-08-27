@@ -30,7 +30,10 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -61,8 +64,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "82223035-1726-407f-8703-3977708e792c");
+  public static final String MESSAGE_TYPE_ID = "82223035-1726-407f-8703-3977708e792c";
 
   /**
    * The error code indicating the result of processing the authentication where a code of '0'

@@ -207,7 +207,7 @@ CREATE TABLE messaging.message_types (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN messaging.message_types.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message type';
+COMMENT ON COLUMN messaging.message_types.id IS 'The ID used to uniquely identify the message type';
 
 COMMENT ON COLUMN messaging.message_types.name IS 'The name of the message type';
 
@@ -259,15 +259,15 @@ CREATE INDEX messages_status_ix ON messaging.messages(status);
 
 CREATE INDEX messages_lock_name_ix ON messaging.messages(lock_name);
 
-COMMENT ON COLUMN messaging.messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+COMMENT ON COLUMN messaging.messages.id IS 'The ID used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.messages.device_id IS 'The ID used to uniquely identify the device the message originated from';
 
-COMMENT ON COLUMN messaging.messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.messages.type_id IS 'The ID used to uniquely identify the type of message';
 
-COMMENT ON COLUMN messaging.messages.correlation_id IS 'The Universally Unique Identifier (UUID) used to correlate the message';
+COMMENT ON COLUMN messaging.messages.correlation_id IS 'The ID used to correlate the message';
 
 COMMENT ON COLUMN messaging.messages.priority IS 'The message priority';
 
@@ -328,7 +328,7 @@ CREATE INDEX message_parts_msg_type_id_ix ON messaging.message_parts(msg_type_id
 
 CREATE INDEX message_parts_lock_name_ix ON messaging.message_parts(lock_name);
 
-COMMENT ON COLUMN messaging.message_parts.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message part';
+COMMENT ON COLUMN messaging.message_parts.id IS 'The ID used to uniquely identify the message part';
 
 COMMENT ON COLUMN messaging.message_parts.part_no IS 'The number of the message part in the set of message parts for the original message';
 
@@ -344,15 +344,15 @@ COMMENT ON COLUMN messaging.message_parts.persisted IS 'The date and time the me
 
 COMMENT ON COLUMN messaging.message_parts.updated IS 'The date and time the message part was last updated';
 
-COMMENT ON COLUMN messaging.message_parts.msg_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_id IS 'The ID used to uniquely identify the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_username IS 'The username identifying the user associated with the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
+COMMENT ON COLUMN messaging.message_parts.msg_device_id IS 'The ID used to uniquely identify the device the original message originated from';
 
-COMMENT ON COLUMN messaging.message_parts.msg_type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_type_id IS 'The ID used to uniquely identify the type of the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_correlation_id IS 'The Universally Unique Identifier (UUID) used to correlate the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_correlation_id IS 'The ID used to correlate the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_priority IS 'The priority for the original message';
 
@@ -389,15 +389,15 @@ CREATE INDEX archived_messages_device_id_ix ON messaging.archived_messages(devic
 
 CREATE INDEX archived_messages_type_id_ix ON messaging.archived_messages(type_id);
 
-COMMENT ON COLUMN messaging.archived_messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+COMMENT ON COLUMN messaging.archived_messages.id IS 'The ID used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.archived_messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The ID used to uniquely identify the device the message originated from';
 
-COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The ID used to uniquely identify the type of message';
 
-COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The Universally Unique Identifier (UUID) used to correlate the message';
+COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The ID used to correlate the message';
 
 COMMENT ON COLUMN messaging.archived_messages.created IS 'The date and time the message was created';
 
@@ -415,7 +415,7 @@ CREATE TABLE reporting.report_definitions (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN reporting.report_definitions.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the report definition';
+COMMENT ON COLUMN reporting.report_definitions.id IS 'The ID used to uniquely identify the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.name IS 'The name of the report definition';
 
@@ -438,7 +438,7 @@ CREATE TABLE scheduler.jobs (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN scheduler.jobs.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+COMMENT ON COLUMN scheduler.jobs.id IS 'The ID used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.jobs.name IS 'The name of the job';
 
@@ -475,9 +475,9 @@ CREATE INDEX job_parameters_job_id_ix ON scheduler.job_parameters(job_id);
 
 CREATE INDEX job_parameters_name_ix ON scheduler.job_parameters(name);
 
-COMMENT ON COLUMN scheduler.job_parameters.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter';
+COMMENT ON COLUMN scheduler.job_parameters.id IS 'The ID used to uniquely identify the job parameter';
 
-COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.job_parameters.name IS 'The name of the job parameter';
 
@@ -494,7 +494,7 @@ CREATE TABLE security.organizations (
 
 CREATE INDEX organizations_name_ix ON security.organizations(name);
 
-COMMENT ON COLUMN security.organizations.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
+COMMENT ON COLUMN security.organizations.id IS 'The ID used to uniquely identify the organization';
 
 COMMENT ON COLUMN security.organizations.name IS 'The name of the organization';
 
@@ -509,7 +509,7 @@ CREATE TABLE security.user_directory_types (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN security.user_directory_types.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directory_types.id IS 'The ID used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directory_types.name IS 'The name of the user directory type';
 
@@ -528,9 +528,9 @@ CREATE TABLE security.user_directories (
 
 CREATE INDEX user_directories_name_ix ON security.user_directories(name);
 
-COMMENT ON COLUMN security.user_directories.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directories.id IS 'The ID used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directories.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type';
+COMMENT ON COLUMN security.user_directories.type_id IS 'The ID used to uniquely identify the user directory type';
 
 COMMENT ON COLUMN security.user_directories.name IS 'The name of the user directory';
 
@@ -550,9 +550,9 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON security
 
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON security.user_directory_to_organization_map(organization_id);
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The ID used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
+COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The ID used to uniquely identify the organization';
 
 
 CREATE TABLE security.users (
@@ -577,9 +577,9 @@ CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
 CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.users.id IS 'The ID used to uniquely identify the user';
 
-COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with';
+COMMENT ON COLUMN security.users.user_directory_id IS 'The ID used to uniquely identify the user directory the user is associated with';
 
 COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
@@ -616,9 +616,9 @@ CREATE INDEX users_password_history_user_id_ix ON security.users_password_histor
 
 CREATE INDEX users_password_history_changed_ix ON security.users_password_history(changed);
 
-COMMENT ON COLUMN security.users_password_history.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry';
+COMMENT ON COLUMN security.users_password_history.id IS 'The ID used to uniquely identify the password history entry';
 
-COMMENT ON COLUMN security.users_password_history.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.users_password_history.user_id IS 'The ID used to uniquely identify the user';
 
 COMMENT ON COLUMN security.users_password_history.changed IS 'When the password change took place for the user';
 
@@ -639,9 +639,9 @@ CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
 
 CREATE INDEX groups_groupname_ix ON security.groups(groupname);
 
-COMMENT ON COLUMN security.groups.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
+COMMENT ON COLUMN security.groups.id IS 'The ID used to uniquely identify the group';
 
-COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
+COMMENT ON COLUMN security.groups.user_directory_id IS 'The ID used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN security.groups.groupname IS 'The group name for the group';
 
@@ -661,9 +661,9 @@ CREATE INDEX user_to_group_map_user_id_ix ON security.user_to_group_map(user_id)
 
 CREATE INDEX user_to_group_map_group_id_ix ON security.user_to_group_map(group_id);
 
-COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The ID used to uniquely identify the user';
 
-COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
+COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The ID used to uniquely identify the group';
 
 
 CREATE TABLE security.functions (
@@ -677,7 +677,7 @@ CREATE TABLE security.functions (
 
 CREATE UNIQUE INDEX functions_code_ix ON security.functions(code);
 
-COMMENT ON COLUMN security.functions.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
+COMMENT ON COLUMN security.functions.id IS 'The ID used to uniquely identify the function';
 
 COMMENT ON COLUMN security.functions.code IS 'The unique code used to identify the function';
 
@@ -694,7 +694,7 @@ CREATE TABLE security.roles (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN security.roles.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+COMMENT ON COLUMN security.roles.id IS 'The ID used to uniquely identify the role';
 
 COMMENT ON COLUMN security.roles.name IS 'The name of the role';
 
@@ -714,9 +714,9 @@ CREATE INDEX function_to_role_map_function_id_ix ON security.function_to_role_ma
 
 CREATE INDEX function_to_role_map_role_id_ix ON security.function_to_role_map(role_id);
 
-COMMENT ON COLUMN security.function_to_role_map.function_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the function';
+COMMENT ON COLUMN security.function_to_role_map.function_id IS 'The ID used to uniquely identify the function';
 
-COMMENT ON COLUMN security.function_to_role_map.role_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+COMMENT ON COLUMN security.function_to_role_map.role_id IS 'The ID used to uniquely identify the role';
 
 
 CREATE TABLE security.role_to_group_map (
@@ -732,9 +732,9 @@ CREATE INDEX role_to_group_map_role_id_ix ON security.role_to_group_map(role_id)
 
 CREATE INDEX role_to_group_map_group_id_ix ON security.role_to_group_map(group_id);
 
-COMMENT ON COLUMN security.role_to_group_map.role_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the role';
+COMMENT ON COLUMN security.role_to_group_map.role_id IS 'The ID used to uniquely identify the role';
 
-COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
+COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquely identify the group';
 
 
 CREATE TABLE service_registry.service_registry (
@@ -817,7 +817,7 @@ CREATE INDEX error_reports_created_ix ON error.error_reports(created);
 
 CREATE INDEX error_reports_who_ix ON error.error_reports(who);
 
-COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
+COMMENT ON COLUMN error.error_reports.id IS 'The ID used to uniquely identify the error report';
 
 COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
 
@@ -1049,13 +1049,13 @@ INSERT INTO security.organizations (id, name, status)
 INSERT INTO security.user_directories (id, type_id, name, configuration)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', 'b43fda33-d3b0-4f80-a39a-110b8e530f4f', 'Sample Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
---INSERT INTO MMP.USER_DIRECTORIES (ID, TYPE_ID, NAME, CONFIGURATION) VALUES
---  ('595d13ac-22d6-4ce2-b898-3add4658a748', 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>sds.inception.digital</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>uid=system,ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=test,ou=applications,o=MMP</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=test,ou=applications,o=MMP</value></parameter><parameter><name>SharedBaseDN</name><value>ou=staff,o=MMP</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserPasswordExpiryAttribute</name><value>passwordexpiry</value></parameter><parameter><name>UserPasswordAttemptsAttribute</name><value>passwordattempts</value></parameter><parameter><name>UserPasswordHistoryAttribute</name><value>passwordhistory</value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>SupportPasswordHistory</name><value>true</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>PasswordHistoryMaxLength</name><value>128</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
+--INSERT INTO security.user_directories (id, type_id, name, configuration)
+--  VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', 'e5741a89-c87b-4406-8a60-2cc0b0a5fa3e', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>SupportPasswordLockout</name><value>false</value></parameter><parameter><name>SupportPasswordExpiry</name><value>false</value></parameter><parameter><name>SupportPasswordHistory</name><value>false</value></parameter><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>uid=sample_service_account,ou=service_accounts,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>SharedBaseDN</name><value></value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserPasswordLastChangedAttribute</name><value></value></parameter><parameter><name>UserPasswordFailuresAttribute</name><value></value></parameter><parameter><name>UserPasswordHistoryAttribute</name><value></value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserFullNameAttribute</name><value>cn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>PasswordHistoryMaxLength</name><value>128</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', '204e5b8f-48e7-4354-bd15-753e6543b64d');
---INSERT INTO SECURITY.USER_DIRECTORY_TO_ORGANIZATION_MAP (USER_DIRECTORY_ID, ORGANIZATION_ID) VALUES
---  ('595d13ac-22d6-4ce2-b898-3add4658a748', '204e5b8f-48e7-4354-bd15-753e6543b64d');
+--INSERT INTO SECURITY.USER_DIRECTORY_TO_ORGANIZATION_MAP (USER_DIRECTORY_ID, ORGANIZATION_ID)
+--  VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'joe', 1, 'Joe', 'Bloggs', '', '', 'joe@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);

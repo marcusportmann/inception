@@ -52,10 +52,9 @@ public class OrganizationNotFoundException extends ServiceException
   /**
    * Constructs a new <code>OrganizationNotFoundException</code>.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    */
-  public OrganizationNotFoundException(UUID organizationId)
+  public OrganizationNotFoundException(String organizationId)
   {
     super(String.format("The organization (%s) could not be found", organizationId));
   }

@@ -86,7 +86,7 @@ public class MessagingServletTest
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
-  private static final UUID DEVICE_ID = UUID.randomUUID();
+  private static final String DEVICE_ID = UUID.randomUUID().toString();
 
   /**
    * The Spring application context.
@@ -110,7 +110,7 @@ public class MessagingServletTest
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
         "Test Data".getBytes());
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -179,7 +179,7 @@ public class MessagingServletTest
 
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value", testData);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -297,14 +297,14 @@ public class MessagingServletTest
     assertEquals("Test Value", responseData.getTestValue());
   }
 
-  private byte[] authenticateUser(String username, String password, UUID deviceId)
+  private byte[] authenticateUser(String username, String password, String deviceId)
     throws Exception
   {
     AuthenticateRequestData requestData = new AuthenticateRequestData(username, password, deviceId);
 
     MessageTranslator messageTranslator = new MessageTranslator(username, deviceId);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -480,7 +480,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessageDownloadResponse sendMessageDownloadRequest(UUID deviceId, String username)
+  private MessageDownloadResponse sendMessageDownloadRequest(String deviceId, String username)
     throws Exception
   {
     MessageDownloadRequest messageDownloadRequest = new MessageDownloadRequest(deviceId, username);
@@ -503,7 +503,8 @@ public class MessagingServletTest
     }
   }
 
-  private MessagePartDownloadResponse sendMessagePartDownloadRequest(UUID deviceId, String username)
+  private MessagePartDownloadResponse sendMessagePartDownloadRequest(String deviceId,
+      String username)
     throws Exception
   {
     MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(
@@ -527,7 +528,8 @@ public class MessagingServletTest
     }
   }
 
-  private MessagePartReceivedResponse sendMessagePartReceivedRequest(UUID deviceId, UUID messageId)
+  private MessagePartReceivedResponse sendMessagePartReceivedRequest(String deviceId,
+      String messageId)
     throws Exception
   {
     MessagePartReceivedRequest messagePartReceivedRequest = new MessagePartReceivedRequest(
@@ -551,7 +553,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessageReceivedResponse sendMessageReceivedRequest(UUID deviceId, UUID messageId)
+  private MessageReceivedResponse sendMessageReceivedRequest(String deviceId, String messageId)
     throws Exception
   {
     MessageReceivedRequest messageReceivedRequest = new MessageReceivedRequest(deviceId, messageId);

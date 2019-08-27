@@ -29,17 +29,12 @@ export class User {
   email: string;
 
   /**
-   * The optional external reference for the user.
-   */
-  externalReference?: string;
-
-  /**
    * The first name for the user.
    */
   firstName: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * The ID used to uniquely identify the user.
    */
   id: string;
 
@@ -84,8 +79,7 @@ export class User {
   status: UserStatus;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
-   * is associated with.
+   * The ID used to uniquely identify the user directory the user  is associated with.
    */
   userDirectoryId: string;
 
@@ -97,10 +91,9 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param id                The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                          user.
-   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                          user directory the user is associated with.
+   * @param id                The ID used to uniquely identify the user.
+   * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
+   *                          associated with.
    * @param username          The username for the user.
    * @param firstName         The first name for the user.
    * @param lastName          The last name for the user.
@@ -113,12 +106,11 @@ export class User {
    * @param status            The status for the user.
    * @param readOnly          Is the user read-only.
    * @param passwordExpiry    The optional date and time the password for the user expires.
-   * @param externalReference The optional external reference for the user.
    */
   constructor(id: string, userDirectoryId: string, username: string, firstName: string,
               lastName: string, mobileNumber: string, phoneNumber: string, email: string,
               password: string, passwordAttempts: number, status: UserStatus, readOnly?: boolean,
-              passwordExpiry?: Date, externalReference?: string) {
+              passwordExpiry?: Date) {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
     this.username = username;
@@ -132,6 +124,5 @@ export class User {
     this.status = status;
     this.readOnly = readOnly;
     this.passwordExpiry = passwordExpiry;
-    this.externalReference = externalReference;
   }
 }

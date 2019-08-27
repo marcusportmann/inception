@@ -27,10 +27,6 @@ import digital.inception.messaging.WbxmlMessageData;
 
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>CheckUserExistsResponseData</code> class manages the data for a
  * "Check User Exists Response" message.
@@ -59,8 +55,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Check User Exists Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
+  public static final String MESSAGE_TYPE_ID = "a38bd55e-3470-46f1-a96a-a6b08a9adc63";
 
   /**
    * The error code;

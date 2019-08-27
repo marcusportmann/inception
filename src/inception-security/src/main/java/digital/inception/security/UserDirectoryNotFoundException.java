@@ -52,10 +52,9 @@ public class UserDirectoryNotFoundException extends ServiceException
   /**
    * Constructs a new <code>UserDirectoryNotFoundException</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    */
-  public UserDirectoryNotFoundException(UUID userDirectoryId)
+  public UserDirectoryNotFoundException(String userDirectoryId)
   {
     super(String.format("The user directory with ID (%s) could not be found", userDirectoryId));
   }

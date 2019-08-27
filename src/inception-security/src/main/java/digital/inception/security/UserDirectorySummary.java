@@ -72,15 +72,15 @@ public class UserDirectorySummary
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * The ID used to uniquely identify the user directory.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      value = "The ID used to uniquely identify the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The name of the user directory.
@@ -93,15 +93,15 @@ public class UserDirectorySummary
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   * The ID used to uniquely identify the user directory type.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory type",
+      value = "The ID used to uniquely identify the user directory type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TypeId", required = true)
   @NotNull
-  private UUID typeId;
+  private String typeId;
 
   /**
    * Constructs a new <code>UserDirectorySummary</code>.
@@ -109,11 +109,11 @@ public class UserDirectorySummary
   public UserDirectorySummary() {}
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the ID used to uniquely identify the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the ID used to uniquely identify the user directory
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -129,23 +129,21 @@ public class UserDirectorySummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type.
+   * Returns the ID used to uniquely identify the user directory type.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         type
+   * @return the ID used to uniquely identify the user directory type
    */
-  public UUID getTypeId()
+  public String getTypeId()
   {
     return typeId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Set the ID used to uniquely identify the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param id the ID used to uniquely identify the user directory
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }
@@ -161,12 +159,11 @@ public class UserDirectorySummary
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   * Set the ID used to uniquely identify the user directory type.
    *
-   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *               directory type
+   * @param typeId the ID used to uniquely identify the user directory type
    */
-  public void setTypeId(UUID typeId)
+  public void setTypeId(String typeId)
   {
     this.typeId = typeId;
   }

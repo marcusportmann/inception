@@ -88,7 +88,7 @@ public class SchedulerServiceTest
 
     for (int i = 0; i < 10; i++)
     {
-      schedulerService.createJobParameter(new JobParameter(UUID.randomUUID(), job.getId(),
+      schedulerService.createJobParameter(new JobParameter(UUID.randomUUID().toString(), job.getId(),
           job.getName() + " Parameter " + i, job.getName() + " Value " + i));
     }
   }
@@ -205,7 +205,7 @@ public class SchedulerServiceTest
     jobCount++;
 
     Job job = new Job();
-    job.setId(UUID.randomUUID());
+    job.setId(UUID.randomUUID().toString());
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("digital.inception.scheduler.TestJob");

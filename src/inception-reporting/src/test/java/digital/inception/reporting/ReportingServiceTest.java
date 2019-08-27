@@ -171,7 +171,7 @@ public class ReportingServiceTest
         "digital/inception/reporting/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId(UUID.randomUUID());
+    reportDefinition.setId(UUID.randomUUID().toString());
     reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
     reportDefinition.setTemplate(testReportTemplate);
 

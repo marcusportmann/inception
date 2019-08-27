@@ -117,7 +117,7 @@ public class SchedulerService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createJobSQL))
     {
-      statement.setObject(1, job.getId());
+      statement.setObject(1, UUID.fromString(job.getId()));
       statement.setString(2, job.getName());
       statement.setString(3, job.getSchedulingPattern());
       statement.setString(4, job.getJobClass());
@@ -152,8 +152,8 @@ public class SchedulerService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(createJobParameterSQL))
     {
-      statement.setObject(1, jobParameter.getId());
-      statement.setObject(2, jobParameter.getJobId());
+      statement.setObject(1, UUID.fromString(jobParameter.getId()));
+      statement.setObject(2, UUID.fromString(jobParameter.getJobId()));
       statement.setString(3, jobParameter.getName());
       statement.setString(4, jobParameter.getValue());
 
@@ -175,10 +175,10 @@ public class SchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
   @Override
-  public void deleteJob(UUID jobId)
+  public void deleteJob(String jobId)
     throws SchedulerServiceException
   {
     String deleteJobSQL = "DELETE FROM scheduler.jobs WHERE id=?";
@@ -319,12 +319,12 @@ public class SchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the job or <code>null</code> if the job could not be found
    */
   @Override
-  public Job getJob(UUID jobId)
+  public Job getJob(String jobId)
     throws SchedulerServiceException
   {
     String getJobSQL =
@@ -358,12 +358,12 @@ public class SchedulerService
   /**
    * Retrieve the parameters for the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the parameters for the job
    */
   @Override
-  public List<JobParameter> getJobParameters(UUID jobId)
+  public List<JobParameter> getJobParameters(String jobId)
     throws SchedulerServiceException
   {
     String getJobParametersSQL =
@@ -574,10 +574,10 @@ public class SchedulerService
   /**
    * Increment the execution attempts for the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
   @Override
-  public void incrementJobExecutionAttempts(UUID jobId)
+  public void incrementJobExecutionAttempts(String jobId)
     throws SchedulerServiceException
   {
     String incrementJobExecutionAttemptsSQL = "UPDATE scheduler.jobs "
@@ -609,11 +609,11 @@ public class SchedulerService
   /**
    * Lock a job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the locked job
    */
   @Override
-  public void lockJob(UUID jobId, JobStatus status)
+  public void lockJob(String jobId, JobStatus status)
     throws SchedulerServiceException
   {
     String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
@@ -642,13 +642,13 @@ public class SchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
+   * @param jobId             the ID used to uniquely identify
    *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
   @Override
-  public void rescheduleJob(UUID jobId, String schedulingPattern)
+  public void rescheduleJob(String jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -779,11 +779,11 @@ public class SchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the job
    */
   @Override
-  public void setJobStatus(UUID jobId, JobStatus status)
+  public void setJobStatus(String jobId, JobStatus status)
     throws SchedulerServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -800,11 +800,11 @@ public class SchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   @Override
-  public void unlockJob(UUID jobId, JobStatus status)
+  public void unlockJob(String jobId, JobStatus status)
     throws SchedulerServiceException
   {
     String unlockJobSQL =
@@ -870,7 +870,7 @@ public class SchedulerService
   private Job getJob(ResultSet rs)
     throws SQLException
   {
-    return new Job(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(3), rs.getString(
+    return new Job(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(
         4), rs.getBoolean(5), JobStatus.fromCode(rs.getInt(6)), rs.getInt(7), rs.getString(8),
         rs.getTimestamp(9), rs.getTimestamp(10), rs.getTimestamp(11));
   }
@@ -878,7 +878,7 @@ public class SchedulerService
   private JobParameter getJobParameter(ResultSet rs)
     throws SQLException
   {
-    return new JobParameter(UUID.fromString(rs.getString(1)), UUID.fromString(rs.getString(2)),
+    return new JobParameter(rs.getString(1), rs.getString(2),
         rs.getString(3), rs.getString(4));
   }
 
@@ -898,7 +898,7 @@ public class SchedulerService
     }
   }
 
-  private void scheduleJob(Connection connection, UUID id, Date nextExecution)
+  private void scheduleJob(Connection connection, String id, Date nextExecution)
     throws SchedulerServiceException
   {
     String scheduleJobSQL =
@@ -924,7 +924,7 @@ public class SchedulerService
     }
   }
 
-  private void setJobStatus(Connection connection, UUID id, JobStatus status)
+  private void setJobStatus(Connection connection, String id, JobStatus status)
     throws SchedulerServiceException
   {
     String setJobStatusSQL = "UPDATE scheduler.jobs SET status=? WHERE id=?";

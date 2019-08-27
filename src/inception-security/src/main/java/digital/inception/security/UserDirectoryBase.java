@@ -50,18 +50,17 @@ public abstract class UserDirectoryBase
   private List<UserDirectoryParameter> parameters;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * The ID used to uniquely identify the user directory.
    */
-  private UUID userDirectoryId;
+  private String userDirectoryId;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param parameters      the parameters for the user directory
    */
-  public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
+  public UserDirectoryBase(String userDirectoryId, List<UserDirectoryParameter> parameters)
   {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
@@ -78,11 +77,11 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the ID used to uniquely identify the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the ID used to uniquely identify the user directory
    */
-  public UUID getUserDirectoryId()
+  public String getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -94,14 +93,13 @@ public abstract class UserDirectoryBase
    * security group will be returned.
    *
    * @param connection       the existing database connection
-   * @param groupId          the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         security group
+   * @param groupId          the ID used to uniquely identify the security group
    * @param groupName        the group name uniquely identifying the security group
    * @param groupDescription a description for the group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   * @return the ID used to uniquely identify the security group
    */
-  protected UUID createGroup(Connection connection, UUID groupId, String groupName,
+  protected String createGroup(Connection connection, String groupId, String groupName,
       String groupDescription)
     throws SQLException
   {
@@ -110,15 +108,15 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(createGroupSQL))
     {
-      UUID existingGroupId = getGroupId(connection, groupName);
+      String existingGroupId = getGroupId(connection, groupName);
 
       if (existingGroupId != null)
       {
         return existingGroupId;
       }
 
-      statement.setObject(1, groupId);
-      statement.setObject(2, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(groupId));
+      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
       statement.setString(3, groupName);
 
       if (StringUtils.isEmpty(groupDescription))
@@ -172,11 +170,10 @@ public abstract class UserDirectoryBase
    * @param connection the existing database connection to use
    * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
-   *         or <code>null</code> if a security group with the specified group name could not be
-   *         found
+   * @return the ID used to uniquely identify the security group or <code>null</code> if a security
+   *         group with the specified group name could not be found
    */
-  protected UUID deleteGroup(Connection connection, String groupName)
+  protected String deleteGroup(Connection connection, String groupName)
     throws SQLException
   {
     String deleteGroupSQL = "DELETE FROM security.groups WHERE user_directory_id=? "
@@ -184,11 +181,11 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(deleteGroupSQL))
     {
-      UUID groupId = getGroupId(connection, groupName);
+      String groupId = getGroupId(connection, groupName);
 
       if (groupId != null)
       {
-        statement.setObject(1, getUserDirectoryId());
+        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
         statement.setString(2, groupName);
 
         if (statement.executeUpdate() <= 0)
@@ -219,7 +216,7 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getGroupSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
@@ -242,11 +239,10 @@ public abstract class UserDirectoryBase
    * @param connection the existing database connection to use
    * @param groupName  the group name uniquely identifying the security group
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
-   *         or <code>null</code> if a security group with the specified group name could not be
-   *         found
+   * @return the ID used to uniquely identify the security group or <code>null</code> if a security
+   *         group with the specified group name could not be found
    */
-  protected UUID getGroupId(Connection connection, String groupName)
+  protected String getGroupId(Connection connection, String groupName)
     throws SQLException
   {
     String getGroupIdSQL = "SELECT id FROM security.groups WHERE user_directory_id=? AND "
@@ -254,14 +250,14 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getGroupIdSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       statement.setString(2, groupName);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return UUID.fromString(rs.getString(1));
+          return rs.getString(1);
         }
         else
         {
@@ -286,7 +282,7 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getGroupsSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -322,7 +318,7 @@ public abstract class UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getNumberOfGroupsSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -364,12 +360,11 @@ public abstract class UserDirectoryBase
    * Update the security group.
    *
    * @param connection       the existing database connection
-   * @param groupId          the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         security group
+   * @param groupId          the ID used to uniquely identify the security group
    * @param groupName        the group name uniquely identifying the security group
    * @param groupDescription a description for the group
    */
-  protected void updateGroup(Connection connection, UUID groupId, String groupName,
+  protected void updateGroup(Connection connection, String groupId, String groupName,
       String groupDescription)
     throws SQLException
   {
@@ -382,8 +377,8 @@ public abstract class UserDirectoryBase
           StringUtils.isEmpty(groupDescription)
           ? ""
           : groupDescription);
-      statement.setObject(2, getUserDirectoryId());
-      statement.setObject(3, groupId);
+      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(3, UUID.fromString(groupId));
 
       if (statement.executeUpdate() <= 0)
       {
@@ -408,7 +403,7 @@ public abstract class UserDirectoryBase
   {
     Group group = new Group(rs.getString(2));
 
-    group.setId(UUID.fromString(rs.getString(1)));
+    group.setId(rs.getString(1));
     group.setUserDirectoryId(getUserDirectoryId());
 
     String description = rs.getString(3);

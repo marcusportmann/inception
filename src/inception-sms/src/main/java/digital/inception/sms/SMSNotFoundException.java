@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;

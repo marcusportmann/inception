@@ -22,7 +22,7 @@
 export class UserDirectoryType {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   * The ID used to uniquely identify the user directory type.
    */
   id: string;
 
@@ -39,8 +39,7 @@ export class UserDirectoryType {
   /**
    * Constructs a new UserDirectoryParameter.
    *
-   * @param id                     The Universally Unique Identifier (UUID) used to uniquely
-   *                               identify the user directory type.
+   * @param id                     The ID used to uniquely identify the user directory type.
    * @param name                   The name of the user directory type.
    * @param userDirectoryClassName The fully qualified name of the Java class that implements the user directory type.
    */

@@ -73,27 +73,26 @@ public class Group
   private String groupName;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the security group.
+   * The ID used to uniquely identify the security group.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the security group",
+      value = "The ID used to uniquely identify the security group",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * security group is associated with
+   * The ID used to uniquely identify the user directory the security group is associated with
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
+      value = "The ID used to uniquely identify the user directory the security group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
-  private UUID userDirectoryId;
+  private String userDirectoryId;
 
   /**
    * Constructs a new <code>Group</code>.
@@ -113,14 +112,13 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param id              the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        security group
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the security group is associated with
+   * @param id              the ID used to uniquely identify the security group
+   * @param userDirectoryId the ID used to uniquely identify the user directory the security group
+   *                        is associated with
    * @param groupName       the name of the security group uniquely identifying the security group
    * @param description     the description for the security group
    */
-  public Group(UUID id, UUID userDirectoryId, String groupName, String description)
+  public Group(String id, String userDirectoryId, String groupName, String description)
   {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
@@ -149,23 +147,23 @@ public class Group
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the security group.
+   * Returns the ID used to uniquely identify the security group.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   * @return the ID used to uniquely identify the security group
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the security group is associated with.
+   * Returns the ID used to uniquely identify the user directory the security group is associated
+   * with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the security group is associated with
+   * @return the ID used to uniquely identify the user directory the security group is associated
+   *         with
    */
-  public UUID getUserDirectoryId()
+  public String getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -181,23 +179,22 @@ public class Group
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the security group.
+   * Set the ID used to uniquely identify the security group.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   * @param id the ID used to uniquely identify the security group
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * security group is associated with.
+   * Set the ID used to uniquely identify the user directory the security group is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the security group is associated with
+   * @param userDirectoryId the ID used to uniquely identify the user directory the security group
+   *                        is associated with
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
+  public void setUserDirectoryId(String userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

@@ -19,7 +19,6 @@ package digital.inception.messaging;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>IMessagingService</code> interface defines the interface for the Messaging Service
@@ -33,14 +32,13 @@ public interface IMessagingService
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   message
+   * @param messageId  the ID used to uniquely identify the message
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
    *         <code>false</code> otherwise
    */
-  boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
+  boolean allPartsQueuedForMessage(String messageId, int totalParts)
     throws MessagingServiceException;
 
   /**
@@ -112,37 +110,36 @@ public interface IMessagingService
   /**
    * Delete the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    */
-  void deleteMessage(UUID messageId)
+  void deleteMessage(String messageId)
     throws MessagingServiceException;
 
   /**
    * Delete the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message part
+   * @param messagePartId the ID used to uniquely identify the message part
    */
-  void deleteMessagePart(UUID messagePartId)
+  void deleteMessagePart(String messagePartId)
     throws MessagingServiceException;
 
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    */
-  void deleteMessagePartsForMessage(UUID messageId)
+  void deleteMessagePartsForMessage(String messageId)
     throws MessagingServiceException;
 
   /**
    * Derive the user-device encryption key.
    *
    * @param username the username uniquely identifying the user e.g. test1
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   * @param deviceId the ID used to uniquely identify the device
    *
    * @return the user-device encryption key
    */
-  byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
+  byte[] deriveUserDeviceEncryptionKey(String username, String deviceId)
     throws MessagingServiceException;
 
   /**
@@ -166,24 +163,23 @@ public interface IMessagingService
   /**
    * Retrieve the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    *
-   * @return the message or <code>null</code> if the message could not
-   *         be found
+   * @return the message or <code>null</code> if the message could not be found
    */
-  Message getMessage(UUID messageId)
+  Message getMessage(String messageId)
     throws MessagingServiceException;
 
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
    * @return the message parts queued for assembly for the message
    */
-  List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
+  List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
     throws MessagingServiceException;
 
   /**
@@ -191,23 +187,23 @@ public interface IMessagingService
    * device.
    *
    * @param username the username identifying the user
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   * @param deviceId the ID used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
    */
-  List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
+  List<MessagePart> getMessagePartsQueuedForDownload(String username, String deviceId)
     throws MessagingServiceException;
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
    * @param username the username identifying the user
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   * @param deviceId the ID used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
    *         device
    */
-  List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
+  List<Message> getMessagesQueuedForDownload(String username, String deviceId)
     throws MessagingServiceException;
 
   /**
@@ -252,24 +248,23 @@ public interface IMessagingService
   /**
    * Has the message already been archived?
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *         otherwise
    */
-  boolean isMessageArchived(UUID messageId)
+  boolean isMessageArchived(String messageId)
     throws MessagingServiceException;
 
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message part
+   * @param messagePartId the ID used to uniquely identify the message part
    *
    * @return <code>true</code> if the message part has already been queued for assemble or
    *         <code>false</code> otherwise
    */
-  boolean isMessagePartQueuedForAssembly(UUID messagePartId)
+  boolean isMessagePartQueuedForAssembly(String messagePartId)
     throws MessagingServiceException;
 
   /**
@@ -366,20 +361,20 @@ public interface IMessagingService
   /**
    * Set the status for a message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param messagePartId the ID used to uniquely identify the
    *                      message part
    * @param status        the new status
    */
-  void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
+  void setMessagePartStatus(String messagePartId, MessagePartStatus status)
     throws MessagingServiceException;
 
   /**
    * Set the status for a message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the ID used to uniquely identify the message
    * @param status    the new status
    */
-  void setMessageStatus(UUID messageId, MessageStatus status)
+  void setMessageStatus(String messageId, MessageStatus status)
     throws MessagingServiceException;
 
   /**
@@ -394,10 +389,9 @@ public interface IMessagingService
   /**
    * Unlock a locked message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message part
+   * @param messagePartId the ID used to uniquely identify the message part
    * @param status        the new status for the unlocked message part
    */
-  void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
+  void unlockMessagePart(String messagePartId, MessagePartStatus status)
     throws MessagingServiceException;
 }

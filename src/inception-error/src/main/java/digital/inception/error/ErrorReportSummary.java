@@ -33,8 +33,6 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -115,15 +113,13 @@ public class ErrorReportSummary
   private String deviceId;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * The ID used to uniquely identify the error report.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the error report",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the error report", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The optional username identifying the user associated with the error report.
@@ -143,8 +139,7 @@ public class ErrorReportSummary
   /**
    * Constructs a new <code>ErrorReportSummary</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the error report
+   * @param id                 the ID used to uniquely identify the error report
    * @param applicationId      the ID used to uniquely identify the application that generated the
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
@@ -155,7 +150,7 @@ public class ErrorReportSummary
    * @param deviceId           the optional ID used to uniquely identify the device the error report
    *                           originated from
    */
-  public ErrorReportSummary(UUID id, String applicationId, String applicationVersion,
+  public ErrorReportSummary(String id, String applicationId, String applicationVersion,
       String description, LocalDateTime created, String who, String deviceId)
   {
     this.id = id;
@@ -218,11 +213,11 @@ public class ErrorReportSummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Returns the ID used to uniquely identify the error report.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @return the ID used to uniquely identify the error report
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -290,11 +285,11 @@ public class ErrorReportSummary
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Set the ID used to uniquely identify the error report.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @param id the ID used to uniquely identify the error report
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

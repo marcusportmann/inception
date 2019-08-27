@@ -53,20 +53,10 @@ public class DuplicateOrganizationException extends ServiceException
   /**
    * Constructs a new <code>DuplicateOrganizationException</code>.
    *
-   * @param name the name of the organization
+   * @param idOrName the ID or name of the organization
    */
-  public DuplicateOrganizationException(String name)
+  public DuplicateOrganizationException(String idOrName)
   {
-    super(String.format("The organization with the name (%s) already exists", name));
-  }
-
-  /**
-   * Constructs a new <code>DuplicateOrganizationException</code>.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
-   */
-  public DuplicateOrganizationException(UUID id)
-  {
-    super(String.format("The organization with the ID (%s) already exists", id.toString()));
+    super(String.format("The organization (%s) already exists", idOrName));
   }
 }

@@ -60,7 +60,7 @@ import java.util.*;
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SystemMessageTest
 {
-  private static final UUID DEVICE_ID = UUID.randomUUID();
+  private static final String DEVICE_ID = UUID.randomUUID().toString();
   private static final String PASSWORD = "Password1";
   private static final String USERNAME = "Administrator";
 
@@ -93,7 +93,7 @@ public class SystemMessageTest
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -116,7 +116,7 @@ public class SystemMessageTest
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -132,7 +132,7 @@ public class SystemMessageTest
 
     OrganizationData organization = organizations.get(0);
 
-    assertEquals(UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5"), organization.getId());
+    assertEquals("c1685b92-9fe5-453a-995b-89d8c0f29cb5", organization.getId());
     assertEquals("Administration", organization.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());
@@ -155,7 +155,7 @@ public class SystemMessageTest
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -199,7 +199,8 @@ public class SystemMessageTest
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID()
+          .toString());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -255,7 +256,8 @@ public class SystemMessageTest
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID()
+          .toString());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -310,7 +312,8 @@ public class SystemMessageTest
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID()
+          .toString());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -366,7 +369,8 @@ public class SystemMessageTest
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID()
+          .toString());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -391,13 +395,14 @@ public class SystemMessageTest
   public void submitErrorReportTest()
     throws Exception
   {
-    SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
-        "ApplicationId", "1.0.0", "Test Description", "Test Detail", "Test Feedback",
-        LocalDateTime.now(), "Administrator", "DeviceId", Base64Util.encodeBytes("Test Data".getBytes()));
+    SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID()
+        .toString(), "ApplicationId", "1.0.0", "Test Description", "Test Detail", "Test Feedback",
+        LocalDateTime.now(), "Administrator", "DeviceId", Base64Util.encodeBytes(
+        "Test Data".getBytes()));
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -424,7 +429,7 @@ public class SystemMessageTest
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 

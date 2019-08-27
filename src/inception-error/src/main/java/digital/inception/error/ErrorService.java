@@ -111,7 +111,7 @@ public class ErrorService
         feedback = feedback.substring(0, 4000);
       }
 
-      statement.setObject(1, errorReport.getId());
+      statement.setObject(1, UUID.fromString(errorReport.getId()));
       statement.setString(2, errorReport.getApplicationId());
       statement.setString(3, errorReport.getApplicationVersion());
       statement.setString(4, description);
@@ -130,7 +130,7 @@ public class ErrorService
 
       if (deviceId != null)
       {
-        statement.setObject(8, deviceId);
+        statement.setString(8, deviceId);
       }
       else
       {
@@ -172,13 +172,12 @@ public class ErrorService
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
+   * @param errorReportId the ID used to uniquely identify the error report
    *
    * @return the error report or <code>null</code> if the error report could not be found
    */
   @Override
-  public ErrorReport getErrorReport(UUID errorReportId)
+  public ErrorReport getErrorReport(String errorReportId)
     throws ErrorServiceException
   {
     String getErrorReportSQL = "SELECT id, application_id, application_version, description, "
@@ -187,7 +186,7 @@ public class ErrorService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getErrorReportSQL))
     {
-      statement.setObject(1, errorReportId);
+      statement.setObject(1, UUID.fromString(errorReportId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -211,14 +210,13 @@ public class ErrorService
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
+   * @param errorReportId the ID used to uniquely identify the error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
    *         found
    */
   @Override
-  public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
+  public ErrorReportSummary getErrorReportSummary(String errorReportId)
     throws ErrorServiceException
   {
     String getErrorReportSummarySQL =
@@ -228,7 +226,7 @@ public class ErrorService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getErrorReportSummarySQL))
     {
-      statement.setObject(1, errorReportId);
+      statement.setObject(1, UUID.fromString(errorReportId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -324,7 +322,7 @@ public class ErrorService
   private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new ErrorReport(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(3),
+    return new ErrorReport(rs.getString(1), rs.getString(2), rs.getString(3),
         rs.getString(4), rs.getString(5), rs.getTimestamp(6).toLocalDateTime(), rs.getString(7),
         rs.getString(8), rs.getString(9), rs.getString(10));
   }
@@ -332,7 +330,7 @@ public class ErrorService
   private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
     throws SQLException
   {
-    return new ErrorReportSummary(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getString(
+    return new ErrorReportSummary(rs.getString(1), rs.getString(2), rs.getString(
         3), rs.getString(4), rs.getTimestamp(5).toLocalDateTime(), rs.getString(6), rs.getString(
         7));
   }

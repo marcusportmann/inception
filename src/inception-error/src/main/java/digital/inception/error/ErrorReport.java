@@ -33,8 +33,6 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -147,15 +145,13 @@ public class ErrorReport
   private String feedback;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * The ID used to uniquely identify the error report.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the error report",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the error report", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The optional username identifying the user associated with the error report.
@@ -175,8 +171,7 @@ public class ErrorReport
   /**
    * Constructs a new <code>ErrorReport</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the error report
+   * @param id                 the ID used to uniquely identify the error report
    * @param applicationId      the ID used to uniquely identify the application that generated the
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
@@ -184,8 +179,8 @@ public class ErrorReport
    * @param detail             the error detail
    * @param created            the date and time the error report was created
    */
-  public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
-      String detail, LocalDateTime created)
+  public ErrorReport(String id, String applicationId, String applicationVersion,
+      String description, String detail, LocalDateTime created)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -198,8 +193,7 @@ public class ErrorReport
   /**
    * Constructs a new <code>ErrorReport</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the error report
+   * @param id                 the ID used to uniquely identify the error report
    * @param applicationId      the ID used to uniquely identify the application that generated the
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
@@ -213,9 +207,9 @@ public class ErrorReport
    * @param feedback           the optional feedback provided by the user for the error
    * @param data               the optional base-64 encoded data associated with the error report
    */
-  public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
-      String detail, LocalDateTime created, String who, String deviceId, String feedback,
-      String data)
+  public ErrorReport(String id, String applicationId, String applicationVersion,
+      String description, String detail, LocalDateTime created, String who, String deviceId,
+      String feedback, String data)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -310,11 +304,11 @@ public class ErrorReport
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Returns the ID used to uniquely identify the error report.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @return the ID used to uniquely identify the error report
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -412,11 +406,11 @@ public class ErrorReport
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Set the ID used to uniquely identify the error report.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @param id the ID used to uniquely identify the error report
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

@@ -93,9 +93,9 @@ public class ErrorServiceTest
 
   private static synchronized ErrorReport getTestErrorReport()
   {
-    return new ErrorReport(UUID.randomUUID(), "ApplicationId", "ApplicationVersion", "Description",
-        "Detail", LocalDateTime.now(), "Who", "DeviceId", "Feedback", Base64Util.encodeBytes(
-        "Data".getBytes()));
+    return new ErrorReport(UUID.randomUUID().toString(), "ApplicationId", "ApplicationVersion",
+        "Description", "Detail", LocalDateTime.now(), "Who", "DeviceId", "Feedback",
+        Base64Util.encodeBytes("Data".getBytes()));
   }
 
   private void compareErrorReportAndErrorReportSummary(ErrorReport errorReport,

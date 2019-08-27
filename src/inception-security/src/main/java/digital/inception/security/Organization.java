@@ -53,15 +53,15 @@ public class Organization
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * The ID used to uniquely identify the organization.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
+      value = "The ID used to uniquely identify the organization",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The name of the organization.
@@ -90,12 +90,11 @@ public class Organization
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the
-   *               organization
+   * @param id     the ID used to uniquely identify the organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(UUID id, String name, OrganizationStatus status)
+  public Organization(String id, String name, OrganizationStatus status)
   {
     this.id = id;
     this.name = name;
@@ -134,11 +133,11 @@ public class Organization
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Returns the ID used to uniquely identify the organization.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @return the ID used to uniquely identify the organization
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -177,11 +176,11 @@ public class Organization
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Set the ID used to uniquely identify the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param id the ID used to uniquely identify the organization
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

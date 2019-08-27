@@ -20,7 +20,6 @@ package digital.inception.messaging.handler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>MessageHandlerConfig</code> class stores the configuration information for a
@@ -64,15 +63,14 @@ public class MessageHandlerConfig
    * defines which messages a message handler is capable of processing synchronously and
    * asynchronously.
    *
-   * @param messageTypeId  the Universally Unique Identifier (UUID) used to uniquely identify
-   *                       the message type
+   * @param messageTypeId  the ID used to uniquely identify the message type
    * @param isSynchronous  is the handler capable of synchronously processing messages of the
    *                       supported message type
    * @param isAsynchronous is the handler capable of asynchronously processing messages of the
    *                       supported message type
    * @param isArchivable   should messages of the supported message type be archived
    */
-  public void addMessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+  public void addMessageConfig(String messageTypeId, boolean isSynchronous, boolean isAsynchronous,
       boolean isArchivable)
   {
     messagesConfig.add(new MessageConfig(messageTypeId, isSynchronous, isAsynchronous,
@@ -113,13 +111,12 @@ public class MessageHandlerConfig
    * Returns <code>true</code> if messages of the specified message type should be archived or
    * <code>false</code> otherwise.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message type
+   * @param messageTypeId the ID used to uniquely identify the message type
    *
    * @return <code>true</code> if messages of the specified message type should be archived or
    *         <code>false</code> otherwise
    */
-  public boolean isArchivable(UUID messageTypeId)
+  public boolean isArchivable(String messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
@@ -146,13 +143,12 @@ public class MessageHandlerConfig
    * Returns <code>true</code> if the message handler supports asynchronous processing of the
    * specified message type or <code>false</code> otherwise.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message type
+   * @param messageTypeId the ID used to uniquely identify the message type
    *
    * @return <code>true</code> if the message handler supports asynchronous processing of the
    *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(UUID messageTypeId)
+  public boolean supportsAsynchronousProcessing(String messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
@@ -169,13 +165,12 @@ public class MessageHandlerConfig
    * Returns <code>true</code> if the message handler supports synchronous processing of the
    * specified message type or <code>false</code> otherwise.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message type
+   * @param messageTypeId the ID used to uniquely identify the message type
    *
    * @return <code>true</code> if the message handler supports synchronous processing of the
    *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(UUID messageTypeId)
+  public boolean supportsSynchronousProcessing(String messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
@@ -192,7 +187,7 @@ public class MessageHandlerConfig
    * The <code>MessageConfig</code> inner class stores the configuration information for a
    * a message that a message handler is capable of processing.
    */
-  public class MessageConfig
+  public static class MessageConfig
   {
     /**
      * Should messages of the supported message type be archived?
@@ -210,22 +205,21 @@ public class MessageHandlerConfig
     private boolean isSynchronous;
 
     /**
-     * The Universally Unique Identifier (UUID) used to uniquely identify the message type.
+     * The ID used to uniquely identify the message type.
      */
-    private UUID messageTypeId;
+    private String messageTypeId;
 
     /**
      * Constructs a new <code>MessageConfig</code>.
      *
-     * @param messageTypeId  the Universally Unique Identifier (UUID) used to uniquely identify
-     *                       the message type
+     * @param messageTypeId  the ID used to uniquely identify the message type
      * @param isSynchronous  is the handler capable of synchronously processing messages of
      *                       the supported message type
      * @param isAsynchronous is the handler capable of asynchronously processing messages of
      *                       the supported message type
      * @param isArchivable   should messages of the supported message type be archived
      */
-    MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+    MessageConfig(String messageTypeId, boolean isSynchronous, boolean isAsynchronous,
         boolean isArchivable)
     {
       this.messageTypeId = messageTypeId;
@@ -235,11 +229,11 @@ public class MessageHandlerConfig
     }
 
     /**
-     * Return the Universally Unique Identifier (UUID) used to uniquely identify the message type.
+     * Return the ID used to uniquely identify the message type.
      *
-     * @return the Universally Unique Identifier (UUID) used to uniquely identify the message type
+     * @return the ID used to uniquely identify the message type
      */
-    public UUID getMessageTypeId()
+    public String getMessageTypeId()
     {
       return messageTypeId;
     }

@@ -22,10 +22,6 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>MessagePartReceivedRequest</code> class represents a request sent by a mobile device
  * to acknowledge the successful download of a message part.
@@ -36,16 +32,14 @@ import java.util.UUID;
 public class MessagePartReceivedRequest
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
-   * received request originated from.
+   * The ID used to uniquely identify the device the message part received request originated from.
    */
-  private UUID deviceId;
+  private String deviceId;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the message part that was
-   * successfully downloaded.
+   * The ID used to uniquely identify the message part that was successfully downloaded.
    */
-  private UUID messagePartId;
+  private String messagePartId;
 
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code> and populates it from the information
@@ -57,19 +51,19 @@ public class MessagePartReceivedRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.messagePartId = UUID.fromString(rootElement.getAttributeValue("messagePartId"));
+    this.deviceId = rootElement.getAttributeValue("deviceId");
+    this.messagePartId = rootElement.getAttributeValue("messagePartId");
   }
 
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code>.
    *
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message part received request originated from
-   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      message part that was successfully downloaded
+   * @param deviceId      the ID used to uniquely identify the device the message part received
+   *                      request originated from
+   * @param messagePartId the ID used to uniquely identify the message part that was successfully
+   *                      downloaded
    */
-  public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId)
+  public MessagePartReceivedRequest(String deviceId, String messagePartId)
   {
     this.deviceId = deviceId;
     this.messagePartId = messagePartId;
@@ -82,7 +76,7 @@ public class MessagePartReceivedRequest
    * @param document the WBXML document to validate
    *
    * @return <code>true</code> if the WBXML document contains valid message part received request
-   * information or <code>false</code> otherwise
+   *         information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document)
   {
@@ -95,25 +89,23 @@ public class MessagePartReceivedRequest
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * Returns the ID used to uniquely identify the device the
    * message part received request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message part received request originated from
+   * @return the ID used to uniquely identify the device the
+   *         message part received request originated from
    */
-  public UUID getDeviceId()
+  public String getDeviceId()
   {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message part
-   * that was successfully downloaded.
+   * Returns the ID used to uniquely identify the message part that was successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
-   * that was successfully downloaded
+   * @return the ID used to uniquely identify the message part that was successfully downloaded
    */
-  public UUID getMessagePartId()
+  public String getMessagePartId()
   {
     return messagePartId;
   }
@@ -139,8 +131,8 @@ public class MessagePartReceivedRequest
   {
     Element rootElement = new Element("MessagePartReceivedRequest");
 
-    rootElement.setAttribute("deviceId", deviceId.toString());
-    rootElement.setAttribute("messagePartId", messagePartId.toString());
+    rootElement.setAttribute("deviceId", deviceId);
+    rootElement.setAttribute("messagePartId", messagePartId);
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

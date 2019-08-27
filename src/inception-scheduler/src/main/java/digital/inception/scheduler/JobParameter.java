@@ -20,8 +20,6 @@ package digital.inception.scheduler;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 /**
  * The <code>JobParameter</code> class holds the information for a job parameter.
  *
@@ -36,13 +34,12 @@ public class JobParameter
   /**
    * The ID uniquely identifying the job parameter.
    */
-  private UUID id;
+  private String id;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter
-   * is associated with.
+   * The ID used to uniquely identify the job the job parameter is associated with.
    */
-  private UUID jobId;
+  private String jobId;
 
   /**
    * The name of the job parameter.
@@ -58,12 +55,11 @@ public class JobParameter
    * Constructs a new <code>JobParameter</code>.
    *
    * @param id    the ID uniquely identifying the job parameter
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
+   * @param jobId the ID used to uniquely identify the job the job parameter is associated with
    * @param name  the name of the job parameter
    * @param value the value of the job parameter
    */
-  public JobParameter(UUID id, UUID jobId, String name, String value)
+  public JobParameter(String id, String jobId, String name, String value)
   {
     this.id = id;
     this.jobId = jobId;
@@ -76,19 +72,17 @@ public class JobParameter
    *
    * @return the ID uniquely identifying the job parameter
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
+   * Returns the ID used to uniquely identify the job the job parameter is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with
+   * @return the ID used to uniquely identify the job the job parameter is associated with
    */
-  public UUID getJobId()
+  public String getJobId()
   {
     return jobId;
   }
@@ -118,19 +112,17 @@ public class JobParameter
    *
    * @param id the ID uniquely identifying the job parameter
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
+   * Set the ID used to uniquely identify the job the job parameter is associated with.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
+   * @param jobId the ID used to uniquely identify the job the job parameter is associated with
    */
-  public void setJobId(UUID jobId)
+  public void setJobId(String jobId)
   {
     this.jobId = jobId;
   }

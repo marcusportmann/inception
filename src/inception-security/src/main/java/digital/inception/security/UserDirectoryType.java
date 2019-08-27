@@ -53,15 +53,15 @@ public class UserDirectoryType
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory type.
+   * The ID used to uniquely identify the user directory type.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory type",
+      value = "The ID used to uniquely identify the user directory type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The name of the user directory type.
@@ -98,13 +98,12 @@ public class UserDirectoryType
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param id                      the Universally Unique Identifier (UUID) used to uniquely
-   *                                identify the user directory type
+   * @param id                      the ID used to uniquely identify the user directory type
    * @param name                    the name of the user directory type
    * @param userDirectoryClassName  the fully qualified name of the Java class that implements the
    *                                user directory type
    */
-  UserDirectoryType(UUID id, String name, String userDirectoryClassName)
+  UserDirectoryType(String id, String name, String userDirectoryClassName)
   {
     this.id = id;
     this.name = name;
@@ -112,13 +111,11 @@ public class UserDirectoryType
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * type.
+   * Returns the ID used to uniquely identify the user directory type.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         type
+   * @return the ID used to uniquely identify the user directory type
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }

@@ -49,8 +49,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Submit Error Report Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
+  public static final String MESSAGE_TYPE_ID = "8be50cfa-2fb1-4634-9bfa-d01e77eaf766";
 
   /**
    * The error code indicating the result of processing the submitted error report where a code
@@ -64,10 +63,9 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   private String errorMessage;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report that was
-   * submitted for processing.
+   * The ID used to uniquely identify the error report that was submitted for processing.
    */
-  private UUID errorReportId;
+  private String errorReportId;
 
   /**
    * Constructs a new <code>SubmitErrorReportResponseData</code>.
@@ -84,10 +82,10 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    *                      report
    * @param errorMessage  the error message describing the result of processing the submitted error
    *                      report
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report that was submitted for processing
+   * @param errorReportId the ID used to uniquely identify the error report that was submitted for
+   *                      processing
    */
-  public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId)
+  public SubmitErrorReportResponseData(int errorCode, String errorMessage, String errorReportId)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -126,7 +124,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
 
     errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
     errorMessage = rootElement.getChildText("ErrorMessage");
-    errorReportId = UUID.fromString(rootElement.getChildText("ErrorReportId"));
+    errorReportId = rootElement.getChildText("ErrorReportId");
 
     return true;
   }
@@ -154,13 +152,11 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   * that was submitted for processing.
+   * Returns the ID used to uniquely identify the error report that was submitted for processing.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   * that was submitted for processing
+   * @return the ID used to uniquely identify the error report that was submitted for processing
    */
-  public UUID getErrorReportId()
+  public String getErrorReportId()
   {
     return errorReportId;
   }

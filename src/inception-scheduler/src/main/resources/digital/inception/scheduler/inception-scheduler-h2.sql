@@ -22,7 +22,7 @@ CREATE TABLE scheduler.jobs (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN scheduler.jobs.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+COMMENT ON COLUMN scheduler.jobs.id IS 'The ID used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.jobs.name IS 'The name of the job';
 
@@ -59,9 +59,9 @@ CREATE INDEX job_parameters_job_id_ix ON scheduler.job_parameters(job_id);
 
 CREATE INDEX job_parameters_name_ix ON scheduler.job_parameters(name);
 
-COMMENT ON COLUMN scheduler.job_parameters.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter';
+COMMENT ON COLUMN scheduler.job_parameters.id IS 'The ID used to uniquely identify the job parameter';
 
-COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the job';
+COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID used to uniquely identify the job';
 
 COMMENT ON COLUMN scheduler.job_parameters.name IS 'The name of the job parameter';
 

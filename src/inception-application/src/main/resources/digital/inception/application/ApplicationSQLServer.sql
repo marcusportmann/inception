@@ -226,7 +226,7 @@ CREATE TABLE "MESSAGING"."MESSAGE_TYPES" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message type' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the message type' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_TYPES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -290,7 +290,7 @@ CREATE INDEX messages_status_ix ON "MESSAGING"."MESSAGES"(status);
 CREATE INDEX messages_lock_name_ix ON "MESSAGING"."MESSAGES"(lock_name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -298,15 +298,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to correlate the message' ,
+@name=N'MS_Description', @value=N'The ID used to correlate the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -393,7 +393,7 @@ CREATE INDEX message_parts_msg_type_id_ix ON "MESSAGING"."MESSAGE_PARTS"(msg_typ
 CREATE INDEX message_parts_lock_name_ix ON "MESSAGING"."MESSAGE_PARTS"(lock_name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message part' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the message part' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -425,7 +425,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'UPDATED';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the original message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -433,15 +433,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the original message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to correlate the original message' ,
+@name=N'MS_Description', @value=N'The ID used to correlate the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -496,7 +496,7 @@ CREATE INDEX archived_messages_device_id_ix ON "MESSAGING"."ARCHIVED_MESSAGES"(d
 CREATE INDEX archived_messages_type_id_ix ON "MESSAGING"."ARCHIVED_MESSAGES"(type_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -504,15 +504,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of message' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to correlate the message' ,
+@name=N'MS_Description', @value=N'The ID used to correlate the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -539,7 +539,7 @@ CREATE TABLE "REPORTING"."REPORT_DEFINITIONS" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the report definition' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the report definition' ,
 @level0type=N'SCHEMA', @level0name=N'REPORTING', @level1type=N'TABLE', @level1name=N'REPORT_DEFINITIONS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -570,7 +570,7 @@ CREATE TABLE "SCHEDULER"."JOBS" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the job' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the job' ,
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -631,11 +631,11 @@ CREATE INDEX job_parameters_job_id_ix ON "SCHEDULER"."JOB_PARAMETERS"(job_id);
 CREATE INDEX job_parameters_name_ix ON "SCHEDULER"."JOB_PARAMETERS"(name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the job parameter' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the job parameter' ,
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOB_PARAMETERS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the job' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the job' ,
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOB_PARAMETERS', @level2type=N'COLUMN', @level2name=N'JOB_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -660,7 +660,7 @@ CREATE TABLE "SECURITY"."ORGANIZATIONS" (
 CREATE INDEX organizations_name_ix ON "SECURITY"."ORGANIZATIONS"(name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the organization' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the organization' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ORGANIZATIONS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -683,7 +683,7 @@ CREATE TABLE "SECURITY"."USER_DIRECTORY_TYPES" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory type' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TYPES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -709,11 +709,11 @@ CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
 CREATE INDEX user_directories_name_ix ON "SECURITY"."USER_DIRECTORIES"(name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory type' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory type' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -741,11 +741,11 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON "SECURIT
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP"(organization_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TO_ORGANIZATION_MAP', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the organization' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the organization' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TO_ORGANIZATION_MAP', @level2type=N'COLUMN', @level2name=N'ORGANIZATION_ID';
 GO
 
@@ -774,11 +774,11 @@ CREATE INDEX users_user_directory_id_ix ON "SECURITY"."USERS"(user_directory_id)
 CREATE UNIQUE INDEX users_username_ix ON "SECURITY"."USERS"(username);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the user is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -839,11 +839,11 @@ CREATE INDEX users_password_history_user_id_ix ON "SECURITY"."USERS_PASSWORD_HIS
 CREATE INDEX users_password_history_changed_ix ON "SECURITY"."USERS_PASSWORD_HISTORY"(changed);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the password history entry' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the password history entry' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -872,11 +872,11 @@ CREATE INDEX groups_user_directory_id_ix ON "SECURITY"."GROUPS"(user_directory_i
 CREATE INDEX groups_groupname_ix ON "SECURITY"."GROUPS"(groupname);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the group' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the group is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -902,11 +902,11 @@ CREATE INDEX user_to_group_map_user_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(user
 CREATE INDEX user_to_group_map_group_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(group_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the group' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'GROUP_ID';
 GO
 
@@ -950,7 +950,7 @@ CREATE TABLE "SECURITY"."FUNCTIONS" (
 CREATE UNIQUE INDEX functions_code_ix ON "SECURITY"."FUNCTIONS"(code);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the function' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the function' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTIONS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -977,7 +977,7 @@ CREATE TABLE "SECURITY"."ROLES" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the role' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -1003,11 +1003,11 @@ CREATE INDEX function_to_role_map_function_id_ix ON "SECURITY"."FUNCTION_TO_ROLE
 CREATE INDEX function_to_role_map_role_id_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(role_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the function' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the function' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'FUNCTION_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the role' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_ID';
 GO
 
@@ -1051,11 +1051,11 @@ CREATE INDEX role_to_group_map_role_id_ix ON "SECURITY"."ROLE_TO_GROUP_MAP"(role
 CREATE INDEX role_to_group_map_group_id_ix ON "SECURITY"."ROLE_TO_GROUP_MAP"(group_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the role' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLE_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the group' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLE_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'GROUP_ID';
 GO
 
@@ -1202,7 +1202,7 @@ CREATE INDEX error_reports_created_ix ON "ERROR"."ERROR_REPORTS"(created);
 CREATE INDEX error_reports_who_ix ON "ERROR"."ERROR_REPORTS"(who);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the error report' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the error report' ,
 @level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty

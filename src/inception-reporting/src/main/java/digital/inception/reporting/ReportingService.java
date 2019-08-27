@@ -98,7 +98,7 @@ public class ReportingService
         throw new DuplicateReportDefinitionException(reportDefinition.getId());
       }
 
-      statement.setObject(1, reportDefinition.getId());
+      statement.setObject(1, UUID.fromString(reportDefinition.getId()));
       statement.setString(2, reportDefinition.getName());
       statement.setBytes(3, reportDefinition.getTemplate());
 
@@ -123,14 +123,13 @@ public class ReportingService
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param parameters         the parameters for the report
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters)
+  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -152,15 +151,14 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param parameters         the parameters for the report
    * @param connection         the database connection used to retrieve the report data
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -200,15 +198,14 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param parameters         the parameters for the report
    * @param document           the XML document containing the report data
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
       Document document)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -254,11 +251,10 @@ public class ReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @Override
-  public void deleteReportDefinition(UUID reportDefinitionId)
+  public void deleteReportDefinition(String reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     String deleteReportDefinitionSQL = "DELETE FROM reporting.report_definitions WHERE id=?";
@@ -266,7 +262,7 @@ public class ReportingService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteReportDefinitionSQL))
     {
-      statement.setObject(1, reportDefinitionId);
+      statement.setObject(1, UUID.fromString(reportDefinitionId));
 
       if (statement.executeUpdate() != 1)
       {
@@ -331,13 +327,12 @@ public class ReportingService
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    *
    * @return the report definition
    */
   @Override
-  public ReportDefinition getReportDefinition(UUID reportDefinitionId)
+  public ReportDefinition getReportDefinition(String reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -391,13 +386,12 @@ public class ReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    *
    * @return the summary for the report definition
    */
   @Override
-  public ReportDefinitionSummary getReportDefinitionSummary(UUID reportDefinitionId)
+  public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     String getReportDefinitionSummaryByIdSQL =
@@ -406,7 +400,7 @@ public class ReportingService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummaryByIdSQL))
     {
-      statement.setObject(1, reportDefinitionId);
+      statement.setObject(1, UUID.fromString(reportDefinitionId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -466,13 +460,12 @@ public class ReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override
-  public boolean reportDefinitionExists(UUID reportDefinitionId)
+  public boolean reportDefinitionExists(String reportDefinitionId)
     throws ReportingServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -517,7 +510,7 @@ public class ReportingService
     {
       statement.setString(1, reportDefinition.getName());
       statement.setBytes(2, reportDefinition.getTemplate());
-      statement.setObject(3, reportDefinition.getId());
+      statement.setObject(3, UUID.fromString(reportDefinition.getId()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -540,10 +533,10 @@ public class ReportingService
   private ReportDefinition getReportDefinition(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinition(UUID.fromString(rs.getString(1)), rs.getString(2), rs.getBytes(3));
+    return new ReportDefinition(rs.getString(1), rs.getString(2), rs.getBytes(3));
   }
 
-  private ReportDefinition getReportDefinition(Connection connection, UUID reportDefinitionId)
+  private ReportDefinition getReportDefinition(Connection connection, String reportDefinitionId)
     throws ReportDefinitionNotFoundException, SQLException
   {
     String getReportDefinitionByIdSQL =
@@ -551,7 +544,7 @@ public class ReportingService
 
     try (PreparedStatement statement = connection.prepareStatement(getReportDefinitionByIdSQL))
     {
-      statement.setObject(1, reportDefinitionId);
+      statement.setObject(1, UUID.fromString(reportDefinitionId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -570,10 +563,10 @@ public class ReportingService
   private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
     throws SQLException
   {
-    return new ReportDefinitionSummary(UUID.fromString(rs.getString(1)), rs.getString(2));
+    return new ReportDefinitionSummary(rs.getString(1), rs.getString(2));
   }
 
-  private boolean reportDefinitionExists(Connection connection, UUID reportDefinitionId)
+  private boolean reportDefinitionExists(Connection connection, String reportDefinitionId)
     throws ReportingServiceException, SQLException
   {
     String reportDefinitionExistsSQL =
@@ -581,7 +574,7 @@ public class ReportingService
 
     try (PreparedStatement statement = connection.prepareStatement(reportDefinitionExistsSQL))
     {
-      statement.setObject(1, reportDefinitionId);
+      statement.setObject(1, UUID.fromString(reportDefinitionId));
 
       try (ResultSet rs = statement.executeQuery())
       {

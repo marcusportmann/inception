@@ -20,16 +20,17 @@ package digital.inception.messaging;
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
-import digital.inception.messaging.*;
-import org.junit.Test;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.time.LocalDateTime;
+
+import java.util.UUID;
 
 /**
  * The <code>PojoTest</code> class contains the implementation of the JUnit
@@ -39,11 +40,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class PojoTest
 {
-  private static final UUID MESSAGE_ID = UUID.randomUUID();
+  private static final String MESSAGE_ID = UUID.randomUUID().toString();
   private static final String USERNAME = "Administrator";
-  private static final UUID DEVICE_ID = UUID.randomUUID();
-  private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
-  private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
+  private static final String DEVICE_ID = UUID.randomUUID().toString();
+  private static final String MESSAGE_TYPE_ID = UUID.randomUUID().toString();
+  private static final String MESSAGE_CORRELATION_ID = UUID.randomUUID().toString();
   private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
   private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
   private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
@@ -61,7 +62,7 @@ public class PojoTest
   private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
   private static final String MESSAGE_ENCRYPTION_IV = Base64Util.encodeBytes(
       CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
-  private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
+  private static final String MESSAGE_PART_ID = UUID.randomUUID().toString();
   private static final int PART_NO = 7;
   private static final int TOTAL_PARTS = 8;
   private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;

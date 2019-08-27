@@ -26,18 +26,26 @@ import {UserDirectoryParameter} from './user-directory-parameter';
 export class UserDirectoryUtil {
 
   /**
-   * Retrieve the parameter with the specified name for the specified user directory.
+   * Retrieve the parameter with the specified name for the specified user directory or array of
+   * user directory parameters.
    *
-   * @param userDirectory The user directory.
-   * @param name          The name of the parameter.
+   * @param object The user directory or array of user directory parameters.
+   * @param name   The name of the parameter.
    *
-   * @return The parameter with the specified name for the specified user directory or null if the
-   *         parameter cannot be found.
+   * @return The parameter with the specified name or null if the parameter cannot be found.
    */
-  static getParameter(userDirectory: UserDirectory, name: string): string | null {
-    for (const userDirectoryParameter of userDirectory.parameters) {
-      if (userDirectoryParameter.name === name) {
-        return userDirectoryParameter.value;
+  static getParameter(object: UserDirectory | UserDirectoryParameter[], name: string): string | null {
+    if (object instanceof UserDirectory) {
+      for (const userDirectoryParameter of object.parameters) {
+        if (userDirectoryParameter.name === name) {
+          return userDirectoryParameter.value;
+        }
+      }
+    } else {
+      for (const userDirectoryParameter of object) {
+        if (userDirectoryParameter.name === name) {
+          return userDirectoryParameter.value;
+        }
       }
     }
 
@@ -45,18 +53,27 @@ export class UserDirectoryUtil {
   }
 
   /**
-   * Check whether a parameter with the specified name exists for the specified user directory.
+   * Check whether a parameter with the specified name exists for the specified user directory or
+   * array of user directory parameters.
    *
-   * @param userDirectory The user directory.
-   * @param name          The name of the parameter.
+   * @param object The user directory or array of user directory parameters.
+   * @param name   The name of the parameter.
    *
    * @return True if a parameter with the specified name exists for the specified user directory or
    *         false otherwise.
    */
-  static hasParameter(userDirectory: UserDirectory, name: string): boolean {
-    for (const userDirectoryParameter of userDirectory.parameters) {
-      if (userDirectoryParameter.name === name) {
-        return true
+  static hasParameter(object: UserDirectory | UserDirectoryParameter[], name: string): boolean {
+    if (object instanceof UserDirectory) {
+      for (const userDirectoryParameter of object.parameters) {
+        if (userDirectoryParameter.name === name) {
+          return true
+        }
+      }
+    } else {
+      for (const userDirectoryParameter of object) {
+        if (userDirectoryParameter.name === name) {
+          return true
+        }
       }
     }
 
@@ -64,24 +81,35 @@ export class UserDirectoryUtil {
   }
 
   /**
-   * Set the parameter with the specified name for the specified user directory.
+   * Set the parameter with the specified name for the specified user directory or array of user
+   * directory parameters.
    *
-   * @param userDirectory The user directory.
-   * @param name          The name of the parameter.
-   * @param value         The value for the parameter.
+   * @param object The user directory or array of user directory parameters.
+   * @param name   The name of the parameter.
+   * @param value  The value for the parameter.
    *
-   * @return The parameter with the specified name for the specified user directory or null if the
-   *         parameter cannot be found.
+   * @return The parameter with the specified name or null if the parameter cannot be found.
    */
-  static setParameter(userDirectory: UserDirectory, name: string, value: string): void {
-    for (const userDirectoryParameter of userDirectory.parameters) {
-      if (userDirectoryParameter.name === name) {
-        userDirectoryParameter.value = value;
-        return;
+  static setParameter(object: UserDirectory | UserDirectoryParameter[], name: string,
+                      value: string): void {
+    if (object instanceof UserDirectory) {
+      for (const userDirectoryParameter of object.parameters) {
+        if (userDirectoryParameter.name === name) {
+          userDirectoryParameter.value = value;
+          return;
+        }
       }
-    }
 
-    userDirectory.parameters = userDirectory.parameters.concat(
-      new UserDirectoryParameter(name, value));
+      object.parameters.push(new UserDirectoryParameter(name, value));
+    } else {
+      for (const userDirectoryParameter of object) {
+        if (userDirectoryParameter.name === name) {
+          userDirectoryParameter.value = value;
+          return;
+        }
+      }
+
+      object.push(new UserDirectoryParameter(name, value));
+    }
   }
 }

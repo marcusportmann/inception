@@ -27,10 +27,6 @@ import digital.inception.messaging.WbxmlMessageData;
 
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>TestResponseData</code> class manages the data for a
  * "Test Response" message.
@@ -44,8 +40,7 @@ public class TestResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Test Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "a3bad7ba-f9d4-4403-b54a-cb1f335ebbad");
+  public static final String MESSAGE_TYPE_ID = "a3bad7ba-f9d4-4403-b54a-cb1f335ebbad";
 
   /**
    * The test value.

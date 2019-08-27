@@ -27,7 +27,7 @@ CREATE INDEX error_reports_created_ix ON error.error_reports(created);
 
 CREATE INDEX error_reports_who_ix ON error.error_reports(who);
 
-COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
+COMMENT ON COLUMN error.error_reports.id IS 'The ID used to uniquely identify the error report';
 
 COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
 

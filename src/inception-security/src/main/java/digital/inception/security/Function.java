@@ -72,15 +72,15 @@ public class Function
   private String description;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the function.
+   * The ID used to uniquely identify the function.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the function",
+      value = "The ID used to uniquely identify the function",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The name of the function.
@@ -100,13 +100,12 @@ public class Function
   /**
    * Constructs a new <code>Function</code>.
    *
-   * @param id          the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                    function
+   * @param id          the ID used to uniquely identify the function
    * @param code        the unique code used to identify the function
    * @param name        the name of the function
    * @param description the description for the function
    */
-  public Function(UUID id, String code, String name, String description)
+  public Function(String id, String code, String name, String description)
   {
     this.id = id;
     this.code = code;
@@ -135,11 +134,11 @@ public class Function
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the function.
+   * Returns the ID used to uniquely identify the function.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the function
+   * @return the ID used to uniquely identify the function
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -175,11 +174,11 @@ public class Function
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the function.
+   * Set the ID used to uniquely identify the function.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the function
+   * @param id the ID used to uniquely identify the function
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

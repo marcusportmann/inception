@@ -173,8 +173,8 @@ public class SampleApplication extends Application
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
           "digital/inception/sample/SampleReport.jasper");
 
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
-          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
+      ReportDefinition sampleReportDefinition = new ReportDefinition(
+          "2a4b74e8-7f03-416f-b058-b35bb06944ef", "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {

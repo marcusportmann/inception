@@ -34,14 +34,14 @@ public class ClientDetails
   implements org.springframework.security.oauth2.provider.ClientDetails
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the client.
+   * The ID used to uniquely identify the client.
    */
   private String clientId;
 
   /**
    * Constructs a new <code>ClientDetails</code>.
    *
-   * @param clientId the Universally Unique Identifier (UUID) used to uniquely identify the client
+   * @param clientId the ID used to uniquely identify the client
    */
   public ClientDetails(String clientId)
   {
@@ -104,9 +104,9 @@ public class ClientDetails
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the client.
+   * Returns the ID used to uniquely identify the client.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the client
+   * @return the ID used to uniquely identify the client
    */
   @Override
   public String getClientId()

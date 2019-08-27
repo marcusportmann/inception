@@ -27,10 +27,6 @@ import digital.inception.messaging.WbxmlMessageData;
 
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>GetCodeCategoryResponseData</code> class manages the data for a
  * "Get Code Category Response" message.
@@ -59,8 +55,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Response" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "0336b544-91e5-4eb9-81db-3dd94e116c92");
+  public static final String MESSAGE_TYPE_ID = "0336b544-91e5-4eb9-81db-3dd94e116c92";
 
   /**
    * The code category.

@@ -35,8 +35,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
-
 import javax.validation.constraints.Size;
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -48,13 +48,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @ApiModel(value = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-    "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status", "readOnly",
-    "externalReference" })
+    "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
+        "readOnly" })
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(name = "User", namespace = "http://security.inception.digital",
     propOrder = { "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
         "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
-        "readOnly", "externalReference" })
+        "readOnly" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class User
@@ -73,14 +73,6 @@ public class User
   private String email;
 
   /**
-   * The optional external reference for the user.
-   */
-  @ApiModelProperty(value = "The optional external reference for the user")
-  @JsonProperty
-  @XmlElement(name = "ExternalReference")
-  private String externalReference;
-
-  /**
    * The first name for the user.
    */
   @ApiModelProperty(value = "The first name for the user", required = true)
@@ -91,15 +83,13 @@ public class User
   private String firstName;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * The ID used to uniquely identify the user.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private UUID id;
+  private String id;
 
   /**
    * The last name for the user.
@@ -179,16 +169,15 @@ public class User
   private UserStatus status;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
-   * is associated with.
+   * The ID used to uniquely identify the user directory the user is associated with.
    */
   @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
+      value = "The ID used to uniquely identify the user directory the user is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
-  private UUID userDirectoryId;
+  private String userDirectoryId;
 
   /**
    * The username for the user.
@@ -216,16 +205,6 @@ public class User
   }
 
   /**
-   * Returns the optional external reference for the user.
-   *
-   * @return the optional external reference for the user
-   */
-  public String getExternalReference()
-  {
-    return externalReference;
-  }
-
-  /**
    * Returns the first name for the user
    *
    * @return the first name for the user
@@ -236,11 +215,11 @@ public class User
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * Returns the ID used to uniquely identify the user.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @return the ID used to uniquely identify the user
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -318,13 +297,11 @@ public class User
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the user is associated with.
+   * Returns the ID used to uniquely identify the user directory the user is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the user is associated with
+   * @return the ID used to uniquely identify the user directory the user is associated with
    */
-  public UUID getUserDirectoryId()
+  public String getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -417,16 +394,6 @@ public class User
   }
 
   /**
-   * Set the optional external reference for the user.
-   *
-   * @param externalReference the optional external reference for the user
-   */
-  public void setExternalReference(String externalReference)
-  {
-    this.externalReference = externalReference;
-  }
-
-  /**
    * Set the first name for the user.
    *
    * @param firstName the first name for the user
@@ -437,11 +404,11 @@ public class User
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * Set the ID used to uniquely identify the user.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param id the ID used to uniquely identify the user
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }
@@ -527,13 +494,12 @@ public class User
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * user is associated with.
+   * Set the ID used to uniquely identify the user directory the user is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the user is associated with
+   * @param userDirectoryId the ID used to uniquely identify the user directory the user is
+   *                        associated with
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
+  public void setUserDirectoryId(String userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

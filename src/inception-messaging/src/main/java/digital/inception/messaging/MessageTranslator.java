@@ -27,8 +27,6 @@ import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
 
-import java.util.UUID;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -59,10 +57,9 @@ public class MessageTranslator
       );
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * originated from.
+   * The ID used to uniquely identify the device the message originated from.
    */
-  private UUID deviceId;
+  private String deviceId;
 
   /**
    * The encryption key used to encrypt or decrypt the message data.
@@ -78,10 +75,9 @@ public class MessageTranslator
    * Constructs a new <code>MessageTranslator</code>.
    *
    * @param username the username uniquely identifying the username responsible for the message
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message originated from
+   * @param deviceId the ID used to uniquely identify the device the message originated from
    */
-  public MessageTranslator(String username, UUID deviceId)
+  public MessageTranslator(String username, String deviceId)
   {
     this.username = username;
     this.deviceId = deviceId;
@@ -92,11 +88,10 @@ public class MessageTranslator
    * Constructs a new <code>MessageTranslator</code>.
    *
    * @param username      the username uniquely identifying the username responsible for the message
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message originated from
+   * @param deviceId      the ID used to uniquely identify the device the message originated from
    * @param encryptionKey the key used to encrypt or decrypt the message data
    */
-  public MessageTranslator(String username, UUID deviceId, byte[] encryptionKey)
+  public MessageTranslator(String username, String deviceId, byte[] encryptionKey)
   {
     this.username = username;
     this.deviceId = deviceId;
@@ -239,18 +234,18 @@ public class MessageTranslator
   public Message toMessage(WbxmlMessageData messageData)
     throws MessagingServiceException
   {
-    return toMessage(messageData, new UUID(0L, 0L));
+    return toMessage(messageData, "");
   }
 
   /**
    * Returns the message containing the WBXML-based message data.
    *
    * @param messageData   the WBXML-based message data
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param correlationId the ID used to correlate the message
    *
    * @return the message that can be sent via the messaging infrastructure
    */
-  public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
+  public Message toMessage(WbxmlMessageData messageData, String correlationId)
     throws MessagingServiceException
   {
     if (StringUtils.isEmpty(username))

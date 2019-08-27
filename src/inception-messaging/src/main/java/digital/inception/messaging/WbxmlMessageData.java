@@ -21,10 +21,6 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>WbxmlMessageData</code> class provides the abstract base class from which all
  * WBXML-based infrastructural and application-specific message data classes should be derived.
@@ -34,9 +30,9 @@ import java.util.UUID;
 public abstract class WbxmlMessageData
 {
   /**
-   * The UUID identifying the type of message the message data is associated with.
+   * The ID identifying the type of message the message data is associated with.
    */
-  private UUID messageTypeId;
+  private String messageTypeId;
 
   /**
    * The priority for the message type the message data is associated with.
@@ -46,12 +42,12 @@ public abstract class WbxmlMessageData
   /**
    * Constructs a new <code>WbxmlMessageData</code>.
    *
-   * @param messageTypeId       the UUID identifying the type of message the message data is
+   * @param messageTypeId       the ID identifying the type of message the message data is
    *                            associated with
    * @param messageTypePriority the priority for the message type the message data is associated
    *                            with
    */
-  public WbxmlMessageData(UUID messageTypeId, MessagePriority messageTypePriority)
+  public WbxmlMessageData(String messageTypeId, MessagePriority messageTypePriority)
   {
     this.messageTypeId = messageTypeId;
     this.messageTypePriority = messageTypePriority;
@@ -69,11 +65,11 @@ public abstract class WbxmlMessageData
     throws MessagingServiceException;
 
   /**
-   * Returns the UUID identifying the type of message the message data is associated with.
+   * Returns the ID identifying the type of message the message data is associated with.
    *
-   * @return the UUID identifying the type of message the message data is associated with
+   * @return the ID identifying the type of message the message data is associated with
    */
-  public UUID getMessageTypeId()
+  public String getMessageTypeId()
   {
     return messageTypeId;
   }

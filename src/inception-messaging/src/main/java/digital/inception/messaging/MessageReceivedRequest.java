@@ -36,16 +36,14 @@ import java.util.UUID;
 public class MessageReceivedRequest
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * received request originated from.
+   * The ID used to uniquely identify the device the message received request originated from.
    */
-  private UUID deviceId;
+  private String deviceId;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   * successfully downloaded.
+   * The ID used to uniquely identify the message that was successfully downloaded.
    */
-  private UUID messageId;
+  private String messageId;
 
   /**
    * Constructs a new <code>MessageReceivedRequest</code> and populates it from the information
@@ -57,19 +55,18 @@ public class MessageReceivedRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
-    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
+    this.deviceId = rootElement.getAttributeValue("deviceId");
+    this.messageId = rootElement.getAttributeValue("messageId");
   }
 
   /**
    * Constructs a new <code>MessageReceivedRequest</code>.
    *
-   * @param deviceId  the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                  the message received request originated from
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
-   *                  that was successfully downloaded
+   * @param deviceId  the ID used to uniquely identify the device the message received request
+   *                  originated from
+   * @param messageId the ID used to uniquely identify the message that was successfully downloaded
    */
-  public MessageReceivedRequest(UUID deviceId, UUID messageId)
+  public MessageReceivedRequest(String deviceId, String messageId)
   {
     this.deviceId = deviceId;
     this.messageId = messageId;
@@ -95,25 +92,23 @@ public class MessageReceivedRequest
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message received request originated from.
+   * Returns the ID used to uniquely identify the device the message received request originated
+   * from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message received request originated from
+   * @return the ID used to uniquely identify the device the message received request originated
+   *         from
    */
-  public UUID getDeviceId()
+  public String getDeviceId()
   {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   * successfully downloaded.
+   * Returns the ID used to uniquely identify the message that was successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message that was
-   * successfully downloaded
+   * @return the ID used to uniquely identify the message that was successfully downloaded
    */
-  public UUID getMessageId()
+  public String getMessageId()
   {
     return messageId;
   }

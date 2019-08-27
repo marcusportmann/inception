@@ -60,7 +60,7 @@
 //  {
 //    try
 //    {
-//      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+//      String userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 //
 //      if (userDirectoryId == null)
 //      {

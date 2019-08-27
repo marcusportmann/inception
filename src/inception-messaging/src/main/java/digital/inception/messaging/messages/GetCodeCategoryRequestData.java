@@ -35,7 +35,6 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a
@@ -51,8 +50,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Request" message.
    */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
+  public static final String MESSAGE_TYPE_ID = "94d60eb6-a062-492d-b5e7-9fb1f05cf088";
 
   /**
    * The ID used to uniquely identify the code category to retrieve.

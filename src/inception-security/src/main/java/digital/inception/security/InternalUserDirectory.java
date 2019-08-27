@@ -100,11 +100,10 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param parameters      the parameters for the user directory
    */
-  public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters)
+  public InternalUserDirectory(String userDirectoryId, List<UserDirectoryParameter> parameters)
     throws SecurityServiceException
   {
     super(userDirectoryId, parameters);
@@ -174,7 +173,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       PreparedStatement statement = connection.prepareStatement(addUserToGroupSQL))
     {
       // Get the ID of the user with the specified username
-      UUID userId;
+      String userId;
 
       if ((userId = getUserId(connection, username)) == null)
       {
@@ -182,7 +181,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Get the ID of the internal security group with the specified group name
-      UUID groupId;
+      String groupId;
 
       if ((groupId = getGroupId(connection, groupName)) == null)
       {
@@ -197,8 +196,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Add the user to the security group
-      statement.setObject(1, userId);
-      statement.setObject(2, groupId);
+      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(2, UUID.fromString(groupId));
 
       if (statement.executeUpdate() != 1)
       {
@@ -288,8 +287,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
       }
 
-      statement.setObject(4, getUserDirectoryId());
-      statement.setObject(5, user.getId());
+      statement.setObject(4, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(5, UUID.fromString(user.getId()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -438,8 +437,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
       }
 
-      statement.setObject(4, getUserDirectoryId());
-      statement.setObject(5, user.getId());
+      statement.setObject(4, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(5, UUID.fromString(user.getId()));
 
       if (statement.executeUpdate() != 1)
       {
@@ -479,7 +478,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateGroupException(group.getGroupName());
       }
 
-      UUID groupId = idGenerator.nextUUID();
+      String groupId = idGenerator.nextUUID().toString();
 
       createGroup(connection, groupId, group.getGroupName(), group.getDescription());
 
@@ -521,10 +520,10 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateUserException(user.getUsername());
       }
 
-      UUID userId = idGenerator.nextUUID();
+      String userId = idGenerator.nextUUID().toString();
 
-      statement.setObject(1, userId);
-      statement.setObject(2, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
       statement.setString(3, user.getUsername());
       statement.setInt(4, user.getStatus().code());
       statement.setString(5,
@@ -628,7 +627,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      UUID groupId = getGroupId(connection, groupName);
+      String groupId = getGroupId(connection, groupName);
 
       if (groupId == null)
       {
@@ -668,15 +667,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(deleteUserSQL))
     {
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
         throw new UserNotFoundException(username);
       }
 
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, userId);
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(2, UUID.fromString(userId));
 
       if (statement.executeUpdate() <= 0)
       {
@@ -752,7 +751,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -814,7 +813,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -870,7 +869,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -942,7 +941,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (StringUtils.isEmpty(filter))
       {
-        statement.setObject(1, getUserDirectoryId());
+        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       }
       else
       {
@@ -951,7 +950,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         filterBuffer.append(filter.toUpperCase());
         filterBuffer.append("%");
 
-        statement.setObject(1, getUserDirectoryId());
+        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
         statement.setString(2, filterBuffer.toString());
         statement.setString(3, filterBuffer.toString());
         statement.setString(4, filterBuffer.toString());
@@ -991,7 +990,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -1064,7 +1063,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(getUsersSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1159,7 +1158,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (StringUtils.isEmpty(filter))
       {
-        statement.setObject(1, getUserDirectoryId());
+        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       }
       else
       {
@@ -1168,7 +1167,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         filterBuffer.append(filter.toUpperCase());
         filterBuffer.append("%");
 
-        statement.setObject(1, getUserDirectoryId());
+        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
         statement.setString(2, filterBuffer.toString());
         statement.setString(3, filterBuffer.toString());
         statement.setString(4, filterBuffer.toString());
@@ -1236,7 +1235,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection())
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -1244,7 +1243,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Get the ID of the internal security group with the specified group name
-      UUID groupId = getGroupId(connection, groupName);
+      String groupId = getGroupId(connection, groupName);
 
       if (groupId == null)
       {
@@ -1283,7 +1282,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       PreparedStatement statement = connection.prepareStatement(removeUserFromGroupSQL))
     {
       // Get the ID of the user with the specified username
-      UUID userId = getUserId(connection, username);
+      String userId = getUserId(connection, username);
 
       if (userId == null)
       {
@@ -1291,7 +1290,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Get the ID of the group with the specified group name
-      UUID groupId = getGroupId(connection, groupName);
+      String groupId = getGroupId(connection, groupName);
 
       if (groupId == null)
       {
@@ -1299,8 +1298,8 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       // Remove the user from the group
-      statement.setObject(1, userId);
-      statement.setObject(2, groupId);
+      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(2, UUID.fromString(groupId));
       statement.executeUpdate();
     }
     catch (UserNotFoundException | GroupNotFoundException e)
@@ -1354,7 +1353,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
     {
-      UUID groupId = getGroupId(connection, group.getGroupName());
+      String groupId = getGroupId(connection, group.getGroupName());
 
       if (groupId == null)
       {
@@ -1367,8 +1366,8 @@ public class InternalUserDirectory extends UserDirectoryBase
           StringUtils.isEmpty(description)
           ? ""
           : description);
-      statement.setObject(2, getUserDirectoryId());
-      statement.setObject(3, groupId);
+      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(3, UUID.fromString(groupId));
 
       if (statement.executeUpdate() <= 0)
       {
@@ -1402,7 +1401,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try (Connection connection = dataSource.getConnection())
     {
-      UUID userId = getUserId(connection, user.getUsername());
+      String userId = getUserId(connection, user.getUsername());
 
       if (userId == null)
       {
@@ -1542,11 +1541,11 @@ public class InternalUserDirectory extends UserDirectoryBase
           parameterIndex++;
         }
 
-        statement.setObject(parameterIndex, getUserDirectoryId());
+        statement.setObject(parameterIndex, UUID.fromString(getUserDirectoryId()));
 
         parameterIndex++;
 
-        statement.setObject(parameterIndex, userId);
+        statement.setObject(parameterIndex, UUID.fromString(userId));
 
         if (statement.executeUpdate() != 1)
         {
@@ -1641,7 +1640,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     PreparedStatement statement = connection.prepareStatement(buffer.toString());
 
-    statement.setObject(1, getUserDirectoryId());
+    statement.setObject(1, UUID.fromString(getUserDirectoryId()));
 
     // Set the parameters for the prepared statement
     int parameterIndex = 2;
@@ -1702,7 +1701,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     User user = new User();
 
-    user.setId(UUID.fromString(rs.getString(1)));
+    user.setId(rs.getString(1));
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setStatus(UserStatus.fromCode(rs.getInt(3)));
@@ -1760,11 +1759,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the authorised function codes for the user.
    *
    * @param connection the existing database connection to use
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId     the ID used to uniquely identify the user
    *
    * @return the authorised function codes for the user
    */
-  private List<String> getFunctionCodesForUserId(Connection connection, UUID userId)
+  private List<String> getFunctionCodesForUserId(Connection connection, String userId)
     throws SQLException
   {
     String getFunctionCodesForUserIdSQL = "SELECT DISTINCT f.code FROM security.functions f "
@@ -1777,7 +1776,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
     {
-      statement.setObject(1, userId);
+      statement.setObject(1, UUID.fromString(userId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1796,11 +1795,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * ID is associated with.
    *
    * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId     the ID used to uniquely identify the user
    *
    * @return the security groups
    */
-  private List<String> getGroupNamesForUser(Connection connection, UUID userId)
+  private List<String> getGroupNamesForUser(Connection connection, String userId)
     throws SQLException
   {
     String getGroupNamesForUserSQL = "SELECT groupname FROM "
@@ -1809,7 +1808,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
     {
-      statement.setObject(1, userId);
+      statement.setObject(1, UUID.fromString(userId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1830,11 +1829,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * is associated with.
    *
    * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId     the ID used to uniquely identify the user
    *
    * @return the internal security groups
    */
-  private List<Group> getGroupsForUser(Connection connection, UUID userId)
+  private List<Group> getGroupsForUser(Connection connection, String userId)
     throws SQLException
   {
     String getGroupsForUserSQL = "SELECT id, groupname, description FROM "
@@ -1843,7 +1842,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
     {
-      statement.setObject(1, userId);
+      statement.setObject(1, UUID.fromString(userId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1853,7 +1852,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         {
           Group group = new Group(rs.getString(2));
 
-          group.setId(UUID.fromString(rs.getString(1)));
+          group.setId(rs.getString(1));
           group.setUserDirectoryId(getUserDirectoryId());
           group.setDescription(rs.getString(3));
           list.add(group);
@@ -1868,13 +1867,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the number of users for the internal security group.
    *
    * @param connection the existing database connection
-   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   internal security group
+   * @param groupId    the ID used to uniquely identify the internal security group
    *
-   * @return the IDs for all the users that are associated with the internal security group
-   *         with the specified ID
+   * @return the number of users for the internal security group
    */
-  private long getNumberOfUsersForGroup(Connection connection, UUID groupId)
+  private long getNumberOfUsersForGroup(Connection connection, String groupId)
     throws SQLException
   {
     String getNumberOfUsersForGroupSQL = "SELECT COUNT (user_id) FROM security.user_to_group_map "
@@ -1882,7 +1879,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
     {
-      statement.setObject(1, groupId);
+      statement.setObject(1, UUID.fromString(groupId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1902,11 +1899,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the names for the roles that the user has been assigned.
    *
    * @param connection the existing database connection to use
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId     the ID used to uniquely identify the user
    *
    * @return the the names for the roles that the user has been assigned
    */
-  private List<String> getRoleNamesForUserId(Connection connection, UUID userId)
+  private List<String> getRoleNamesForUserId(Connection connection, String userId)
     throws SQLException
   {
     String getRoleNamesForUserIdSQL = "SELECT DISTINCT r.name FROM security.roles r "
@@ -1918,7 +1915,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getRoleNamesForUserIdSQL))
     {
-      statement.setObject(1, userId);
+      statement.setObject(1, UUID.fromString(userId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -1949,7 +1946,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getUserSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       statement.setString(2, username);
 
       try (ResultSet rs = statement.executeQuery())
@@ -1967,16 +1964,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user
-   * with the specified username.
+   * Returns the ID used to uniquely identify the user with the specified username.
    *
    * @param connection the existing database connection to use
    * @param username   the username uniquely identifying the user
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *         with the specified username
+   * @return the ID used to uniquely identify the user with the specified username
    */
-  private UUID getUserId(Connection connection, String username)
+  private String getUserId(Connection connection, String username)
     throws SecurityServiceException
   {
     String getUserIdSQL = "SELECT id FROM security.users "
@@ -1984,14 +1979,14 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(getUserIdSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
       statement.setString(2, username);
 
       try (ResultSet rs = statement.executeQuery())
       {
         if (rs.next())
         {
-          return UUID.fromString(rs.getString(1));
+          return rs.getString(1);
         }
         else
         {
@@ -2010,9 +2005,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Increment the password attempts for the user.
    *
-   * @param userId the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId the ID used to uniquely identify the user
    */
-  private void incrementPasswordAttempts(UUID userId)
+  private void incrementPasswordAttempts(String userId)
     throws SecurityServiceException
   {
     String incrementPasswordAttemptsSQL = "UPDATE security.users "
@@ -2021,8 +2016,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))
     {
-      statement.setObject(1, getUserDirectoryId());
-      statement.setObject(2, userId);
+      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
+      statement.setObject(2, UUID.fromString(userId));
 
       if (statement.executeUpdate() != 1)
       {
@@ -2043,13 +2038,13 @@ public class InternalUserDirectory extends UserDirectoryBase
    * be reused for a period of time i.e. was the password used previously in the last X months.
    *
    * @param connection   the existing database connection
-   * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId       the ID used to uniquely identify the user
    * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
    *         period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(Connection connection, UUID userId, String passwordHash)
+  private boolean isPasswordInHistory(Connection connection, String userId, String passwordHash)
     throws SQLException
   {
     String isPasswordInUserPasswordHistorySQL = "SELECT id FROM  security.users_password_history "
@@ -2063,7 +2058,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       calendar.setTime(new Date());
       calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
 
-      statement.setObject(1, userId);
+      statement.setObject(1, UUID.fromString(userId));
       statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
       statement.setString(3, passwordHash);
 
@@ -2078,14 +2073,13 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Is the user in the security group?
    *
    * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   * @param groupId    the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   internal security group
+   * @param userId     the ID used to uniquely identify the user
+   * @param groupId    the ID used to uniquely identify the internal security group
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
    *         otherwise
    */
-  private boolean isUserInGroup(Connection connection, UUID userId, UUID groupId)
+  private boolean isUserInGroup(Connection connection, String userId, String groupId)
     throws SQLException
   {
     String isUserInGroupSQL = "SELECT user_id FROM "
@@ -2093,8 +2087,8 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(isUserInGroupSQL))
     {
-      statement.setObject(1, userId);
-      statement.setObject(2, groupId);
+      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(2, UUID.fromString(groupId));
 
       try (ResultSet rs = statement.executeQuery())
       {
@@ -2103,7 +2097,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  private void savePasswordHistory(Connection connection, UUID userId, String passwordHash)
+  private void savePasswordHistory(Connection connection, String userId, String passwordHash)
     throws SQLException
   {
     String saveUserPasswordHistorySQL = "INSERT INTO security.users_password_history "
@@ -2111,10 +2105,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
     try (PreparedStatement statement = connection.prepareStatement(saveUserPasswordHistorySQL))
     {
-      UUID id = idGenerator.nextUUID();
+      // TODO: Optimize the UUID usage -- MARCUS
+      String id = idGenerator.nextUUID().toString();
 
-      statement.setObject(1, id);
-      statement.setObject(2, userId);
+      statement.setObject(1, UUID.fromString(id));
+      statement.setObject(2, UUID.fromString(userId));
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setString(4, passwordHash);
       statement.execute();
