@@ -1348,9 +1348,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
        *       would to be to use the ANY operator in the WHERE clause but this is not
        *       supported by H2.
        */
-      String getFunctionCodesForGroupsSQL = "SELECT DISTINCT f.code FROM security.functions f "
-          + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_code = f.code "
-          + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = ftrm.role_id "
+      String getFunctionCodesForGroupsSQL =
+          "SELECT DISTINCT ftrm.function_code FROM security.function_to_role_map ftrm "
+          + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_code = ftrm.role_code "
           + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
 
       StringBuilder buffer = new StringBuilder(getFunctionCodesForGroupsSQL);
@@ -1752,14 +1752,14 @@ public class LDAPUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names for the roles that the user has been assigned.
+   * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param username the username identifying the user
    *
-   * @return the names for the roles that the user has been assigned
+   * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleNamesForUser(String username)
+  public List<String> getRoleCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
     DirContext dirContext = null;
@@ -1807,11 +1807,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
        *       would to be to use the ANY operator in the WHERE clause but this is not
        *       supported by H2.
        */
-      String getRoleNamesForGroupsSQL = "SELECT DISTINCT r.name FROM security.roles r "
-          + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
+      String getRoleCodesForGroupsSQL =
+          "SELECT DISTINCT rtgm.role_code FROM security.role_to_group_map rtgm "
           + "INNER JOIN security.groups g ON g.id = rtgm.group_id";
 
-      StringBuilder buffer = new StringBuilder(getRoleNamesForGroupsSQL);
+      StringBuilder buffer = new StringBuilder(getRoleCodesForGroupsSQL);
       buffer.append(" WHERE g.user_directory_id='").append(getUserDirectoryId());
       buffer.append("' AND g.groupname IN (");
 
@@ -1827,7 +1827,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       buffer.append(")");
 
-      List<String> roleNames = new ArrayList<>();
+      List<String> roleCodes = new ArrayList<>();
 
       try (Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement())
@@ -1836,12 +1836,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
         {
           while (rs.next())
           {
-            roleNames.add(rs.getString(1));
+            roleCodes.add(rs.getString(1));
           }
         }
       }
 
-      return roleNames;
+      return roleCodes;
     }
     catch (UserNotFoundException e)
     {

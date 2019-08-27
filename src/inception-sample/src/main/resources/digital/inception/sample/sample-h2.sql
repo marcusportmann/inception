@@ -105,10 +105,10 @@ INSERT INTO security.user_to_group_map (user_id, group_id)
 INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '956c5550-cd3d-42de-8660-7749e1b4df52');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', '146c5550-cd3d-42de-8660-7749e1b4df52');
+INSERT INTO security.role_to_group_map (role_code, group_id)
+  VALUES ('OrganizationAdministrator', '956c5550-cd3d-42de-8660-7749e1b4df52');
+INSERT INTO security.role_to_group_map (role_code, group_id)
+  VALUES ('PasswordResetter', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
 INSERT INTO sample.data (id, name, string_value)
   VALUES (1, 'Sample Name 1', 'Sample Value 1');
@@ -302,10 +302,10 @@ INSERT INTO security.user_to_group_map (user_id, group_id)
 INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
 
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', '69aea0f3-5798-4ee8-9082-6c41feba3472');
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
+INSERT INTO security.role_to_group_map (role_code, group_id)
+  VALUES ('OrganizationAdministrator', '69aea0f3-5798-4ee8-9082-6c41feba3472');
+INSERT INTO security.role_to_group_map (role_code, group_id)
+  VALUES ('PasswordResetter', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
 
 
 

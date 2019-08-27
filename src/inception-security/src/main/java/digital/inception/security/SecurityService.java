@@ -1402,15 +1402,15 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the names for the roles that the user has been assigned.
+   * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the names for the roles that the user has been assigned
+   * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleNamesForUser(String userDirectoryId, String username)
+  public List<String> getRoleCodesForUser(String userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1420,7 +1420,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getRoleNamesForUser(username);
+    return userDirectory.getRoleCodesForUser(username);
   }
 
   /**

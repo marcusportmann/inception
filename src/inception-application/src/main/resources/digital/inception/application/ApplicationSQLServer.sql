@@ -962,16 +962,16 @@ GO
 
 
 CREATE TABLE "SECURITY"."ROLES" (
-  id          UNIQUEIDENTIFIER NOT NULL,
-  name        NVARCHAR(256)    NOT NULL,
+  code        NVARCHAR(100) NOT NULL,
+  name        NVARCHAR(256) NOT NULL,
   description NVARCHAR(512),
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the role' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'CODE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the role' ,
@@ -986,22 +986,22 @@ GO
 
 CREATE TABLE "SECURITY"."FUNCTION_TO_ROLE_MAP" (
   function_code NVARCHAR(100) NOT NULL,
-  role_id       UNIQUEIDENTIFIER NOT NULL,
+  role_code     NVARCHAR(100) NOT NULL,
 
-  PRIMARY KEY (function_code, role_id)
+  PRIMARY KEY (function_code, role_code)
 );
 
 CREATE INDEX function_to_role_map_function_code_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(function_code);
 
-CREATE INDEX function_to_role_map_role_id_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(role_id);
+CREATE INDEX function_to_role_map_role_code_ix ON "SECURITY"."FUNCTION_TO_ROLE_MAP"(role_code);
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The code used to uniquely identify the function' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'FUNCTION_CODE';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the role' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'FUNCTION_TO_ROLE_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_CODE';
 GO
 
 CREATE TRIGGER functions_on_delete_function_to_role_map_trigger
@@ -1019,33 +1019,33 @@ DELETE
 
 CREATE TRIGGER roles_on_delete_function_to_role_map_trigger
   ON "SECURITY"."ROLES"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
-SELECT deleted.id
+  FOR DELETE AS BEGIN DECLARE @CODE NVARCHAR(100) DECLARE C CURSOR FOR
+SELECT deleted.code
   FROM deleted open C FETCH NEXT
   FROM C
-  INTO @ID WHILE @@FETCH_STATUS = 0 BEGIN
+  INTO @CODE WHILE @@FETCH_STATUS = 0 BEGIN
 DELETE
   FROM "SECURITY"."FUNCTION_TO_ROLE_MAP"
-  WHERE role_id = @id FETCH NEXT
+  WHERE role_code = @CODE FETCH NEXT
   FROM C
-  INTO @ID END CLOSE C DEALLOCATE C END GO
+  INTO @CODE END CLOSE C DEALLOCATE C END GO
 
 
 
 CREATE TABLE "SECURITY"."ROLE_TO_GROUP_MAP" (
-  role_id  UNIQUEIDENTIFIER NOT NULL,
-  group_id UNIQUEIDENTIFIER NOT NULL,
+  role_code NVARCHAR(100)    NOT NULL,
+  group_id  UNIQUEIDENTIFIER NOT NULL,
 
-  PRIMARY KEY (role_id, group_id),
+  PRIMARY KEY (role_code, group_id),
 );
 
-CREATE INDEX role_to_group_map_role_id_ix ON "SECURITY"."ROLE_TO_GROUP_MAP"(role_id);
+CREATE INDEX role_to_group_map_role_code_ix ON "SECURITY"."ROLE_TO_GROUP_MAP"(role_code);
 
 CREATE INDEX role_to_group_map_group_id_ix ON "SECURITY"."ROLE_TO_GROUP_MAP"(group_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the role' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLE_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_ID';
+@name=N'MS_Description', @value=N'The code used to uniquely identify the role' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLE_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'ROLE_CODE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
@@ -1054,16 +1054,16 @@ GO
 
 CREATE TRIGGER roles_on_delete_role_to_group_map_trigger
   ON "SECURITY"."ROLES"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
-SELECT deleted.id
+  FOR DELETE AS BEGIN DECLARE @CODE UNIQUEIDENTIFIER DECLARE C CURSOR FOR
+SELECT deleted.code
   FROM deleted open C FETCH NEXT
   FROM C
-  INTO @ID WHILE @@FETCH_STATUS = 0 BEGIN
+  INTO @CODE WHILE @@FETCH_STATUS = 0 BEGIN
 DELETE
   FROM "SECURITY"."ROLE_TO_GROUP_MAP"
-  WHERE role_id = @id FETCH NEXT
+  WHERE role_code = @CODE FETCH NEXT
   FROM C
-  INTO @ID END CLOSE C DEALLOCATE C END GO
+  INTO @CODE END CLOSE C DEALLOCATE C END GO
 
 CREATE TRIGGER groups_on_delete_role_to_group_map_trigger
   ON "SECURITY"."GROUPS"
@@ -1321,36 +1321,36 @@ INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
 INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
   VALUES ('Security.UserGroups', 'User Groups', 'User Groups');
 
-INSERT INTO "SECURITY"."ROLES" (id, name, description)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
-INSERT INTO "SECURITY"."ROLES" (id, name, description)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
-INSERT INTO "SECURITY"."ROLES" (id, name, description)
-  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
+INSERT INTO "SECURITY"."ROLES" (code, name, description)
+  VALUES ('Administrator', 'Administrator', 'Administrator');
+INSERT INTO "SECURITY"."ROLES" (code, name, description)
+  VALUES ('OrganizationAdministrator', 'Organization Administrator', 'Organization Administrator');
+INSERT INTO "SECURITY"."ROLES" (code, name, description)
+  VALUES ('PasswordResetter', 'Password Resetter', 'Password Resetter');
 
 
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Application.SecureHome', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Application.Dashboard', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.Dashboard function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Reporting.ViewReport', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Reporting.ViewReport function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Security.ResetUserPassword', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.ResetUserPassword function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Security.UserAdministration', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserAdministration function to the Organization Administrator role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Security.UserGroups', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Application.SecureHome', 'OrganizationAdministrator');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Application.Dashboard', 'OrganizationAdministrator');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Reporting.ViewReport', 'OrganizationAdministrator');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Security.ResetUserPassword', 'OrganizationAdministrator');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Security.UserAdministration', 'OrganizationAdministrator');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Security.UserGroups', 'OrganizationAdministrator');
 
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Application.SecureHome', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Application.Dashboard', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
-INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_id)
-  VALUES ('Security.ResetUserPassword', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Application.SecureHome', 'PasswordResetter');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Application.Dashboard', 'PasswordResetter');
+INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
+  VALUES ('Security.ResetUserPassword', 'PasswordResetter');
 
-INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_id, group_id)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
+INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_code, group_id)
+  VALUES ('Administrator', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
 
 INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
   VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');

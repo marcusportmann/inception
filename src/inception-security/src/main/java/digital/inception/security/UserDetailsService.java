@@ -94,9 +94,9 @@ public class UserDetailsService
         }
 
         // Retrieve the list of roles for the user
-        List<String> roleNames = securityService.getRoleNamesForUser(userDirectoryId, username);
+        List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
 
-        return new digital.inception.security.UserDetails(user, roleNames, functionCodes,
+        return new digital.inception.security.UserDetails(user, roleCodes, functionCodes,
             organizationIds, userDirectoryIdsForOrganizations);
       }
     }

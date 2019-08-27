@@ -49,7 +49,7 @@ public class UserDetails
    * Constructs a new <code>UserDetails</code>.
    *
    * @param user             the user
-   * @param roleNames        the names for the roles that the user has been assigned
+   * @param roleCodes        the codes for the roles that the user has been assigned
    * @param functionCodes    the function codes for the user
    * @param organizationIds  the Universally Unique Identifiers (UUIDs) used to uniquely identify
    *                         the organizations the user is associated with
@@ -57,7 +57,7 @@ public class UserDetails
    *                         identify the user directories the user is associated with as a result
    *                         of being associated with one or more organizations
    */
-  UserDetails(User user, List<String> roleNames, List<String> functionCodes,
+  UserDetails(User user, List<String> roleCodes, List<String> functionCodes,
       List<String> organizationIds, List<String> userDirectoryIds)
   {
     this.user = user;
@@ -74,7 +74,7 @@ public class UserDetails
     functionCodes.stream().map(functionCode -> new SimpleGrantedAuthority("FUNCTION_"
         + functionCode)).forEach(authorities::add);
 
-    roleNames.stream().map(roleName -> new SimpleGrantedAuthority("ROLE_" + roleName)).forEach(
+    roleCodes.stream().map(roleCode -> new SimpleGrantedAuthority("ROLE_" + roleCode)).forEach(
         authorities::add);
   }
 

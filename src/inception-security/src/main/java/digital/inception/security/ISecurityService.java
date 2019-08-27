@@ -374,14 +374,14 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the names for the roles that the user has been assigned.
+   * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the names for the roles that the user has been assigned
+   * @return the codes for the roles that the user has been assigned
    */
-  List<String> getRoleNamesForUser(String userDirectoryId, String username)
+  List<String> getRoleCodesForUser(String userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**

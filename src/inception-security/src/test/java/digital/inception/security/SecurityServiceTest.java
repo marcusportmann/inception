@@ -442,7 +442,7 @@ public class SecurityServiceTest
 
     user = securityService.getUser(userDirectory.getId(), user.getUsername());
 
-    assertEquals("The correct number of password attemtps (1) was not retrieved", 1,
+    assertEquals("The correct number of password attempts (1) was not retrieved", 1,
         user.getPasswordAttempts().intValue());
   }
 
@@ -581,8 +581,9 @@ public class SecurityServiceTest
     List<String> functionCodesForUser = securityService.getFunctionCodesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
-    assertEquals("The correct number of function codes (" + 0 + ") was not retrieved for the user ("
-        + user.getUsername() + ")", 0, functionCodesForUser.size());
+    assertEquals("The correct number of function codes (" + 0
+        + ") was not retrieved for the user (" + user.getUsername() + ")", 0,
+        functionCodesForUser.size());
   }
 
   /**
@@ -893,6 +894,22 @@ public class SecurityServiceTest
       fail("Failed to find the internal user directory type (" + SecurityService
           .LDAP_USER_DIRECTORY_TYPE_ID + ") in the list of user directory types");
     }
+  }
+
+  /**
+   * Test the role functionality.
+   */
+  @Test
+  public void roleTest()
+    throws Exception
+  {
+    List<String> roleCodes = securityService.getRoleCodesForUser(
+        "4ef18395-423a-4df6-b7d7-6bcdd85956e4", "Administrator");
+
+    assertEquals("The correct number of role codes (1) was not retrieved", 1, roleCodes.size());
+
+    assertEquals("The expected role code (Administrator) was not retrieved", "Administrator",
+        roleCodes.get(0));
   }
 
   /**
@@ -1207,7 +1224,7 @@ public class SecurityServiceTest
   private void compareFunctions(Function function1, Function function2)
   {
     assertEquals("The code values for the two functions do not match", function1.getCode(),
-      function2.getCode());
+        function2.getCode());
     assertEquals("The description values for the two functions do not match",
         function1.getDescription(), function2.getDescription());
     assertEquals("The name values for the two functions do not match", function1.getName(),

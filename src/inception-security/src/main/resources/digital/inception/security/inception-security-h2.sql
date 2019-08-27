@@ -204,14 +204,14 @@ COMMENT ON COLUMN security.functions.description IS 'A description for the funct
 
 
 CREATE TABLE security.roles (
-  id          UUID          NOT NULL,
+  code        VARCHAR(100)  NOT NULL,
   name        VARCHAR(4000) NOT NULL,
   description VARCHAR(4000),
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
-COMMENT ON COLUMN security.roles.id IS 'The ID used to uniquely identify the role';
+COMMENT ON COLUMN security.roles.code IS 'The code used to uniquely identify the role';
 
 COMMENT ON COLUMN security.roles.name IS 'The name of the role';
 
@@ -220,36 +220,36 @@ COMMENT ON COLUMN security.roles.description IS 'A description for the role';
 
 CREATE TABLE security.function_to_role_map (
   function_code VARCHAR(100) NOT NULL,
-  role_id       UUID NOT NULL,
+  role_code     VARCHAR(100) NOT NULL,
 
-  PRIMARY KEY (function_code, role_id),
+  PRIMARY KEY (function_code, role_code),
   CONSTRAINT function_to_role_map_function_fk FOREIGN KEY (function_code) REFERENCES security.functions(code) ON DELETE CASCADE,
-  CONSTRAINT function_to_role_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles(id) ON DELETE CASCADE
+  CONSTRAINT function_to_role_map_role_fk FOREIGN KEY (role_code) REFERENCES security.roles(code) ON DELETE CASCADE
 );
 
 CREATE INDEX function_to_role_map_function_code_ix ON security.function_to_role_map(function_code);
 
-CREATE INDEX function_to_role_map_role_id_ix ON security.function_to_role_map(role_id);
+CREATE INDEX function_to_role_map_role_code_ix ON security.function_to_role_map(role_code);
 
 COMMENT ON COLUMN security.function_to_role_map.function_code IS 'The code used to uniquely identify the function';
 
-COMMENT ON COLUMN security.function_to_role_map.role_id IS 'The ID used to uniquely identify the role';
+COMMENT ON COLUMN security.function_to_role_map.role_code IS 'The code used to uniquely identify the role';
 
 
 CREATE TABLE security.role_to_group_map (
-  role_id  UUID NOT NULL,
-  group_id UUID NOT NULL,
+  role_code VARCHAR(100) NOT NULL,
+  group_id  UUID NOT NULL,
 
-  PRIMARY KEY (role_id, group_id),
-  CONSTRAINT role_to_group_map_role_fk FOREIGN KEY (role_id) REFERENCES security.roles(id) ON DELETE CASCADE,
+  PRIMARY KEY (role_code, group_id),
+  CONSTRAINT role_to_group_map_role_fk FOREIGN KEY (role_code) REFERENCES security.roles(code) ON DELETE CASCADE,
   CONSTRAINT role_to_group_map_group_fk FOREIGN KEY (group_id) REFERENCES security.groups(id) ON DELETE CASCADE
 );
 
-CREATE INDEX role_to_group_map_role_id_ix ON security.role_to_group_map(role_id);
+CREATE INDEX role_to_group_map_role_code_ix ON security.role_to_group_map(role_code);
 
 CREATE INDEX role_to_group_map_group_id_ix ON security.role_to_group_map(group_id);
 
-COMMENT ON COLUMN security.role_to_group_map.role_id IS 'The ID used to uniquely identify the role';
+COMMENT ON COLUMN security.role_to_group_map.role_code IS 'The code used to uniquely identify the role';
 
 COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquely identify the group';
 
@@ -314,32 +314,32 @@ INSERT INTO security.functions (code, name, description)
 INSERT INTO security.functions (code, name, description)
   VALUES ('Security.UserGroups', 'User Groups', 'User Groups');
 
-INSERT INTO security.roles (id, name, description)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'Administrator', 'Administrator');
-INSERT INTO security.roles (id, name, description)
-  VALUES ('44ff0ad2-fbe1-489f-86c9-cef7f82acf35', 'Organization Administrator', 'Organization Administrator');
-INSERT INTO security.roles (id, name, description)
-  VALUES ('d46298de-eb3e-4729-b45a-f2daf36202e1', 'Password Resetter', 'Password Resetter');
+INSERT INTO security.roles (code, name, description)
+  VALUES ('Administrator', 'Administrator', 'Administrator');
+INSERT INTO security.roles (code, name, description)
+  VALUES ('OrganizationAdministrator', 'Organization Administrator', 'Organization Administrator');
+INSERT INTO security.roles (code, name, description)
+  VALUES ('PasswordResetter', 'Password Resetter', 'Password Resetter');
 
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Application.SecureHome', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.SecureHome function to the Organization Administrator role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Application.Dashboard', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Application.Dashboard function to the Organization Administrator role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Reporting.ViewReport', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Reporting.ViewReport function to the Organization Administrator role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Security.ResetUserPassword', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.ResetUserPassword function to the Organization Administrator role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Security.UserAdministration', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserAdministration function to the Organization Administrator role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Security.UserGroups', '44ff0ad2-fbe1-489f-86c9-cef7f82acf35'); -- Assign the Security.UserGroups function to the Organization Administrator role
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Application.SecureHome', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Application.Dashboard', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Reporting.ViewReport', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.ResetUserPassword', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.UserAdministration', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.UserGroups', 'OrganizationAdministrator');
 
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Application.SecureHome', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.SecureHome function to the Password Resetter role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Application.Dashboard', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Application.Dashboard function to the Password Resetter role
-INSERT INTO security.function_to_role_map (function_code, role_id)
-  VALUES ('Security.ResetUserPassword', 'd46298de-eb3e-4729-b45a-f2daf36202e1'); -- Assign the Security.ResetUserPassword function to the Password Resetter role
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Application.SecureHome', 'PasswordResetter');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Application.Dashboard', 'PasswordResetter');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.ResetUserPassword', 'PasswordResetter');
 
-INSERT INTO security.role_to_group_map (role_id, group_id)
-  VALUES ('100fafb4-783a-4204-a22d-9e27335dc2ea', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
+INSERT INTO security.role_to_group_map (role_code, group_id)
+  VALUES ('Administrator', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group

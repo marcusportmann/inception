@@ -19,8 +19,8 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
-
 import digital.inception.core.util.PasswordUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
@@ -977,14 +977,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names for the roles that the user has been assigned.
+   * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param username the username identifying the user
    *
-   * @return the names for the roles that the user has been assigned
+   * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleNamesForUser(String username)
+  public List<String> getRoleCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -997,7 +997,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      return getRoleNamesForUserId(connection, userId);
+      return getRoleCodesForUserId(connection, userId);
     }
     catch (UserNotFoundException e)
     {
@@ -1006,7 +1006,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the role names for the user (%s) for the user directory (%s)",
+          "Failed to retrieve the role codes for the user (%s) for the user directory (%s)",
           username, getUserDirectoryId()), e);
     }
   }
@@ -1201,7 +1201,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean isExistingUser(String username)
@@ -1226,7 +1226,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean isUserInGroup(String username, String groupName)
@@ -1260,8 +1260,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s)",
-          username, groupName, getUserDirectoryId()), e);
+          "Failed to check if the user (%s) is in the security group (%s) for the user directory "
+          + "(%s)", username, groupName, getUserDirectoryId()), e);
     }
   }
 
@@ -1318,7 +1318,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Does the user directory support administering security groups.
    *
    * @return <code>true</code> if the user directory supports administering security groups or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean supportsGroupAdministration()
@@ -1330,7 +1330,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Does the user directory support administering users.
    *
    * @return <code>true</code> if the user directory supports administering users or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean supportsUserAdministration()
@@ -1347,8 +1347,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityServiceException
   {
-    String updateGroupSQL =
-        "UPDATE security.groups SET description=? WHERE user_directory_id=? AND id=?";
+    String updateGroupSQL = "UPDATE security.groups SET description=? WHERE user_directory_id=? "
+        + "AND id=?";
 
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
@@ -1458,12 +1458,16 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (lockUser || (user.getPasswordAttempts() != null))
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET password_attempts=?" : ", password_attempts=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0)
+            ? "SET password_attempts=?"
+            : ", password_attempts=?");
       }
 
       if (expirePassword || (user.getPasswordExpiry() != null))
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0) ? "SET password_expiry=?" : ", password_expiry=?");
+        fieldsBuffer.append((fieldsBuffer.length() == 0)
+            ? "SET password_expiry=?"
+            : ", password_expiry=?");
       }
 
       buffer.append(fieldsBuffer.toString());
@@ -1575,7 +1579,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param attributes the attributes to be used as the selection criteria
    *
    * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   *         USERS table using the values of the specified attributes as the selection criteria
+   * USERS table using the values of the specified attributes as the selection criteria
    */
   private PreparedStatement buildFindUsersStatement(Connection connection,
       List<Attribute> attributes)
@@ -1766,9 +1770,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   private List<String> getFunctionCodesForUserId(Connection connection, String userId)
     throws SQLException
   {
-    String getFunctionCodesForUserIdSQL = "SELECT DISTINCT f.code FROM security.functions f "
-        + "INNER JOIN security.function_to_role_map ftrm ON ftrm.function_code = f.code "
-        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = ftrm.role_id "
+    String getFunctionCodesForUserIdSQL =
+        "SELECT DISTINCT ftrm.function_code FROM security.function_to_role_map ftrm "
+        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_code = ftrm.role_code "
         + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
         + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
 
@@ -1896,24 +1900,24 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names for the roles that the user has been assigned.
+   * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param connection the existing database connection to use
    * @param userId     the ID used to uniquely identify the user
    *
-   * @return the the names for the roles that the user has been assigned
+   * @return the codes for the roles that the user has been assigned
    */
-  private List<String> getRoleNamesForUserId(Connection connection, String userId)
+  private List<String> getRoleCodesForUserId(Connection connection, String userId)
     throws SQLException
   {
-    String getRoleNamesForUserIdSQL = "SELECT DISTINCT r.name FROM security.roles r "
-        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_id = r.id "
+    String getRoleCodesForUserIdSQL =
+        "SELECT DISTINCT rtgm.role_code FROM security.role_to_group_map rtgm "
         + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
         + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
 
-    List<String> roleNames = new ArrayList<>();
+    List<String> roleCodes = new ArrayList<>();
 
-    try (PreparedStatement statement = connection.prepareStatement(getRoleNamesForUserIdSQL))
+    try (PreparedStatement statement = connection.prepareStatement(getRoleCodesForUserIdSQL))
     {
       statement.setObject(1, UUID.fromString(userId));
 
@@ -1921,10 +1925,10 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         while (rs.next())
         {
-          roleNames.add(rs.getString(1));
+          roleCodes.add(rs.getString(1));
         }
 
-        return roleNames;
+        return roleCodes;
       }
     }
   }
@@ -2042,7 +2046,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
-   *         period of time or <code>false</code> otherwise
+   * period of time or <code>false</code> otherwise
    */
   private boolean isPasswordInHistory(Connection connection, String userId, String passwordHash)
     throws SQLException
@@ -2077,7 +2081,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupId    the ID used to uniquely identify the internal security group
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   private boolean isUserInGroup(Connection connection, String userId, String groupId)
     throws SQLException
