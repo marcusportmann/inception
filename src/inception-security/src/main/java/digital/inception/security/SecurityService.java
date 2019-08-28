@@ -1857,6 +1857,52 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the user directory type for the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the user directory type for the user directory
+   */
+  @Override
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(String userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    String getUserDirectoryTypeForUserDirectorySQL =
+        "SELECT udt.code, udt.name, udt.user_directory_class "
+        + "FROM security.user_directories ud INNER JOIN security.user_directory_types udt "
+        + "ON ud.type = udt.code WHERE ud.id = ?";
+
+    try (Connection connection = dataSource.getConnection();
+      PreparedStatement statement = connection.prepareStatement(
+          getUserDirectoryTypeForUserDirectorySQL))
+    {
+      statement.setObject(1, UUID.fromString(userDirectoryId));
+
+      try (ResultSet rs = statement.executeQuery())
+      {
+        if (rs.next())
+        {
+          return new UserDirectoryType(rs.getString(1), rs.getString(2), rs.getString(3));
+        }
+        else
+        {
+          throw new UserDirectoryNotFoundException(userDirectoryId);
+        }
+      }
+    }
+    catch (UserDirectoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(String.format(
+          "Failed to retrieve the user directory type for the user directory (%s)",
+          userDirectoryId), e);
+    }
+  }
+
+  /**
    * Retrieve the user directory types.
    *
    * @return the user directory types

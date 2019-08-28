@@ -19,6 +19,7 @@
             <mat-label i18n="@@new_user_component_label_first_name">First Name</mat-label>
             <input type="text" matInput formControlName="firstName">
             <mat-error *ngIf="newUserForm.get('firstName').errors && !newUserForm.get('firstName').untouched">
+              <span *ngIf="newUserForm.get('firstName').errors?.required" i18n="@@new_user_component_error_first_name_required">A first name is required.</span>
               <span *ngIf="newUserForm.get('firstName').errors?.maxlength" i18n="@@new_user_component_error_first_name_maxlength">First name must not exceed 4000 characters.</span>
             </mat-error>
           </mat-form-field>
@@ -28,6 +29,7 @@
             <mat-label i18n="@@new_user_component_label_last_name">Last Name</mat-label>
             <input type="text" matInput formControlName="lastName">
             <mat-error *ngIf="newUserForm.get('lastName').errors && !newUserForm.get('lastName').untouched">
+              <span *ngIf="newUserForm.get('lastName').errors?.required" i18n="@@new_user_component_error_last_name_required">A last name is required.</span>
               <span *ngIf="newUserForm.get('lastName').errors?.maxlength" i18n="@@new_user_component_error_last_name_maxlength">Last name must not exceed 4000 characters.</span>
             </mat-error>
           </mat-form-field>
@@ -86,12 +88,12 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="newUserForm.contains('expirePassword') || newUserForm.contains('lockUser')" class="row">
         <div class="col-sm">
           <checkbox-form-field>
             <mat-label i18n="@@new_user_component_label_options">Options</mat-label>
-            <mat-checkbox formControlName="expiredPassword" i18n="@@new_user_component_label_expired_password">Expired Password?</mat-checkbox>
-            <mat-checkbox formControlName="userLocked" i18n="@@new_user_component_label_user_locked">User Locked?</mat-checkbox>
+            <mat-checkbox *ngIf="newUserForm.contains('expiredPassword')" formControlName="expiredPassword" i18n="@@new_user_component_label_expired_password">Expired Password?</mat-checkbox>
+            <mat-checkbox *ngIf="newUserForm.contains('userLocked')" formControlName="userLocked" i18n="@@new_user_component_label_user_locked">User Locked?</mat-checkbox>
           </checkbox-form-field>
         </div>
       </div>

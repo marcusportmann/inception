@@ -79,7 +79,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "FirstName", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(min = 1, max = 4000)
   private String firstName;
 
   /**
@@ -98,7 +98,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "LastName", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(min = 1, max = 4000)
   private String lastName;
 
   /**

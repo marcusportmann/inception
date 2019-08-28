@@ -31,6 +31,8 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserStatus} from '../../services/security/user-status';
 import {v4 as uuid} from 'uuid';
+import {UserDirectory} from '../../services/security/user-directory';
+import {UserDirectoryType} from '../../services/security/user-directory-type';
 
 /**
  * The NewUserComponent class implements the new user component.
@@ -47,6 +49,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
 
   user?: User;
 
+  userDirectoryType?: UserDirectoryType;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService,
@@ -57,13 +61,11 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
     this.newUserForm = new FormGroup({
       confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
       email: new FormControl('', [Validators.maxLength(4000)]),
-      expiredPassword: new FormControl(false),
-      firstName: new FormControl('',       [Validators.maxLength(4000)]),
-      lastName: new FormControl('', [Validators.maxLength(4000)]),
+      firstName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      lastName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
       mobileNumber: new FormControl('', [Validators.maxLength(4000)]),
       password: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
       phoneNumber: new FormControl('', [Validators.maxLength(4000)]),
-      userLocked: new FormControl(false),
       username: new FormControl('', [Validators.required, Validators.maxLength(4000)])
     });
   }
@@ -90,8 +92,31 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
     const userDirectoryId = decodeURIComponent(
       this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
-    this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', '', 0,
-      UserStatus.Active);
+    // Retrieve the existing user and initialise the form fields
+    this.spinnerService.showSpinner();
+
+    this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe((userDirectoryType: UserDirectoryType) => {
+        this.userDirectoryType = userDirectoryType;
+
+        this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', '', 0,
+          UserStatus.Active);
+
+        if (this.userDirectoryType!.code === 'InternalUserDirectory') {
+          this.newUserForm.addControl('expirePassword', new FormControl(false));
+          this.newUserForm.addControl('lockUser', new FormControl(false));
+        }
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
   }
 
   onCancel(): void {
@@ -106,7 +131,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   onOK(): void {
     if (this.user && this.newUserForm.valid) {
       // Check that the password and confirmation password match
-      if (this.newUserForm.get('password')!.value !== this.newUserForm.get('confirmPassword')!.value) {
+      if (this.newUserForm.get('password')!.value !== this.newUserForm.get(
+        'confirmPassword')!.value) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
           id: '@@new_user_component_passwords_do_not_match',
           value: 'The passwords do not match.'
@@ -125,8 +151,10 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createUser(this.user, this.newUserForm.get('expiredPassword')!.value,
-        this.newUserForm.get('userLocked')!.value)
+      this.securityService.createUser(this.user,
+        this.newUserForm.contains('expiredPassword') ? this.newUserForm.get(
+          'expiredPassword')!.value : false,
+        this.newUserForm.contains('userLocked') ? this.newUserForm.get('userLocked')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           const userDirectoryId = decodeURIComponent(

@@ -472,7 +472,8 @@ export class SecurityService {
    */
   getUserDirectory(userDirectoryId: string): Observable<UserDirectory> {
     return this.httpClient.get<UserDirectory>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(userDirectoryId),
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId),
       {reportProgress: true}).pipe(map((userDirectory: UserDirectory) => {
       return userDirectory;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -525,6 +526,43 @@ export class SecurityService {
             return throwError(new SecurityServiceError(this.i18n({
               id: '@@codes_service_failed_to_retrieve_the_summaries_for_the_user_directories_associated_with_the_organization',
               value: 'Failed to retrieve the summaries for the user directories associated with the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the user directory type for the user directory.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   *
+   * @return The user directory type for the user directory.
+   */
+  getUserDirectoryTypeForUserDirectory(userDirectoryId: string): Observable<UserDirectoryType> {
+    return this.httpClient.get<UserDirectoryType>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
+      userDirectoryId) + '/user-directory-type',
+      {reportProgress: true})
+      .pipe(map((userDirectoryType: UserDirectoryType) => {
+        return userDirectoryType;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_retrieve_the_user_directory_type_for_the_user_directory',
+              value: 'Failed to retrieve the user directory type for the user directory.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

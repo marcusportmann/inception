@@ -2350,60 +2350,93 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       if (!StringUtils.isEmpty(userFirstNameAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userFirstNameAttribute,
-            StringUtils.isEmpty(user.getFirstName())
-            ? ""
-            : user.getFirstName())));
+        if (StringUtils.isEmpty(user.getFirstName()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userFirstNameAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userFirstNameAttribute, user.getFirstName())));
+        }
       }
 
       if (!StringUtils.isEmpty(userLastNameAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userLastNameAttribute,
-            StringUtils.isEmpty(user.getLastName())
-            ? ""
-            : user.getLastName())));
+        if (StringUtils.isEmpty(user.getLastName()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userLastNameAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userLastNameAttribute, user.getLastName())));
+        }
       }
 
       if (!StringUtils.isEmpty(userFullNameAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userFullNameAttribute, (StringUtils.isEmpty(user.getFirstName())
-            ? ""
-            : user.getFirstName()) + ((!StringUtils.isEmpty(user.getFirstName())
-                && (!StringUtils.isEmpty(user.getLastName())))
-            ? " "
-            : "") + (StringUtils.isEmpty(user.getLastName())
-            ? ""
-            : user.getLastName()))));
+        if (StringUtils.isEmpty(user.getFirstName()) && StringUtils.isEmpty(user.getLastName()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userFullNameAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userFullNameAttribute, (StringUtils.isEmpty(user.getFirstName())
+              ? ""
+              : user.getFirstName()) + ((!StringUtils.isEmpty(user.getFirstName())
+                  && (!StringUtils.isEmpty(user.getLastName())))
+              ? " "
+              : "") + (StringUtils.isEmpty(user.getLastName())
+              ? ""
+              : user.getLastName()))));
+        }
       }
 
       if (!StringUtils.isEmpty(userEmailAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userEmailAttribute,
-            StringUtils.isEmpty(user.getEmail())
-            ? ""
-            : user.getEmail())));
+        if (StringUtils.isEmpty(user.getEmail()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userEmailAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userEmailAttribute, user.getEmail())));
+        }
       }
 
       if (!StringUtils.isEmpty(userPhoneNumberAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userPhoneNumberAttribute,
-            StringUtils.isEmpty(user.getPhoneNumber())
-            ? ""
-            : user.getPhoneNumber())));
+        if (StringUtils.isEmpty(user.getPhoneNumber()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userPhoneNumberAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userPhoneNumberAttribute, user.getPhoneNumber())));
+        }
       }
 
       if (!StringUtils.isEmpty(userMobileNumberAttribute))
       {
-        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(
-            userMobileNumberAttribute,
-            StringUtils.isEmpty(user.getMobileNumber())
-            ? ""
-            : user.getMobileNumber())));
+        if (StringUtils.isEmpty(user.getMobileNumber()))
+        {
+          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+              new BasicAttribute(userMobileNumberAttribute)));
+        }
+        else
+        {
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+              new BasicAttribute(userMobileNumberAttribute, user.getMobileNumber())));
+        }
       }
 
       if (supportPasswordLockout)

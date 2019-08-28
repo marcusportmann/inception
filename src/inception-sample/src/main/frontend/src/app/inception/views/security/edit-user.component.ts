@@ -29,6 +29,9 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {User} from '../../services/security/user';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
+import {combineLatest} from 'rxjs';
+import {UserDirectoryType} from '../../services/security/user-directory-type';
+import {UserDirectory} from '../../services/security/user-directory';
 
 /**
  * The EditUserComponent class implements the edit user component.
@@ -45,6 +48,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   user?: User;
 
+  userDirectoryType?: UserDirectoryType;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService,
@@ -54,10 +59,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     // Initialise the form
     this.editUserForm = new FormGroup({
       email: new FormControl('', [Validators.maxLength(4000)]),
-      expirePassword: new FormControl(false),
-      firstName: new FormControl('', [Validators.maxLength(4000)]),
-      lastName: new FormControl('', [Validators.maxLength(4000)]),
-      lockUser: new FormControl(false),
+      firstName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      lastName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
       mobileNumber: new FormControl('', [Validators.maxLength(4000)]),
       phoneNumber: new FormControl('', [Validators.maxLength(4000)]),
       username: new FormControl({value: '', disabled: true})
@@ -90,17 +93,27 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getUser(userDirectoryId, username)
+    combineLatest([
+      this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId),
+      this.securityService.getUser(userDirectoryId, username)
+    ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((user: User) => {
-        this.user = user;
+      .subscribe((results: [UserDirectoryType, User]) => {
+        this.userDirectoryType = results[0];
 
-        this.editUserForm.get('email')!.setValue(user.email);
-        this.editUserForm.get('firstName')!.setValue(user.firstName);
-        this.editUserForm.get('lastName')!.setValue(user.lastName);
-        this.editUserForm.get('mobileNumber')!.setValue(user.mobileNumber);
-        this.editUserForm.get('phoneNumber')!.setValue(user.phoneNumber);
-        this.editUserForm.get('username')!.setValue(user.username);
+        this.user = results[1];
+
+        this.editUserForm.get('email')!.setValue(results[1].email);
+        this.editUserForm.get('firstName')!.setValue(results[1].firstName);
+        this.editUserForm.get('lastName')!.setValue(results[1].lastName);
+        this.editUserForm.get('mobileNumber')!.setValue(results[1].mobileNumber);
+        this.editUserForm.get('phoneNumber')!.setValue(results[1].phoneNumber);
+        this.editUserForm.get('username')!.setValue(results[1].username);
+
+        if (this.userDirectoryType!.code === 'InternalUserDirectory') {
+          this.editUserForm.addControl('expirePassword', new FormControl(false));
+          this.editUserForm.addControl('lockUser', new FormControl(false));
+        }
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -132,8 +145,10 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updateUser(this.user, this.editUserForm.get('expirePassword')!.value,
-        this.editUserForm.get('lockUser')!.value)
+      this.securityService.updateUser(this.user,
+        this.editUserForm.contains('expirePassword') ? this.editUserForm.get(
+          'expirePassword')!.value : false,
+        this.editUserForm.contains('lockUser') ? this.editUserForm.get('lockUser')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           const userDirectoryId = decodeURIComponent(

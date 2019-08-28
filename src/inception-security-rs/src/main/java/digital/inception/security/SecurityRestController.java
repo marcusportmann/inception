@@ -157,7 +157,7 @@ public class SecurityRestController extends SecureRestController
     throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
         SecurityServiceException
   {
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -252,7 +252,7 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
-    if (organizationId == null)
+    if (StringUtils.isEmpty(organizationId))
     {
       throw new InvalidArgumentException("organizationId");
     }
@@ -286,7 +286,7 @@ public class SecurityRestController extends SecureRestController
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
         SecurityServiceException
   {
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -323,7 +323,7 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -358,7 +358,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
+    if (StringUtils.isEmpty(organizationId))
     {
       throw new InvalidArgumentException("organizationId");
     }
@@ -434,7 +434,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -487,7 +487,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -583,7 +583,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
+    if (StringUtils.isEmpty(organizationId))
     {
       throw new InvalidArgumentException("organizationId");
     }
@@ -631,7 +631,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -712,7 +712,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
+    if (StringUtils.isEmpty(organizationId))
     {
       throw new InvalidArgumentException("organizationId");
     }
@@ -731,6 +731,48 @@ public class SecurityRestController extends SecureRestController
     }
 
     return new ResponseEntity<>(filteredUserDirectorySummaries, HttpStatus.OK);
+  }
+
+  /**
+   * Retrieve the user directory type for the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the user directory type for the user directory
+   */
+  @ApiOperation(value = "Retrieve the user directory type for the user directory",
+      notes = "Retrieve the user directory type for the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/user-directory-type",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable String userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (StringUtils.isEmpty(userDirectoryId))
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    return securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId);
   }
 
   /**
@@ -799,7 +841,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -850,7 +892,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
+    if (StringUtils.isEmpty(organizationId))
     {
       throw new InvalidArgumentException("organizationId");
     }
@@ -912,7 +954,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -979,7 +1021,7 @@ public class SecurityRestController extends SecureRestController
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
+    if (StringUtils.isEmpty(userDirectoryId))
     {
       throw new InvalidArgumentException("userDirectoryId");
     }

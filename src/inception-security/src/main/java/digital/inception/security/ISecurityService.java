@@ -486,6 +486,16 @@ public interface ISecurityService
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the user directory type for the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the user directory type for the user directory
+   */
+  UserDirectoryType getUserDirectoryTypeForUserDirectory(String userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the user directory types.
    *
    * @return the user directory types
