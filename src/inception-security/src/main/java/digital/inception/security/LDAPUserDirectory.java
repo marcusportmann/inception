@@ -55,21 +55,6 @@ import javax.sql.DataSource;
 public class LDAPUserDirectory extends UserDirectoryBase
 {
   /**
-   * The default number of failed password attempts before the user is locked.
-   */
-  public static final int DEFAULT_MAX_PASSWORD_ATTEMPTS = 5;
-
-  /**
-   * The default number of months before a user's password expires.
-   */
-  public static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 3;
-
-  /**
-   * The default number of months to check password history against.
-   */
-  public static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
-
-  /**
    * The default maximum number of filtered groups.
    */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
@@ -78,11 +63,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
    * The default maximum number of filtered users.
    */
   private static final int DEFAULT_MAX_FILTERED_USERS = 100;
-
-  /**
-   * The default maximum length of a users's password history.
-   */
-  private static final int DEFAULT_PASSWORD_HISTORY_MAX_LENGTH = 128;
   private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
 
   /* Logger */
@@ -112,15 +92,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private IDGenerator idGenerator;
   private int maxFilteredGroups;
   private int maxFilteredUsers;
-  private int maxPasswordAttempts;
-  private int passwordExpiryMonths;
-  private int passwordHistoryMaxLength;
-  private int passwordHistoryMonths;
   private int port;
   private LdapName sharedBaseDN;
-  private boolean supportPasswordExpiry;
-  private boolean supportPasswordHistory;
-  private boolean supportPasswordLockout;
   private boolean useSSL;
   private LdapName userBaseDN;
   private String userEmailAttribute;
@@ -129,10 +102,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private String userLastNameAttribute;
   private String userMobileNumberAttribute;
   private String userObjectClass;
-  private String userPasswordFailuresAttribute;
-  private String userPasswordHistoryAttribute;
-  private String[] userPasswordHistoryAttributeArray;
-  private String userPasswordLastChangedAttribute;
   private String userPhoneNumberAttribute;
   private String userUsernameAttribute;
 
@@ -365,105 +334,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
             "GroupDescriptionAttribute");
       }
 
-      supportPasswordLockout = UserDirectoryParameter.contains(parameters, "SupportPasswordLockout")
-          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters,
-              "SupportPasswordLockout"));
-
-      if (supportPasswordLockout)
-      {
-        if (UserDirectoryParameter.contains(parameters, "UserPasswordFailuresAttribute"))
-        {
-          userPasswordFailuresAttribute = UserDirectoryParameter.getStringValue(parameters,
-              "UserPasswordFailuresAttribute");
-        }
-        else
-        {
-          throw new SecurityServiceException(String.format(
-              "No UserPasswordFailuresAttribute parameter found for the user directory (%s)",
-              userDirectoryId));
-        }
-
-        if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts"))
-        {
-          maxPasswordAttempts = UserDirectoryParameter.getIntegerValue(parameters,
-              "MaxPasswordAttempts");
-        }
-        else
-        {
-          maxPasswordAttempts = DEFAULT_MAX_PASSWORD_ATTEMPTS;
-        }
-      }
-
-      supportPasswordExpiry = UserDirectoryParameter.contains(parameters, "SupportPasswordExpiry")
-          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters,
-              "SupportPasswordExpiry"));
-
-      if (supportPasswordExpiry)
-      {
-        if (UserDirectoryParameter.contains(parameters, "UserPasswordLastChangedAttribute"))
-        {
-          userPasswordLastChangedAttribute = UserDirectoryParameter.getStringValue(parameters,
-              "UserPasswordLastChangedAttribute");
-        }
-        else
-        {
-          throw new SecurityServiceException(String.format(
-              "No UserPasswordLastChangedAttribute parameter found for the user directory (%s)",
-              userDirectoryId));
-        }
-
-        if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths"))
-        {
-          passwordExpiryMonths = UserDirectoryParameter.getIntegerValue(parameters,
-              "PasswordExpiryMonths");
-        }
-        else
-        {
-          passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
-        }
-      }
-
-      supportPasswordHistory = UserDirectoryParameter.contains(parameters, "SupportPasswordHistory")
-          && Boolean.parseBoolean(UserDirectoryParameter.getStringValue(parameters,
-              "SupportPasswordHistory"));
-
-      if (supportPasswordHistory)
-      {
-        if (UserDirectoryParameter.contains(parameters, "UserPasswordHistoryAttribute"))
-        {
-          userPasswordHistoryAttribute = UserDirectoryParameter.getStringValue(parameters,
-              "UserPasswordHistoryAttribute");
-          userPasswordHistoryAttributeArray = new String[] { userPasswordHistoryAttribute };
-        }
-        else
-        {
-          throw new SecurityServiceException(String.format(
-              "No UserPasswordHistoryAttribute parameter found for the user directory (%s)",
-              userDirectoryId));
-        }
-
-        if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
-        {
-          passwordHistoryMonths = UserDirectoryParameter.getIntegerValue(parameters,
-              "PasswordHistoryMonths");
-        }
-        else
-        {
-          passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
-        }
-
-        if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMaxLength"))
-        {
-          passwordHistoryMaxLength = UserDirectoryParameter.getIntegerValue(parameters,
-              "PasswordHistoryMaxLength");
-        }
-        else
-        {
-          passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MAX_LENGTH;
-        }
-
-      }
-
       if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers"))
       {
         maxFilteredUsers = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredUsers");
@@ -600,71 +470,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE, passwordAttribute));
 
-      if (supportPasswordExpiry)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-
-//      if (expirePassword)
-//      {
-//        BasicAttribute passwordExpiryAttribute = new BasicAttribute(
-//            userPasswordLastChangedAttribute);
-//        passwordExpiryAttribute.add("0");
-//
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            passwordExpiryAttribute));
-//      }
-//      else
-//      {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.MONTH, passwordExpiryMonths);
-//
-//        BasicAttribute passwordExpiryAttribute = new BasicAttribute(
-//            userPasswordLastChangedAttribute);
-//        passwordExpiryAttribute.add(String.valueOf(calendar.getTimeInMillis()));
-//
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            passwordExpiryAttribute));
-//      }
-      }
-
-      if (supportPasswordLockout)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-
-//      if (lockUser)
-//      {
-//        BasicAttribute passwordAttemptsAttribute = new BasicAttribute(
-//            userPasswordFailuresAttribute);
-//        passwordAttemptsAttribute.add(String.valueOf(maxPasswordAttempts));
-//
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            passwordAttemptsAttribute));
-//      }
-//      else
-//      {
-//        BasicAttribute passwordAttemptsAttribute = new BasicAttribute(
-//            userPasswordFailuresAttribute);
-//        passwordAttemptsAttribute.add("0");
-//
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            passwordAttemptsAttribute));
-//      }
-      }
-
-      if (supportPasswordHistory)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-
-//      if (resetPasswordHistory)
-//      {
-//        BasicAttribute passwordHistoryAttribute = new BasicAttribute(
-//            userPasswordHistoryAttribute);
-//
-//        modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
-//            passwordHistoryAttribute));
-//      }
-      }
-
       dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
     }
     catch (UserNotFoundException e)
@@ -709,30 +514,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       LdapName userDN = new LdapName(user.getId());
 
-      if (!userDN.startsWith(sharedBaseDN))
-      {
-        if (supportPasswordLockout)
-        {
-          // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-
-//        if ((user.getPasswordAttempts() != null) &&
-//          (user.getPasswordAttempts() >= maxPasswordAttempts))
-//        {
-//          throw new UserLockedException(username);
-//        }
-        }
-
-        if (supportPasswordExpiry)
-        {
-          // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-
-//        if (user.hasPasswordExpired())
-//        {
-//          throw new ExpiredPasswordException(username);
-//        }
-        }
-      }
-
       DirContext userDirContext = null;
 
       try
@@ -745,11 +526,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (e.getCause() instanceof javax.naming.AuthenticationException)
         {
-          if (supportPasswordLockout)
-          {
-            incrementPasswordAttempts(dirContext, user);
-          }
-
           throw new AuthenticationFailedException(String.format(
               "Failed to authenticate the user (%s) for the user directory (%s)", username,
               getUserDirectoryId()));
@@ -775,7 +551,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       throw e;
     }
 
-    // TODO: FIX THIS IMPLEMENTATION -- MARCUS
+    // TODO: FIX THIS IMPLEMENTATION BY CORRECTLY INTERPRETING USER LOCKED ERROR -- MARCUS
 //  catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
 //      | ExpiredPasswordException e)
 //  {
@@ -1044,47 +820,10 @@ public class LDAPUserDirectory extends UserDirectoryBase
         passwordHash = createPasswordHash("");
       }
 
-      if (supportPasswordHistory)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-        // attributes.put(new BasicAttribute(userPasswordHistoryAttribute, passwordHash));
-      }
-
       attributes.put(new BasicAttribute("userPassword",
           StringUtils.isEmpty(user.getPassword())
           ? ""
           : user.getPassword()));
-
-      if (supportPasswordLockout)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//      if (userLocked)
-//      {
-//        attributes.put(new BasicAttribute(userPasswordFailuresAttribute, String.valueOf(
-//            maxPasswordAttempts)));
-//      }
-//      else
-//      {
-//        attributes.put(new BasicAttribute(userPasswordFailuresAttribute, "0"));
-//      }
-      }
-
-      if (supportPasswordExpiry)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//      if (expiredPassword)
-//      {
-//        attributes.put(new BasicAttribute(userPasswordLastChangedAttribute, "0"));
-//      }
-//      else
-//      {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.add(Calendar.MONTH, passwordExpiryMonths);
-//
-//        attributes.put(new BasicAttribute(userPasswordLastChangedAttribute, String.valueOf(
-//            calendar.getTimeInMillis())));
-//      }
-      }
 
       userDN = new LdapName(userUsernameAttribute + "=" + user.getUsername() + ","
           + userBaseDN.toString());
@@ -2439,40 +2178,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         }
       }
 
-      if (supportPasswordLockout)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//      if (lockUser)
-//      {
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            new BasicAttribute(userPasswordFailuresAttribute, String.valueOf(
-//            maxPasswordAttempts))));
-//      }
-//      else
-//      {
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            new BasicAttribute(userPasswordFailuresAttribute, String.valueOf(
-//            user.getPasswordAttempts()))));
-//      }
-      }
-
-      if (supportPasswordExpiry)
-      {
-        // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//      if (expirePassword)
-//      {
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            new BasicAttribute(userPasswordLastChangedAttribute, String.valueOf(
-//            System.currentTimeMillis()))));
-//      }
-//      else
-//      {
-//        modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
-//            new BasicAttribute(userPasswordLastChangedAttribute, String.valueOf(
-//            user.getPasswordExpiry().toEpochSecond(ZoneOffset.UTC)))));
-//      }
-      }
-
       if (modificationItems.size() > 0)
       {
         dirContext.modifyAttributes(userDN, modificationItems.toArray(new ModificationItem[0]));
@@ -2579,36 +2284,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     else
     {
       user.setEmail("");
-    }
-
-    if (supportPasswordLockout)
-    {
-      // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//    String userPasswordAttemptsAttributeValue = String.valueOf(attributes.get(
-//        userPasswordFailuresAttribute).get());
-//
-//    if ((!StringUtils.isEmpty(userPasswordAttemptsAttributeValue))
-//        && (!userPasswordAttemptsAttributeValue.equals("-1")))
-//    {
-//      user.setPasswordAttempts(Integer.parseInt(String.valueOf(attributes.get(
-//          userPasswordFailuresAttribute).get())));
-//    }
-    }
-
-    if (supportPasswordExpiry)
-    {
-      // TODO: FIX THIS IMPLEMENTATION -- MARCUS
-//    String userPasswordExpiryAttributeValue = String.valueOf(attributes.get(
-//        userPasswordLastChangedAttribute).get());
-//
-//    if ((!StringUtils.isEmpty(userPasswordExpiryAttributeValue))
-//        && (!userPasswordExpiryAttributeValue.equals("-1")))
-//    {
-//      LocalDateTime epochSecond = LocalDateTime.ofEpochSecond(Long.parseLong(String.valueOf(
-//          attributes.get(userPasswordLastChangedAttribute).get())), 0, ZoneOffset.UTC);
-//
-//      user.setPasswordExpiry(epochSecond);
-//    }
     }
 
     return user;
@@ -2861,101 +2536,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
     {
       JNDIUtil.close(searchResultsSharedUsers);
       JNDIUtil.close(searchResultsNonSharedUsers);
-    }
-  }
-
-  private void incrementPasswordAttempts(DirContext dirContext, User user)
-  {
-    try
-    {
-      if ((!StringUtils.isEmpty(userPasswordFailuresAttribute))
-          && (user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() != -1))
-      {
-        dirContext.modifyAttributes(user.getId(), new ModificationItem[] { new ModificationItem(
-            DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPasswordFailuresAttribute,
-            String.valueOf(user.getPasswordAttempts() + 1))) });
-      }
-    }
-    catch (Throwable e)
-    {
-      logger.error(String.format(
-          "Failed to increment the password attempts for the user (%s) for the user directory (%s)",
-          user.getUsername(), getUserDirectoryId()), e);
-    }
-  }
-
-  private boolean isPasswordInHistory(DirContext dirContext, String username, LdapName userDN,
-      String passwordHash)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
-      {
-        Attributes attributes = dirContext.getAttributes(userDN, userPasswordHistoryAttributeArray);
-
-        if (attributes.get(userPasswordHistoryAttribute) != null)
-        {
-          @SuppressWarnings("unchecked")
-          NamingEnumeration<String> existingPasswordHashes =
-              (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
-
-          while (existingPasswordHashes.hasMore())
-          {
-            if (existingPasswordHashes.next().equals(passwordHash))
-            {
-              return true;
-            }
-          }
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether the password hash (%s) is in the password history for the user "
-          + "(%s) for the user directory (%s)", passwordHash, username, getUserDirectoryId()), e);
-    }
-
-    return false;
-  }
-
-  private void savePasswordHistory(DirContext dirContext, String username, LdapName userDN,
-      String passwordHash)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (!StringUtils.isEmpty(userPasswordHistoryAttribute))
-      {
-        BasicAttribute attribute = new BasicAttribute(userPasswordHistoryAttribute);
-
-        Attributes attributes = dirContext.getAttributes(userDN, userPasswordHistoryAttributeArray);
-
-        if (attributes.get(userPasswordHistoryAttribute) != null)
-        {
-          @SuppressWarnings("unchecked")
-          NamingEnumeration<String> existingPasswordHashes =
-              (NamingEnumeration<String>) attributes.get(userPasswordHistoryAttribute).getAll();
-
-          while (existingPasswordHashes.hasMore())
-          {
-            attribute.add(existingPasswordHashes.next());
-          }
-        }
-
-        attribute.add(passwordHash);
-
-        dirContext.modifyAttributes(userDN, new ModificationItem[] { new ModificationItem(DirContext
-            .REPLACE_ATTRIBUTE, attribute) });
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to save the password hash (%s) for the user (%s) for the user directory (%s)",
-          passwordHash, username, getUserDirectoryId()), e);
     }
   }
 }
