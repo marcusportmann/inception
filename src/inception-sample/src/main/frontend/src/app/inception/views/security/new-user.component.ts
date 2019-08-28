@@ -31,7 +31,6 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserStatus} from '../../services/security/user-status';
 import {v4 as uuid} from 'uuid';
-import {UserDirectory} from '../../services/security/user-directory';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
 
 /**
@@ -104,8 +103,8 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
           UserStatus.Active);
 
         if (this.userDirectoryType!.code === 'InternalUserDirectory') {
-          this.newUserForm.addControl('expirePassword', new FormControl(false));
-          this.newUserForm.addControl('lockUser', new FormControl(false));
+          this.newUserForm.addControl('expiredPassword', new FormControl(false));
+          this.newUserForm.addControl('userLocked', new FormControl(false));
         }
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard

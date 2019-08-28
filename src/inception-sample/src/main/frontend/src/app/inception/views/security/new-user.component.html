@@ -88,7 +88,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div *ngIf="newUserForm.contains('expirePassword') || newUserForm.contains('lockUser')" class="row">
+      <div *ngIf="newUserForm.contains('expiredPassword') || newUserForm.contains('userLocked')" class="row">
         <div class="col-sm">
           <checkbox-form-field>
             <mat-label i18n="@@new_user_component_label_options">Options</mat-label>

@@ -34,10 +34,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -990,23 +989,21 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if (!StringUtils.isEmpty(userFirstNameAttribute))
+      if ((!StringUtils.isEmpty(userFirstNameAttribute))
+          && (!StringUtils.isEmpty(user.getFirstName())))
       {
-        attributes.put(new BasicAttribute(userFirstNameAttribute,
-            StringUtils.isEmpty(user.getFirstName())
-            ? ""
-            : user.getFirstName()));
+        attributes.put(new BasicAttribute(userFirstNameAttribute, user.getFirstName()));
       }
 
-      if (!StringUtils.isEmpty(userLastNameAttribute))
+      if ((!StringUtils.isEmpty(userLastNameAttribute))
+          && (!StringUtils.isEmpty(user.getLastName())))
       {
-        attributes.put(new BasicAttribute(userLastNameAttribute,
-            StringUtils.isEmpty(user.getLastName())
-            ? ""
-            : user.getLastName()));
+        attributes.put(new BasicAttribute(userLastNameAttribute, user.getLastName()));
       }
 
-      if (!StringUtils.isEmpty(userFullNameAttribute))
+      if ((!StringUtils.isEmpty(userFullNameAttribute))
+          && ((!StringUtils.isEmpty(user.getFirstName())) || (!StringUtils.isEmpty(
+              user.getLastName()))))
       {
         attributes.put(new BasicAttribute(userFullNameAttribute, (StringUtils.isEmpty(
             user.getFirstName())
@@ -1019,28 +1016,21 @@ public class LDAPUserDirectory extends UserDirectoryBase
             : user.getLastName())));
       }
 
-      if (!StringUtils.isEmpty(userEmailAttribute))
+      if ((!StringUtils.isEmpty(userEmailAttribute)) && (!StringUtils.isEmpty(user.getEmail())))
       {
-        attributes.put(new BasicAttribute(userEmailAttribute,
-            StringUtils.isEmpty(user.getEmail())
-            ? ""
-            : user.getEmail()));
+        attributes.put(new BasicAttribute(userEmailAttribute, user.getEmail()));
       }
 
-      if (!StringUtils.isEmpty(userPhoneNumberAttribute))
+      if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
+          && (!StringUtils.isEmpty(user.getPhoneNumber())))
       {
-        attributes.put(new BasicAttribute(userPhoneNumberAttribute,
-            StringUtils.isEmpty(user.getPhoneNumber())
-            ? ""
-            : user.getPhoneNumber()));
+        attributes.put(new BasicAttribute(userPhoneNumberAttribute, user.getPhoneNumber()));
       }
 
-      if (!StringUtils.isEmpty(userMobileNumberAttribute))
+      if ((!StringUtils.isEmpty(userMobileNumberAttribute))
+          && (!StringUtils.isEmpty(user.getMobileNumber())))
       {
-        attributes.put(new BasicAttribute(userMobileNumberAttribute,
-            StringUtils.isEmpty(user.getMobileNumber())
-            ? ""
-            : user.getMobileNumber()));
+        attributes.put(new BasicAttribute(userMobileNumberAttribute, user.getMobileNumber()));
       }
 
       String passwordHash;
@@ -1337,6 +1327,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
           groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
               .get()));
         }
+      }
+
+      if (groupNames.isEmpty())
+      {
+        return new ArrayList<>();
       }
 
       /*
@@ -1796,6 +1791,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
           groupNames.add(String.valueOf(searchResult.getAttributes().get(groupNameAttribute)
               .get()));
         }
+      }
+
+      if (groupNames.isEmpty())
+      {
+        return new ArrayList<>();
       }
 
       /*
@@ -2352,7 +2352,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getFirstName()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userFirstNameAttribute)));
         }
         else
@@ -2366,7 +2366,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getLastName()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userLastNameAttribute)));
         }
         else
@@ -2380,7 +2380,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getFirstName()) && StringUtils.isEmpty(user.getLastName()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userFullNameAttribute)));
         }
         else
@@ -2401,7 +2401,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getEmail()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userEmailAttribute)));
         }
         else
@@ -2415,7 +2415,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getPhoneNumber()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userPhoneNumberAttribute)));
         }
         else
@@ -2429,7 +2429,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         if (StringUtils.isEmpty(user.getMobileNumber()))
         {
-          modificationItems.add(new ModificationItem(DirContext.REMOVE_ATTRIBUTE,
+          modificationItems.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
               new BasicAttribute(userMobileNumberAttribute)));
         }
         else

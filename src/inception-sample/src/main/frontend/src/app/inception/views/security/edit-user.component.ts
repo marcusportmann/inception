@@ -31,7 +31,6 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
-import {UserDirectory} from '../../services/security/user-directory';
 
 /**
  * The EditUserComponent class implements the edit user component.
