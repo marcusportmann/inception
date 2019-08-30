@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,6 +47,9 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Code", namespace = "http://codes.inception.digital",
     propOrder = { "id", "codeCategoryId", "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "codes", name = "codes")
+@IdClass(CodeId.class)
 public class Code
   implements Serializable
 {
@@ -61,6 +65,8 @@ public class Code
   @XmlElement(name = "CodeCategoryId", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "code_category_id")
   private String codeCategoryId;
 
   /**
@@ -71,6 +77,8 @@ public class Code
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "id")
   private String id;
 
   /**
@@ -81,6 +89,7 @@ public class Code
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 100)
+  @Column(name = "name")
   private String name;
 
   /**
@@ -91,6 +100,7 @@ public class Code
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
+  @Column(name = "value")
   private String value;
 
   /**

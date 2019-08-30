@@ -363,7 +363,8 @@ public class ConfigurationService
     {
       if (!StringUtils.isEmpty(filter))
       {
-        return configurationSummaryRepository.getFilteredConfigurationSummaries(filter);
+        return configurationSummaryRepository.findFiltered("%"
+            + filter.toUpperCase() + "%");
       }
       else
       {
@@ -392,7 +393,7 @@ public class ConfigurationService
     {
       if (!StringUtils.isEmpty(filter))
       {
-        return configurationRepository.getFilteredConfigurations(filter);
+        return configurationRepository.findFiltered("%" + filter.toUpperCase() + "%");
       }
       else
       {
@@ -624,7 +625,7 @@ public class ConfigurationService
   {
     try
     {
-      configurationRepository.save(configuration);
+      configurationRepository.saveAndFlush(configuration);
     }
     catch (Throwable e)
     {

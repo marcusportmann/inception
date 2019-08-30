@@ -33,6 +33,10 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -51,6 +55,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlType(name = "CodeCategorySummary", namespace = "http://codes.inception.digital",
     propOrder = { "id", "name", "updated" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "codes", name = "code_categories")
 public class CodeCategorySummary
   implements Serializable
 {
@@ -64,6 +70,8 @@ public class CodeCategorySummary
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "id")
   private String id;
 
   /**
@@ -74,6 +82,7 @@ public class CodeCategorySummary
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 100)
+  @Column(name = "name")
   private String name;
 
   /**
@@ -84,6 +93,7 @@ public class CodeCategorySummary
   @XmlElement(name = "Updated")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
+  @Column(name = "updated")
   private LocalDateTime updated;
 
   /**

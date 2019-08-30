@@ -14,27 +14,20 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the
- * <code>ConfigurationSummary</code> domain type.
+ * The <code>CodesConfiguration</code> class provides the Spring configuration
+ * for the Codes module.
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationSummaryRepository extends JpaRepository<ConfigurationSummary, String>
-{
-  List<ConfigurationSummary> findAllByOrderByKeyDesc();
-
-  @Query("select c from Configuration c where upper(c.key) like ?1")
-  List<ConfigurationSummary> findFiltered(String filter);
-}
+@Configuration
+@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+  basePackages = { "digital.inception.codes" })
+public class CodesConfiguration {}

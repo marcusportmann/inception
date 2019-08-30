@@ -212,7 +212,7 @@ public class CodesServiceTest
       codesService.createCode(code);
     }
 
-    int numberOfCodes = codesService.getNumberOfCodes(codeCategory.getId());
+    long numberOfCodes = codesService.getNumberOfCodes(codeCategory.getId());
 
     assertEquals("The correct number of codes (" + codes.size() + ") was not retrieved",
         codes.size(), numberOfCodes);

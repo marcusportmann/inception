@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
 
 /**
- * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the
- * <code>ConfigurationSummary</code> domain type.
+ * The <code>CodeCategorySummaryRepository</code> interface declares the repository for the
+ * <code>CodeCategorySummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationSummaryRepository extends JpaRepository<ConfigurationSummary, String>
+public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String>
 {
-  List<ConfigurationSummary> findAllByOrderByKeyDesc();
 
-  @Query("select c from Configuration c where upper(c.key) like ?1")
-  List<ConfigurationSummary> findFiltered(String filter);
 }

@@ -199,7 +199,7 @@ public interface ICodesService
    *
    * @return the number of code categories
    */
-  int getNumberOfCodeCategories()
+  long getNumberOfCodeCategories()
     throws CodesServiceException;
 
   /**
@@ -209,7 +209,7 @@ public interface ICodesService
    *
    * @return the number of codes for the code category
    */
-  int getNumberOfCodes(String codeCategoryId)
+  long getNumberOfCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**

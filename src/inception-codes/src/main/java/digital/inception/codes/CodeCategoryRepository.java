@@ -14,37 +14,35 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
+import java.time.LocalDateTime;
+
 import java.util.Optional;
 
 /**
- * The <code>ConfigurationRepository</code> interface declares the repository for the
- * <code>Configuration</code> domain type.
+ * The <code>CodeCategoryRepository</code> interface declares the repository for the
+ * <code>CodeCategory</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationRepository extends JpaRepository<Configuration, String>
+public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String>
 {
-  void deleteByKeyIgnoreCase(String key);
+  @Query("select c.data from CodeCategory c where c.id = ?1")
+  Optional<String> getDataById(String id);
 
-  boolean existsByKeyIgnoreCase(String key);
+  @Query("select c.updated from CodeCategory c where c.id = ?1")
+  Optional<LocalDateTime> getUpdatedById(String id);
 
-  List<Configuration> findAllByOrderByKeyDesc();
-
-  Optional<Configuration> findByKeyIgnoreCase(String key);
-
-  @Query("select c from Configuration c where upper(c.key) like ?1 order by c.key")
-  List<Configuration> findFiltered(String filter);
-
-  @Query("select value from Configuration c where upper(c.key) = upper(?1)")
-  Optional<String> getValueByKeyIgnoreCase(String key);
+  @Modifying
+  @Query("update CodeCategory c set c.data = ?2, c.updated =?3 where c.id = ?1")
+  int setDataAndUpdatedById(String id, String data, LocalDateTime updated);
 }

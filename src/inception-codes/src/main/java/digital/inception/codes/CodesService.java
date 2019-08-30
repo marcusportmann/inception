@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,16 +42,9 @@ import java.lang.reflect.Constructor;
 
 import java.net.URL;
 
-import java.sql.*;
-
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,6 +74,16 @@ public class CodesService
   private ApplicationContext applicationContext;
 
   /**
+   * The Code Category Repository.
+   */
+  private CodeCategoryRepository codeCategoryRepository;
+
+  /**
+   * The Code Category Summary Repository.
+   */
+  private CodeCategorySummaryRepository codeCategorySummaryRepository;
+
+  /**
    * The configuration information for the code providers read from the code provider configuration
    * files (META-INF/code-providers.xml) on the classpath.
    */
@@ -91,22 +93,26 @@ public class CodesService
   private List<ICodeProvider> codeProviders;
 
   /**
-   * The data source used to provide connections to the application database.
+   * The Code Repository.
    */
-  private DataSource dataSource;
+  private CodeRepository codeRepository;
 
   /**
    * Constructs a new <code>CodesService</code>.
    *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
+   * @param applicationContext            the Spring application context
+   * @param codeCategoryRepository        the Code Category Repository
+   * @param codeCategorySummaryRepository the Code Category Summary Repository
+   * @param codeRepository                the Code Repository
    */
-  public CodesService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource)
+  public CodesService(ApplicationContext applicationContext,
+      CodeCategoryRepository codeCategoryRepository,
+      CodeCategorySummaryRepository codeCategorySummaryRepository, CodeRepository codeRepository)
   {
     this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
+    this.codeCategoryRepository = codeCategoryRepository;
+    this.codeCategorySummaryRepository = codeCategorySummaryRepository;
+    this.codeRepository = codeRepository;
   }
 
   /**
@@ -144,10 +150,9 @@ public class CodesService
   public boolean codeCategoryExists(String codeCategoryId)
     throws CodesServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Check if the code category exists in the database
-      return codeCategoryExists(connection, codeCategoryId);
+      return codeCategoryRepository.existsById(codeCategoryId);
     }
     catch (Throwable e)
     {
@@ -169,9 +174,9 @@ public class CodesService
   public boolean codeExists(String codeCategoryId, String codeId)
     throws CodesServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return codeExists(connection, codeCategoryId, codeId);
+      return codeRepository.existsById(new CodeId(codeCategoryId, codeId));
     }
     catch (Throwable e)
     {
@@ -191,33 +196,19 @@ public class CodesService
   public void createCode(Code code)
     throws DuplicateCodeException, CodeCategoryNotFoundException, CodesServiceException
   {
-    String createCodeSQL =
-        "INSERT INTO codes.codes (id, code_category_id, name, value) VALUES (?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createCodeSQL))
+    try
     {
-      if (codeExists(connection, code.getCodeCategoryId(), code.getId()))
+      if (codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId())))
       {
         throw new DuplicateCodeException(code.getCodeCategoryId(), code.getId());
       }
 
-      if (!codeCategoryExists(connection, code.getCodeCategoryId()))
+      if (!codeCategoryRepository.existsById(code.getCodeCategoryId()))
       {
         throw new CodeCategoryNotFoundException(code.getCodeCategoryId());
       }
 
-      statement.setString(1, code.getId());
-      statement.setString(2, code.getCodeCategoryId());
-      statement.setString(3, code.getName());
-      statement.setString(4, code.getValue());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new CodesServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createCodeSQL));
-      }
+      codeRepository.saveAndFlush(code);
     }
     catch (DuplicateCodeException | CodeCategoryNotFoundException e)
     {
@@ -242,40 +233,19 @@ public class CodesService
   public void createCodeCategory(CodeCategory codeCategory)
     throws DuplicateCodeCategoryException, CodesServiceException
   {
-    String createCodeCategorySQL =
-        "INSERT INTO codes.code_categories (id, name, data, updated) VALUES (?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createCodeCategorySQL))
+    try
     {
-      if (codeCategoryExists(connection, codeCategory.getId()))
+      if (codeCategoryRepository.existsById(codeCategory.getId()))
       {
         throw new DuplicateCodeCategoryException(codeCategory.getId());
       }
 
-      statement.setString(1, codeCategory.getId());
-      statement.setString(2, codeCategory.getName());
-      statement.setString(3, codeCategory.getData());
-
       if (codeCategory.getUpdated() == null)
       {
-        LocalDateTime updated = LocalDateTime.now();
-
-        statement.setTimestamp(4, Timestamp.valueOf(updated));
-
-        codeCategory.setUpdated(updated);
-      }
-      else
-      {
-        statement.setTimestamp(4, Timestamp.valueOf(codeCategory.getUpdated()));
+        codeCategory.setUpdated(LocalDateTime.now());
       }
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new CodesServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createCodeCategorySQL));
-      }
+      codeCategoryRepository.saveAndFlush(codeCategory);
     }
     catch (DuplicateCodeCategoryException e)
     {
@@ -300,18 +270,16 @@ public class CodesService
   public void deleteCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException
   {
-    String deleteCodeSQL = "DELETE FROM codes.codes WHERE code_category_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteCodeSQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
-      statement.setString(2, codeId);
+      CodeId id = new CodeId(codeCategoryId, codeId);
 
-      if (statement.executeUpdate() == 0)
+      if (!codeRepository.existsById(id))
       {
         throw new CodeNotFoundException(codeCategoryId, codeId);
       }
+
+      codeRepository.deleteById(id);
     }
     catch (CodeNotFoundException e)
     {
@@ -334,17 +302,14 @@ public class CodesService
   public void deleteCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String deleteCodeCategorySQL = "DELETE FROM codes.code_categories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteCodeCategorySQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
-
-      if (statement.executeUpdate() == 0)
+      if (!codeCategoryRepository.existsById(codeCategoryId))
       {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
+
+      codeCategoryRepository.deleteById(codeCategoryId);
     }
     catch (CodeCategoryNotFoundException e)
     {
@@ -355,7 +320,6 @@ public class CodesService
       throw new CodesServiceException(String.format("Failed to delete the code category (%s)",
           codeCategoryId), e);
     }
-
   }
 
   /**
@@ -371,35 +335,27 @@ public class CodesService
   public Code getCode(String codeCategoryId, String codeId)
     throws CodeNotFoundException, CodesServiceException
   {
-    String getCodeSQL = "SELECT id, code_category_id, name, VALUE FROM codes.codes "
-        + "WHERE code_category_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeSQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
-      statement.setString(2, codeId);
+      Optional<Code> code = codeRepository.findById(new CodeId(codeCategoryId, codeId));
 
-      try (ResultSet rs = statement.executeQuery())
+      if (code.isPresent())
       {
-        if (rs.next())
+        return code.get();
+      }
+      else
+      {
+        // Check if one of the registered code providers supports the code category
+        for (ICodeProvider codeProvider : codeProviders)
         {
-          return getCode(rs);
-        }
-        else
-        {
-          // Check if one of the registered code providers supports the code category
-          for (ICodeProvider codeProvider : codeProviders)
+          if (codeProvider.codeCategoryExists(codeCategoryId))
           {
-            if (codeProvider.codeCategoryExists(codeCategoryId))
-            {
-              return codeProvider.getCode(codeCategoryId, codeId);
-            }
+            return codeProvider.getCode(codeCategoryId, codeId);
           }
         }
-
-        throw new CodeNotFoundException(codeCategoryId, codeId);
       }
+
+      throw new CodeNotFoundException(codeCategoryId, codeId);
     }
     catch (CodeNotFoundException e)
     {
@@ -423,23 +379,9 @@ public class CodesService
   public List<CodeCategory> getCodeCategories()
     throws CodesServiceException
   {
-    String getCodeCategoriesSQL =
-        "SELECT id, name, data, updated FROM codes.code_categories ORDER BY name";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategoriesSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<CodeCategory> codeCategories = new ArrayList<>();
-
-        while (rs.next())
-        {
-          codeCategories.add(getCodeCategory(rs));
-        }
-
-        return codeCategories;
-      }
+      return codeCategoryRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -458,34 +400,25 @@ public class CodesService
   public CodeCategory getCodeCategory(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getCodeCategorySQL =
-        "SELECT id, name, data, updated FROM codes.code_categories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
+      Optional<CodeCategory> codeCategory = codeCategoryRepository.findById(codeCategoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (codeCategory.isPresent())
       {
-        if (rs.next())
-        {
-          return getCodeCategory(rs);
-        }
-        else
-        {
-          // Check if one of the registered code providers supports the code category
-          for (ICodeProvider codeProvider : codeProviders)
-          {
-            if (codeProvider.codeCategoryExists(codeCategoryId))
-            {
-              return codeProvider.getCodeCategory(codeCategoryId);
-            }
-          }
-        }
-
-        throw new CodeCategoryNotFoundException(codeCategoryId);
+        return codeCategory.get();
       }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders)
+      {
+        if (codeProvider.codeCategoryExists(codeCategoryId))
+        {
+          return codeProvider.getCodeCategory(codeCategoryId);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
     }
     catch (CodeCategoryNotFoundException e)
     {
@@ -513,23 +446,13 @@ public class CodesService
   public String getCodeCategoryData(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getCodeCategorySQL = "SELECT data FROM codes.code_categories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
+      Optional<String> data = codeCategoryRepository.getDataById(codeCategoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (data.isPresent())
       {
-        if (rs.next())
-        {
-          String data = rs.getString(1);
-
-          return StringUtils.isEmpty(data)
-              ? ""
-              : data;
-        }
+        return data.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -537,11 +460,11 @@ public class CodesService
       {
         if (codeProvider.codeCategoryExists(codeCategoryId))
         {
-          String data = codeProvider.getDataForCodeCategory(codeCategoryId);
+          String codeProviderData = codeProvider.getDataForCodeCategory(codeCategoryId);
 
-          return StringUtils.isEmpty(data)
+          return StringUtils.isEmpty(codeProviderData)
               ? ""
-              : data;
+              : codeProviderData;
         }
       }
 
@@ -575,19 +498,13 @@ public class CodesService
       String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getCodeCategorySQL = "SELECT data FROM codes.code_categories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategorySQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
+      Optional<String> data = codeCategoryRepository.getDataById(codeCategoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (data.isPresent())
       {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
+        return data.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -595,7 +512,12 @@ public class CodesService
       {
         if (codeProvider.codeCategoryExists(codeCategoryId))
         {
-          return codeProvider.getDataForCodeCategoryWithParameters(codeCategoryId, parameters);
+          String codeProviderData = codeProvider.getDataForCodeCategoryWithParameters(
+              codeCategoryId, parameters);
+
+          return StringUtils.isEmpty(codeProviderData)
+              ? ""
+              : codeProviderData;
         }
       }
 
@@ -621,23 +543,9 @@ public class CodesService
   public List<CodeCategorySummary> getCodeCategorySummaries()
     throws CodesServiceException
   {
-    String getCodeCategorySummariesSQL =
-        "SELECT id, name, updated FROM codes.code_categories ORDER BY name";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategorySummariesSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<CodeCategorySummary> codeCategorySummaries = new ArrayList<>();
-
-        while (rs.next())
-        {
-          codeCategorySummaries.add(getCodeCategorySummary(rs));
-        }
-
-        return codeCategorySummaries;
-      }
+      return codeCategorySummaryRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -657,35 +565,25 @@ public class CodesService
   public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getCodeCategoryLastUpdatedSQL = "SELECT updated FROM codes.code_categories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getCodeCategoryLastUpdatedSQL))
+    try
     {
-      statement.setString(1, codeCategoryId);
+      Optional<LocalDateTime> updated = codeCategoryRepository.getUpdatedById(codeCategoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (updated.isPresent())
       {
-        if (rs.next())
-        {
-          return (rs.getTimestamp(1) == null)
-              ? null
-              : rs.getTimestamp(1).toLocalDateTime();
-        }
-        else
-        {
-          // Check if one of the registered code providers supports the code category
-          for (ICodeProvider codeProvider : codeProviders)
-          {
-            if (codeProvider.codeCategoryExists(codeCategoryId))
-            {
-              return codeProvider.getCodeCategoryLastUpdated(codeCategoryId);
-            }
-          }
-        }
-
-        throw new CodeCategoryNotFoundException(codeCategoryId);
+        return updated.get();
       }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders)
+      {
+        if (codeProvider.codeCategoryExists(codeCategoryId))
+        {
+          return codeProvider.getCodeCategoryLastUpdated(codeCategoryId);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
     }
     catch (CodeCategoryNotFoundException e)
     {
@@ -714,11 +612,11 @@ public class CodesService
   public List<Code> getCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      if (codeCategoryExists(connection, codeCategoryId))
+      if (codeCategoryRepository.existsById(codeCategoryId))
       {
-        return getCodesForCodeCategory(connection, codeCategoryId);
+        return codeRepository.findByCodeCategoryId(codeCategoryId);
       }
 
       // Check if one of the registered code providers supports the code category
@@ -759,11 +657,11 @@ public class CodesService
   public List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      if (codeCategoryExists(connection, codeCategoryId))
+      if (codeCategoryRepository.existsById(codeCategoryId))
       {
-        return getCodesForCodeCategory(connection, codeCategoryId);
+        return codeRepository.findByCodeCategoryId(codeCategoryId);
       }
 
       // Check if one of the registered code providers supports the code category
@@ -794,27 +692,12 @@ public class CodesService
    * @return the number of code categories
    */
   @Override
-  public int getNumberOfCodeCategories()
+  public long getNumberOfCodeCategories()
     throws CodesServiceException
   {
-    String getNumberOfCodeCategoriesSQL = "SELECT COUNT(ID) FROM codes.code_categories";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfCodeCategoriesSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new CodesServiceException(String.format(
-              "No results were returned as a result of executing the SQL statement (%s)",
-              getNumberOfCodeCategoriesSQL));
-        }
-      }
+      return codeCategoryRepository.count();
     }
     catch (Throwable e)
     {
@@ -830,35 +713,17 @@ public class CodesService
    * @return the number of codes for the code category
    */
   @Override
-  public int getNumberOfCodes(String codeCategoryId)
+  public long getNumberOfCodes(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String getNumberOfCodesForCodeCategorySQL =
-        "SELECT COUNT(ID) FROM codes.codes WHERE code_category_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfCodesForCodeCategorySQL))
+    try
     {
-      if (!codeCategoryExists(connection, codeCategoryId))
+      if (!codeCategoryRepository.existsById(codeCategoryId))
       {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
-      statement.setString(1, codeCategoryId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new CodesServiceException(String.format(
-              "No results were returned as a result of executing the SQL statement (%s)",
-              getNumberOfCodesForCodeCategorySQL));
-        }
-      }
+      return codeRepository.countByCodeCategoryId(codeCategoryId);
     }
     catch (CodeCategoryNotFoundException e)
     {
@@ -883,19 +748,14 @@ public class CodesService
   public Code updateCode(Code code)
     throws CodeNotFoundException, CodesServiceException
   {
-    String updateCodeSQL = "UPDATE codes.codes SET name=?, value=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateCodeSQL))
+    try
     {
-      statement.setString(1, code.getName());
-      statement.setString(2, code.getValue());
-      statement.setString(3, code.getId());
-
-      if (statement.executeUpdate() == 0)
+      if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId())))
       {
         throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
       }
+
+      codeRepository.saveAndFlush(code);
 
       return code;
     }
@@ -923,25 +783,16 @@ public class CodesService
   public CodeCategory updateCodeCategory(CodeCategory codeCategory)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String updateCodeCategorySQL =
-        "UPDATE codes.code_categories SET name=?, data=?, updated=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateCodeCategorySQL))
+    try
     {
-      LocalDateTime updated = LocalDateTime.now();
-
-      statement.setString(1, codeCategory.getName());
-      statement.setString(2, codeCategory.getData());
-      statement.setTimestamp(3, Timestamp.valueOf(updated));
-      statement.setString(4, codeCategory.getId());
-
-      if (statement.executeUpdate() == 0)
+      if (!codeCategoryRepository.existsById(codeCategory.getId()))
       {
         throw new CodeCategoryNotFoundException(codeCategory.getId());
       }
 
-      codeCategory.setUpdated(updated);
+      codeCategory.setUpdated(LocalDateTime.now());
+
+      codeCategoryRepository.saveAndFlush(codeCategory);
 
       return codeCategory;
     }
@@ -963,25 +814,18 @@ public class CodesService
    * @param data           the updated XML or JSON data
    */
   @Override
+  @Transactional
   public void updateCodeCategoryData(String codeCategoryId, String data)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
-    String updateCodeCategoryDataSQL =
-        "UPDATE codes.code_categories SET data=?, updated=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateCodeCategoryDataSQL))
+    try
     {
-      LocalDateTime updated = LocalDateTime.now();
-
-      statement.setString(1, data);
-      statement.setTimestamp(2, Timestamp.valueOf(updated));
-      statement.setString(3, codeCategoryId);
-
-      if (statement.executeUpdate() == 0)
+      if (!codeCategoryRepository.existsById(codeCategoryId))
       {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
+
+      codeCategoryRepository.setDataAndUpdatedById(codeCategoryId, data, LocalDateTime.now());
     }
     catch (CodeCategoryNotFoundException e)
     {
@@ -991,95 +835,6 @@ public class CodesService
     {
       throw new CodesServiceException(String.format(
           "Failed to update the data for the code category (%s)", codeCategoryId), e);
-    }
-  }
-
-  private boolean codeCategoryExists(Connection connection, String codeCategoryId)
-    throws SQLException
-  {
-    String codeCategoryExistsSQL = "SELECT id FROM codes.code_categories WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(codeCategoryExistsSQL))
-    {
-      statement.setString(1, codeCategoryId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  private boolean codeExists(Connection connection, String codeCategoryId, String codeId)
-    throws SQLException
-  {
-    String codeExistsSQL =
-        "SELECT code_category_id, id FROM codes.codes WHERE code_category_id=? AND id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(codeExistsSQL))
-    {
-      statement.setString(1, codeCategoryId);
-      statement.setString(2, codeId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  private Code getCode(ResultSet rs)
-    throws SQLException
-  {
-    return new Code(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
-  }
-
-  private CodeCategory getCodeCategory(ResultSet rs)
-    throws SQLException
-  {
-    return new CodeCategory(rs.getString(1), rs.getString(2), rs.getString(3),
-        (rs.getTimestamp(4) == null)
-        ? null
-        : rs.getTimestamp(4).toLocalDateTime());
-  }
-
-  private CodeCategorySummary getCodeCategorySummary(ResultSet rs)
-    throws SQLException
-  {
-    return new CodeCategorySummary(rs.getString(1), rs.getString(2),
-        (rs.getTimestamp(3) == null)
-        ? null
-        : rs.getTimestamp(3).toLocalDateTime());
-  }
-
-  private List<Code> getCodes(PreparedStatement statement)
-    throws SQLException
-  {
-    try (ResultSet rs = statement.executeQuery())
-    {
-      List<Code> codes = new ArrayList<>();
-
-      while (rs.next())
-      {
-        codes.add(getCode(rs));
-      }
-
-      return codes;
-    }
-  }
-
-  private List<Code> getCodesForCodeCategory(Connection connection, String codeCategoryId)
-    throws SQLException
-  {
-    String getCodesForCodeCategorySQL =
-        "SELECT id, code_category_id, name, value FROM codes.codes "
-        + "WHERE code_category_id=? ORDER BY name";
-
-    try (PreparedStatement statement = connection.prepareStatement(getCodesForCodeCategorySQL))
-    {
-      statement.setString(1, codeCategoryId);
-
-      return getCodes(statement);
     }
   }
 
