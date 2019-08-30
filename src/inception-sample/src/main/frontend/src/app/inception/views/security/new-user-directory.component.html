@@ -13,6 +13,20 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="mat-form-field-slim">
+            <mat-label i18n="@@new_user_directory_component_label_type">Type</mat-label>
+            <mat-select formControlName="userDirectoryType"  required="true" i18n-placeholder="@@edit_user_component_placeholder_select_a_user_directory_type" placeholder="Select a user directory type">
+              <mat-option *ngFor="let userDirectoryType of userDirectoryTypes" [value]="userDirectoryType.code">
+                {{userDirectoryType.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <internal-user-directory *ngIf="newUserDirectoryForm.contains('internalUserDirectory')" formControlName="internalUserDirectory"></internal-user-directory>
+      <ldap-user-directory *ngIf="newUserDirectoryForm.contains('ldapUserDirectory')" formControlName="ldapUserDirectory"></ldap-user-directory>
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_user_directory_component_button_cancel">Cancel</button>

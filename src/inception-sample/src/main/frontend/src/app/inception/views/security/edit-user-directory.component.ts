@@ -189,7 +189,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     if (this.internalUserDirectory) {
       this.internalUserDirectory.setParameters(this.userDirectory!.parameters);
     } else if (this.ldapUserDirectory) {
-      //this.internalUserDirectory.setParameters(this.userDirectory!.parameters);
+      this.ldapUserDirectory.setParameters(this.userDirectory!.parameters);
     }
   }
 }

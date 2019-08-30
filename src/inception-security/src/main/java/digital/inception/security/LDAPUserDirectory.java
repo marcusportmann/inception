@@ -93,7 +93,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
   private int maxFilteredGroups;
   private int maxFilteredUsers;
   private int port;
-  private LdapName sharedBaseDN;
+  //private LdapName sharedBaseDN;
   private boolean useSSL;
   private LdapName userBaseDN;
   private String userEmailAttribute;
@@ -190,14 +190,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
       {
         throw new SecurityServiceException(String.format(
             "No GroupBaseDN parameter found for the user directory (%s)", userDirectoryId));
-      }
-
-      if ((UserDirectoryParameter.contains(parameters, "SharedBaseDN"))
-          && (!StringUtils.isEmpty(UserDirectoryParameter.getStringValue(parameters,
-              "SharedBaseDN"))))
-      {
-        sharedBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters,
-            "SharedBaseDN"));
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserObjectClass"))
@@ -996,16 +988,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
       }
 
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
-        {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
-        }
-      }
-
       return users;
     }
     catch (Throwable e)
@@ -1457,18 +1439,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         numberOfUsers++;
       }
 
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (numberOfUsers <= maxFilteredUsers))
-        {
-          searchResultsSharedUsers.next();
-
-          numberOfUsers++;
-        }
-      }
-
       return numberOfUsers;
     }
     catch (Throwable e)
@@ -1674,16 +1644,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
       }
 
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
-        {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
-        }
-      }
-
       return users;
     }
     catch (Throwable e)
@@ -1747,16 +1707,6 @@ public class LDAPUserDirectory extends UserDirectoryBase
         users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
       }
 
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore() && (users.size() <= maxFilteredUsers))
-        {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
-        }
-      }
-
       return users;
     }
     catch (Throwable e)
@@ -1800,23 +1750,9 @@ public class LDAPUserDirectory extends UserDirectoryBase
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
 
-      // First search for a non-shared user
-      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+      searchResultsNonSharedUsers = dirContext.search(baseDN, searchFilter, searchControls);
 
-      if (searchResultsNonSharedUsers.hasMore())
-      {
-        return true;
-      }
-
-      // Next search for a shared user
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        return searchResultsSharedUsers.hasMore();
-      }
-
-      return false;
+      return searchResultsNonSharedUsers.hasMore();
     }
     catch (Throwable e)
     {
@@ -2402,22 +2338,11 @@ public class LDAPUserDirectory extends UserDirectoryBase
       searchControls.setReturningObjFlag(false);
 
       // First search for a non-shared user
-      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+      searchResultsNonSharedUsers = dirContext.search(baseDN, searchFilter, searchControls);
 
       while (searchResultsNonSharedUsers.hasMore())
       {
         users.add(buildUserFromSearchResult(searchResultsNonSharedUsers.next(), false));
-      }
-
-      // Next search for a shared user
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore())
-        {
-          users.add(buildUserFromSearchResult(searchResultsSharedUsers.next(), true));
-        }
       }
 
       if (users.size() == 0)
@@ -2478,25 +2403,12 @@ public class LDAPUserDirectory extends UserDirectoryBase
       searchControls.setReturningObjFlag(false);
       searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
 
-      // First search for a non-shared user
-      searchResultsNonSharedUsers = dirContext.search(userBaseDN, searchFilter, searchControls);
+      searchResultsNonSharedUsers = dirContext.search(baseDN, searchFilter, searchControls);
 
       while (searchResultsNonSharedUsers.hasMore())
       {
         userDNs.add(new LdapName(searchResultsNonSharedUsers.next().getNameInNamespace()
             .toLowerCase()));
-      }
-
-      // Next search for a shared user
-      if (sharedBaseDN != null)
-      {
-        searchResultsSharedUsers = dirContext.search(sharedBaseDN, searchFilter, searchControls);
-
-        while (searchResultsSharedUsers.hasMore())
-        {
-          userDNs.add(new LdapName(searchResultsSharedUsers.next().getNameInNamespace()
-              .toLowerCase()));
-        }
       }
 
       if (userDNs.size() == 0)

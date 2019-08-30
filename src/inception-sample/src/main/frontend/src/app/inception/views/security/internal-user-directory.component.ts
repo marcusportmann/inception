@@ -53,7 +53,7 @@ import {UserDirectoryUtil} from '../../services/security/user-directory-util';
     }
   ]
 })
-export class InternalUserDirectoryComponent implements OnInit, ControlValueAccessor, Validator {
+export class InternalUserDirectoryComponent implements ControlValueAccessor, Validator {
 
   internalUserDirectoryForm: FormGroup;
 
@@ -70,7 +70,6 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
   }
 
   getParameters(): UserDirectoryParameter[] {
-
     const parameters: UserDirectoryParameter[] = [];
 
     UserDirectoryUtil.setParameter(parameters, 'MaxPasswordAttempts',
@@ -83,9 +82,6 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
       this.internalUserDirectoryForm.get('maxFilteredUsers')!.value);
 
     return parameters;
-  }
-
-  ngOnInit() {
   }
 
   onTouched: () => void = () => {
@@ -109,19 +105,19 @@ export class InternalUserDirectoryComponent implements OnInit, ControlValueAcces
     this.internalUserDirectoryForm.get('maxPasswordAttempts')!.setValue(
       UserDirectoryUtil.hasParameter(parameters,
         'MaxPasswordAttempts') ? UserDirectoryUtil.getParameter(parameters,
-        'MaxPasswordAttempts') : '');
+        'MaxPasswordAttempts') : '5');
     this.internalUserDirectoryForm.get('passwordExpiryMonths')!.setValue(
       UserDirectoryUtil.hasParameter(parameters,
         'PasswordExpiryMonths') ? UserDirectoryUtil.getParameter(parameters,
-        'PasswordExpiryMonths') : '');
+        'PasswordExpiryMonths') : '12');
     this.internalUserDirectoryForm.get('passwordHistoryMonths')!.setValue(
       UserDirectoryUtil.hasParameter(parameters,
         'PasswordHistoryMonths') ? UserDirectoryUtil.getParameter(parameters,
-        'PasswordHistoryMonths') : '');
+        'PasswordHistoryMonths') : '24');
     this.internalUserDirectoryForm.get('maxFilteredUsers')!.setValue(
       UserDirectoryUtil.hasParameter(parameters,
         'MaxFilteredUsers') ? UserDirectoryUtil.getParameter(parameters,
-        'MaxFilteredUsers') : '');
+        'MaxFilteredUsers') : '100');
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
