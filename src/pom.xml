@@ -71,7 +71,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>11</java.version>
+    <java.version>12</java.version>
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
@@ -235,6 +235,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-data</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-error</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -390,6 +395,7 @@
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
     <module>inception-configuration-ws</module>
+    <module>inception-data</module>
     <module>inception-error</module>
     <module>inception-error-rs</module>
     <module>inception-error-ws</module>
@@ -428,7 +434,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.7.0</version>
         <configuration>
-          <release>10</release>
+          <release>12</release>
         </configuration>
       </plugin>
       <plugin>

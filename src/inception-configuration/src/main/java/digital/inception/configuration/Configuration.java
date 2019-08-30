@@ -29,6 +29,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,6 +50,8 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Configuration", namespace = "http://configuration.inception.digital",
     propOrder = { "key", "value", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "configuration", name = "configuration")
 public class Configuration
   implements Serializable
 {
@@ -59,6 +65,7 @@ public class Configuration
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
+  @Column(name = "description")
   private String description;
 
   /**
@@ -69,6 +76,8 @@ public class Configuration
   @XmlElement(name = "Key", required = true)
   @NotNull
   @Size(min = 1, max = 4000)
+  @Id
+  @Column(name = "key")
   private String key;
 
   /**
@@ -79,6 +88,7 @@ public class Configuration
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
+  @Column(name = "value")
   private String value;
 
   /**

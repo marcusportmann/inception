@@ -20,22 +20,14 @@ package digital.inception.configuration;
 
 import digital.inception.core.util.Base64Util;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
+import java.util.Optional;
 
 /**
  * The <code>ConfigurationService</code> class provides the Configuration Service implementation.
@@ -48,18 +40,26 @@ public class ConfigurationService
   implements IConfigurationService
 {
   /**
-   * The data source used to provide connections to the application database.
+   * The Configuration Repository.
    */
-  private DataSource dataSource;
+  private ConfigurationRepository configurationRepository;
+
+  /**
+   * The Configuration Summary Repository.
+   */
+  private ConfigurationSummaryRepository configurationSummaryRepository;
 
   /**
    * Constructs a new <code>ConfigurationService</code>.
    *
-   * @param dataSource the data source used to provide connections to the application database
+   * @param configurationRepository the Configuration Repository
+   * @param configurationSummaryRepository the Configuration Summary Repository
    */
-  public ConfigurationService(@Qualifier("applicationDataSource") DataSource dataSource)
+  public ConfigurationService(ConfigurationRepository configurationRepository,
+      ConfigurationSummaryRepository configurationSummaryRepository)
   {
-    this.dataSource = dataSource;
+    this.configurationRepository = configurationRepository;
+    this.configurationSummaryRepository = configurationSummaryRepository;
   }
 
   /**
@@ -68,21 +68,18 @@ public class ConfigurationService
    * @param key the key used to uniquely identify the configuration
    */
   @Override
+  @Transactional
   public void deleteConfiguration(String key)
     throws ConfigurationNotFoundException, ConfigurationServiceException
   {
-    String deleteConfigurationSQL =
-        "DELETE FROM configuration.configuration WHERE (UPPER(key) LIKE ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteConfigurationSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
-
-      if (statement.executeUpdate() <= 0)
+      if (!configurationRepository.existsByKeyIgnoreCase(key))
       {
         throw new ConfigurationNotFoundException(key);
       }
+
+      configurationRepository.deleteByKeyIgnoreCase(key);
     }
     catch (ConfigurationNotFoundException e)
     {
@@ -108,11 +105,11 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
+      if (value.isPresent())
       {
-        return Base64Util.decode(stringValue);
+        return Base64Util.decode(value.get());
       }
       else
       {
@@ -145,16 +142,9 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
-      {
-        return Base64Util.decode(stringValue);
-      }
-      else
-      {
-        return defaultValue;
-      }
+      return value.map(Base64Util::decode).orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -176,11 +166,11 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
+      if (value.isPresent())
       {
-        return Boolean.parseBoolean(stringValue);
+        return Boolean.parseBoolean(value.get());
       }
       else
       {
@@ -213,16 +203,9 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
-      {
-        return Boolean.parseBoolean(stringValue);
-      }
-      else
-      {
-        return defaultValue;
-      }
+      return value.map(Boolean::parseBoolean).orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -242,24 +225,17 @@ public class ConfigurationService
   public Configuration getConfiguration(String key)
     throws ConfigurationNotFoundException, ConfigurationServiceException
   {
-    String getValueSQL =
-        "SELECT key, value, description FROM configuration.configuration WHERE (UPPER(key) = ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
+      Optional<Configuration> configuration = configurationRepository.findByKeyIgnoreCase(key);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (configuration.isEmpty())
       {
-        if (rs.next())
-        {
-          return new Configuration(rs.getString(1), rs.getString(2), rs.getString(3));
-        }
-        else
-        {
-          throw new ConfigurationNotFoundException(key);
-        }
+        throw new ConfigurationNotFoundException(key);
+      }
+      else
+      {
+        return configuration.get();
       }
     }
     catch (ConfigurationNotFoundException e)
@@ -282,12 +258,9 @@ public class ConfigurationService
   public List<ConfigurationSummary> getConfigurationSummaries()
     throws ConfigurationServiceException
   {
-    String getValueSQL = "SELECT key, description FROM configuration.configuration ORDER BY key";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      return getConfigurationSummaries(statement);
+      return configurationSummaryRepository.findAllByOrderByKeyDesc();
     }
     catch (Throwable e)
     {
@@ -304,13 +277,9 @@ public class ConfigurationService
   public List<Configuration> getConfigurations()
     throws ConfigurationServiceException
   {
-    String getValueSQL =
-        "SELECT key, value, description FROM configuration.configuration ORDER BY key";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      return getConfigurations(statement);
+      return configurationRepository.findAllByOrderByKeyDesc();
     }
     catch (Throwable e)
     {
@@ -331,11 +300,11 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
+      if (value.isPresent())
       {
-        return Double.parseDouble(stringValue);
+        return Double.parseDouble(value.get());
       }
       else
       {
@@ -368,16 +337,9 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
-      {
-        return Double.parseDouble(stringValue);
-      }
-      else
-      {
-        return defaultValue;
-      }
+      return value.map(Double::parseDouble).orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -397,23 +359,16 @@ public class ConfigurationService
   public List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
     throws ConfigurationServiceException
   {
-    String getConfigValuesSQL = "SELECT key, description FROM "
-        + "configuration.configuration ORDER BY key";
-
-    String getFilteredConfigValuesSQL = "SELECT key, description FROM "
-        + "configuration.configuration WHERE (UPPER(key) LIKE ?) ORDER BY key";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getConfigValuesSQL
-          : getFilteredConfigValuesSQL))
+    try
     {
       if (!StringUtils.isEmpty(filter))
       {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
+        return configurationSummaryRepository.getFilteredConfigurationSummaries(filter);
       }
-
-      return getConfigurationSummaries(statement);
+      else
+      {
+        return configurationSummaryRepository.findAllByOrderByKeyDesc();
+      }
     }
     catch (Throwable e)
     {
@@ -433,23 +388,16 @@ public class ConfigurationService
   public List<Configuration> getFilteredConfigurations(String filter)
     throws ConfigurationServiceException
   {
-    String getConfigValuesSQL = "SELECT key, value, description FROM "
-        + "configuration.configuration ORDER BY key";
-
-    String getFilteredConfigValuesSQL = "SELECT key, value, description FROM "
-        + "configuration.configuration WHERE (UPPER(key) LIKE ?) ORDER BY key";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getConfigValuesSQL
-          : getFilteredConfigValuesSQL))
+    try
     {
       if (!StringUtils.isEmpty(filter))
       {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
+        return configurationRepository.getFilteredConfigurations(filter);
       }
-
-      return getConfigurations(statement);
+      else
+      {
+        return configurationRepository.findAllByOrderByKeyDesc();
+      }
     }
     catch (Throwable e)
     {
@@ -471,11 +419,11 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
+      if (value.isPresent())
       {
-        return Integer.parseInt(stringValue);
+        return Integer.parseInt(value.get());
       }
       else
       {
@@ -508,16 +456,9 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
-      {
-        return Integer.parseInt(stringValue);
-      }
-      else
-      {
-        return defaultValue;
-      }
+      return value.map(Integer::parseInt).orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -539,11 +480,11 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
+      if (value.isPresent())
       {
-        return Long.parseLong(stringValue);
+        return Long.parseLong(value.get());
       }
       else
       {
@@ -576,16 +517,9 @@ public class ConfigurationService
   {
     try
     {
-      String stringValue = getString(key);
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (stringValue != null)
-      {
-        return Long.parseLong(stringValue);
-      }
-      else
-      {
-        return defaultValue;
-      }
+      return value.map(Long::parseLong).orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -605,23 +539,17 @@ public class ConfigurationService
   public String getString(String key)
     throws ConfigurationNotFoundException, ConfigurationServiceException
   {
-    String getValueSQL = "SELECT value FROM configuration.configuration WHERE (UPPER(key) = ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (value.isPresent())
       {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          throw new ConfigurationNotFoundException(key);
-        }
+        return value.get();
+      }
+      else
+      {
+        throw new ConfigurationNotFoundException(key);
       }
     }
     catch (ConfigurationNotFoundException e)
@@ -648,24 +576,11 @@ public class ConfigurationService
   public String getString(String key, String defaultValue)
     throws ConfigurationServiceException
   {
-    String getValueSQL = "SELECT value FROM configuration.configuration WHERE (UPPER(key) = ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getValueSQL))
+    try
     {
-      statement.setString(1, key.toUpperCase());
+      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          return defaultValue;
-        }
-      }
+      return value.orElse(defaultValue);
     }
     catch (Throwable e)
     {
@@ -686,9 +601,9 @@ public class ConfigurationService
   public boolean keyExists(String key)
     throws ConfigurationServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return keyExists(connection, key);
+      return configurationRepository.existsByKeyIgnoreCase(key);
     }
     catch (Throwable e)
     {
@@ -707,8 +622,15 @@ public class ConfigurationService
   public void setConfiguration(Configuration configuration)
     throws ConfigurationServiceException
   {
-    setConfiguration(configuration.getKey(), configuration.getValue(),
-        configuration.getDescription());
+    try
+    {
+      configurationRepository.save(configuration);
+    }
+    catch (Throwable e)
+    {
+      throw new ConfigurationServiceException(String.format(
+          "Failed to set the configuration with the key (%s)", configuration.getKey()), e);
+    }
   }
 
   /**
@@ -723,10 +645,7 @@ public class ConfigurationService
   public void setConfiguration(String key, Object value, String description)
     throws ConfigurationServiceException
   {
-    String updateValueSQL =
-        "UPDATE configuration.configuration SET value = ?, description = ? WHERE (UPPER(key) = ?)";
-
-    try (Connection connection = dataSource.getConnection())
+    try
     {
       String stringValue;
 
@@ -743,128 +662,12 @@ public class ConfigurationService
         stringValue = value.toString();
       }
 
-      if (keyExists(connection, key))
-      {
-        try (PreparedStatement statement = connection.prepareStatement(updateValueSQL))
-        {
-          statement.setString(1, stringValue);
-          statement.setString(2,
-              StringUtils.isEmpty(description)
-              ? ""
-              : description);
-          statement.setString(3, key.toUpperCase());
-
-          if (statement.executeUpdate() <= 0)
-          {
-            throw new ConfigurationServiceException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                updateValueSQL));
-          }
-        }
-      }
-      else
-      {
-        createValue(connection, key, stringValue, description);
-      }
+      configurationRepository.save(new Configuration(key, stringValue, description));
     }
     catch (Throwable e)
     {
       throw new ConfigurationServiceException(String.format(
           "Failed to set the configuration with the key (%s)", key), e);
-    }
-  }
-
-  private void createValue(Connection connection, String key, Object value, String description)
-    throws SQLException, ConfigurationServiceException
-  {
-    String createValueSQL =
-        "INSERT INTO configuration.configuration (key, value, description) VALUES (?, ?, ?)";
-
-    String stringValue;
-
-    if (value instanceof String)
-    {
-      stringValue = (String) value;
-    }
-    else
-    {
-      stringValue = value.toString();
-    }
-
-    try (PreparedStatement statement = connection.prepareStatement(createValueSQL))
-    {
-      statement.setString(1, key);
-      statement.setString(2, stringValue);
-      statement.setString(3,
-          StringUtils.isEmpty(description)
-          ? ""
-          : description);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new ConfigurationServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createValueSQL));
-      }
-    }
-  }
-
-  private List<ConfigurationSummary> getConfigurationSummaries(PreparedStatement statement)
-    throws SQLException
-  {
-    try (ResultSet rs = statement.executeQuery())
-    {
-      List<ConfigurationSummary> configurationSummaries = new ArrayList<>();
-
-      while (rs.next())
-      {
-        configurationSummaries.add(new ConfigurationSummary(rs.getString(1), rs.getString(2)));
-      }
-
-      return configurationSummaries;
-    }
-  }
-
-  private List<Configuration> getConfigurations(PreparedStatement statement)
-    throws SQLException
-  {
-    try (ResultSet rs = statement.executeQuery())
-    {
-      List<Configuration> configurations = new ArrayList<>();
-
-      while (rs.next())
-      {
-        configurations.add(new Configuration(rs.getString(1), rs.getString(2), rs.getString(3)));
-      }
-
-      return configurations;
-    }
-  }
-
-  private boolean keyExists(Connection connection, String key)
-    throws SQLException
-  {
-    String keyExistsSQL =
-        "SELECT COUNT(key) FROM configuration.configuration WHERE (UPPER(key) LIKE ?)";
-
-    try (PreparedStatement statement = connection.prepareStatement(keyExistsSQL))
-    {
-      statement.setString(1, key.toUpperCase());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return (rs.getInt(1) > 0);
-        }
-        else
-        {
-          throw new SQLException(String.format(
-              "Failed to check whether the configuration with the key (%s) exists: "
-              + "No results were returned as a result of executing the SQL statement (%s)", key,
-              keyExistsSQL));
-        }
-      }
     }
   }
 }

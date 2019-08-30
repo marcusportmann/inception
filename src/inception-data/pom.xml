@@ -3,8 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-configuration</artifactId>
-  <name>inception-configuration</name>
+  <artifactId>inception-data</artifactId>
+  <name>inception-data</name>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -16,21 +16,21 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-data</artifactId>
+      <artifactId>inception-core</artifactId>
     </dependency>
 
     <!-- Dependencies -->
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
     </dependency>
 
     <!-- Test Dependencies -->
