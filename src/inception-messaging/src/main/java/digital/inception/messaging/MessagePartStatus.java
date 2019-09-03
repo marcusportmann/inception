@@ -16,23 +16,55 @@
 
 package digital.inception.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The enumeration giving the possible statuses for a message part.
  */
+@ApiModel(value = "MessagePartStatus")
+@XmlEnum
+@XmlType(name = "MessagePartStatus", namespace = "http://messaging.inception.digital")
 public enum MessagePartStatus
 {
-  INITIALIZED(0, "Initialized"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"),
-      QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"), ASSEMBLING(4, "Assembling"), QUEUED_FOR_DOWNLOAD(
-      5, "QueuedForDownload"), DOWNLOADING(6, "Downloading"), ABORTED(7, "Aborted"), FAILED(8,
-      "Failed"), UNKNOWN(-1, "Unknown");
+  @XmlEnumValue("Initialized")
+  INITIALIZED(0, "Initialized"),
+  @XmlEnumValue("QueuedForSending")
+  QUEUED_FOR_SENDING(1, "QueuedForSending"),
+  @XmlEnumValue("Sending")
+  SENDING(2, "Sending"),
+  @XmlEnumValue("QueuedForAssembly")
+  QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"),
+  @XmlEnumValue("Assembling")
+  ASSEMBLING(4, "Assembling"),
+  @XmlEnumValue("QueuedForDownload")
+  QUEUED_FOR_DOWNLOAD(5, "QueuedForDownload"),
+  @XmlEnumValue("Downloading")
+  DOWNLOADING(6, "Downloading"),
+  @XmlEnumValue("Aborted")
+  ABORTED(7, "Aborted"),
+  @XmlEnumValue("Failed")
+  FAILED(8, "Failed"),
+  @XmlEnumValue("Unknown")
+  UNKNOWN(-1, "Unknown");
 
   private int code;
-  private String name;
+  private String description;
 
-  MessagePartStatus(int code, String name)
+  MessagePartStatus(int code, String description)
   {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -42,6 +74,7 @@ public enum MessagePartStatus
    *
    * @return the message part status given by the specified numeric code value
    */
+  @JsonCreator
   public static MessagePartStatus fromCode(int code)
   {
     switch (code)
@@ -83,19 +116,20 @@ public enum MessagePartStatus
    *
    * @return the numeric code value identifying the message part status
    */
-  public int getCode()
+  @JsonValue
+  public int code()
   {
     return code;
   }
 
   /**
-   * Returns the name of the message part status.
+   * Returns the description for the message part status.
    *
-   * @return the name of the message part status
+   * @return the description for the message part status
    */
-  public String getName()
+  public String description()
   {
-    return name;
+    return description;
   }
 
   /**
@@ -105,6 +139,6 @@ public enum MessagePartStatus
    */
   public String toString()
   {
-    return name;
+    return description;
   }
 }

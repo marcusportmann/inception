@@ -16,23 +16,57 @@
 
 package digital.inception.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The enumeration giving the possible statuses for a message.
  */
+@ApiModel(value = "MessageStatus")
+@XmlEnum
+@XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
 public enum MessageStatus
 {
-  INITIALIZED(0, "Initialized"), QUEUED_FOR_SENDING(1, "QueuedForSending"), QUEUED_FOR_PROCESSING(
-      2, "QueuedForProcessing"), ABORTED(3, "Aborted"), FAILED(4, "Failed"), PROCESSING(5,
-      "Processing"), SENDING(6, "Sending"), QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"),
-      DOWNLOADING(8, "Downloading"), PROCESSED(10, "Processed"), UNKNOWN(-1, "Unknown");
+  @XmlEnumValue("Initialized")
+  INITIALIZED(0, "Initialized"),
+  @XmlEnumValue("QueuedForSending")
+  QUEUED_FOR_SENDING(1, "QueuedForSending"),
+  @XmlEnumValue("QueuedForProcessing")
+  QUEUED_FOR_PROCESSING(2, "QueuedForProcessing"),
+  @XmlEnumValue("Aborted")
+  ABORTED(3, "Aborted"),
+  @XmlEnumValue("Failed")
+  FAILED(4, "Failed"),
+  @XmlEnumValue("Processing")
+  PROCESSING(5, "Processing"),
+  @XmlEnumValue("Sending")
+  SENDING(6, "Sending"),
+  @XmlEnumValue("QueuedForDownload")
+  QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"),
+  @XmlEnumValue("Downloading")
+  DOWNLOADING(8, "Downloading"),
+  @XmlEnumValue("Processed")
+  PROCESSED(10, "Processed"),
+  @XmlEnumValue("Unknown")
+  UNKNOWN(-1, "Unknown");
 
   private int code;
-  private String name;
+  private String description;
 
-  MessageStatus(int code, String name)
+  MessageStatus(int code, String description)
   {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -42,6 +76,7 @@ public enum MessageStatus
    *
    * @return the message status given by the specified numeric code value
    */
+  @JsonCreator
   public static MessageStatus fromCode(int code)
   {
     switch (code)
@@ -86,19 +121,20 @@ public enum MessageStatus
    *
    * @return the numeric code value identifying the message status
    */
-  public int getCode()
+  @JsonValue
+  public int code()
   {
     return code;
   }
 
   /**
-   * Returns the name of the message status.
+   * Returns the description for the message status.
    *
-   * @return the name of the message status
+   * @return the description for the message status
    */
-  public String getName()
+  public String description()
   {
-    return name;
+    return description;
   }
 
   /**
@@ -108,6 +144,6 @@ public enum MessageStatus
    */
   public String toString()
   {
-    return name;
+    return description;
   }
 }

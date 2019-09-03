@@ -19,8 +19,12 @@ package digital.inception.codes;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>CodeRepository</code> interface declares the repository for the
@@ -30,6 +34,10 @@ import java.util.List;
  */
 public interface CodeRepository extends JpaRepository<Code, CodeId>
 {
+  @Modifying
+  @Query("delete from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
+  void deleteById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
+
   long countByCodeCategoryId(String codeCategoryId);
 
   List<Code> findByCodeCategoryId(String codeCategoryId);

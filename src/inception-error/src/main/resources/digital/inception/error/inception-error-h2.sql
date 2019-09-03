@@ -8,13 +8,13 @@ CREATE SCHEMA error;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE error.error_reports (
   id                  UUID          NOT NULL,
-  application_id      VARCHAR(100)  NOT NULL,
+  application_id      VARCHAR(200)  NOT NULL,
   application_version VARCHAR(50)   NOT NULL,
   description         VARCHAR(4000) NOT NULL,
   detail              CLOB          NOT NULL,
   created             TIMESTAMP     NOT NULL,
   who                 VARCHAR(1000),
-  device_id           VARCHAR(50),
+  device_id           UUID,
   feedback            VARCHAR(4000),
   data                CLOB,
 
@@ -27,7 +27,7 @@ CREATE INDEX error_reports_created_ix ON error.error_reports(created);
 
 CREATE INDEX error_reports_who_ix ON error.error_reports(who);
 
-COMMENT ON COLUMN error.error_reports.id IS 'The ID used to uniquely identify the error report';
+COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
 
 COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
 
@@ -41,7 +41,7 @@ COMMENT ON COLUMN error.error_reports.created IS 'The date and time the error re
 
 COMMENT ON COLUMN error.error_reports.who IS 'The optional username identifying the user associated with the error report';
 
-COMMENT ON COLUMN error.error_reports.device_id IS 'The optional ID used to uniquely identify the device the error report originated from';
+COMMENT ON COLUMN error.error_reports.device_id IS 'The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
 
 COMMENT ON COLUMN error.error_reports.feedback IS 'The optional feedback provided by the user for the error';
 

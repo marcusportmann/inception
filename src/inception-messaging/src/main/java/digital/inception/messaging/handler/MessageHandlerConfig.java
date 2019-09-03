@@ -20,6 +20,7 @@ package digital.inception.messaging.handler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>MessageHandlerConfig</code> class stores the configuration information for a
@@ -63,17 +64,20 @@ public class MessageHandlerConfig
    * defines which messages a message handler is capable of processing synchronously and
    * asynchronously.
    *
-   * @param messageTypeId  the ID used to uniquely identify the message type
+   * @param messageTypeId  the Universally Unique Identifier (UUID) used to uniquely identify
+   *                       the message type
    * @param isSynchronous  is the handler capable of synchronously processing messages of the
    *                       supported message type
    * @param isAsynchronous is the handler capable of asynchronously processing messages of the
    *                       supported message type
+   * @param isSecure       should messages of the supported message type be processed securely i.e.
+   *                       should these messages be encrypted
    * @param isArchivable   should messages of the supported message type be archived
    */
-  public void addMessageConfig(String messageTypeId, boolean isSynchronous, boolean isAsynchronous,
-      boolean isArchivable)
+  public void addMessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+      boolean isSecure, boolean isArchivable)
   {
-    messagesConfig.add(new MessageConfig(messageTypeId, isSynchronous, isAsynchronous,
+    messagesConfig.add(new MessageConfig(messageTypeId, isSynchronous, isAsynchronous, isSecure,
         isArchivable));
   }
 
@@ -108,21 +112,43 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Returns <code>true</code> if messages of the specified message type should be archived or
-   * <code>false</code> otherwise.
+   * Returns whether the messages of the specified message type should be archived.
    *
-   * @param messageTypeId the ID used to uniquely identify the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if messages of the specified message type should be archived or
    *         <code>false</code> otherwise
    */
-  public boolean isArchivable(String messageTypeId)
+  public boolean isArchivable(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
       if (messageConfig.getMessageTypeId().equals(messageTypeId))
       {
         return messageConfig.isArchivable();
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns whether the messages of the specified message type should be processed securely.
+   *
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
+   *
+   * @return <code>true</code> if messages of the specified message type should be processed
+   *         securely or <code>false</code> otherwise
+   */
+  public boolean isSecure(UUID messageTypeId)
+  {
+    for (MessageConfig messageConfig : messagesConfig)
+    {
+      if (messageConfig.getMessageTypeId().equals(messageTypeId))
+      {
+        return messageConfig.isSecure();
       }
     }
 
@@ -140,15 +166,16 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Returns <code>true</code> if the message handler supports asynchronous processing of the
-   * specified message type or <code>false</code> otherwise.
+   * Returns whether the message handler supports asynchronous processing of the specified message
+   * type.
    *
-   * @param messageTypeId the ID used to uniquely identify the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler supports asynchronous processing of the
    *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsAsynchronousProcessing(String messageTypeId)
+  public boolean supportsAsynchronousProcessing(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
@@ -162,15 +189,16 @@ public class MessageHandlerConfig
   }
 
   /**
-   * Returns <code>true</code> if the message handler supports synchronous processing of the
-   * specified message type or <code>false</code> otherwise.
+   * Returns whether the message handler supports synchronous processing of the specified message
+   * type.
    *
-   * @param messageTypeId the ID used to uniquely identify the message type
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message type
    *
    * @return <code>true</code> if the message handler supports synchronous processing of the
    *         specified message type or <code>false</code> otherwise
    */
-  public boolean supportsSynchronousProcessing(String messageTypeId)
+  public boolean supportsSynchronousProcessing(UUID messageTypeId)
   {
     for (MessageConfig messageConfig : messagesConfig)
     {
@@ -187,7 +215,7 @@ public class MessageHandlerConfig
    * The <code>MessageConfig</code> inner class stores the configuration information for a
    * a message that a message handler is capable of processing.
    */
-  public static class MessageConfig
+  public class MessageConfig
   {
     /**
      * Should messages of the supported message type be archived?
@@ -200,47 +228,68 @@ public class MessageHandlerConfig
     private boolean isAsynchronous;
 
     /**
+     * Should the messages of the supported message type be processed securely i.e. should these
+     * messages be encrypted?
+     */
+    private boolean isSecure;
+
+    /**
      * Is the handler capable of synchronously processing messages of the supported message type.
      */
     private boolean isSynchronous;
 
     /**
-     * The ID used to uniquely identify the message type.
+     * The Universally Unique Identifier (UUID) used to uniquely identify the message type.
      */
-    private String messageTypeId;
+    private UUID messageTypeId;
 
     /**
      * Constructs a new <code>MessageConfig</code>.
      *
-     * @param messageTypeId  the ID used to uniquely identify the message type
+     * @param messageTypeId  the Universally Unique Identifier (UUID) used to uniquely identify
+     *                       the message type
      * @param isSynchronous  is the handler capable of synchronously processing messages of
      *                       the supported message type
      * @param isAsynchronous is the handler capable of asynchronously processing messages of
      *                       the supported message type
+     * @param isSecure       should messages of the supported message type be processed securely i.e.
+     *                       should these messages be encrypted
      * @param isArchivable   should messages of the supported message type be archived
      */
-    MessageConfig(String messageTypeId, boolean isSynchronous, boolean isAsynchronous,
-        boolean isArchivable)
+    MessageConfig(UUID messageTypeId, boolean isSynchronous, boolean isAsynchronous,
+        boolean isSecure, boolean isArchivable)
     {
       this.messageTypeId = messageTypeId;
       this.isSynchronous = isSynchronous;
       this.isAsynchronous = isAsynchronous;
+      this.isSecure = isSecure;
       this.isArchivable = isArchivable;
     }
 
     /**
-     * Return the ID used to uniquely identify the message type.
+     * Return the Universally Unique Identifier (UUID) used to uniquely identify the message type.
      *
-     * @return the ID used to uniquely identify the message type
+     * @return the Universally Unique Identifier (UUID) used to uniquely identify the message type
      */
-    public String getMessageTypeId()
+    public UUID getMessageTypeId()
     {
       return messageTypeId;
     }
 
     /**
-     * Returns <code>true</code> if the handler is capable of asynchronously processing messages of
-     * the supported message type or <code>false</code> otherwise.
+     * Returns whether the messages of the supported message type should be archived.
+     *
+     * @return <code>true</code> if messages of the supported message type should be archived or
+     *         <code>false</code> otherwise
+     */
+    public boolean isArchivable()
+    {
+      return isArchivable;
+    }
+
+    /**
+     * Returns whether the handler is capable of asynchronously processing messages of the
+     * supported message type.
      *
      * @return <code>true</code> if the handler is capable of asynchronously processing messages of
      *         the supported message type or <code>false</code> otherwise
@@ -251,8 +300,19 @@ public class MessageHandlerConfig
     }
 
     /**
-     * Returns <code>true</code> if the handler is capable of synchronously processing messages of
-     * the supported message type or <code>false</code> otherwise.
+     * Returns whether the messages of the supported message type should be processed securely.
+     *
+     * @return <code>true</code> if the messages of the supported message type should be processed
+     *         securely or <code>false</code> otherwise
+     */
+    public boolean isSecure()
+    {
+      return isSecure;
+    }
+
+    /**
+     * Returns whether the handler is capable of synchronously processing messages of the supported
+     * message type.
      *
      * @return <code>true</code> if the handler is capable of synchronously processing messages of
      *         the supported message type or <code>false</code> otherwise
@@ -260,18 +320,6 @@ public class MessageHandlerConfig
     public boolean isSynchronous()
     {
       return isSynchronous;
-    }
-
-    /**
-     * Returns <code>true</code> if messages of the supported message type should be archived or
-     * <code>false</code> otherwise.
-     *
-     * @return <code>true</code> if messages of the supported message type should be archived or
-     *         <code>false</code> otherwise
-     */
-    boolean isArchivable()
-    {
-      return isArchivable;
     }
   }
 }

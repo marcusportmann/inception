@@ -20,6 +20,7 @@ package digital.inception.configuration;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -42,9 +43,9 @@ public interface ConfigurationRepository extends JpaRepository<Configuration, St
 
   Optional<Configuration> findByKeyIgnoreCase(String key);
 
-  @Query("select c from Configuration c where upper(c.key) like ?1 order by c.key")
-  List<Configuration> findFiltered(String filter);
+  @Query("select c from Configuration c where upper(c.key) like upper(:filter) order by c.key")
+  List<Configuration> findFiltered(@Param("filter") String filter);
 
-  @Query("select value from Configuration c where upper(c.key) = upper(?1)")
-  Optional<String> getValueByKeyIgnoreCase(String key);
+  @Query("select value from Configuration c where upper(c.key) = upper(:key)")
+  Optional<String> getValueByKeyIgnoreCase(@Param("key") String key);
 }

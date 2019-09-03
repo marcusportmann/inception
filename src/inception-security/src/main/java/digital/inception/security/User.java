@@ -186,7 +186,7 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(min =1, max = 1000)
   private String username;
 
   /**

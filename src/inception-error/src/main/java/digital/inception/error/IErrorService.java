@@ -19,6 +19,7 @@ package digital.inception.error;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>IErrorService</code> interface defines the functionality provided by an Error Service
@@ -40,23 +41,25 @@ public interface IErrorService
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the ID used to uniquely identify the error report
+   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      error report
    *
    * @return the error report or <code>null</code> if the error report could not be found
    */
-  ErrorReport getErrorReport(String errorReportId)
-    throws ErrorServiceException;
+  ErrorReport getErrorReport(UUID errorReportId)
+    throws ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the ID used to uniquely identify the error report
+   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
+   * found
    */
-  ErrorReportSummary getErrorReportSummary(String errorReportId)
-    throws ErrorServiceException;
+  ErrorReportSummary getErrorReportSummary(UUID errorReportId)
+    throws ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summaries for the most recent error reports.
@@ -74,6 +77,6 @@ public interface IErrorService
    *
    * @return the total number of error reports
    */
-  int getNumberOfErrorReports()
+  long getNumberOfErrorReports()
     throws ErrorServiceException;
 }

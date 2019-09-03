@@ -44,12 +44,14 @@ public class AuthenticateRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Request" message.
    */
-  public static final String MESSAGE_TYPE_ID = "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3";
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
-   * The ID used to uniquely identify the device the authentication request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * authentication request originated from.
    */
-  private String deviceId;
+  private UUID deviceId;
 
   /**
    * The password used to authenticate the user.
@@ -74,10 +76,10 @@ public class AuthenticateRequestData extends WbxmlMessageData
    *
    * @param username the username identifying the user associated with the message
    * @param password the password used to authenticate the user
-   * @param deviceId the ID used to uniquely identify the device the authentication request
-   *                 originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the authentication request originated from
    */
-  public AuthenticateRequestData(String username, String password, String deviceId)
+  public AuthenticateRequestData(String username, String password, UUID deviceId)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -108,13 +110,13 @@ public class AuthenticateRequestData extends WbxmlMessageData
     }
 
     if ((!rootElement.hasChild("Username"))
-        || (!rootElement.hasChild("Password"))
-        || (!rootElement.hasChild("DeviceId")))
+      || (!rootElement.hasChild("Password"))
+      || (!rootElement.hasChild("DeviceId")))
     {
       return false;
     }
 
-    this.deviceId = rootElement.getChildText("DeviceId");
+    this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
     this.password = rootElement.getChildText("Password");
     this.username = rootElement.getChildText("Username");
 
@@ -122,11 +124,13 @@ public class AuthenticateRequestData extends WbxmlMessageData
   }
 
   /**
-   * Returns the ID used to uniquely identify the device the authentication request originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * authentication request originated from.
    *
-   * @return the ID used to uniquely identify the device the authentication request originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   *         authentication request originated from
    */
-  public String getDeviceId()
+  public UUID getDeviceId()
   {
     return deviceId;
   }
@@ -163,13 +167,13 @@ public class AuthenticateRequestData extends WbxmlMessageData
   {
     Element rootElement = new Element("AuthenticateRequest");
 
-    rootElement.addContent(new Element("DeviceId", deviceId));
+    rootElement.addContent(new Element("DeviceId", deviceId.toString()));
     rootElement.addContent(new Element("Password", StringUtils.isEmpty(password)
-        ? ""
-        : password));
+      ? ""
+      : password));
     rootElement.addContent(new Element("Username", StringUtils.isEmpty(username)
-        ? ""
-        : username));
+      ? ""
+      : username));
 
     Document document = new Document(rootElement);
 

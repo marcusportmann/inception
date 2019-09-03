@@ -21,12 +21,14 @@ package digital.inception.codes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
 
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The <code>CodeCategoryRepository</code> interface declares the repository for the
@@ -36,13 +38,19 @@ import java.util.Optional;
  */
 public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String>
 {
-  @Query("select c.data from CodeCategory c where c.id = ?1")
-  Optional<String> getDataById(String id);
+  @Modifying
+  @Query("delete from CodeCategory cc where cc.id = :codeCategoryId")
+  void deleteById(@Param("codeCategoryId") String codeCategoryId);
 
-  @Query("select c.updated from CodeCategory c where c.id = ?1")
-  Optional<LocalDateTime> getUpdatedById(String id);
+  @Query("select cc.data from CodeCategory cc where cc.id = :codeCategoryId")
+  Optional<String> getDataById(@Param("codeCategoryId") String codeCategoryId);
+
+  @Query("select cc.updated from CodeCategory cc where cc.id = :codeCategoryId")
+  Optional<LocalDateTime> getUpdatedById(@Param("codeCategoryId") String codeCategoryId);
 
   @Modifying
-  @Query("update CodeCategory c set c.data = ?2, c.updated =?3 where c.id = ?1")
-  int setDataAndUpdatedById(String id, String data, LocalDateTime updated);
+  @Query(
+      "update CodeCategory cc set cc.data = :data, cc.updated = :updated where cc.id = :codeCategoryId")
+  int setDataAndUpdatedById(@Param("codeCategoryId") String codeCategoryId, @Param(
+      "data") String data, @Param("updated") LocalDateTime updated);
 }

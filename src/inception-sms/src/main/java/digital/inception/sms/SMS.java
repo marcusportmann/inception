@@ -66,7 +66,7 @@ public class SMS
   /**
    * The status of the SMS.
    */
-  private Status status;
+  private SMSStatus status;
 
   /**
    * Constructs a new <code>SMS</code>.
@@ -92,7 +92,7 @@ public class SMS
    * @param message      the message to send
    * @param status       the status of the SMS
    */
-  SMS(String mobileNumber, String message, Status status)
+  SMS(String mobileNumber, String message, SMSStatus status)
   {
     this.mobileNumber = mobileNumber;
     this.message = message;
@@ -110,7 +110,7 @@ public class SMS
    * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  SMS(long id, String mobileNumber, String message, Status status, int sendAttempts,
+  SMS(long id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
       String lockName, Date lastProcessed)
   {
     this.id = id;
@@ -120,95 +120,6 @@ public class SMS
     this.sendAttempts = sendAttempts;
     this.lockName = lockName;
     this.lastProcessed = lastProcessed;
-  }
-
-  /**
-   * The enumeration giving the possible statuses for a SMS.
-   */
-  public enum Status
-  {
-    UNKNOWN(0, "Unknown"), QUEUED_FOR_SENDING(1, "QueuedForSending"), SENDING(2, "Sending"), SENT(
-        3, "Sent"), FAILED(4, "Failed"), ANY(-1, "Any");
-
-    private int code;
-    private String name;
-
-    Status(int code, String name)
-    {
-      this.code = code;
-      this.name = name;
-    }
-
-    /**
-     * Returns the status given by the specified numeric code value.
-     *
-     * @param code the numeric code value identifying the status
-     *
-     * @return the status given by the specified numeric code value
-     */
-    public static Status fromCode(int code)
-    {
-      switch (code)
-      {
-        case 1:
-          return Status.QUEUED_FOR_SENDING;
-
-        case 2:
-          return Status.SENDING;
-
-        case 3:
-          return Status.SENT;
-
-        case 4:
-          return Status.FAILED;
-
-        case -1:
-          return Status.ANY;
-
-        default:
-          return Status.UNKNOWN;
-      }
-    }
-
-    /**
-     * Returns the numeric code value identifying the status.
-     *
-     * @return the numeric code value identifying the status
-     */
-    public int getCode()
-    {
-      return code;
-    }
-
-    /**
-     * Returns the <code>String</code> value of the numeric code value identifying the status.
-     *
-     * @return the <code>String</code> value of the numeric code value identifying the status
-     */
-    public String getCodeAsString()
-    {
-      return String.valueOf(code);
-    }
-
-    /**
-     * Returns the name of the status.
-     *
-     * @return the name of the status
-     */
-    public String getName()
-    {
-      return name;
-    }
-
-    /**
-     * Return the string representation of the status enumeration value.
-     *
-     * @return the string representation of the status enumeration value
-     */
-    public String toString()
-    {
-      return name;
-    }
   }
 
   /**
@@ -276,7 +187,7 @@ public class SMS
    *
    * @return the status of the SMS
    */
-  public Status getStatus()
+  public SMSStatus getStatus()
   {
     return status;
   }
@@ -346,7 +257,7 @@ public class SMS
    *
    * @param status the status of the SMS
    */
-  public void setStatus(Status status)
+  public void setStatus(SMSStatus status)
   {
     this.status = status;
   }

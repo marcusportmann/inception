@@ -204,7 +204,7 @@ CREATE TABLE messaging.message_types (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN messaging.message_types.id IS 'The ID used to uniquely identify the message type';
+COMMENT ON COLUMN messaging.message_types.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message type';
 
 COMMENT ON COLUMN messaging.message_types.name IS 'The name of the message type';
 
@@ -226,15 +226,16 @@ CREATE TABLE messaging.messages (
   username          TEXT      NOT NULL,
   device_id         UUID      NOT NULL,
   type_id           UUID      NOT NULL,
-  correlation_id    UUID      NOT NULL,
+  correlation_id    UUID,
   priority          INTEGER   NOT NULL,
   status            INTEGER   NOT NULL,
   created           TIMESTAMP NOT NULL,
-  persisted         TIMESTAMP NOT NULL,
+  data_hash         TEXT,
+  encryption_iv     TEXT,
   updated           TIMESTAMP,
-  send_attempts     INTEGER   NOT NULL,
-  process_attempts  INTEGER   NOT NULL,
-  download_attempts INTEGER   NOT NULL,
+  send_attempts     INTEGER,
+  process_attempts  INTEGER,
+  download_attempts INTEGER,
   lock_name         TEXT,
   last_processed    TIMESTAMP,
   data              BYTEA,
@@ -256,15 +257,15 @@ CREATE INDEX messages_status_ix ON messaging.messages(status);
 
 CREATE INDEX messages_lock_name_ix ON messaging.messages(lock_name);
 
-COMMENT ON COLUMN messaging.messages.id IS 'The ID used to uniquely identify the message';
+COMMENT ON COLUMN messaging.messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.messages.device_id IS 'The ID used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
 
-COMMENT ON COLUMN messaging.messages.type_id IS 'The ID used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
 
-COMMENT ON COLUMN messaging.messages.correlation_id IS 'The ID used to correlate the message';
+COMMENT ON COLUMN messaging.messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
 COMMENT ON COLUMN messaging.messages.priority IS 'The message priority';
 
@@ -272,7 +273,9 @@ COMMENT ON COLUMN messaging.messages.status IS 'The message status e.g. Initiali
 
 COMMENT ON COLUMN messaging.messages.created IS 'The date and time the message was created';
 
-COMMENT ON COLUMN messaging.messages.persisted IS 'The date and time the message was persisted';
+COMMENT ON COLUMN messaging.messages.data_hash IS 'The hash of the unencrypted data for the message if the message is encrypted';
+
+COMMENT ON COLUMN messaging.messages.encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the message';
 
 COMMENT ON COLUMN messaging.messages.updated IS 'The date and time the message was last updated';
 
@@ -293,20 +296,19 @@ CREATE TABLE messaging.message_parts (
   id                 UUID      NOT NULL,
   part_no            INTEGER   NOT NULL,
   total_parts        INTEGER   NOT NULL,
-  send_attempts      INTEGER   NOT NULL,
-  download_attempts  INTEGER   NOT NULL,
+  send_attempts      INTEGER,
+  download_attempts  INTEGER,
   status             INTEGER   NOT NULL,
-  persisted          TIMESTAMP NOT NULL,
   updated            TIMESTAMP,
   msg_id             UUID      NOT NULL,
   msg_username       TEXT      NOT NULL,
   msg_device_id      UUID      NOT NULL,
   msg_type_id        UUID      NOT NULL,
-  msg_correlation_id UUID      NOT NULL,
+  msg_correlation_id UUID,
   msg_priority       INTEGER   NOT NULL,
   msg_created        TIMESTAMP NOT NULL,
   msg_data_hash      TEXT,
-  msg_encryption_iv  TEXT      NOT NULL,
+  msg_encryption_iv  TEXT,
   msg_checksum       TEXT      NOT NULL,
   lock_name          TEXT,
   data               BYTEA,
@@ -325,7 +327,7 @@ CREATE INDEX message_parts_msg_type_id_ix ON messaging.message_parts(msg_type_id
 
 CREATE INDEX message_parts_lock_name_ix ON messaging.message_parts(lock_name);
 
-COMMENT ON COLUMN messaging.message_parts.id IS 'The ID used to uniquely identify the message part';
+COMMENT ON COLUMN messaging.message_parts.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message part';
 
 COMMENT ON COLUMN messaging.message_parts.part_no IS 'The number of the message part in the set of message parts for the original message';
 
@@ -337,25 +339,23 @@ COMMENT ON COLUMN messaging.message_parts.download_attempts IS 'The number of ti
 
 COMMENT ON COLUMN messaging.message_parts.status IS 'The message part status e.g. Initialised, QueuedForSending, etc';
 
-COMMENT ON COLUMN messaging.message_parts.persisted IS 'The date and time the message part was persisted';
-
 COMMENT ON COLUMN messaging.message_parts.updated IS 'The date and time the message part was last updated';
 
-COMMENT ON COLUMN messaging.message_parts.msg_id IS 'The ID used to uniquely identify the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_username IS 'The username identifying the user associated with the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_device_id IS 'The ID used to uniquely identify the device the original message originated from';
+COMMENT ON COLUMN messaging.message_parts.msg_device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
 
-COMMENT ON COLUMN messaging.message_parts.msg_type_id IS 'The ID used to uniquely identify the type of the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_correlation_id IS 'The ID used to correlate the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_priority IS 'The priority for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.msg_created IS 'The date and time the original message was created';
 
-COMMENT ON COLUMN messaging.message_parts.msg_data_hash IS 'The hash of the unencrypted data for the original message';
+COMMENT ON COLUMN messaging.message_parts.msg_data_hash IS 'The hash of the unencrypted data for the original message if the message was encrypted';
 
 COMMENT ON COLUMN messaging.message_parts.msg_encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
 
@@ -371,7 +371,7 @@ CREATE TABLE messaging.archived_messages (
   username       TEXT      NOT NULL,
   device_id      UUID      NOT NULL,
   type_id        UUID      NOT NULL,
-  correlation_id UUID      NOT NULL,
+  correlation_id UUID,
   created        TIMESTAMP NOT NULL,
   archived       TIMESTAMP NOT NULL,
   data           BYTEA,
@@ -386,15 +386,15 @@ CREATE INDEX archived_messages_device_id_ix ON messaging.archived_messages(devic
 
 CREATE INDEX archived_messages_type_id_ix ON messaging.archived_messages(type_id);
 
-COMMENT ON COLUMN messaging.archived_messages.id IS 'The ID used to uniquely identify the message';
+COMMENT ON COLUMN messaging.archived_messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
 
 COMMENT ON COLUMN messaging.archived_messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The ID used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
 
-COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The ID used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
 
-COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The ID used to correlate the message';
+COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
 COMMENT ON COLUMN messaging.archived_messages.created IS 'The date and time the message was created';
 
@@ -796,7 +796,7 @@ CREATE TABLE error.error_reports (
   detail              TEXT      NOT NULL,
   created             TIMESTAMP NOT NULL,
   who                 TEXT,
-  device_id           TEXT,
+  device_id           UUID,
   feedback            TEXT,
   data                TEXT,
 
@@ -809,7 +809,7 @@ CREATE INDEX error_reports_created_ix ON error.error_reports(created);
 
 CREATE INDEX error_reports_who_ix ON error.error_reports(who);
 
-COMMENT ON COLUMN error.error_reports.id IS 'The ID used to uniquely identify the error report';
+COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
 
 COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
 
@@ -823,7 +823,7 @@ COMMENT ON COLUMN error.error_reports.created IS 'The date and time the error re
 
 COMMENT ON COLUMN error.error_reports.who IS 'The optional username identifying the user associated with the error report';
 
-COMMENT ON COLUMN error.error_reports.device_id IS 'The optional ID used to uniquely identify the device the error report originated from';
+COMMENT ON COLUMN error.error_reports.device_id IS 'The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
 
 COMMENT ON COLUMN error.error_reports.feedback IS 'The optional feedback provided by the user for the error';
 

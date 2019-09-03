@@ -14,7 +14,7 @@ CREATE TABLE scheduler.jobs (
   is_enabled         BOOLEAN       NOT NULL,
   status             INTEGER       NOT NULL DEFAULT 1,
   execution_attempts INTEGER       NOT NULL DEFAULT 0,
-  lock_name          VARCHAR(4000),
+  lock_name          VARCHAR(100),
   last_executed      TIMESTAMP,
   next_execution     TIMESTAMP,
   updated            TIMESTAMP,

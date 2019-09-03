@@ -51,6 +51,7 @@ public class MessageNotFoundException extends ServiceException
   /**
    * Constructs a new <code>MessageNotFoundException</code>.
    *
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    */
   public MessageNotFoundException(UUID messageId)
   {

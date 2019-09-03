@@ -226,7 +226,7 @@ CREATE TABLE "MESSAGING"."MESSAGE_TYPES" (
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the message type' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message type' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_TYPES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -256,19 +256,20 @@ GO
 
 CREATE TABLE "MESSAGING"."MESSAGES" (
   id                UNIQUEIDENTIFIER NOT NULL,
-  username          NVARCHAR(256)    NOT NULL,
+  username          NVARCHAR(1000)   NOT NULL,
   device_id         UNIQUEIDENTIFIER NOT NULL,
   type_id           UNIQUEIDENTIFIER NOT NULL,
-  correlation_id    UNIQUEIDENTIFIER NOT NULL,
+  correlation_id    UNIQUEIDENTIFIER,
   priority          INTEGER          NOT NULL,
   status            INTEGER          NOT NULL,
   created           DATETIME         NOT NULL,
-  persisted         DATETIME         NOT NULL,
+  data_hash         NVARCHAR(100),
+  encryption_iv     NVARCHAR(100),
   updated           DATETIME,
-  send_attempts     INTEGER          NOT NULL,
-  process_attempts  INTEGER          NOT NULL,
-  download_attempts INTEGER          NOT NULL,
-  lock_name         NVARCHAR(256),
+  send_attempts     INTEGER,
+  process_attempts  INTEGER,
+  download_attempts INTEGER ,
+  lock_name         NVARCHAR(100),
   last_processed    DATETIME,
   data              VARBINARY(MAX),
 
@@ -290,7 +291,7 @@ CREATE INDEX messages_status_ix ON "MESSAGING"."MESSAGES"(status);
 CREATE INDEX messages_lock_name_ix ON "MESSAGING"."MESSAGES"(lock_name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -298,15 +299,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the message originated from' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to correlate the message' ,
+@name=N'MS_Description', @value=N'The optional Universally Unique Identifier (UUID) used to correlate the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -322,8 +323,12 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'CREATED';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the message was persisted' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'PERSISTED';
+@name=N'MS_Description', @value=N'The hash of the unencrypted data for the message if the message is encrypted' ,
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'DATA_HASH';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The base-64 encoded initialisation vector for the encryption scheme for the message' ,
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'ENCRYPTION_IV';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the message was last updated' ,
@@ -360,22 +365,21 @@ CREATE TABLE "MESSAGING"."MESSAGE_PARTS" (
   id                 UNIQUEIDENTIFIER NOT NULL,
   part_no            INTEGER          NOT NULL,
   total_parts        INTEGER          NOT NULL,
-  send_attempts      INTEGER          NOT NULL,
-  download_attempts  INTEGER          NOT NULL,
+  send_attempts      INTEGER,
+  download_attempts  INTEGER,
   status             INTEGER          NOT NULL,
-  persisted          DATETIME         NOT NULL,
   updated            DATETIME,
   msg_id             UNIQUEIDENTIFIER NOT NULL,
-  msg_username       NVARCHAR(256)    NOT NULL,
+  msg_username       NVARCHAR(1000)   NOT NULL,
   msg_device_id      UNIQUEIDENTIFIER NOT NULL,
   msg_type_id        UNIQUEIDENTIFIER NOT NULL,
-  msg_correlation_id UNIQUEIDENTIFIER NOT NULL,
+  msg_correlation_id UNIQUEIDENTIFIER,
   msg_priority       INTEGER          NOT NULL,
   msg_created        DATETIME         NOT NULL,
-  msg_data_hash      NVARCHAR(512),
-  msg_encryption_iv  NVARCHAR(512)    NOT NULL,
-  msg_checksum       NVARCHAR(512)    NOT NULL,
-  lock_name          NVARCHAR(256),
+  msg_data_hash      NVARCHAR(100),
+  msg_encryption_iv  NVARCHAR(100),
+  msg_checksum       NVARCHAR(100)    NOT NULL,
+  lock_name          NVARCHAR(100),
   data               VARBINARY(MAX),
 
   PRIMARY KEY (id),
@@ -393,7 +397,7 @@ CREATE INDEX message_parts_msg_type_id_ix ON "MESSAGING"."MESSAGE_PARTS"(msg_typ
 CREATE INDEX message_parts_lock_name_ix ON "MESSAGING"."MESSAGE_PARTS"(lock_name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the message part' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message part' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -417,15 +421,11 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'STATUS';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the message part was persisted' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'PERSISTED';
-
-EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the message part was last updated' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'UPDATED';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the original message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -433,15 +433,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the original message originated from' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of the original message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to correlate the original message' ,
+@name=N'MS_Description', @value=N'The optional Universally Unique Identifier (UUID) used to correlate the original message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -453,7 +453,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CREATED';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The hash of the unencrypted data for the original message' ,
+@name=N'MS_Description', @value=N'The hash of the unencrypted data for the original message if the message was encrypted' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DATA_HASH';
 
 EXEC sys.sp_addextendedproperty
@@ -477,10 +477,10 @@ GO
 
 CREATE TABLE "MESSAGING"."ARCHIVED_MESSAGES" (
   id             UNIQUEIDENTIFIER NOT NULL,
-  username       NVARCHAR(256)    NOT NULL,
+  username       NVARCHAR(1000)   NOT NULL,
   device_id      UNIQUEIDENTIFIER NOT NULL,
   type_id        UNIQUEIDENTIFIER NOT NULL,
-  correlation_id UNIQUEIDENTIFIER NOT NULL,
+  correlation_id UNIQUEIDENTIFIER,
   created        DATETIME         NOT NULL,
   archived       DATETIME         NOT NULL,
   data           VARBINARY(MAX),
@@ -496,7 +496,7 @@ CREATE INDEX archived_messages_device_id_ix ON "MESSAGING"."ARCHIVED_MESSAGES"(d
 CREATE INDEX archived_messages_type_id_ix ON "MESSAGING"."ARCHIVED_MESSAGES"(type_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -504,15 +504,15 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'USERNAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the device the message originated from' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the type of message' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to correlate the message' ,
+@name=N'MS_Description', @value=N'The optional Universally Unique Identifier (UUID) used to correlate the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'ARCHIVED_MESSAGES', @level2type=N'COLUMN', @level2name=N'CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -651,7 +651,7 @@ GO
 
 CREATE TABLE "SECURITY"."ORGANIZATIONS" (
   id     UNIQUEIDENTIFIER NOT NULL,
-  name   NVARCHAR(256)    NOT NULL,
+  name   NVARCHAR(4000)   NOT NULL,
   status INTEGER          NOT NULL,
 
   PRIMARY KEY (id)
@@ -754,14 +754,14 @@ GO
 CREATE TABLE "SECURITY"."USERS" (
   id                UNIQUEIDENTIFIER NOT NULL,
   user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  username          NVARCHAR(256)    NOT NULL,
+  username          NVARCHAR(1000)   NOT NULL,
   status            INTEGER          NOT NULL,
-  first_name        NVARCHAR(256)    NOT NULL DEFAULT '',
-  last_name         NVARCHAR(256)    NOT NULL DEFAULT '',
-  phone             NVARCHAR(256)    NOT NULL DEFAULT '',
-  mobile            NVARCHAR(256)    NOT NULL DEFAULT '',
-  email             NVARCHAR(256)    NOT NULL DEFAULT '',
-  password          NVARCHAR(512)    NOT NULL DEFAULT '',
+  first_name        NVARCHAR(4000)    NOT NULL DEFAULT '',
+  last_name         NVARCHAR(4000)    NOT NULL DEFAULT '',
+  phone             NVARCHAR(4000)    NOT NULL DEFAULT '',
+  mobile            NVARCHAR(4000)    NOT NULL DEFAULT '',
+  email             NVARCHAR(4000)    NOT NULL DEFAULT '',
+  password          NVARCHAR(4000)    NOT NULL DEFAULT '',
   password_attempts INTEGER          NOT NULL DEFAULT 0,
   password_expiry   DATETIME,
 
@@ -828,7 +828,7 @@ CREATE TABLE "SECURITY"."USERS_PASSWORD_HISTORY" (
   id               UNIQUEIDENTIFIER NOT NULL,
   user_id UNIQUEIDENTIFIER NOT NULL,
   changed          DATETIME         NOT NULL,
-  password         NVARCHAR(512),
+  password         NVARCHAR(4000),
 
   PRIMARY KEY (id),
   CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES "SECURITY"."USERS"(id) ON DELETE CASCADE
@@ -860,8 +860,8 @@ GO
 CREATE TABLE "SECURITY"."GROUPS" (
   id                UNIQUEIDENTIFIER NOT NULL,
   user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  groupname         NVARCHAR(256)    NOT NULL,
-  description       NVARCHAR(512),
+  groupname         NVARCHAR(4000)    NOT NULL,
+  description       NVARCHAR(4000),
 
   PRIMARY KEY (id),
   CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES "SECURITY"."USER_DIRECTORIES"(id) ON DELETE CASCADE
@@ -963,8 +963,8 @@ GO
 
 CREATE TABLE "SECURITY"."ROLES" (
   code        NVARCHAR(100) NOT NULL,
-  name        NVARCHAR(256) NOT NULL,
-  description NVARCHAR(512),
+  name        NVARCHAR(4000) NOT NULL,
+  description NVARCHAR(4000),
 
   PRIMARY KEY (code)
 );
@@ -1130,11 +1130,11 @@ GO
 
 CREATE TABLE "SMS"."SMS" (
   id             BIGINT         NOT NULL,
-  mobile_number  NVARCHAR(100)  NOT NULL,
-  message        NVARCHAR(1024) NOT NULL,
+  mobile_number  NVARCHAR(4000) NOT NULL,
+  message        NVARCHAR(4000) NOT NULL,
   status         INTEGER        NOT NULL,
   send_attempts  INTEGER        NOT NULL,
-  lock_name      NVARCHAR(256),
+  lock_name      NVARCHAR(100),
   last_processed DATETIME,
 
   PRIMARY KEY (id)
@@ -1175,13 +1175,13 @@ GO
 
 CREATE TABLE "ERROR"."ERROR_REPORTS" (
   id                  UNIQUEIDENTIFIER NOT NULL,
-  application_id      NVARCHAR(100)    NOT NULL,
+  application_id      NVARCHAR(200)    NOT NULL,
   application_version NVARCHAR(50)     NOT NULL,
   description         NVARCHAR(4000)   NOT NULL,
   detail              NVARCHAR(MAX)    NOT NULL,
   created             DATETIME         NOT NULL,
   who                 NVARCHAR(1000),
-  device_id           NVARCHAR(50),
+  device_id           UNIQUEIDENTIFIER,
   feedback            NVARCHAR(4000),
   data                NVARCHAR(MAX),
 

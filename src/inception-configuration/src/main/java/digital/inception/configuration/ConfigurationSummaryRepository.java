@@ -35,6 +35,6 @@ public interface ConfigurationSummaryRepository extends JpaRepository<Configurat
 {
   List<ConfigurationSummary> findAllByOrderByKeyDesc();
 
-  @Query("select c from Configuration c where upper(c.key) like ?1")
+  @Query("select c from Configuration c where upper(c.key) like :filter")
   List<ConfigurationSummary> findFiltered(String filter);
 }

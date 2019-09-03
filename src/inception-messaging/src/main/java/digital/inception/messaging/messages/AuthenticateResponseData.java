@@ -30,10 +30,7 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +61,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * The UUID for the "Authenticate Response" message.
    */
-  public static final String MESSAGE_TYPE_ID = "82223035-1726-407f-8703-3977708e792c";
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "82223035-1726-407f-8703-3977708e792c");
 
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
@@ -127,7 +125,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param userProperties    the properties returned for the authenticated user
    */
   public AuthenticateResponseData(List<Organization> organizations, byte[] userEncryptionKey,
-      Map<String, Object> userProperties)
+    Map<String, Object> userProperties)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -139,7 +137,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
     this.organizations = new ArrayList<>();
 
     this.organizations.addAll(organizations.stream().map(OrganizationData::new).collect(
-        Collectors.toList()));
+      Collectors.toList()));
   }
 
   /**
@@ -164,8 +162,8 @@ public class AuthenticateResponseData extends WbxmlMessageData
     }
 
     if ((!rootElement.hasChild("UserEncryptionKey"))
-        || (!rootElement.hasChild("ErrorCode"))
-        || (!rootElement.hasChild("ErrorMessage")))
+      || (!rootElement.hasChild("ErrorCode"))
+      || (!rootElement.hasChild("ErrorMessage")))
     {
       return false;
     }
@@ -190,7 +188,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
       List<Element> organizationElements = organizationsElement.getChildren("Organization");
 
       this.organizations.addAll(organizationElements.stream().map(OrganizationData::new).collect(
-          Collectors.toList()));
+        Collectors.toList()));
     }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
@@ -217,14 +215,14 @@ public class AuthenticateResponseData extends WbxmlMessageData
           else
           {
             throw new MessagingServiceException("Failed to read the user property ("
-                + userPropertyName + ") with unknown type (" + userPropertyType
-                + ") from the message data");
+              + userPropertyName + ") with unknown type (" + userPropertyType
+              + ") from the message data");
           }
         }
         catch (Throwable e)
         {
           throw new MessagingServiceException(
-              "Failed to read the user property from the message data", e);
+            "Failed to read the user property from the message data", e);
         }
       }
     }
@@ -300,7 +298,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage",
-        StringUtils.isEmpty(errorMessage)
+      StringUtils.isEmpty(errorMessage)
         ? ""
         : errorMessage));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));

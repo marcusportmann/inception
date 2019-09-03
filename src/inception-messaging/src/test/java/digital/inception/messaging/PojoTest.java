@@ -40,11 +40,11 @@ import java.util.UUID;
  */
 public class PojoTest
 {
-  private static final String MESSAGE_ID = UUID.randomUUID().toString();
+  private static final UUID MESSAGE_ID = UUID.randomUUID();
   private static final String USERNAME = "Administrator";
-  private static final String DEVICE_ID = UUID.randomUUID().toString();
-  private static final String MESSAGE_TYPE_ID = UUID.randomUUID().toString();
-  private static final String MESSAGE_CORRELATION_ID = UUID.randomUUID().toString();
+  private static final UUID DEVICE_ID = UUID.randomUUID();
+  private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
+  private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
   private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
   private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
   private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
@@ -52,9 +52,9 @@ public class PojoTest
   private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
   private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
   private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
-  private static final int SEND_ATTEMPTS = 1;
-  private static final int PROCESS_ATTEMPTS = 2;
-  private static final int DOWNLOAD_ATTEMPTS = 3;
+  private static final Integer SEND_ATTEMPTS = 1;
+  private static final Integer PROCESS_ATTEMPTS = 2;
+  private static final Integer DOWNLOAD_ATTEMPTS = 3;
   private static final String LOCK_NAME = "Lock Name";
   private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
   private static final String MESSAGE_DATA_HASH = "DataHash";
@@ -62,7 +62,7 @@ public class PojoTest
   private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
   private static final String MESSAGE_ENCRYPTION_IV = Base64Util.encodeBytes(
       CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
-  private static final String MESSAGE_PART_ID = UUID.randomUUID().toString();
+  private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
   private static final int PART_NO = 7;
   private static final int TOTAL_PARTS = 8;
   private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;
@@ -75,10 +75,9 @@ public class PojoTest
   public void messagePartTest()
   {
     MessagePart messagePart = new MessagePart(MESSAGE_PART_ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS,
-        DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_PART_PERSISTED, MESSAGE_PART_UPDATED,
-        MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID, MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY,
-        MESSAGE_CREATED, MESSAGE_DATA_HASH, MESSAGE_ENCRYPTION_IV, MESSAGE_CHECKSUM, LOCK_NAME,
-        MESSAGE_PART_DATA);
+        DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_PART_UPDATED, MESSAGE_ID, USERNAME,
+        DEVICE_ID, MESSAGE_TYPE_ID, MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED,
+        MESSAGE_DATA_HASH, MESSAGE_ENCRYPTION_IV, MESSAGE_CHECKSUM, LOCK_NAME, MESSAGE_PART_DATA);
 
     assertEquals(MESSAGE_PART_ID, messagePart.getId());
     assertEquals(PART_NO, messagePart.getPartNo());
@@ -86,7 +85,6 @@ public class PojoTest
     assertEquals(SEND_ATTEMPTS, messagePart.getSendAttempts());
     assertEquals(DOWNLOAD_ATTEMPTS, messagePart.getDownloadAttempts());
     assertEquals(MESSAGE_PART_STATUS, messagePart.getStatus());
-    assertEquals(MESSAGE_PART_PERSISTED, messagePart.getPersisted());
     assertEquals(MESSAGE_PART_UPDATED, messagePart.getUpdated());
     assertEquals(MESSAGE_ID, messagePart.getMessageId());
     assertEquals(USERNAME, messagePart.getMessageUsername());
@@ -110,7 +108,6 @@ public class PojoTest
     anotherMessagePart.setSendAttempts(SEND_ATTEMPTS);
     anotherMessagePart.setDownloadAttempts(DOWNLOAD_ATTEMPTS);
     anotherMessagePart.setStatus(MESSAGE_PART_STATUS);
-    anotherMessagePart.setPersisted(MESSAGE_PART_PERSISTED);
     anotherMessagePart.setUpdated(MESSAGE_PART_UPDATED);
     anotherMessagePart.setMessageId(MESSAGE_ID);
     anotherMessagePart.setMessageUsername(USERNAME);
@@ -131,7 +128,6 @@ public class PojoTest
     assertEquals(SEND_ATTEMPTS, anotherMessagePart.getSendAttempts());
     assertEquals(DOWNLOAD_ATTEMPTS, anotherMessagePart.getDownloadAttempts());
     assertEquals(MESSAGE_PART_STATUS, anotherMessagePart.getStatus());
-    assertEquals(MESSAGE_PART_PERSISTED, anotherMessagePart.getPersisted());
     assertEquals(MESSAGE_PART_UPDATED, anotherMessagePart.getUpdated());
     assertEquals(MESSAGE_ID, anotherMessagePart.getMessageId());
     assertEquals(USERNAME, anotherMessagePart.getMessageUsername());
@@ -155,9 +151,8 @@ public class PojoTest
   public void messageTest()
   {
     Message message = new Message(MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
-        MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_STATUS, MESSAGE_CREATED,
-        MESSAGE_PERSISTED, MESSAGE_UPDATED, SEND_ATTEMPTS, PROCESS_ATTEMPTS, DOWNLOAD_ATTEMPTS,
-        LOCK_NAME, LAST_PROCESSED, MESSAGE_DATA, MESSAGE_DATA_HASH, MESSAGE_ENCRYPTION_IV);
+        MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA, MESSAGE_DATA_HASH,
+        MESSAGE_ENCRYPTION_IV);
 
     assertEquals(MESSAGE_ID, message.getId());
     assertEquals(USERNAME, message.getUsername());
@@ -165,15 +160,7 @@ public class PojoTest
     assertEquals(MESSAGE_TYPE_ID, message.getTypeId());
     assertEquals(MESSAGE_CORRELATION_ID, message.getCorrelationId());
     assertEquals(MESSAGE_PRIORITY, message.getPriority());
-    assertEquals(MESSAGE_STATUS, message.getStatus());
     assertEquals(MESSAGE_CREATED, message.getCreated());
-    assertEquals(MESSAGE_PERSISTED, message.getPersisted());
-    assertEquals(MESSAGE_UPDATED, message.getUpdated());
-    assertEquals(SEND_ATTEMPTS, message.getSendAttempts());
-    assertEquals(PROCESS_ATTEMPTS, message.getProcessAttempts());
-    assertEquals(DOWNLOAD_ATTEMPTS, message.getDownloadAttempts());
-    assertEquals(LOCK_NAME, message.getLockName());
-    assertEquals(LAST_PROCESSED, message.getLastProcessed());
     assertArrayEquals(MESSAGE_DATA, message.getData());
     assertEquals(MESSAGE_ENCRYPTION_IV, message.getEncryptionIV());
     assertEquals(MESSAGE_DATA_HASH, message.getDataHash());
@@ -188,7 +175,6 @@ public class PojoTest
     anotherMessage.setPriority(MESSAGE_PRIORITY);
     anotherMessage.setStatus(MESSAGE_STATUS);
     anotherMessage.setCreated(MESSAGE_CREATED);
-    anotherMessage.setPersisted(MESSAGE_PERSISTED);
     anotherMessage.setUpdated(MESSAGE_UPDATED);
     anotherMessage.setSendAttempts(SEND_ATTEMPTS);
     anotherMessage.setProcessAttempts(PROCESS_ATTEMPTS);
@@ -207,7 +193,6 @@ public class PojoTest
     assertEquals(MESSAGE_PRIORITY, anotherMessage.getPriority());
     assertEquals(MESSAGE_STATUS, anotherMessage.getStatus());
     assertEquals(MESSAGE_CREATED, anotherMessage.getCreated());
-    assertEquals(MESSAGE_PERSISTED, anotherMessage.getPersisted());
     assertEquals(MESSAGE_UPDATED, anotherMessage.getUpdated());
     assertEquals(SEND_ATTEMPTS, anotherMessage.getSendAttempts());
     assertEquals(PROCESS_ATTEMPTS, anotherMessage.getProcessAttempts());

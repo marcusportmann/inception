@@ -16,24 +16,53 @@
 
 package digital.inception.scheduler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The enumeration giving the possible statuses for a job.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "JobStatus")
+@XmlEnum
+@XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
 public enum JobStatus
 {
-  UNSCHEDULED(0, "Unscheduled"), SCHEDULED(1, "Scheduled"), EXECUTING(2, "Executing"), EXECUTED(3,
-      "Executed"), ABORTED(4, "Aborted"), FAILED(5, "Failed"), ONCE_OFF(6, "Once-Off"), UNKNOWN(-1,
-      "Unknown");
+  @XmlEnumValue("Unscheduled")
+  UNSCHEDULED(0, "Unscheduled"),
+  @XmlEnumValue("Scheduled")
+  SCHEDULED(1, "Scheduled"),
+  @XmlEnumValue("Executing")
+  EXECUTING(2, "Executing"),
+  @XmlEnumValue("Executed")
+  EXECUTED(3, "Executed"),
+  @XmlEnumValue("Aborted")
+  ABORTED(4, "Aborted"),
+  @XmlEnumValue("Failed")
+  FAILED(5, "Failed"),
+  @XmlEnumValue("OnceOff")
+  ONCE_OFF(6, "Once-Off"),
+  @XmlEnumValue("Unknown")
+  UNKNOWN(-1, "Unknown");
 
   private int code;
-  private String name;
+  private String description;
 
-  JobStatus(int code, String name)
+  JobStatus(int code, String description)
   {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -43,6 +72,7 @@ public enum JobStatus
    *
    * @return the status given by the specified numeric code value
    */
+  @JsonCreator
   public static JobStatus fromCode(int code)
   {
     switch (code)
@@ -78,7 +108,8 @@ public enum JobStatus
    *
    * @return the numeric code value identifying the status
    */
-  public int getCode()
+  @JsonValue
+  public int code()
   {
     return code;
   }
@@ -88,19 +119,19 @@ public enum JobStatus
    *
    * @return the <code>String</code> value of the numeric code value identifying the status
    */
-  public String getCodeAsString()
+  public String codeAsString()
   {
     return String.valueOf(code);
   }
 
   /**
-   * Returns the name of the status.
+   * Returns the description for the status.
    *
-   * @return the name of the status
+   * @return the description for the status
    */
-  public String getName()
+  public String description()
   {
-    return name;
+    return description;
   }
 
   /**
@@ -110,6 +141,6 @@ public enum JobStatus
    */
   public String toString()
   {
-    return name;
+    return description;
   }
 }

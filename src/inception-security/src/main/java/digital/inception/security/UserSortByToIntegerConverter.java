@@ -45,6 +45,6 @@ public class UserSortByToIntegerConverter
       return null;
     }
 
-    return source.getCode();
+    return source.code();
   }
 }

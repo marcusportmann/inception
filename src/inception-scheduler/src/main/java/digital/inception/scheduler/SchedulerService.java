@@ -122,7 +122,7 @@ public class SchedulerService
       statement.setString(3, job.getSchedulingPattern());
       statement.setString(4, job.getJobClass());
       statement.setBoolean(5, job.getIsEnabled());
-      statement.setInt(6, job.getStatus().getCode());
+      statement.setInt(6, job.getStatus().code());
 
       if (statement.executeUpdate() != 1)
       {
@@ -461,7 +461,7 @@ public class SchedulerService
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
             - jobExecutionRetryDelay);
 
-        statement.setInt(1, JobStatus.SCHEDULED.getCode());
+        statement.setInt(1, JobStatus.SCHEDULED.code());
         statement.setTimestamp(2, processedBefore);
         statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 
@@ -479,7 +479,7 @@ public class SchedulerService
 
             try (PreparedStatement updateStatement = connection.prepareStatement(lockJobSQL))
             {
-              updateStatement.setInt(1, JobStatus.EXECUTING.getCode());
+              updateStatement.setInt(1, JobStatus.EXECUTING.code());
               updateStatement.setString(2, instanceName);
               updateStatement.setTimestamp(3, updated);
               updateStatement.setObject(4, job.getId());
@@ -621,7 +621,7 @@ public class SchedulerService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(lockJobSQL))
     {
-      statement.setInt(1, status.getCode());
+      statement.setInt(1, status.code());
       statement.setString(2, instanceName);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setObject(4, jobId);
@@ -684,10 +684,10 @@ public class SchedulerService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetJobLocksSQL))
     {
-      statement.setInt(1, newStatus.getCode());
+      statement.setInt(1, newStatus.code());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setString(3, instanceName);
-      statement.setInt(4, status.getCode());
+      statement.setInt(4, status.code());
 
       return statement.executeUpdate();
     }
@@ -813,7 +813,7 @@ public class SchedulerService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockJobSQL))
     {
-      statement.setInt(1, status.getCode());
+      statement.setInt(1, status.code());
       statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
       statement.setObject(3, jobId);
 
@@ -851,7 +851,7 @@ public class SchedulerService
       statement.setString(2, job.getSchedulingPattern());
       statement.setString(3, job.getJobClass());
       statement.setBoolean(4, job.getIsEnabled());
-      statement.setInt(5, job.getStatus().getCode());
+      statement.setInt(5, job.getStatus().code());
       statement.setObject(6, job.getId());
 
       if (statement.executeUpdate() != 1)
@@ -931,7 +931,7 @@ public class SchedulerService
 
     try (PreparedStatement statement = connection.prepareStatement(setJobStatusSQL))
     {
-      statement.setInt(1, status.getCode());
+      statement.setInt(1, status.code());
       statement.setObject(2, id);
 
       if (statement.executeUpdate() != 1)

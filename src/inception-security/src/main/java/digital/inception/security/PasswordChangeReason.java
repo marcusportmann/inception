@@ -16,15 +16,33 @@
 
 package digital.inception.security;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The <code>PasswordChangeReason</code> enumeration defines the possible reasons for why a user's
  * password was changed.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "PasswordChangeReason")
+@XmlEnum
+@XmlType(name = "PasswordChangeReason", namespace = "http://security.inception.digital")
 public enum PasswordChangeReason
 {
-  USER(0, "User"), ADMINISTRATIVE(1, "Administrative"), FORGOTTEN(2, "Forgotten");
+  @XmlEnumValue("User")
+  USER(0, "User"),
+
+  @XmlEnumValue("Administrative")
+  ADMINISTRATIVE(1, "Administrative"),
+
+  @XmlEnumValue("Forgotten")
+  FORGOTTEN(2, "Forgotten");
 
   private int code;
   private String description;
@@ -36,10 +54,34 @@ public enum PasswordChangeReason
   }
 
   /**
-   * Returns the numeric codeentifier for the password change reason.
+   * Returns the password change reason given by the specified code value.
    *
-   * @return the numeric codeentifier for the password change reason
+   * @param code the code value identifying the password change reason
+   *
+   * @return the password change reason given by the specified code value
    */
+  @JsonCreator
+  public static PasswordChangeReason fromCode(int code)
+  {
+    switch (code)
+    {
+      case 0:
+        return PasswordChangeReason.USER;
+
+      case 1:
+        return PasswordChangeReason.ADMINISTRATIVE;
+
+      default:
+        return PasswordChangeReason.FORGOTTEN;
+    }
+  }
+
+  /**
+   * Returns the numeric code value identifying for the password change reason.
+   *
+   * @return the numeric code value identifying for the password change reason
+   */
+  @JsonValue
   public int code()
   {
     return code;

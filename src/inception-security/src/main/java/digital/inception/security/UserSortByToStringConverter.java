@@ -45,6 +45,6 @@ public class UserSortByToStringConverter
       return null;
     }
 
-    return String.valueOf(source.getCode());
+    return String.valueOf(source.code());
   }
 }

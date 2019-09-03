@@ -50,7 +50,7 @@ public class ConfigurationNotFoundException extends ServiceException
   /**
    * Constructs a new <code>ConfigurationNotFoundException</code> with the specified message.
    *
-   * @param key The key used to uniquely identify the configuration.
+   * @param key the key used to uniquely identify the configuration
    */
   public ConfigurationNotFoundException(String key)
   {

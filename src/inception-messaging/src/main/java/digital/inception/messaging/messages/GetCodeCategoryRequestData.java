@@ -35,6 +35,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a
@@ -50,7 +51,8 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Get Code Category Request" message.
    */
-  public static final String MESSAGE_TYPE_ID = "94d60eb6-a062-492d-b5e7-9fb1f05cf088";
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
   /**
    * The ID used to uniquely identify the code category to retrieve.
@@ -89,7 +91,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    *                             category is current
    */
   public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved,
-      boolean returnCodesIfCurrent)
+    boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -109,7 +111,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
    *                             category is current
    */
   public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved, Map<String,
-      String> parameters, boolean returnCodesIfCurrent)
+    String> parameters, boolean returnCodesIfCurrent)
   {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
@@ -139,8 +141,8 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
     }
 
     if ((!rootElement.hasChild("CodeCategoryId"))
-        || (!rootElement.hasChild("LastRetrieved"))
-        || (!rootElement.hasChild("ReturnCodesIfCurrent")))
+      || (!rootElement.hasChild("LastRetrieved"))
+      || (!rootElement.hasChild("ReturnCodesIfCurrent")))
     {
       return false;
     }
@@ -158,13 +160,13 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
       catch (Throwable e)
       {
         throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
-            + lastRetrievedValue + ") for the \"Get Code Category Request\" message", e);
+          + lastRetrievedValue + ") for the \"Get Code Category Request\" message", e);
       }
     }
     else
     {
       this.lastRetrieved = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
-          lastRetrievedValue)), ZoneId.systemDefault());
+        lastRetrievedValue)), ZoneId.systemDefault());
     }
 
     this.parameters = new HashMap<>();
@@ -180,7 +182,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
     }
 
     this.returnCodesIfCurrent = Boolean.parseBoolean(rootElement.getChildText(
-        "ReturnCodesIfCurrent"));
+      "ReturnCodesIfCurrent"));
 
     return true;
   }
@@ -241,7 +243,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
 
     rootElement.addContent(new Element("CodeCategoryId", codeCategoryId));
     rootElement.addContent(new Element("LastRetrieved",
-        (lastRetrieved == null)
+      (lastRetrieved == null)
         ? ISO8601Util.now()
         : ISO8601Util.fromLocalDateTime(lastRetrieved)));
 
@@ -258,7 +260,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData
     }
 
     rootElement.addContent(new Element("ReturnCodesIfCurrent", String.valueOf(
-        returnCodesIfCurrent)));
+      returnCodesIfCurrent)));
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

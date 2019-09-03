@@ -59,7 +59,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "SAMPLE", name = "DATA")
+@Table(schema = "sample", name = "data")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Data
   implements Serializable
@@ -74,7 +74,7 @@ public class Data
   @XmlElement(name = "TimestampValue")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
-  @Column(name = "TIMESTAMP_VALUE")
+  @Column(name = "timestamp_value")
   public LocalDateTime timestampValue;
 
   /**
@@ -86,7 +86,7 @@ public class Data
   @XmlElement(name = "DateValue")
   @XmlJavaTypeAdapter(LocalDateAdapter.class)
   @XmlSchemaType(name = "date")
-  @Column(name = "DATE_VALUE")
+  @Column(name = "date_value")
   private LocalDate dateValue;
 
   /**
@@ -97,7 +97,7 @@ public class Data
   @XmlElement(name = "Id", required = true)
   @Id
   @NotNull
-  @Column(name = "ID", nullable = false)
+  @Column(name = "id", nullable = false)
   private long id;
 
   /**
@@ -106,7 +106,7 @@ public class Data
   @ApiModelProperty(value = "The integer value for the data")
   @JsonProperty
   @XmlElement(name = "IntegerValue")
-  @Column(name = "INTEGER_VALUE")
+  @Column(name = "integer_value")
   private Integer integerValue;
 
   /**
@@ -116,7 +116,7 @@ public class Data
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Column(name = "NAME", nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
   /**
@@ -125,7 +125,7 @@ public class Data
   @ApiModelProperty(value = "The string string value for the data")
   @JsonProperty
   @XmlElement(name = "StringValue")
-  @Column(name = "STRING_VALUE")
+  @Column(name = "string_value")
   private String stringValue;
 
   /**

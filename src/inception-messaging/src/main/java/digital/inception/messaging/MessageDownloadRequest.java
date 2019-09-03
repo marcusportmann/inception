@@ -22,6 +22,10 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>MessageDownloadRequest</code> class represents a request sent by a mobile device to
  * download the queued messages for the device.
@@ -35,9 +39,10 @@ import digital.inception.core.wbxml.Encoder;
 public class MessageDownloadRequest
 {
   /**
-   * The ID used to uniquely identify the device the message download request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * download request originated from.
    */
-  private String deviceId;
+  private UUID deviceId;
 
   /**
    * The username identifying the user whose messages should be downloaded.
@@ -54,18 +59,18 @@ public class MessageDownloadRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = rootElement.getAttributeValue("deviceId");
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
     this.username = rootElement.getAttributeValue("username");
   }
 
   /**
    * Constructs a new <code>MessageDownloadRequest</code>.
    *
-   * @param deviceId the ID used to uniquely identify the device the message download request
-   *                 originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message download request originated from
    * @param username the username identifying the user whose messages should be downloaded
    */
-  public MessageDownloadRequest(String deviceId, String username)
+  public MessageDownloadRequest(UUID deviceId, String username)
   {
     this.deviceId = deviceId;
     this.username = username;
@@ -85,19 +90,19 @@ public class MessageDownloadRequest
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageDownloadRequest")
-        && (rootElement.getAttributes().size() == 2)
-        && rootElement.hasAttribute("deviceId")
-        && rootElement.hasAttribute("username");
+      && (rootElement.getAttributes().size() == 2)
+      && rootElement.hasAttribute("deviceId")
+      && rootElement.hasAttribute("username");
   }
 
   /**
-   * Returns the ID used to uniquely identify the device the message download request originated
-   * from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message download request originated from.
    *
-   * @return the ID used to uniquely identify the device the message download request originated
-   *          from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message download request originated from
    */
-  public String getDeviceId()
+  public UUID getDeviceId()
   {
     return deviceId;
   }
@@ -113,12 +118,13 @@ public class MessageDownloadRequest
   }
 
   /**
-   * Set the ID used to uniquely identify the device the message download request originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * download request originated from.
    *
-   * @param deviceId the ID used to uniquely identify the device the message download request
-   *                 originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message download request originated from
    */
-  public void setDeviceId(String deviceId)
+  public void setDeviceId(UUID deviceId)
   {
     this.deviceId = deviceId;
   }
@@ -142,7 +148,7 @@ public class MessageDownloadRequest
   public String toString()
   {
     return String.format("<MessageDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
-        username);
+      username);
   }
 
   /**
@@ -154,7 +160,7 @@ public class MessageDownloadRequest
   {
     Element rootElement = new Element("MessageDownloadRequest");
 
-    rootElement.setAttribute("deviceId", deviceId);
+    rootElement.setAttribute("deviceId", deviceId.toString());
     rootElement.setAttribute("username", username);
 
     Encoder encoder = new Encoder(new Document(rootElement));

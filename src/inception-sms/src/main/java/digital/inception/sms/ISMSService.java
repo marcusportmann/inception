@@ -91,7 +91,7 @@ public interface ISMSService
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
-  void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
+  void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
     throws SMSServiceException;
 
   /**
@@ -125,7 +125,7 @@ public interface ISMSService
    * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  void setSMSStatus(long smsId, SMS.Status status)
+  void setSMSStatus(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException;
 
   /**
@@ -134,6 +134,6 @@ public interface ISMSService
    * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  void unlockSMS(long smsId, SMS.Status status)
+  void unlockSMS(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException;
 }

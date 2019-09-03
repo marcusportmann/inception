@@ -279,7 +279,7 @@ public class CodesService
         throw new CodeNotFoundException(codeCategoryId, codeId);
       }
 
-      codeRepository.deleteById(id);
+      codeRepository.deleteById(codeCategoryId, codeId);
     }
     catch (CodeNotFoundException e)
     {

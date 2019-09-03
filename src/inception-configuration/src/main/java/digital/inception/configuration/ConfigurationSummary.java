@@ -65,7 +65,7 @@ public class ConfigurationSummary
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "description")
+  @Column(name = "description", nullable = false, length = 4000)
   private String description;
 
   /**
@@ -77,7 +77,7 @@ public class ConfigurationSummary
   @NotNull
   @Size(min = 1, max = 4000)
   @Id
-  @Column(name = "key")
+  @Column(name = "key", nullable = false, length = 4000)
   private String key;
 
   /**

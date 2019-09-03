@@ -16,12 +16,33 @@
 
 package digital.inception.messaging;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * The enumeration giving the possible priorities for a message.
  */
+@ApiModel(value = "MessagePriority")
+@XmlEnum
+@XmlType(name = "MessagePriority", namespace = "http://messaging.inception.digital")
 public enum MessagePriority
 {
-  LOW(1, "Low"), MEDIUM(5, "Medium"), HIGH(10, "High");
+  @XmlEnumValue("Low")
+  LOW(1, "Low"),
+  @XmlEnumValue("Medium")
+  MEDIUM(5, "Medium"),
+  @XmlEnumValue("High")
+  HIGH(10, "High");
 
   /**
    * The code identifying the message priority.
@@ -29,14 +50,14 @@ public enum MessagePriority
   private int code;
 
   /**
-   * The name of the message priority.
+   * The description for the message priority.
    */
-  private String name;
+  private String description;
 
-  MessagePriority(int code, String name)
+  MessagePriority(int code, String description)
   {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -46,6 +67,7 @@ public enum MessagePriority
    *
    * @return the message priority given by the specified numeric code value
    */
+  @JsonCreator
   public static MessagePriority fromCode(int code)
   {
     switch (code)
@@ -69,19 +91,20 @@ public enum MessagePriority
    *
    * @return the code identifying the message priority
    */
-  public int getCode()
+  @JsonValue
+  public int code()
   {
     return code;
   }
 
   /**
-   * Returns the name of the message priority.
+   * Returns the description for the message priority.
    *
-   * @return the name of the message priority
+   * @return the description for the message priority
    */
-  public String getName()
+  public String description()
   {
-    return name;
+    return description;
   }
 
   /**
@@ -91,6 +114,6 @@ public enum MessagePriority
    */
   public String toString()
   {
-    return name;
+    return description;
   }
 }

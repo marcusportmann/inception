@@ -59,12 +59,12 @@ public enum UserSortBy
   USERNAME(2, "Sort By Username");
 
   private int code;
-  private String name;
+  private String description;
 
-  UserSortBy(int code, String name)
+  UserSortBy(int code, String description)
   {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -108,19 +108,19 @@ public enum UserSortBy
    * @return the code value identifying the method used to sort a list of users
    */
   @JsonValue
-  public int getCode()
+  public int code()
   {
     return code;
   }
 
   /**
-   * Returns the name of the method used to sort a list of users.
+   * Returns the description for the method used to sort a list of users.
    *
-   * @return the name of the method used to sort a list of users
+   * @return the description for the method used to sort a list of users
    */
-  public String getName()
+  public String description()
   {
-    return name;
+    return description;
   }
 
   /**
@@ -130,6 +130,6 @@ public enum UserSortBy
    */
   public String toString()
   {
-    return name;
+    return description;
   }
 }

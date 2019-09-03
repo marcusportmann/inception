@@ -24,19 +24,22 @@ import digital.inception.core.wbxml.Encoder;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent a mobile device to
  * download the queued message parts for the device.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({"WeakerAccess"})
+@SuppressWarnings({ "WeakerAccess" })
 public class MessagePartDownloadRequest
 {
   /**
-   * The ID used to uniquely identify the device the message part download request originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
+   * download request originated from.
    */
-  private String deviceId;
+  private UUID deviceId;
 
   /**
    * The username identifying the user whose message parts should be downloaded.
@@ -53,18 +56,18 @@ public class MessagePartDownloadRequest
   {
     Element rootElement = document.getRootElement();
 
-    this.deviceId = rootElement.getAttributeValue("deviceId");
+    this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
     this.username = rootElement.getAttributeValue("username");
   }
 
   /**
    * Constructs a new <code>MessagePartDownloadRequest</code>.
    *
-   * @param deviceId the ID used to uniquely identify the device the message part download request
-   *                 originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message part download request originated from
    * @param username the username identifying the user whose message parts should be downloaded
    */
-  public MessagePartDownloadRequest(String deviceId, String username)
+  public MessagePartDownloadRequest(UUID deviceId, String username)
   {
     this.deviceId = deviceId;
     this.username = username;
@@ -83,19 +86,20 @@ public class MessagePartDownloadRequest
   {
     Element rootElement = document.getRootElement();
 
-    return rootElement.getName().equals("MessagePartDownloadRequest") &&
-      (rootElement.getAttributes().size() == 2) && rootElement.hasAttribute("deviceId") &&
-      rootElement.hasAttribute("username");
+    return rootElement.getName().equals("MessagePartDownloadRequest")
+      && (rootElement.getAttributes().size() == 2)
+      && rootElement.hasAttribute("deviceId")
+      && rootElement.hasAttribute("username");
   }
 
   /**
-   * Returns the ID used to uniquely identify the device the message part download request
-   * originated from.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message part download request originated from.
    *
-   * @return the ID used to uniquely identify the device the message part download request
-   * originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message part download request originated from
    */
-  public String getDeviceId()
+  public UUID getDeviceId()
   {
     return deviceId;
   }
@@ -111,13 +115,13 @@ public class MessagePartDownloadRequest
   }
 
   /**
-   * Set the ID used to uniquely identify the device the message part download request originated
-   * from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * part download request originated from.
    *
-   * @param deviceId the ID used to uniquely identify the device the message part download request
-   *                 originated from
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message part download request originated from
    */
-  public void setDeviceId(String deviceId)
+  public void setDeviceId(UUID deviceId)
   {
     this.deviceId = deviceId;
   }
@@ -153,7 +157,7 @@ public class MessagePartDownloadRequest
   {
     Element rootElement = new Element("MessagePartDownloadRequest");
 
-    rootElement.setAttribute("deviceId", deviceId);
+    rootElement.setAttribute("deviceId", deviceId.toString());
     rootElement.setAttribute("username", username);
 
     Encoder encoder = new Encoder(new Document(rootElement));

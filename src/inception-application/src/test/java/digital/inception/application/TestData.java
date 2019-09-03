@@ -36,19 +36,19 @@ public class TestData
    * The ID.
    */
   @Id
-  @Column(name = "ID", nullable = false)
+  @Column(name = "id", nullable = false)
   private String id;
 
   /**
    * The name.
    */
-  @Column(name = "NAME", nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
   /**
    * The value.
    */
-  @Column(name = "VALUE", nullable = false)
+  @Column(name = "value", nullable = false)
   private String value;
 
   /**

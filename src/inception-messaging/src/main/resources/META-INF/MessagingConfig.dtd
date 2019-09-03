@@ -17,6 +17,7 @@
         typeVersion CDATA #REQUIRED
         isSynchronous CDATA #REQUIRED
         isAsynchronous CDATA #REQUIRED
+        isSecure CDATA #REQUIRED
         isArchivable CDATA #REQUIRED
       >
 

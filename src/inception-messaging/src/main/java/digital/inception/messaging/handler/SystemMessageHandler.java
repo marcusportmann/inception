@@ -92,6 +92,7 @@ public class SystemMessageHandler extends MessageHandler
    *
    * @return the response message or <code>null</code> if no response message exists
    */
+  @Override
   public Message processMessage(Message message)
     throws MessageHandlerException
   {
@@ -219,12 +220,8 @@ public class SystemMessageHandler extends MessageHandler
             requestData.getUsername(), e.getMessage()));
       }
 
-      Message responseMessage = messageTranslator.toMessage(responseData,
+      return messageTranslator.toMessage(responseData,
           requestMessage.getCorrelationId());
-
-      responseMessage.setIsEncryptionDisabled(true);
-
-      return responseMessage;
     }
     catch (Throwable e)
     {
@@ -271,11 +268,7 @@ public class SystemMessageHandler extends MessageHandler
 
       }
 
-      Message responseMessage = messageTranslator.toMessage(responseData);
-
-      responseMessage.setIsEncryptionDisabled(true);
-
-      return responseMessage;
+      return messageTranslator.toMessage(responseData);
     }
     catch (Throwable e)
     {

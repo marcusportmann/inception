@@ -13,7 +13,7 @@ CREATE TABLE service_registry.service_registry (
   endpoint             VARCHAR(4000) NOT NULL,
   service_class        VARCHAR(4000) NOT NULL,
   wsdl_location        VARCHAR(4000) NOT NULL,
-  username             VARCHAR(4000),
+  username             VARCHAR(1000),
   password             VARCHAR(4000),
 
   PRIMARY KEY (name)

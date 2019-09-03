@@ -33,6 +33,13 @@ import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -53,6 +60,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     propOrder = { "id", "applicationId", "applicationVersion", "description", "created", "who",
         "deviceId" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "error", name = "error_reports")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ErrorReportSummary
   implements Serializable
 {
@@ -67,7 +77,8 @@ public class ErrorReportSummary
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
   @NotNull
-  @Size(min = 1, max = 100)
+  @Size(min = 1, max = 200)
+  @Column(name = "application_id", nullable = false, length = 200)
   private String applicationId;
 
   /**
@@ -78,7 +89,8 @@ public class ErrorReportSummary
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationVersion", required = true)
   @NotNull
-  @Size(min = 0, max = 50)
+  @Size(max = 50)
+  @Column(name = "application_version", nullable = false)
   private String applicationVersion;
 
   /**
@@ -90,6 +102,7 @@ public class ErrorReportSummary
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @NotNull
+  @Column(name = "created", nullable = false)
   private LocalDateTime created;
 
   /**
@@ -100,26 +113,33 @@ public class ErrorReportSummary
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
+  @Column(name = "description", nullable = false, length = 4000)
   private String description;
 
   /**
-   * The optional ID used to uniquely identify the device the error report originated from.
+   * The optional Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * error report originated from.
    */
   @ApiModelProperty(
-      value = "The optional ID used to uniquely identify the device the error report originated from")
+      value = "The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Size(max = 50)
-  private String deviceId;
+  @Column(name = "device_id")
+  private UUID deviceId;
 
   /**
-   * The ID used to uniquely identify the error report.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the error report", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the error report",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The optional username identifying the user associated with the error report.
@@ -129,6 +149,7 @@ public class ErrorReportSummary
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 1000)
+  @Column(name = "who", length = 1000)
   private String who;
 
   /**
@@ -139,7 +160,8 @@ public class ErrorReportSummary
   /**
    * Constructs a new <code>ErrorReportSummary</code>.
    *
-   * @param id                 the ID used to uniquely identify the error report
+   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the error report
    * @param applicationId      the ID used to uniquely identify the application that generated the
    *                           error report
    * @param applicationVersion the version of the application that generated the error report
@@ -147,11 +169,11 @@ public class ErrorReportSummary
    * @param created            the date and time the error report was created
    * @param who                the optional username identifying the user associated with the error
    *                           report
-   * @param deviceId           the optional ID used to uniquely identify the device the error report
-   *                           originated from
+   * @param deviceId           the optional Universally Unique Identifier (UUID) used to uniquely
+   *                           identify the device the error report originated from
    */
-  public ErrorReportSummary(String id, String applicationId, String applicationVersion,
-      String description, LocalDateTime created, String who, String deviceId)
+  public ErrorReportSummary(UUID id, String applicationId, String applicationVersion,
+      String description, LocalDateTime created, String who, UUID deviceId)
   {
     this.id = id;
     this.applicationId = applicationId;
@@ -203,21 +225,23 @@ public class ErrorReportSummary
   }
 
   /**
-   * Returns the optional ID used to uniquely identify the device the error report originated from.
+   * Returns the optional Universally Unique Identifier (UUID) used to uniquely identify the device
+   * the error report originated from.
    *
-   * @return the optional ID used to uniquely identify the device the error report originated from
+   * @return the optional Universally Unique Identifier (UUID) used to uniquely identify the device
+   *         the error report originated from
    */
-  public String getDeviceId()
+  public UUID getDeviceId()
   {
     return deviceId;
   }
 
   /**
-   * Returns the ID used to uniquely identify the error report.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
    *
-   * @return the ID used to uniquely identify the error report
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -274,22 +298,23 @@ public class ErrorReportSummary
   }
 
   /**
-   * Set the optional ID used to uniquely identify the device the error report originated from.
+   * Set the optional Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * error report originated from.
    *
-   * @param deviceId the optional ID used to uniquely identify the device the error report
-   *                 originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) used to uniquely identify
+   *                 the device the error report originated from
    */
-  public void setDeviceId(String deviceId)
+  public void setDeviceId(UUID deviceId)
   {
     this.deviceId = deviceId;
   }
 
   /**
-   * Set the ID used to uniquely identify the error report.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
    *
-   * @param id the ID used to uniquely identify the error report
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

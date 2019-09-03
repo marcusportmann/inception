@@ -68,7 +68,7 @@ import javax.servlet.Servlet;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameParameterValue"})
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = { MessagingTestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
@@ -86,7 +86,7 @@ public class MessagingServletTest
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
-  private static final String DEVICE_ID = UUID.randomUUID().toString();
+  private static final UUID DEVICE_ID = UUID.randomUUID();
 
   /**
    * The Spring application context.
@@ -96,10 +96,10 @@ public class MessagingServletTest
   private ServletUnitClient servletUnitClient;
 
   /**
-   * Test the "Another Test" asynchronous message functionality.
+   * Test the "Another Test" asynchronous encrypted message functionality.
    */
   @Test
-  public void anotherTestMessageTest()
+  public void anotherTestMessageEncryptedTest()
     throws Exception
   {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
@@ -110,17 +110,19 @@ public class MessagingServletTest
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
         "Test Data".getBytes());
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+    assertTrue(requestMessage.isEncrypted());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
     assertEquals(MessageResult.SUCCESS, messageResult.getCode());
-    assertEquals(null, messageResult.getMessage());
+    assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
     try
     {
-      Thread.sleep(2500L);
+      Thread.sleep(1000L);
     }
     catch (Throwable ignored) {}
 
@@ -141,7 +143,7 @@ public class MessagingServletTest
     for (Message message : messages)
     {
       assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
-      assertEquals(1, message.getDownloadAttempts());
+      assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
       logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
           + ")");
@@ -151,6 +153,8 @@ public class MessagingServletTest
 
       assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
 
+      assertTrue(message.isEncrypted());
+
       AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
           new AnotherTestResponseData());
 
@@ -159,6 +163,37 @@ public class MessagingServletTest
       assertEquals("Test Value", responseData.getTestValue());
       assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
     }
+  }
+
+  /**
+   * Test the "Another Test" asynchronous unencrypted message functionality.
+   */
+  @Test
+  public void anotherTestMessageUnencryptedTest()
+    throws Exception
+  {
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+    AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
+        "Test Data".getBytes());
+
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+
+    assertFalse(requestMessage.isEncrypted());
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
+    assertNull(messageResult.getMessage());
+
+    // Sleep to give the back-end a chance to process the message
+    try
+    {
+      Thread.sleep(1000L);
+    }
+    catch (Throwable ignored) {}
+
+    // TODO: Confirm that there is no message with the same correlation ID in the database
   }
 
   /**
@@ -179,7 +214,7 @@ public class MessagingServletTest
 
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value", testData);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -189,7 +224,7 @@ public class MessagingServletTest
     // Sleep to give the back-end a chance to process the message
     try
     {
-      Thread.sleep(2500L);
+      Thread.sleep(1000L);
     }
     catch (Throwable ignored) {}
 
@@ -203,22 +238,8 @@ public class MessagingServletTest
 
     logger.info("Downloaded " + messages.size() + " messages");
 
-    for (Message message : messages)
-    {
-      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
-          + ")");
-
-      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
-          message.getId());
-
-      assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
-
-      AnotherTestResponseData responseData = messageTranslator.fromMessage(
-          messageResult.getMessage(), new AnotherTestResponseData());
-
-      assertEquals("Test Value", responseData.getTestValue());
-      assertArrayEquals(testData, requestData.getTestData());
-    }
+    // There should be no messages as the reply message will have been split up into message parts
+    assertEquals(0, messages.size());
 
     // Retrieve the message parts queued for download
     MessagePartDownloadResponse messagePartDownloadResponse = sendMessagePartDownloadRequest(
@@ -236,7 +257,7 @@ public class MessagingServletTest
 
     for (MessagePart messagePart : messageParts)
     {
-      assertEquals(1, messagePart.getDownloadAttempts());
+      assertEquals(Integer.valueOf(1), messagePart.getDownloadAttempts());
       assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
 
       logger.info("Downloaded message part (" + messagePart.getPartNo() + "/"
@@ -270,10 +291,10 @@ public class MessagingServletTest
   }
 
   /**
-   * Test the "Test" synchronous message functionality.
+   * Test the "Test" synchronous encrypted message functionality.
    */
   @Test
-  public void testMessageTest()
+  public void testMessageEncryptedTest()
     throws Exception
   {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
@@ -297,14 +318,32 @@ public class MessagingServletTest
     assertEquals("Test Value", responseData.getTestValue());
   }
 
-  private byte[] authenticateUser(String username, String password, String deviceId)
+  /**
+   * Test the "Test" synchronous unencrypted message functionality.
+   */
+  @Test
+  public void testMessageUnencryptedTest()
+    throws Exception
+  {
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+    TestRequestData requestData = new TestRequestData("Test Value");
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.ERROR_DECRYPTION_FAILED, messageResult.getCode());
+  }
+
+  private byte[] authenticateUser(String username, String password, UUID deviceId)
     throws Exception
   {
     AuthenticateRequestData requestData = new AuthenticateRequestData(username, password, deviceId);
 
     MessageTranslator messageTranslator = new MessageTranslator(username, deviceId);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID().toString());
+    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -372,7 +411,6 @@ public class MessagingServletTest
   }
 
   private MessageResult sendMessage(Message message)
-    throws Exception
   {
     try
     {
@@ -480,7 +518,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessageDownloadResponse sendMessageDownloadRequest(String deviceId, String username)
+  private MessageDownloadResponse sendMessageDownloadRequest(UUID deviceId, String username)
     throws Exception
   {
     MessageDownloadRequest messageDownloadRequest = new MessageDownloadRequest(deviceId, username);
@@ -503,8 +541,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessagePartDownloadResponse sendMessagePartDownloadRequest(String deviceId,
-      String username)
+  private MessagePartDownloadResponse sendMessagePartDownloadRequest(UUID deviceId, String username)
     throws Exception
   {
     MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(
@@ -528,8 +565,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessagePartReceivedResponse sendMessagePartReceivedRequest(String deviceId,
-      String messageId)
+  private MessagePartReceivedResponse sendMessagePartReceivedRequest(UUID deviceId, UUID messageId)
     throws Exception
   {
     MessagePartReceivedRequest messagePartReceivedRequest = new MessagePartReceivedRequest(
@@ -553,7 +589,7 @@ public class MessagingServletTest
     }
   }
 
-  private MessageReceivedResponse sendMessageReceivedRequest(String deviceId, String messageId)
+  private MessageReceivedResponse sendMessageReceivedRequest(UUID deviceId, UUID messageId)
     throws Exception
   {
     MessageReceivedRequest messageReceivedRequest = new MessageReceivedRequest(deviceId, messageId);

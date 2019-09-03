@@ -31,12 +31,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -54,18 +59,19 @@ import java.net.URL;
 
 import java.security.MessageDigest;
 
-import java.sql.*;
-
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -96,6 +102,16 @@ public class MessagingService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
 
+  /**
+   * The maximum number of messages to download at one time.
+   */
+  private static final int NUMBER_OF_MESSAGES_TO_DOWNLOAD = 3;
+
+  /**
+   * The maximum number of message parts to download at one time.
+   */
+  private static final int NUMBER_OF_MESSAGE_PARTS_TO_DOWNLOAD = 3;
+
   /* The name of the Messaging Service instance. */
   private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
 
@@ -105,9 +121,9 @@ public class MessagingService
   private ApplicationContext applicationContext;
 
   /**
-   * The data source used to provide connections to the database.
+   * The Archived Message Repository.
    */
-  private DataSource dataSource;
+  private ArchivedMessageRepository archivedMessageRepository;
 
   /**
    * The base64 encoded AES encryption master key used to derive the device/user encryption keys.
@@ -120,6 +136,10 @@ public class MessagingService
    */
   private byte[] encryptionMasterKey;
 
+  /* Entity Manager */
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  private EntityManager entityManager;
+
   /**
    * The maximum number of times processing will be attempted for a message.
    */
@@ -127,15 +147,31 @@ public class MessagingService
   private int maximumProcessingAttempts;
 
   /**
+   * The internal reference to the Messaging Service for transaction management.
+   */
+  @Resource
+  private IMessagingService self;
+
+  /**
    *  The message handlers.
    */
-  private Map<String, IMessageHandler> messageHandlers;
+  private Map<UUID, IMessageHandler> messageHandlers;
 
   /**
    * The configuration information for the message handlers read from the messaging configuration
    * files (META-INF/MessagingConfig.xml) on the classpath.
    */
   private List<MessageHandlerConfig> messageHandlersConfig;
+
+  /**
+   * The Message Part Repository.
+   */
+  private MessagePartRepository messagePartRepository;
+
+  /**
+   * The Message Repository.
+   */
+  private MessageRepository messageRepository;
 
   /**
    * The delay in milliseconds to wait before re-attempting to process a message.
@@ -146,14 +182,19 @@ public class MessagingService
   /**
    * Constructs a new <code>MessagingService</code>.
    *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the database
+   * @param applicationContext        the Spring application context
+   * @param messageRepository         the Message Repository
+   * @param messagePartRepository     the Message Part Repository
+   * @param archivedMessageRepository the Archived Message Repository
    */
-  public MessagingService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource)
+  public MessagingService(ApplicationContext applicationContext,
+      MessageRepository messageRepository, MessagePartRepository messagePartRepository,
+      ArchivedMessageRepository archivedMessageRepository)
   {
     this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
+    this.messageRepository = messageRepository;
+    this.messagePartRepository = messagePartRepository;
+    this.archivedMessageRepository = archivedMessageRepository;
   }
 
   /**
@@ -186,28 +227,20 @@ public class MessagingService
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId  the ID used to uniquely identify the message
+   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   message
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean allPartsQueuedForMessage(String messageId, int totalParts)
+  public boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
     throws MessagingServiceException
   {
-    String allPartsQueuedForMessageSQL = "SELECT COUNT(MP.ID) FROM MESSAGING.MESSAGE_PARTS MP "
-        + "WHERE MP.MSG_ID=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(allPartsQueuedForMessageSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(messageId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (totalParts == rs.getInt(1));
-      }
+      return messagePartRepository.getNumberOfPartsForMessage(messageId) == totalParts;
     }
     catch (Throwable e)
     {
@@ -222,33 +255,17 @@ public class MessagingService
    * @param message the message to archive
    */
   @Override
+  @Transactional
   public void archiveMessage(Message message)
     throws MessagingServiceException
   {
     if (isArchivableMessage(message))
     {
-      String archiveMessageSQL = "INSERT INTO messaging.archived_messages "
-          + "(id, username, device_id, type_id, correlation_id, created, archived, data) "
-          + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(archiveMessageSQL))
+      try
       {
-        statement.setObject(1, UUID.fromString(message.getId()));
-        statement.setString(2, message.getUsername());
-        statement.setObject(3, UUID.fromString(message.getDeviceId()));
-        statement.setObject(4, UUID.fromString(message.getTypeId()));
-        statement.setObject(5, UUID.fromString(message.getCorrelationId()));
-        statement.setTimestamp(6, Timestamp.valueOf(message.getCreated()));
-        statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-        statement.setBytes(8, message.getData());
+        ArchivedMessage archivedMessage = new ArchivedMessage(message);
 
-        if (statement.executeUpdate() != 1)
-        {
-          throw new MessagingServiceException(String.format(
-              "No rows were affected as a result of executing the SQL statement (%s)",
-              archiveMessageSQL));
-        }
+        archivedMessageRepository.saveAndFlush(archivedMessage);
       }
       catch (Throwable e)
       {
@@ -294,48 +311,21 @@ public class MessagingService
    * @param message the <code>Message</code> instance containing the information for the message
    */
   @Override
+  @Transactional
   public void createMessage(Message message)
     throws MessagingServiceException
   {
-    String createMessageSQL = "INSERT INTO MESSAGING.MESSAGES (id, username, device_id, type_id, "
-        + "correlation_id, priority, status, created, persisted, updated, send_attempts, "
-        + "process_attempts, download_attempts, data) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createMessageSQL))
+    try
     {
-      LocalDateTime persisted = LocalDateTime.now();
+      message.setUpdated(LocalDateTime.now());
 
-      statement.setObject(1, UUID.fromString(message.getId()));
-      statement.setString(2, message.getUsername());
-      statement.setObject(3, UUID.fromString(message.getDeviceId()));
-      statement.setObject(4, UUID.fromString(message.getTypeId()));
-      statement.setObject(5, UUID.fromString(message.getCorrelationId()));
-      statement.setInt(6, message.getPriority().getCode());
-      statement.setInt(7, message.getStatus().getCode());
-      statement.setTimestamp(8, Timestamp.valueOf(message.getCreated()));
-      statement.setTimestamp(9, Timestamp.valueOf(persisted));
-      statement.setTimestamp(10, Timestamp.valueOf(message.getCreated()));
-      statement.setInt(11, message.getSendAttempts());
-      statement.setInt(12, message.getProcessAttempts());
-      statement.setInt(13, message.getDownloadAttempts());
-      statement.setBytes(14, message.getData());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createMessageSQL));
-      }
-
-      message.setPersisted(persisted);
-      message.setUpdated(message.getCreated());
+      messageRepository.saveAndFlush(message);
     }
     catch (Throwable e)
     {
       throw new MessagingServiceException(String.format("Failed to create the message (%s)",
           message.getId()), e);
+
     }
   }
 
@@ -346,47 +336,15 @@ public class MessagingService
    *                    message part
    */
   @Override
+  @Transactional
   public void createMessagePart(MessagePart messagePart)
     throws MessagingServiceException
   {
-    String createMessagePartSQL = "INSERT INTO messaging.message_parts (id, part_no, total_parts, "
-        + "send_attempts, download_attempts, status, persisted, msg_id, msg_username, "
-        + "msg_device_id, msg_type_id, msg_correlation_id, msg_priority, msg_created, "
-        + "msg_data_hash, msg_encryption_iv, msg_checksum, data) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createMessagePartSQL))
+    try
     {
-      LocalDateTime persisted = LocalDateTime.now();
+      messagePart.setUpdated(LocalDateTime.now());
 
-      statement.setObject(1, UUID.fromString(messagePart.getId()));
-      statement.setInt(2, messagePart.getPartNo());
-      statement.setInt(3, messagePart.getTotalParts());
-      statement.setInt(4, messagePart.getSendAttempts());
-      statement.setInt(5, messagePart.getDownloadAttempts());
-      statement.setInt(6, messagePart.getStatus().getCode());
-      statement.setTimestamp(7, Timestamp.valueOf(persisted));
-      statement.setObject(8, UUID.fromString(messagePart.getMessageId()));
-      statement.setString(9, messagePart.getMessageUsername());
-      statement.setObject(10, UUID.fromString(messagePart.getMessageDeviceId()));
-      statement.setObject(11, UUID.fromString(messagePart.getMessageTypeId()));
-      statement.setObject(12, UUID.fromString(messagePart.getMessageCorrelationId()));
-      statement.setInt(13, messagePart.getMessagePriority().getCode());
-      statement.setTimestamp(14, Timestamp.valueOf(messagePart.getMessageCreated()));
-      statement.setString(15, messagePart.getMessageDataHash());
-      statement.setString(16, messagePart.getMessageEncryptionIV());
-      statement.setString(17, messagePart.getMessageChecksum());
-      statement.setBytes(18, messagePart.getData());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createMessagePartSQL));
-      }
-
-      messagePart.setPersisted(persisted);
+      messagePartRepository.saveAndFlush(messagePart);
     }
     catch (Throwable e)
     {
@@ -455,8 +413,8 @@ public class MessagingService
       else
       {
         message.setData(decryptedData);
-        message.setDataHash("");
-        message.setEncryptionIV("");
+        message.setDataHash(null);
+        message.setEncryptionIV(null);
 
         return true;
       }
@@ -475,8 +433,9 @@ public class MessagingService
    * @param message the message to delete
    */
   @Override
+  @Transactional
   public void deleteMessage(Message message)
-    throws MessagingServiceException
+    throws MessageNotFoundException, MessagingServiceException
   {
     deleteMessage(message.getId());
   }
@@ -484,20 +443,25 @@ public class MessagingService
   /**
    * Delete the message.
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    */
   @Override
-  public void deleteMessage(String messageId)
-    throws MessagingServiceException
+  @Transactional
+  public void deleteMessage(UUID messageId)
+    throws MessageNotFoundException, MessagingServiceException
   {
-    String deleteMessageSQL = "DELETE FROM messaging.messages WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteMessageSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(messageId));
+      if (!messageRepository.existsById(messageId))
+      {
+        throw new MessageNotFoundException(messageId);
+      }
 
-      statement.executeUpdate();
+      messageRepository.deleteById(messageId);
+    }
+    catch (MessageNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -509,19 +473,26 @@ public class MessagingService
   /**
    * Delete the message part.
    *
-   * @param messagePartId the ID used to uniquely identify the message part
+   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message part
    */
-  public void deleteMessagePart(String messagePartId)
-    throws MessagingServiceException
+  @Override
+  @Transactional
+  public void deleteMessagePart(UUID messagePartId)
+    throws MessagePartNotFoundException, MessagingServiceException
   {
-    String deleteMessagePartSQL = "DELETE FROM messaging.message_parts WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteMessagePartSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(messagePartId));
+      if (!messagePartRepository.existsById(messagePartId))
+      {
+        throw new MessagePartNotFoundException(messagePartId);
+      }
 
-      statement.executeUpdate();
+      messagePartRepository.deleteById(messagePartId);
+    }
+    catch (MessagePartNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -533,20 +504,16 @@ public class MessagingService
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    */
   @Override
-  public void deleteMessagePartsForMessage(String messageId)
+  @Transactional
+  public void deleteMessagePartsForMessage(UUID messageId)
     throws MessagingServiceException
   {
-    String deleteMessagePartsForMessageSQL = "DELETE FROM messaging.message_parts WHERE msg_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteMessagePartsForMessageSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(messageId));
-
-      statement.executeUpdate();
+      messagePartRepository.deleteMessagePartsForMessage(messageId);
     }
     catch (Throwable e)
     {
@@ -559,12 +526,12 @@ public class MessagingService
    * Derive the user-device encryption key.
    *
    * @param username the username uniquely identifying the user e.g. test1
-   * @param deviceId the ID used to uniquely identify the device
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the user-device encryption key
    */
   @Override
-  public byte[] deriveUserDeviceEncryptionKey(String username, String deviceId)
+  public byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
     throws MessagingServiceException
   {
     try
@@ -665,34 +632,30 @@ public class MessagingService
   /**
    * Retrieve the message.
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
-   * @return the message or <code>null</code> if the message could not be found
+   * @return the message
    */
   @Override
-  public Message getMessage(String messageId)
-    throws MessagingServiceException
+  public Message getMessage(UUID messageId)
+    throws MessageNotFoundException, MessagingServiceException
   {
-    String getMessagSQL = "SELECT id, username, device_id, type_id, correlation_id, priority, "
-        + "status, created, persisted, updated, send_attempts, process_attempts, download_attempts, "
-        + "lock_name, last_processed, data FROM messaging.messages WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getMessagSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(messageId));
+      Optional<Message> message = messageRepository.findById(messageId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (message.isPresent())
       {
-        if (rs.next())
-        {
-          return buildMessageFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
+        return message.get();
       }
+      else
+      {
+        throw new MessageNotFoundException(messageId);
+      }
+    }
+    catch (MessageNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -704,7 +667,7 @@ public class MessagingService
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
@@ -712,61 +675,25 @@ public class MessagingService
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForAssembly(String messageId, String lockName)
+  public List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
     throws MessagingServiceException
   {
-    String getMessagePartsQueuedForAssemblySQL = "SELECT id, part_no, total_parts, send_attempts, "
-        + "download_attempts, status, persisted, updated, msg_id, msg_username, msg_device_id, "
-        + "msg_type_id, msg_correlation_id, msg_priority, msg_created, msg_data_hash, "
-        + "msg_encryption_iv, msg_checksum, lock_name, data FROM messaging.message_parts "
-        + "WHERE status=? AND msg_id=? ORDER BY part_no FOR UPDATE";
-
-    String lockMessagePartSQL =
-        "UPDATE messaging.message_parts SET status=?, lock_name=?, updated=? WHERE id=?";
-
     try
     {
-      List<MessagePart> messageParts = new ArrayList<>();
+      List<MessagePart> messageParts =
+          messagePartRepository.findMessagePartsQueuedForAssemblyForMessageForWrite(messageId);
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-            getMessagePartsQueuedForAssemblySQL))
+      for (MessagePart messagePart : messageParts)
       {
-        statement.setInt(1, MessagePartStatus.QUEUED_FOR_ASSEMBLY.getCode());
-        statement.setObject(2, UUID.fromString(messageId));
+        LocalDateTime when = LocalDateTime.now();
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          while (rs.next())
-          {
-            messageParts.add(buildMessagePartFromResultSet(rs));
-          }
-        }
+        messagePartRepository.lockMessagePartForAssembly(messagePart.getId(), instanceName, when);
 
-        for (MessagePart messagePart : messageParts)
-        {
-          LocalDateTime updated = LocalDateTime.now();
+        entityManager.detach(messagePart);
 
-          messagePart.setStatus(MessagePartStatus.ASSEMBLING);
-          messagePart.setLockName(lockName);
-          messagePart.setUpdated(updated);
-
-          try (PreparedStatement updateStatement = connection.prepareStatement(lockMessagePartSQL))
-          {
-            updateStatement.setInt(1, MessagePartStatus.ASSEMBLING.getCode());
-            updateStatement.setString(2, lockName);
-            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
-            updateStatement.setObject(4, UUID.fromString(messagePart.getId()));
-
-            if (updateStatement.executeUpdate() != 1)
-            {
-              throw new MessagingServiceException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockMessagePartSQL));
-            }
-          }
-        }
+        messagePart.setStatus(MessagePartStatus.ASSEMBLING);
+        messagePart.setLockName(lockName);
+        messagePart.setUpdated(when);
       }
 
       return messageParts;
@@ -784,96 +711,55 @@ public class MessagingService
    * device.
    *
    * @param username the username identifying the user
-   * @param deviceId the ID used to uniquely identify the device
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the message parts that have been queued for download by a particular remote device
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
-  public List<MessagePart> getMessagePartsQueuedForDownload(String username, String deviceId)
+  public List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
     throws MessagingServiceException
   {
-    String getMessagePartsQueuedForDownloadSQL = "SELECT id, part_no, total_parts, send_attempts, "
-        + "download_attempts, status, persisted, updated, msg_id, msg_username, msg_device_id, "
-        + "msg_type_id, msg_correlation_id, msg_priority, msg_created, msg_data_hash, "
-        + "msg_encryption_iv, msg_checksum, lock_name, data FROM messaging.message_parts "
-        + "WHERE status=? AND msg_username=? AND msg_device_id=? ORDER BY part_no "
-        + "FETCH FIRST 3 ROWS ONLY FOR UPDATE";
-
-    String lockMessagePartForDownloadSQL = "UPDATE messaging.message_parts "
-        + "SET status=?, lock_name=?, updated=?, download_attempts=download_attempts+1 WHERE id=?";
-
     try
     {
-      List<MessagePart> messageParts = new ArrayList<>();
+      PageRequest pageRequest = PageRequest.of(0, NUMBER_OF_MESSAGE_PARTS_TO_DOWNLOAD);
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-            getMessagePartsQueuedForDownloadSQL))
+      /*
+       * First check if we already have message parts locked for downloading for this device, if
+       * so update the lock and return these message parts. This handles the situation where a
+       * device attempted to download message parts previously and failed leaving these message
+       * parts locked in a "Downloading" state.
+       */
+      List<MessagePart> messageParts =
+          messagePartRepository.findMessagePartsWithStatusForUserAndDeviceForWrite(MessagePartStatus
+          .DOWNLOADING, username, deviceId, pageRequest);
+
+      if (messageParts.size() == 0)
       {
-        /*
-         * First check if we already have message parts locked for downloading for this device, if
-         * so update the lock and return these message parts. This handles the situation where a
-         * device attempted to download message parts previously and failed leaving these message
-         * parts locked in a "Downloading" state.
-         */
-        statement.setInt(1, MessagePartStatus.DOWNLOADING.getCode());
-        statement.setString(2, username);
-        statement.setString(3, deviceId);
+        messageParts = messagePartRepository.findMessagePartsWithStatusForUserAndDeviceForWrite(
+            MessagePartStatus.QUEUED_FOR_DOWNLOAD, username, deviceId, pageRequest);
+      }
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          while (rs.next())
-          {
-            messageParts.add(buildMessagePartFromResultSet(rs));
-          }
-        }
+//    messageParts = messagePartRepository.findAll();
+//
+//    for (MessagePart messagePart : messageParts)
+//    {
+//      System.out.println(messagePart.toString());
+//    }
 
-        /*
-         * If we did not find message parts already locked for downloading then retrieve the message
-         * parts that are "QueuedForDownload" for the device.
-         */
-        if (messageParts.size() == 0)
-        {
-          statement.setInt(1, MessagePartStatus.QUEUED_FOR_DOWNLOAD.getCode());
-          statement.setString(2, username);
-          statement.setObject(3, UUID.fromString(deviceId));
+      for (MessagePart messagePart : messageParts)
+      {
+        LocalDateTime when = LocalDateTime.now();
 
-          try (ResultSet rs = statement.executeQuery())
-          {
-            while (rs.next())
-            {
-              messageParts.add(buildMessagePartFromResultSet(rs));
-            }
-          }
-        }
+        messagePartRepository.lockMessagePartForDownload(messagePart.getId(), instanceName, when);
 
-        for (MessagePart messagePart : messageParts)
-        {
-          LocalDateTime updated = LocalDateTime.now();
+        entityManager.detach(messagePart);
 
-          messagePart.setStatus(MessagePartStatus.DOWNLOADING);
-          messagePart.setLockName(instanceName);
-          messagePart.setUpdated(updated);
-          messagePart.setDownloadAttempts(messagePart.getDownloadAttempts() + 1);
-
-          try (PreparedStatement updateStatement = connection.prepareStatement(
-              lockMessagePartForDownloadSQL))
-          {
-            updateStatement.setInt(1, MessagePartStatus.DOWNLOADING.getCode());
-            updateStatement.setString(2, instanceName);
-            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
-            updateStatement.setObject(4, UUID.fromString(messagePart.getId()));
-
-            if (updateStatement.executeUpdate() != 1)
-            {
-              throw new MessagingServiceException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockMessagePartForDownloadSQL));
-            }
-          }
-        }
+        messagePart.setStatus(MessagePartStatus.DOWNLOADING);
+        messagePart.setLockName(instanceName);
+        messagePart.setUpdated(when);
+        messagePart.incrementDownloadAttempts();
       }
 
       return messageParts;
@@ -890,7 +776,7 @@ public class MessagingService
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
    * @param username the username identifying the user
-   * @param deviceId the ID used to uniquely identify the device
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
    *         device
@@ -898,103 +784,62 @@ public class MessagingService
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
-  public List<Message> getMessagesQueuedForDownload(String username, String deviceId)
+  public List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
     throws MessagingServiceException
   {
-    String getMessagesQueuedForDownloadSQL = "SELECT id, username, device_id, type_id, "
-        + "correlation_id, priority, status, created, persisted, updated, send_attempts, "
-        + "process_attempts, download_attempts, lock_name, last_processed, data "
-        + "FROM messaging.messages WHERE status=? AND username=? AND device_id=? ORDER BY created "
-        + "FETCH FIRST 3 ROWS ONLY FOR UPDATE";
-
-    String lockMessageForDownloadSQL = "UPDATE messaging.messages "
-        + "SET status=?, lock_name=?, updated=?, download_attempts=download_attempts+1 WHERE id=?";
-
     try
     {
-      List<Message> messages = new ArrayList<>();
+      PageRequest pageRequest = PageRequest.of(0, NUMBER_OF_MESSAGES_TO_DOWNLOAD);
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getMessagesQueuedForDownloadSQL))
+      /*
+       * First check if we already have messages locked for downloading for the user-device
+       * combination, if so update the lock and return these messages. This handles the situation
+       * where a device attempted to download messages previously and failed leaving these
+       * messages locked in a "Downloading" state.
+       */
+      List<Message> messages = messageRepository.findMessagesWithStatusForUserAndDeviceForWrite(
+          MessageStatus.DOWNLOADING, username, deviceId, pageRequest);
+
+      if (messages.size() == 0)
       {
-        /*
-         * First check if we already have messages locked for downloading for the user-device
-         * combination, if so update the lock and return these messages. This handles the situation
-         * where a device attempted to download messages previously and failed leaving these
-         * messages locked in a "Downloading" state.
-         */
-        statement.setInt(1, MessageStatus.DOWNLOADING.getCode());
-        statement.setString(2, username);
-        statement.setObject(3, deviceId);
-
-        try (ResultSet rs = statement.executeQuery())
-        {
-          while (rs.next())
-          {
-            Message message = buildMessageFromResultSet(rs);
-
-            if (!StringUtils.isEmpty(message.getLockName()))
-            {
-              if (!message.getLockName().equals(instanceName))
-              {
-                if (logger.isDebugEnabled())
-                {
-                  logger.debug(String.format(
-                      "The message (%s) that was originally locked for download using the lock "
-                      + "name (%s) will now be locked for download using the lock name (%s)",
-                      message.getId(), message.getLockName(), instanceName));
-                }
-              }
-            }
-
-            messages.add(message);
-          }
-        }
-
         /*
          * If we did not find messages already locked for downloading then retrieve the messages
          * that are "QueuedForDownload" for the user-device combination.
          */
-        if (messages.size() == 0)
-        {
-          statement.setInt(1, MessageStatus.QUEUED_FOR_DOWNLOAD.getCode());
-          statement.setString(2, username);
-          statement.setObject(3, deviceId);
+        messages = messageRepository.findMessagesWithStatusForUserAndDeviceForWrite(MessageStatus
+            .QUEUED_FOR_DOWNLOAD, username, deviceId, pageRequest);
+      }
 
-          try (ResultSet rs = statement.executeQuery())
+      /*
+       * Ensure each message is locked correctly with the status "Downloading" and increment the
+       * download attempts.
+       */
+      for (Message message : messages)
+      {
+        if (!StringUtils.isEmpty(message.getLockName()))
+        {
+          if (!message.getLockName().equals(instanceName))
           {
-            while (rs.next())
+            if (logger.isDebugEnabled())
             {
-              messages.add(buildMessageFromResultSet(rs));
+              logger.debug(String.format(
+                  "The message (%s) that was originally locked for download using the lock "
+                  + "name (%s) will now be locked for download using the lock name (%s)",
+                  message.getId(), message.getLockName(), instanceName));
             }
           }
         }
 
-        for (Message message : messages)
-        {
-          LocalDateTime updated = LocalDateTime.now();
+        LocalDateTime when = LocalDateTime.now();
 
-          message.setStatus(MessageStatus.DOWNLOADING);
-          message.setLockName(instanceName);
-          message.setUpdated(updated);
-          message.setDownloadAttempts(message.getDownloadAttempts() + 1);
+        messageRepository.lockMessageForDownload(message.getId(), instanceName, when);
 
-          try (PreparedStatement updateStatement = connection.prepareStatement(
-              lockMessageForDownloadSQL))
-          {
-            updateStatement.setInt(1, MessageStatus.DOWNLOADING.getCode());
-            updateStatement.setString(2, instanceName);
-            updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
-            updateStatement.setObject(4, message.getId());
+        entityManager.detach(message);
 
-            if (updateStatement.executeUpdate() != 1)
-            {
-              throw new MessagingServiceException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  lockMessageForDownloadSQL));
-            }
-          }
-        }
+        message.incrementDownloadAttempts();
+        message.setLockName(instanceName);
+        message.setStatus(MessageStatus.DOWNLOADING);
+        message.setUpdated(when);
       }
 
       return messages;
@@ -1020,60 +865,39 @@ public class MessagingService
   public Message getNextMessageQueuedForProcessing()
     throws MessagingServiceException
   {
-    String getNextMessageForProcessingSQL = "SELECT id, username, device_id, type_id, "
-        + "correlation_id, priority, status, created, persisted, updated, send_attempts, "
-        + "process_attempts, download_attempts, lock_name, last_processed, data "
-        + "FROM messaging.messages "
-        + "WHERE status=? AND (last_processed<? OR last_processed IS NULL) "
-        + "ORDER BY updated FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    String lockMessageSQL =
-        "UPDATE messaging.messages SET status=?, lock_name=?, updated=? WHERE id=?";
-
     try
     {
-      Message message = null;
+      LocalDateTime processedBefore = LocalDateTime.now();
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getNextMessageForProcessingSQL))
+      processedBefore = processedBefore.minus(processingRetryDelay, ChronoUnit.MILLIS);
+
+      PageRequest pageRequest = PageRequest.of(0, 1);
+
+      List<Message> messages = messageRepository.findMessagesQueuedForProcessingForWrite(
+          processedBefore, pageRequest);
+
+      if (messages.size() > 0)
       {
-        Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
-            - processingRetryDelay);
+        Message message = messages.get(0);
 
-        statement.setInt(1, MessageStatus.QUEUED_FOR_PROCESSING.getCode());
-        statement.setTimestamp(2, processedBefore);
+        LocalDateTime when = LocalDateTime.now();
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          if (rs.next())
-          {
-            LocalDateTime updated = LocalDateTime.now();
+        messageRepository.lockMessageForProcessing(message.getId(), instanceName, when);
 
-            message = buildMessageFromResultSet(rs);
+        entityManager.detach(message);
 
-            message.setStatus(MessageStatus.PROCESSING);
-            message.setLockName(instanceName);
-            message.setUpdated(updated);
+        message.setLockName(instanceName);
+        message.setStatus(MessageStatus.PROCESSING);
+        message.incrementProcessAttempts();
+        message.setLastProcessed(when);
+        message.setUpdated(when);
 
-            try (PreparedStatement updateStatement = connection.prepareStatement(lockMessageSQL))
-            {
-              updateStatement.setInt(1, MessageStatus.PROCESSING.getCode());
-              updateStatement.setString(2, instanceName);
-              updateStatement.setTimestamp(3, Timestamp.valueOf(updated));
-              updateStatement.setObject(4, message.getId());
-
-              if (updateStatement.executeUpdate() != 1)
-              {
-                throw new MessagingServiceException(String.format(
-                    "No rows were affected as a result of executing the SQL statement (%s)",
-                    lockMessageSQL));
-              }
-            }
-          }
-        }
+        return message;
       }
-
-      return message;
+      else
+      {
+        return null;
+      }
     }
     catch (Throwable e)
     {
@@ -1083,51 +907,11 @@ public class MessagingService
   }
 
   /**
-   * Increment the processing attempts for the message.
-   *
-   * @param message the message whose processing attempts should be incremented
-   */
-  @Override
-  public void incrementMessageProcessingAttempts(Message message)
-    throws MessagingServiceException
-  {
-    String incrementMessageProcessingAttemptsSQL = "UPDATE messaging.messages "
-        + "SET process_attempts=process_attempts + 1, updated=?, last_processed=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          incrementMessageProcessingAttemptsSQL))
-    {
-      LocalDateTime currentTime = LocalDateTime.now();
-
-      statement.setTimestamp(1, Timestamp.valueOf(currentTime));
-      statement.setTimestamp(2, Timestamp.valueOf(currentTime));
-      statement.setObject(3, message.getId());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            incrementMessageProcessingAttemptsSQL));
-      }
-
-      message.setProcessAttempts(message.getProcessAttempts() + 1);
-      message.setLastProcessed(currentTime);
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(String.format(
-          "Failed to increment the processing attempts for the message (%s)", message.getId()), e);
-    }
-  }
-
-  /**
    * Should the specified message be archived?
    *
    * @param message the message
    *
-   * @return <code>true</code> if a message with the specified type information should be archived
-   *         or <code>false</code> otherwise
+   * @return <code>true</code> if the message should be archived or <code>false</code> otherwise
    */
   @Override
   public boolean isArchivableMessage(Message message)
@@ -1152,26 +936,18 @@ public class MessagingService
   /**
    * Has the message already been archived?
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *         otherwise
    */
   @Override
-  public boolean isMessageArchived(String messageId)
+  public boolean isMessageArchived(UUID messageId)
     throws MessagingServiceException
   {
-    String isMessageArchivedSQL = "SELECT id FROM messaging.archived_messages WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(isMessageArchivedSQL))
+    try
     {
-      statement.setObject(1, messageId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
+      return archivedMessageRepository.existsById(messageId);
     }
     catch (Throwable e)
     {
@@ -1183,26 +959,20 @@ public class MessagingService
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param messagePartId the ID used to uniquely identify the message part
+   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message part
    *
-   * @return <code>true</code> if the message part has already been queued for assemble or
+   * @return <code>true</code> if the message part has already been queued for assembly or
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean isMessagePartQueuedForAssembly(String messagePartId)
+  public boolean isMessagePartQueuedForAssembly(UUID messagePartId)
     throws MessagingServiceException
   {
-    String isMessagePartQueuedForAssemblySQL = "SELECT id FROM messaging.message_parts WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(isMessagePartQueuedForAssemblySQL))
+    try
     {
-      statement.setObject(1, messagePartId);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
+      return messagePartRepository.existsByIdAndStatus(messagePartId, MessagePartStatus
+          .QUEUED_FOR_ASSEMBLY);
     }
     catch (Throwable e)
     {
@@ -1210,6 +980,19 @@ public class MessagingService
           "Failed to check whether the message part (%s) is queued for assembly", messagePartId),
           e);
     }
+  }
+
+  /**
+   * Should the specified message be be processed securely?
+   *
+   * @param message the message
+   *
+   * @return <code>true</code> if the message is secure or <code>false</code> otherwise
+   */
+  @Override
+  public boolean isSecureMessage(Message message)
+  {
+    return isSecureMessage(message.getTypeId());
   }
 
   /**
@@ -1232,6 +1015,7 @@ public class MessagingService
    *
    * @return the response message or <code>null</code> if no response message exists
    */
+  @Override
   public Message processMessage(Message message)
     throws MessagingServiceException
   {
@@ -1266,37 +1050,22 @@ public class MessagingService
    *
    * @param message the message to queue
    */
+  @Override
+  @Transactional
   public void queueMessageForDownload(Message message)
     throws MessagingServiceException
   {
-    // Update the status of the message to indicate that it is queued for sending
-    message.setStatus(MessageStatus.QUEUED_FOR_DOWNLOAD);
-
     try
     {
       if (message.getData().length <= Message.MAX_ASYNC_MESSAGE_SIZE)
       {
+        // Update the status of the message to indicate that it is queued for sending
+        message.setStatus(MessageStatus.QUEUED_FOR_DOWNLOAD);
+
         createMessage(message);
       }
       else
       {
-        /*
-         * NOTE: The message parts are not encrypted. Since asynchronous messages should ALWAYS be
-         *       encrypted the original message needs to be encrypted BEFORE it is queued for
-         *       download and split up into a number of message parts.
-         */
-        if (!message.isEncrypted())
-        {
-          if (!encryptMessage(message))
-          {
-            throw new MessagingServiceException(String.format(
-                "Failed to process the asynchronous message (%s) with type (%s) that exceeds the "
-                + "maximum asynchronous message size (%d) and must be encrypted prior to being "
-                + "queued for download", message.getId(), message.getTypeId(), Message
-                .MAX_ASYNC_MESSAGE_SIZE));
-          }
-        }
-
         // Calculate the hash for the message data to use as the message checksum
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
@@ -1361,11 +1130,45 @@ public class MessagingService
     archiveMessage(message);
   }
 
+
+
+
+  /**
+   * Queue the specified message for processing and process the message using the Background
+   * Message Processor.
+   *
+   * @param message the message to queue
+   */
+  @Override
+  @Transactional
+  public void queueMessageForProcessingAndProcess(Message message)
+    throws MessagingServiceException
+  {
+    /*
+     * Queue the message for processing in a new transaction so it is available to the
+     * Background Message Processor, which will be triggered asynchronously in a different thread.
+     */
+    self.queueMessageForProcessing(message);
+
+    // Trigger the Background Message Processor to process the message that was queued
+    try
+    {
+      applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to trigger the Background Message Processor", e);
+    }
+  }
+
+
   /**
    * Queue the specified message for processing.
    *
    * @param message the message to queue
    */
+  @Override
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessageForProcessing(Message message)
     throws MessagingServiceException
   {
@@ -1374,16 +1177,17 @@ public class MessagingService
 
     try
     {
+      // Create the message
       createMessage(message);
+
+      // Archive the message
+      archiveMessage(message);
     }
     catch (Throwable e)
     {
       throw new MessagingServiceException(String.format(
           "Failed to queue the message (%s) for processing", message.getId()), e);
     }
-
-    // Archive the message
-    archiveMessage(message);
 
     if (logger.isDebugEnabled())
     {
@@ -1392,17 +1196,6 @@ public class MessagingService
 
       logger.debug(message.toString());
     }
-
-    // Inform the Background Message Processor that a new message has been queued for processing
-    try
-    {
-      applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
-    }
-    catch (Throwable e)
-    {
-      logger.error(String.format("Failed to invoke the Background Message Processor to process "
-          + "the message (%s) that was queued for processing", message.getId()), e);
-    }
   }
 
   /**
@@ -1410,12 +1203,11 @@ public class MessagingService
    *
    * @param messagePart the message part to queue
    */
+  @Override
+  @Transactional
   public void queueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingServiceException
   {
-    // Update the status of the message part to indicate that it is queued for assembly
-    messagePart.setStatus(MessagePartStatus.QUEUED_FOR_ASSEMBLY);
-
     try
     {
       // Verify that the message has not already been queued for processing
@@ -1431,6 +1223,9 @@ public class MessagingService
       // Check that we have not already received and queued this message part for assembly
       if (!isMessagePartQueuedForAssembly(messagePart.getId()))
       {
+        // Update the status of the message part to indicate that it is queued for assembly
+        messagePart.setStatus(MessagePartStatus.QUEUED_FOR_ASSEMBLY);
+
         createMessagePart(messagePart);
       }
     }
@@ -1490,30 +1285,12 @@ public class MessagingService
 
         Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUsername(),
             messagePart.getMessageDeviceId(), messagePart.getMessageTypeId(),
-            messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(), MessageStatus
-            .INITIALIZED, messagePart.getMessageCreated(), null, null, 0, 0, 0, null, null,
-            reconstructedData, messagePart.getMessageDataHash(),
+            messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(),
+            messagePart.getMessageCreated(), reconstructedData, messagePart.getMessageDataHash(),
             messagePart.getMessageEncryptionIV());
 
-        if (decryptMessage(message))
-        {
-          queueMessageForProcessing(message);
-        }
-        else
-        {
-          // Delete the message parts
-          deleteMessagePartsForMessage(messagePart.getMessageId());
-
-          logger.error(String.format(
-              "Failed to decrypt the reconstructed message (%s) with type (%s) from the user (%s) "
-              + "and device (%s). Found %d bytes of message data with the hash (%s) that was "
-              + "reconstructed from %d message parts. The message will NOT be processed",
-              messagePart.getMessageId(), messagePart.getMessageTypeId(),
-              messagePart.getMessageUsername(), messagePart.getMessageDeviceId(), reconstructedData
-              .length, messageChecksum, messageParts.size()));
-
-          return;
-        }
+        // Queue the message for processing
+        queueMessageForProcessingAndProcess(message);
 
         // Delete the message parts
         deleteMessagePartsForMessage(messagePart.getMessageId());
@@ -1529,25 +1306,23 @@ public class MessagingService
   /**
    * Reset the expired message locks.
    *
-   * @param lockTimeout the lock timeout in seconds
    * @param status      the current status of the messages that have been locked
    * @param newStatus   the new status for the messages that have been unlocked
-   *
-   * @return the number of message locks reset
+   * @param lockTimeout the lock timeout in seconds
    */
   @Override
-  public int resetExpiredMessageLocks(int lockTimeout, MessageStatus status,
-      MessageStatus newStatus)
+  @Transactional
+  public void resetExpiredMessageLocks(MessageStatus status, MessageStatus newStatus,
+      int lockTimeout)
     throws MessagingServiceException
   {
-    String resetExpiredMessageLocksSQL =
-        "UPDATE messaging.messages SET status=?, lock_name=NULL, updated=? "
-        + "WHERE lock_name IS NOT NULL AND status=? AND updated < ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetExpiredMessageLocksSQL))
+    try
     {
-      return resetLocks(lockTimeout, statement, newStatus.getCode(), status.getCode());
+      LocalDateTime lockExpiry = LocalDateTime.now();
+      lockExpiry = lockExpiry.minus(lockTimeout, ChronoUnit.SECONDS);
+
+      messageRepository.resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(status, newStatus,
+          lockExpiry);
     }
     catch (Throwable e)
     {
@@ -1559,25 +1334,23 @@ public class MessagingService
   /**
    * Reset the expired message part locks.
    *
-   * @param lockTimeout the lock timeout in seconds
    * @param status      the current status of the message parts that have been locked
    * @param newStatus   the new status for the message parts that have been unlocked
-   *
-   * @return the number of message part locks reset
+   * @param lockTimeout the lock timeout in seconds
    */
   @Override
-  public int resetExpiredMessagePartLocks(int lockTimeout, MessagePartStatus status,
-      MessagePartStatus newStatus)
+  @Transactional
+  public void resetExpiredMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus,
+      int lockTimeout)
     throws MessagingServiceException
   {
-    String resetExpiredMessagePartLocksSQL =
-        "UPDATE messaging.message_parts SET status=?, lock_name=NULL, updated=? "
-        + "WHERE lock_name IS NOT NULL AND status=? AND updated < ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetExpiredMessagePartLocksSQL))
+    try
     {
-      return resetLocks(lockTimeout, statement, newStatus.getCode(), status.getCode());
+      LocalDateTime lockExpiry = LocalDateTime.now();
+      lockExpiry = lockExpiry.minus(lockTimeout, ChronoUnit.SECONDS);
+
+      messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndExpiredLocks(status,
+          newStatus, lockExpiry);
     }
     catch (Throwable e)
     {
@@ -1592,25 +1365,16 @@ public class MessagingService
    *
    * @param status    the current status of the messages that have been locked
    * @param newStatus the new status for the messages that have been unlocked
-   *
-   * @return the number of messages whose locks were reset
    */
   @Override
-  public int resetMessageLocks(MessageStatus status, MessageStatus newStatus)
+  @Transactional
+  public void resetMessageLocks(MessageStatus status, MessageStatus newStatus)
     throws MessagingServiceException
   {
-    String resetMessageLocksSQL = "UPDATE messaging.messages "
-        + "SET status=?, lock_name=NULL, updated=? WHERE lock_name=? AND status=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetMessageLocksSQL))
+    try
     {
-      statement.setInt(1, newStatus.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setString(3, instanceName);
-      statement.setInt(4, status.getCode());
-
-      return statement.executeUpdate();
+      messageRepository.resetStatusAndLocksForMessagesWithStatusAndLock(status, newStatus,
+          instanceName);
     }
     catch (Throwable e)
     {
@@ -1625,24 +1389,16 @@ public class MessagingService
    *
    * @param status    the current status of the message parts that have been locked
    * @param newStatus the new status for the message parts that have been unlocked
-   *
-   * @return the number of message parts whose locks were reset
    */
   @Override
-  public int resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
+  @Transactional
+  public void resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
     throws MessagingServiceException
   {
-    String resetMessagePartLocksSQL = "UPDATE messaging.message_parts "
-        + "SET status=?, lock_name=NULL WHERE lock_name=? AND status=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetMessagePartLocksSQL))
+    try
     {
-      statement.setInt(1, newStatus.getCode());
-      statement.setString(2, instanceName);
-      statement.setInt(3, status.getCode());
-
-      return statement.executeUpdate();
+      messagePartRepository.resetStatusAndLocksForMessagesWithStatusAndLock(status, newStatus,
+          instanceName);
     }
     catch (Throwable e)
     {
@@ -1655,29 +1411,18 @@ public class MessagingService
   /**
    * Set the status for a message part.
    *
-   * @param messagePartId the ID used to uniquely identify the message part
+   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message part
    * @param status        the new status
    */
   @Override
-  public void setMessagePartStatus(String messagePartId, MessagePartStatus status)
+  @Transactional
+  public void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
     throws MessagingServiceException
   {
-    String setMessagePartStatusSQL =
-        "UPDATE messaging.message_parts SET status=?, updated=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(setMessagePartStatusSQL))
+    try
     {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, UUID.fromString(messagePartId));
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setMessagePartStatusSQL));
-      }
+      messagePartRepository.setMessagePartStatus(messagePartId, status);
     }
     catch (Throwable e)
     {
@@ -1690,28 +1435,17 @@ public class MessagingService
   /**
    * Set the status for a message.
    *
-   * @param messageId the ID used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    * @param status    the new status
    */
   @Override
-  public void setMessageStatus(String messageId, MessageStatus status)
+  @Transactional
+  public void setMessageStatus(UUID messageId, MessageStatus status)
     throws MessagingServiceException
   {
-    String setMessageStatusSQL = "UPDATE messaging.messages SET status=?, updated=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(setMessageStatusSQL))
+    try
     {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, messageId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setMessageStatusSQL));
-      }
+      messageRepository.setMessageStatus(messageId, status);
     }
     catch (Throwable e)
     {
@@ -1728,25 +1462,19 @@ public class MessagingService
    * @param status  the new status for the unlocked message
    */
   @Override
+  @Transactional
   public void unlockMessage(Message message, MessageStatus status)
     throws MessagingServiceException
   {
-    String unlockMessageSQL =
-        "UPDATE messaging.messages SET status=?, updated=?, lock_name=NULL WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(unlockMessageSQL))
+    try
     {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, message.getId());
+      LocalDateTime when = LocalDateTime.now();
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            unlockMessageSQL));
-      }
+      messageRepository.unlockMessage(message.getId(), status, when);
+
+      message.setStatus(status);
+      message.setLockName(null);
+      message.setUpdated(when);
     }
     catch (Throwable e)
     {
@@ -1759,29 +1487,20 @@ public class MessagingService
   /**
    * Unlock a locked message part.
    *
-   * @param messagePartId the ID used to uniquely identify the message part
+   * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message part
    * @param status        the new status for the unlocked message part
    */
   @Override
-  public void unlockMessagePart(String messagePartId, MessagePartStatus status)
+  @Transactional
+  public void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
     throws MessagingServiceException
   {
-    String unlockMessagePartSQL =
-        "UPDATE messaging.message_parts SET status=?, updated=?, lock_name=NULL WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(unlockMessagePartSQL))
+    try
     {
-      statement.setInt(1, status.getCode());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, messagePartId);
+      LocalDateTime when = LocalDateTime.now();
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new MessagingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            unlockMessagePartSQL));
-      }
+      messagePartRepository.unlockMessagePart(messagePartId, status, when);
     }
     catch (Throwable e)
     {
@@ -1789,46 +1508,6 @@ public class MessagingService
           "Failed to unlock and set the status for the message part (%s) to (%s)", messagePartId,
           status.toString()), e);
     }
-  }
-
-  private Message buildMessageFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new Message(rs.getString(1), rs.getString(2),
-        rs.getString(3), rs.getString(4), rs.getString(5),
-        MessagePriority.fromCode(rs.getInt(6)), MessageStatus.fromCode(rs.getInt(7)),
-        (rs.getTimestamp(8) == null)
-        ? null
-        : rs.getTimestamp(8).toLocalDateTime(),
-        (rs.getTimestamp(9) == null)
-        ? null
-        : rs.getTimestamp(9).toLocalDateTime(),
-        (rs.getTimestamp(10) == null)
-        ? null
-        : rs.getTimestamp(10).toLocalDateTime(), rs.getInt(11), rs.getInt(12), rs.getInt(13),
-            rs.getString(14),
-        (rs.getTimestamp(15) == null)
-        ? null
-        : rs.getTimestamp(15).toLocalDateTime(), rs.getBytes(16), "", "");
-  }
-
-  private MessagePart buildMessagePartFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new MessagePart(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(
-        4), rs.getInt(5), MessagePartStatus.fromCode(rs.getInt(6)),
-        (rs.getTimestamp(7) == null)
-        ? null
-        : rs.getTimestamp(7).toLocalDateTime(),
-        (rs.getTimestamp(8) == null)
-        ? null
-        : rs.getTimestamp(8).toLocalDateTime(), rs.getString(9), rs.getString(10),
-            rs.getString(11), rs.getString(12),
-            rs.getString(13), MessagePriority.fromCode(rs.getInt(14)),
-        (rs.getTimestamp(15) == null)
-        ? null
-        : rs.getTimestamp(15).toLocalDateTime(), rs.getString(16), rs.getString(17), rs.getString(
-            18), rs.getString(19), rs.getBytes(20));
   }
 
   /**
@@ -1924,13 +1603,13 @@ public class MessagingService
   /**
    * Should a message with the specified type be archived?
    *
-   * @param typeId the ID used to uniquely identify the message
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *               type
    *
    * @return <code>true</code> if a message with the specified type should be archived or
    *         <code>false</code> otherwise
    */
-  private boolean isArchivableMessage(String typeId)
+  private boolean isArchivableMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
@@ -1949,13 +1628,13 @@ public class MessagingService
   /**
    * Can a message with the specified type be processed asynchronously?
    *
-   * @param typeId the ID used to uniquely identify the message
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed asynchronously
    *         or <code>false</code> otherwise
    */
-  private boolean isAsynchronousMessage(String typeId)
+  private boolean isAsynchronousMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
@@ -1972,15 +1651,40 @@ public class MessagingService
   }
 
   /**
+   * Should a message with the specified type be processed securely?
+   *
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   *               type
+   *
+   * @return <code>true</code> if a message with the specified type should be processed securely or
+   *         <code>false</code> otherwise
+   */
+  private boolean isSecureMessage(UUID typeId)
+  {
+    // TODO: Add caching of this check
+
+    // Check if any of the configured handlers required secure processing of the message type
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
+    {
+      if (messageHandlerConfig.isSecure(typeId))
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Can a message with the specified type be processed synchronously?
    *
-   * @param typeId the ID used to uniquely identify the message
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed synchronously
    *         or <code>false</code> otherwise
    */
-  private boolean isSynchronousMessage(String typeId)
+  private boolean isSynchronousMessage(UUID typeId)
   {
     // TODO: Add caching of this check
 
@@ -2060,16 +1764,17 @@ public class MessagingService
 
             for (Element messageElement : messageElements)
             {
-              String messageType = messageElement.getAttribute("type");
+              UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
               boolean isSynchronous = messageElement.getAttribute("isSynchronous").equalsIgnoreCase(
                   "Y");
               boolean isAsynchronous = messageElement.getAttribute("isAsynchronous")
                   .equalsIgnoreCase("Y");
+              boolean isSecure = messageElement.getAttribute("isSecure").equalsIgnoreCase("Y");
               boolean isArchivable = messageElement.getAttribute("isArchivable").equalsIgnoreCase(
                   "Y");
 
               messageHandlerConfig.addMessageConfig(messageType, isSynchronous, isAsynchronous,
-                  isArchivable);
+                  isSecure, isArchivable);
             }
           }
 
@@ -2081,17 +1786,5 @@ public class MessagingService
     {
       throw new MessagingServiceException("Failed to read the messaging configuration", e);
     }
-  }
-
-  private int resetLocks(int lockTimeout, PreparedStatement statement, int newStatusCode,
-      int statusCode)
-    throws SQLException
-  {
-    statement.setInt(1, newStatusCode);
-    statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-    statement.setInt(3, statusCode);
-    statement.setTimestamp(4, new Timestamp(System.currentTimeMillis() - (lockTimeout * 1000L)));
-
-    return statement.executeUpdate();
   }
 }

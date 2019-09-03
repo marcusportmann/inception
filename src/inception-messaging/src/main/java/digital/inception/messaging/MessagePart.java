@@ -18,10 +18,18 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
+import digital.inception.core.xml.LocalDateTimeAdapter;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -29,12 +37,38 @@ import java.time.LocalDateTime;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import javax.validation.constraints.NotNull;
+
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 /**
  * The <code>MessagePart</code> class holds the information for a message part.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@ApiModel(value = "MessagePart")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
+    "updated", "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
+    "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
+    "messageEncryptionIV", "messageChecksum", "lockName", "data" })
+@XmlRootElement(name = "MessagePart", namespace = "http://messaging.inception.digital")
+@XmlType(name = "MessagePart", namespace = "http://messaging.inception.digital",
+    propOrder = { "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
+        "updated", "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
+        "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
+        "messageEncryptionIV", "messageChecksum", "lockName", "data" })
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "messaging", name = "message_parts")
+@SuppressWarnings({ "WeakerAccess" })
 public class MessagePart
 {
   /**
@@ -45,101 +79,212 @@ public class MessagePart
   /**
    * The binary data for the message part.
    */
+  @ApiModelProperty(value = "The data for the message part", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Data", required = true)
+  @NotNull
+  @Column(name = "data", nullable = false)
   private byte[] data;
 
   /**
    * The number of times that downloading of the message part was attempted.
    */
-  private int downloadAttempts;
+  @ApiModelProperty(
+      value = "The number of times that downloading of the message part was attempted")
+  @JsonProperty
+  @XmlElement(name = "DownloadAttempts")
+  @Column(name = "download_attempts")
+  private Integer downloadAttempts;
 
   /**
-   * The ID used to uniquely identify the message part.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the message part.
    */
-  private String id;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the message part",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The name of the entity that has locked the message part for processing.
    */
+  @ApiModelProperty(
+      value = "The name of the entity that has locked the message part for processing")
+  @JsonProperty
+  @XmlElement(name = "LockName")
+  @Column(name = "lock_name")
+  @Size(min = 1, max = 100)
   private String lockName;
 
   /**
    * The checksum for the original message.
    */
+  @ApiModelProperty(value = "The checksum for the original message", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageChecksum", required = true)
+  @NotNull
+  @Column(name = "msg_checksum", nullable = false)
   private String messageChecksum;
 
   /**
-   * The ID used to correlate the original message.
+   * The optional Universally Unique Identifier (UUID) used to correlate the original message.
    */
-  private String messageCorrelationId;
+  @ApiModelProperty(
+      value = "The optional Universally Unique Identifier (UUID) used to correlate the original message")
+  @JsonProperty
+  @XmlElement(name = "MessageCorrelationId")
+  @Column(name = "msg_correlation_id")
+  private UUID messageCorrelationId;
 
   /**
    * The date and time the original message was created.
    */
+  @ApiModelProperty(value = "The date and time the original message was created", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageCreated", required = true)
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @NotNull
+  @Column(name = "msg_created", nullable = false)
   private LocalDateTime messageCreated;
 
   /**
-   * The hash of the data for the original message.
+   * The hash of the unencrypted data for the original message if the message was encrypted.
    */
+  @ApiModelProperty(
+      value = "The hash of the unencrypted data for the original message if the message was encrypted")
+  @JsonProperty
+  @XmlElement(name = "MessageDataHash")
+  @Column(name = "msg_data_hash")
   private String messageDataHash;
 
   /**
-   * The ID used to uniquely identify the device the original message originated from.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the original
+   * message originated from.
    */
-  private String messageDeviceId;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageDeviceId", required = true)
+  @NotNull
+  @Column(name = "msg_device_id", nullable = false)
+  private UUID messageDeviceId;
 
   /**
    * The base-64 encoded initialization vector for the encryption scheme for the original message.
    */
+  @ApiModelProperty(
+      value = "The base-64 encoded initialization vector for the encryption scheme for the original message")
+  @JsonProperty
+  @XmlElement(name = "MessageEncryptionIV")
+  @Column(name = "msg_encryption_iv")
   private String messageEncryptionIV;
 
   /**
-   * The ID used to uniquely identify the original message.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the original message.
    */
-  private String messageId;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the original message",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageId", required = true)
+  @NotNull
+  @Column(name = "msg_id", nullable = false)
+  private UUID messageId;
 
   /**
    * The priority for the original message.
    */
+  @ApiModelProperty(value = "The priority for the original message", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessagePriority", required = true)
+  @NotNull
+  @Column(name = "msg_priority", nullable = false)
   private MessagePriority messagePriority;
 
   /**
-   * The ID used to uniquely identify the type of the original message.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the type of the original
+   * message.
    */
-  private String messageTypeId;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageTypeId", required = true)
+  @NotNull
+  @Column(name = "msg_type_id", nullable = false)
+  private UUID messageTypeId;
 
   /**
    * The username identifying the user associated with the original message.
    */
+  @ApiModelProperty(
+      value = "The username identifying the user associated with the original message",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MessageUsername", required = true)
+  @NotNull
+  @Column(name = "msg_username", nullable = false)
   private String messageUsername;
 
   /**
    * The number of the message part in the set of message parts for the original message.
    */
+  @ApiModelProperty(
+      value = "The number of the message part in the set of message parts for the original message",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartNo", required = true)
+  @NotNull
+  @Column(name = "part_no", nullable = false)
   private int partNo;
-
-  /**
-   * The date and time the message part was persisted.
-   */
-  private LocalDateTime persisted;
 
   /**
    * The number of times that the sending of the message part was attempted.
    */
-  private int sendAttempts;
+  @ApiModelProperty(
+      value = "The number of times that the sending of the message part was attempted")
+  @JsonProperty
+  @XmlElement(name = "SendAttempts")
+  @Column(name = "send_attempts")
+  private Integer sendAttempts;
 
   /**
    * The message part status e.g. Initialized, Sending, etc
    */
+  @ApiModelProperty(value = "The message part status", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Status", required = true)
+  @NotNull
+  @Column(name = "status", nullable = false)
   private MessagePartStatus status;
 
   /**
    * The total number of parts in the set of message parts for the original message.
    */
+  @ApiModelProperty(
+      value = "The total number of parts in the set of message parts for the original message",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TotalParts", required = true)
+  @NotNull
+  @Column(name = "total_parts", nullable = false)
   private int totalParts;
 
   /**
    * The date and time the message part was last updated.
    */
+  @ApiModelProperty(value = "The date and time the message part was last updated")
+  @JsonProperty
+  @XmlElement(name = "Updated")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "updated")
   private LocalDateTime updated;
 
   /**
@@ -157,18 +302,33 @@ public class MessagePart
   {
     Element rootElement = document.getRootElement();
 
-    this.id = rootElement.getAttributeValue("id");
+    this.id = UUID.fromString(rootElement.getAttributeValue("id"));
     this.partNo = Integer.parseInt(rootElement.getAttributeValue("partNo"));
     this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
-    this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
-    this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
+
+    if (rootElement.hasAttribute("sendAttempts"))
+    {
+      this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
+    }
+
+    if (rootElement.hasAttribute("downloadAttempts"))
+    {
+      this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
+    }
+
     this.status = MessagePartStatus.INITIALIZED;
 
-    this.messageId = rootElement.getAttributeValue("messageId");
+    this.messageId = UUID.fromString(rootElement.getAttributeValue("messageId"));
     this.messageUsername = rootElement.getAttributeValue("messageUsername");
-    this.messageDeviceId = rootElement.getAttributeValue("messageDeviceId");
-    this.messageTypeId = rootElement.getAttributeValue("messageTypeId");
-    this.messageCorrelationId = rootElement.getAttributeValue("messageCorrelationId");
+    this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
+    this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
+
+    if (rootElement.hasAttribute("messageCorrelationId"))
+    {
+      this.messageCorrelationId = UUID.fromString(rootElement.getAttributeValue(
+          "messageCorrelationId"));
+    }
+
     this.messagePriority = MessagePriority.fromCode(Integer.parseInt(rootElement.getAttributeValue(
         "messagePriority")));
 
@@ -185,8 +345,16 @@ public class MessagePart
           messageCreatedAttributeValue, id), e);
     }
 
-    this.messageDataHash = rootElement.getAttributeValue("messageDataHash");
-    this.messageEncryptionIV = rootElement.getAttributeValue("messageEncryptionIV");
+    if (rootElement.hasAttribute("messageDataHash"))
+    {
+      this.messageDataHash = rootElement.getAttributeValue("messageDataHash");
+    }
+
+    if (rootElement.hasAttribute("messageEncryptionIV"))
+    {
+      this.messageEncryptionIV = rootElement.getAttributeValue("messageEncryptionIV");
+    }
+
     this.messageChecksum = rootElement.getAttributeValue("messageChecksum");
 
     this.data = rootElement.getOpaque();
@@ -199,13 +367,16 @@ public class MessagePart
    *                             the original message
    * @param totalParts           the total number of parts in the set of message parts for the
    *                             original message
-   * @param messageId            the ID used to uniquely identify the original message
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the original message
    * @param messageUsername      the username identifying the user associated with the original
    *                             message
-   * @param messageDeviceId      the ID used to uniquely identify the device the original message
-   *                             originated from
-   * @param messageTypeId        the ID used to uniquely identify the type of the original message
-   * @param messageCorrelationId the ID used to correlate the original message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the type of the original message
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
@@ -214,15 +385,14 @@ public class MessagePart
    * @param messageChecksum      the checksum for the original message
    * @param data                 the binary data for the message part
    */
-  public MessagePart(int partNo, int totalParts, String messageId, String messageUsername,
-      String messageDeviceId, String messageTypeId, String messageCorrelationId,
+  public MessagePart(int partNo, int totalParts, UUID messageId, String messageUsername,
+      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
       MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
       String messageEncryptionIV, String messageChecksum, byte[] data)
   {
-    this.id = UUID.randomUUID().toString();
+    this.id = UUID.randomUUID();
     this.partNo = partNo;
     this.totalParts = totalParts;
-    this.sendAttempts = 0;
     this.status = MessagePartStatus.INITIALIZED;
     this.messageId = messageId;
     this.messageUsername = messageUsername;
@@ -240,7 +410,7 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param id                   the ID used to uniquely
+   * @param id                   the Universally Unique Identifier (UUID) used to uniquely
    *                             identify the message part
    * @param partNo               the number of the message part in the set of message parts for
    *                             the original message
@@ -251,15 +421,17 @@ public class MessagePart
    * @param downloadAttempts     the number of times that downloading of the message part was
    *                             attempted
    * @param status               the message part status e.g. Initialized, Sending, etc
-   * @param persisted            the date and time the message part was persisted
    * @param updated              the date and time the message part was last updated
-   * @param messageId            the ID used to uniquely identify the original message
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the original message
    * @param messageUsername      the username identifying the user associated with the original
    *                             message
-   * @param messageDeviceId      the ID used to uniquely identify the device the original message
-   *                             originated from
-   * @param messageTypeId        the ID used to uniquely identify the type of the original message
-   * @param messageCorrelationId the ID used to correlate the original message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
+   *                             identify the type of the original message
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
@@ -270,12 +442,11 @@ public class MessagePart
    *                             processing
    * @param data                 the binary data for the message part
    */
-  public MessagePart(String id, int partNo, int totalParts, int sendAttempts, int downloadAttempts,
-      MessagePartStatus status, LocalDateTime persisted, LocalDateTime updated, String messageId,
-      String messageUsername, String messageDeviceId, String messageTypeId,
-      String messageCorrelationId, MessagePriority messagePriority, LocalDateTime messageCreated,
-      String messageDataHash, String messageEncryptionIV, String messageChecksum, String lockName,
-      byte[] data)
+  public MessagePart(UUID id, int partNo, int totalParts, Integer sendAttempts,
+      Integer downloadAttempts, MessagePartStatus status, LocalDateTime updated, UUID messageId,
+      String messageUsername, UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
+      MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
+      String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
   {
     this.id = id;
     this.partNo = partNo;
@@ -283,7 +454,6 @@ public class MessagePart
     this.sendAttempts = sendAttempts;
     this.downloadAttempts = downloadAttempts;
     this.status = status;
-    this.persisted = persisted;
     this.updated = updated;
     this.messageId = messageId;
     this.messageUsername = messageUsername;
@@ -315,13 +485,11 @@ public class MessagePart
     return rootElement.getName().equals("MessagePart")
         && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("partNo"))
             || (!rootElement.hasAttribute("totalParts")) || (!rootElement.hasAttribute(
-            "sendAttempts")) || (!rootElement.hasAttribute("messageId"))
-            || (!rootElement.hasAttribute("messageUsername")) || (!rootElement.hasAttribute(
-            "messageDeviceId")) || (!rootElement.hasAttribute("messageTypeId"))
-            || (!rootElement.hasAttribute("messageCorrelationId")) || (!rootElement.hasAttribute(
-            "messagePriority")) || (!rootElement.hasAttribute("messageCreated"))
-            || (!rootElement.hasAttribute("messageDataHash")) || (!rootElement.hasAttribute(
-            "messageEncryptionIV")) || (!rootElement.hasAttribute("messageChecksum")));
+            "messageId")) || (!rootElement.hasAttribute("messageUsername"))
+            || (!rootElement.hasAttribute("messageDeviceId")) || (!rootElement.hasAttribute(
+            "messageTypeId")) || (!rootElement.hasAttribute("messagePriority"))
+            || (!rootElement.hasAttribute("messageCreated")) || (!rootElement.hasAttribute(
+            "messageChecksum")));
   }
 
   /**
@@ -339,17 +507,17 @@ public class MessagePart
    *
    * @return the number of times that downloading of the message part was attempted
    */
-  public int getDownloadAttempts()
+  public Integer getDownloadAttempts()
   {
     return downloadAttempts;
   }
 
   /**
-   * Returns the ID used to uniquely identify the message part.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message part.
    *
-   * @return the ID used to uniquely identify the message part
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -375,11 +543,11 @@ public class MessagePart
   }
 
   /**
-   * Returns the ID used to correlate the original message.
+   * Returns the Universally Unique Identifier (UUID) used to correlate the original message.
    *
-   * @return the ID used to correlate the original message
+   * @return the Universally Unique Identifier (UUID) used to correlate the original message
    */
-  public String getMessageCorrelationId()
+  public UUID getMessageCorrelationId()
   {
     return messageCorrelationId;
   }
@@ -395,9 +563,9 @@ public class MessagePart
   }
 
   /**
-   * Returns the hash of the unencrypted data for the original message.
+   * Returns the hash of the unencrypted data for the original message if the message was encrypted.
    *
-   * @return the hash of the unencrypted data for the original message
+   * @return the hash of the unencrypted data for the original message if the message was encrypted
    */
   public String getMessageDataHash()
   {
@@ -405,11 +573,13 @@ public class MessagePart
   }
 
   /**
-   * Returns the ID used to uniquely identify the device the original message originated from
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * original message originated from
    *
-   * @return the ID used to uniquely identify the device the original message originated from
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * original message originated from
    */
-  public String getMessageDeviceId()
+  public UUID getMessageDeviceId()
   {
     return messageDeviceId;
   }
@@ -427,11 +597,12 @@ public class MessagePart
   }
 
   /**
-   * Returns the ID used to uniquely identify the original message.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the original
+   * message.
    *
-   * @return the ID used to uniquely identify the original message
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the original message
    */
-  public String getMessageId()
+  public UUID getMessageId()
   {
     return messageId;
   }
@@ -447,11 +618,13 @@ public class MessagePart
   }
 
   /**
-   * Returns the ID used to uniquely identify the type of the original message.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   * original message.
    *
-   * @return the ID used to uniquely identify the type of the original message
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   * original message
    */
-  public String getMessageTypeId()
+  public UUID getMessageTypeId()
   {
     return messageTypeId;
   }
@@ -477,21 +650,11 @@ public class MessagePart
   }
 
   /**
-   * Returns the date and time the message part was persisted.
-   *
-   * @return the date and time the message part was persisted
-   */
-  public LocalDateTime getPersisted()
-  {
-    return persisted;
-  }
-
-  /**
    * Returns the number of times that the sending of the message part was attempted.
    *
    * @return the number of times that the sending of the message part was attempted
    */
-  public int getSendAttempts()
+  public Integer getSendAttempts()
   {
     return sendAttempts;
   }
@@ -527,6 +690,21 @@ public class MessagePart
   }
 
   /**
+   * Increment the download attempts.
+   */
+  public void incrementDownloadAttempts()
+  {
+    if (downloadAttempts == null)
+    {
+      downloadAttempts = 1;
+    }
+    else
+    {
+      downloadAttempts++;
+    }
+  }
+
+  /**
    * Returns <code>true</code> if the data for the original message is encrypted or
    * <code>false</code> otherwise.
    *
@@ -553,17 +731,17 @@ public class MessagePart
    *
    * @param downloadAttempts the number of times that downloading of the message part was attempted
    */
-  public void setDownloadAttempts(int downloadAttempts)
+  public void setDownloadAttempts(Integer downloadAttempts)
   {
     this.downloadAttempts = downloadAttempts;
   }
 
   /**
-   * Set the ID used to uniquely identify the message part.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message part.
    *
-   * @param id the ID used to uniquely identify the message part
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -589,11 +767,12 @@ public class MessagePart
   }
 
   /**
-   * Set the ID used to correlate the original message.
+   * Set the Universally Unique Identifier (UUID) used to correlate the original message.
    *
-   * @param messageCorrelationId the ID used to correlate the original message
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
    */
-  public void setMessageCorrelationId(String messageCorrelationId)
+  public void setMessageCorrelationId(UUID messageCorrelationId)
   {
     this.messageCorrelationId = messageCorrelationId;
   }
@@ -609,9 +788,10 @@ public class MessagePart
   }
 
   /**
-   * Set the hash of the data for the original message.
+   * Set the hash of the unencrypted data for the original message if the message was encrypted.
    *
-   * @param messageDataHash the hash of the data for the original message
+   * @param messageDataHash the hash of the unencrypted data for the original message if the message
+   *                        was encrypted
    */
   public void setMessageDataHash(String messageDataHash)
   {
@@ -619,12 +799,13 @@ public class MessagePart
   }
 
   /**
-   * Set the ID used to uniquely identify the device the original message originated from.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the original
+   * message originated from.
    *
-   * @param messageDeviceId the ID used to uniquely identify the device the original message
-   *                        originated from
+   * @param messageDeviceId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        device the original message originated from
    */
-  public void setMessageDeviceId(String messageDeviceId)
+  public void setMessageDeviceId(UUID messageDeviceId)
   {
     this.messageDeviceId = messageDeviceId;
   }
@@ -642,11 +823,12 @@ public class MessagePart
   }
 
   /**
-   * Set the ID used to uniquely identify the original message.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the original message.
    *
-   * @param messageId the ID used to uniquely identify the original message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  original message
    */
-  public void setMessageId(String messageId)
+  public void setMessageId(UUID messageId)
   {
     this.messageId = messageId;
   }
@@ -662,11 +844,13 @@ public class MessagePart
   }
 
   /**
-   * Set the ID used to uniquely identify the type of the original message.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the type of the original
+   * message.
    *
-   * @param messageTypeId the ID used to uniquely identify the type of the original message
+   * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of the original message
    */
-  public void setMessageTypeId(String messageTypeId)
+  public void setMessageTypeId(UUID messageTypeId)
   {
     this.messageTypeId = messageTypeId;
   }
@@ -693,21 +877,11 @@ public class MessagePart
   }
 
   /**
-   * Set the date and time the message part was persisted.
-   *
-   * @param persisted the date and time the message part was persisted
-   */
-  public void setPersisted(LocalDateTime persisted)
-  {
-    this.persisted = persisted;
-  }
-
-  /**
    * Set the number of times that the sending of the message part was attempted.
    *
    * @param sendAttempts the number of times that the sending of the message part was attempted
    */
-  public void setSendAttempts(int sendAttempts)
+  public void setSendAttempts(Integer sendAttempts)
   {
     this.sendAttempts = sendAttempts;
   }
@@ -756,24 +930,28 @@ public class MessagePart
     buffer.append(" id=\"").append(id).append("\"");
     buffer.append(" partNo=\"").append(partNo).append("\"");
     buffer.append(" totalParts=\"").append(totalParts).append("\"");
-    buffer.append(" sendAttempts=\"").append(sendAttempts).append("\"");
-    buffer.append(" downloadAttempts=\"").append(downloadAttempts).append("\"");
+
+    if (sendAttempts != null)
+    {
+      buffer.append(" sendAttempts=\"").append(sendAttempts).append("\"");
+    }
+
+    if (downloadAttempts != null)
+    {
+      buffer.append(" downloadAttempts=\"").append(downloadAttempts).append("\"");
+    }
+
     buffer.append(" status=\"").append(status).append("\"");
-
-    if (persisted != null)
-    {
-      buffer.append(" persisted=\"").append(ISO8601Util.fromLocalDateTime(persisted)).append("\"");
-    }
-    else
-    {
-      buffer.append(" persisted=\"Never\"");
-    }
-
     buffer.append(" messageId=\"").append(messageId).append("\"");
     buffer.append(" messageUsername=\"").append(messageUsername).append("\"");
     buffer.append(" messageDeviceId=\"").append(messageDeviceId).append("\"");
     buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
-    buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
+
+    if (messageCorrelationId != null)
+    {
+      buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
+    }
+
     buffer.append(" messagePriority=\"").append(messagePriority).append("\"");
     buffer.append(" messageCreated=\"").append(ISO8601Util.fromLocalDateTime(messageCreated))
         .append("\"");
@@ -795,20 +973,43 @@ public class MessagePart
   {
     Element rootElement = new Element("MessagePart");
 
-    rootElement.setAttribute("id", id);
+    rootElement.setAttribute("id", id.toString());
     rootElement.setAttribute("partNo", Integer.toString(partNo));
     rootElement.setAttribute("totalParts", Integer.toString(totalParts));
-    rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
-    rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
-    rootElement.setAttribute("messageId", messageId);
+
+    if (sendAttempts != null)
+    {
+      rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
+    }
+
+    if (downloadAttempts != null)
+    {
+      rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
+    }
+
+    rootElement.setAttribute("messageId", messageId.toString());
     rootElement.setAttribute("messageUsername", messageUsername);
-    rootElement.setAttribute("messageDeviceId", messageDeviceId);
-    rootElement.setAttribute("messageTypeId", messageTypeId);
-    rootElement.setAttribute("messageCorrelationId", messageCorrelationId);
-    rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.getCode()));
+    rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());
+    rootElement.setAttribute("messageTypeId", messageTypeId.toString());
+
+    if (messageCorrelationId != null)
+    {
+      rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
+    }
+
+    rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.code()));
     rootElement.setAttribute("messageCreated", ISO8601Util.fromLocalDateTime(messageCreated));
-    rootElement.setAttribute("messageDataHash", messageDataHash);
-    rootElement.setAttribute("messageEncryptionIV", messageEncryptionIV);
+
+    if (messageDataHash != null)
+    {
+      rootElement.setAttribute("messageDataHash", messageDataHash);
+    }
+
+    if (messageEncryptionIV != null)
+    {
+      rootElement.setAttribute("messageEncryptionIV", messageEncryptionIV);
+    }
+
     rootElement.setAttribute("messageChecksum", messageChecksum);
     rootElement.addContent(data);
 

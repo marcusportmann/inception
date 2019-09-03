@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagePartDownloadResponse
 {
   /**
@@ -118,7 +118,7 @@ public class MessagePartDownloadResponse
       catch (Throwable e)
       {
         throw new MessagingServiceException(
-            "Failed to parse the WBXML for a message part associated with "
+          "Failed to parse the WBXML for a message part associated with "
             + "the message part download response", e);
       }
     }
@@ -195,9 +195,9 @@ public class MessagePartDownloadResponse
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartDownloadResponse")
-        && (rootElement.getAttributes().size() == 2)
-        && rootElement.hasAttribute("code")
-        && rootElement.hasAttribute("detail");
+      && (rootElement.getAttributes().size() == 2)
+      && rootElement.hasAttribute("code")
+      && rootElement.hasAttribute("detail");
   }
 
   /**

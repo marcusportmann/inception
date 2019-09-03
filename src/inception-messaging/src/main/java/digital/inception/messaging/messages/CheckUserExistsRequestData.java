@@ -27,6 +27,10 @@ import digital.inception.messaging.WbxmlMessageData;
 
 import org.springframework.util.StringUtils;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>CheckUserExistsRequestData</code> class manages the data for a
  * "Check User Exists Request" message.
@@ -40,7 +44,8 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   /**
    * The UUID for the "Check User Exists Request" message.
    */
-  public static final String MESSAGE_TYPE_ID = "cc005e6a-b01b-48eb-98a0-026297be69f3";
+  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
+    "cc005e6a-b01b-48eb-98a0-026297be69f3");
 
   /**
    * The username identifying the user.
@@ -121,8 +126,8 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
     Element rootElement = new Element("CheckUserExistsRequest");
 
     rootElement.addContent(new Element("Username", StringUtils.isEmpty(username)
-        ? ""
-        : username));
+      ? ""
+      : username));
 
     Document document = new Document(rootElement);
 

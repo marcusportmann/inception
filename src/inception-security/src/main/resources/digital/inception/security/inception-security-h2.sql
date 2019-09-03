@@ -80,7 +80,7 @@ COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS
 CREATE TABLE security.users (
   id                UUID          NOT NULL,
   user_directory_id UUID          NOT NULL,
-  username          VARCHAR(4000) NOT NULL,
+  username          VARCHAR(1000) NOT NULL,
   status            INTEGER       NOT NULL,
   first_name        VARCHAR(4000) NOT NULL DEFAULT '',
   last_name         VARCHAR(4000) NOT NULL DEFAULT '',

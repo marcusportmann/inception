@@ -18,19 +18,18 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.*;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>ErrorService</code> class provides the Error Service implementation.
@@ -43,18 +42,26 @@ public class ErrorService
   implements IErrorService
 {
   /**
-   * The data source used to provide connections to the database.
+   * The Error Report Repository.
    */
-  private DataSource dataSource;
+  private ErrorReportRepository errorReportRepository;
+
+  /**
+   * The Error Report Summary Repository.
+   */
+  private ErrorReportSummaryRepository errorReportSummaryRepository;
 
   /**
    * Constructs a new <code>ErrorService</code>.
    *
-   * @param dataSource the data source used to provide connections to the database
+   * @param errorReportRepository the Error Report Repository
+   * @param errorReportSummaryRepository the Error Report Summary Repository
    */
-  public ErrorService(@Qualifier("applicationDataSource") DataSource dataSource)
+  public ErrorService(ErrorReportRepository errorReportRepository,
+      ErrorReportSummaryRepository errorReportSummaryRepository)
   {
-    this.dataSource = dataSource;
+    this.errorReportRepository = errorReportRepository;
+    this.errorReportSummaryRepository = errorReportSummaryRepository;
   }
 
   /**
@@ -67,12 +74,7 @@ public class ErrorService
   public void createErrorReport(ErrorReport errorReport)
     throws ErrorServiceException
   {
-    String createErrorReportSQL = "INSERT INTO error.error_reports (id, application_id, "
-        + "application_version, description, detail, created, who, device_id, feedback, data) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createErrorReportSQL))
+    try
     {
       String description = errorReport.getDescription();
 
@@ -80,6 +82,8 @@ public class ErrorService
       {
         description = description.substring(0, 4000);
       }
+
+      errorReport.setDescription(description);
 
       String detail = StringUtils.isEmpty(errorReport.getDetail())
           ? ""
@@ -90,6 +94,8 @@ public class ErrorService
         detail = detail.substring(0, 4000);
       }
 
+      errorReport.setDetail(detail);
+
       String who = errorReport.getWho();
 
       if ((who != null) && (who.length() > 1000))
@@ -97,12 +103,7 @@ public class ErrorService
         who = who.substring(0, 1000);
       }
 
-      String deviceId = errorReport.getDeviceId();
-
-      if ((deviceId != null) && (deviceId.length() > 50))
-      {
-        deviceId = deviceId.substring(0, 50);
-      }
+      errorReport.setWho(who);
 
       String feedback = errorReport.getFeedback();
 
@@ -111,56 +112,9 @@ public class ErrorService
         feedback = feedback.substring(0, 4000);
       }
 
-      statement.setObject(1, UUID.fromString(errorReport.getId()));
-      statement.setString(2, errorReport.getApplicationId());
-      statement.setString(3, errorReport.getApplicationVersion());
-      statement.setString(4, description);
-      statement.setString(5, detail);
+      errorReport.setFeedback(feedback);
 
-      statement.setTimestamp(6, Timestamp.valueOf(errorReport.getCreated()));
-
-      if (who != null)
-      {
-        statement.setString(7, who);
-      }
-      else
-      {
-        statement.setNull(7, Types.VARCHAR);
-      }
-
-      if (deviceId != null)
-      {
-        statement.setString(8, deviceId);
-      }
-      else
-      {
-        statement.setNull(8, Types.VARCHAR);
-      }
-
-      if (feedback != null)
-      {
-        statement.setString(9, feedback);
-      }
-      else
-      {
-        statement.setNull(9, Types.VARCHAR);
-      }
-
-      if (errorReport.getData() != null)
-      {
-        statement.setString(10, errorReport.getData());
-      }
-      else
-      {
-        statement.setNull(10, Types.BLOB);
-      }
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new ErrorServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createErrorReportSQL));
-      }
+      errorReportRepository.saveAndFlush(errorReport);
     }
     catch (Throwable e)
     {
@@ -172,33 +126,31 @@ public class ErrorService
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the ID used to uniquely identify the error report
+   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      error report
    *
    * @return the error report or <code>null</code> if the error report could not be found
    */
   @Override
-  public ErrorReport getErrorReport(String errorReportId)
-    throws ErrorServiceException
+  public ErrorReport getErrorReport(UUID errorReportId)
+    throws ErrorReportNotFoundException, ErrorServiceException
   {
-    String getErrorReportSQL = "SELECT id, application_id, application_version, description, "
-        + "detail, created, who, device_id, feedback, data FROM error.error_reports WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getErrorReportSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(errorReportId));
+      Optional<ErrorReport> errorReport = errorReportRepository.findById(errorReportId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (errorReport.isPresent())
       {
-        if (rs.next())
-        {
-          return buildErrorReportFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
+        return errorReport.get();
       }
+      else
+      {
+        throw new ErrorReportNotFoundException(errorReportId);
+      }
+    }
+    catch (ErrorReportNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -210,35 +162,33 @@ public class ErrorService
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the ID used to uniquely identify the error report
+   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
    *         found
    */
   @Override
-  public ErrorReportSummary getErrorReportSummary(String errorReportId)
-    throws ErrorServiceException
+  public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
+    throws ErrorReportNotFoundException, ErrorServiceException
   {
-    String getErrorReportSummarySQL =
-        "SELECT id, application_id, application_version, description, created, who, device_id "
-        + "FROM error.error_reports WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getErrorReportSummarySQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(errorReportId));
+      Optional<ErrorReportSummary> errorReportSummary = errorReportSummaryRepository.findById(
+          errorReportId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (errorReportSummary.isPresent())
       {
-        if (rs.next())
-        {
-          return buildErrorReportSummaryFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
+        return errorReportSummary.get();
       }
+      else
+      {
+        throw new ErrorReportNotFoundException(errorReportId);
+      }
+    }
+    catch (ErrorReportNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -259,26 +209,14 @@ public class ErrorService
   public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
     throws ErrorServiceException
   {
-    String getMostRecentErrorReportSummariesSQL =
-        "SELECT id, application_id, application_version, description, created, who, device_id "
-        + "FROM error.error_reports ";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(String.format(
-          "%s ORDER BY created DESC FETCH FIRST %d ROWS ONLY",
-          getMostRecentErrorReportSummariesSQL, maximumNumberOfEntries)))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<ErrorReportSummary> errorReportSummaries = new ArrayList<>();
+      Pageable pageable = PageRequest.of(0, maximumNumberOfEntries, Sort.Direction.DESC, "created");
 
-        while (rs.next())
-        {
-          errorReportSummaries.add(buildErrorReportSummaryFromResultSet(rs));
-        }
+      Page<ErrorReportSummary> errorReportSummaryPage = errorReportSummaryRepository.findAll(
+          pageable);
 
-        return errorReportSummaries;
-      }
+      return errorReportSummaryPage.getContent();
     }
     catch (Throwable e)
     {
@@ -293,45 +231,16 @@ public class ErrorService
    * @return the total number of error reports
    */
   @Override
-  public int getNumberOfErrorReports()
+  public long getNumberOfErrorReports()
     throws ErrorServiceException
   {
-    String getNumberOfErrorReportsSQL = "SELECT COUNT(id) FROM error.error_reports";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfErrorReportsSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
+      return errorReportRepository.count();
     }
     catch (Throwable e)
     {
       throw new ErrorServiceException("Failed to retrieve the total number of error reports", e);
     }
-  }
-
-  private ErrorReport buildErrorReportFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new ErrorReport(rs.getString(1), rs.getString(2), rs.getString(3),
-        rs.getString(4), rs.getString(5), rs.getTimestamp(6).toLocalDateTime(), rs.getString(7),
-        rs.getString(8), rs.getString(9), rs.getString(10));
-  }
-
-  private ErrorReportSummary buildErrorReportSummaryFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    return new ErrorReportSummary(rs.getString(1), rs.getString(2), rs.getString(
-        3), rs.getString(4), rs.getTimestamp(5).toLocalDateTime(), rs.getString(6), rs.getString(
-        7));
   }
 }

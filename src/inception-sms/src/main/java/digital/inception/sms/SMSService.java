@@ -165,7 +165,7 @@ public class SMSService
       statement.setLong(1, id);
       statement.setString(2, sms.getMobileNumber());
       statement.setString(3, sms.getMessage());
-      statement.setInt(4, sms.getStatus().getCode());
+      statement.setInt(4, sms.getStatus().code());
 
       if (statement.executeUpdate() != 1)
       {
@@ -252,7 +252,7 @@ public class SMSService
       {
         Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - sendRetryDelay);
 
-        statement.setInt(1, SMS.Status.QUEUED_FOR_SENDING.getCode());
+        statement.setInt(1, SMSStatus.QUEUED_FOR_SENDING.code());
         statement.setTimestamp(2, processedBefore);
 
         try (ResultSet rs = statement.executeQuery())
@@ -261,12 +261,12 @@ public class SMSService
           {
             sms = getSMS(rs);
 
-            sms.setStatus(SMS.Status.SENDING);
+            sms.setStatus(SMSStatus.SENDING);
             sms.setLockName(instanceName);
 
             try (PreparedStatement updateStatement = connection.prepareStatement(lockSMSSQL))
             {
-              updateStatement.setInt(1, SMS.Status.SENDING.getCode());
+              updateStatement.setInt(1, SMSStatus.SENDING.code());
               updateStatement.setString(2, instanceName);
               updateStatement.setLong(3, sms.getId());
 
@@ -416,7 +416,7 @@ public class SMSService
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   @Override
-  public void resetSMSLocks(SMS.Status status, SMS.Status newStatus)
+  public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
     throws SMSServiceException
   {
     String resetSMSLocksSQL =
@@ -425,9 +425,9 @@ public class SMSService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(resetSMSLocksSQL))
     {
-      statement.setInt(1, newStatus.getCode());
+      statement.setInt(1, newStatus.code());
       statement.setString(2, instanceName);
-      statement.setInt(3, status.getCode());
+      statement.setInt(3, status.code());
 
       statement.executeUpdate();
     }
@@ -452,7 +452,7 @@ public class SMSService
   {
     try
     {
-      SMS sms = new SMS(mobileNumber, message, SMS.Status.QUEUED_FOR_SENDING);
+      SMS sms = new SMS(mobileNumber, message, SMSStatus.QUEUED_FOR_SENDING);
 
       createSMS(sms);
 
@@ -609,7 +609,7 @@ public class SMSService
    * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  public void setSMSStatus(long smsId, SMS.Status status)
+  public void setSMSStatus(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
     String setSMSStatusSQL = "UPDATE sms.sms SET status=? WHERE id=?";
@@ -617,7 +617,7 @@ public class SMSService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(setSMSStatusSQL))
     {
-      statement.setInt(1, status.getCode());
+      statement.setInt(1, status.code());
       statement.setLong(2, smsId);
 
       if (statement.executeUpdate() != 1)
@@ -643,7 +643,7 @@ public class SMSService
    * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  public void unlockSMS(long smsId, SMS.Status status)
+  public void unlockSMS(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
     String unlockSMSSQL = "UPDATE sms.sms SET status=?, lock_name=NULL WHERE id=?";
@@ -651,7 +651,7 @@ public class SMSService
     try (Connection connection = dataSource.getConnection();
       PreparedStatement statement = connection.prepareStatement(unlockSMSSQL))
     {
-      statement.setInt(1, status.getCode());
+      statement.setInt(1, status.code());
       statement.setLong(2, smsId);
 
       if (statement.executeUpdate() != 1)
@@ -742,7 +742,7 @@ public class SMSService
   private SMS getSMS(ResultSet rs)
     throws SQLException
   {
-    return new SMS(rs.getLong(1), rs.getString(2), rs.getString(3), SMS.Status.fromCode(rs.getInt(
+    return new SMS(rs.getLong(1), rs.getString(2), rs.getString(3), SMSStatus.fromCode(rs.getInt(
         4)), rs.getInt(5), rs.getString(6), rs.getTimestamp(7));
   }
 

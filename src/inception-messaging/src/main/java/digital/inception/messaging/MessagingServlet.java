@@ -283,18 +283,18 @@ public class MessagingServlet extends HttpServlet
     }
 
     // Create the message and initialize it using the WBXML document sent as part of the request
-    Message message = new Message(document);
+    Message requestMessage = new Message(document);
 
     // Check whether we can process the message
-    if (!messagingService.canProcessMessage(message))
+    if (!messagingService.canProcessMessage(requestMessage))
     {
       logger.warn(String.format(
           "Failed to process the unrecognised message (%s) from the user (%s) and the device (%s)",
-          message.getId(), message.getUsername(), message.getDeviceId()));
+          requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()));
 
       MessageResult messageResult = new MessageResult(MessageResult.ERROR_UNRECOGNISED_TYPE,
           String.format("Failed to process the message (%s) with the unrecognised type (%s)",
-          message.getId(), message.getTypeId()));
+          requestMessage.getId(), requestMessage.getTypeId()));
 
       writeResponseDocument(messageResult.toWBXML(), response);
 
@@ -305,45 +305,64 @@ public class MessagingServlet extends HttpServlet
     {
       logger.debug(String.format(
           "Processing the message (%s) with type (%s) from the user (%s) and the device (%s)",
-          message.getId(), message.getTypeId(), message.getUsername(), message.getDeviceId()));
+          requestMessage.getId(), requestMessage.getTypeId(), requestMessage.getUsername(),
+          requestMessage.getDeviceId()));
 
-      logger.debug(message.toString());
+      logger.debug(requestMessage.toString());
     }
-
-    // Decrypt the message data
-    if (message.isEncrypted())
-    {
-      if (!messagingService.decryptMessage(message))
-      {
-        logger.warn(String.format(
-            "Failed to decrypt the message (%s) from the user (%s) and device (%s)",
-            message.getId(), message.getUsername(), message.getDeviceId()));
-
-        MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
-            String.format("Failed to decrypt and process the message (%s)", message.getId()));
-
-        writeResponseDocument(messageResult.toWBXML(), response);
-
-        return false;
-      }
-    }
-
-    // Work out whether we should process this message synchronously
-    boolean isSynchronous = messagingService.isSynchronousMessage(message);
 
     /*
      * Process the message synchronously if required, otherwise queue it for asynchronous
      * processing.
      */
-    if (isSynchronous)
+    if (messagingService.isSynchronousMessage(requestMessage))
     {
+      // Decrypt the message data if required
+      boolean isRequestMessageEncrypted = requestMessage.isEncrypted();
+
+      if (requestMessage.isEncrypted())
+      {
+        if (!messagingService.decryptMessage(requestMessage))
+        {
+          logger.warn(String.format(
+              "Failed to decrypt the message (%s) from the user (%s) and device (%s)",
+              requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()));
+
+          MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
+              String.format("Failed to decrypt and process the message (%s)",
+              requestMessage.getId()));
+
+          writeResponseDocument(messageResult.toWBXML(), response);
+
+          return false;
+        }
+      }
+      else
+      {
+        if (messagingService.isSecureMessage(requestMessage))
+        {
+          logger.warn(String.format(
+              "Failed to process the message (%s) from the user (%s) and device (%s) that should "
+              + "be processed securely but is not encrypted", requestMessage.getId(),
+              requestMessage.getUsername(), requestMessage.getDeviceId()));
+
+          MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
+            "Failed to process the message (" + requestMessage.getId() +
+              ") that should be processed securely and is not encrypted");
+
+          writeResponseDocument(messageResult.toWBXML(), response);
+
+          return false;
+        }
+      }
+
       try
       {
         // Attempt to archive the synchronous request message
-        messagingService.archiveMessage(message);
+        messagingService.archiveMessage(requestMessage);
 
         // Attempt to process the synchronous message
-        Message responseMessage = messagingService.processMessage(message);
+        Message responseMessage = messagingService.processMessage(requestMessage);
 
         // Attempt to archive the synchronous response message
         messagingService.archiveMessage(responseMessage);
@@ -352,21 +371,18 @@ public class MessagingServlet extends HttpServlet
 
         if (responseMessage != null)
         {
-          if (!responseMessage.isEncrypted())
+          if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted()))
           {
-            if (!responseMessage.isEncryptionDisabled())
-            {
-              messagingService.encryptMessage(responseMessage);
-            }
+            messagingService.encryptMessage(responseMessage);
           }
 
           messageResult = new MessageResult(0, String.format(
-              "Successfully processed the message (%s)", message.getId()), responseMessage);
+              "Successfully processed the message (%s)", requestMessage.getId()), responseMessage);
         }
         else
         {
           messageResult = new MessageResult(0, String.format(
-              "Successfully processed the message (%s)", message.getId()));
+              "Successfully processed the message (%s)", requestMessage.getId()));
         }
 
         writeResponseDocument(messageResult.toWBXML(), response);
@@ -375,33 +391,27 @@ public class MessagingServlet extends HttpServlet
       }
       catch (Throwable e)
       {
-        // If the message can be queued for asynchronous processing do so now
-        if (messagingService.isAsynchronousMessage(message))
-        {
-          return queueMessageForAsynchronousProcessing(message, response);
-        }
-
         logger.error(String.format(
             "Failed to process the message (%s) from the user (%s) and device (%s)",
-            message.getId(), message.getUsername(), message.getDeviceId()), e);
+            requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()), e);
 
         MessageResult messageResult = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED,
-            String.format("Failed to process the message (%s)", message.getId()), e);
+            String.format("Failed to process the message (%s)", requestMessage.getId()), e);
 
         writeResponseDocument(messageResult.toWBXML(), response);
 
         return false;
       }
     }
-    else if (messagingService.isAsynchronousMessage(message))
+    else if (messagingService.isAsynchronousMessage(requestMessage))
     {
-      return queueMessageForAsynchronousProcessing(message, response);
+      return queueMessageForAsynchronousProcessing(requestMessage, response);
     }
     else
     {
       MessageResult result = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED, String.format(
           "Synchronous and asynchronous processing are not supported for the message (%s) with "
-          + "type (%s)", message.getId(), message.getTypeId()));
+          + "type (%s)", requestMessage.getId(), requestMessage.getTypeId()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -439,14 +449,6 @@ public class MessagingServlet extends HttpServlet
         logger.debug(String.format(
             "Found %d messages queued for download for the user (%s) and the device (%s)",
             messages.size(), downloadRequest.getUsername(), downloadRequest.getDeviceId()));
-      }
-
-      for (Message message : messages)
-      {
-        if (!message.isEncrypted())
-        {
-          messagingService.encryptMessage(message);
-        }
       }
 
       MessageDownloadResponse downloadResponse = new MessageDownloadResponse(messages);
@@ -750,7 +752,7 @@ public class MessagingServlet extends HttpServlet
         return true;
       }
 
-      messagingService.queueMessageForProcessing(message);
+      messagingService.queueMessageForProcessingAndProcess(message);
 
       MessageResult result = new MessageResult(0, String.format(
           "Successfully queued the message (%s) for processing", message.getId()));

@@ -66,7 +66,7 @@ public class Code
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "code_category_id")
+  @Column(name = "code_category_id", nullable = false, length = 100)
   private String codeCategoryId;
 
   /**
@@ -78,7 +78,7 @@ public class Code
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id")
+  @Column(name = "id", nullable = false, length = 100)
   private String id;
 
   /**
@@ -89,7 +89,7 @@ public class Code
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "name")
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -100,7 +100,7 @@ public class Code
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "value")
+  @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
   /**

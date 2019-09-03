@@ -107,14 +107,14 @@ public class WebServiceClientSecurityHelper
     {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.DIGEST_AUTHENTICATION.getCode());
+          + WebServiceSecurityType.DIGEST_AUTHENTICATION.code());
 
       if (webServiceClient == null)
       {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .DIGEST_AUTHENTICATION.getCode(), webServiceClient);
+            .DIGEST_AUTHENTICATION.code(), webServiceClient);
       }
 
       T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
@@ -231,14 +231,14 @@ public class WebServiceClientSecurityHelper
     {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.MUTUAL_SSL.getCode());
+          + WebServiceSecurityType.MUTUAL_SSL.code());
 
       if (webServiceClient == null)
       {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .MUTUAL_SSL.getCode(), webServiceClient);
+            .MUTUAL_SSL.code(), webServiceClient);
       }
 
       T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
@@ -300,14 +300,14 @@ public class WebServiceClientSecurityHelper
     {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.MUTUAL_SSL.getCode());
+          + WebServiceSecurityType.MUTUAL_SSL.code());
 
       if (webServiceClient == null)
       {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .MUTUAL_SSL.getCode(), webServiceClient);
+            .MUTUAL_SSL.code(), webServiceClient);
       }
 
       T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
@@ -501,14 +501,14 @@ public class WebServiceClientSecurityHelper
     {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN.getCode());
+          + WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN.code());
 
       if (webServiceClient == null)
       {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .WSS_SECURITY_USERNAME_TOKEN.getCode(), webServiceClient);
+            .WSS_SECURITY_USERNAME_TOKEN.code(), webServiceClient);
       }
 
       T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
@@ -589,14 +589,14 @@ public class WebServiceClientSecurityHelper
     {
       // First attempt to retrieve the web service client from the cache
       WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.WSS_SECURITY_X509_TOKEN.getCode());
+          + WebServiceSecurityType.WSS_SECURITY_X509_TOKEN.code());
 
       if (webServiceClient == null)
       {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
         webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .WSS_SECURITY_X509_TOKEN.getCode(), webServiceClient);
+            .WSS_SECURITY_X509_TOKEN.code(), webServiceClient);
       }
 
       T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),

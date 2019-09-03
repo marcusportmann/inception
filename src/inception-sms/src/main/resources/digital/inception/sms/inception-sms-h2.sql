@@ -12,7 +12,7 @@ CREATE TABLE sms.sms (
   message        VARCHAR(4000) NOT NULL,
   status         INTEGER       NOT NULL,
   send_attempts  INTEGER       NOT NULL,
-  lock_name      VARCHAR(4000),
+  lock_name      VARCHAR(100),
   last_processed TIMESTAMP,
 
   PRIMARY KEY (id)

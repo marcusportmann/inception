@@ -80,7 +80,7 @@ public class CodeCategory
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id")
+  @Column(name = "id", nullable = false, length = 100)
   private String id;
 
   /**
@@ -91,7 +91,7 @@ public class CodeCategory
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "name")
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
