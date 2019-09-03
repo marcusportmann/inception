@@ -741,11 +741,9 @@ public class CodesService
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code
-   *
-   * @return the updated code
    */
   @Override
-  public Code updateCode(Code code)
+  public void updateCode(Code code)
     throws CodeNotFoundException, CodesServiceException
   {
     try
@@ -756,8 +754,6 @@ public class CodesService
       }
 
       codeRepository.saveAndFlush(code);
-
-      return code;
     }
     catch (CodeNotFoundException e)
     {
@@ -776,11 +772,9 @@ public class CodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
-   *
-   * @return the updated code category
    */
   @Override
-  public CodeCategory updateCodeCategory(CodeCategory codeCategory)
+  public void updateCodeCategory(CodeCategory codeCategory)
     throws CodeCategoryNotFoundException, CodesServiceException
   {
     try
@@ -793,8 +787,6 @@ public class CodesService
       codeCategory.setUpdated(LocalDateTime.now());
 
       codeCategoryRepository.saveAndFlush(codeCategory);
-
-      return codeCategory;
     }
     catch (CodeCategoryNotFoundException e)
     {

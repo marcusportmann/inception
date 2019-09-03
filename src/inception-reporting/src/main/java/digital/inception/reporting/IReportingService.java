@@ -26,6 +26,7 @@ import java.sql.Connection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The <code>IReportingService</code> interface defines the functionality provided by a Reporting
@@ -53,46 +54,50 @@ public interface IReportingService
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param connection         the database connection used to retrieve the report data
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param document           the XML document containing the report data
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Document document)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
-  void deleteReportDefinition(String reportDefinitionId)
+  void deleteReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -107,17 +112,18 @@ public interface IReportingService
    *
    * @return the number of report definitions
    */
-  int getNumberOfReportDefinitions()
+  long getNumberOfReportDefinitions()
     throws ReportingServiceException;
 
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the report definition
    */
-  ReportDefinition getReportDefinition(String reportDefinitionId)
+  ReportDefinition getReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -131,11 +137,12 @@ public interface IReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the summary for the report definition
    */
-  ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
+  ReportDefinitionSummary getReportDefinitionSummary(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -149,11 +156,12 @@ public interface IReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
-  boolean reportDefinitionExists(String reportDefinitionId)
+  boolean reportDefinitionExists(UUID reportDefinitionId)
     throws ReportingServiceException;
 
   /**
@@ -169,9 +177,7 @@ public interface IReportingService
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
    *                         information for the report definition
-   *
-   * @return the updated report definition
    */
-  ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
+  void updateReportDefinition(ReportDefinition reportDefinition)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 }

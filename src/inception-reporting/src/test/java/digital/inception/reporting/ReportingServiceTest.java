@@ -125,7 +125,7 @@ public class ReportingServiceTest
     assertTrue("The updated report definition that was saved does not exist",
         reportDefinitionExists);
 
-    int numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
+    long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
 
     assertEquals("The correct number of report definitions (1) was not retrieved", 1,
         numberOfReportDefinitions);
@@ -171,7 +171,7 @@ public class ReportingServiceTest
         "digital/inception/reporting/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId(UUID.randomUUID().toString());
+    reportDefinition.setId(UUID.randomUUID());
     reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
     reportDefinition.setTemplate(testReportTemplate);
 

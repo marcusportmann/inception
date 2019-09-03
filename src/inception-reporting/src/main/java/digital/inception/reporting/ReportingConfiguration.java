@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.messaging;
+package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -22,12 +22,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>MessagingConfiguration</code> class provides the Spring configuration
- * for the Messaging module.
+ * The <code>ReportingConfiguration</code> class provides the Spring configuration
+ * for the Reporting module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.messaging" })
-public class MessagingConfiguration {}
+    basePackages = { "digital.inception.reporting" })
+public class ReportingConfiguration {}

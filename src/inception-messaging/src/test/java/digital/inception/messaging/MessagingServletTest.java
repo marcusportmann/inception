@@ -165,6 +165,78 @@ public class MessagingServletTest
     }
   }
 
+
+  /**
+   * Test the "Another Test" asynchronous encrypted message functionality with no correlation.
+   */
+  @Test
+  public void anotherTestMessageEncryptedNoCorrelationIdTest()
+    throws Exception
+  {
+    byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
+
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
+      userEncryptionKey);
+
+    AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
+      "Test Data".getBytes());
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    assertTrue(requestMessage.isEncrypted());
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
+    assertNull(messageResult.getMessage());
+
+    // Sleep to give the back-end a chance to process the message
+    try
+    {
+      Thread.sleep(1000L);
+    }
+    catch (Throwable ignored) {}
+
+    // Retrieve the messages queued for download
+    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
+      USERNAME);
+
+    assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
+    assertEquals(messageDownloadResponse.getNumberOfMessages(),
+      messageDownloadResponse.getMessages().size());
+
+    List<Message> messages = messageDownloadResponse.getMessages();
+
+    assertEquals(1, messages.size());
+
+    logger.info("Downloaded " + messages.size() + " messages");
+
+    for (Message message : messages)
+    {
+      assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
+      assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
+
+      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
+        + ")");
+
+      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
+        message.getId());
+
+      assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
+
+      assertTrue(message.isEncrypted());
+
+      AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
+        new AnotherTestResponseData());
+
+      assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+      assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
+      assertEquals("Test Value", responseData.getTestValue());
+      assertArrayEquals("Test Data".getBytes(), requestData.getTestData());
+    }
+  }
+
+
   /**
    * Test the "Another Test" asynchronous unencrypted message functionality.
    */

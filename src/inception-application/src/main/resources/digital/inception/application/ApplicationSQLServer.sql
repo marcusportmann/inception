@@ -362,37 +362,37 @@ GO
 
 
 CREATE TABLE "MESSAGING"."MESSAGE_PARTS" (
-  id                 UNIQUEIDENTIFIER NOT NULL,
-  part_no            INTEGER          NOT NULL,
-  total_parts        INTEGER          NOT NULL,
-  send_attempts      INTEGER,
-  download_attempts  INTEGER,
-  status             INTEGER          NOT NULL,
-  updated            DATETIME,
-  msg_id             UNIQUEIDENTIFIER NOT NULL,
-  msg_username       NVARCHAR(1000)   NOT NULL,
-  msg_device_id      UNIQUEIDENTIFIER NOT NULL,
-  msg_type_id        UNIQUEIDENTIFIER NOT NULL,
-  msg_correlation_id UNIQUEIDENTIFIER,
-  msg_priority       INTEGER          NOT NULL,
-  msg_created        DATETIME         NOT NULL,
-  msg_data_hash      NVARCHAR(100),
-  msg_encryption_iv  NVARCHAR(100),
-  msg_checksum       NVARCHAR(100)    NOT NULL,
-  lock_name          NVARCHAR(100),
-  data               VARBINARY(MAX),
+  id                     UNIQUEIDENTIFIER NOT NULL,
+  part_no                INTEGER          NOT NULL,
+  total_parts            INTEGER          NOT NULL,
+  send_attempts          INTEGER,
+  download_attempts      INTEGER,
+  status                 INTEGER          NOT NULL,
+  updated                DATETIME,
+  message_id             UNIQUEIDENTIFIER NOT NULL,
+  message_username       NVARCHAR(1000)   NOT NULL,
+  message_device_id      UNIQUEIDENTIFIER NOT NULL,
+  message_type_id        UNIQUEIDENTIFIER NOT NULL,
+  message_correlation_id UNIQUEIDENTIFIER,
+  message_priority       INTEGER          NOT NULL,
+  message_created        DATETIME         NOT NULL,
+  message_data_hash      NVARCHAR(100),
+  message_encryption_iv  NVARCHAR(100),
+  message_checksum       NVARCHAR(100)    NOT NULL,
+  lock_name              NVARCHAR(100),
+  data                   VARBINARY(MAX),
 
   PRIMARY KEY (id),
-  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (msg_type_id) REFERENCES "MESSAGING"."MESSAGE_TYPES"(id)
+  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (message_type_id) REFERENCES "MESSAGING"."MESSAGE_TYPES"(id)
 );
 
 CREATE INDEX message_parts_status_ix ON "MESSAGING"."MESSAGE_PARTS"(status);
 
-CREATE INDEX message_parts_msg_id_ix ON "MESSAGING"."MESSAGE_PARTS"(msg_id);
+CREATE INDEX message_parts_message_id_ix ON "MESSAGING"."MESSAGE_PARTS"(message_id);
 
-CREATE INDEX message_parts_msg_device_id_ix ON "MESSAGING"."MESSAGE_PARTS"(msg_device_id);
+CREATE INDEX message_parts_message_device_id_ix ON "MESSAGING"."MESSAGE_PARTS"(message_device_id);
 
-CREATE INDEX message_parts_msg_type_id_ix ON "MESSAGING"."MESSAGE_PARTS"(msg_type_id);
+CREATE INDEX message_parts_message_type_id_ix ON "MESSAGING"."MESSAGE_PARTS"(message_type_id);
 
 CREATE INDEX message_parts_lock_name_ix ON "MESSAGING"."MESSAGE_PARTS"(lock_name);
 
@@ -426,43 +426,43 @@ EXEC sys.sp_addextendedproperty
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ID';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_ID';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The username identifying the user associated with the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_USERNAME';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_USERNAME';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DEVICE_ID';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_DEVICE_ID';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_TYPE_ID';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_TYPE_ID';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The optional Universally Unique Identifier (UUID) used to correlate the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CORRELATION_ID';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_CORRELATION_ID';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The priority for the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_PRIORITY';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_PRIORITY';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the original message was created' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CREATED';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_CREATED';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The hash of the unencrypted data for the original message if the message was encrypted' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_DATA_HASH';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_DATA_HASH';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The base-64 encoded initialisation vector for the encryption scheme for the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_ENCRYPTION_IV';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_ENCRYPTION_IV';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The checksum for the original message' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MSG_CHECKSUM';
+@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'MESSAGE_CHECKSUM';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the entity that has locked the message part for processing' ,
@@ -532,14 +532,14 @@ GO
 
 CREATE TABLE "REPORTING"."REPORT_DEFINITIONS" (
   id       UNIQUEIDENTIFIER NOT NULL,
-  name     NVARCHAR(256)    NOT NULL,
+  name     NVARCHAR(100)    NOT NULL,
   template VARBINARY(MAX)   NOT NULL,
 
   PRIMARY KEY (id)
 );
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the report definition' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the report definition' ,
 @level0type=N'SCHEMA', @level0name=N'REPORTING', @level1type=N'TABLE', @level1name=N'REPORT_DEFINITIONS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty

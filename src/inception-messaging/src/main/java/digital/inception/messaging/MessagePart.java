@@ -116,8 +116,8 @@ public class MessagePart
       value = "The name of the entity that has locked the message part for processing")
   @JsonProperty
   @XmlElement(name = "LockName")
-  @Column(name = "lock_name")
   @Size(min = 1, max = 100)
+  @Column(name = "lock_name")
   private String lockName;
 
   /**
@@ -127,7 +127,7 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageChecksum", required = true)
   @NotNull
-  @Column(name = "msg_checksum", nullable = false)
+  @Column(name = "message_checksum", nullable = false)
   private String messageChecksum;
 
   /**
@@ -137,7 +137,7 @@ public class MessagePart
       value = "The optional Universally Unique Identifier (UUID) used to correlate the original message")
   @JsonProperty
   @XmlElement(name = "MessageCorrelationId")
-  @Column(name = "msg_correlation_id")
+  @Column(name = "message_correlation_id")
   private UUID messageCorrelationId;
 
   /**
@@ -149,7 +149,7 @@ public class MessagePart
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @NotNull
-  @Column(name = "msg_created", nullable = false)
+  @Column(name = "message_created", nullable = false)
   private LocalDateTime messageCreated;
 
   /**
@@ -159,7 +159,7 @@ public class MessagePart
       value = "The hash of the unencrypted data for the original message if the message was encrypted")
   @JsonProperty
   @XmlElement(name = "MessageDataHash")
-  @Column(name = "msg_data_hash")
+  @Column(name = "message_data_hash")
   private String messageDataHash;
 
   /**
@@ -172,7 +172,7 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageDeviceId", required = true)
   @NotNull
-  @Column(name = "msg_device_id", nullable = false)
+  @Column(name = "message_device_id", nullable = false)
   private UUID messageDeviceId;
 
   /**
@@ -182,7 +182,7 @@ public class MessagePart
       value = "The base-64 encoded initialization vector for the encryption scheme for the original message")
   @JsonProperty
   @XmlElement(name = "MessageEncryptionIV")
-  @Column(name = "msg_encryption_iv")
+  @Column(name = "message_encryption_iv")
   private String messageEncryptionIV;
 
   /**
@@ -194,7 +194,7 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageId", required = true)
   @NotNull
-  @Column(name = "msg_id", nullable = false)
+  @Column(name = "message_id", nullable = false)
   private UUID messageId;
 
   /**
@@ -204,7 +204,7 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessagePriority", required = true)
   @NotNull
-  @Column(name = "msg_priority", nullable = false)
+  @Column(name = "message_priority", nullable = false)
   private MessagePriority messagePriority;
 
   /**
@@ -217,7 +217,7 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageTypeId", required = true)
   @NotNull
-  @Column(name = "msg_type_id", nullable = false)
+  @Column(name = "message_type_id", nullable = false)
   private UUID messageTypeId;
 
   /**
@@ -229,7 +229,8 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageUsername", required = true)
   @NotNull
-  @Column(name = "msg_username", nullable = false)
+  @Size(min = 1, max = 1000)
+  @Column(name = "message_username", nullable = false)
   private String messageUsername;
 
   /**

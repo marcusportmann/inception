@@ -79,7 +79,9 @@ public class CodesServiceTest
 
     codeCategory.setName(codeCategory.getName() + " Updated");
 
-    CodeCategory updatedCodeCategory = codesService.updateCodeCategory(codeCategory);
+    codesService.updateCodeCategory(codeCategory);
+
+    CodeCategory updatedCodeCategory = codesService.getCodeCategory(codeCategory.getId());
 
     compareCodeCategories(codeCategory, updatedCodeCategory);
 
@@ -165,9 +167,7 @@ public class CodesServiceTest
     code.setName("Updated " + code.getName());
     code.setValue("Updated " + code.getValue());
 
-    Code updatedCode = codesService.updateCode(code);
-
-    compareCodes(code, updatedCode);
+    codesService.updateCode(code);
 
     retrievedCode = codesService.getCode(codeCategory.getId(), code.getId());
 

@@ -38,9 +38,6 @@ import org.w3c.dom.Document;
 import java.io.ByteArrayInputStream;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import java.util.*;
 
@@ -68,13 +65,30 @@ public class ReportingService
   private String localReportFolderPath;
 
   /**
+   * The Report Definition Repository.
+   */
+  private ReportDefinitionRepository reportDefinitionRepository;
+
+  /**
+   * The Report Definition Summary Repository.
+   */
+  private ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
+
+  /**
    * Constructs a new <code>ReportingService</code>.
    *
-   * @param dataSource the data source used to provide connections to the application database
+   * @param dataSource                        the data source used to provide connections to the
+   *                                          application database
+   * @param reportDefinitionRepository        the Report Definition Repository
+   * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
    */
-  public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource)
+  public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource,
+      ReportDefinitionRepository reportDefinitionRepository,
+      ReportDefinitionSummaryRepository reportDefinitionSummaryRepository)
   {
     this.dataSource = dataSource;
+    this.reportDefinitionRepository = reportDefinitionRepository;
+    this.reportDefinitionSummaryRepository = reportDefinitionSummaryRepository;
   }
 
   /**
@@ -87,27 +101,14 @@ public class ReportingService
   public void createReportDefinition(ReportDefinition reportDefinition)
     throws DuplicateReportDefinitionException, ReportingServiceException
   {
-    String createReportDefinitionSQL =
-        "INSERT INTO reporting.report_definitions (id, name, template) VALUES (?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createReportDefinitionSQL))
+    try
     {
-      if (reportDefinitionExists(connection, reportDefinition.getId()))
+      if (reportDefinitionRepository.existsById(reportDefinition.getId()))
       {
         throw new DuplicateReportDefinitionException(reportDefinition.getId());
       }
 
-      statement.setObject(1, UUID.fromString(reportDefinition.getId()));
-      statement.setString(2, reportDefinition.getName());
-      statement.setBytes(3, reportDefinition.getTemplate());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new ReportingServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createReportDefinitionSQL));
-      }
+      reportDefinitionRepository.saveAndFlush(reportDefinition);
     }
     catch (DuplicateReportDefinitionException e)
     {
@@ -123,13 +124,14 @@ public class ReportingService
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -151,20 +153,27 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param connection         the database connection used to retrieve the report data
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try
     {
-      ReportDefinition reportDefinition = getReportDefinition(connection, reportDefinitionId);
+      Optional<ReportDefinition> reportDefinition = reportDefinitionRepository.findById(
+          reportDefinitionId);
+
+      if (reportDefinition.isEmpty())
+      {
+        throw new ReportDefinitionNotFoundException(reportDefinitionId);
+      }
 
       Map<String, Object> localParameters = new HashMap<>();
 
@@ -179,7 +188,7 @@ public class ReportingService
       }
 
       JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
-          reportDefinition.getTemplate()), localParameters, connection);
+          reportDefinition.get().getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
@@ -198,14 +207,15 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param document           the XML document containing the report data
    *
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Document document)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -251,23 +261,21 @@ public class ReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   @Override
-  public void deleteReportDefinition(String reportDefinitionId)
+  public void deleteReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
-    String deleteReportDefinitionSQL = "DELETE FROM reporting.report_definitions WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteReportDefinitionSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(reportDefinitionId));
-
-      if (statement.executeUpdate() != 1)
+      if (!reportDefinitionRepository.existsById(reportDefinitionId))
       {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
+
+      reportDefinitionRepository.deleteById(reportDefinitionId);
     }
     catch (ReportDefinitionNotFoundException e)
     {
@@ -296,27 +304,12 @@ public class ReportingService
    * @return the number of report definitions
    */
   @Override
-  public int getNumberOfReportDefinitions()
+  public long getNumberOfReportDefinitions()
     throws ReportingServiceException
   {
-    String getNumberOfReportDefinitionsSQL = "SELECT COUNT(id) FROM reporting.report_definitions";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfReportDefinitionsSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          throw new ReportingServiceException(String.format(
-              "No results were returned as a result of executing the SQL statement (%s)",
-              getNumberOfReportDefinitionsSQL));
-        }
-      }
+      return reportDefinitionRepository.count();
     }
     catch (Throwable e)
     {
@@ -327,17 +320,28 @@ public class ReportingService
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the report definition
    */
   @Override
-  public ReportDefinition getReportDefinition(String reportDefinitionId)
+  public ReportDefinition getReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return getReportDefinition(connection, reportDefinitionId);
+      Optional<ReportDefinition> reportDefinition = reportDefinitionRepository.findById(
+          reportDefinitionId);
+
+      if (reportDefinition.isPresent())
+      {
+        return reportDefinition.get();
+      }
+      else
+      {
+        throw new ReportDefinitionNotFoundException(reportDefinitionId);
+      }
     }
     catch (ReportDefinitionNotFoundException e)
     {
@@ -359,22 +363,9 @@ public class ReportingService
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
   {
-    String getReportDefinitionSummariesSQL = "SELECT id, name FROM reporting.report_definitions";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummariesSQL))
+    try
     {
-      List<ReportDefinitionSummary> reportDefinitionSummaries = new ArrayList<>();
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          reportDefinitionSummaries.add(getReportDefinitionSummary(rs));
-        }
-      }
-
-      return reportDefinitionSummaries;
+      return reportDefinitionSummaryRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -386,32 +377,27 @@ public class ReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the summary for the report definition
    */
   @Override
-  public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
+  public ReportDefinitionSummary getReportDefinitionSummary(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
-    String getReportDefinitionSummaryByIdSQL =
-        "SELECT id, name FROM reporting.report_definitions WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getReportDefinitionSummaryByIdSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(reportDefinitionId));
+      Optional<ReportDefinitionSummary> reportDefinitionSummary =
+          reportDefinitionSummaryRepository.findById(reportDefinitionId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (reportDefinitionSummary.isPresent())
       {
-        if (rs.next())
-        {
-          return getReportDefinitionSummary(rs);
-        }
-        else
-        {
-          throw new ReportDefinitionNotFoundException(reportDefinitionId);
-        }
+        return reportDefinitionSummary.get();
+      }
+      else
+      {
+        throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
     }
     catch (ReportDefinitionNotFoundException e)
@@ -434,22 +420,9 @@ public class ReportingService
   public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
   {
-    String getReportDefinitionsSQL = "SELECT id, name, template FROM reporting.report_definitions";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getReportDefinitionsSQL))
+    try
     {
-      List<ReportDefinition> reportDefinitions = new ArrayList<>();
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          reportDefinitions.add(getReportDefinition(rs));
-        }
-      }
-
-      return reportDefinitions;
+      return reportDefinitionRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -460,17 +433,18 @@ public class ReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override
-  public boolean reportDefinitionExists(String reportDefinitionId)
+  public boolean reportDefinitionExists(UUID reportDefinitionId)
     throws ReportingServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return reportDefinitionExists(connection, reportDefinitionId);
+      return reportDefinitionRepository.existsById(reportDefinitionId);
     }
     catch (Throwable e)
     {
@@ -495,29 +469,19 @@ public class ReportingService
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
    *                         information for the report definition
-   *
-   * @return the updated report definition
    */
   @Override
-  public ReportDefinition updateReportDefinition(ReportDefinition reportDefinition)
+  public void updateReportDefinition(ReportDefinition reportDefinition)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
-    String updateReportDefinitionSQL =
-        "UPDATE reporting.report_definitions SET name=?, template=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateReportDefinitionSQL))
+    try
     {
-      statement.setString(1, reportDefinition.getName());
-      statement.setBytes(2, reportDefinition.getTemplate());
-      statement.setObject(3, UUID.fromString(reportDefinition.getId()));
-
-      if (statement.executeUpdate() != 1)
+      if (!reportDefinitionRepository.existsById(reportDefinition.getId()))
       {
         throw new ReportDefinitionNotFoundException(reportDefinition.getId());
       }
 
-      return reportDefinition;
+      reportDefinitionRepository.saveAndFlush(reportDefinition);
     }
     catch (ReportDefinitionNotFoundException e)
     {
@@ -528,68 +492,5 @@ public class ReportingService
       throw new ReportingServiceException(String.format(
           "Failed to update the report definition (%s)", reportDefinition.getId()), e);
     }
-  }
-
-  private ReportDefinition getReportDefinition(ResultSet rs)
-    throws SQLException
-  {
-    return new ReportDefinition(rs.getString(1), rs.getString(2), rs.getBytes(3));
-  }
-
-  private ReportDefinition getReportDefinition(Connection connection, String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, SQLException
-  {
-    String getReportDefinitionByIdSQL =
-        "SELECT id, name, template FROM reporting.report_definitions WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(getReportDefinitionByIdSQL))
-    {
-      statement.setObject(1, UUID.fromString(reportDefinitionId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return getReportDefinition(rs);
-        }
-        else
-        {
-          throw new ReportDefinitionNotFoundException(reportDefinitionId);
-        }
-      }
-    }
-  }
-
-  private ReportDefinitionSummary getReportDefinitionSummary(ResultSet rs)
-    throws SQLException
-  {
-    return new ReportDefinitionSummary(rs.getString(1), rs.getString(2));
-  }
-
-  private boolean reportDefinitionExists(Connection connection, String reportDefinitionId)
-    throws ReportingServiceException, SQLException
-  {
-    String reportDefinitionExistsSQL =
-        "SELECT COUNT(id) FROM reporting.report_definitions WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(reportDefinitionExistsSQL))
-    {
-      statement.setObject(1, UUID.fromString(reportDefinitionId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return (rs.getInt(1) > 0);
-        }
-        else
-        {
-          throw new ReportingServiceException(String.format(
-              "No results were returned as a result of executing the SQL statement (%s)",
-              reportDefinitionExistsSQL));
-        }
-      }
-    }
-
   }
 }

@@ -31,6 +31,11 @@ import java.io.Serializable;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,22 +54,26 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital",
     propOrder = { "id", "name" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@Entity
+@Table(schema = "reporting", name = "report_definitions")
+@SuppressWarnings({ "unused" })
 public class ReportDefinitionSummary
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the report definition",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The name of the report definition.
@@ -73,33 +82,37 @@ public class ReportDefinitionSummary
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 256)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false)
   private String name;
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    */
   @SuppressWarnings("unused")
-  private ReportDefinitionSummary() {}
+  public ReportDefinitionSummary() {}
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id   the ID used to uniquely identify the report definition
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *             definition
    * @param name the name of the report definition
    */
-  ReportDefinitionSummary(String id, String name)
+  ReportDefinitionSummary(UUID id, String name)
   {
     this.id = id;
     this.name = name;
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *         definition
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }

@@ -51,8 +51,10 @@ public class ReportDefinitionNotFoundException extends ServiceException
   /**
    * Constructs a new <code>ReportDefinitionNotFoundException</code>.
    *
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
-  public ReportDefinitionNotFoundException(String reportDefinitionId)
+  public ReportDefinitionNotFoundException(UUID reportDefinitionId)
   {
     super("The report definition with ID (" + reportDefinitionId + ") could not be found");
   }

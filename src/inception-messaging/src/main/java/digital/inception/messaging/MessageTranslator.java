@@ -239,7 +239,7 @@ public class MessageTranslator
   public Message toMessage(WbxmlMessageData messageData)
     throws MessagingServiceException
   {
-    return toMessage(messageData, new UUID(0L, 0L));
+    return toMessage(messageData, null);
   }
 
   /**

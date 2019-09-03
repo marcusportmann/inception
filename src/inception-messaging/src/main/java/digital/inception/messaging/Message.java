@@ -177,8 +177,8 @@ public class Message
       value = "The name of the entity that has locked this message for processing")
   @JsonProperty
   @XmlElement(name = "LockName")
-  @Column(name = "lock_name")
   @Size(min = 1, max = 100)
+  @Column(name = "lock_name")
   private String lockName;
 
   /**

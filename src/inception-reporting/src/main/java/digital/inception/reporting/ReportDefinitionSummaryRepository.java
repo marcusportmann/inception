@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package digital.inception.messaging;
+package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
 
 /**
- * The <code>MessagingConfiguration</code> class provides the Spring configuration
- * for the Messaging module.
+ * The <code>ReportDefinitionSummaryRepository</code> interface declares the repository for the
+ * <code>ReportDefinitionSummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-@Configuration
-@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.messaging" })
-public class MessagingConfiguration {}
+public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
+    UUID>
+{
+
+}

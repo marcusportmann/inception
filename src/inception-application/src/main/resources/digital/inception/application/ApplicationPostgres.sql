@@ -293,37 +293,37 @@ COMMENT ON COLUMN messaging.messages.data IS 'The data for the message';
 
 
 CREATE TABLE messaging.message_parts (
-  id                 UUID      NOT NULL,
-  part_no            INTEGER   NOT NULL,
-  total_parts        INTEGER   NOT NULL,
-  send_attempts      INTEGER,
-  download_attempts  INTEGER,
-  status             INTEGER   NOT NULL,
-  updated            TIMESTAMP,
-  msg_id             UUID      NOT NULL,
-  msg_username       TEXT      NOT NULL,
-  msg_device_id      UUID      NOT NULL,
-  msg_type_id        UUID      NOT NULL,
-  msg_correlation_id UUID,
-  msg_priority       INTEGER   NOT NULL,
-  msg_created        TIMESTAMP NOT NULL,
-  msg_data_hash      TEXT,
-  msg_encryption_iv  TEXT,
-  msg_checksum       TEXT      NOT NULL,
-  lock_name          TEXT,
-  data               BYTEA,
+  id                     UUID      NOT NULL,
+  part_no                INTEGER   NOT NULL,
+  total_parts            INTEGER   NOT NULL,
+  send_attempts          INTEGER,
+  download_attempts      INTEGER,
+  status                 INTEGER   NOT NULL,
+  updated                TIMESTAMP,
+  message_id             UUID      NOT NULL,
+  message_username       TEXT      NOT NULL,
+  message_device_id      UUID      NOT NULL,
+  message_type_id        UUID      NOT NULL,
+  message_correlation_id UUID,
+  message_priority       INTEGER   NOT NULL,
+  message_created        TIMESTAMP NOT NULL,
+  message_data_hash      TEXT,
+  message_encryption_iv  TEXT,
+  message_checksum       TEXT      NOT NULL,
+  lock_name              TEXT,
+  data                   BYTEA,
 
   PRIMARY KEY (id),
-  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (msg_type_id) REFERENCES messaging.message_types(id)
+  CONSTRAINT message_parts_message_type_fk FOREIGN KEY (message_type_id) REFERENCES messaging.message_types(id)
 );
 
 CREATE INDEX message_parts_status_ix ON messaging.message_parts(status);
 
-CREATE INDEX message_parts_msg_id_ix ON messaging.message_parts(msg_id);
+CREATE INDEX message_parts_message_id_ix ON messaging.message_parts(message_id);
 
-CREATE INDEX message_parts_msg_device_id_ix ON messaging.message_parts(msg_device_id);
+CREATE INDEX message_parts_message_device_id_ix ON messaging.message_parts(message_device_id);
 
-CREATE INDEX message_parts_msg_type_id_ix ON messaging.message_parts(msg_type_id);
+CREATE INDEX message_parts_message_type_id_ix ON messaging.message_parts(message_type_id);
 
 CREATE INDEX message_parts_lock_name_ix ON messaging.message_parts(lock_name);
 
@@ -341,25 +341,25 @@ COMMENT ON COLUMN messaging.message_parts.status IS 'The message part status e.g
 
 COMMENT ON COLUMN messaging.message_parts.updated IS 'The date and time the message part was last updated';
 
-COMMENT ON COLUMN messaging.message_parts.msg_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
+COMMENT ON COLUMN messaging.message_parts.message_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_username IS 'The username identifying the user associated with the original message';
+COMMENT ON COLUMN messaging.message_parts.message_username IS 'The username identifying the user associated with the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
+COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
 
-COMMENT ON COLUMN messaging.message_parts.msg_type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
+COMMENT ON COLUMN messaging.message_parts.message_type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
+COMMENT ON COLUMN messaging.message_parts.message_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_priority IS 'The priority for the original message';
+COMMENT ON COLUMN messaging.message_parts.message_priority IS 'The priority for the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_created IS 'The date and time the original message was created';
+COMMENT ON COLUMN messaging.message_parts.message_created IS 'The date and time the original message was created';
 
-COMMENT ON COLUMN messaging.message_parts.msg_data_hash IS 'The hash of the unencrypted data for the original message if the message was encrypted';
+COMMENT ON COLUMN messaging.message_parts.message_data_hash IS 'The hash of the unencrypted data for the original message if the message was encrypted';
 
-COMMENT ON COLUMN messaging.message_parts.msg_encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
+COMMENT ON COLUMN messaging.message_parts.message_encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the original message';
 
-COMMENT ON COLUMN messaging.message_parts.msg_checksum IS 'The checksum for the original message';
+COMMENT ON COLUMN messaging.message_parts.message_checksum IS 'The checksum for the original message';
 
 COMMENT ON COLUMN messaging.message_parts.lock_name IS 'The name of the entity that has locked the message part for processing';
 
@@ -412,7 +412,7 @@ CREATE TABLE reporting.report_definitions (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN reporting.report_definitions.id IS 'The ID used to uniquely identify the report definition';
+COMMENT ON COLUMN reporting.report_definitions.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.name IS 'The name of the report definition';
 

@@ -43,7 +43,7 @@ INSERT INTO security.user_directories (id, type, name, configuration)
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', '204e5b8f-48e7-4354-bd15-753e6543b64d');
-INSERT INTO SECURITY.USER_DIRECTORY_TO_ORGANIZATION_MAP (USER_DIRECTORY_ID, ORGANIZATION_ID)
+INSERT INTO security.user_directory_to_organization_map (USER_DIRECTORY_ID, ORGANIZATION_ID)
   VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)

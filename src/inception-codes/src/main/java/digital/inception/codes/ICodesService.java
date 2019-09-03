@@ -216,10 +216,8 @@ public interface ICodesService
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code
-   *
-   * @return the updated code
    */
-  Code updateCode(Code code)
+  void updateCode(Code code)
     throws CodeNotFoundException, CodesServiceException;
 
   /**
@@ -227,10 +225,8 @@ public interface ICodesService
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
    *                     for the code category
-   *
-   * @return the updated code category
    */
-  CodeCategory updateCodeCategory(CodeCategory codeCategory)
+  void updateCodeCategory(CodeCategory codeCategory)
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
