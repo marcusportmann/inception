@@ -67,44 +67,45 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
       "deviceId") UUID deviceId, Pageable pageable);
 
   @Query("select count(mp.id) from MessagePart mp where mp.messageId = :messageId")
-  int getNumberOfPartsForMessage(@Param("messageId") UUID messageId);
+  int getNumberOfMessagePartsForMessage(@Param("messageId") UUID messageId);
+
+  @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
+    + "mp.messageId = :messageId")
+  int getNumberOfMessagePartsForMessageQueuedForAssembly(@Param("messageId") UUID messageId);
 
   @Modifying
-  @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 4, mp.updated = :when "
-      + " where mp.id = :messagePartId")
+  @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 4 "
+      + "where mp.id = :messagePartId")
   void lockMessagePartForAssembly(@Param("messagePartId") UUID messagePartId, @Param(
-      "lockName") String lockName, @Param("when") LocalDateTime when);
+      "lockName") String lockName);
 
   @Modifying
   @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 6, "
-      + "mp.downloadAttempts = mp.downloadAttempts + 1, mp.updated = :when "
-      + "where mp.id = :messagePartId")
+      + "mp.downloadAttempts = mp.downloadAttempts + 1 where mp.id = :messagePartId")
   void lockMessagePartForDownload(@Param("messagePartId") UUID messagePartId, @Param(
-      "lockName") String lockName, @Param("when") LocalDateTime when);
+      "lockName") String lockName);
+
+//  @Modifying
+//  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
+//      + "where mp.status = :status and mp.lockName is not null and mp.updated < :lockExpiry")
+//  void resetStatusAndLocksForMessagePartsWithStatusAndExpiredLocks(@Param(
+//      "status") MessagePartStatus status, @Param("newStatus") MessagePartStatus newStatus, @Param(
+//      "lockExpiry") LocalDateTime lockExpiry);
 
   @Modifying
-  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null, "
-      + "mp.updated = current_timestamp where mp.status = :status and mp.lockName is not null "
-      + "and mp.updated < :lockExpiry")
-  void resetStatusAndLocksForMessagePartsWithStatusAndExpiredLocks(@Param(
-      "status") MessagePartStatus status, @Param("newStatus") MessagePartStatus newStatus, @Param(
-      "lockExpiry") LocalDateTime lockExpiry);
-
-  @Modifying
-  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null, "
-      + "mp.updated = current_timestamp where mp.status = :status and mp.lockName = :lockName ")
-  void resetStatusAndLocksForMessagesWithStatusAndLock(@Param("status") MessagePartStatus status,
+  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
+      + "where mp.status = :status and mp.lockName = :lockName ")
+  void resetStatusAndLocksForMessagePartsWithStatusAndLock(@Param("status") MessagePartStatus status,
       @Param("newStatus") MessagePartStatus newStatus, @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update MessagePart mp set mp.status = :status, mp.updated = current_timestamp "
-      + "where mp.id = :messagePartId")
+  @Query("update MessagePart mp set mp.status = :status where mp.id = :messagePartId")
   void setMessagePartStatus(@Param("messagePartId") UUID messagePartId, @Param(
       "status") MessagePartStatus status);
 
   @Modifying
-  @Query("update MessagePart mp set mp.status = :status, mp.lockName = null, "
-      + "mp.updated = :when where mp.id = :messagePartId")
+  @Query("update MessagePart mp set mp.status = :status, mp.lockName = null "
+      + "where mp.id = :messagePartId")
   void unlockMessagePart(@Param("messagePartId") UUID messagePartId, @Param(
-      "status") MessagePartStatus status, @Param("when") LocalDateTime when);
+      "status") MessagePartStatus status);
 }

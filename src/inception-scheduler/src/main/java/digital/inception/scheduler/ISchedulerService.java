@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler
@@ -38,20 +39,12 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
-   * Create the job parameter.
-   *
-   * @param jobParameter the job parameter
-   */
-  void createJobParameter(JobParameter jobParameter)
-    throws SchedulerServiceException;
-
-  /**
    * Delete the job
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
-  void deleteJob(String jobId)
-    throws SchedulerServiceException;
+  void deleteJob(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Execute the job.
@@ -74,22 +67,12 @@ public interface ISchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
-   * @return the job or <code>null</code> if the job could not be found
+   * @return the job
    */
-  Job getJob(String jobId)
-    throws SchedulerServiceException;
-
-  /**
-   * Retrieve the parameters for the job.
-   *
-   * @param jobId the ID used to uniquely identify the job
-   *
-   * @return the parameters for the job
-   */
-  List<JobParameter> getJobParameters(String jobId)
-    throws SchedulerServiceException;
+  Job getJob(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the jobs.
@@ -122,7 +105,7 @@ public interface ISchedulerService
    *
    * @return the number of jobs
    */
-  int getNumberOfJobs()
+  long getNumberOfJobs()
     throws SchedulerServiceException;
 
   /**
@@ -134,30 +117,23 @@ public interface ISchedulerService
     throws SchedulerServiceException;
 
   /**
-   * Increment the execution attempts for the job.
-   *
-   * @param jobId the ID used to uniquely identify the job
-   */
-  void incrementJobExecutionAttempts(String jobId)
-    throws SchedulerServiceException;
-
-  /**
    * Lock a job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the locked job
    */
-  void lockJob(String jobId, JobStatus status)
+  void lockJob(UUID jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the ID used to uniquely identify the job
+   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
-  void rescheduleJob(String jobId, String schedulingPattern)
+  void rescheduleJob(UUID jobId, String schedulingPattern)
     throws SchedulerServiceException;
 
   /**
@@ -165,10 +141,8 @@ public interface ISchedulerService
    *
    * @param status    the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
-   *
-   * @return the number of job locks reset
    */
-  int resetJobLocks(JobStatus status, JobStatus newStatus)
+  void resetJobLocks(JobStatus status, JobStatus newStatus)
     throws SchedulerServiceException;
 
   /**
@@ -183,19 +157,19 @@ public interface ISchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the job
    */
-  void setJobStatus(String jobId, JobStatus status)
+  void setJobStatus(UUID jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
-  void unlockJob(String jobId, JobStatus status)
+  void unlockJob(UUID jobId, JobStatus status)
     throws SchedulerServiceException;
 
   /**

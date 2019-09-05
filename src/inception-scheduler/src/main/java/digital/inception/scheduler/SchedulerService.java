@@ -79,17 +79,24 @@ public class SchedulerService
   private int maximumJobExecutionAttempts;
 
   /**
+   * The Job Repository.
+   */
+  private JobRepository jobRepository;
+
+  /**
    * Constructs a new <code>SchedulerService</code>.
    *
    * @param applicationContext the Spring application context
    * @param dataSource         the data source used to provide connections to the application
    *                           database
+   * @param jobRepository      the Job Repository
    */
   public SchedulerService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource)
+      "applicationDataSource") DataSource dataSource, JobRepository jobRepository)
   {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
+    this.jobRepository = jobRepository;
   }
 
   /**
@@ -107,92 +114,43 @@ public class SchedulerService
    * @param job the <code>Job</code> instance containing the information for the job
    */
   @Override
+  @Transactional
   public void createJob(Job job)
     throws SchedulerServiceException
   {
-    String createJobSQL =
-        "INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, is_enabled, status) "
-        + "VALUES (?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createJobSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(job.getId()));
-      statement.setString(2, job.getName());
-      statement.setString(3, job.getSchedulingPattern());
-      statement.setString(4, job.getJobClass());
-      statement.setBoolean(5, job.getIsEnabled());
-      statement.setInt(6, job.getStatus().code());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", createJobSQL));
-      }
+      jobRepository.saveAndFlush(job);
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to add the job (%s)",
+      throw new SchedulerServiceException(String.format("Failed to create the job (%s)",
           job.getName()), e);
-    }
-  }
-
-  /**
-   * Create the job parameter.
-   *
-   * @param jobParameter the job parameter
-   */
-  @Override
-  public void createJobParameter(JobParameter jobParameter)
-    throws SchedulerServiceException
-  {
-    String createJobParameterSQL =
-        "INSERT INTO scheduler.job_parameters (id, job_id, name, value) VALUES (?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createJobParameterSQL))
-    {
-      statement.setObject(1, UUID.fromString(jobParameter.getId()));
-      statement.setObject(2, UUID.fromString(jobParameter.getJobId()));
-      statement.setString(3, jobParameter.getName());
-      statement.setString(4, jobParameter.getValue());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createJobParameterSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to add the job parameter (%s) for the job (%s)", jobParameter.getName(),
-          jobParameter.getId()), e);
     }
   }
 
   /**
    * Delete the job
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   @Override
-  public void deleteJob(String jobId)
-    throws SchedulerServiceException
+  @Transactional
+  public void deleteJob(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException
   {
-    String deleteJobSQL = "DELETE FROM scheduler.jobs WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteJobSQL))
+    try
     {
-      statement.setObject(1, jobId);
-
-      if (statement.executeUpdate() != 1)
+      if (!jobRepository.existsById(jobId))
       {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", deleteJobSQL));
+        throw new JobNotFoundException(jobId);
       }
+
+      jobRepository.deleteById(jobId);
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -254,11 +212,9 @@ public class SchedulerService
     try
     {
       // Retrieve the parameters for the job
-      List<JobParameter> jobParameters = getJobParameters(job.getId());
-
       Map<String, String> parameters = new HashMap<>();
 
-      for (JobParameter jobParameter : jobParameters)
+      for (JobParameter jobParameter : job.getParameters())
       {
         parameters.put(jobParameter.getName(), jobParameter.getValue());
       }
@@ -296,15 +252,15 @@ public class SchedulerService
         + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs "
         + "WHERE (UPPER(name) LIKE ?) OR (UPPER(job_class) LIKE ?)";
 
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(StringUtils.isEmpty(filter)
-          ? getJobsSQL
-          : getFilteredJobsSQL))
+    try
     {
       if (!StringUtils.isEmpty(filter))
       {
-        statement.setString(1, "%" + filter.toUpperCase() + "%");
-        statement.setString(2, "%" + filter.toUpperCase() + "%");
+        return jobRepository.findFiltered("%" + filter.toUpperCase() + "%");
+      }
+      else
+      {
+        XXX
       }
 
       return getJobs(statement);
@@ -319,77 +275,36 @@ public class SchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
-   * @return the job or <code>null</code> if the job could not be found
+   * @return the job
    */
   @Override
-  public Job getJob(String jobId)
-    throws SchedulerServiceException
+  @Transactional
+  public Job getJob(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException
   {
-    String getJobSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs WHERE id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getJobSQL))
+    try
     {
-      statement.setObject(1, jobId);
+      Optional<Job> job = jobRepository.findById(jobId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (job.isPresent())
       {
-        if (rs.next())
-        {
-          return getJob(rs);
-        }
-        else
-        {
-          return null;
-        }
+        return job.get();
       }
+      else
+      {
+        throw new JobNotFoundException(jobId);
+      }
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId),
           e);
-    }
-  }
-
-  /**
-   * Retrieve the parameters for the job.
-   *
-   * @param jobId the ID used to uniquely identify the job
-   *
-   * @return the parameters for the job
-   */
-  @Override
-  public List<JobParameter> getJobParameters(String jobId)
-    throws SchedulerServiceException
-  {
-    String getJobParametersSQL =
-        "SELECT id, job_id, name, value FROM scheduler.job_parameters WHERE job_id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getJobParametersSQL))
-    {
-      statement.setObject(1, jobId);
-
-      List<JobParameter> jobParameters = new ArrayList<>();
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          jobParameters.add(getJobParameter(rs));
-        }
-      }
-
-      return jobParameters;
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to retrieve the parameters for the job (%s)", jobId), e);
     }
   }
 
@@ -402,14 +317,9 @@ public class SchedulerService
   public List<Job> getJobs()
     throws SchedulerServiceException
   {
-    String getJobsSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getJobsSQL))
+    try
     {
-      return getJobs(statement);
+      return jobRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -510,25 +420,12 @@ public class SchedulerService
    * @return the number of jobs
    */
   @Override
-  public int getNumberOfJobs()
+  public long getNumberOfJobs()
     throws SchedulerServiceException
   {
-    String getNumberOfJobsSQL = "SELECT COUNT(id) FROM scheduler.jobs";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfJobsSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
+      return jobRepository.count();
     }
     catch (Throwable e)
     {
@@ -572,48 +469,14 @@ public class SchedulerService
   }
 
   /**
-   * Increment the execution attempts for the job.
-   *
-   * @param jobId the ID used to uniquely identify the job
-   */
-  @Override
-  public void incrementJobExecutionAttempts(String jobId)
-    throws SchedulerServiceException
-  {
-    String incrementJobExecutionAttemptsSQL = "UPDATE scheduler.jobs "
-        + "SET execution_attempts=execution_attempts + 1, updated=?, last_executed=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(incrementJobExecutionAttemptsSQL))
-    {
-      Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-
-      statement.setTimestamp(1, currentTime);
-      statement.setTimestamp(2, currentTime);
-      statement.setObject(3, jobId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            incrementJobExecutionAttemptsSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to increment the execution attempts for the job (%s)", jobId), e);
-    }
-  }
-
-  /**
    * Lock a job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the locked job
    */
   @Override
-  public void lockJob(String jobId, JobStatus status)
+  @Transactional
+  public void lockJob(UUID jobId, JobStatus status)
     throws SchedulerServiceException
   {
     String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
@@ -642,13 +505,13 @@ public class SchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the ID used to uniquely identify
+   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
    *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
   @Override
-  public void rescheduleJob(String jobId, String schedulingPattern)
+  public void rescheduleJob(UUID jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -671,11 +534,10 @@ public class SchedulerService
    *
    * @param status    the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
-   *
-   * @return the number of job locks reset
    */
   @Override
-  public int resetJobLocks(JobStatus status, JobStatus newStatus)
+  @Transactional
+  public void resetJobLocks(JobStatus status, JobStatus newStatus)
     throws SchedulerServiceException
   {
     String resetJobLocksSQL = "UPDATE scheduler.jobs SET status=?, lock_name=NULL, updated=? "
@@ -779,11 +641,12 @@ public class SchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the job
    */
   @Override
-  public void setJobStatus(String jobId, JobStatus status)
+  @Transactional
+  public void setJobStatus(UUID jobId, JobStatus status)
     throws SchedulerServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -800,11 +663,12 @@ public class SchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   @Override
-  public void unlockJob(String jobId, JobStatus status)
+  @Transactional
+  public void unlockJob(UUID jobId, JobStatus status)
     throws SchedulerServiceException
   {
     String unlockJobSQL =
@@ -867,36 +731,7 @@ public class SchedulerService
     }
   }
 
-  private Job getJob(ResultSet rs)
-    throws SQLException
-  {
-    return new Job(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(
-        4), rs.getBoolean(5), JobStatus.fromCode(rs.getInt(6)), rs.getInt(7), rs.getString(8),
-        rs.getTimestamp(9), rs.getTimestamp(10), rs.getTimestamp(11));
-  }
-
-  private JobParameter getJobParameter(ResultSet rs)
-    throws SQLException
-  {
-    return new JobParameter(rs.getString(1), rs.getString(2),
-        rs.getString(3), rs.getString(4));
-  }
-
-  private List<Job> getJobs(PreparedStatement statement)
-    throws SQLException
-  {
-    try (ResultSet rs = statement.executeQuery())
-    {
-      List<Job> list = new ArrayList<>();
-
-      while (rs.next())
-      {
-        list.add(getJob(rs));
-      }
-
-      return list;
-    }
-  }
+  
 
   private void scheduleJob(Connection connection, String id, Date nextExecution)
     throws SchedulerServiceException

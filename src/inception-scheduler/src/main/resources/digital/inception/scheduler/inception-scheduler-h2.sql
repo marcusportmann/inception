@@ -8,16 +8,15 @@ CREATE SCHEMA scheduler;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE scheduler.jobs (
   id                 UUID          NOT NULL,
-  name               VARCHAR(4000) NOT NULL,
-  scheduling_pattern VARCHAR(4000) NOT NULL,
-  job_class          VARCHAR(4000) NOT NULL,
-  is_enabled         BOOLEAN       NOT NULL,
+  name               VARCHAR(100) NOT NULL,
+  scheduling_pattern VARCHAR(100) NOT NULL,
+  job_class          VARCHAR(1000) NOT NULL,
+  enabled            BOOLEAN       NOT NULL,
   status             INTEGER       NOT NULL DEFAULT 1,
   execution_attempts INTEGER       NOT NULL DEFAULT 0,
   lock_name          VARCHAR(100),
   last_executed      TIMESTAMP,
   next_execution     TIMESTAMP,
-  updated            TIMESTAMP,
 
   PRIMARY KEY (id)
 );
@@ -30,7 +29,7 @@ COMMENT ON COLUMN scheduler.jobs.scheduling_pattern IS 'The cron-style schedulin
 
 COMMENT ON COLUMN scheduler.jobs.job_class IS 'The fully qualified name of the Java class that implements the job';
 
-COMMENT ON COLUMN scheduler.jobs.is_enabled IS 'Is the job enabled for execution';
+COMMENT ON COLUMN scheduler.jobs.enabled IS 'Is the job enabled for execution';
 
 COMMENT ON COLUMN scheduler.jobs.status IS 'The status of the job';
 
@@ -42,24 +41,19 @@ COMMENT ON COLUMN scheduler.jobs.last_executed IS 'The date and time the job was
 
 COMMENT ON COLUMN scheduler.jobs.next_execution IS 'The date and time created the job will next be executed';
 
-COMMENT ON COLUMN scheduler.jobs.updated IS 'The date and time the job was last updated';
-
 
 CREATE TABLE scheduler.job_parameters (
-  id     UUID          NOT NULL,
   job_id UUID          NOT NULL,
-  name   VARCHAR(4000) NOT NULL,
+  name   VARCHAR(100) NOT NULL,
   value  VARCHAR(4000) NOT NULL,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (job_id, name),
   CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES scheduler.jobs(id) ON DELETE CASCADE
 );
 
 CREATE INDEX job_parameters_job_id_ix ON scheduler.job_parameters(job_id);
 
 CREATE INDEX job_parameters_name_ix ON scheduler.job_parameters(name);
-
-COMMENT ON COLUMN scheduler.job_parameters.id IS 'The ID used to uniquely identify the job parameter';
 
 COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID used to uniquely identify the job';
 

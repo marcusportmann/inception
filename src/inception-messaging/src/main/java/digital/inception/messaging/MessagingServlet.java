@@ -538,7 +538,7 @@ public class MessagingServlet extends HttpServlet
     // Queue the message part for assembly
     try
     {
-      messagingService.queueMessagePartForAssembly(messagePart);
+      messagingService.queueMessagePartForAssemblyAndAssembleAndProcessMessage(messagePart);
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.SUCCESS, String.format(
           "Successfully queued the message part (%s)", messagePart.getId()));
@@ -752,7 +752,7 @@ public class MessagingServlet extends HttpServlet
         return true;
       }
 
-      messagingService.queueMessageForProcessingAndProcess(message);
+      messagingService.queueMessageForProcessingAndProcessMessage(message);
 
       MessageResult result = new MessageResult(0, String.format(
           "Successfully queued the message (%s) for processing", message.getId()));

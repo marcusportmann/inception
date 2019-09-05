@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.reporting;
+package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -32,30 +32,29 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>ReportDefinitionNotFoundException</code> exception is thrown to indicate an error
- * condition as a result of a report definition that could not be found.
+ * The <code>JobNotFoundException</code> exception is thrown to indicate an error
+ * condition as a result of a job that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The report definition could not be found")
-@WebFault(name = "ReportDefinitionNotFoundException",
-    targetNamespace = "http://reporting.inception.digital",
-    faultBean = "digital.inception.core.service.ServiceError")
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The job could not be found")
+@WebFault(name = "JobNotFoundException",
+  targetNamespace = "http://scheduler.inception.digital",
+  faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class ReportDefinitionNotFoundException extends ServiceException
+public class JobNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
-  /**w
-   * Constructs a new <code>ReportDefinitionNotFoundException</code>.
+  /**
+   * Constructs a new <code>JobNotFoundException</code>.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
-  public ReportDefinitionNotFoundException(UUID reportDefinitionId)
+  public JobNotFoundException(UUID jobId)
   {
-    super("The report definition with ID (" + reportDefinitionId + ") could not be found");
+    super("The job with ID (" + jobId + ") could not be found");
   }
 }

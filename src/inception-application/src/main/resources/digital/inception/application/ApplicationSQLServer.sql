@@ -265,7 +265,6 @@ CREATE TABLE "MESSAGING"."MESSAGES" (
   created           DATETIME         NOT NULL,
   data_hash         NVARCHAR(100),
   encryption_iv     NVARCHAR(100),
-  updated           DATETIME,
   send_attempts     INTEGER,
   process_attempts  INTEGER,
   download_attempts INTEGER ,
@@ -331,10 +330,6 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'ENCRYPTION_IV';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the message was last updated' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'UPDATED';
-
-EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The number of times that the sending of the message was attempted' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'SEND_ATTEMPTS';
 
@@ -368,7 +363,6 @@ CREATE TABLE "MESSAGING"."MESSAGE_PARTS" (
   send_attempts          INTEGER,
   download_attempts      INTEGER,
   status                 INTEGER          NOT NULL,
-  updated                DATETIME,
   message_id             UNIQUEIDENTIFIER NOT NULL,
   message_username       NVARCHAR(1000)   NOT NULL,
   message_device_id      UNIQUEIDENTIFIER NOT NULL,
@@ -419,10 +413,6 @@ EXEC sys.sp_addextendedproperty
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The message part status e.g. Initialised, QueuedForSending, etc' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'STATUS';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the message part was last updated' ,
-@level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_PARTS', @level2type=N'COLUMN', @level2name=N'UPDATED';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the original message' ,
@@ -555,16 +545,15 @@ GO
 
 CREATE TABLE "SCHEDULER"."JOBS" (
   id                 UNIQUEIDENTIFIER NOT NULL,
-  name               NVARCHAR(256)    NOT NULL,
-  scheduling_pattern NVARCHAR(1024)   NOT NULL,
-  job_class          NVARCHAR(1024)   NOT NULL,
-  is_enabled         BIT              NOT NULL,
+  name               NVARCHAR(100)    NOT NULL,
+  scheduling_pattern NVARCHAR(100)   NOT NULL,
+  job_class          NVARCHAR(1000)   NOT NULL,
+  enabled            BIT              NOT NULL,
   status             INTEGER          NOT NULL DEFAULT 1,
   execution_attempts INTEGER          NOT NULL DEFAULT 0,
-  lock_name          NVARCHAR(256),
+  lock_name          NVARCHAR(100),
   last_executed      DATETIME,
   next_execution     DATETIME,
-  updated            DATETIME,
 
   PRIMARY KEY (id)
 );
@@ -587,7 +576,7 @@ EXEC sys.sp_addextendedproperty
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'Is the job enabled for execution' ,
-@level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'IS_ENABLED';
+@level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'ENABLED';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The status of the job' ,
@@ -608,31 +597,22 @@ EXEC sys.sp_addextendedproperty
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time created the job will next be executed' ,
 @level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'NEXT_EXECUTION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the job was updated' ,
-@level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOBS', @level2type=N'COLUMN', @level2name=N'UPDATED';
 GO
 
 
 
 CREATE TABLE "SCHEDULER"."JOB_PARAMETERS" (
-  id     UNIQUEIDENTIFIER NOT NULL,
   job_id UNIQUEIDENTIFIER NOT NULL,
-  name   NVARCHAR(256)    NOT NULL,
+  name   NVARCHAR(100)    NOT NULL,
   value  NVARCHAR(MAX)    NOT NULL,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (job_id, name),
   CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES "SCHEDULER"."JOBS"(id) ON DELETE CASCADE
 );
 
 CREATE INDEX job_parameters_job_id_ix ON "SCHEDULER"."JOB_PARAMETERS"(job_id);
 
 CREATE INDEX job_parameters_name_ix ON "SCHEDULER"."JOB_PARAMETERS"(name);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the job parameter' ,
-@level0type=N'SCHEMA', @level0name=N'SCHEDULER', @level1type=N'TABLE', @level1name=N'JOB_PARAMETERS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the job' ,

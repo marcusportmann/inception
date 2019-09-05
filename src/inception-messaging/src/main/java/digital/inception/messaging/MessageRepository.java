@@ -48,7 +48,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID>
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select m from Message m where m.status = 2 and "
-      + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.updated")
+      + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.lastProcessed")
   List<Message> findMessagesQueuedForProcessingForWrite(@Param(
       "processedBefore") LocalDateTime processedBefore, Pageable pageable);
 
@@ -61,39 +61,42 @@ public interface MessageRepository extends JpaRepository<Message, UUID>
 
   @Modifying
   @Query("update Message m set m.lockName = :lockName, m.status = 8, "
-      + "m.downloadAttempts = m.downloadAttempts + 1, m.updated = :when where m.id = :messageId")
+      + "m.downloadAttempts = m.downloadAttempts + 1 where m.id = :messageId")
   void lockMessageForDownload(@Param("messageId") UUID messageId, @Param(
-      "lockName") String lockName, @Param("when") LocalDateTime when);
+      "lockName") String lockName);
 
   @Modifying
   @Query("update Message m set m.lockName = :lockName, m.status = 5, "
-      + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when, m.updated = :when "
+      + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when "
       + "where m.id = :messageId")
   void lockMessageForProcessing(@Param("messageId") UUID messageId, @Param(
       "lockName") String lockName, @Param("when") LocalDateTime when);
 
-  @Modifying
-  @Query("update Message m set m.status = :newStatus, m.lockName = null, "
-      + "m.updated = current_timestamp where m.status = :status and m.lockName is not null "
-      + "and m.updated < :lockExpiry")
-  void resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(@Param(
-      "status") MessageStatus status, @Param("newStatus") MessageStatus newStatus, @Param(
-      "lockExpiry") LocalDateTime lockExpiry);
+//  Change this to reset processing locks and limit it to that status
+//
+//  Download locks don't need to be reset as they will be handled by the download process
+//
+//  @Modifying
+//  @Query("update Message m set m.status = :newStatus, m.lockName = null, "
+//      + "where m.status = :status and m.lockName is not null "
+//      + "and m.updated < :lockExpiry")
+//  void resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(@Param(
+//      "status") MessageStatus status, @Param("newStatus") MessageStatus newStatus, @Param(
+//      "lockExpiry") LocalDateTime lockExpiry);
 
   @Modifying
-  @Query("update Message m set m.status = :newStatus, m.lockName = null, "
-      + "m.updated = current_timestamp where m.status = :status and m.lockName = :lockName ")
+  @Query("update Message m set m.status = :newStatus, m.lockName = null "
+      + "where m.status = :status and m.lockName = :lockName ")
   void resetStatusAndLocksForMessagesWithStatusAndLock(@Param("status") MessageStatus status,
       @Param("newStatus") MessageStatus newStatus, @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update Message m set m.status = :status, m.updated = current_timestamp "
+  @Query("update Message m set m.status = :status "
       + "where m.id = :messageId")
   void setMessageStatus(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 
   @Modifying
-  @Query("update Message m set m.status = :status, m.lockName = null, "
-      + "m.updated = :when where m.id = :messageId")
-  void unlockMessage(@Param("messageId") UUID messageId, @Param("status") MessageStatus status,
-      @Param("when") LocalDateTime when);
+  @Query("update Message m set m.status = :status, m.lockName = null "
+      + "where m.id = :messageId")
+  void unlockMessage(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 }

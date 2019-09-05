@@ -41,7 +41,6 @@ CREATE TABLE messaging.messages (
   created           TIMESTAMP     NOT NULL,
   data_hash         VARCHAR(100),
   encryption_iv     VARCHAR(100),
-  updated           TIMESTAMP,
   send_attempts     INTEGER,
   process_attempts  INTEGER,
   download_attempts INTEGER,
@@ -86,8 +85,6 @@ COMMENT ON COLUMN messaging.messages.data_hash IS 'The hash of the unencrypted d
 
 COMMENT ON COLUMN messaging.messages.encryption_iv IS 'The base-64 encoded initialisation vector for the encryption scheme for the message';
 
-COMMENT ON COLUMN messaging.messages.updated IS 'The date and time the message was last updated';
-
 COMMENT ON COLUMN messaging.messages.send_attempts IS 'The number of times that the sending of the message was attempted';
 
 COMMENT ON COLUMN messaging.messages.process_attempts IS 'The number of times that the processing of the message was attempted';
@@ -108,7 +105,6 @@ CREATE TABLE messaging.message_parts (
   send_attempts          INTEGER,
   download_attempts      INTEGER,
   status                 INTEGER       NOT NULL,
-  updated                TIMESTAMP,
   message_id             UUID          NOT NULL,
   message_username       VARCHAR(1000) NOT NULL,
   message_device_id      UUID          NOT NULL,
@@ -147,8 +143,6 @@ COMMENT ON COLUMN messaging.message_parts.send_attempts IS 'The number of times 
 COMMENT ON COLUMN messaging.message_parts.download_attempts IS 'The number of times that an attempt was made to download the message part';
 
 COMMENT ON COLUMN messaging.message_parts.status IS 'The message part status e.g. Initialised, QueuedForSending, etc';
-
-COMMENT ON COLUMN messaging.message_parts.updated IS 'The date and time the message part was last updated';
 
 COMMENT ON COLUMN messaging.message_parts.message_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
 

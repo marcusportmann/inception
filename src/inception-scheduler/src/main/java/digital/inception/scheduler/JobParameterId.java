@@ -14,49 +14,50 @@
  * limitations under the License.
  */
 
-package digital.inception.codes;
+package digital.inception.scheduler;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
+import java.util.UUID;
+
 /**
- * The <code>CodeId</code> class implements the ID class for the <code>Code</code> class.
+ * The <code>JobParameterId</code> class implements the ID class for the <code>JobParameter</code>
+ * class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
-public class CodeId
+@SuppressWarnings({ "unused" })
+public class JobParameterId
   implements Serializable
 {
-  private static final long serialVersionUID = 1000000;
-
   /**
-   * The ID used to uniquely identify the code category the code is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter is associated with.
    */
-  private String codeCategoryId;
+  private UUID jobId;
 
   /**
-   * The ID used to uniquely identify the code.
+   * The name of the job parameter.
    */
-  private String id;
+  private String name;
 
   /**
-   * Constructs a new <code>CodeId</code>.
+   * Constructs a new <code>JobParameterId</code>.
    */
-  public CodeId() {}
+  public JobParameterId() {}
 
   /**
-   * Constructs a new <code>CodeId</code>.
+   * Constructs a new <code>JobParameterId</code>.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is
-   *                       associated with
-   * @param id             the ID used to uniquely identify the code
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
+   *              job parameter is associated with
+   * @param name  the name of the job parameter
    */
-  public CodeId(String codeCategoryId, String id)
+  public JobParameterId(UUID jobId, String name)
   {
-    this.codeCategoryId = codeCategoryId;
-    this.id = id;
+    this.jobId = jobId;
+    this.name = name;
   }
 
   /**
@@ -85,9 +86,9 @@ public class CodeId
       return false;
     }
 
-    CodeId other = (CodeId) obj;
+    JobParameterId other = (JobParameterId) obj;
 
-    return codeCategoryId.equals(other.codeCategoryId) && id.equals(other.id);
+    return jobId.equals(other.jobId) && name.equals(other.name);
   }
 
   /**
@@ -98,10 +99,10 @@ public class CodeId
   @Override
   public int hashCode()
   {
-    return ((codeCategoryId == null)
+    return ((jobId == null)
         ? 0
-        : codeCategoryId.hashCode()) + ((id == null)
+        : jobId.hashCode()) + ((name == null)
         ? 0
-        : id.hashCode());
+        : name.hashCode());
   }
 }

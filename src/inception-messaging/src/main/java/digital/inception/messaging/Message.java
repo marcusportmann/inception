@@ -50,12 +50,12 @@ import java.util.UUID;
 @ApiModel(value = "Message")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
-    "created", "updated", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed",
+    "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed",
     "lockName", "encryptionIV", "dataHash" })
 @XmlRootElement(name = "Message", namespace = "http://messaging.inception.digital")
 @XmlType(name = "Message", namespace = "http://messaging.inception.digital",
     propOrder = { "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
-        "created", "updated", "sendAttempts", "processAttempts", "downloadAttempts",
+        "created", "sendAttempts", "processAttempts", "downloadAttempts",
         "lastProcessed", "lockName", "encryptionIV", "dataHash" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -232,17 +232,6 @@ public class Message
   @NotNull
   @Column(name = "type_id", nullable = false)
   private UUID typeId;
-
-  /**
-   * The date and time the message was last updated.
-   */
-  @ApiModelProperty(value = "The date and time the message was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private LocalDateTime updated;
 
   /**
    * The username identifying the user associated with the message.
@@ -662,16 +651,6 @@ public class Message
   }
 
   /**
-   * Returns the date and time the message was last updated.
-   *
-   * @return the date and time the message was last updated
-   */
-  public LocalDateTime getUpdated()
-  {
-    return updated;
-  }
-
-  /**
    * Returns the username identifying the user associated with the message.
    *
    * @return the username identifying the user associated with the message
@@ -882,16 +861,6 @@ public class Message
   }
 
   /**
-   * Set the date and time the message was last updated.
-   *
-   * @param updated the date and time the message was last updated
-   */
-  public void setUpdated(LocalDateTime updated)
-  {
-    this.updated = updated;
-  }
-
-  /**
    * Set the username identifying the user associated with the message.
    *
    * @param username the username identifying the user associated with the message
@@ -922,15 +891,6 @@ public class Message
     buffer.append(" priority=\"").append(priority).append("\"");
     buffer.append(" status=\"").append(status).append("\"");
     buffer.append(" created=\"").append(ISO8601Util.fromLocalDateTime(created)).append("\"");
-
-    if (updated != null)
-    {
-      buffer.append(" updated=\"").append(ISO8601Util.fromLocalDateTime(updated)).append("\"");
-    }
-    else
-    {
-      buffer.append(" updated=\"Never\"");
-    }
 
     if (sendAttempts != null)
     {

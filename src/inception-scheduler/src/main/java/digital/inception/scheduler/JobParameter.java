@@ -16,15 +16,43 @@
 
 package digital.inception.scheduler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
+import java.util.UUID;
+
+import javax.persistence.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
 
 /**
  * The <code>JobParameter</code> class holds the information for a job parameter.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "JobParameter")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "jobId", "name", "value" })
+@XmlRootElement(name = "JobParameter", namespace = "http://scheduler.inception.digital")
+@XmlType(name = "JobParameter", namespace = "http://scheduler.inception.digital",
+    propOrder = { "jobId", "name", "value" })
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "scheduler", name = "job_parameters")
+@IdClass(JobParameterId.class)
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class JobParameter
   implements Serializable
@@ -32,57 +60,70 @@ public class JobParameter
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID uniquely identifying the job parameter.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter
+   * is associated with.
    */
-  private String id;
-
-  /**
-   * The ID used to uniquely identify the job the job parameter is associated with.
-   */
-  private String jobId;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "JobId", required = true)
+  @NotNull
+  @Id
+  @Column(name = "job_id", nullable = false)
+  private UUID jobId;
 
   /**
    * The name of the job parameter.
    */
+  @ApiModelProperty(value = "The name of the job parameter", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "name", nullable = false)
   private String name;
 
   /**
    * The value of the job parameter.
    */
+  @ApiModelProperty(value = "The value of the job parameter", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Value", required = true)
+  @NotNull
+  @Size(max = 4000)
+  @Column(name = "value", nullable = false)
   private String value;
 
   /**
    * Constructs a new <code>JobParameter</code>.
+   */
+  public JobParameter() {}
+
+  /**
+   * Constructs a new <code>JobParameter</code>.
    *
-   * @param id    the ID uniquely identifying the job parameter
-   * @param jobId the ID used to uniquely identify the job the job parameter is associated with
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
+   *              job parameter is associated with
    * @param name  the name of the job parameter
    * @param value the value of the job parameter
    */
-  public JobParameter(String id, String jobId, String name, String value)
+  public JobParameter(UUID jobId, String name, String value)
   {
-    this.id = id;
     this.jobId = jobId;
     this.name = name;
     this.value = value;
   }
 
   /**
-   * Returns the ID uniquely identifying the job parameter.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with.
    *
-   * @return the ID uniquely identifying the job parameter
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   *         parameter is associated with
    */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the job the job parameter is associated with.
-   *
-   * @return the ID used to uniquely identify the job the job parameter is associated with
-   */
-  public String getJobId()
+  public UUID getJobId()
   {
     return jobId;
   }
@@ -108,21 +149,13 @@ public class JobParameter
   }
 
   /**
-   * Set the ID uniquely identifying the job parameter.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
+   * parameter is associated with.
    *
-   * @param id the ID uniquely identifying the job parameter
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
+   *              job parameter is associated with
    */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the job the job parameter is associated with.
-   *
-   * @param jobId the ID used to uniquely identify the job the job parameter is associated with
-   */
-  public void setJobId(String jobId)
+  public void setJobId(UUID jobId)
   {
     this.jobId = jobId;
   }

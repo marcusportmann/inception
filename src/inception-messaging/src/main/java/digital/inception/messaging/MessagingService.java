@@ -35,13 +35,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -65,6 +60,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import javax.annotation.Resource;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -147,12 +143,6 @@ public class MessagingService
   private int maximumProcessingAttempts;
 
   /**
-   * The internal reference to the Messaging Service for transaction management.
-   */
-  @Resource
-  private IMessagingService self;
-
-  /**
    *  The message handlers.
    */
   private Map<UUID, IMessageHandler> messageHandlers;
@@ -178,6 +168,12 @@ public class MessagingService
    */
   @Value("${application.messaging.processingRetryDelay:#{60000}}")
   private int processingRetryDelay;
+
+  /**
+   * The internal reference to the Messaging Service for transaction management.
+   */
+  @Resource
+  private IMessagingService self;
 
   /**
    * Constructs a new <code>MessagingService</code>.
@@ -235,12 +231,12 @@ public class MessagingService
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
+  public boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
     throws MessagingServiceException
   {
     try
     {
-      return messagePartRepository.getNumberOfPartsForMessage(messageId) == totalParts;
+      return messagePartRepository.getNumberOfMessagePartsForMessageQueuedForAssembly(messageId) == totalParts;
     }
     catch (Throwable e)
     {
@@ -272,6 +268,98 @@ public class MessagingService
         throw new MessagingServiceException(String.format("Failed to archive the message (%s)",
             message.getId()), e);
       }
+    }
+  }
+
+  /**
+   * Assemble the message from the message parts that have been queued for assembly.
+   *
+   * @param messageId  sthe Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param totalParts the total number of parts for the message
+   */
+  @Override
+  @Transactional
+  public void assembleMessage(UUID messageId, int totalParts)
+    throws MessagingServiceException
+  {
+    try
+    {
+      // Check whether all the message parts for the message have been queued for assembly
+      if (allMessagePartsForMessageQueuedForAssembly(messageId, totalParts))
+      {
+        // Retrieve the message parts queued for assembly
+        List<MessagePart> messageParts = getMessagePartsQueuedForAssembly(
+          messageId, instanceName);
+
+        /*
+         * If there are no message parts that are queued for assembly then this is not necessarily
+         * an error because another Background Message Assembler could have assembled the message.
+         */
+        if (messageParts.size() == 0)
+        {
+          if (logger.isDebugEnabled())
+          {
+            logger.debug(
+              String.format("No message parts found for message (%s) that are queued for assembly",
+                messageId));
+          }
+
+          return;
+        }
+
+        // Retrieve the first message part
+        MessagePart firstMessagePart = messageParts.get(0);
+
+        // Assemble the message from its constituent parts
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        for (MessagePart tmpMessagePart : messageParts)
+        {
+          baos.write(tmpMessagePart.getData());
+        }
+
+        byte[] reconstructedData = baos.toByteArray();
+
+        // Check that the reconstructed message data is valid
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+
+        messageDigest.update(reconstructedData);
+
+        String messageChecksum = Base64Util.encodeBytes(messageDigest.digest());
+
+        if (!messageChecksum.equals(firstMessagePart.getMessageChecksum()))
+        {
+          // Delete the message parts
+          deleteMessagePartsForMessage(messageId);
+
+          logger.error(String.format(
+            "Failed to verify the checksum for the reconstructed message (%s) with type (%s) "
+              + "from the user (%s) and device (%s). Found %d bytes of message data with the hash "
+              + "(%s) that was reconstructed from %d message parts. The message will NOT be processed",
+            firstMessagePart.getMessageId(), firstMessagePart.getMessageTypeId(),
+            firstMessagePart.getMessageUsername(), firstMessagePart.getMessageDeviceId(), reconstructedData
+              .length, messageChecksum, messageParts.size()));
+
+          return;
+        }
+
+        Message message = new Message(firstMessagePart.getMessageId(), firstMessagePart.getMessageUsername(),
+          firstMessagePart.getMessageDeviceId(), firstMessagePart.getMessageTypeId(),
+          firstMessagePart.getMessageCorrelationId(), firstMessagePart.getMessagePriority(),
+          firstMessagePart.getMessageCreated(), reconstructedData, firstMessagePart.getMessageDataHash(),
+          firstMessagePart.getMessageEncryptionIV());
+
+        // Queue the message for processing
+        queueMessageForProcessingAndProcessMessage(message);
+
+        // Delete the message parts
+        deleteMessagePartsForMessage(messageId);
+      }
+    }
+    catch (Exception e)
+    {
+      throw new MessagingServiceException(String.format(
+        "Failed to assemble the message parts for the message (%s)", messageId), e);
     }
   }
 
@@ -317,8 +405,6 @@ public class MessagingService
   {
     try
     {
-      message.setUpdated(LocalDateTime.now());
-
       messageRepository.saveAndFlush(message);
     }
     catch (Throwable e)
@@ -342,8 +428,6 @@ public class MessagingService
   {
     try
     {
-      messagePart.setUpdated(LocalDateTime.now());
-
       messagePartRepository.saveAndFlush(messagePart);
     }
     catch (Throwable e)
@@ -685,15 +769,12 @@ public class MessagingService
 
       for (MessagePart messagePart : messageParts)
       {
-        LocalDateTime when = LocalDateTime.now();
-
-        messagePartRepository.lockMessagePartForAssembly(messagePart.getId(), instanceName, when);
+        messagePartRepository.lockMessagePartForAssembly(messagePart.getId(), instanceName);
 
         entityManager.detach(messagePart);
 
         messagePart.setStatus(MessagePartStatus.ASSEMBLING);
         messagePart.setLockName(lockName);
-        messagePart.setUpdated(when);
       }
 
       return messageParts;
@@ -750,15 +831,12 @@ public class MessagingService
 
       for (MessagePart messagePart : messageParts)
       {
-        LocalDateTime when = LocalDateTime.now();
-
-        messagePartRepository.lockMessagePartForDownload(messagePart.getId(), instanceName, when);
+        messagePartRepository.lockMessagePartForDownload(messagePart.getId(), instanceName);
 
         entityManager.detach(messagePart);
 
         messagePart.setStatus(MessagePartStatus.DOWNLOADING);
         messagePart.setLockName(instanceName);
-        messagePart.setUpdated(when);
         messagePart.incrementDownloadAttempts();
       }
 
@@ -830,16 +908,13 @@ public class MessagingService
           }
         }
 
-        LocalDateTime when = LocalDateTime.now();
-
-        messageRepository.lockMessageForDownload(message.getId(), instanceName, when);
+        messageRepository.lockMessageForDownload(message.getId(), instanceName);
 
         entityManager.detach(message);
 
         message.incrementDownloadAttempts();
         message.setLockName(instanceName);
         message.setStatus(MessageStatus.DOWNLOADING);
-        message.setUpdated(when);
       }
 
       return messages;
@@ -890,7 +965,6 @@ public class MessagingService
         message.setStatus(MessageStatus.PROCESSING);
         message.incrementProcessAttempts();
         message.setLastProcessed(when);
-        message.setUpdated(when);
 
         return message;
       }
@@ -1130,38 +1204,6 @@ public class MessagingService
     archiveMessage(message);
   }
 
-
-
-
-  /**
-   * Queue the specified message for processing and process the message using the Background
-   * Message Processor.
-   *
-   * @param message the message to queue
-   */
-  @Override
-  @Transactional
-  public void queueMessageForProcessingAndProcess(Message message)
-    throws MessagingServiceException
-  {
-    /*
-     * Queue the message for processing in a new transaction so it is available to the
-     * Background Message Processor, which will be triggered asynchronously in a different thread.
-     */
-    self.queueMessageForProcessing(message);
-
-    // Trigger the Background Message Processor to process the message that was queued
-    try
-    {
-      applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to trigger the Background Message Processor", e);
-    }
-  }
-
-
   /**
    * Queue the specified message for processing.
    *
@@ -1199,12 +1241,40 @@ public class MessagingService
   }
 
   /**
+   * Queue the specified message for processing and process the message using the Background
+   * Message Processor.
+   *
+   * @param message the message to queue
+   */
+  @Override
+  @Transactional
+  public void queueMessageForProcessingAndProcessMessage(Message message)
+    throws MessagingServiceException
+  {
+    /*
+     * Queue the message for processing in a new transaction so it is available to the
+     * Background Message Processor, which will be triggered asynchronously in a different thread.
+     */
+    self.queueMessageForProcessing(message);
+
+    // Trigger the Background Message Processor to process the message that was queued
+    try
+    {
+      applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
+    }
+    catch (Throwable e)
+    {
+      logger.error("Failed to trigger the Background Message Processor", e);
+    }
+  }
+
+  /**
    * Queue the specified message part for assembly.
    *
    * @param messagePart the message part to queue
    */
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessagePartForAssembly(MessagePart messagePart)
     throws MessagingServiceException
   {
@@ -1234,129 +1304,38 @@ public class MessagingService
       throw new MessagingServiceException(String.format(
           "Failed to queue the message part (%s) for assembly", messagePart.getId()), e);
     }
+  }
 
-    // TODO: MOVE TO BACKGROUND THREAD RATHER TO PREVENT MOBILE DEVICE WAITING FOR THIS - MARCUS
+  /**
+   * Queue the specified message part for assembly and if all the parts of the message have been
+   * queued for assembly then assemble the message using the Background Message Part Assembler
+   * and process the message using the Background Message Processor.
+   *
+   * @param messagePart the message part to queue
+   */
+  @Override
+  @Transactional
+  public void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
+    throws MessagingServiceException
+  {
+    /*
+     * Queue the message part for assembly in a new transaction so it is available to the
+     * Background Message Assembler, which will be triggered asynchronously in a different thread.
+     */
+    self.queueMessagePartForAssembly(messagePart);
 
     /*
-     * Check whether all the parts for the message have been queued for assembly and if so
-     * assemble the message.
+     * If all the message parts for the message have been queued for assembly then trigger the
+     * Background Message Assembler to assemble the message.
      */
     try
     {
-      // Check whether all the parts for the message have been queued for assembly
-      if (allPartsQueuedForMessage(messagePart.getMessageId(), messagePart.getTotalParts()))
-      {
-        // Retrieve the message parts queued for assembly
-        List<MessagePart> messageParts = getMessagePartsQueuedForAssembly(
-            messagePart.getMessageId(), instanceName);
-
-        // Assemble the message from its constituent parts
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        for (MessagePart tmpMessagePart : messageParts)
-        {
-          baos.write(tmpMessagePart.getData());
-        }
-
-        byte[] reconstructedData = baos.toByteArray();
-
-        // Check that the reconstructed message data is valid
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-
-        messageDigest.update(reconstructedData);
-
-        String messageChecksum = Base64Util.encodeBytes(messageDigest.digest());
-
-        if (!messageChecksum.equals(messagePart.getMessageChecksum()))
-        {
-          // Delete the message parts
-          deleteMessagePartsForMessage(messagePart.getMessageId());
-
-          logger.error(String.format(
-              "Failed to verify the checksum for the reconstructed message (%s) with type (%s) "
-              + "from the user (%s) and device (%s). Found %d bytes of message data with the hash "
-              + "(%s) that was reconstructed from %d message parts. The message will NOT be processed",
-              messagePart.getMessageId(), messagePart.getMessageTypeId(),
-              messagePart.getMessageUsername(), messagePart.getMessageDeviceId(), reconstructedData
-              .length, messageChecksum, messageParts.size()));
-
-          return;
-        }
-
-        Message message = new Message(messagePart.getMessageId(), messagePart.getMessageUsername(),
-            messagePart.getMessageDeviceId(), messagePart.getMessageTypeId(),
-            messagePart.getMessageCorrelationId(), messagePart.getMessagePriority(),
-            messagePart.getMessageCreated(), reconstructedData, messagePart.getMessageDataHash(),
-            messagePart.getMessageEncryptionIV());
-
-        // Queue the message for processing
-        queueMessageForProcessingAndProcess(message);
-
-        // Delete the message parts
-        deleteMessagePartsForMessage(messagePart.getMessageId());
-      }
-    }
-    catch (Exception e)
-    {
-      throw new MessagingServiceException(String.format(
-          "Failed to assemble the parts for the message (%s)", messagePart.getMessageId()), e);
-    }
-  }
-
-  /**
-   * Reset the expired message locks.
-   *
-   * @param status      the current status of the messages that have been locked
-   * @param newStatus   the new status for the messages that have been unlocked
-   * @param lockTimeout the lock timeout in seconds
-   */
-  @Override
-  @Transactional
-  public void resetExpiredMessageLocks(MessageStatus status, MessageStatus newStatus,
-      int lockTimeout)
-    throws MessagingServiceException
-  {
-    try
-    {
-      LocalDateTime lockExpiry = LocalDateTime.now();
-      lockExpiry = lockExpiry.minus(lockTimeout, ChronoUnit.SECONDS);
-
-      messageRepository.resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(status, newStatus,
-          lockExpiry);
+      applicationContext.getBean(BackgroundMessageAssembler.class).assembleMessage(
+        messagePart.getMessageId(), messagePart.getTotalParts());
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to reset the expired locks for the messages with the status (%s)", status), e);
-    }
-  }
-
-  /**
-   * Reset the expired message part locks.
-   *
-   * @param status      the current status of the message parts that have been locked
-   * @param newStatus   the new status for the message parts that have been unlocked
-   * @param lockTimeout the lock timeout in seconds
-   */
-  @Override
-  @Transactional
-  public void resetExpiredMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus,
-      int lockTimeout)
-    throws MessagingServiceException
-  {
-    try
-    {
-      LocalDateTime lockExpiry = LocalDateTime.now();
-      lockExpiry = lockExpiry.minus(lockTimeout, ChronoUnit.SECONDS);
-
-      messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndExpiredLocks(status,
-          newStatus, lockExpiry);
-    }
-    catch (Throwable e)
-    {
-      throw new MessagingServiceException(String.format(
-          "Failed to reset the expired locks for the message parts with the status (%s)", status),
-          e);
+      logger.error("Failed to trigger the Background Message Assembler", e);
     }
   }
 
@@ -1397,7 +1376,7 @@ public class MessagingService
   {
     try
     {
-      messagePartRepository.resetStatusAndLocksForMessagesWithStatusAndLock(status, newStatus,
+      messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndLock(status, newStatus,
           instanceName);
     }
     catch (Throwable e)
@@ -1468,13 +1447,10 @@ public class MessagingService
   {
     try
     {
-      LocalDateTime when = LocalDateTime.now();
-
-      messageRepository.unlockMessage(message.getId(), status, when);
+      messageRepository.unlockMessage(message.getId(), status);
 
       message.setStatus(status);
       message.setLockName(null);
-      message.setUpdated(when);
     }
     catch (Throwable e)
     {
@@ -1498,9 +1474,7 @@ public class MessagingService
   {
     try
     {
-      LocalDateTime when = LocalDateTime.now();
-
-      messagePartRepository.unlockMessagePart(messagePartId, status, when);
+      messagePartRepository.unlockMessagePart(messagePartId, status);
     }
     catch (Throwable e)
     {

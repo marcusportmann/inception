@@ -16,17 +16,51 @@
 
 package digital.inception.scheduler;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import digital.inception.core.xml.LocalDateTimeAdapter;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>Job</code> class holds the information for a job.
  *
  * @author Marcus Portmann
  */
+@ApiModel(value = "Job")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
+    "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
+@XmlRootElement(name = "Job", namespace = "http://  scheduler.inception.digital")
+@XmlType(name = "Job", namespace = "http://scheduler.inception.digital",
+    propOrder = { "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
+        "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "scheduler", name = "jobs")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Job
   implements Serializable
@@ -34,59 +68,120 @@ public class Job
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The parameters for the job.
+   */
+  @ApiModelProperty(value = "The parameters for the job")
+  @JsonProperty
+  @XmlElementWrapper(name = "Parameters")
+  @XmlElement(name = "Parameter")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
+      nullable = false)
+  private Set<JobParameter> parameters = new HashSet<>();
+
+  /**
+   * Is the job enabled for execution?
+   */
+  @ApiModelProperty(value = "Is the job enabled for execution", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Enabled", required = true)
+  @NotNull
+  @Column(name = "enabled", nullable = false)
+  private boolean enabled;
+
+  /**
    * The number of times the current execution of the job has been attempted.
    */
   private int executionAttempts;
 
   /**
-   * The ID used to uniquely identify the job.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the job.
    */
-  private String id;
-
-  /**
-   * Is the job enabled for execution.
-   */
-  private boolean isEnabled;
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The fully qualified name of the Java class that implements the job.
    */
+  @ApiModelProperty(value = "The fully qualified name of the Java class that implements the job",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "JobClass", required = true)
+  @NotNull
+  @Size(min = 1, max = 1000)
+  @Column(name = "job_class", nullable = false)
   private String jobClass;
 
   /**
    * The date and time the job was last executed.
    */
+  @ApiModelProperty(value = "The date and time the job was last executed")
+  @JsonProperty
+  @XmlElement(name = "LastExecuted")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "last_executed")
   private Date lastExecuted;
 
   /**
    * The name of the entity that has locked the job for execution.
    */
+  @ApiModelProperty(value = "The name of the entity that has locked the job for execution")
+  @XmlElement(name = "JobClass")
+  @Size(min = 1, max = 100)
+  @Column(name = "lock_name")
   private String lockName;
 
   /**
    * The name of the job.
    */
+  @ApiModelProperty(value = "The name of the job", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false)
   private String name;
 
   /**
    * The date and time when the job will next be executed.
    */
+  @ApiModelProperty(value = "The date and time when the job will next be executed")
+  @JsonProperty
+  @XmlElement(name = "NextExecution")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "next_execution")
   private Date nextExecution;
 
   /**
    * The cron-style scheduling pattern for the job.
    */
+  @ApiModelProperty(value = "The cron-style scheduling pattern for the job", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SchedulingPattern", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "scheduling_pattern", nullable = false)
   private String schedulingPattern;
 
   /**
    * The status of the job.
    */
+  @ApiModelProperty(value = "The status of the job", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Status", required = true)
+  @NotNull
+  @Column(name = "status", nullable = false)
   private JobStatus status;
-
-  /**
-   * The date and time the job was last updated.
-   */
-  private Date updated;
 
   /**
    * Constructs a new <code>Job</code>.
@@ -96,34 +191,33 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the ID used to uniquely identify the job
+   * @param id                the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
-   * @param isEnabled         is the job enabled for execution
+   * @param enabled           is the job enabled for execution
    * @param status            the status of the job
    * @param executionAttempts the number of times the current execution of the job has
    *                          been attempted
    * @param lockName          the name of the entity that has locked the job for execution
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
-   * @param updated           the date and time the job was last updated
    */
-  public Job(String id, String name, String schedulingPattern, String jobClass, boolean isEnabled,
+  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean enabled,
       JobStatus status, int executionAttempts, String lockName, Date lastExecuted,
-      Date nextExecution, Date updated)
+      Date nextExecution)
   {
     this.id = id;
     this.name = name;
     this.schedulingPattern = schedulingPattern;
     this.jobClass = jobClass;
-    this.isEnabled = isEnabled;
+    this.enabled = enabled;
     this.status = status;
     this.executionAttempts = executionAttempts;
     this.lockName = lockName;
     this.lastExecuted = lastExecuted;
     this.nextExecution = nextExecution;
-    this.updated = updated;
   }
 
   /**
@@ -137,23 +231,13 @@ public class Job
   }
 
   /**
-   * Returns the ID used to uniquely identify the job.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
    *
-   * @return the ID used to uniquely identify the job
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
-  }
-
-  /**
-   * Returns whether the job is enabled for execution.
-   *
-   * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
-   */
-  public boolean getIsEnabled()
-  {
-    return isEnabled;
   }
 
   /**
@@ -207,6 +291,16 @@ public class Job
   }
 
   /**
+   * Returns the parameters for the job.
+   *
+   * @return the parameters for the job
+   */
+  public Set<JobParameter> getParameters()
+  {
+    return parameters;
+  }
+
+  /**
    * Returns the cron-style scheduling pattern for the job.
    *
    * @return the cron-style scheduling pattern for the job
@@ -227,13 +321,24 @@ public class Job
   }
 
   /**
-   * Returns the date and time the job was last updated.
+   * Returns whether the job is enabled for execution.
    *
-   * @return the date and time the job was last updated
+   * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
    */
-  public Date getUpdated()
+  public boolean isEnabled()
   {
-    return updated;
+    return enabled;
+  }
+
+  /**
+   * Set whether the job is enabled for execution.
+   *
+   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
+   *                  otherwise
+   */
+  public void setEnabled(boolean enabled)
+  {
+    this.enabled = enabled;
   }
 
   /**
@@ -248,24 +353,13 @@ public class Job
   }
 
   /**
-   * Set the ID used to uniquely identify the job.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job.
    *
-   * @param id the ID used to uniquely identify the scheduled job
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the scheduled job
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
-  }
-
-  /**
-   * Set whether the job is enabled for execution.
-   *
-   * @param isEnabled <code>true</code> if the job is enabled for execution or <code>false</code>
-   *                  otherwise
-   */
-  public void setIsEnabled(boolean isEnabled)
-  {
-    this.isEnabled = isEnabled;
   }
 
   /**
@@ -319,6 +413,16 @@ public class Job
   }
 
   /**
+   * Set the parameters for the job.
+   *
+   * @param parameters the parameters for the job
+   */
+  public void setParameters(Set<JobParameter> parameters)
+  {
+    this.parameters = parameters;
+  }
+
+  /**
    * Set the cron-style scheduling pattern for the job.
    *
    * @param schedulingPattern the cron-style scheduling pattern for the job
@@ -336,15 +440,5 @@ public class Job
   public void setStatus(JobStatus status)
   {
     this.status = status;
-  }
-
-  /**
-   * Set the date and time the job was last updated.
-   *
-   * @param updated the date and time the job was last updated
-   */
-  public void setUpdated(Date updated)
-  {
-    this.updated = updated;
   }
 }

@@ -56,13 +56,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @ApiModel(value = "MessagePart")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
-    "updated", "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
+    "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
     "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
     "messageEncryptionIV", "messageChecksum", "lockName", "data" })
 @XmlRootElement(name = "MessagePart", namespace = "http://messaging.inception.digital")
 @XmlType(name = "MessagePart", namespace = "http://messaging.inception.digital",
     propOrder = { "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
-        "updated", "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
+        "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
         "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
         "messageEncryptionIV", "messageChecksum", "lockName", "data" })
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -278,17 +278,6 @@ public class MessagePart
   private int totalParts;
 
   /**
-   * The date and time the message part was last updated.
-   */
-  @ApiModelProperty(value = "The date and time the message part was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
-  private LocalDateTime updated;
-
-  /**
    * Constructs a new <code>MessagePart</code>.
    */
   public MessagePart() {}
@@ -422,7 +411,6 @@ public class MessagePart
    * @param downloadAttempts     the number of times that downloading of the message part was
    *                             attempted
    * @param status               the message part status e.g. Initialized, Sending, etc
-   * @param updated              the date and time the message part was last updated
    * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
    *                             identify the original message
    * @param messageUsername      the username identifying the user associated with the original
@@ -444,7 +432,7 @@ public class MessagePart
    * @param data                 the binary data for the message part
    */
   public MessagePart(UUID id, int partNo, int totalParts, Integer sendAttempts,
-      Integer downloadAttempts, MessagePartStatus status, LocalDateTime updated, UUID messageId,
+      Integer downloadAttempts, MessagePartStatus status, UUID messageId,
       String messageUsername, UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
       MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
       String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
@@ -455,7 +443,6 @@ public class MessagePart
     this.sendAttempts = sendAttempts;
     this.downloadAttempts = downloadAttempts;
     this.status = status;
-    this.updated = updated;
     this.messageId = messageId;
     this.messageUsername = messageUsername;
     this.messageDeviceId = messageDeviceId;
@@ -681,16 +668,6 @@ public class MessagePart
   }
 
   /**
-   * Returns the date and time the message part was last updated.
-   *
-   * @return the date and time the message part was last updated
-   */
-  public LocalDateTime getUpdated()
-  {
-    return updated;
-  }
-
-  /**
    * Increment the download attempts.
    */
   public void incrementDownloadAttempts()
@@ -906,16 +883,6 @@ public class MessagePart
   public void setTotalParts(int totalParts)
   {
     this.totalParts = totalParts;
-  }
-
-  /**
-   * Set the date and time the message part was last updated.
-   *
-   * @param updated the date and time the message part was last updated
-   */
-  public void setUpdated(LocalDateTime updated)
-  {
-    this.updated = updated;
   }
 
   /**

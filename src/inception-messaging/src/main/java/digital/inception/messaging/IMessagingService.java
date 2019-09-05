@@ -40,7 +40,7 @@ public interface IMessagingService
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
    *         <code>false</code> otherwise
    */
-  boolean allPartsQueuedForMessage(UUID messageId, int totalParts)
+  boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
     throws MessagingServiceException;
 
   /**
@@ -49,6 +49,15 @@ public interface IMessagingService
    * @param message the message to archive
    */
   void archiveMessage(Message message)
+    throws MessagingServiceException;
+
+  /**
+   * Assemble the message from the message parts that have been queued for assembly.
+   *
+   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param totalParts the total number of parts for the message
+   */
+  void assembleMessage(UUID messageId, int totalParts)
     throws MessagingServiceException;
 
   /**
@@ -313,7 +322,7 @@ public interface IMessagingService
    *
    * @param message the message to queue
    */
-  void queueMessageForProcessingAndProcess(Message message)
+  void queueMessageForProcessingAndProcessMessage(Message message)
     throws MessagingServiceException;
 
   /**
@@ -325,24 +334,13 @@ public interface IMessagingService
     throws MessagingServiceException;
 
   /**
-   * Reset the expired message locks.
+   * Queue the specified message part for assembly and if all the parts of the message have been
+   * queued for assembly then assemble the message using the Background Message Part Assembler
+   * and process the message using the Background Message Processor.
    *
-   * @param status      the current status of the messages that have been locked
-   * @param newStatus   the new status for the messages that have been unlocked
-   * @param lockTimeout the lock timeout in seconds
+   * @param messagePart the message part to queue
    */
-  void resetExpiredMessageLocks(MessageStatus status, MessageStatus newStatus, int lockTimeout)
-    throws MessagingServiceException;
-
-  /**
-   * Reset the expired message part locks.
-   *
-   * @param status      the current status of the message parts that have been locked
-   * @param newStatus   the new status for the message parts that have been unlocked
-   * @param lockTimeout the lock timeout in seconds
-   */
-  void resetExpiredMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus,
-      int lockTimeout)
+  void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
     throws MessagingServiceException;
 
   /**
