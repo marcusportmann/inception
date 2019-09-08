@@ -56,36 +56,6 @@
     </dependency>
   </dependencies>
 
-  <!--
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxws-maven-plugin</artifactId>
-        <version>${jaxws-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>wsimport</goal>
-            </goals>
-            <configuration>
-              <executable>${tool.wsimport}</executable>
-              <args>
-                <arg>-disableXmlSecurity</arg>
-              </args>
-              <wsdlFiles>
-                <wsdlFile>${basedir}/src/main/resources/META-INF/wsdl/MyMobileAPI.wsdl</wsdlFile>
-              </wsdlFiles>
-              <keep>true</keep>
-              <sourceDestDir>${project.build.directory}/generated-sources/jaxws</sourceDestDir>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-  -->
-
   <build>
     <plugins>
       <plugin>

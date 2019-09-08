@@ -31,6 +31,7 @@ import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
 import digital.inception.sample.api.SampleWebService;
 import digital.inception.sample.model.ISampleService;
+import digital.inception.scheduler.ISchedulerService;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityWebService;
 
@@ -116,6 +117,11 @@ public class SampleApplication extends Application
   private ISecurityService securityService;
 
   /**
+   * The Scheduler Service.
+   */
+  private ISchedulerService schedulerService;
+
+  /**
    * The JSR-303 validator.
    */
   private Validator validator;
@@ -131,6 +137,7 @@ public class SampleApplication extends Application
    * @param errorService            the Error Service
    * @param reportingService        the Reporting Service
    * @param sampleService           the Sample Service
+   * @param schedulerService        the Scheduler Service
    * @param securityService         the Security Service
    * @param validator               the JSR-303 validator
    */
@@ -138,7 +145,7 @@ public class SampleApplication extends Application
       "applicationDataSource") DataSource dataSource, ICodesService codesService,
       IConfigurationService configurationService, IErrorService errorService,
       IReportingService reportingService, ISampleService sampleService,
-      ISecurityService securityService, Validator validator)
+      ISchedulerService schedulerService, ISecurityService securityService, Validator validator)
   {
     super(applicationContext);
 
@@ -148,6 +155,7 @@ public class SampleApplication extends Application
     this.errorService = errorService;
     this.reportingService = reportingService;
     this.sampleService = sampleService;
+    this.schedulerService = schedulerService;
     this.securityService = securityService;
     this.validator = validator;
   }

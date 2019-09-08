@@ -73,6 +73,10 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-scheduler</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-security-rs</artifactId>
     </dependency>
     <dependency>

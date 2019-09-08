@@ -309,3 +309,5 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 
 
 
+INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, enabled, status)
+  VALUES ('', 'Sample Job', '* * * * *', 'digital.inception.sample.job.SampleJob', true, 0);

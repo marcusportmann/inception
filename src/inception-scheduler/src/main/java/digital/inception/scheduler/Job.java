@@ -31,7 +31,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -68,19 +69,6 @@ public class Job
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The parameters for the job.
-   */
-  @ApiModelProperty(value = "The parameters for the job")
-  @JsonProperty
-  @XmlElementWrapper(name = "Parameters")
-  @XmlElement(name = "Parameter")
-  @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
-      nullable = false)
-  private Set<JobParameter> parameters = new HashSet<>();
-
-  /**
    * Is the job enabled for execution?
    */
   @ApiModelProperty(value = "Is the job enabled for execution", required = true)
@@ -93,7 +81,12 @@ public class Job
   /**
    * The number of times the current execution of the job has been attempted.
    */
-  private int executionAttempts;
+  @ApiModelProperty(
+      value = "The number of times the current execution of the job has been attempted")
+  @JsonProperty
+  @XmlElement(name = "ExecutionAttempts")
+  @Column(name = "execution_attempts")
+  private Integer executionAttempts;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the job.
@@ -129,7 +122,7 @@ public class Job
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @Column(name = "last_executed")
-  private Date lastExecuted;
+  private LocalDateTime lastExecuted;
 
   /**
    * The name of the entity that has locked the job for execution.
@@ -160,7 +153,20 @@ public class Job
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   @Column(name = "next_execution")
-  private Date nextExecution;
+  private LocalDateTime nextExecution;
+
+  /**
+   * The parameters for the job.
+   */
+  @ApiModelProperty(value = "The parameters for the job")
+  @JsonProperty
+  @XmlElementWrapper(name = "Parameters")
+  @XmlElement(name = "Parameter")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
+      nullable = false)
+  private Set<JobParameter> parameters = new HashSet<>();
 
   /**
    * The cron-style scheduling pattern for the job.
@@ -205,8 +211,8 @@ public class Job
    * @param nextExecution     the date and time when the job will next be executed
    */
   public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean enabled,
-      JobStatus status, int executionAttempts, String lockName, Date lastExecuted,
-      Date nextExecution)
+      JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
+      LocalDateTime nextExecution)
   {
     this.id = id;
     this.name = name;
@@ -221,11 +227,23 @@ public class Job
   }
 
   /**
+   * Add the parameter for the job.
+   *
+   * @param parameter the parameter
+   */
+  public void addParameter(JobParameter parameter)
+  {
+    parameter.setJobId(this.getId());
+
+    this.parameters.add(parameter);
+  }
+
+  /**
    * Returns the number of times the current execution of the job has been attempted.
    *
    * @return the number of times the current execution of the job has been attempted
    */
-  public int getExecutionAttempts()
+  public Integer getExecutionAttempts()
   {
     return executionAttempts;
   }
@@ -255,7 +273,7 @@ public class Job
    *
    * @return the date and time the job was last executed
    */
-  public Date getLastExecuted()
+  public LocalDateTime getLastExecuted()
   {
     return lastExecuted;
   }
@@ -285,7 +303,7 @@ public class Job
    *
    * @return the date and time when the job will next be executed
    */
-  public Date getNextExecution()
+  public LocalDateTime getNextExecution()
   {
     return nextExecution;
   }
@@ -321,6 +339,21 @@ public class Job
   }
 
   /**
+   * Increment the number of execution attempts for the job.
+   */
+  public void incrementExecutionAttempts()
+  {
+    if (executionAttempts == null)
+    {
+      executionAttempts = 1;
+    }
+    else
+    {
+      executionAttempts++;
+    }
+  }
+
+  /**
    * Returns whether the job is enabled for execution.
    *
    * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
@@ -347,7 +380,7 @@ public class Job
    * @param executionAttempts the number of times the current execution of the job has
    *                          been attempted
    */
-  public void setExecutionAttempts(int executionAttempts)
+  public void setExecutionAttempts(Integer executionAttempts)
   {
     this.executionAttempts = executionAttempts;
   }
@@ -377,7 +410,7 @@ public class Job
    *
    * @param lastExecuted the date and time the job was last executed
    */
-  public void setLastExecuted(Date lastExecuted)
+  public void setLastExecuted(LocalDateTime lastExecuted)
   {
     this.lastExecuted = lastExecuted;
   }
@@ -407,7 +440,7 @@ public class Job
    *
    * @param nextExecution the date and time when the job will next be executed
    */
-  public void setNextExecution(Date nextExecution)
+  public void setNextExecution(LocalDateTime nextExecution)
   {
     this.nextExecution = nextExecution;
   }

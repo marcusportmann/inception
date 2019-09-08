@@ -18,6 +18,10 @@ package digital.inception.scheduler;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -47,11 +51,6 @@ import java.util.TimeZone;
 public class Predictor
 {
   /**
-   * The time zone for the prediction.
-   */
-  private TimeZone timeZone = TimeZone.getDefault();
-
-  /**
    * The scheduling pattern on which the predictor works.
    */
   private SchedulingPattern schedulingPattern;
@@ -60,6 +59,11 @@ public class Predictor
    * The start time for the next prediction.
    */
   private long time;
+
+  /**
+   * The time zone for the prediction.
+   */
+  private TimeZone timeZone = TimeZone.getDefault();
 
   /**
    * Constructs a new <code>SchedulingPattern</code>.
@@ -138,6 +142,17 @@ public class Predictor
   public synchronized Date nextMatchingDate()
   {
     return new Date(nextMatchingTime());
+  }
+
+  /**
+   * Returns the next matching moment as a {@link LocalDateTime} object.
+   *
+   * @return the next matching moment as a {@link LocalDateTime} object
+   */
+  public synchronized LocalDateTime nextMatchingLocalDateTime()
+  {
+    return LocalDateTime.ofInstant(Instant.ofEpochMilli(nextMatchingTime()),
+        ZoneId.systemDefault());
   }
 
   /**

@@ -18,7 +18,8 @@ package digital.inception.scheduler;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import java.util.Map;
 
 /**
@@ -30,10 +31,14 @@ import java.util.Map;
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class JobExecutionContext
 {
-  /* The date and time that the job was scheduled to be executed. */
-  private Date executionDate;
+  /**
+   * The date and time that the job was scheduled to be executed.
+   */
+  private LocalDateTime executionDate;
 
-  /* The parameters for the job. */
+  /**
+   * The parameters for the job.
+   */
   private Map<String, String> parameters;
 
   /**
@@ -42,7 +47,7 @@ public class JobExecutionContext
    * @param executionDate the date and time that the job was scheduled to be executed
    * @param parameters    the parameters for the job
    */
-  public JobExecutionContext(Date executionDate, Map<String, String> parameters)
+  public JobExecutionContext(LocalDateTime executionDate, Map<String, String> parameters)
   {
     this.executionDate = executionDate;
     this.parameters = parameters;
@@ -53,7 +58,7 @@ public class JobExecutionContext
    *
    * @return the date and time that the job was scheduled to be executed
    */
-  public Date getExecutionDate()
+  public LocalDateTime getExecutionDate()
   {
     return executionDate;
   }

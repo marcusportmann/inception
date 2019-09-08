@@ -104,6 +104,18 @@ public class JobParameter
   /**
    * Constructs a new <code>JobParameter</code>.
    *
+   * @param name  the name of the job parameter
+   * @param value the value of the job parameter
+   */
+  public JobParameter(String name, String value)
+  {
+    this.name = name;
+    this.value = value;
+  }
+
+  /**
+   * Constructs a new <code>JobParameter</code>.
+   *
    * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
    *              job parameter is associated with
    * @param name  the name of the job parameter

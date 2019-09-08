@@ -82,15 +82,19 @@ public class SchedulerServiceTest
     throws Exception
   {
     Job job = getTestJobDetails();
-    job.setIsEnabled(false);
-
-    schedulerService.createJob(job);
+    job.setEnabled(false);
 
     for (int i = 0; i < 10; i++)
     {
-      schedulerService.createJobParameter(new JobParameter(UUID.randomUUID().toString(), job.getId(),
-          job.getName() + " Parameter " + i, job.getName() + " Value " + i));
+      job.addParameter(new JobParameter(job.getName() + " Parameter " + i, job.getName()
+          + " Value " + i));
     }
+
+    schedulerService.createJob(job);
+
+    Job retrievedJob = schedulerService.getJob(job.getId());
+
+    compareJobs(job, retrievedJob);
   }
 
   /**
@@ -101,7 +105,7 @@ public class SchedulerServiceTest
     throws Exception
   {
     Job disabledJob = getTestJobDetails();
-    disabledJob.setIsEnabled(false);
+    disabledJob.setEnabled(false);
 
     schedulerService.createJob(disabledJob);
 
@@ -126,7 +130,7 @@ public class SchedulerServiceTest
 
     compareJobs(job, retrievedJob);
 
-    int numberOfJobs = schedulerService.getNumberOfJobs();
+    long numberOfJobs = schedulerService.getNumberOfJobs();
 
     assertEquals(String.format("The correct number of jobs (%d) was not retrieved",
         beforeRetrievedJobs.size() + 1), beforeRetrievedJobs.size() + 1, numberOfJobs);
@@ -175,7 +179,7 @@ public class SchedulerServiceTest
           job.getId()));
     }
 
-    //noinspection StatementWithEmptyBody
+    // noinspection StatementWithEmptyBody
     while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
@@ -205,16 +209,12 @@ public class SchedulerServiceTest
     jobCount++;
 
     Job job = new Job();
-    job.setId(UUID.randomUUID().toString());
+    job.setId(UUID.randomUUID());
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("digital.inception.scheduler.TestJob");
-    job.setIsEnabled(true);
+    job.setEnabled(true);
     job.setStatus(JobStatus.UNSCHEDULED);
-    job.setExecutionAttempts(0);
-    job.setLockName(null);
-    job.setLastExecuted(null);
-    job.setUpdated(null);
 
     return job;
   }
@@ -227,8 +227,8 @@ public class SchedulerServiceTest
         job1.getSchedulingPattern(), job2.getSchedulingPattern());
     assertEquals("The job class values for the two jobs do not match", job1.getJobClass(),
         job2.getJobClass());
-    assertEquals("The is enabled values for the two jobs do not match", job1.getIsEnabled(),
-        job2.getIsEnabled());
+    assertEquals("The is enabled values for the two jobs do not match", job1.isEnabled(),
+        job2.isEnabled());
     assertEquals("The status values for the two jobs do not match", job1.getStatus(),
         job2.getStatus());
     assertEquals("The execution attempts values for the two jobs do not match",
@@ -237,7 +237,29 @@ public class SchedulerServiceTest
         job2.getLockName());
     assertEquals("The last executed values for the two jobs do not match", job1.getLastExecuted(),
         job2.getLastExecuted());
-    assertEquals("The updated values for the two jobs do not match", job1.getUpdated(),
-        job2.getUpdated());
+    assertEquals("The number of parameters for the two jobs do not match", job1.getParameters()
+        .size(), job2.getParameters().size());
+
+    for (JobParameter job1Parameter : job1.getParameters())
+    {
+      boolean foundParameter = false;
+
+      for (JobParameter job2Parameter : job2.getParameters())
+      {
+        if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName()))
+        {
+          assertEquals(
+            "The values for the two job parameters (" + job1Parameter.getName() + ") do not match",
+            job1Parameter.getValue(), job2Parameter.getValue());
+
+          foundParameter = true;
+        }
+      }
+
+      if (!foundParameter)
+      {
+        fail("Failed to find the job parameter (" + job1Parameter.getName() + ")");
+      }
+    }
   }
 }

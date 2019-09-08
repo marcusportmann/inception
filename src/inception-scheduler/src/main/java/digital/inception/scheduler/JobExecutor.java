@@ -95,19 +95,6 @@ public class JobExecutor
     {
       logger.error(String.format("Failed to execute the job (%s)", job.getId()), e);
 
-      // Increment the execution attempts for the job
-      try
-      {
-        schedulerService.incrementJobExecutionAttempts(job.getId());
-
-        job.setExecutionAttempts(job.getExecutionAttempts() + 1);
-      }
-      catch (Throwable f)
-      {
-        logger.error(String.format("Failed to increment the execution attempts for the job (%s)",
-            job.getId()), f);
-      }
-
       try
       {
         /*

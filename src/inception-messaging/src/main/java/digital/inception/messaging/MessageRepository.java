@@ -72,18 +72,6 @@ public interface MessageRepository extends JpaRepository<Message, UUID>
   void lockMessageForProcessing(@Param("messageId") UUID messageId, @Param(
       "lockName") String lockName, @Param("when") LocalDateTime when);
 
-//  Change this to reset processing locks and limit it to that status
-//
-//  Download locks don't need to be reset as they will be handled by the download process
-//
-//  @Modifying
-//  @Query("update Message m set m.status = :newStatus, m.lockName = null, "
-//      + "where m.status = :status and m.lockName is not null "
-//      + "and m.updated < :lockExpiry")
-//  void resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(@Param(
-//      "status") MessageStatus status, @Param("newStatus") MessageStatus newStatus, @Param(
-//      "lockExpiry") LocalDateTime lockExpiry);
-
   @Modifying
   @Query("update Message m set m.status = :newStatus, m.lockName = null "
       + "where m.status = :status and m.lockName = :lockName ")

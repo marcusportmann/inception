@@ -49,58 +49,43 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Query("select j from Job j where upper(j.name) like :filter or upper(j.jobClass) like :filter")
   List<Job> findFiltered(String filter);
 
-//
-//  @Lock(LockModeType.PESSIMISTIC_WRITE)
-//  @Query("select m from Message m where m.status = 2 and "
-//    + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.lastProcessed")
-//  List<Message> findMessagesQueuedForProcessingForWrite(@Param(
-//    "processedBefore") LocalDateTime processedBefore, Pageable pageable);
-//
-//  @Lock(LockModeType.PESSIMISTIC_WRITE)
-//  @Query("select m from Message m where m.status = :status and m.username = :username and "
-//    + "m.deviceId = :deviceId order by m.created")
-//  List<Message> findMessagesWithStatusForUserAndDeviceForWrite(@Param(
-//    "status") MessageStatus status, @Param("username") String username, @Param(
-//    "deviceId") UUID deviceId, Pageable pageable);
-//
-//  @Modifying
-//  @Query("update Message m set m.lockName = :lockName, m.status = 8, "
-//    + "m.downloadAttempts = m.downloadAttempts + 1 where m.id = :messageId")
-//  void lockMessageForDownload(@Param("messageId") UUID messageId, @Param(
-//    "lockName") String lockName);
-//
-//  @Modifying
-//  @Query("update Message m set m.lockName = :lockName, m.status = 5, "
-//    + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when "
-//    + "where m.id = :messageId")
-//  void lockMessageForProcessing(@Param("messageId") UUID messageId, @Param(
-//    "lockName") String lockName, @Param("when") LocalDateTime when);
-//
-////  Change this to reset processing locks and limit it to that status
-////
-////  Download locks don't need to be reset as they will be handled by the download process
-////
-////  @Modifying
-////  @Query("update Message m set m.status = :newStatus, m.lockName = null, "
-////      + "where m.status = :status and m.lockName is not null "
-////      + "and m.updated < :lockExpiry")
-////  void resetStatusAndLocksForMessagesWithStatusAndExpiredLocks(@Param(
-////      "status") MessageStatus status, @Param("newStatus") MessageStatus newStatus, @Param(
-////      "lockExpiry") LocalDateTime lockExpiry);
-//
-//  @Modifying
-//  @Query("update Message m set m.status = :newStatus, m.lockName = null "
-//    + "where m.status = :status and m.lockName = :lockName ")
-//  void resetStatusAndLocksForMessagesWithStatusAndLock(@Param("status") MessageStatus status,
-//    @Param("newStatus") MessageStatus newStatus, @Param("lockName") String lockName);
-//
-//  @Modifying
-//  @Query("update Message m set m.status = :status "
-//    + "where m.id = :messageId")
-//  void setMessageStatus(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
-//
-//  @Modifying
-//  @Query("update Message m set m.status = :status, m.lockName = null "
-//    + "where m.id = :messageId")
-//  void unlockMessage(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @Query("select j from Job j where j.status = 1 and ((j.executionAttempts is null) or "
+      + "((j.executionAttempts > 0) and (j.lastExecuted<lastExecutedBefore))) and "
+      + "j.nextExecution <= current_timestamp")
+  List<Job> findJobsScheduledForExecutionForWrite(@Param(
+      "lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
+
+  @Query("select j from Job j where j.enabled = true and j.status = 0")
+  List<Job> findUnscheduledJobs();
+
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  @Query("select j from Job j where j.enabled = true and j.status = 0")
+  List<Job> findUnscheduledJobsForWrite(Pageable pageable);
+
+  @Modifying
+  @Query("update Job j set j.lockName = :lockName, j.status = 2, "
+      + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
+      + "where j.id = :jobId")
+  void lockJobForExecution(@Param("jobId") UUID jobId, @Param("lockName") String lockName, @Param(
+      "when") LocalDateTime when);
+
+  @Modifying
+  @Query("update Job j set j.status = :newStatus, j.lockName = null "
+      + "where j.lockName = :lockName and j.status = :status")
+  void resetJobLocks(@Param("status") JobStatus status, @Param("newStatus") JobStatus newStatus,
+      @Param("lockName") String lockName);
+
+  @Modifying
+  @Query("update Job j set j.status = 1, j.executionAttempts = null, "
+      + "j.nextExecution = :nextExecution where j.id = :jobId")
+  void scheduleJob(@Param("jobId") UUID jobId, @Param("nextExecution") LocalDateTime nextExecution);
+
+  @Modifying
+  @Query("update Job j set j.status = :status where id = :jobId")
+  void setJobStatus(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
+
+  @Modifying
+  @Query("update Job j set j.status = :status, j.lockName = null where j.id = :jobId")
+  void unlockJob(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
 }

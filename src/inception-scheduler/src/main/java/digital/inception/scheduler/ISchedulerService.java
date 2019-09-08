@@ -116,14 +116,14 @@ public interface ISchedulerService
   List<Job> getUnscheduledJobs()
     throws SchedulerServiceException;
 
-  /**
-   * Lock a job.
-   *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
-   * @param status the new status for the locked job
-   */
-  void lockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+//  /**
+//   * Lock a job.
+//   *
+//   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+//   * @param status the new status for the locked job
+//   */
+//  void lockJob(UUID jobId, JobStatus status)
+//    throws SchedulerServiceException;
 
   /**
    * Reschedule the job for execution.
@@ -134,7 +134,7 @@ public interface ISchedulerService
    *                          next execution time
    */
   void rescheduleJob(UUID jobId, String schedulingPattern)
-    throws SchedulerServiceException;
+    throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Reset the job locks.
@@ -148,8 +148,8 @@ public interface ISchedulerService
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
-   *         if there are no more unscheduled jobs to schedule
+   * @return <code>true</code> if a job was successfully scheduled for execution or
+   *         <code>false</code> otherwise
    */
   boolean scheduleNextUnscheduledJobForExecution()
     throws SchedulerServiceException;
@@ -161,7 +161,7 @@ public interface ISchedulerService
    * @param status the new status for the job
    */
   void setJobStatus(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+    throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Unlock a locked job.
@@ -170,7 +170,7 @@ public interface ISchedulerService
    * @param status the new status for the unlocked job
    */
   void unlockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException;
+    throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Update the job.
@@ -178,5 +178,5 @@ public interface ISchedulerService
    * @param job the <code>Job</code> instance containing the updated information for the job
    */
   void updateJob(Job job)
-    throws SchedulerServiceException;
+    throws JobNotFoundException, SchedulerServiceException;
 }

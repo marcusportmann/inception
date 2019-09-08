@@ -24,9 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +34,13 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import java.util.*;
-import java.util.Date;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
@@ -53,24 +54,28 @@ public class SchedulerService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
-
   /**
    * The Spring application context.
    */
   private ApplicationContext applicationContext;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  private DataSource dataSource;
+  /* Entity Manager */
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  private EntityManager entityManager;
+
+  /* The name of the Scheduler Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
    */
   @Value("${application.scheduler.jobExecutionRetryDelay:#{60000}}")
   private int jobExecutionRetryDelay;
+
+  /**
+   * The Job Repository.
+   */
+  private JobRepository jobRepository;
 
   /*
    * The maximum number of times execution will be attempted for a job.
@@ -79,23 +84,14 @@ public class SchedulerService
   private int maximumJobExecutionAttempts;
 
   /**
-   * The Job Repository.
-   */
-  private JobRepository jobRepository;
-
-  /**
    * Constructs a new <code>SchedulerService</code>.
    *
    * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
    * @param jobRepository      the Job Repository
    */
-  public SchedulerService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, JobRepository jobRepository)
+  public SchedulerService(ApplicationContext applicationContext, JobRepository jobRepository)
   {
     this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
     this.jobRepository = jobRepository;
   }
 
@@ -243,15 +239,6 @@ public class SchedulerService
   public List<Job> getFilteredJobs(String filter)
     throws SchedulerServiceException
   {
-    String getJobsSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs";
-
-    String getFilteredJobsSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs "
-        + "WHERE (UPPER(name) LIKE ?) OR (UPPER(job_class) LIKE ?)";
-
     try
     {
       if (!StringUtils.isEmpty(filter))
@@ -260,10 +247,8 @@ public class SchedulerService
       }
       else
       {
-        XXX
+        return jobRepository.findAll();
       }
-
-      return getJobs(statement);
     }
     catch (Throwable e)
     {
@@ -280,7 +265,6 @@ public class SchedulerService
    * @return the job
    */
   @Override
-  @Transactional
   public Job getJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
@@ -351,61 +335,38 @@ public class SchedulerService
   public Job getNextJobScheduledForExecution()
     throws SchedulerServiceException
   {
-    String getNextJobScheduledForExecutionSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs "
-        + "WHERE status=? AND ((execution_attempts=0) OR "
-        + "((execution_attempts>0) AND (last_executed<?))) AND next_execution <= ? "
-        + "ORDER BY updated FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
-
     try
     {
-      Job job = null;
+      LocalDateTime lastExecutedBefore = LocalDateTime.now();
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-            getNextJobScheduledForExecutionSQL))
+      lastExecutedBefore = lastExecutedBefore.minus(jobExecutionRetryDelay, ChronoUnit.MILLIS);
+
+      PageRequest pageRequest = PageRequest.of(0, 1);
+
+      List<Job> jobs = jobRepository.findJobsScheduledForExecutionForWrite(lastExecutedBefore,
+          pageRequest);
+
+      if (jobs.size() > 0)
       {
-        Timestamp processedBefore = new Timestamp(System.currentTimeMillis()
-            - jobExecutionRetryDelay);
+        Job job = jobs.get(0);
 
-        statement.setInt(1, JobStatus.SCHEDULED.code());
-        statement.setTimestamp(2, processedBefore);
-        statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+        LocalDateTime when = LocalDateTime.now();
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          if (rs.next())
-          {
-            Timestamp updated = new Timestamp(System.currentTimeMillis());
+        jobRepository.lockJobForExecution(job.getId(), instanceName, when);
 
-            job = getJob(rs);
+        entityManager.detach(job);
 
-            job.setStatus(JobStatus.EXECUTING);
-            job.setLockName(instanceName);
-            job.setUpdated(updated);
+        job.setLockName(instanceName);
+        job.setStatus(JobStatus.EXECUTING);
+        job.incrementExecutionAttempts();
+        job.setLastExecuted(when);
 
-            try (PreparedStatement updateStatement = connection.prepareStatement(lockJobSQL))
-            {
-              updateStatement.setInt(1, JobStatus.EXECUTING.code());
-              updateStatement.setString(2, instanceName);
-              updateStatement.setTimestamp(3, updated);
-              updateStatement.setObject(4, job.getId());
-
-              if (updateStatement.executeUpdate() != 1)
-              {
-                throw new SchedulerServiceException(String.format(
-                    "No rows were affected as a result of executing the SQL statement (%s)",
-                    lockJobSQL));
-              }
-            }
-          }
-        }
+        return job;
       }
-
-      return job;
+      else
+      {
+        return null;
+      }
     }
     catch (Throwable e)
     {
@@ -442,25 +403,9 @@ public class SchedulerService
   public List<Job> getUnscheduledJobs()
     throws SchedulerServiceException
   {
-    String getUnscheduledJobsSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs "
-        + "WHERE is_enabled = TRUE AND status = 0";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUnscheduledJobsSQL))
+    try
     {
-      List<Job> unscheduledJobs = new ArrayList<>();
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          unscheduledJobs.add(getJob(rs));
-        }
-      }
-
-      return unscheduledJobs;
+      return jobRepository.findUnscheduledJobs();
     }
     catch (Throwable e)
     {
@@ -468,39 +413,39 @@ public class SchedulerService
     }
   }
 
-  /**
-   * Lock a job.
-   *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
-   * @param status the new status for the locked job
-   */
-  @Override
-  @Transactional
-  public void lockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException
-  {
-    String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(lockJobSQL))
-    {
-      statement.setInt(1, status.code());
-      statement.setString(2, instanceName);
-      statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(4, jobId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", lockJobSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to lock and set the status for the job (%s) to (%s)", jobId, status), e);
-    }
-  }
+///**
+// * Lock a job.
+// *
+// * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+// * @param status the new status for the locked job
+// */
+//@Override
+//@Transactional
+//public void lockJob(UUID jobId, JobStatus status)
+//  throws SchedulerServiceException
+//{
+//  String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
+//
+//  try (Connection connection = dataSource.getConnection();
+//    PreparedStatement statement = connection.prepareStatement(lockJobSQL))
+//  {
+//    statement.setInt(1, status.code());
+//    statement.setString(2, instanceName);
+//    statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+//    statement.setObject(4, jobId);
+//
+//    if (statement.executeUpdate() != 1)
+//    {
+//      throw new SchedulerServiceException(String.format(
+//          "No rows were affected as a result of executing the SQL statement (%s)", lockJobSQL));
+//    }
+//  }
+//  catch (Throwable e)
+//  {
+//    throw new SchedulerServiceException(String.format(
+//        "Failed to lock and set the status for the job (%s) to (%s)", jobId, status), e);
+//  }
+//}
 
   /**
    * Reschedule the job for execution.
@@ -511,16 +456,15 @@ public class SchedulerService
    *                          next execution time
    */
   @Override
+  @Transactional
   public void rescheduleJob(UUID jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
       Predictor predictor = new Predictor(schedulingPattern, System.currentTimeMillis());
 
-      Date nextExecution = predictor.nextMatchingDate();
-
-      scheduleJob(connection, jobId, nextExecution);
+      jobRepository.scheduleJob(jobId, predictor.nextMatchingLocalDateTime());
     }
     catch (Throwable e)
     {
@@ -540,18 +484,9 @@ public class SchedulerService
   public void resetJobLocks(JobStatus status, JobStatus newStatus)
     throws SchedulerServiceException
   {
-    String resetJobLocksSQL = "UPDATE scheduler.jobs SET status=?, lock_name=NULL, updated=? "
-        + "WHERE lock_name=? AND status=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetJobLocksSQL))
+    try
     {
-      statement.setInt(1, newStatus.code());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setString(3, instanceName);
-      statement.setInt(4, status.code());
-
-      return statement.executeUpdate();
+      jobRepository.resetJobLocks(status, newStatus, instanceName);
     }
     catch (Throwable e)
     {
@@ -564,73 +499,59 @@ public class SchedulerService
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <code>true</code> if there are more unscheduled jobs to schedule or <code>false</code>
-   *         if there are no more unscheduled jobs to schedule
+   * @return <code>true</code> if a job was successfully scheduled for execution or
+   *         <code>false</code> otherwise
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public boolean scheduleNextUnscheduledJobForExecution()
     throws SchedulerServiceException
   {
-    String getNextUnscheduledJobSQL =
-        "SELECT id, name, scheduling_pattern, job_class, is_enabled, status, execution_attempts, "
-        + "lock_name, last_executed, next_execution, updated FROM scheduler.jobs "
-        + "WHERE is_enabled = TRUE AND status = 0 "
-        + "ORDER BY updated FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
     try
     {
-      boolean hasMoreUnscheduledJobs;
+      PageRequest pageRequest = PageRequest.of(0, 1);
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getNextUnscheduledJobSQL))
+      List<Job> jobs = jobRepository.findUnscheduledJobsForWrite(pageRequest);
+
+      if (jobs.size() > 0)
       {
-        try (ResultSet rs = statement.executeQuery())
+        Job job = jobs.get(0);
+
+        LocalDateTime nextExecution = null;
+
+        try
         {
-          if (rs.next())
-          {
-            Job job = getJob(rs);
+          Predictor predictor = new Predictor(job.getSchedulingPattern(),
+              System.currentTimeMillis());
 
-            Date nextExecution = null;
-
-            try
-            {
-              Predictor predictor = new Predictor(job.getSchedulingPattern(),
-                  System.currentTimeMillis());
-
-              nextExecution = predictor.nextMatchingDate();
-            }
-            catch (Throwable e)
-            {
-              logger.error(String.format(
-                  "The next execution date could not be determined for the unscheduled job (%s) "
-                  + "with the scheduling pattern (%s): The job will be marked as FAILED",
-                  job.getId(), job.getSchedulingPattern()), e);
-            }
-
-            if (nextExecution == null)
-            {
-              setJobStatus(connection, job.getId(), JobStatus.FAILED);
-            }
-            else
-            {
-              logger.info(String.format(
-                  "Scheduling the unscheduled job (%s) for execution at (%s)", job.getId(),
-                  nextExecution));
-
-              scheduleJob(connection, job.getId(), nextExecution);
-            }
-
-            hasMoreUnscheduledJobs = true;
-          }
-          else
-          {
-            hasMoreUnscheduledJobs = false;
-          }
+          nextExecution = predictor.nextMatchingLocalDateTime();
         }
-      }
+        catch (Throwable e)
+        {
+          logger.error(String.format(
+              "The next execution date could not be determined for the unscheduled job (%s) "
+              + "with the scheduling pattern (%s): The job will be marked as FAILED", job.getId(),
+              job.getSchedulingPattern()), e);
+        }
 
-      return hasMoreUnscheduledJobs;
+        if (nextExecution == null)
+        {
+          jobRepository.setJobStatus(job.getId(), JobStatus.FAILED);
+        }
+        else
+        {
+          logger.info(String.format("Scheduling the unscheduled job (%s) for execution at (%s)",
+              job.getId(), nextExecution));
+
+          jobRepository.scheduleJob(job.getId(), nextExecution);
+        }
+
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
     catch (Throwable e)
     {
@@ -647,11 +568,20 @@ public class SchedulerService
   @Override
   @Transactional
   public void setJobStatus(UUID jobId, JobStatus status)
-    throws SchedulerServiceException
+    throws JobNotFoundException, SchedulerServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      setJobStatus(connection, jobId, status);
+      if (!jobRepository.existsById(jobId))
+      {
+        throw new JobNotFoundException(jobId);
+      }
+
+      jobRepository.setJobStatus(jobId, status);
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -669,24 +599,20 @@ public class SchedulerService
   @Override
   @Transactional
   public void unlockJob(UUID jobId, JobStatus status)
-    throws SchedulerServiceException
+    throws JobNotFoundException, SchedulerServiceException
   {
-    String unlockJobSQL =
-        "UPDATE scheduler.jobs SET status=?, updated=?, lock_name=NULL WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(unlockJobSQL))
+    try
     {
-      statement.setInt(1, status.code());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, jobId);
-
-      if (statement.executeUpdate() != 1)
+      if (!jobRepository.existsById(jobId))
       {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result  of executing the SQL statement (%s)",
-            unlockJobSQL));
+        throw new JobNotFoundException(jobId);
       }
+
+      jobRepository.unlockJob(jobId, status);
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -702,84 +628,25 @@ public class SchedulerService
    */
   @Override
   public void updateJob(Job job)
-    throws SchedulerServiceException
+    throws JobNotFoundException, SchedulerServiceException
   {
-    String updateJobSQL =
-        "UPDATE scheduler.jobs SET name=?, scheduling_pattern=?, job_class=?, is_enabled=?, "
-        + "status=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateJobSQL))
+    try
     {
-      statement.setString(1, job.getName());
-      statement.setString(2, job.getSchedulingPattern());
-      statement.setString(3, job.getJobClass());
-      statement.setBoolean(4, job.getIsEnabled());
-      statement.setInt(5, job.getStatus().code());
-      statement.setObject(6, job.getId());
-
-      if (statement.executeUpdate() != 1)
+      if (!jobRepository.existsById(job.getId()))
       {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", updateJobSQL));
+        throw new JobNotFoundException(job.getId());
       }
+
+      jobRepository.saveAndFlush(job);
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
       throw new SchedulerServiceException(String.format("Failed to update the job (%s)",
           job.getId()), e);
-    }
-  }
-
-  
-
-  private void scheduleJob(Connection connection, String id, Date nextExecution)
-    throws SchedulerServiceException
-  {
-    String scheduleJobSQL =
-        "UPDATE scheduler.jobs SET status=1, execution_attempts=0, next_execution=?, updated=? "
-        + "WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(scheduleJobSQL))
-    {
-      statement.setTimestamp(1, new Timestamp(nextExecution.getTime()));
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-      statement.setObject(3, id);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            scheduleJobSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format("Failed to schedule the job (%s)", id), e);
-    }
-  }
-
-  private void setJobStatus(Connection connection, String id, JobStatus status)
-    throws SchedulerServiceException
-  {
-    String setJobStatusSQL = "UPDATE scheduler.jobs SET status=? WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(setJobStatusSQL))
-    {
-      statement.setInt(1, status.code());
-      statement.setObject(2, id);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SchedulerServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            setJobStatusSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SchedulerServiceException(String.format(
-          "Failed to set the status (%s) for the job (%s)", status, id), e);
     }
   }
 }
