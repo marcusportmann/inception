@@ -18,8 +18,11 @@ package digital.inception.scheduler                                     ;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The <code>SchedulerConfiguration</code> class provides the Spring configuration
@@ -30,4 +33,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
   basePackages = { "digital.inception.scheduler" })
-public class SchedulerConfiguration {}
+@EnableScheduling
+public class SchedulerConfiguration
+{
+}

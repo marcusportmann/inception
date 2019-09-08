@@ -20,6 +20,7 @@ package digital.inception.messaging;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * The <code>MessagingConfiguration</code> class provides the Spring configuration
@@ -30,4 +31,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = { "digital.inception.messaging" })
+@EnableScheduling
 public class MessagingConfiguration {}
