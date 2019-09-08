@@ -73,7 +73,7 @@ import javax.xml.ws.Endpoint;
  * @author Marcus Portmann
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
+@ComponentScan(basePackages = { "digital.inception" }, lazyInit = false)
 @EnableSwagger2
 public class SampleApplication extends Application
   implements InitializingBean

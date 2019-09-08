@@ -51,7 +51,7 @@ public interface JobRepository extends JpaRepository<Job, UUID>
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select j from Job j where j.status = 1 and ((j.executionAttempts is null) or "
-      + "((j.executionAttempts > 0) and (j.lastExecuted<lastExecutedBefore))) and "
+      + "((j.executionAttempts > 0) and (j.lastExecuted < :lastExecutedBefore))) and "
       + "j.nextExecution <= current_timestamp")
   List<Job> findJobsScheduledForExecutionForWrite(@Param(
       "lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
