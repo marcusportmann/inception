@@ -822,13 +822,6 @@ public class MessagingService
             MessagePartStatus.QUEUED_FOR_DOWNLOAD, username, deviceId, pageRequest);
       }
 
-//    messageParts = messagePartRepository.findAll();
-//
-//    for (MessagePart messagePart : messageParts)
-//    {
-//      System.out.println(messagePart.toString());
-//    }
-
       for (MessagePart messagePart : messageParts)
       {
         messagePartRepository.lockMessagePartForDownload(messagePart.getId(), instanceName);

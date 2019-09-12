@@ -55,7 +55,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
     "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
-@XmlRootElement(name = "Job", namespace = "http://  scheduler.inception.digital")
+@XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
 @XmlType(name = "Job", namespace = "http://scheduler.inception.digital",
     propOrder = { "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
         "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
@@ -128,7 +128,7 @@ public class Job
    * The name of the entity that has locked the job for execution.
    */
   @ApiModelProperty(value = "The name of the entity that has locked the job for execution")
-  @XmlElement(name = "JobClass")
+  @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
   @Column(name = "lock_name")
   private String lockName;

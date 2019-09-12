@@ -140,17 +140,6 @@ public class BackgroundSMSSender
       {
         logger.error(String.format("Failed to send the queued SMS (%d)", sms.getId()), e);
 
-        // Increment the send attempts for the SMS
-        try
-        {
-          smsService.incrementSMSSendAttempts(sms);
-        }
-        catch (Throwable f)
-        {
-          logger.error(String.format(
-              "Failed to increment the send attempts for the queued SMS (%d)", sms.getId()), f);
-        }
-
         try
         {
           /*

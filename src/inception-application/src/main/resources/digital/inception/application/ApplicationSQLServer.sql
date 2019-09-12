@@ -62,6 +62,15 @@ GO
 
 
 -- -------------------------------------------------------------------------------------------------
+-- DROP SCHEMAS
+-- -------------------------------------------------------------------------------------------------
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'SMS_ID_SEQ')
+DROP SEQUENCE "SMS"."SMS_ID_SEQ"
+GO
+
+
+
+-- -------------------------------------------------------------------------------------------------
 -- CREATE SCHEMAS
 -- -------------------------------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'CODES')
@@ -108,6 +117,14 @@ IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'TEST')
 BEGIN
     EXEC('CREATE SCHEMA TEST')
 END;
+GO
+
+
+
+-- -------------------------------------------------------------------------------------------------
+-- CREATE SCHEMAS
+-- -------------------------------------------------------------------------------------------------
+CREATE SCHEMA "SMS"."SMS_ID_SEQ";
 GO
 
 
@@ -1110,10 +1127,10 @@ GO
 
 CREATE TABLE "SMS"."SMS" (
   id             BIGINT         NOT NULL,
-  mobile_number  NVARCHAR(4000) NOT NULL,
-  message        NVARCHAR(4000) NOT NULL,
+  mobile_number  NVARCHAR(100) NOT NULL,
+  message        NVARCHAR(1000) NOT NULL,
   status         INTEGER        NOT NULL,
-  send_attempts  INTEGER        NOT NULL,
+  send_attempts  INTEGER,
   lock_name      NVARCHAR(100),
   last_processed DATETIME,
 

@@ -28,6 +28,7 @@
 -- -------------------------------------------------------------------------------------------------
 SET client_min_messages = 'warning';
 
+
 -- -------------------------------------------------------------------------------------------------
 -- DROP TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -60,6 +61,13 @@ DROP TABLE IF EXISTS configuration.configuration CASCADE;
 DROP TABLE IF EXISTS idgenerator.idgenerator CASCADE;
 DROP TABLE IF EXISTS test.test_data CASCADE;
 
+
+-- -------------------------------------------------------------------------------------------------
+-- DROP SEQUENCES
+-- -------------------------------------------------------------------------------------------------
+DROP SEQUENCE sms.sms_id_seq;
+
+
 -- -------------------------------------------------------------------------------------------------
 -- DROP SCHEMAS
 -- -------------------------------------------------------------------------------------------------
@@ -75,12 +83,14 @@ DROP SCHEMA IF EXISTS idgenerator CASCADE;
 DROP SCHEMA IF EXISTS configuration CASCADE;
 DROP SCHEMA IF EXISTS codes CASCADE;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- DROP ROLES
 -- -------------------------------------------------------------------------------------------------
 DROP
 OWNED BY dbuser CASCADE;
 DROP ROLE IF EXISTS dbuser;
+
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE ROLES
@@ -90,6 +100,7 @@ CREATE ROLE dbuser WITH LOGIN
 ALTER
 ROLE dbuser
 WITH login;
+
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE PROCEDURES
@@ -127,6 +138,13 @@ CREATE SCHEMA service_registry;
 CREATE SCHEMA sms;
 CREATE SCHEMA error;
 CREATE SCHEMA test;
+
+
+-------------------------------------------------------------------------------------------------
+-- CREATE SEQUENCES
+-- -------------------------------------------------------------------------------------------------
+CREATE SEQUENCE sms.sms_id_seq;
+
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
@@ -752,7 +770,7 @@ CREATE TABLE sms.sms (
   mobile_number  TEXT    NOT NULL,
   message        TEXT    NOT NULL,
   status         INTEGER NOT NULL,
-  send_attempts  INTEGER NOT NULL,
+  send_attempts  INTEGER,
   lock_name      TEXT,
   last_processed TIMESTAMP,
 
@@ -831,6 +849,7 @@ COMMENT ON COLUMN test.test_data.id IS 'The ID used to uniquely identify the tes
 COMMENT ON COLUMN test.test_data.name IS 'The name for the test data';
 
 COMMENT ON COLUMN test.test_data.value IS 'The value for the test data';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

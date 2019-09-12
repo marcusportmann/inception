@@ -356,8 +356,8 @@ public class SchedulerService
 
         entityManager.detach(job);
 
-        job.setLockName(instanceName);
         job.setStatus(JobStatus.EXECUTING);
+        job.setLockName(instanceName);
         job.incrementExecutionAttempts();
         job.setLastExecuted(when);
 

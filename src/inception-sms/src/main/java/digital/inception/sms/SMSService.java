@@ -20,47 +20,39 @@ package digital.inception.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
-
 import digital.inception.Debug;
-import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.StringReader;
-
-import java.net.URL;
-
-import java.sql.*;
-
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
-
-import javax.sql.DataSource;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.ws.BindingProvider;
+import java.io.StringReader;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -83,20 +75,16 @@ public class SMSService
   /* The name of the SMS Service instance. */
   private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
+  /* Entity Manager */
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  private EntityManager entityManager;
+
   /**
    * The Spring application context.
    */
   private ApplicationContext applicationContext;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  private DataSource dataSource;
 
-  /**
-   * The ID generator.
-   */
-  private IDGenerator idGenerator;
 
   /**
    * The maximum number of times sending will be attempted for a SMS.
@@ -129,19 +117,20 @@ public class SMSService
   private int sendRetryDelay;
 
   /**
+   * The SMS Repository.
+   */
+  private SMSRepository smsRepository;
+
+  /**
    * Constructs a new <code>SMSService</code>.
    *
    * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
-   * @param idGenerator        the ID generator
    */
-  public SMSService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+  public SMSService(ApplicationContext applicationContext,
+      SMSRepository smsRepository)
   {
     this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
-    this.idGenerator = idGenerator;
+    this.smsRepository = smsRepository;
   }
 
   /**
@@ -153,27 +142,9 @@ public class SMSService
   public void createSMS(SMS sms)
     throws SMSServiceException
   {
-    String createSMSSQL =
-        "INSERT INTO sms.sms (id, mobile_number, message, status, send_attempts) "
-        + "VALUES (?, ?, ?, ?, 0)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createSMSSQL))
+    try
     {
-      long id = idGenerator.next("Application.SMSId");
-
-      statement.setLong(1, id);
-      statement.setString(2, sms.getMobileNumber());
-      statement.setString(3, sms.getMessage());
-      statement.setInt(4, sms.getStatus().code());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SMSServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)", createSMSSQL));
-      }
-
-      sms.setId(id);
+      smsRepository.saveAndFlush(sms);
     }
     catch (Throwable e)
     {
@@ -190,17 +161,14 @@ public class SMSService
   public void deleteSMS(long smsId)
     throws SMSNotFoundException, SMSServiceException
   {
-    String deleteSMSSQL = "DELETE FROM sms.sms WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteSMSSQL))
+    try
     {
-      statement.setLong(1, smsId);
-
-      if (statement.executeUpdate() <= 0)
+      if (!smsRepository.existsById(smsId))
       {
         throw new SMSNotFoundException(smsId);
       }
+
+      smsRepository.deleteById(smsId);
     }
     catch (SMSNotFoundException e)
     {
@@ -236,52 +204,39 @@ public class SMSService
   public SMS getNextSMSQueuedForSending()
     throws SMSServiceException
   {
-    String getNextSMSQueuedForSendingSQL =
-        "SELECT id, mobile_number, message, status, send_attempts, lock_name, last_processed FROM "
-        + "sms.sms WHERE status=? AND (last_processed<? OR last_processed IS NULL) "
-        + "FETCH FIRST 1 ROWS ONLY FOR UPDATE";
-
-    String lockSMSSQL = "UPDATE sms.sms SET status=?, lock_name=? WHERE id=?";
-
     try
     {
-      SMS sms = null;
+      LocalDateTime lastProcessedBefore = LocalDateTime.now();
 
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getNextSMSQueuedForSendingSQL))
+      lastProcessedBefore = lastProcessedBefore.minus(sendRetryDelay, ChronoUnit.MILLIS);
+
+      PageRequest pageRequest = PageRequest.of(0, 1);
+
+      List<SMS> smss = smsRepository.findSMSsScheduledForExecutionForWrite(lastProcessedBefore,
+          pageRequest);
+
+      if (smss.size() > 0)
       {
-        Timestamp processedBefore = new Timestamp(System.currentTimeMillis() - sendRetryDelay);
+        SMS sms = smss.get(0);
 
-        statement.setInt(1, SMSStatus.QUEUED_FOR_SENDING.code());
-        statement.setTimestamp(2, processedBefore);
+        LocalDateTime when = LocalDateTime.now();
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          if (rs.next())
-          {
-            sms = getSMS(rs);
+        smsRepository.lockSMSForSending(sms.getId(), instanceName, when);
 
-            sms.setStatus(SMSStatus.SENDING);
-            sms.setLockName(instanceName);
+        entityManager.detach(sms);
 
-            try (PreparedStatement updateStatement = connection.prepareStatement(lockSMSSQL))
-            {
-              updateStatement.setInt(1, SMSStatus.SENDING.code());
-              updateStatement.setString(2, instanceName);
-              updateStatement.setLong(3, sms.getId());
+        sms.setStatus(SMSStatus.SENDING);
+        sms.setLockName(instanceName);
+        sms.incrementSendAttempts();
+        sms.setLastProcessed(when);
 
-              if (updateStatement.executeUpdate() != 1)
-              {
-                throw new SMSServiceException(String.format(
-                    "No rows were affected as a result of executing the SQL statement (%s)",
-                    lockSMSSQL));
-              }
-            }
-          }
-        }
+        return sms;
+      }
+      else
+      {
+        return null;
       }
 
-      return sms;
     }
     catch (Throwable e)
     {
@@ -337,25 +292,17 @@ public class SMSService
   public SMS getSMS(long smsId)
     throws SMSNotFoundException, SMSServiceException
   {
-    String getSMSByIdSQL =
-        "SELECT id, mobile_number, message, status, send_attempts, lock_name, last_processed "
-        + "FROM sms.sms WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getSMSByIdSQL))
+    try
     {
-      statement.setLong(1, smsId);
+      Optional<SMS> sms = smsRepository.findById(smsId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (sms.isPresent())
       {
-        if (rs.next())
-        {
-          return getSMS(rs);
-        }
-        else
-        {
-          throw new SMSNotFoundException(smsId);
-        }
+        return sms.get();
+      }
+      else
+      {
+        throw new SMSNotFoundException(smsId);
       }
     }
     catch (SMSNotFoundException e)
@@ -370,66 +317,19 @@ public class SMSService
   }
 
   /**
-   * Increment the send attempts for the SMS.
-   *
-   * @param sms the SMS whose send attempts should be incremented
-   */
-  @Override
-  public void incrementSMSSendAttempts(SMS sms)
-    throws SMSNotFoundException, SMSServiceException
-  {
-    String incrementSMSSendAttemptsSQL =
-        "UPDATE sms.sms SET send_attempts=send_attempts + 1, last_processed=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(incrementSMSSendAttemptsSQL))
-    {
-      Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-
-      statement.setTimestamp(1, currentTime);
-      statement.setLong(2, sms.getId());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SMSNotFoundException(sms.getId());
-      }
-
-      sms.setSendAttempts(sms.getSendAttempts() + 1);
-      sms.setLastProcessed(currentTime);
-    }
-    catch (SMSNotFoundException e)
-    {
-      throw e;
-    }
-    catch (Throwable e)
-    {
-      throw new SMSServiceException(String.format(
-          "Failed to increment the send attempts for the SMS (%d) in the database", sms.getId()),
-          e);
-    }
-  }
-
-  /**
    * Reset the SMS locks.
    *
    * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   @Override
+  @Transactional
   public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
     throws SMSServiceException
   {
-    String resetSMSLocksSQL =
-        "UPDATE sms.sms SET status=?, lock_name=NULL WHERE lock_name=? AND status=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(resetSMSLocksSQL))
+    try
     {
-      statement.setInt(1, newStatus.code());
-      statement.setString(2, instanceName);
-      statement.setInt(3, status.code());
-
-      statement.executeUpdate();
+      smsRepository.resetSMSLocks(status, newStatus, instanceName);
     }
     catch (Throwable e)
     {
@@ -609,21 +509,19 @@ public class SMSService
    * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
+  @Override
+  @Transactional
   public void setSMSStatus(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
-    String setSMSStatusSQL = "UPDATE sms.sms SET status=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(setSMSStatusSQL))
+    try
     {
-      statement.setInt(1, status.code());
-      statement.setLong(2, smsId);
-
-      if (statement.executeUpdate() != 1)
+      if (!smsRepository.existsById(smsId))
       {
         throw new SMSNotFoundException(smsId);
       }
+
+      smsRepository.setSMSStatus(smsId, status);
     }
     catch (SMSNotFoundException e)
     {
@@ -643,21 +541,19 @@ public class SMSService
    * @param smsId     the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
+  @Override
+  @Transactional
   public void unlockSMS(long smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
-    String unlockSMSSQL = "UPDATE sms.sms SET status=?, lock_name=NULL WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(unlockSMSSQL))
+    try
     {
-      statement.setInt(1, status.code());
-      statement.setLong(2, smsId);
-
-      if (statement.executeUpdate() != 1)
+      if (!smsRepository.existsById(smsId))
       {
         throw new SMSNotFoundException(smsId);
       }
+
+      smsRepository.unlockSMS(smsId, status);
     }
     catch (SMSNotFoundException e)
     {
@@ -737,13 +633,6 @@ public class SMSService
         myMobileAPIEndPoint);
 
     return apiSoap;
-  }
-
-  private SMS getSMS(ResultSet rs)
-    throws SQLException
-  {
-    return new SMS(rs.getLong(1), rs.getString(2), rs.getString(3), SMSStatus.fromCode(rs.getInt(
-        4)), rs.getInt(5), rs.getString(6), rs.getTimestamp(7));
   }
 
   private Element parseAPIResultXML(String xml)

@@ -16,18 +16,48 @@
 
 package digital.inception.sms;
 
+//~--- non-JDK imports --------------------------------------------------------
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import digital.inception.core.xml.LocalDateTimeAdapter;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import javax.persistence.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>SMS</code> class holds the information for a SMS.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
+@ApiModel(value = "SMS")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({ "id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
+    "lastProcessed" })
+@XmlRootElement(name = "Job", namespace = "http://sms.inception.digital")
+@XmlType(name = "Job", namespace = "http://sms.inception.digital",
+    propOrder = { "id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
+        "lastProcessed" })
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "sms", name = "sms")
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class SMS
   implements Serializable
 {
@@ -36,36 +66,76 @@ public class SMS
   /**
    * The ID used to uniquely identify the SMS.
    */
+  @ApiModelProperty(value = "The ID used to uniquely identify the SMS", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "id", required = true)
+  @NotNull
+  @SequenceGenerator(schema = "sms", name = "sms_id_seq", sequenceName = "sms_id_seq",
+      allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sms_id_seq")
+  @Id
+  @Column(name = "id", nullable = false)
   private long id;
 
   /**
    * The date and time the last attempt was made to send the SMS.
    */
-  private Date lastProcessed;
+  @ApiModelProperty(value = "The date and time the last attempt was made to send the SMS")
+  @JsonProperty
+  @XmlElement(name = "LastProcessed")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "last_processed")
+  private LocalDateTime lastProcessed;
 
   /**
    * The name of the entity that has locked the SMS for sending.
    */
+  @ApiModelProperty(value = "The name of the entity that has locked the SMS for sending")
+  @XmlElement(name = "LockName")
+  @Size(min = 1, max = 100)
+  @Column(name = "lock_name")
   private String lockName;
 
   /**
    * The message to send.
    */
+  @ApiModelProperty(value = "The message to send", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Message", required = true)
+  @NotNull
+  @Size(min = 1, max = 1000)
+  @Column(name = "message", nullable = false)
   private String message;
 
   /**
    * The mobile number to send the SMS to.
    */
+  @ApiModelProperty(value = "The mobile number to send the SMS to", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MobileNumber", required = true)
+  @NotNull
+  @Size(min = 1, max = 1000)
+  @Column(name = "mobile_number", nullable = false)
   private String mobileNumber;
 
   /**
    * The number of times that the sending of the SMS was attempted.
    */
-  private int sendAttempts;
+  @ApiModelProperty(value = "The number of times that the sending of the SMS was attempted")
+  @JsonProperty
+  @XmlElement(name = "SendAttempts")
+  @Column(name = "send_attempts")
+  private Integer sendAttempts;
 
   /**
    * The status of the SMS.
    */
+  @ApiModelProperty(value = "The status of the SMS", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Status", required = true)
+  @NotNull
+  @Column(name = "status", nullable = false)
   private SMSStatus status;
 
   /**
@@ -111,7 +181,7 @@ public class SMS
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
   SMS(long id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
-      String lockName, Date lastProcessed)
+      String lockName, LocalDateTime lastProcessed)
   {
     this.id = id;
     this.mobileNumber = mobileNumber;
@@ -137,7 +207,7 @@ public class SMS
    *
    * @return the date and time the last attempt was made to send the SMS
    */
-  public Date getLastProcessed()
+  public LocalDateTime getLastProcessed()
   {
     return lastProcessed;
   }
@@ -177,7 +247,7 @@ public class SMS
    *
    * @return the number of times that the sending of the SMS was attempted
    */
-  public int getSendAttempts()
+  public Integer getSendAttempts()
   {
     return sendAttempts;
   }
@@ -190,6 +260,21 @@ public class SMS
   public SMSStatus getStatus()
   {
     return status;
+  }
+
+  /**
+   * Increment the number of times that the sending of the SMS was attempted.
+   */
+  public void incrementSendAttempts()
+  {
+    if (sendAttempts == null)
+    {
+      sendAttempts = 1;
+    }
+    else
+    {
+      sendAttempts++;
+    }
   }
 
   /**
@@ -207,7 +292,7 @@ public class SMS
    *
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  public void setLastProcessed(Date lastProcessed)
+  public void setLastProcessed(LocalDateTime lastProcessed)
   {
     this.lastProcessed = lastProcessed;
   }
@@ -247,7 +332,7 @@ public class SMS
    *
    * @param sendAttempts the number of times that the sending of the SMS was attempted
    */
-  public void setSendAttempts(int sendAttempts)
+  public void setSendAttempts(Integer sendAttempts)
   {
     this.sendAttempts = sendAttempts;
   }

@@ -27,8 +27,6 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -66,11 +64,8 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
       "status") MessagePartStatus status, @Param("username") String username, @Param(
       "deviceId") UUID deviceId, Pageable pageable);
 
-  @Query("select count(mp.id) from MessagePart mp where mp.messageId = :messageId")
-  int getNumberOfMessagePartsForMessage(@Param("messageId") UUID messageId);
-
   @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
-    + "mp.messageId = :messageId")
+      + "mp.messageId = :messageId")
   int getNumberOfMessagePartsForMessageQueuedForAssembly(@Param("messageId") UUID messageId);
 
   @Modifying
@@ -85,18 +80,12 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
   void lockMessagePartForDownload(@Param("messagePartId") UUID messagePartId, @Param(
       "lockName") String lockName);
 
-//  @Modifying
-//  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
-//      + "where mp.status = :status and mp.lockName is not null and mp.updated < :lockExpiry")
-//  void resetStatusAndLocksForMessagePartsWithStatusAndExpiredLocks(@Param(
-//      "status") MessagePartStatus status, @Param("newStatus") MessagePartStatus newStatus, @Param(
-//      "lockExpiry") LocalDateTime lockExpiry);
-
   @Modifying
   @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
       + "where mp.status = :status and mp.lockName = :lockName ")
-  void resetStatusAndLocksForMessagePartsWithStatusAndLock(@Param("status") MessagePartStatus status,
-      @Param("newStatus") MessagePartStatus newStatus, @Param("lockName") String lockName);
+  void resetStatusAndLocksForMessagePartsWithStatusAndLock(@Param(
+      "status") MessagePartStatus status, @Param("newStatus") MessagePartStatus newStatus, @Param(
+      "lockName") String lockName);
 
   @Modifying
   @Query("update MessagePart mp set mp.status = :status where mp.id = :messagePartId")

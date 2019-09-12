@@ -4,14 +4,19 @@
 CREATE SCHEMA sms;
 
 -- -------------------------------------------------------------------------------------------------
+-- CREATE SEQUENCES
+-- -------------------------------------------------------------------------------------------------
+create sequence sms.sms_id_seq;
+
+-- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE sms.sms (
   id             BIGINT        NOT NULL,
-  mobile_number  VARCHAR(4000) NOT NULL,
-  message        VARCHAR(4000) NOT NULL,
+  mobile_number  VARCHAR(100) NOT NULL,
+  message        VARCHAR(1000) NOT NULL,
   status         INTEGER       NOT NULL,
-  send_attempts  INTEGER       NOT NULL,
+  send_attempts  INTEGER,
   lock_name      VARCHAR(100),
   last_processed TIMESTAMP,
 

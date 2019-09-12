@@ -78,14 +78,6 @@ public interface ISMSService
     throws SMSNotFoundException, SMSServiceException;
 
   /**
-   * Increment the send attempts for the SMS.
-   *
-   * @param sms the SMS whose send attempts should be incremented
-   */
-  void incrementSMSSendAttempts(SMS sms)
-    throws SMSNotFoundException, SMSServiceException;
-
-  /**
    * Reset the SMS locks.
    *
    * @param status    the current status of the SMSs that have been locked

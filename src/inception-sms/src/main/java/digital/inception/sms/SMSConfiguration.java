@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.scheduler;
+package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -23,13 +23,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>SchedulerConfiguration</code> class provides the Spring configuration
- * for the Scheduler module.
+ * The <code>SMSConfiguration</code> class provides the Spring configuration
+ * for the SMS module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.scheduler" })
+    basePackages = { "digital.inception.sms" })
 @EnableScheduling
-public class SchedulerConfiguration {}
+public class SMSConfiguration {}
