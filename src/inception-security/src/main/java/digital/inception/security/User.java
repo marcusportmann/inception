@@ -34,6 +34,10 @@ import java.time.LocalDateTime;
 
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -56,6 +60,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
         "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
         "readOnly" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "security", name = "users")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class User
   implements java.io.Serializable
@@ -83,13 +89,15 @@ public class User
   private String firstName;
 
   /**
-   * The ID used to uniquely identify the user.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the user", required = true)
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The last name for the user.
@@ -169,10 +177,10 @@ public class User
   private UserStatus status;
 
   /**
-   * The ID used to uniquely identify the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory the user is associated with",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -215,11 +223,11 @@ public class User
   }
 
   /**
-   * Returns the ID used to uniquely identify the user.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @return the ID used to uniquely identify the user
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -297,9 +305,9 @@ public class User
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory the user is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
    *
-   * @return the ID used to uniquely identify the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with
    */
   public String getUserDirectoryId()
   {
@@ -404,11 +412,11 @@ public class User
   }
 
   /**
-   * Set the ID used to uniquely identify the user.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @param id the ID used to uniquely identify the user
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -494,9 +502,9 @@ public class User
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory the user is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the user is
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is
    *                        associated with
    */
   public void setUserDirectoryId(String userDirectoryId)

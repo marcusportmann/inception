@@ -100,7 +100,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param parameters      the parameters for the user directory
    */
   public InternalUserDirectory(String userDirectoryId, List<UserDirectoryParameter> parameters)
@@ -288,7 +288,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       statement.setObject(4, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(5, UUID.fromString(user.getId()));
+      statement.setObject(5, user.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -438,7 +438,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       statement.setObject(4, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(5, UUID.fromString(user.getId()));
+      statement.setObject(5, user.getId());
 
       if (statement.executeUpdate() != 1)
       {
@@ -520,9 +520,9 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateUserException(user.getUsername());
       }
 
-      String userId = idGenerator.nextUUID().toString();
+      UUID userId = idGenerator.nextUUID();
 
-      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(1, userId);
       statement.setObject(2, UUID.fromString(getUserDirectoryId()));
       statement.setString(3, user.getUsername());
       statement.setInt(4, user.getStatus().code());
@@ -1705,7 +1705,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     User user = new User();
 
-    user.setId(rs.getString(1));
+    user.setId(rs.getObject(1, UUID.class));
     user.setUsername(rs.getString(2));
     user.setUserDirectoryId(getUserDirectoryId());
     user.setStatus(UserStatus.fromCode(rs.getInt(3)));
@@ -1763,7 +1763,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the authorised function codes for the user.
    *
    * @param connection the existing database connection to use
-   * @param userId     the ID used to uniquely identify the user
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the authorised function codes for the user
    */
@@ -1799,7 +1799,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * ID is associated with.
    *
    * @param connection the existing database connection
-   * @param userId     the ID used to uniquely identify the user
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the security groups
    */
@@ -1833,7 +1833,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * is associated with.
    *
    * @param connection the existing database connection
-   * @param userId     the ID used to uniquely identify the user
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the internal security groups
    */
@@ -1903,7 +1903,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param connection the existing database connection to use
-   * @param userId     the ID used to uniquely identify the user
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    *
    * @return the codes for the roles that the user has been assigned
    */
@@ -1968,12 +1968,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Returns the ID used to uniquely identify the user with the specified username.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user with the specified username.
    *
    * @param connection the existing database connection to use
    * @param username   the username uniquely identifying the user
    *
-   * @return the ID used to uniquely identify the user with the specified username
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user with the specified username
    */
   private String getUserId(Connection connection, String username)
     throws SecurityServiceException
@@ -2009,9 +2009,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Increment the password attempts for the user.
    *
-   * @param userId the ID used to uniquely identify the user
+   * @param userId the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  private void incrementPasswordAttempts(String userId)
+  private void incrementPasswordAttempts(UUID userId)
     throws SecurityServiceException
   {
     String incrementPasswordAttemptsSQL = "UPDATE security.users "
@@ -2021,7 +2021,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))
     {
       statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(2, UUID.fromString(userId));
+      statement.setObject(2, userId);
 
       if (statement.executeUpdate() != 1)
       {
@@ -2042,13 +2042,13 @@ public class InternalUserDirectory extends UserDirectoryBase
    * be reused for a period of time i.e. was the password used previously in the last X months.
    *
    * @param connection   the existing database connection
-   * @param userId       the ID used to uniquely identify the user
+   * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the user
    * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
    * period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(Connection connection, String userId, String passwordHash)
+  private boolean isPasswordInHistory(Connection connection, UUID userId, String passwordHash)
     throws SQLException
   {
     String isPasswordInUserPasswordHistorySQL = "SELECT id FROM  security.users_password_history "
@@ -2062,7 +2062,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       calendar.setTime(new Date());
       calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
 
-      statement.setObject(1, UUID.fromString(userId));
+      statement.setObject(1, userId);
       statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
       statement.setString(3, passwordHash);
 
@@ -2077,7 +2077,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * Is the user in the security group?
    *
    * @param connection the existing database connection
-   * @param userId     the ID used to uniquely identify the user
+   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
    * @param groupId    the ID used to uniquely identify the internal security group
    *
    * @return <code>true</code> if the user is a member of the security group or <code>false</code>
@@ -2101,7 +2101,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  private void savePasswordHistory(Connection connection, String userId, String passwordHash)
+  private void savePasswordHistory(Connection connection, UUID userId, String passwordHash)
     throws SQLException
   {
     String saveUserPasswordHistorySQL = "INSERT INTO security.users_password_history "
@@ -2113,7 +2113,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       String id = idGenerator.nextUUID().toString();
 
       statement.setObject(1, UUID.fromString(id));
-      statement.setObject(2, UUID.fromString(userId));
+      statement.setObject(2, userId);
       statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
       statement.setString(4, passwordHash);
       statement.execute();

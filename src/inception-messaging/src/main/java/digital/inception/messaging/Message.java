@@ -111,7 +111,8 @@ public class Message
       value = "The hash of the unencrypted data for the message if the message is encrypted")
   @JsonProperty
   @XmlElement(name = "DataHash")
-  @Column(name = "data_hash")
+  @Size(min = 1, max = 100)
+  @Column(name = "data_hash", length = 100)
   private String dataHash;
 
   /**
@@ -143,7 +144,8 @@ public class Message
       value = "The base-64 encoded initialization vector for the encryption scheme for the message")
   @JsonProperty
   @XmlElement(name = "EncryptionIV")
-  @Column(name = "encryption_iv")
+  @Size(min = 1, max = 100)
+  @Column(name = "encryption_iv", length = 100)
   private String encryptionIV;
 
   /**
@@ -178,7 +180,7 @@ public class Message
   @JsonProperty
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
-  @Column(name = "lock_name")
+  @Column(name = "lock_name", length = 100)
   private String lockName;
 
   /**
@@ -242,7 +244,7 @@ public class Message
   @XmlElement(name = "Username", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "username", nullable = false)
+  @Column(name = "username", nullable = false, length = 1000)
   private String username;
 
   /**

@@ -82,9 +82,9 @@ public class UserDirectory
   private List<UserDirectoryParameter> parameters = new ArrayList<>();
 
   /**
-   * The ID used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -147,9 +147,9 @@ public class UserDirectory
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @return the ID used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   public String getId()
   {
@@ -233,9 +233,9 @@ public class UserDirectory
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @param id the ID used to uniquely identify the user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   public void setId(String id)
   {

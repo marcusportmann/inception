@@ -110,7 +110,7 @@ public class Job
   @XmlElement(name = "JobClass", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "job_class", nullable = false)
+  @Column(name = "job_class", nullable = false, length = 1000)
   private String jobClass;
 
   /**
@@ -130,7 +130,7 @@ public class Job
   @ApiModelProperty(value = "The name of the entity that has locked the job for execution")
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
-  @Column(name = "lock_name")
+  @Column(name = "lock_name", length = 100)
   private String lockName;
 
   /**
@@ -141,7 +141,7 @@ public class Job
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -176,7 +176,7 @@ public class Job
   @XmlElement(name = "SchedulingPattern", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "scheduling_pattern", nullable = false)
+  @Column(name = "scheduling_pattern", nullable = false, length = 100)
   private String schedulingPattern;
 
   /**

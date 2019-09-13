@@ -20,7 +20,7 @@ COMMENT ON COLUMN messaging.message_types.name IS 'The name of the message type'
 
 CREATE TABLE messaging.message_statuses (
   code INTEGER       NOT NULL,
-  name VARCHAR(4000) NOT NULL,
+  name VARCHAR(100) NOT NULL,
 
   PRIMARY KEY (code)
 );

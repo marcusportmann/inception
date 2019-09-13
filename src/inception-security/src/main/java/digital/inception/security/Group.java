@@ -84,10 +84,10 @@ public class Group
   private String id;
 
   /**
-   * The ID used to uniquely identify the user directory the security group is associated with
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory the security group is associated with",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -113,7 +113,7 @@ public class Group
    * Constructs a new <code>Group</code>.
    *
    * @param id              the ID used to uniquely identify the security group
-   * @param userDirectoryId the ID used to uniquely identify the user directory the security group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group
    *                        is associated with
    * @param groupName       the name of the security group uniquely identifying the security group
    * @param description     the description for the security group
@@ -157,10 +157,10 @@ public class Group
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory the security group is associated
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated
    * with.
    *
-   * @return the ID used to uniquely identify the user directory the security group is associated
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated
    *         with
    */
   public String getUserDirectoryId()
@@ -189,9 +189,9 @@ public class Group
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory the security group is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the security group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group
    *                        is associated with
    */
   public void setUserDirectoryId(String userDirectoryId)

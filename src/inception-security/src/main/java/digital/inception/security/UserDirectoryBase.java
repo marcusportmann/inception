@@ -50,14 +50,14 @@ public abstract class UserDirectoryBase
   private List<UserDirectoryParameter> parameters;
 
   /**
-   * The ID used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private String userDirectoryId;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param parameters      the parameters for the user directory
    */
   public UserDirectoryBase(String userDirectoryId, List<UserDirectoryParameter> parameters)
@@ -77,9 +77,9 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @return the ID used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   public String getUserDirectoryId()
   {

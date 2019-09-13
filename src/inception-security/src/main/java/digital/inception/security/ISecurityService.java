@@ -31,7 +31,7 @@ public interface ISecurityService
   /**
    * Add the user to the group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the security group uniquely identifying the security group
    */
@@ -42,7 +42,7 @@ public interface ISecurityService
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId      the ID used to uniquely identify the user directory
+   * @param userDirectoryId      the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
@@ -61,7 +61,7 @@ public interface ISecurityService
    * @param username the username identifying the user
    * @param password the password being used to authenticate
    *
-   * @return the ID used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   String authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
@@ -74,7 +74,7 @@ public interface ISecurityService
    * @param password    the password for the user that is used to authorise the operation
    * @param newPassword the new password
    *
-   * @return the ID used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   String changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
@@ -91,7 +91,7 @@ public interface ISecurityService
   /**
    * Create the new security group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param group           the security group
    */
   void createGroup(String userDirectoryId, Group group)
@@ -112,7 +112,7 @@ public interface ISecurityService
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
@@ -139,7 +139,7 @@ public interface ISecurityService
   /**
    * Delete the security group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param groupName       the name of the security group uniquely identifying the security group
    */
   void deleteGroup(String userDirectoryId, String groupName)
@@ -157,7 +157,7 @@ public interface ISecurityService
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    */
   void deleteUser(String userDirectoryId, String username)
@@ -166,7 +166,7 @@ public interface ISecurityService
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   void deleteUserDirectory(String userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException;
@@ -174,7 +174,7 @@ public interface ISecurityService
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param attributes      the attribute criteria used to select the users
    *
    * @return the users whose attributes match the attribute criteria
@@ -195,7 +195,7 @@ public interface ISecurityService
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the authorised function codes for the user
@@ -214,7 +214,7 @@ public interface ISecurityService
   /**
    * Retrieve the security group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param groupName       the name of the security group uniquely identifying the security group
    *
    * @return the security group
@@ -225,7 +225,7 @@ public interface ISecurityService
   /**
    * Retrieve the security group names for the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the security group names for the user
@@ -236,7 +236,7 @@ public interface ISecurityService
   /**
    * Retrieve all the security groups.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the security groups
    */
@@ -246,7 +246,7 @@ public interface ISecurityService
   /**
    * Retrieve the security groups for the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the security groups for the user
@@ -257,7 +257,7 @@ public interface ISecurityService
   /**
    * Retrieve the number of security groups
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the number of security groups
    */
@@ -303,7 +303,7 @@ public interface ISecurityService
   /**
    * Retrieve the number of users.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the number of users
    */
@@ -313,7 +313,7 @@ public interface ISecurityService
   /**
    * Retrieve the number of users.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param filter          the optional filter to apply to the users
    *
    * @return the number of users
@@ -334,7 +334,7 @@ public interface ISecurityService
   /**
    * Retrieve the IDs used to uniquely identify the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the IDs used to uniquely identify the organizations the user directory is associated with
    */
@@ -366,7 +366,7 @@ public interface ISecurityService
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the organizations the user directory is associated with
    */
@@ -376,7 +376,7 @@ public interface ISecurityService
   /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the codes for the roles that the user has been assigned
@@ -387,7 +387,7 @@ public interface ISecurityService
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the user
@@ -430,7 +430,7 @@ public interface ISecurityService
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the user directory
    */
@@ -438,12 +438,12 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the ID used to uniquely identify the user directory that the user with the specified
+   * Retrieve the Universally Unique Identifier (UUID) used to uniquely identify the user directory that the user with the specified
    * username is associated with.
    *
    * @param username the username identifying the user
    *
-   * @return the ID used to uniquely identify the user directory that the user with the specified
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory that the user with the specified
    *         username is associated with or <code>null</code> if the user cannot be found
    */
   String getUserDirectoryIdForUser(String username)
@@ -488,7 +488,7 @@ public interface ISecurityService
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the user directory type for the user directory
    */
@@ -506,7 +506,7 @@ public interface ISecurityService
   /**
    * Retrieve all the users.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return the users
    */
@@ -516,7 +516,7 @@ public interface ISecurityService
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param filter          the optional filter to apply to the users
    * @param sortBy          the optional method used to sort the users e.g. by last name
    * @param sortDirection   the optional sort direction to apply to the users
@@ -532,7 +532,7 @@ public interface ISecurityService
   /**
    * Is the user in the security group?
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the security group uniquely identifying the security group
    *
@@ -552,7 +552,7 @@ public interface ISecurityService
   /**
    * Remove the user from the security group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param username        the username identifying the user
    * @param groupName       the security group name
    */
@@ -563,7 +563,7 @@ public interface ISecurityService
   /**
    * Does the user directory support administering security groups.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return <code>true</code> if the user directory supports administering security groups or
    *         <code>false</code> otherwise
@@ -574,7 +574,7 @@ public interface ISecurityService
   /**
    * Does the user directory support administering users.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    *
    * @return <code>true</code> if the user directory supports administering users or
    *         <code>false</code> otherwise
@@ -593,7 +593,7 @@ public interface ISecurityService
   /**
    * Update the security group.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param group           the security group
    */
   void updateGroup(String userDirectoryId, Group group)
@@ -610,7 +610,7 @@ public interface ISecurityService
   /**
    * Update the user.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update

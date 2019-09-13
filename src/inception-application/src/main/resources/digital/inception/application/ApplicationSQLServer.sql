@@ -255,7 +255,7 @@ GO
 
 CREATE TABLE "MESSAGING"."MESSAGE_STATUSES" (
   code INTEGER       NOT NULL,
-  name NVARCHAR(256) NOT NULL,
+  name NVARCHAR(100) NOT NULL,
 
   PRIMARY KEY (code)
 );
@@ -706,7 +706,7 @@ CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
 CREATE INDEX user_directories_name_ix ON "SECURITY"."USER_DIRECTORIES"(name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -738,7 +738,7 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON "SECURIT
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP"(organization_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TO_ORGANIZATION_MAP', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -771,11 +771,11 @@ CREATE INDEX users_user_directory_id_ix ON "SECURITY"."USERS"(user_directory_id)
 CREATE UNIQUE INDEX users_username_ix ON "SECURITY"."USERS"(username);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the user is associated with' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -840,7 +840,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -873,7 +873,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the group is associated with' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -899,7 +899,7 @@ CREATE INDEX user_to_group_map_user_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(user
 CREATE INDEX user_to_group_map_group_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(group_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty

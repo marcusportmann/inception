@@ -94,7 +94,7 @@ public class SMS
   @ApiModelProperty(value = "The name of the entity that has locked the SMS for sending")
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
-  @Column(name = "lock_name")
+  @Column(name = "lock_name", length = 100)
   private String lockName;
 
   /**
@@ -105,7 +105,7 @@ public class SMS
   @XmlElement(name = "Message", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "message", nullable = false)
+  @Column(name = "message", nullable = false, length = 1000)
   private String message;
 
   /**
@@ -116,7 +116,7 @@ public class SMS
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "mobile_number", nullable = false)
+  @Column(name = "mobile_number", nullable = false, length = 1000)
   private String mobileNumber;
 
   /**

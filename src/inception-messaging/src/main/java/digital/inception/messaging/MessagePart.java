@@ -117,7 +117,7 @@ public class MessagePart
   @JsonProperty
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
-  @Column(name = "lock_name")
+  @Column(name = "lock_name", length = 100)
   private String lockName;
 
   /**
@@ -127,7 +127,8 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageChecksum", required = true)
   @NotNull
-  @Column(name = "message_checksum", nullable = false)
+  @Size(min = 1, max = 100)
+  @Column(name = "message_checksum", nullable = false, length = 100)
   private String messageChecksum;
 
   /**
@@ -159,7 +160,8 @@ public class MessagePart
       value = "The hash of the unencrypted data for the original message if the message was encrypted")
   @JsonProperty
   @XmlElement(name = "MessageDataHash")
-  @Column(name = "message_data_hash")
+  @Size(min = 1, max = 100)
+  @Column(name = "message_data_hash", length = 100)
   private String messageDataHash;
 
   /**
@@ -182,7 +184,8 @@ public class MessagePart
       value = "The base-64 encoded initialization vector for the encryption scheme for the original message")
   @JsonProperty
   @XmlElement(name = "MessageEncryptionIV")
-  @Column(name = "message_encryption_iv")
+  @Size(min = 1, max = 100)
+  @Column(name = "message_encryption_iv", length = 100)
   private String messageEncryptionIV;
 
   /**
@@ -230,7 +233,7 @@ public class MessagePart
   @XmlElement(name = "MessageUsername", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "message_username", nullable = false)
+  @Column(name = "message_username", nullable = false, length = 1000)
   private String messageUsername;
 
   /**

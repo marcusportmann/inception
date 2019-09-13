@@ -82,7 +82,7 @@ public class JobParameter
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -93,7 +93,7 @@ public class JobParameter
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "value", nullable = false)
+  @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
   /**
