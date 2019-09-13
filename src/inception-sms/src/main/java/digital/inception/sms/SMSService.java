@@ -20,12 +20,15 @@ package digital.inception.sms;
 
 import com.mymobileapi.api5.API;
 import com.mymobileapi.api5.APISoap;
+
 import digital.inception.Debug;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -33,26 +36,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
 import org.xml.sax.InputSource;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.ws.BindingProvider;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.StringReader;
+
 import java.net.URL;
+
 import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.ws.BindingProvider;
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -83,8 +94,6 @@ public class SMSService
    * The Spring application context.
    */
   private ApplicationContext applicationContext;
-
-
 
   /**
    * The maximum number of times sending will be attempted for a SMS.
@@ -126,8 +135,7 @@ public class SMSService
    *
    * @param applicationContext the Spring application context
    */
-  public SMSService(ApplicationContext applicationContext,
-      SMSRepository smsRepository)
+  public SMSService(ApplicationContext applicationContext, SMSRepository smsRepository)
   {
     this.applicationContext = applicationContext;
     this.smsRepository = smsRepository;
