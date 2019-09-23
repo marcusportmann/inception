@@ -156,8 +156,8 @@ public class ArchivedMessage
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
-  @Size(min = 1, max = 1000)
-  @Column(name = "username", nullable = false, length = 1000)
+  @Size(min = 1, max = 100)
+  @Column(name = "username", nullable = false, length = 100)
   private String username;
 
   /**
@@ -209,6 +209,37 @@ public class ArchivedMessage
     this.created = created;
     this.archived = archived;
     this.data = data;
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    ArchivedMessage other = (ArchivedMessage) object;
+
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -291,6 +322,19 @@ public class ArchivedMessage
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

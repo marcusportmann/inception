@@ -34,7 +34,7 @@ export class User {
   firstName: string;
 
   /**
-   * The ID used to uniquely identify the user.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
    */
   id: string;
 
@@ -56,10 +56,10 @@ export class User {
   /**
    * The number of failed authentication attempts as a result of an incorrect password for the user.
    */
-  passwordAttempts: number;
+  passwordAttempts?: number;
 
   /**
-   * The optional date and time the password for the user expires.
+   * The date and time the password for the user expires.
    */
   passwordExpiry?: Date;
 
@@ -79,7 +79,8 @@ export class User {
   status: UserStatus;
 
   /**
-   * The ID used to uniquely identify the user directory the user  is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
    */
   userDirectoryId: string;
 
@@ -91,26 +92,27 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param id                The ID used to uniquely identify the user.
-   * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
-   *                          associated with.
+   * @param id                The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          user.
+   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          user directory the user is associated with.
    * @param username          The username for the user.
    * @param firstName         The first name for the user.
    * @param lastName          The last name for the user.
    * @param mobileNumber      The mobile number for the user.
    * @param phoneNumber       The phone number for the user.
    * @param email             The e-mail address for the user.
+   * @param status            The status for the user.*
    * @param password          The password or password hash for the user.
    * @param passwordAttempts  The number of failed authentication attempts as a result of an
    *                          incorrect password for the user.
-   * @param status            The status for the user.
+   * @param passwordExpiry    The date and time the password for the user expires.
    * @param readOnly          Is the user read-only.
-   * @param passwordExpiry    The optional date and time the password for the user expires.
    */
   constructor(id: string, userDirectoryId: string, username: string, firstName: string,
               lastName: string, mobileNumber: string, phoneNumber: string, email: string,
-              password: string, passwordAttempts: number, status: UserStatus, readOnly?: boolean,
-              passwordExpiry?: Date) {
+              status: UserStatus, password: string, passwordAttempts?: number,
+              passwordExpiry?: Date, readOnly?: boolean) {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
     this.username = username;
@@ -119,10 +121,10 @@ export class User {
     this.mobileNumber = mobileNumber;
     this.phoneNumber = phoneNumber;
     this.email = email;
+    this.status = status;
     this.password = password;
     this.passwordAttempts = passwordAttempts;
-    this.status = status;
-    this.readOnly = readOnly;
     this.passwordExpiry = passwordExpiry;
+    this.readOnly = readOnly;
   }
 }

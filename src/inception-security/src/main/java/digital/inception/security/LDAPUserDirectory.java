@@ -1350,7 +1350,7 @@
 //   * @return the number of security groups
 //   */
 //  @Override
-//  public int getNumberOfGroups()
+//  public long getNumberOfGroups()
 //    throws SecurityServiceException
 //  {
 //    DirContext dirContext = null;
@@ -1402,7 +1402,7 @@
 //   * @return the number of users
 //   */
 //  @Override
-//  public int getNumberOfUsers(String filter)
+//  public long getNumberOfUsers(String filter)
 //    throws SecurityServiceException
 //  {
 //    DirContext dirContext = null;

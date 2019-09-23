@@ -40,33 +40,33 @@ import javax.persistence.LockModeType;
  */
 public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
 {
+  @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
+      + "mp.messageId = :messageId")
+  int countMessagePartsQueuedForAssemblyByMessageId(@Param("messageId") UUID messageId);
+
   @Modifying
   @Query("delete from MessagePart mp where mp.id = :messagePartId")
   void deleteById(@Param("messagePartId") UUID messagePartId);
 
   @Modifying
   @Query("delete from MessagePart mp where mp.messageId = :messageId")
-  void deleteMessagePartsForMessage(@Param("messageId") UUID messageId);
+  void deleteMessagePartsByMessageId(@Param("messageId") UUID messageId);
 
   boolean existsByIdAndStatus(UUID messagePartId, MessagePartStatus status);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select mp from MessagePart mp where mp.status = 3 and mp.messageId = :messageId "
+  @Query("select mp from MessagePart mp where mp.messageId = :messageId and mp.status = :status "
       + "order by mp.partNo")
-  List<MessagePart> findMessagePartsQueuedForAssemblyForMessageForWrite(@Param(
-      "messageId") UUID messageId);
+  List<MessagePart> findMessagePartsByMessageIdAndStatusForWrite(@Param(
+      "messageId") UUID messageId, @Param("status") MessagePartStatus status);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select mp from MessagePart mp where mp.status = :status "
-      + "and mp.messageUsername = :username and  mp.messageDeviceId = :deviceId "
+  @Query("select mp from MessagePart mp where mp.messageUsername = :username and "
+      + "mp.messageDeviceId = :deviceId and mp.status = :status "
       + "order by mp.messageId, mp.partNo")
-  List<MessagePart> findMessagePartsWithStatusForUserAndDeviceForWrite(@Param(
-      "status") MessagePartStatus status, @Param("username") String username, @Param(
-      "deviceId") UUID deviceId, Pageable pageable);
-
-  @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
-      + "mp.messageId = :messageId")
-  int getNumberOfMessagePartsForMessageQueuedForAssembly(@Param("messageId") UUID messageId);
+  List<MessagePart> findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(@Param(
+      "username") String username, @Param("deviceId") UUID deviceId, @Param(
+      "status") MessagePartStatus status, Pageable pageable);
 
   @Modifying
   @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 4 "
@@ -89,7 +89,7 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
 
   @Modifying
   @Query("update MessagePart mp set mp.status = :status where mp.id = :messagePartId")
-  void setMessagePartStatus(@Param("messagePartId") UUID messagePartId, @Param(
+  void setStatusById(@Param("messagePartId") UUID messagePartId, @Param(
       "status") MessagePartStatus status);
 
   @Modifying

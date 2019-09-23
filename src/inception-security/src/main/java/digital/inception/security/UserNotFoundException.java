@@ -53,6 +53,6 @@ public class UserNotFoundException extends ServiceException
    */
   public UserNotFoundException(String username)
   {
-    super(String.format("The user (%s) could not be found", username));
+    super("The user (" + username + ") could not be found");
   }
 }

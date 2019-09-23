@@ -7,14 +7,14 @@ CREATE SCHEMA service_registry;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE service_registry.service_registry (
-  name                 VARCHAR(4000) NOT NULL,
+  name                 VARCHAR(100) NOT NULL,
   security_type        INTEGER       NOT NULL,
   supports_compression CHAR(1)       NOT NULL,
-  endpoint             VARCHAR(4000) NOT NULL,
-  service_class        VARCHAR(4000) NOT NULL,
-  wsdl_location        VARCHAR(4000) NOT NULL,
-  username             VARCHAR(1000),
-  password             VARCHAR(4000),
+  endpoint             VARCHAR(1000) NOT NULL,
+  service_class        VARCHAR(1000) NOT NULL,
+  wsdl_location        VARCHAR(1000) NOT NULL,
+  username             VARCHAR(100),
+  password             VARCHAR(100),
 
   PRIMARY KEY (name)
 );

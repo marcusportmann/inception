@@ -31,7 +31,7 @@ export class Session {
   username: string;
 
   /**
-   * The ID used to uniquely identify the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
    */
   userDirectoryId: string;
 
@@ -74,7 +74,7 @@ export class Session {
    * Constructs a new Session.
    *
    * @param username          The username for the user the user session is associated with.
-   * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
+   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is
    *                          associated with.
    * @param userFullName      The full name for the user.
    * @param scopes            The OAuth2 scopes for the user session.

@@ -45,7 +45,7 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class DuplicateOrganizationException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
@@ -53,10 +53,21 @@ public class DuplicateOrganizationException extends ServiceException
   /**
    * Constructs a new <code>DuplicateOrganizationException</code>.
    *
-   * @param idOrName the ID or name of the organization
+   * @param name the name of the organization
    */
-  public DuplicateOrganizationException(String idOrName)
+  public DuplicateOrganizationException(String name)
   {
-    super(String.format("An organization with the ID or name (%s) already exists", idOrName));
+    super("An organization with the name (" + name + ") already exists");
+  }
+
+  /**
+   * Constructs a new <code>DuplicateOrganizationException</code>.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
+   */
+  public DuplicateOrganizationException(UUID organizationId)
+  {
+    super("An organization with the ID (" + organizationId + ") already exists");
   }
 }

@@ -115,8 +115,8 @@ public class SMS
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
-  @Size(min = 1, max = 1000)
-  @Column(name = "mobile_number", nullable = false, length = 1000)
+  @Size(min = 1, max = 100)
+  @Column(name = "mobile_number", nullable = false, length = 100)
   private String mobileNumber;
 
   /**
@@ -193,6 +193,37 @@ public class SMS
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    SMS other = (SMS) object;
+
+    return id == other.id;
+  }
+
+  /**
    * Returns the ID used to uniquely identify the SMS.
    *
    * @return the ID used to uniquely identify the SMS
@@ -260,6 +291,17 @@ public class SMS
   public SMSStatus getStatus()
   {
     return status;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (int) (id ^ (id >>> 32));
   }
 
   /**

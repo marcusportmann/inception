@@ -23,6 +23,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.util.List;
 import java.util.UUID;
 
@@ -34,11 +36,15 @@ import java.util.UUID;
  */
 public interface CodeRepository extends JpaRepository<Code, CodeId>
 {
+  long countByCodeCategoryId(String codeCategoryId);
+
+  @Modifying
+  @Query("delete from Code c where c.codeCategoryId = :#{#id.codeCategoryId} and c.id = :#{#id.id}")
+  void deleteById(@Param("id") CodeId id);
+
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
   void deleteById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
-
-  long countByCodeCategoryId(String codeCategoryId);
 
   List<Code> findByCodeCategoryId(String codeCategoryId);
 }

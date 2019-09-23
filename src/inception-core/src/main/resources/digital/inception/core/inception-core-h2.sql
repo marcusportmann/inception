@@ -9,7 +9,7 @@ CREATE SCHEMA idgenerator;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE idgenerator.idgenerator (
-  name    VARCHAR(4000) NOT NULL,
+  name    VARCHAR(100) NOT NULL,
   current BIGINT DEFAULT 0,
 
   PRIMARY KEY (name)

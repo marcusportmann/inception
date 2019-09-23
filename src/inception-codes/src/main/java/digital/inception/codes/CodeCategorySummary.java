@@ -37,6 +37,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -116,6 +117,37 @@ public class CodeCategorySummary
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    CodeCategorySummary other = (CodeCategorySummary) object;
+
+    return (id != null) && id.equals(other.id);
+  }
+
+  /**
    * Returns the ID used to uniquely identify the code category.
    *
    * @return the ID used to uniquely identify the code category
@@ -143,5 +175,18 @@ public class CodeCategorySummary
   public LocalDateTime getUpdated()
   {
     return updated;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 }

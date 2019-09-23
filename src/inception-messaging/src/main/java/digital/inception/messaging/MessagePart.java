@@ -43,8 +43,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import javax.validation.constraints.NotNull;
-
 import javax.validation.constraints.Size;
+
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -56,15 +56,15 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @ApiModel(value = "MessagePart")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
-    "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
-    "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
-    "messageEncryptionIV", "messageChecksum", "lockName", "data" })
+    "messageId", "messageUsername", "messageDeviceId", "messageTypeId", "messageCorrelationId",
+    "messagePriority", "messageCreated", "messageDataHash", "messageEncryptionIV",
+    "messageChecksum", "lockName", "data" })
 @XmlRootElement(name = "MessagePart", namespace = "http://messaging.inception.digital")
 @XmlType(name = "MessagePart", namespace = "http://messaging.inception.digital",
     propOrder = { "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
-        "messageId", "messageUsername", "messageDeviceId", "messageTypeId",
-        "messageCorrelationId", "messagePriority", "messageCreated", "messageDataHash",
-        "messageEncryptionIV", "messageChecksum", "lockName", "data" })
+        "messageId", "messageUsername", "messageDeviceId", "messageTypeId", "messageCorrelationId",
+        "messagePriority", "messageCreated", "messageDataHash", "messageEncryptionIV",
+        "messageChecksum", "lockName", "data" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "messaging", name = "message_parts")
@@ -232,8 +232,8 @@ public class MessagePart
   @JsonProperty(required = true)
   @XmlElement(name = "MessageUsername", required = true)
   @NotNull
-  @Size(min = 1, max = 1000)
-  @Column(name = "message_username", nullable = false, length = 1000)
+  @Size(min = 1, max = 100)
+  @Column(name = "message_username", nullable = false, length = 100)
   private String messageUsername;
 
   /**
@@ -435,8 +435,8 @@ public class MessagePart
    * @param data                 the binary data for the message part
    */
   public MessagePart(UUID id, int partNo, int totalParts, Integer sendAttempts,
-      Integer downloadAttempts, MessagePartStatus status, UUID messageId,
-      String messageUsername, UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
+      Integer downloadAttempts, MessagePartStatus status, UUID messageId, String messageUsername,
+      UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
       MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
       String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
   {
@@ -481,6 +481,37 @@ public class MessagePart
             "messageTypeId")) || (!rootElement.hasAttribute("messagePriority"))
             || (!rootElement.hasAttribute("messageCreated")) || (!rootElement.hasAttribute(
             "messageChecksum")));
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    MessagePart other = (MessagePart) object;
+
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -668,6 +699,19 @@ public class MessagePart
   public int getTotalParts()
   {
     return totalParts;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

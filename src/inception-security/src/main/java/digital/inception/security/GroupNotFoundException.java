@@ -53,6 +53,6 @@ public class GroupNotFoundException extends ServiceException
    */
   public GroupNotFoundException(String groupName)
   {
-    super(String.format("The security group (%s) could not be found", groupName));
+    super("The security group (" + groupName + ") could not be found");
   }
 }

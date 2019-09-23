@@ -54,6 +54,9 @@ public class SchedulerService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
+  /* The name of the Scheduler Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
+
   /**
    * The Spring application context.
    */
@@ -62,9 +65,6 @@ public class SchedulerService
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
-
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
@@ -101,7 +101,7 @@ public class SchedulerService
   @Override
   public void afterPropertiesSet()
   {
-    logger.info(String.format("Initializing the Scheduler Service (%s)", instanceName));
+    logger.info("Initializing the Scheduler Service (" + instanceName + ")");
   }
 
   /**
@@ -120,8 +120,7 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to create the job (%s)",
-          job.getName()), e);
+      throw new SchedulerServiceException("Failed to create the job (" + job.getName() + ")", e);
     }
   }
 
@@ -150,7 +149,7 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to delete the job (%s)", jobId), e);
+      throw new SchedulerServiceException("Failed to delete the job (" + jobId + ")", e);
     }
   }
 
@@ -172,9 +171,9 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to execute the job (%s) with ID (%s): Failed to load the job class (%s)",
-          job.getName(), job.getId(), job.getJobClass()), e);
+      throw new SchedulerServiceException("Failed to execute the job (" + job.getName()
+          + ") with ID (" + job.getId() + "): Failed to load the job class (" + job.getJobClass()
+          + ")", e);
     }
 
     // Initialize the job
@@ -188,9 +187,8 @@ public class SchedulerService
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob))
       {
-        throw new SchedulerServiceException(String.format(
-            "The job class (%s) does not implement the digital.inception.scheduler.IJob interface",
-            job.getJobClass()));
+        throw new SchedulerServiceException("The job class (" + job.getJobClass()
+            + ") does not implement the digital.inception.scheduler.IJob interface");
       }
 
       jobImplementation = (IJob) jobObject;
@@ -200,8 +198,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to initialize the job (%s) with ID (%s)", job.getName(), job.getId()), e);
+      throw new SchedulerServiceException("Failed to initialize the job (" + job.getName()
+          + ") with ID (" + job.getId() + ")", e);
     }
 
     // Execute the job
@@ -223,8 +221,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to execute the job (%s) with ID (%s)", job.getName(), job.getId()), e);
+      throw new SchedulerServiceException("Failed to execute the job (" + job.getName()
+          + ") with ID (" + job.getId() + ")", e);
     }
   }
 
@@ -252,8 +250,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to retrieve the jobs matching the filter (%s)", filter), e);
+      throw new SchedulerServiceException("Failed to retrieve the jobs matching the filter ("
+          + filter + ")", e);
     }
   }
 
@@ -270,11 +268,11 @@ public class SchedulerService
   {
     try
     {
-      Optional<Job> job = jobRepository.findById(jobId);
+      Optional<Job> jobOptional = jobRepository.findById(jobId);
 
-      if (job.isPresent())
+      if (jobOptional.isPresent())
       {
-        return job.get();
+        return jobOptional.get();
       }
       else
       {
@@ -287,8 +285,7 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to retrieve the job (%s)", jobId),
-          e);
+      throw new SchedulerServiceException("Failed to retrieve the job (" + jobId + ")", e);
     }
   }
 
@@ -413,40 +410,6 @@ public class SchedulerService
     }
   }
 
-///**
-// * Lock a job.
-// *
-// * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
-// * @param status the new status for the locked job
-// */
-//@Override
-//@Transactional
-//public void lockJob(UUID jobId, JobStatus status)
-//  throws SchedulerServiceException
-//{
-//  String lockJobSQL = "UPDATE scheduler.jobs SET status=?, lock_name=?, updated=? WHERE id=?";
-//
-//  try (Connection connection = dataSource.getConnection();
-//    PreparedStatement statement = connection.prepareStatement(lockJobSQL))
-//  {
-//    statement.setInt(1, status.code());
-//    statement.setString(2, instanceName);
-//    statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-//    statement.setObject(4, jobId);
-//
-//    if (statement.executeUpdate() != 1)
-//    {
-//      throw new SchedulerServiceException(String.format(
-//          "No rows were affected as a result of executing the SQL statement (%s)", lockJobSQL));
-//    }
-//  }
-//  catch (Throwable e)
-//  {
-//    throw new SchedulerServiceException(String.format(
-//        "Failed to lock and set the status for the job (%s) to (%s)", jobId, status), e);
-//  }
-//}
-
   /**
    * Reschedule the job for execution.
    *
@@ -468,8 +431,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to reschedule the job (%s) for execution", jobId), e);
+      throw new SchedulerServiceException("Failed to reschedule the job (" + jobId
+          + ") for execution", e);
     }
   }
 
@@ -490,9 +453,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to reset the locks for the jobs with status (%s) that have been locked using the "
-          + "lock name (%s)", status, instanceName), e);
+      throw new SchedulerServiceException("Failed to reset the locks for the jobs with status ("
+          + status + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -528,10 +490,9 @@ public class SchedulerService
         }
         catch (Throwable e)
         {
-          logger.error(String.format(
-              "The next execution date could not be determined for the unscheduled job (%s) "
-              + "with the scheduling pattern (%s): The job will be marked as FAILED", job.getId(),
-              job.getSchedulingPattern()), e);
+          logger.error("The next execution date could not be determined for the unscheduled job ("
+              + job.getId() + ") with the scheduling pattern (" + job.getSchedulingPattern()
+              + "): The job will be marked as FAILED", e);
         }
 
         if (nextExecution == null)
@@ -540,8 +501,8 @@ public class SchedulerService
         }
         else
         {
-          logger.info(String.format("Scheduling the unscheduled job (%s) for execution at (%s)",
-              job.getId(), nextExecution));
+          logger.info("Scheduling the unscheduled job (" + job.getId() + ") for execution at ("
+              + nextExecution + ")");
 
           jobRepository.scheduleJob(job.getId(), nextExecution);
         }
@@ -585,8 +546,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to set the status (%s) for the job (%s)", status, jobId), e);
+      throw new SchedulerServiceException("Failed to set the status (" + status + ") for the job ("
+          + jobId + ")", e);
     }
   }
 
@@ -616,8 +577,8 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format(
-          "Failed to unlock and set the status for the job (%s) to (%s)", jobId, status), e);
+      throw new SchedulerServiceException("Failed to unlock and set the status for the job ("
+          + jobId + ") to (" + status + ")", e);
     }
   }
 
@@ -645,8 +606,7 @@ public class SchedulerService
     }
     catch (Throwable e)
     {
-      throw new SchedulerServiceException(String.format("Failed to update the job (%s)",
-          job.getId()), e);
+      throw new SchedulerServiceException("Failed to update the job (" + job.getId() + ")", e);
     }
   }
 }

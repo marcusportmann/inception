@@ -184,7 +184,7 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format("Failed to delete the SMS (%d)", smsId), e);
+      throw new SMSServiceException("Failed to delete the SMS (" + smsId + ")", e);
     }
   }
 
@@ -302,11 +302,11 @@ public class SMSService
   {
     try
     {
-      Optional<SMS> sms = smsRepository.findById(smsId);
+      Optional<SMS> smsOptional = smsRepository.findById(smsId);
 
-      if (sms.isPresent())
+      if (smsOptional.isPresent())
       {
-        return sms.get();
+        return smsOptional.get();
       }
       else
       {
@@ -319,8 +319,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to retrieve the SMS (%d) from the database", smsId), e);
+      throw new SMSServiceException("Failed to retrieve the SMS (" + smsId + ") from the database",
+          e);
     }
   }
 
@@ -341,9 +341,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to reset the locks for the SMSs with the status (%s) that have been locked using "
-          + "the lock name (%s)", status, instanceName), e);
+      throw new SMSServiceException("Failed to reset the locks for the SMSs with the status ("
+          + status + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -368,8 +367,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to queue the SMS for the mobile number (%s) for sending", mobileNumber), e);
+      throw new SMSServiceException("Failed to queue the SMS for the mobile number ("
+          + mobileNumber + ") for sending", e);
     }
   }
 
@@ -391,7 +390,7 @@ public class SMSService
     {
       if (StringUtils.isEmpty(message))
       {
-        logger.info(String.format("Failed to send the empty SMS message to (%s)", mobileNumber));
+        logger.info("Failed to send the empty SMS message to (" + mobileNumber + ")");
 
         return true;
       }
@@ -405,15 +404,13 @@ public class SMSService
 
       if (logger.isDebugEnabled())
       {
-        logger.debug(String.format("Attempting to send a SMS using the mobile number (%s)",
-            mobileNumber));
+        logger.debug("Attempting to send a SMS using the mobile number (" + mobileNumber + ")");
       }
 
       if (Debug.inDebugMode())
       {
-        logger.info(String.format(
-            "Skipping sending of SMS (%s) to mobile number (%s) in DEBUG mode", message,
-            mobileNumber));
+        logger.info("Skipping sending of SMS (" + message + ") to mobile number (" + mobileNumber
+            + ") in DEBUG mode");
 
         return true;
       }
@@ -493,21 +490,20 @@ public class SMSService
 
       if (remainingCredits < 100)
       {
-        logger.warn(String.format("There are %d SMS credits remaining", remainingCredits));
+        logger.warn("There are " + remainingCredits + " SMS credits remaining");
       }
 
       if (logger.isDebugEnabled())
       {
-        logger.debug(String.format("Successfully sent a SMS using the mobile number (%s)",
-            mobileNumber));
+        logger.debug("Successfully sent a SMS using the mobile number (" + mobileNumber + ")");
       }
 
       return true;
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to send the SMS to the mobile number (%s)", mobileNumber), e);
+      throw new SMSServiceException("Failed to send the SMS to the mobile number (" + mobileNumber
+          + ")", e);
     }
   }
 
@@ -537,9 +533,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to set the status for the SMS (%d) to (%s) in the database", smsId,
-          status.toString()), e);
+      throw new SMSServiceException("Failed to set the status for the SMS (" + smsId + ") to ("
+          + status + ") in the database", e);
     }
   }
 
@@ -569,9 +564,8 @@ public class SMSService
     }
     catch (Throwable e)
     {
-      throw new SMSServiceException(String.format(
-          "Failed to unlock and set the status for the SMS (%d) to (%s) in the database", smsId,
-          status.toString()), e);
+      throw new SMSServiceException("Failed to unlock and set the status for the SMS (" + smsId
+          + ") to (" + status + ") in the database", e);
     }
   }
 

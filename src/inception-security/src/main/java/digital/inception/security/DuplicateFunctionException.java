@@ -55,6 +55,6 @@ public class DuplicateFunctionException extends ServiceException
    */
   public DuplicateFunctionException(String functionCode)
   {
-    super(String.format("A function with the code (%s) already exists", functionCode));
+    super("A function with the code (" + functionCode + ") already exists");
   }
 }

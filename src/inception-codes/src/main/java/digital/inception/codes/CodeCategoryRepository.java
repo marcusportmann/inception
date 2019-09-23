@@ -49,8 +49,8 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
   Optional<LocalDateTime> getUpdatedById(@Param("codeCategoryId") String codeCategoryId);
 
   @Modifying
-  @Query(
-      "update CodeCategory cc set cc.data = :data, cc.updated = :updated where cc.id = :codeCategoryId")
+  @Query("update CodeCategory cc set cc.data = :data, cc.updated = :updated "
+      + "where cc.id = :codeCategoryId")
   int setDataAndUpdatedById(@Param("codeCategoryId") String codeCategoryId, @Param(
       "data") String data, @Param("updated") LocalDateTime updated);
 }

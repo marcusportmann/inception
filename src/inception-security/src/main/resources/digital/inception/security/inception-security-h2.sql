@@ -7,9 +7,9 @@ CREATE SCHEMA security;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE security.organizations (
-  id     UUID          NOT NULL,
-  name   VARCHAR(4000) NOT NULL,
-  status INTEGER       NOT NULL,
+  id     UUID         NOT NULL,
+  name   VARCHAR(100) NOT NULL,
+  status INTEGER      NOT NULL,
 
   PRIMARY KEY (id)
 );
@@ -78,18 +78,18 @@ COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS
 
 
 CREATE TABLE security.users (
-  id                UUID          NOT NULL,
-  user_directory_id UUID          NOT NULL,
-  username          VARCHAR(1000) NOT NULL,
-  status            INTEGER       NOT NULL,
-  first_name        VARCHAR(4000) NOT NULL DEFAULT '',
-  last_name         VARCHAR(4000) NOT NULL DEFAULT '',
-  phone             VARCHAR(4000) NOT NULL DEFAULT '',
-  mobile            VARCHAR(4000) NOT NULL DEFAULT '',
-  email             VARCHAR(4000) NOT NULL DEFAULT '',
-  password          VARCHAR(4000) NOT NULL DEFAULT '',
-  password_attempts INTEGER       NOT NULL DEFAULT 0,
-  password_expiry   TIMESTAMP,
+  id                UUID         NOT NULL,
+  user_directory_id UUID         NOT NULL,
+  username          VARCHAR(100) NOT NULL,
+  status            INTEGER      NOT NULL,
+  first_name        VARCHAR(100) NOT NULL DEFAULT '',
+  last_name         VARCHAR(100) NOT NULL DEFAULT '',
+  phone             VARCHAR(100) NOT NULL DEFAULT '',
+  mobile            VARCHAR(100) NOT NULL DEFAULT '',
+  email             VARCHAR(100) NOT NULL DEFAULT '',
+  password          VARCHAR(100) NOT NULL DEFAULT '',
+  password_attempts INTEGER      NOT NULL DEFAULT 0,
+  password_expiry   TIMESTAMP    NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -128,7 +128,7 @@ CREATE TABLE security.users_password_history (
   id       UUID      NOT NULL,
   user_id  UUID      NOT NULL,
   changed  TIMESTAMP NOT NULL,
-  password VARCHAR(4000),
+  password VARCHAR(100),
 
   PRIMARY KEY (id),
   CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE
@@ -150,8 +150,8 @@ COMMENT ON COLUMN security.users_password_history.password IS 'The password for 
 CREATE TABLE security.groups (
   id                UUID          NOT NULL,
   user_directory_id UUID          NOT NULL,
-  groupname         VARCHAR(4000) NOT NULL,
-  description       VARCHAR(4000),
+  groupname         VARCHAR(100) NOT NULL,
+  description       VARCHAR(100),
 
   PRIMARY KEY (id),
   CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -191,7 +191,7 @@ COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The ID used to uniquel
 CREATE TABLE security.functions (
   code        VARCHAR(100) NOT NULL,
   name        VARCHAR(100) NOT NULL,
-  description VARCHAR(1000),
+  description VARCHAR(100),
 
   PRIMARY KEY (code)
 );
@@ -205,8 +205,8 @@ COMMENT ON COLUMN security.functions.description IS 'A description for the funct
 
 CREATE TABLE security.roles (
   code        VARCHAR(100)  NOT NULL,
-  name        VARCHAR(4000) NOT NULL,
-  description VARCHAR(4000),
+  name        VARCHAR(100) NOT NULL,
+  description VARCHAR(100),
 
   PRIMARY KEY (code)
 );
@@ -215,7 +215,7 @@ COMMENT ON COLUMN security.roles.code IS 'The code used to uniquely identify the
 
 COMMENT ON COLUMN security.roles.name IS 'The name of the role';
 
-COMMENT ON COLUMN security.roles.description IS 'A description for the role';
+COMMENT ON COLUMN security.roles.description IS 'The description for the role';
 
 
 CREATE TABLE security.function_to_role_map (

@@ -63,30 +63,30 @@ public class JobParameterId
   /**
    * Indicates whether some other object is "equal to" this one.
    *
-   * @param obj the reference object with which to compare
+   * @param object the reference object with which to compare
    *
-   * @return <code>true</code> if this object is the same as the obj argument otherwise
+   * @return <code>true</code> if this object is the same as the object argument otherwise
    *         <code>false</code>
    */
   @Override
-  public boolean equals(Object obj)
+  public boolean equals(Object object)
   {
-    if (this == obj)
+    if (this == object)
     {
       return true;
     }
 
-    if (obj == null)
+    if (object == null)
     {
       return false;
     }
 
-    if (getClass() != obj.getClass())
+    if (getClass() != object.getClass())
     {
       return false;
     }
 
-    JobParameterId other = (JobParameterId) obj;
+    JobParameterId other = (JobParameterId) object;
 
     return jobId.equals(other.jobId) && name.equals(other.name);
   }

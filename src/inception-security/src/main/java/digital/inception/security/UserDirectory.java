@@ -42,8 +42,9 @@ import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import javax.persistence.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 @XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
     propOrder = { "id", "type", "name", "parameters" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@Entity
+@Table(schema = "security", name = "user_directories")
+@SuppressWarnings({ "unused" })
 public class UserDirectory
   implements java.io.Serializable
 {
@@ -79,16 +82,29 @@ public class UserDirectory
   @XmlElementWrapper(name = "Parameters", required = true)
   @XmlElement(name = "Parameter", required = true)
   @Valid
+  @Transient
   private List<UserDirectoryParameter> parameters = new ArrayList<>();
+
+  /**
+   * The organizations the user directory is associated with.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(mappedBy = "userDirectories")
+  private Set<Organization> organizations = new HashSet<>();
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The name of the user directory.
@@ -97,7 +113,8 @@ public class UserDirectory
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -109,6 +126,7 @@ public class UserDirectory
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Column(name = "type", nullable = false, length = 100)
   private String type;
 
   /**
@@ -117,12 +135,44 @@ public class UserDirectory
   public UserDirectory() {}
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    UserDirectory other = (UserDirectory) object;
+
+    return (id != null) && id.equals(other.id);
+  }
+
+  /**
    * Returns the XML configuration data for the user directory.
    *
    * @return the XML configuration data for the user directory
    */
   @JsonIgnore
   @XmlTransient
+  @Column(name = "configuration", nullable = false, length = 4000)
   public String getConfiguration()
   {
     StringBuilder buffer = new StringBuilder();
@@ -151,7 +201,7 @@ public class UserDirectory
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -164,6 +214,16 @@ public class UserDirectory
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns the organizations the user directory is associated with.
+   *
+   * @return the organizations the user directory is associated with
+   */
+  public Set<Organization> getOrganizations()
+  {
+    return organizations;
   }
 
   /**
@@ -184,6 +244,19 @@ public class UserDirectory
   public String getType()
   {
     return type;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**
@@ -237,7 +310,7 @@ public class UserDirectory
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -250,6 +323,16 @@ public class UserDirectory
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Set the organizations the user directory is associated with.
+   *
+   * @param organizations the organizations the user directory is associated with
+   */
+  public void setOrganizations(Set<Organization> organizations)
+  {
+    this.organizations = organizations;
   }
 
   /**

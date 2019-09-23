@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,7 +28,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,7 +47,9 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "UserDirectoryType", namespace = "http://security.inception.digital",
     propOrder = { "code", "name", "userDirectoryClassName" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@Entity
+@Table(schema = "security", name = "user_directory_types")
+@SuppressWarnings({ "unused" })
 public class UserDirectoryType
   implements java.io.Serializable
 {
@@ -61,6 +64,8 @@ public class UserDirectoryType
   @XmlElement(name = "Code", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "code", nullable = false, length = 100)
   private String code;
 
   /**
@@ -70,12 +75,16 @@ public class UserDirectoryType
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
    * The Java class that implements the user directory type.
    */
+  @JsonIgnore
+  @XmlTransient
+  @Transient
   private transient Class userDirectoryClass;
 
   /**
@@ -87,7 +96,8 @@ public class UserDirectoryType
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryClassName", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 1000)
+  @Column(name = "user_directory_class", nullable = false, length = 1000)
   private String userDirectoryClassName;
 
   /**
@@ -111,6 +121,37 @@ public class UserDirectoryType
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    UserDirectoryType other = (UserDirectoryType) object;
+
+    return (code != null) && code.equals(other.code);
+  }
+
+  /**
    * Returns the code used to uniquely identify the user directory type.
    *
    * @return the code used to uniquely identify the user directory type
@@ -128,6 +169,19 @@ public class UserDirectoryType
   public String getName()
   {
     return name;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (code == null)
+        ? 0
+        : code.hashCode();
   }
 
   /**

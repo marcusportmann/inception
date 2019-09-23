@@ -23,17 +23,24 @@ import digital.inception.core.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -64,12 +71,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  private DataSource dataSource;
+//  /**
+//   * The data source used to provide connections to the application database.
+//   */
+//  @Autowired
+//  @Qualifier("applicationDataSource")
+//  private DataSource dataSource;
 
   /**
    * The ID generator.
@@ -100,13 +107,17 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the parameters for the user directory
+   * @param groupRepository the Group Repository
+   * @param userRepository  the User Repository
    */
-  public InternalUserDirectory(String userDirectoryId, List<UserDirectoryParameter> parameters)
+  public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
+      GroupRepository groupRepository, UserRepository userRepository)
     throws SecurityServiceException
   {
-    super(userDirectoryId, parameters);
+    super(userDirectoryId, parameters, groupRepository, userRepository);
 
     try
     {
@@ -163,48 +174,31 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    */
   @Override
+  @Transactional
   public void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    String addUserToGroupSQL = "INSERT INTO security.user_to_group_map "
-        + "(user_id, group_id) VALUES (?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(addUserToGroupSQL))
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId;
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if ((userId = getUserId(connection, username)) == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      // Get the ID of the internal security group with the specified group name
-      String groupId;
+      Optional<UUID> groupIdOptional =
+          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          groupName);
 
-      if ((groupId = getGroupId(connection, groupName)) == null)
+      if (groupIdOptional.isEmpty())
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      // Check if the user has already been added to the security group for the user directory
-      if (isUserInGroup(connection, userId, groupId))
-      {
-        // The user is already a member of the specified security group do nothing
-        return;
-      }
-
-      // Add the user to the security group
-      statement.setObject(1, UUID.fromString(userId));
-      statement.setObject(2, UUID.fromString(groupId));
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            addUserToGroupSQL));
-      }
+      getGroupRepository().addUserToGroup(userIdOptional.get(), groupIdOptional.get());
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -229,75 +223,48 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param reason               the reason for changing the password
    */
   @Override
+  @Transactional
   public void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityServiceException
   {
-    String changeUserPasswordSQL =
-        "UPDATE security.users SET password=?, password_attempts=?, password_expiry=? "
-        + "WHERE user_directory_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changeUserPasswordSQL))
+    try
     {
-      User user = getUser(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (user == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      String passwordHash = createPasswordHash(newPassword);
+      String newPasswordHash = createPasswordHash(newPassword);
 
-      statement.setString(1, passwordHash);
+      int passwordAttempts = 0;
 
       if (lockUser)
       {
-        statement.setInt(2, maxPasswordAttempts);
+        passwordAttempts = maxPasswordAttempts;
       }
-      else
-      {
-        if (user.getPasswordAttempts() == null)
-        {
-          statement.setNull(2, java.sql.Types.INTEGER);
-        }
-        else
-        {
-          statement.setInt(2, 0);
-        }
-      }
+
+      LocalDateTime passwordExpiry;
 
       if (expirePassword)
       {
-        statement.setTimestamp(3, new Timestamp(0));
+        passwordExpiry = LocalDateTime.now();
       }
       else
       {
-        if (user.getPasswordExpiry() == null)
-        {
-          statement.setNull(3, Types.TIMESTAMP);
-        }
-        else
-        {
-          Calendar calendar = Calendar.getInstance();
-          calendar.setTime(new Date());
-          calendar.add(Calendar.MONTH, passwordExpiryMonths);
-
-          statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-        }
+        passwordExpiry = LocalDateTime.now();
+        passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
       }
 
-      statement.setObject(4, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(5, user.getId());
+      getUserRepository().changePassword(userIdOptional.get(), newPasswordHash, passwordAttempts,
+          Optional.of(passwordExpiry));
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            changeUserPasswordSQL));
-      }
-
-      savePasswordHistory(connection, user.getId(), passwordHash);
+      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), userIdOptional.get(),
+          newPasswordHash);
     }
     catch (UserNotFoundException e)
     {
@@ -318,18 +285,22 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param password the password being used to authenticate
    */
   @Override
+  @Transactional
   public void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      User user = getUser(connection, username);
+      Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
+          getUserDirectoryId(), username);
 
-      if (user == null)
+      if (userOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
+
+      User user = userOptional.get();
 
       if ((user.getPasswordAttempts() != null)
           && (user.getPasswordAttempts() >= maxPasswordAttempts))
@@ -346,7 +317,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
         {
-          incrementPasswordAttempts(user.getId());
+          getUserRepository().incrementPasswordAttempts(user.getId());
         }
 
         throw new AuthenticationFailedException(String.format(
@@ -374,23 +345,22 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param newPassword the new password
    */
   @Override
+  @Transactional
   public void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
   {
-    String changeUserPasswordSQL =
-        "UPDATE security.users SET password=?, password_attempts=?, password_expiry=? "
-        + "WHERE user_directory_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(changeUserPasswordSQL))
+    try
     {
-      User user = getUser(connection, username);
+      Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
+          getUserDirectoryId(), username);
 
-      if (user == null)
+      if (userOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
+
+      User user = userOptional.get();
 
       if ((user.getPasswordAttempts() != null)
           && (user.getPasswordAttempts() > maxPasswordAttempts))
@@ -408,46 +378,21 @@ public class InternalUserDirectory extends UserDirectoryBase
             username));
       }
 
-      if (isPasswordInHistory(connection, user.getId(), newPasswordHash))
+      if (isPasswordInHistory(user.getId(), newPasswordHash))
       {
         throw new ExistingPasswordException(username);
       }
 
-      statement.setString(1, newPasswordHash);
+      LocalDateTime passwordExpiry = LocalDateTime.now();
+      passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
 
-      if (user.getPasswordAttempts() == null)
-      {
-        statement.setNull(2, java.sql.Types.INTEGER);
-      }
-      else
-      {
-        statement.setInt(2, 0);
-      }
+      user.setPasswordExpiry(passwordExpiry);
 
-      if (user.getPasswordExpiry() == null)
-      {
-        statement.setNull(3, Types.TIMESTAMP);
-      }
-      else
-      {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.add(Calendar.MONTH, passwordExpiryMonths);
+      getUserRepository().changePassword(user.getId(), newPasswordHash, 0, Optional.of(
+          passwordExpiry));
 
-        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
-      }
-
-      statement.setObject(4, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(5, user.getId());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            changeUserPasswordSQL));
-      }
-
-      savePasswordHistory(connection, user.getId(), newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(),
+          newPasswordHash);
     }
     catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
         | UserLockedException e)
@@ -468,22 +413,22 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param group the security group
    */
   @Override
+  @Transactional
   public void createGroup(Group group)
     throws DuplicateGroupException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      if (getGroupId(connection, group.getGroupName()) != null)
+      if (getGroupRepository().existsByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          group.getGroupName()))
       {
         throw new DuplicateGroupException(group.getGroupName());
       }
 
-      String groupId = idGenerator.nextUUID().toString();
-
-      createGroup(connection, groupId, group.getGroupName(), group.getDescription());
-
-      group.setId(groupId);
+      group.setId(idGenerator.nextUUID());
       group.setUserDirectoryId(getUserDirectoryId());
+
+      getGroupRepository().saveAndFlush(group);
     }
     catch (DuplicateGroupException e)
     {
@@ -505,78 +450,42 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param userLocked      create the user locked
    */
   @Override
+  @Transactional
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityServiceException
   {
-    String createUserSQL = "INSERT INTO security.users "
-        + "(id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, "
-        + "password, password_attempts, password_expiry) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createUserSQL))
+    try
     {
-      if (getUserId(connection, user.getUsername()) != null)
+      if (getUserRepository().existsByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          user.getUsername()))
       {
         throw new DuplicateUserException(user.getUsername());
       }
 
-      UUID userId = idGenerator.nextUUID();
-
-      statement.setObject(1, userId);
-      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
-      statement.setString(3, user.getUsername());
-      statement.setInt(4, user.getStatus().code());
-      statement.setString(5,
-          StringUtils.isEmpty(user.getFirstName())
-          ? ""
-          : user.getFirstName());
-      statement.setString(6,
-          StringUtils.isEmpty(user.getLastName())
-          ? ""
-          : user.getLastName());
-      statement.setString(7,
-          StringUtils.isEmpty(user.getPhoneNumber())
-          ? ""
-          : user.getPhoneNumber());
-      statement.setString(8,
-          StringUtils.isEmpty(user.getMobileNumber())
-          ? ""
-          : user.getMobileNumber());
-      statement.setString(9,
-          StringUtils.isEmpty(user.getEmail())
-          ? ""
-          : user.getEmail());
-
-      String passwordHash;
+      user.setId(idGenerator.nextUUID());
+      user.setUserDirectoryId(getUserDirectoryId());
 
       if (!isNullOrEmpty(user.getPassword()))
       {
-        passwordHash = createPasswordHash(user.getPassword());
+        user.setPassword(createPasswordHash(user.getPassword()));
       }
       else
       {
-        passwordHash = createPasswordHash(PasswordUtil.generateRandomPassword());
+        user.setPassword(createPasswordHash(PasswordUtil.generateRandomPassword()));
       }
-
-      statement.setString(10, passwordHash);
 
       if (userLocked)
       {
-        statement.setInt(11, maxPasswordAttempts);
         user.setPasswordAttempts(maxPasswordAttempts);
       }
       else
       {
-        statement.setInt(11, 0);
         user.setPasswordAttempts(0);
       }
 
       if (expiredPassword)
       {
-        Timestamp expiryTime = new Timestamp(0);
-
-        statement.setTimestamp(12, expiryTime);
-        user.setPasswordExpiry(expiryTime.toLocalDateTime());
+        user.setPasswordExpiry(LocalDateTime.now());
       }
       else
       {
@@ -584,25 +493,13 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
 
-        statement.setTimestamp(12, Timestamp.valueOf(passwordExpiry));
         user.setPasswordExpiry(passwordExpiry);
       }
 
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createUserSQL));
-      }
+      getUserRepository().saveAndFlush(user);
 
-      user.setId(userId);
-      user.setUserDirectoryId(getUserDirectoryId());
-
-      // Save the password in the password history if one was specified
-      if (passwordHash != null)
-      {
-        savePasswordHistory(connection, userId, passwordHash);
-      }
+      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(),
+          user.getPassword());
     }
     catch (DuplicateUserException e)
     {
@@ -622,24 +519,27 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    */
   @Override
+  @Transactional
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      String groupId = getGroupId(connection, groupName);
+      Optional<UUID> groupIdOptional =
+          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          groupName);
 
-      if (groupId == null)
+      if (groupIdOptional.isEmpty())
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (getNumberOfUsersForGroup(connection, groupId) > 0)
+      if (getGroupRepository().countUsersById(groupIdOptional.get()) > 0)
       {
         throw new ExistingGroupMembersException(groupName);
       }
 
-      deleteGroup(connection, groupName);
+      getGroupRepository().deleteById(groupIdOptional.get());
     }
     catch (GroupNotFoundException | ExistingGroupMembersException e)
     {
@@ -659,30 +559,22 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    */
   @Override
+  @Transactional
   public void deleteUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    String deleteUserSQL = "DELETE FROM security.users WHERE user_directory_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteUserSQL))
+    try
     {
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(2, UUID.fromString(userId));
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteUserSQL));
-      }
+      getUserRepository().deleteById(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -707,24 +599,50 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<User> findUsers(List<Attribute> attributes)
     throws InvalidAttributeException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      try (PreparedStatement statement = buildFindUsersStatement(connection, attributes))
+      User userCriteria = new User();
+
+      for (Attribute attribute : attributes)
       {
-        try (ResultSet rs = statement.executeQuery())
+        if (attribute.getName().equalsIgnoreCase("status"))
         {
-          List<User> list = new ArrayList<>();
-
-          while (rs.next())
-          {
-            User user = buildUserFromResultSet(rs);
-
-            list.add(user);
-          }
-
-          return list;
+          userCriteria.setStatus(UserStatus.fromCode(attribute.getIntegerValue()));
+        }
+        else if (attribute.getName().equalsIgnoreCase("email"))
+        {
+          userCriteria.setEmail(attribute.getValue());
+        }
+        else if (attribute.getName().equalsIgnoreCase("firstName"))
+        {
+          userCriteria.setFirstName(attribute.getValue());
+        }
+        else if (attribute.getName().equalsIgnoreCase("lastName"))
+        {
+          userCriteria.setLastName(attribute.getValue());
+        }
+        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
+        {
+          userCriteria.setPhoneNumber(attribute.getValue());
+        }
+        else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
+        {
+          userCriteria.setMobileNumber(attribute.getValue());
+        }
+        else if (attribute.getName().equalsIgnoreCase("username"))
+        {
+          userCriteria.setUsername(attribute.getValue());
+        }
+        else
+        {
+          throw new InvalidAttributeException(attribute.getName());
         }
       }
+
+      ExampleMatcher matcher = ExampleMatcher.matching().withIncludeNullValues().withIgnoreCase()
+          .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+      return getUserRepository().findAll(Example.of(userCriteria, matcher));
     }
     catch (InvalidAttributeException e)
     {
@@ -748,17 +666,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<String> getFunctionCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      return getFunctionCodesForUserId(connection, userId);
+      return getUserRepository().getFunctionCodesByUserId(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -783,9 +702,20 @@ public class InternalUserDirectory extends UserDirectoryBase
   public Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return getGroup(connection, groupName);
+      Optional<Group> groupOptional =
+          getGroupRepository().findByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          groupName);
+
+      if (groupOptional.isPresent())
+      {
+        return groupOptional.get();
+      }
+      else
+      {
+        throw new GroupNotFoundException(groupName);
+      }
     }
     catch (GroupNotFoundException e)
     {
@@ -810,17 +740,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<String> getGroupNamesForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      return getGroupNamesForUser(connection, userId);
+      return getUserRepository().getGroupNamesByUserId(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -843,9 +774,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<Group> getGroups()
     throws SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return getGroups(connection);
+      return getGroupRepository().findByUserDirectoryId(getUserDirectoryId());
     }
     catch (Throwable e)
     {
@@ -866,18 +797,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      // Get the groups the user is associated with
-      return getGroupsForUser(connection, userId);
+      return getGroupRepository().findGroupsForUserById(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -897,12 +828,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @return the number of security groups
    */
   @Override
-  public int getNumberOfGroups()
+  public long getNumberOfGroups()
     throws SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return getNumberOfGroups(connection);
+      return getGroupRepository().countByUserDirectoryId(getUserDirectoryId());
     }
     catch (Throwable e)
     {
@@ -920,52 +851,19 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @return the number of users
    */
   @Override
-  public int getNumberOfUsers(String filter)
+  public long getNumberOfUsers(String filter)
     throws SecurityServiceException
   {
-    String getNumberOfUsersSQL = "SELECT COUNT(id) FROM security.users";
-
-    if (StringUtils.isEmpty(filter))
-    {
-      getNumberOfUsersSQL += " WHERE user_directory_id=?";
-    }
-    else
-    {
-      getNumberOfUsersSQL +=
-          " WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) "
-          + "OR (UPPER(last_name) LIKE ?))";
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfUsersSQL))
+    try
     {
       if (StringUtils.isEmpty(filter))
       {
-        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
+        return getUserRepository().count();
       }
       else
       {
-        StringBuilder filterBuffer = new StringBuilder("%");
-
-        filterBuffer.append(filter.toUpperCase());
-        filterBuffer.append("%");
-
-        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-        statement.setString(2, filterBuffer.toString());
-        statement.setString(3, filterBuffer.toString());
-        statement.setString(4, filterBuffer.toString());
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
+        return getUserRepository().countByUsernameIgnoreCaseContainingOrFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining(
+            filter, filter, filter);
       }
     }
     catch (Throwable e)
@@ -987,17 +885,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<String> getRoleCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      return getRoleCodesForUserId(connection, userId);
+      return getUserRepository().getRoleCodesByUserId(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -1022,13 +921,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   public User getUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      User user = getUser(connection, username);
+      Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
+          getUserDirectoryId(), username);
 
-      if (user != null)
+      if (userOptional.isPresent())
       {
-        return user;
+        return userOptional.get();
       }
       else
       {
@@ -1056,28 +956,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   public List<User> getUsers()
     throws SecurityServiceException
   {
-    String getUsersSQL = "SELECT id, username, status, first_name, "
-        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.users WHERE user_directory_id=? ORDER BY username";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
+      return getUserRepository().findByUserDirectoryId(getUserDirectoryId());
     }
     catch (Throwable e)
     {
@@ -1102,90 +983,45 @@ public class InternalUserDirectory extends UserDirectoryBase
       Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getUsersSQL = "SELECT id, username, status, first_name, "
-        + "last_name, phone, mobile, email, password, password_attempts, password_expiry "
-        + "FROM security.users";
+    try
+    {
+      Pageable pageable = null;
 
-    if (StringUtils.isEmpty(filter))
-    {
-      getUsersSQL += " WHERE user_directory_id=?";
-    }
-    else
-    {
-      getUsersSQL +=
-          " WHERE user_directory_id=? AND ((UPPER(username) LIKE ?) OR (UPPER(first_name) LIKE ?) "
-          + "OR (UPPER(last_name) LIKE ?))";
-    }
-
-    if ((sortBy != null) && (sortDirection != null))
-    {
-      if (sortBy == UserSortBy.FIRST_NAME)
+      if (sortBy == UserSortBy.USERNAME)
       {
-        getUsersSQL += " ORDER BY first_name";
+        pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
+            ? maxFilteredUsers
+            : pageSize, (sortDirection == SortDirection.ASCENDING)
+            ? Sort.Direction.ASC
+            : Sort.Direction.DESC, "username");
+      }
+      else if (sortBy == UserSortBy.FIRST_NAME)
+      {
+        pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
+            ? maxFilteredUsers
+            : pageSize, (sortDirection == SortDirection.ASCENDING)
+            ? Sort.Direction.ASC
+            : Sort.Direction.DESC, "firstName");
       }
       else if (sortBy == UserSortBy.LAST_NAME)
       {
-        getUsersSQL += " ORDER BY last_name";
+        pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
+            ? maxFilteredUsers
+            : pageSize, (sortDirection == SortDirection.ASCENDING)
+            ? Sort.Direction.ASC
+            : Sort.Direction.DESC, "lastName");
       }
-      else if (sortBy == UserSortBy.USERNAME)
-      {
-        getUsersSQL += " ORDER BY username";
-      }
-
-      if (sortDirection == SortDirection.ASCENDING)
-      {
-        getUsersSQL += " ASC";
-      }
-      else
-      {
-        getUsersSQL += " DESC";
-      }
-    }
-
-    if ((pageIndex != null) && (pageSize != null))
-    {
-      getUsersSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
-    }
-    else
-    {
-      getUsersSQL += " LIMIT " + maxFilteredUsers;
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUsersSQL))
-    {
-      statement.setMaxRows(maxFilteredUsers);
 
       if (StringUtils.isEmpty(filter))
       {
-        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
+        return getUserRepository().findAll(pageable).getContent();
       }
       else
       {
-        StringBuilder filterBuffer = new StringBuilder("%");
-
-        filterBuffer.append(filter.toUpperCase());
-        filterBuffer.append("%");
-
-        statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-        statement.setString(2, filterBuffer.toString());
-        statement.setString(3, filterBuffer.toString());
-        statement.setString(4, filterBuffer.toString());
+        return getUserRepository().findByUsernameIgnoreCaseContainingOrFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining(
+            filter, filter, filter, pageable);
       }
 
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<User> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          User user = buildUserFromResultSet(rs);
-
-          list.add(user);
-        }
-
-        return list;
-      }
     }
     catch (Throwable e)
     {
@@ -1207,9 +1043,10 @@ public class InternalUserDirectory extends UserDirectoryBase
   public boolean isExistingUser(String username)
     throws SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      return (getUserId(connection, username) != null);
+      return getUserRepository().existsByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
     }
     catch (Throwable e)
     {
@@ -1232,26 +1069,27 @@ public class InternalUserDirectory extends UserDirectoryBase
   public boolean isUserInGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      // Get the ID of the internal security group with the specified group name
-      String groupId = getGroupId(connection, groupName);
+      Optional<UUID> groupIdOptional =
+          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          groupName);
 
-      if (groupId == null)
+      if (groupIdOptional.isEmpty())
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      // Get the current internal security groups for the user
-      return isUserInGroup(connection, userId, groupId);
+      return getUserRepository().isUserInGroup(userIdOptional.get(), groupIdOptional.get());
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -1272,35 +1110,31 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the security group name
    */
   @Override
+  @Transactional
   public void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
-    String removeUserFromGroupSQL = "DELETE FROM security.user_to_group_map "
-        + "WHERE user_id=? AND group_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(removeUserFromGroupSQL))
+    try
     {
-      // Get the ID of the user with the specified username
-      String userId = getUserId(connection, username);
+      Optional<UUID> userIdOptional =
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
 
-      if (userId == null)
+      if (userIdOptional.isEmpty())
       {
         throw new UserNotFoundException(username);
       }
 
-      // Get the ID of the group with the specified group name
-      String groupId = getGroupId(connection, groupName);
+      Optional<UUID> groupIdOptional =
+          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          groupName);
 
-      if (groupId == null)
+      if (groupIdOptional.isEmpty())
       {
         throw new GroupNotFoundException(groupName);
       }
 
-      // Remove the user from the group
-      statement.setObject(1, UUID.fromString(userId));
-      statement.setObject(2, UUID.fromString(groupId));
-      statement.executeUpdate();
+      getGroupRepository().removeUserFromGroup(userIdOptional.get(), groupIdOptional.get());
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -1347,34 +1181,20 @@ public class InternalUserDirectory extends UserDirectoryBase
   public void updateGroup(Group group)
     throws GroupNotFoundException, SecurityServiceException
   {
-    String updateGroupSQL = "UPDATE security.groups SET description=? WHERE user_directory_id=? "
-        + "AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateGroupSQL))
+    try
     {
-      String groupId = getGroupId(connection, group.getGroupName());
+      Optional<UUID> groupIdOptional =
+          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
+          group.getGroupName());
 
-      if (groupId == null)
+      if (groupIdOptional.isEmpty())
       {
         throw new GroupNotFoundException(group.getGroupName());
       }
 
-      String description = group.getDescription();
+      group.setId(groupIdOptional.get());
 
-      statement.setString(1,
-          StringUtils.isEmpty(description)
-          ? ""
-          : description);
-      statement.setObject(2, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(3, UUID.fromString(groupId));
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            updateGroupSQL));
-      }
+      getGroupRepository().saveAndFlush(group);
     }
     catch (GroupNotFoundException e)
     {
@@ -1396,168 +1216,71 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param lockUser       lock the user as part of the update
    */
   @Override
+  @Transactional
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
     throws UserNotFoundException, SecurityServiceException
   {
-    try (Connection connection = dataSource.getConnection())
+    try
     {
-      String userId = getUserId(connection, user.getUsername());
+      Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
+          user.getUserDirectoryId(), user.getUsername());
 
-      if (userId == null)
+      if (userOptional.isEmpty())
       {
         throw new UserNotFoundException(user.getUsername());
       }
 
-      StringBuilder buffer = new StringBuilder();
-
-      buffer.append("UPDATE security.users ");
-
-      StringBuilder fieldsBuffer = new StringBuilder();
+      User existingUser = userOptional.get();
 
       if (user.getFirstName() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET first_name=?"
-            : ", first_name=?");
+        existingUser.setFirstName(user.getFirstName());
       }
 
       if (user.getLastName() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET last_name=?"
-            : ", last_name=?");
+        existingUser.setLastName(user.getLastName());
       }
 
       if (user.getEmail() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET email=?"
-            : ", email=?");
+        existingUser.setEmail(user.getEmail());
       }
 
       if (user.getPhoneNumber() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET phone=?"
-            : ", phone=?");
+        existingUser.setPhoneNumber(user.getPhoneNumber());
       }
 
       if (user.getMobileNumber() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET mobile=?"
-            : ", mobile=?");
+        existingUser.setMobileNumber(user.getMobileNumber());
       }
 
       if (!StringUtils.isEmpty(user.getPassword()))
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET password=?"
-            : ", password=?");
+        existingUser.setPhoneNumber(user.getPassword());
       }
 
-      if (lockUser || (user.getPasswordAttempts() != null))
+      if (lockUser)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET password_attempts=?"
-            : ", password_attempts=?");
+        existingUser.setPasswordAttempts(maxPasswordAttempts);
       }
-
-      if (expirePassword || (user.getPasswordExpiry() != null))
+      else if (user.getPasswordAttempts() != null)
       {
-        fieldsBuffer.append((fieldsBuffer.length() == 0)
-            ? "SET password_expiry=?"
-            : ", password_expiry=?");
+        existingUser.setPasswordAttempts(user.getPasswordAttempts());
       }
 
-      buffer.append(fieldsBuffer.toString());
-      buffer.append(" WHERE user_directory_id=? AND id=?");
-
-      String updateUserSQL = buffer.toString();
-
-      try (PreparedStatement statement = connection.prepareStatement(updateUserSQL))
+      if (expirePassword)
       {
-        int parameterIndex = 1;
-
-        if (user.getFirstName() != null)
-        {
-          statement.setString(parameterIndex, user.getFirstName());
-          parameterIndex++;
-        }
-
-        if (user.getLastName() != null)
-        {
-          statement.setString(parameterIndex, user.getLastName());
-          parameterIndex++;
-        }
-
-        if (user.getEmail() != null)
-        {
-          statement.setString(parameterIndex, user.getEmail());
-          parameterIndex++;
-        }
-
-        if (user.getPhoneNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getPhoneNumber());
-          parameterIndex++;
-        }
-
-        if (user.getMobileNumber() != null)
-        {
-          statement.setString(parameterIndex, user.getMobileNumber());
-          parameterIndex++;
-        }
-
-        if (user.getPassword() != null)
-        {
-          if (user.getPassword().length() > 0)
-          {
-            statement.setString(parameterIndex, createPasswordHash(user.getPassword()));
-          }
-          else
-          {
-            statement.setString(parameterIndex, "");
-          }
-
-          parameterIndex++;
-        }
-
-        if (lockUser)
-        {
-          statement.setInt(parameterIndex, maxPasswordAttempts);
-          parameterIndex++;
-        }
-        else if (user.getPasswordAttempts() != null)
-        {
-          statement.setInt(parameterIndex, user.getPasswordAttempts());
-          parameterIndex++;
-        }
-
-        if (expirePassword)
-        {
-          statement.setTimestamp(parameterIndex, new Timestamp(System.currentTimeMillis()));
-          parameterIndex++;
-        }
-        else if (user.getPasswordExpiry() != null)
-        {
-          statement.setTimestamp(parameterIndex, Timestamp.valueOf(user.getPasswordExpiry()));
-          parameterIndex++;
-        }
-
-        statement.setObject(parameterIndex, UUID.fromString(getUserDirectoryId()));
-
-        parameterIndex++;
-
-        statement.setObject(parameterIndex, UUID.fromString(userId));
-
-        if (statement.executeUpdate() != 1)
-        {
-          throw new SecurityServiceException(String.format(
-              "No rows were affected as a result of executing the SQL statement (%s)",
-              updateUserSQL));
-        }
+        existingUser.setPasswordExpiry(LocalDateTime.now());
       }
+      else if (user.getPasswordExpiry() != null)
+      {
+        existingUser.setPasswordExpiry(user.getPasswordExpiry());
+      }
+
+      getUserRepository().saveAndFlush(existingUser);
     }
     catch (UserNotFoundException e)
     {
@@ -1571,552 +1294,383 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-  /**
-   * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
-   * in the USERS table using the values of the specified attributes as the selection criteria.
-   *
-   * @param connection the existing database connection to use
-   * @param attributes the attributes to be used as the selection criteria
-   *
-   * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-   * USERS table using the values of the specified attributes as the selection criteria
-   */
-  private PreparedStatement buildFindUsersStatement(Connection connection,
-      List<Attribute> attributes)
-    throws InvalidAttributeException, SQLException
-  {
-    // Build the SQL statement to select the users
-    StringBuilder buffer = new StringBuilder();
+///**
+// * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
+// * in the USERS table using the values of the specified attributes as the selection criteria.
+// *
+// * @param connection the existing database connection to use
+// * @param attributes the attributes to be used as the selection criteria
+// *
+// * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
+// * USERS table using the values of the specified attributes as the selection criteria
+// */
+//private PreparedStatement buildFindUsersStatement(Connection connection,
+//    List<Attribute> attributes)
+//  throws InvalidAttributeException, SQLException
+//{
+//  // Build the SQL statement to select the users
+//  StringBuilder buffer = new StringBuilder();
+//
+//  buffer.append("SELECT id, username, status, first_name, last_name, phone, mobile, email, ");
+//  buffer.append("password, password_attempts, password_expiry FROM security.users");
+//
+//  if (attributes.size() > 0)
+//  {
+//    // Build the parameters for the "WHERE" clause for the SQL statement
+//    StringBuilder whereParameters = new StringBuilder();
+//
+//    for (Attribute attribute : attributes)
+//    {
+//      whereParameters.append(" AND ");
+//
+//      if (attribute.getName().equalsIgnoreCase("status"))
+//      {
+//        whereParameters.append("status = ?");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("email"))
+//      {
+//        whereParameters.append("LOWER(email) LIKE LOWER(?)");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("firstName"))
+//      {
+//        whereParameters.append("LOWER(first_name) LIKE LOWER(?)");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("lastName"))
+//      {
+//        whereParameters.append("LOWER(last_name) LIKE LOWER(?)");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
+//      {
+//        whereParameters.append("LOWER(phone) LIKE LOWER(?)");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
+//      {
+//        whereParameters.append("LOWER(mobile) LIKE LOWER(?)");
+//      }
+//      else if (attribute.getName().equalsIgnoreCase("username"))
+//      {
+//        whereParameters.append("LOWER(username) LIKE LOWER(?)");
+//      }
+//      else
+//      {
+//        throw new InvalidAttributeException(attribute.getName());
+//      }
+//    }
+//
+//    buffer.append(" WHERE user_directory_id=?");
+//    buffer.append(whereParameters.toString());
+//  }
+//  else
+//  {
+//    buffer.append(" WHERE user_directory_id=?");
+//  }
+//
+//  PreparedStatement statement = connection.prepareStatement(buffer.toString());
+//
+//  statement.setObject(1, UUID.fromString(getUserDirectoryId()));
+//
+//  // Set the parameters for the prepared statement
+//  int parameterIndex = 2;
+//
+//  for (Attribute attribute : attributes)
+//  {
+//    if (attribute.getName().equalsIgnoreCase("status"))
+//    {
+//      statement.setInt(parameterIndex, Integer.parseInt(attribute.getStringValue()));
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("email"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("firstName"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("lastName"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//    else if (attribute.getName().equalsIgnoreCase("username"))
+//    {
+//      statement.setString(parameterIndex, attribute.getStringValue());
+//      parameterIndex++;
+//    }
+//  }
+//
+//  return statement;
+//}
 
-    buffer.append("SELECT id, username, status, first_name, last_name, phone, mobile, email, ");
-    buffer.append("password, password_attempts, password_expiry FROM security.users");
+//  /**
+//   * Create a new <code>User</code> instance and populate it with the contents of the current
+//   * row in the specified <code>ResultSet</code>.
+//   *
+//   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
+//   *           <code>User</code> instance
+//   *
+//   * @return the populated <code>User</code> instance
+//   */
+//  private User buildUserFromResultSet(ResultSet rs)
+//    throws SQLException
+//  {
+//    User user = new User();
+//
+//    user.setId(rs.getObject(1, UUID.class));
+//    user.setUsername(rs.getString(2));
+//    user.setUserDirectoryId(getUserDirectoryId());
+//    user.setStatus(UserStatus.fromCode(rs.getInt(3)));
+//
+//    String firstName = rs.getString(4);
+//
+//    user.setFirstName(StringUtils.isEmpty(firstName)
+//        ? ""
+//        : firstName);
+//
+//    String lastName = rs.getString(5);
+//
+//    user.setLastName(StringUtils.isEmpty(lastName)
+//        ? ""
+//        : lastName);
+//
+//    String phoneNumber = rs.getString(6);
+//
+//    user.setPhoneNumber(StringUtils.isEmpty(phoneNumber)
+//        ? ""
+//        : phoneNumber);
+//
+//    String mobilePhoneNumber = rs.getString(7);
+//
+//    user.setMobileNumber(StringUtils.isEmpty(mobilePhoneNumber)
+//        ? ""
+//        : mobilePhoneNumber);
+//
+//    String email = rs.getString(8);
+//
+//    user.setEmail(StringUtils.isEmpty(email)
+//        ? ""
+//        : email);
+//
+//    String password = rs.getString(9);
+//
+//    user.setPassword(StringUtils.isEmpty(password)
+//        ? ""
+//        : password);
+//
+//    if (rs.getObject(10) != null)
+//    {
+//      user.setPasswordAttempts(rs.getInt(10));
+//    }
+//
+//    if (rs.getObject(11) != null)
+//    {
+//      user.setPasswordExpiry(rs.getTimestamp(11).toLocalDateTime());
+//    }
+//
+//    return user;
+//  }
 
-    if (attributes.size() > 0)
-    {
-      // Build the parameters for the "WHERE" clause for the SQL statement
-      StringBuilder whereParameters = new StringBuilder();
+//  /**
+//   * Retrieve the authorised function codes for the user.
+//   *
+//   * @param connection the existing database connection to use
+//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+//   *
+//   * @return the authorised function codes for the user
+//   */
+//  private List<String> getFunctionCodesForUserId(Connection connection, String userId)
+//    throws SQLException
+//  {
+//    String getFunctionCodesForUserIdSQL =
+//        "SELECT DISTINCT ftrm.function_code FROM security.function_to_role_map ftrm "
+//        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_code = ftrm.role_code "
+//        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
+//        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
+//
+//    List<String> functionCodes = new ArrayList<>();
+//
+//    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
+//    {
+//      statement.setObject(1, UUID.fromString(userId));
+//
+//      try (ResultSet rs = statement.executeQuery())
+//      {
+//        while (rs.next())
+//        {
+//          functionCodes.add(rs.getString(1));
+//        }
+//
+//        return functionCodes;
+//      }
+//    }
+//  }
 
-      for (Attribute attribute : attributes)
-      {
-        whereParameters.append(" AND ");
+//  /**
+//   * Retrieve the names for all the security groups that the user with the specific numeric
+//   * ID is associated with.
+//   *
+//   * @param connection the existing database connection
+//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+//   *
+//   * @return the security groups
+//   */
+//  private List<String> getGroupNamesForUser(Connection connection, String userId)
+//    throws SQLException
+//  {
+//    String getGroupNamesForUserSQL = "SELECT groupname FROM "
+//        + "security.groups g, security.user_to_group_map utgm "
+//        + "WHERE g.id = utgm.group_id AND utgm.user_id=? ORDER BY g.groupname";
+//
+//    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
+//    {
+//      statement.setObject(1, UUID.fromString(userId));
+//
+//      try (ResultSet rs = statement.executeQuery())
+//      {
+//        List<String> list = new ArrayList<>();
+//
+//        while (rs.next())
+//        {
+//          list.add(rs.getString(1));
+//        }
+//
+//        return list;
+//      }
+//    }
+//  }
 
-        if (attribute.getName().equalsIgnoreCase("status"))
-        {
-          whereParameters.append("status = ?");
-        }
-        else if (attribute.getName().equalsIgnoreCase("email"))
-        {
-          whereParameters.append("LOWER(email) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("firstName"))
-        {
-          whereParameters.append("LOWER(first_name) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("lastName"))
-        {
-          whereParameters.append("LOWER(last_name) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-        {
-          whereParameters.append("LOWER(phone) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-        {
-          whereParameters.append("LOWER(mobile) LIKE LOWER(?)");
-        }
-        else if (attribute.getName().equalsIgnoreCase("username"))
-        {
-          whereParameters.append("LOWER(username) LIKE LOWER(?)");
-        }
-        else
-        {
-          throw new InvalidAttributeException(attribute.getName());
-        }
-      }
+///**
+// * Retrieve all the internal security groups that the user with the specific numeric ID
+// * is associated with.
+// *
+// * @param connection the existing database connection
+// * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+// *
+// * @return the internal security groups
+// */
+//private List<Group> getGroupsForUser(Connection connection, String userId)
+//  throws SQLException
+//{
+//  String getGroupsForUserSQL = "SELECT id, groupname, description FROM "
+//      + "security.groups g, security.user_to_group_map utgm "
+//      + "WHERE g.id = utgm.group_id AND utgm.user_id=? " + "ORDER BY g.groupname";
+//
+//  try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
+//  {
+//    statement.setObject(1, UUID.fromString(userId));
+//
+//    try (ResultSet rs = statement.executeQuery())
+//    {
+//      List<Group> list = new ArrayList<>();
+//
+//      while (rs.next())
+//      {
+//        Group group = new Group(rs.getString(2));
+//
+//        group.setId(rs.getString(1));
+//        group.setUserDirectoryId(getUserDirectoryId());
+//        group.setDescription(rs.getString(3));
+//        list.add(group);
+//      }
+//
+//      return list;
+//    }
+//  }
+//}
 
-      buffer.append(" WHERE user_directory_id=?");
-      buffer.append(whereParameters.toString());
-    }
-    else
-    {
-      buffer.append(" WHERE user_directory_id=?");
-    }
+//  /**
+//   * Retrieve the number of users for the internal security group.
+//   *
+//   * @param connection the existing database connection
+//   * @param groupId    the ID used to uniquely identify the internal security group
+//   *
+//   * @return the number of users for the internal security group
+//   */
+//  private long getNumberOfUsersForGroup(Connection connection, String groupId)
+//    throws SQLException
+//  {
+//    String getNumberOfUsersForGroupSQL = "SELECT COUNT (user_id) FROM security.user_to_group_map "
+//        + "WHERE group_id=?";
+//
+//    try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
+//    {
+//      statement.setObject(1, UUID.fromString(groupId));
+//
+//      try (ResultSet rs = statement.executeQuery())
+//      {
+//        if (rs.next())
+//        {
+//          return rs.getLong(1);
+//        }
+//        else
+//        {
+//          return 0;
+//        }
+//      }
+//    }
+//  }
 
-    PreparedStatement statement = connection.prepareStatement(buffer.toString());
-
-    statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-
-    // Set the parameters for the prepared statement
-    int parameterIndex = 2;
-
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equalsIgnoreCase("status"))
-      {
-        statement.setInt(parameterIndex, Integer.parseInt(attribute.getStringValue()));
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("email"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("firstName"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("lastName"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-      else if (attribute.getName().equalsIgnoreCase("username"))
-      {
-        statement.setString(parameterIndex, attribute.getStringValue());
-        parameterIndex++;
-      }
-    }
-
-    return statement;
-  }
-
-  /**
-   * Create a new <code>User</code> instance and populate it with the contents of the current
-   * row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>User</code> instance
-   *
-   * @return the populated <code>User</code> instance
-   */
-  private User buildUserFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    User user = new User();
-
-    user.setId(rs.getObject(1, UUID.class));
-    user.setUsername(rs.getString(2));
-    user.setUserDirectoryId(getUserDirectoryId());
-    user.setStatus(UserStatus.fromCode(rs.getInt(3)));
-
-    String firstName = rs.getString(4);
-
-    user.setFirstName(StringUtils.isEmpty(firstName)
-        ? ""
-        : firstName);
-
-    String lastName = rs.getString(5);
-
-    user.setLastName(StringUtils.isEmpty(lastName)
-        ? ""
-        : lastName);
-
-    String phoneNumber = rs.getString(6);
-
-    user.setPhoneNumber(StringUtils.isEmpty(phoneNumber)
-        ? ""
-        : phoneNumber);
-
-    String mobilePhoneNumber = rs.getString(7);
-
-    user.setMobileNumber(StringUtils.isEmpty(mobilePhoneNumber)
-        ? ""
-        : mobilePhoneNumber);
-
-    String email = rs.getString(8);
-
-    user.setEmail(StringUtils.isEmpty(email)
-        ? ""
-        : email);
-
-    String password = rs.getString(9);
-
-    user.setPassword(StringUtils.isEmpty(password)
-        ? ""
-        : password);
-
-    if (rs.getObject(10) != null)
-    {
-      user.setPasswordAttempts(rs.getInt(10));
-    }
-
-    if (rs.getObject(11) != null)
-    {
-      user.setPasswordExpiry(rs.getTimestamp(11).toLocalDateTime());
-    }
-
-    return user;
-  }
-
-  /**
-   * Retrieve the authorised function codes for the user.
-   *
-   * @param connection the existing database connection to use
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *
-   * @return the authorised function codes for the user
-   */
-  private List<String> getFunctionCodesForUserId(Connection connection, String userId)
-    throws SQLException
-  {
-    String getFunctionCodesForUserIdSQL =
-        "SELECT DISTINCT ftrm.function_code FROM security.function_to_role_map ftrm "
-        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_code = ftrm.role_code "
-        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
-        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
-
-    List<String> functionCodes = new ArrayList<>();
-
-    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
-    {
-      statement.setObject(1, UUID.fromString(userId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          functionCodes.add(rs.getString(1));
-        }
-
-        return functionCodes;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the names for all the security groups that the user with the specific numeric
-   * ID is associated with.
-   *
-   * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *
-   * @return the security groups
-   */
-  private List<String> getGroupNamesForUser(Connection connection, String userId)
-    throws SQLException
-  {
-    String getGroupNamesForUserSQL = "SELECT groupname FROM "
-        + "security.groups g, security.user_to_group_map utgm "
-        + "WHERE g.id = utgm.group_id AND utgm.user_id=? ORDER BY g.groupname";
-
-    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
-    {
-      statement.setObject(1, UUID.fromString(userId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<String> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(rs.getString(1));
-        }
-
-        return list;
-      }
-    }
-  }
-
-  /**
-   * Retrieve all the internal security groups that the user with the specific numeric ID
-   * is associated with.
-   *
-   * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *
-   * @return the internal security groups
-   */
-  private List<Group> getGroupsForUser(Connection connection, String userId)
-    throws SQLException
-  {
-    String getGroupsForUserSQL = "SELECT id, groupname, description FROM "
-        + "security.groups g, security.user_to_group_map utgm "
-        + "WHERE g.id = utgm.group_id AND utgm.user_id=? " + "ORDER BY g.groupname";
-
-    try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
-    {
-      statement.setObject(1, UUID.fromString(userId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Group> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          Group group = new Group(rs.getString(2));
-
-          group.setId(rs.getString(1));
-          group.setUserDirectoryId(getUserDirectoryId());
-          group.setDescription(rs.getString(3));
-          list.add(group);
-        }
-
-        return list;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the number of users for the internal security group.
-   *
-   * @param connection the existing database connection
-   * @param groupId    the ID used to uniquely identify the internal security group
-   *
-   * @return the number of users for the internal security group
-   */
-  private long getNumberOfUsersForGroup(Connection connection, String groupId)
-    throws SQLException
-  {
-    String getNumberOfUsersForGroupSQL = "SELECT COUNT (user_id) FROM security.user_to_group_map "
-        + "WHERE group_id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
-    {
-      statement.setObject(1, UUID.fromString(groupId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getLong(1);
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-  }
-
-  /**
-   * Retrieve the codes for the roles that the user has been assigned.
-   *
-   * @param connection the existing database connection to use
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *
-   * @return the codes for the roles that the user has been assigned
-   */
-  private List<String> getRoleCodesForUserId(Connection connection, String userId)
-    throws SQLException
-  {
-    String getRoleCodesForUserIdSQL =
-        "SELECT DISTINCT rtgm.role_code FROM security.role_to_group_map rtgm "
-        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
-        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
-
-    List<String> roleCodes = new ArrayList<>();
-
-    try (PreparedStatement statement = connection.prepareStatement(getRoleCodesForUserIdSQL))
-    {
-      statement.setObject(1, UUID.fromString(userId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        while (rs.next())
-        {
-          roleCodes.add(rs.getString(1));
-        }
-
-        return roleCodes;
-      }
-    }
-  }
-
-  /**
-   * Retrieve the information for the user with the specified username.
-   *
-   * @param connection the existing database connection to use
-   * @param username   the username identifying the user
-   *
-   * @return the <code>User</code> or <code>null</code> if the user could not be found
-   */
-  private User getUser(Connection connection, String username)
-    throws SQLException
-  {
-    String getUserSQL = "SELECT id, username, status, first_name, last_name, phone, "
-        + "mobile, email, password, password_attempts, password_expiry FROM security.users "
-        + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (PreparedStatement statement = connection.prepareStatement(getUserSQL))
-    {
-      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-      statement.setString(2, username);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return buildUserFromResultSet(rs);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user with the specified username.
-   *
-   * @param connection the existing database connection to use
-   * @param username   the username uniquely identifying the user
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user with the specified username
-   */
-  private String getUserId(Connection connection, String username)
-    throws SecurityServiceException
-  {
-    String getUserIdSQL = "SELECT id FROM security.users "
-        + "WHERE user_directory_id=? AND UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (PreparedStatement statement = connection.prepareStatement(getUserIdSQL))
-    {
-      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-      statement.setString(2, username);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          return null;
-        }
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the ID for the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
-    }
-  }
-
-  /**
-   * Increment the password attempts for the user.
-   *
-   * @param userId the Universally Unique Identifier (UUID) used to uniquely identify the user
-   */
-  private void incrementPasswordAttempts(UUID userId)
-    throws SecurityServiceException
-  {
-    String incrementPasswordAttemptsSQL = "UPDATE security.users "
-        + "SET password_attempts = password_attempts + 1 WHERE user_directory_id=? AND id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(incrementPasswordAttemptsSQL))
-    {
-      statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-      statement.setObject(2, userId);
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            incrementPasswordAttemptsSQL));
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format("Failed to increment the password attempts "
-          + "for the user (%s) for the user directory (%s)", userId, getUserDirectoryId()), e);
-    }
-  }
+//  /**
+//   * Retrieve the codes for the roles that the user has been assigned.
+//   *
+//   * @param connection the existing database connection to use
+//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
+//   *
+//   * @return the codes for the roles that the user has been assigned
+//   */
+//  private List<String> getRoleCodesForUserId(Connection connection, String userId)
+//    throws SQLException
+//  {
+//    String getRoleCodesForUserIdSQL =
+//        "SELECT DISTINCT rtgm.role_code FROM security.role_to_group_map rtgm "
+//        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
+//        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
+//
+//    List<String> roleCodes = new ArrayList<>();
+//
+//    try (PreparedStatement statement = connection.prepareStatement(getRoleCodesForUserIdSQL))
+//    {
+//      statement.setObject(1, UUID.fromString(userId));
+//
+//      try (ResultSet rs = statement.executeQuery())
+//      {
+//        while (rs.next())
+//        {
+//          roleCodes.add(rs.getString(1));
+//        }
+//
+//        return roleCodes;
+//      }
+//    }
+//  }
 
   /**
    * Is the password, given by the specified password hash, a historical password that cannot
    * be reused for a period of time i.e. was the password used previously in the last X months.
    *
-   * @param connection   the existing database connection
    * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the user
    * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
-   * period of time or <code>false</code> otherwise
+   *         period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(Connection connection, UUID userId, String passwordHash)
-    throws SQLException
+  private boolean isPasswordInHistory(UUID userId, String passwordHash)
   {
-    String isPasswordInUserPasswordHistorySQL = "SELECT id FROM  security.users_password_history "
-        + "WHERE user_id=? AND changed > ? AND password=?";
+    LocalDateTime after = LocalDateTime.now();
+    after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
 
-    try (PreparedStatement statement = connection.prepareStatement(
-        isPasswordInUserPasswordHistorySQL))
-    {
-      Calendar calendar = Calendar.getInstance();
-
-      calendar.setTime(new Date());
-      calendar.add(Calendar.MONTH, -1 * passwordHistoryMonths);
-
-      statement.setObject(1, userId);
-      statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
-      statement.setString(3, passwordHash);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  /**
-   * Is the user in the security group?
-   *
-   * @param connection the existing database connection
-   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-   * @param groupId    the ID used to uniquely identify the internal security group
-   *
-   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
-   * otherwise
-   */
-  private boolean isUserInGroup(Connection connection, String userId, String groupId)
-    throws SQLException
-  {
-    String isUserInGroupSQL = "SELECT user_id FROM "
-        + "security.user_to_group_map WHERE user_id=? AND " + "group_id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(isUserInGroupSQL))
-    {
-      statement.setObject(1, UUID.fromString(userId));
-      statement.setObject(2, UUID.fromString(groupId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  private void savePasswordHistory(Connection connection, UUID userId, String passwordHash)
-    throws SQLException
-  {
-    String saveUserPasswordHistorySQL = "INSERT INTO security.users_password_history "
-        + "(id, user_id, changed, password) VALUES (?, ?, ?, ?)";
-
-    try (PreparedStatement statement = connection.prepareStatement(saveUserPasswordHistorySQL))
-    {
-      // TODO: Optimize the UUID usage -- MARCUS
-      String id = idGenerator.nextUUID().toString();
-
-      statement.setObject(1, UUID.fromString(id));
-      statement.setObject(2, userId);
-      statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-      statement.setString(4, passwordHash);
-      statement.execute();
-    }
+    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
   }
 }

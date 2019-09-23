@@ -54,8 +54,7 @@ public class UserLockedException extends ServiceException
    */
   public UserLockedException(String username)
   {
-    super(String.format(
-        "The user (%s) has exceeded the maximum number of failed password attempts and has been locked",
-        username));
+    super("The user (" + username
+        + ") has exceeded the maximum number of failed password attempts and has been locked");
   }
 }

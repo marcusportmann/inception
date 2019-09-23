@@ -191,7 +191,7 @@ export class SecurityService {
   /**
    * Delete the organization.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
    * @return True if the organization was deleted or false otherwise.
    */
@@ -226,7 +226,7 @@ export class SecurityService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    * @param username        The username identifying the user.
    *
    * @return True if the user was deleted or false otherwise.
@@ -263,7 +263,7 @@ export class SecurityService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @return True if the user directory was deleted or false otherwise.
    */
@@ -299,7 +299,7 @@ export class SecurityService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
    * @return The organization.
    */
@@ -392,7 +392,7 @@ export class SecurityService {
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @return The organizations the user directory is associated with.
    */
@@ -429,7 +429,7 @@ export class SecurityService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    * @param username        The username identifying the user.
    *
    * @return The user.
@@ -466,7 +466,7 @@ export class SecurityService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @return The user directory.
    */
@@ -502,7 +502,7 @@ export class SecurityService {
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
    * @return The summaries for the user directories the organization is associated with.
    */
@@ -539,7 +539,7 @@ export class SecurityService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @return The user directory type for the user directory.
    */
@@ -602,7 +602,7 @@ export class SecurityService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   The optional sort direction to apply to the users.

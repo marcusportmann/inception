@@ -273,7 +273,7 @@ GO
 
 CREATE TABLE "MESSAGING"."MESSAGES" (
   id                UNIQUEIDENTIFIER NOT NULL,
-  username          NVARCHAR(1000)   NOT NULL,
+  username          NVARCHAR(100)   NOT NULL,
   device_id         UNIQUEIDENTIFIER NOT NULL,
   type_id           UNIQUEIDENTIFIER NOT NULL,
   correlation_id    UNIQUEIDENTIFIER,
@@ -381,7 +381,7 @@ CREATE TABLE "MESSAGING"."MESSAGE_PARTS" (
   download_attempts      INTEGER,
   status                 INTEGER          NOT NULL,
   message_id             UNIQUEIDENTIFIER NOT NULL,
-  message_username       NVARCHAR(1000)   NOT NULL,
+  message_username       NVARCHAR(100)   NOT NULL,
   message_device_id      UNIQUEIDENTIFIER NOT NULL,
   message_type_id        UNIQUEIDENTIFIER NOT NULL,
   message_correlation_id UNIQUEIDENTIFIER,
@@ -484,7 +484,7 @@ GO
 
 CREATE TABLE "MESSAGING"."ARCHIVED_MESSAGES" (
   id             UNIQUEIDENTIFIER NOT NULL,
-  username       NVARCHAR(1000)   NOT NULL,
+  username       NVARCHAR(100)   NOT NULL,
   device_id      UNIQUEIDENTIFIER NOT NULL,
   type_id        UNIQUEIDENTIFIER NOT NULL,
   correlation_id UNIQUEIDENTIFIER,
@@ -648,7 +648,7 @@ GO
 
 CREATE TABLE "SECURITY"."ORGANIZATIONS" (
   id     UNIQUEIDENTIFIER NOT NULL,
-  name   NVARCHAR(4000)   NOT NULL,
+  name   NVARCHAR(100)   NOT NULL,
   status INTEGER          NOT NULL,
 
   PRIMARY KEY (id)
@@ -751,16 +751,16 @@ GO
 CREATE TABLE "SECURITY"."USERS" (
   id                UNIQUEIDENTIFIER NOT NULL,
   user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  username          NVARCHAR(1000)   NOT NULL,
+  username          NVARCHAR(100)    NOT NULL,
   status            INTEGER          NOT NULL,
-  first_name        NVARCHAR(4000)    NOT NULL DEFAULT '',
-  last_name         NVARCHAR(4000)    NOT NULL DEFAULT '',
-  phone             NVARCHAR(4000)    NOT NULL DEFAULT '',
-  mobile            NVARCHAR(4000)    NOT NULL DEFAULT '',
-  email             NVARCHAR(4000)    NOT NULL DEFAULT '',
-  password          NVARCHAR(4000)    NOT NULL DEFAULT '',
+  first_name        NVARCHAR(100)    NOT NULL DEFAULT '',
+  last_name         NVARCHAR(100)    NOT NULL DEFAULT '',
+  phone             NVARCHAR(100)    NOT NULL DEFAULT '',
+  mobile            NVARCHAR(100)    NOT NULL DEFAULT '',
+  email             NVARCHAR(100)    NOT NULL DEFAULT '',
+  password          NVARCHAR(100)    NOT NULL DEFAULT '',
   password_attempts INTEGER          NOT NULL DEFAULT 0,
-  password_expiry   DATETIME,
+  password_expiry   DATETIME         NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES "SECURITY"."USER_DIRECTORIES"(id) ON DELETE CASCADE
@@ -825,7 +825,7 @@ CREATE TABLE "SECURITY"."USERS_PASSWORD_HISTORY" (
   id               UNIQUEIDENTIFIER NOT NULL,
   user_id UNIQUEIDENTIFIER NOT NULL,
   changed          DATETIME         NOT NULL,
-  password         NVARCHAR(4000),
+  password         NVARCHAR(100),
 
   PRIMARY KEY (id),
   CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES "SECURITY"."USERS"(id) ON DELETE CASCADE
@@ -857,8 +857,8 @@ GO
 CREATE TABLE "SECURITY"."GROUPS" (
   id                UNIQUEIDENTIFIER NOT NULL,
   user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  groupname         NVARCHAR(4000)    NOT NULL,
-  description       NVARCHAR(4000),
+  groupname         NVARCHAR(100)    NOT NULL,
+  description       NVARCHAR(100),
 
   PRIMARY KEY (id),
   CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES "SECURITY"."USER_DIRECTORIES"(id) ON DELETE CASCADE
@@ -938,7 +938,7 @@ DELETE
 CREATE TABLE "SECURITY"."FUNCTIONS" (
   code        NVARCHAR(100)    NOT NULL,
   name        NVARCHAR(100)    NOT NULL,
-  description NVARCHAR(1000),
+  description NVARCHAR(100),
 
   PRIMARY KEY (code)
 );
@@ -960,8 +960,8 @@ GO
 
 CREATE TABLE "SECURITY"."ROLES" (
   code        NVARCHAR(100) NOT NULL,
-  name        NVARCHAR(4000) NOT NULL,
-  description NVARCHAR(4000),
+  name        NVARCHAR(100) NOT NULL,
+  description NVARCHAR(100),
 
   PRIMARY KEY (code)
 );
@@ -975,7 +975,7 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'NAME';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'A description for the role' ,
+@name=N'MS_Description', @value=N'The description for the role' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
 GO
 
@@ -1084,8 +1084,8 @@ CREATE TABLE "SERVICE_REGISTRY"."SERVICE_REGISTRY" (
   endpoint             NVARCHAR(1024) NOT NULL,
   service_class        NVARCHAR(1024) NOT NULL,
   wsdl_location        NVARCHAR(1024) NOT NULL,
-  username             NVARCHAR(256),
-  password             NVARCHAR(256),
+  username             NVARCHAR(100),
+  password             NVARCHAR(100),
 
   PRIMARY KEY (name)
 );
@@ -1177,7 +1177,7 @@ CREATE TABLE "ERROR"."ERROR_REPORTS" (
   description         NVARCHAR(4000)   NOT NULL,
   detail              NVARCHAR(MAX)    NOT NULL,
   created             DATETIME         NOT NULL,
-  who                 NVARCHAR(1000),
+  who                 NVARCHAR(100),
   device_id           UNIQUEIDENTIFIER,
   feedback            NVARCHAR(4000),
   data                NVARCHAR(MAX),
@@ -1236,7 +1236,7 @@ GO
 
 CREATE TABLE "TEST"."TEST_DATA" (
   id    INTEGER        NOT NULL,
-  name  NVARCHAR(4000) NOT NULL,
+  name  NVARCHAR(100) NOT NULL,
   value NVARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (id)

@@ -129,6 +129,38 @@ public class JobParameter
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    JobParameter other = (JobParameter) object;
+
+    return ((jobId != null) && jobId.equals(other.jobId))
+        && ((name != null) && name.equals(other.name));
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
    * parameter is associated with.
    *
@@ -158,6 +190,21 @@ public class JobParameter
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return ((jobId == null)
+        ? 0
+        : jobId.hashCode()) + ((name == null)
+        ? 0
+        : name.hashCode());
   }
 
   /**

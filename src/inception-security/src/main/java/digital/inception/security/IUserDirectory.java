@@ -169,7 +169,7 @@ interface IUserDirectory
    *
    * @return the number of security groups
    */
-  int getNumberOfGroups()
+  long getNumberOfGroups()
     throws SecurityServiceException;
 
   /**
@@ -179,7 +179,7 @@ interface IUserDirectory
    *
    * @return the number of users
    */
-  int getNumberOfUsers(String filter)
+  long getNumberOfUsers(String filter)
     throws SecurityServiceException;
 
   /**

@@ -95,8 +95,8 @@ public class Data
   @ApiModelProperty(value = "The ID used to uniquely identify the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @Id
   @NotNull
+  @Id
   @Column(name = "id", nullable = false)
   private long id;
 
@@ -152,6 +152,37 @@ public class Data
     this.stringValue = stringValue;
     this.dateValue = dateValue;
     this.timestampValue = timestampValue;
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Data other = (Data) object;
+
+    return id == other.id;
   }
 
   /**
@@ -212,6 +243,17 @@ public class Data
   public LocalDateTime getTimestampValue()
   {
     return timestampValue;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (int) (id ^ (id >>> 32));
   }
 
   /**

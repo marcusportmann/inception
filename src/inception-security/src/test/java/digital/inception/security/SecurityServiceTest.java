@@ -251,7 +251,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    String userDirectoryId = securityService.changePassword(user.getUsername(), user.getPassword(),
+    UUID userDirectoryId = securityService.changePassword(user.getUsername(), user.getPassword(),
         "Password2");
 
     assertEquals("The correct user directory ID was not returned", userDirectory.getId(),
@@ -613,7 +613,7 @@ public class SecurityServiceTest
 
     compareGroups(group, retrievedGroup);
 
-    int numberOfGroups = securityService.getNumberOfGroups(userDirectory.getId());
+    long numberOfGroups = securityService.getNumberOfGroups(userDirectory.getId());
 
     assertEquals("The correct number of groups (1) was not retrieved", 1, numberOfGroups);
 
@@ -733,7 +733,7 @@ public class SecurityServiceTest
 
     compareOrganizations(organization, retrievedOrganization);
 
-    int numberOfOrganizations = securityService.getNumberOfOrganizations();
+    long numberOfOrganizations = securityService.getNumberOfOrganizations();
 
     assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
         + 1) + ") was not retrieved", beforeRetrievedOrganizations.size() + 1,
@@ -904,7 +904,7 @@ public class SecurityServiceTest
     throws Exception
   {
     List<String> roleCodes = securityService.getRoleCodesForUser(
-        "4ef18395-423a-4df6-b7d7-6bcdd85956e4", "Administrator");
+        UUID.fromString("4ef18395-423a-4df6-b7d7-6bcdd85956e4"), "Administrator");
 
     assertEquals("The correct number of role codes (1) was not retrieved", 1, roleCodes.size());
 
@@ -930,7 +930,7 @@ public class SecurityServiceTest
         "The correct number of organizations (1) was not retrieved for the user directory", 1,
         organizationsForUserDirectory.size());
 
-    List<String> organizationIdsForUserDirectory =
+    List<UUID> organizationIdsForUserDirectory =
         securityService.getOrganizationIdsForUserDirectory(userDirectory.getId());
 
     assertEquals(
@@ -965,7 +965,7 @@ public class SecurityServiceTest
 
     compareUserDirectories(userDirectory, retrievedUserDirectory);
 
-    int numberOfUserDirectories = securityService.getNumberOfUserDirectories();
+    long numberOfUserDirectories = securityService.getNumberOfUserDirectories();
 
     assertEquals("The correct number of user directories ("
         + (beforeRetrievedUserDirectories.size() + 1) + ") was not retrieved",
@@ -1075,7 +1075,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    String userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
+    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
 
     assertEquals("The correct user directory ID was not retrieved for the user",
         userDirectory.getId(), userDirectoryId);
@@ -1084,7 +1084,7 @@ public class SecurityServiceTest
 
     compareUsers(user, retrievedUser, false);
 
-    int numberOfUsers = securityService.getNumberOfUsers(userDirectory.getId());
+    long numberOfUsers = securityService.getNumberOfUsers(userDirectory.getId());
 
     assertEquals("The correct number of users (1) was not retrieved", 1, numberOfUsers);
 
@@ -1175,7 +1175,7 @@ public class SecurityServiceTest
   {
     organizationCount++;
 
-    return new Organization(UUID.randomUUID().toString(), "Test Organization Name "
+    return new Organization(UUID.randomUUID(), "Test Organization Name "
         + organizationCount, OrganizationStatus.ACTIVE);
   }
 
@@ -1204,7 +1204,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(UUID.randomUUID().toString());
+    userDirectory.setId(UUID.randomUUID());
     userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 

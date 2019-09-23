@@ -156,8 +156,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to check whether the code category (%s) exists", codeCategoryId), e);
+      throw new CodesServiceException("Failed to check whether the code category ("
+          + codeCategoryId + ") exists", e);
     }
   }
 
@@ -180,9 +180,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to check whether the code (%s) exists for the code category (%s)", codeId,
-          codeCategoryId), e);
+      throw new CodesServiceException("Failed to check whether the code (" + codeId
+          + ") exists for the code category (" + codeCategoryId + ")", e);
     }
   }
 
@@ -216,9 +215,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to create the code (%s) for the code category (%s)", code.getName(),
-          code.getCodeCategoryId()), e);
+      throw new CodesServiceException("Failed to create the code (" + code.getName()
+          + ") for the code category (" + code.getCodeCategoryId() + ")", e);
     }
   }
 
@@ -253,8 +251,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to create the code category (%s)",
-          codeCategory.getId()), e);
+      throw new CodesServiceException("Failed to create the code category (" + codeCategory.getId()
+          + ")", e);
     }
   }
 
@@ -287,8 +285,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to delete the code (%s) for the code category (%s)", codeId, codeCategoryId), e);
+      throw new CodesServiceException("Failed to delete the code (" + codeId
+          + ") for the code category (" + codeCategoryId + ")", e);
     }
   }
 
@@ -317,8 +315,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to delete the code category (%s)",
-          codeCategoryId), e);
+      throw new CodesServiceException("Failed to delete the code category (" + codeCategoryId
+          + ")", e);
     }
   }
 
@@ -337,11 +335,11 @@ public class CodesService
   {
     try
     {
-      Optional<Code> code = codeRepository.findById(new CodeId(codeCategoryId, codeId));
+      Optional<Code> codeOptional = codeRepository.findById(new CodeId(codeCategoryId, codeId));
 
-      if (code.isPresent())
+      if (codeOptional.isPresent())
       {
-        return code.get();
+        return codeOptional.get();
       }
       else
       {
@@ -363,9 +361,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the code (%s) for the code category (%s)", codeId, codeCategoryId),
-          e);
+      throw new CodesServiceException("Failed to retrieve the code (" + codeId
+          + ") for the code category (" + codeCategoryId + ")", e);
     }
 
   }
@@ -402,11 +399,11 @@ public class CodesService
   {
     try
     {
-      Optional<CodeCategory> codeCategory = codeCategoryRepository.findById(codeCategoryId);
+      Optional<CodeCategory> codeCategoryOptional = codeCategoryRepository.findById(codeCategoryId);
 
-      if (codeCategory.isPresent())
+      if (codeCategoryOptional.isPresent())
       {
-        return codeCategory.get();
+        return codeCategoryOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -426,8 +423,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to retrieve the code category (%s)",
-          codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the code category (" + codeCategoryId
+          + ")", e);
     }
   }
 
@@ -448,11 +445,11 @@ public class CodesService
   {
     try
     {
-      Optional<String> data = codeCategoryRepository.getDataById(codeCategoryId);
+      Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
-      if (data.isPresent())
+      if (dataOptional.isPresent())
       {
-        return data.get();
+        return dataOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -476,8 +473,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the data for the code category ("
+          + codeCategoryId + ")", e);
     }
   }
 
@@ -500,11 +497,11 @@ public class CodesService
   {
     try
     {
-      Optional<String> data = codeCategoryRepository.getDataById(codeCategoryId);
+      Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
-      if (data.isPresent())
+      if (dataOptional.isPresent())
       {
-        return data.get();
+        return dataOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -529,8 +526,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the data for the code category ("
+          + codeCategoryId + ")", e);
     }
   }
 
@@ -567,11 +564,11 @@ public class CodesService
   {
     try
     {
-      Optional<LocalDateTime> updated = codeCategoryRepository.getUpdatedById(codeCategoryId);
+      Optional<LocalDateTime> updatedOptional = codeCategoryRepository.getUpdatedById(codeCategoryId);
 
-      if (updated.isPresent())
+      if (updatedOptional.isPresent())
       {
-        return updated.get();
+        return updatedOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
@@ -591,9 +588,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the date and time the code category (%s) was last updated",
-          codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the date and time the code category ("
+          + codeCategoryId + ") was last updated", e);
     }
   }
 
@@ -636,8 +632,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the codes for the code category ("
+          + codeCategoryId + ")", e);
     }
   }
 
@@ -681,8 +677,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException("Failed to retrieve the codes for the code category ("
+          + codeCategoryId + ")", e);
     }
   }
 
@@ -731,8 +727,9 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to retrieve the number of codes for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException(
+          "Failed to retrieve the number of codes for the code category (" + codeCategoryId + ")",
+          e);
     }
 
   }
@@ -761,8 +758,7 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to update the code (%s)",
-          code.getId()), e);
+      throw new CodesServiceException("Failed to update the code (" + code.getId() + ")", e);
     }
 
   }
@@ -794,8 +790,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format("Failed to update the code category (%s)",
-          codeCategory.getId()), e);
+      throw new CodesServiceException("Failed to update the code category (" + codeCategory.getId()
+          + ")", e);
     }
   }
 
@@ -825,8 +821,8 @@ public class CodesService
     }
     catch (Throwable e)
     {
-      throw new CodesServiceException(String.format(
-          "Failed to update the data for the code category (%s)", codeCategoryId), e);
+      throw new CodesServiceException("Failed to update the data for the code category ("
+          + codeCategoryId + ")", e);
     }
   }
 
@@ -840,8 +836,8 @@ public class CodesService
     {
       try
       {
-        logger.info(String.format("Initializing the code provider (%s) with class (%s)",
-            codeProviderConfig.getName(), codeProviderConfig.getClassName()));
+        logger.info("Initializing the code provider (" + codeProviderConfig.getName()
+            + ") with class (" + codeProviderConfig.getClassName() + ")");
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
             codeProviderConfig.getClassName());
@@ -860,16 +856,15 @@ public class CodesService
         }
         else
         {
-          logger.error(String.format(
-              "Failed to register the code provider (%s): The code provider "
-              + "class does not provide a constructor with the required signature",
-              codeProviderConfig.getClassName()));
+          logger.error("Failed to register the code provider (" + codeProviderConfig.getClassName()
+              + "): The code provider class does not provide a constructor with the required "
+              + "signature");
         }
       }
       catch (Throwable e)
       {
-        logger.error(String.format("Failed to initialize the code provider (%s) with class (%s)",
-            codeProviderConfig.getName(), codeProviderConfig.getClassName()), e);
+        logger.error("Failed to initialize the code provider (" + codeProviderConfig.getName()
+            + ") with class (" + codeProviderConfig.getClassName() + ")", e);
       }
     }
   }
@@ -897,8 +892,8 @@ public class CodesService
 
         if (logger.isDebugEnabled())
         {
-          logger.debug(String.format("Reading the code provider configuration file (%s)",
-              codeProviderConfigurationFile.toURI().toString()));
+          logger.debug("Reading the code provider configuration file ("
+              + codeProviderConfigurationFile.toURI().toString() + ")");
         }
 
         // Retrieve a document builder instance using the factory

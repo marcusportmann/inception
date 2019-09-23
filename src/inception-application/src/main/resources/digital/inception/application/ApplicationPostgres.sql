@@ -65,7 +65,7 @@ DROP TABLE IF EXISTS test.test_data CASCADE;
 -- -------------------------------------------------------------------------------------------------
 -- DROP SEQUENCES
 -- -------------------------------------------------------------------------------------------------
-DROP SEQUENCE sms.sms_id_seq;
+DROP SEQUENCE IF EXISTS sms.sms_id_seq;
 
 
 -- -------------------------------------------------------------------------------------------------
@@ -509,7 +509,7 @@ CREATE TABLE security.user_directory_types (
   name                 TEXT NOT NULL,
   user_directory_class TEXT NOT NULL,
 
-  PRIMARY KEY (id)
+  PRIMARY KEY (code)
 );
 
 COMMENT ON COLUMN security.user_directory_types.code IS 'The code used to uniquely identify the user directory type';
@@ -570,7 +570,7 @@ CREATE TABLE security.users (
   email             TEXT    NOT NULL DEFAULT '',
   password          TEXT    NOT NULL DEFAULT '',
   password_attempts INTEGER NOT NULL DEFAULT 0,
-  password_expiry   TIMESTAMP,
+  password_expiry   TIMESTAMP NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -696,7 +696,7 @@ COMMENT ON COLUMN security.roles.code IS 'The code used to uniquely identify the
 
 COMMENT ON COLUMN security.roles.name IS 'The name of the role';
 
-COMMENT ON COLUMN security.roles.description IS 'A description for the role';
+COMMENT ON COLUMN security.roles.description IS 'The description for the role';
 
 
 CREATE TABLE security.function_to_role_map (

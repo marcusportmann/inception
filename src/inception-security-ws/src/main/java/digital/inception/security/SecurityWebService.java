@@ -91,7 +91,7 @@ public class SecurityWebService
   /**
    * Delete the organization.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   @WebMethod(operationName = "DeleteOrganization")
   public void deleteOrganization(@WebParam(name = "OrganizationId")
@@ -131,7 +131,7 @@ public class SecurityWebService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the organization
    *
    * @return the user directories the organization is associated with
    */

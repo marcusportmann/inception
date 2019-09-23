@@ -32,12 +32,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.time.LocalDateTime;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -69,13 +69,22 @@ public class User
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The groups the user is associated with.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(mappedBy = "users")
+  private Set<Group> groups = new HashSet<>();
+
+  /**
    * The e-mail address for the user.
    */
   @ApiModelProperty(value = "The e-mail address for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Email", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(max = 100)
+  @Column(name = "email", nullable = false, length = 100)
   private String email;
 
   /**
@@ -85,13 +94,16 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "FirstName", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(max = 100)
+  @Column(name = "first_name", nullable = false, length = 100)
   private String firstName;
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the user.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -106,7 +118,8 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "LastName", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(max = 100)
+  @Column(name = "last_name", nullable = false, length = 100)
   private String lastName;
 
   /**
@@ -116,16 +129,22 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(max = 100)
+  @Column(name = "mobile", nullable = false, length = 100)
   private String mobileNumber;
 
   /**
    * The password or password hash for the user.
+   *
+   * NOTE: The password is not required as part of the JSON or XML representation of the user,
+   *       other than when creating the user, so the field is nullable but the database column is
+   *       not.
    */
   @ApiModelProperty(value = "The password or password hash for the user")
   @JsonProperty
   @XmlElement(name = "Password")
-  @Size(max = 4000)
+  @Size(max = 100)
+  @Column(name = "password", nullable = false, length = 100)
   private String password;
 
   /**
@@ -136,16 +155,18 @@ public class User
       example = "0")
   @JsonProperty
   @XmlElement(name = "PasswordAttempts")
+  @Column(name = "password_attempts", nullable = false)
   private Integer passwordAttempts;
 
   /**
-   * The optional date and time the password for the user expires.
+   * The date and time the password for the user expires.
    */
-  @ApiModelProperty(value = "The optional date and time the password for the user expires")
+  @ApiModelProperty(value = "The date and time the password for the user expires")
   @JsonProperty
   @XmlElement(name = "PasswordExpiry")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
+  @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
   /**
@@ -155,7 +176,8 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "PhoneNumber", required = true)
   @NotNull
-  @Size(max = 4000)
+  @Size(max = 100)
+  @Column(name = "phone", nullable = false, length = 100)
   private String phoneNumber;
 
   /**
@@ -164,6 +186,7 @@ public class User
   @ApiModelProperty(value = "Is the user read-only")
   @JsonProperty
   @XmlElement(name = "ReadOnly")
+  @Transient
   private Boolean readOnly;
 
   /**
@@ -174,10 +197,12 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
+  @Column(name = "status", nullable = false)
   private UserStatus status;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
    */
   @ApiModelProperty(
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
@@ -185,7 +210,8 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
-  private String userDirectoryId;
+  @Column(name = "user_directory_id", nullable = false)
+  private UUID userDirectoryId;
 
   /**
    * The username for the user.
@@ -194,13 +220,45 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
-  @Size(min =1, max = 1000)
+  @Size(min = 1, max = 100)
+  @Column(name = "username", nullable = false, length = 100)
   private String username;
 
   /**
    * Constructs a new <code>User</code>.
    */
   public User() {}
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    User other = (User) object;
+
+    return (id != null) && id.equals(other.id);
+  }
 
   /**
    * Returns the e-mail address for the user
@@ -220,6 +278,16 @@ public class User
   public String getFirstName()
   {
     return firstName;
+  }
+
+  /**
+   * Returns the groups the user is associated with.
+   *
+   * @return the groups the user is associated with
+   */
+  public Set<Group> getGroups()
+  {
+    return groups;
   }
 
   /**
@@ -275,9 +343,9 @@ public class User
   }
 
   /**
-   * Returns the optional date and time the password for the user expires
+   * Returns the date and time the password for the user expires
    *
-   * @return the optional date and time the password for the user expires
+   * @return the date and time the password for the user expires
    */
   public LocalDateTime getPasswordExpiry()
   {
@@ -305,11 +373,13 @@ public class User
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the user is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the user is associated with
    */
-  public String getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -343,6 +413,19 @@ public class User
     }
 
     return false;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**
@@ -412,6 +495,16 @@ public class User
   }
 
   /**
+   * Set the groups the user is associated with.
+   *
+   * @param groups the groups the user is associated with
+   */
+  public void setGroups(Set<Group> groups)
+  {
+    this.groups = groups;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
@@ -462,9 +555,9 @@ public class User
   }
 
   /**
-   * Set the optional password expiry for the user
+   * Set the date and time the password for the user expires.
    *
-   * @param passwordExpiry the optional password expiry for the user
+   * @param passwordExpiry the date and time the password for the user expires
    */
   public void setPasswordExpiry(LocalDateTime passwordExpiry)
   {
@@ -502,12 +595,13 @@ public class User
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * user is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is
-   *                        associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the user is associated with
    */
-  public void setUserDirectoryId(String userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

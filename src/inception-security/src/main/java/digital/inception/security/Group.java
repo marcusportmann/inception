@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,7 +28,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,10 +51,34 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Group", namespace = "http://security.inception.digital",
     propOrder = { "id", "userDirectoryId", "groupName", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "security", name = "groups")
 public class Group
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The roles associated with the group.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(schema = "security", name = "role_to_group_map",
+      joinColumns = @JoinColumn(name = "role_id") ,
+      inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<Role> roles = new HashSet<>();
+
+  /**
+   * The users associated with the group.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(schema = "security", name = "user_to_group_map",
+      joinColumns = @JoinColumn(name = "user_id") ,
+      inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<User> users = new HashSet<>();
 
   /**
    * The description for the security group.
@@ -57,7 +86,8 @@ public class Group
   @ApiModelProperty(value = "The description for the security group")
   @JsonProperty
   @XmlElement(name = "Description")
-  @Size(max = 4000)
+  @Size(max = 100)
+  @Column(name = "description", length = 100)
   private String description;
 
   /**
@@ -69,22 +99,26 @@ public class Group
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
+  @Column(name = "groupname", nullable = false, length = 100)
   private String groupName;
 
   /**
-   * The ID used to uniquely identify the security group.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the security group.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the security group",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the security group",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * security group is associated with
    */
   @ApiModelProperty(
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
@@ -92,7 +126,8 @@ public class Group
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
-  private String userDirectoryId;
+  @Column(name = "user_directory_id", nullable = false)
+  private UUID userDirectoryId;
 
   /**
    * Constructs a new <code>Group</code>.
@@ -112,18 +147,72 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param id              the ID used to uniquely identify the security group
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group
-   *                        is associated with
+   * @param id              the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        security group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the security group is associated with
    * @param groupName       the name of the security group uniquely identifying the security group
    * @param description     the description for the security group
    */
-  public Group(String id, String userDirectoryId, String groupName, String description)
+  public Group(UUID id, UUID userDirectoryId, String groupName, String description)
   {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.description = description;
+  }
+
+  /**
+   * Add the role to the group.
+   *
+   * @param role the role
+   */
+  public void addRole(Role role)
+  {
+    roles.add(role);
+    role.getGroups().add(this);
+  }
+
+  /**
+   * Add the user to the group.
+   *
+   * @param user the user
+   */
+  public void addUser(User user)
+  {
+    users.add(user);
+    user.getGroups().add(this);
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Group other = (Group) object;
+
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -147,25 +236,80 @@ public class Group
   }
 
   /**
-   * Returns the ID used to uniquely identify the security group.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the security group.
    *
-   * @return the ID used to uniquely identify the security group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated
-   * with.
+   * Returns the roles associated with the group.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated
-   *         with
+   * @return the roles associated with the group
    */
-  public String getUserDirectoryId()
+  public Set<Role> getRoles()
+  {
+    return roles;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the security group is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the security group is associated with
+   */
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
+  }
+
+  /**
+   * Returns the users associated with the group.
+   *
+   * @return the users associated with the group
+   */
+  public Set<User> getUsers()
+  {
+    return users;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
+  }
+
+  /**
+   * Remove the role from the group.
+   *
+   * @param role the role
+   */
+  public void removeRole(Role role)
+  {
+    roles.remove(role);
+    role.getGroups().remove(this);
+  }
+
+  /**
+   * Remove the user from the group.
+   *
+   * @param user the user
+   */
+  public void removeUser(User user)
+  {
+    users.remove(user);
+    user.getGroups().remove(this);
   }
 
   /**
@@ -179,23 +323,44 @@ public class Group
   }
 
   /**
-   * Set the ID used to uniquely identify the security group.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the security group.
    *
-   * @param id the ID used to uniquely identify the security group
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the security group
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with.
+   * Set the roles associated with the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group
-   *                        is associated with
+   * @param roles the roles associated with the group
    */
-  public void setUserDirectoryId(String userDirectoryId)
+  public void setRoles(Set<Role> roles)
+  {
+    this.roles = roles;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * security group is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the security group is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the users associated with the group.
+   *
+   * @param users the users associated with the group
+   */
+  public void setUsers(Set<User> users)
+  {
+    this.users = users;
   }
 }

@@ -33,6 +33,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -64,8 +65,8 @@ public class Configuration
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
-  @Size(max = 4000)
-  @Column(name = "description", nullable = false, length = 4000)
+  @Size(max = 100)
+  @Column(name = "description", nullable = false, length = 100)
   private String description;
 
   /**
@@ -75,9 +76,9 @@ public class Configuration
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
   @Id
-  @Column(name = "key", nullable = false, length = 4000)
+  @Column(name = "key", nullable = false, length = 100)
   private String key;
 
   /**
@@ -111,6 +112,37 @@ public class Configuration
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Configuration other = (Configuration) object;
+
+    return (key != null) && key.equals(other.key);
+  }
+
+  /**
    * Returns the description for the configuration.
    *
    * @return the description for the configuration
@@ -138,6 +170,19 @@ public class Configuration
   public String getValue()
   {
     return value;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (key == null)
+        ? 0
+        : key.hashCode();
   }
 
   /**

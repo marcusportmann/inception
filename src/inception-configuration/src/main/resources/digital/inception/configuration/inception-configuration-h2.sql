@@ -7,9 +7,9 @@ CREATE SCHEMA configuration;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE configuration.configuration (
-  key         VARCHAR(4000) NOT NULL,
+  key         VARCHAR(100) NOT NULL,
   value       VARCHAR(4000) NOT NULL,
-  description VARCHAR(4000) NOT NULL,
+  description VARCHAR(100) NOT NULL,
 
   PRIMARY KEY (key)
 );

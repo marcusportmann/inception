@@ -87,8 +87,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to delete the configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException("Failed to delete the configuration with the key ("
+          + key + ")", e);
     }
   }
 
@@ -105,11 +105,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return Base64Util.decode(value.get());
+        return Base64Util.decode(valueOptional.get());
       }
       else
       {
@@ -122,8 +122,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the binary configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the binary configuration with the key (" + key + ")", e);
     }
   }
 
@@ -142,14 +142,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.map(Base64Util::decode).orElse(defaultValue);
+      return valueOptional.map(Base64Util::decode).orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the binary configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the binary configuration with the key (" + key + ")", e);
     }
   }
 
@@ -166,11 +166,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return Boolean.parseBoolean(value.get());
+        return Boolean.parseBoolean(valueOptional.get());
       }
       else
       {
@@ -183,8 +183,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Boolean configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Boolean configuration with the key (" + key + ")", e);
     }
   }
 
@@ -203,14 +203,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.map(Boolean::parseBoolean).orElse(defaultValue);
+      return valueOptional.map(Boolean::parseBoolean).orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Boolean configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Boolean configuration with the key (" + key + ")", e);
     }
   }
 
@@ -227,15 +227,16 @@ public class ConfigurationService
   {
     try
     {
-      Optional<Configuration> configuration = configurationRepository.findByKeyIgnoreCase(key);
+      Optional<Configuration> configurationOptional = configurationRepository.findByKeyIgnoreCase(
+          key);
 
-      if (configuration.isEmpty())
+      if (configurationOptional.isEmpty())
       {
         throw new ConfigurationNotFoundException(key);
       }
       else
       {
-        return configuration.get();
+        return configurationOptional.get();
       }
     }
     catch (ConfigurationNotFoundException e)
@@ -244,8 +245,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException("Failed to retrieve the configuration with the key ("
+          + key + ")", e);
     }
   }
 
@@ -300,11 +301,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return Double.parseDouble(value.get());
+        return Double.parseDouble(valueOptional.get());
       }
       else
       {
@@ -317,8 +318,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Double configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Double configuration with the key (" + key + ")", e);
     }
   }
 
@@ -337,14 +338,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.map(Double::parseDouble).orElse(defaultValue);
+      return valueOptional.map(Double::parseDouble).orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Double configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Double configuration with the key (" + key + ")", e);
     }
   }
 
@@ -363,8 +364,7 @@ public class ConfigurationService
     {
       if (!StringUtils.isEmpty(filter))
       {
-        return configurationSummaryRepository.findFiltered("%"
-            + filter.toUpperCase() + "%");
+        return configurationSummaryRepository.findByKeyIgnoreCaseContaining(filter);
       }
       else
       {
@@ -373,8 +373,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the configuration summaries matching the filter (%s)", filter), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the configuration summaries matching the filter (" + filter + ")", e);
     }
   }
 
@@ -393,7 +393,7 @@ public class ConfigurationService
     {
       if (!StringUtils.isEmpty(filter))
       {
-        return configurationRepository.findFiltered("%" + filter.toUpperCase() + "%");
+        return configurationRepository.findByKeyIgnoreCaseContaining(filter);
       }
       else
       {
@@ -402,8 +402,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the configuration matching the filter (%s)", filter), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the configuration matching the filter (" + filter + ")", e);
     }
   }
 
@@ -420,11 +420,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return Integer.parseInt(value.get());
+        return Integer.parseInt(valueOptional.get());
       }
       else
       {
@@ -437,8 +437,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Integer configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Integer configuration with the key (" + key + ")", e);
     }
   }
 
@@ -457,14 +457,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.map(Integer::parseInt).orElse(defaultValue);
+      return valueOptional.map(Integer::parseInt).orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Integer configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Integer configuration with the key (" + key + ")", e);
     }
   }
 
@@ -481,11 +481,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return Long.parseLong(value.get());
+        return Long.parseLong(valueOptional.get());
       }
       else
       {
@@ -498,8 +498,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Long configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Long configuration with the key (" + key + ")", e);
     }
   }
 
@@ -518,14 +518,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.map(Long::parseLong).orElse(defaultValue);
+      return valueOptional.map(Long::parseLong).orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the Long configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the Long configuration with the key (" + key + ")", e);
     }
   }
 
@@ -542,11 +542,11 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      if (value.isPresent())
+      if (valueOptional.isPresent())
       {
-        return value.get();
+        return valueOptional.get();
       }
       else
       {
@@ -559,8 +559,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the String configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the String configuration with the key (" + key + ")", e);
     }
   }
 
@@ -579,14 +579,14 @@ public class ConfigurationService
   {
     try
     {
-      Optional<String> value = configurationRepository.getValueByKeyIgnoreCase(key);
+      Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
-      return value.orElse(defaultValue);
+      return valueOptional.orElse(defaultValue);
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to retrieve the String configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the String configuration with the key (" + key + ")", e);
     }
   }
 
@@ -629,8 +629,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to set the configuration with the key (%s)", configuration.getKey()), e);
+      throw new ConfigurationServiceException("Failed to set the configuration with the key ("
+          + configuration.getKey() + ")", e);
     }
   }
 
@@ -667,8 +667,8 @@ public class ConfigurationService
     }
     catch (Throwable e)
     {
-      throw new ConfigurationServiceException(String.format(
-          "Failed to set the configuration with the key (%s)", key), e);
+      throw new ConfigurationServiceException("Failed to set the configuration with the key ("
+          + key + ")", e);
     }
   }
 }

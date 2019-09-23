@@ -182,8 +182,8 @@ public class ErrorReport
       value = "The optional username identifying the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
-  @Size(max = 1000)
-  @Column(name = "who", length = 1000)
+  @Size(max = 100)
+  @Column(name = "who", length = 100)
   private String who;
 
   /**
@@ -245,6 +245,37 @@ public class ErrorReport
     this.deviceId = deviceId;
     this.feedback = feedback;
     this.data = data;
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    ErrorReport other = (ErrorReport) object;
+
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -347,6 +378,19 @@ public class ErrorReport
   public String getWho()
   {
     return who;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

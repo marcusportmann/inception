@@ -9,8 +9,8 @@ CREATE SCHEMA test;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE test.test_data (
-  id    VARCHAR(4000) NOT NULL,
-  name  VARCHAR(4000) NOT NULL,
+  id    VARCHAR(100) NOT NULL,
+  name  VARCHAR(100) NOT NULL,
   value VARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (id)

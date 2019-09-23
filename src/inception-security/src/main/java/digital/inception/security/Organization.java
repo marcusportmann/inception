@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -27,8 +28,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,6 +50,8 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Organization", namespace = "http://security.inception.digital",
     propOrder = { "id", "name", "status" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "security", name = "organizations")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Organization
   implements java.io.Serializable
@@ -53,15 +59,17 @@ public class Organization
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the organization.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the organization",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The name of the organization.
@@ -70,7 +78,8 @@ public class Organization
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -80,7 +89,43 @@ public class Organization
       allowableValues = "0 = Inactive, 1 = Active", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
+  @Column(name = "status", nullable = false)
   private OrganizationStatus status;
+
+  /**
+   * The user directories associated with the organization.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+    joinColumns = @JoinColumn(name = "user_directory_id"),
+    inverseJoinColumns = @JoinColumn(name = "organization_id")
+  )
+  private Set<UserDirectory> userDirectories = new HashSet<>();
+
+  /**
+   * Link the user directory to the organization.
+   *
+   * @param userDirectory the user directory
+   */
+  public void linkUserDirectory(UserDirectory userDirectory)
+  {
+    userDirectories.add(userDirectory);
+    userDirectory.getOrganizations().add(this);
+  }
+
+  /**
+   * Unlink the user directory from the organization.
+   *
+   * @param userDirectory the user directory
+   */
+  public void unlinkUserDirectory(UserDirectory userDirectory)
+  {
+    userDirectories.remove(userDirectory);
+    userDirectory.getOrganizations().remove(this);
+  }
+
 
   /**
    * Constructs a new <code>Organization</code>.
@@ -90,11 +135,12 @@ public class Organization
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param id     the ID used to uniquely identify the organization
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the
+   *               organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(String id, String name, OrganizationStatus status)
+  public Organization(UUID id, String name, OrganizationStatus status)
   {
     this.id = id;
     this.name = name;
@@ -104,40 +150,40 @@ public class Organization
   /**
    * Indicates whether some other object is "equal to" this one.
    *
-   * @param obj the reference object with which to compare
+   * @param object the reference object with which to compare
    *
-   * @return <code>true</code> if this object is the same as the obj argument otherwise
+   * @return <code>true</code> if this object is the same as the object argument otherwise
    *         <code>false</code>
    */
   @Override
-  public boolean equals(Object obj)
+  public boolean equals(Object object)
   {
-    if (this == obj)
+    if (this == object)
     {
       return true;
     }
 
-    if (obj == null)
+    if (object == null)
     {
       return false;
     }
 
-    if (getClass() != obj.getClass())
+    if (getClass() != object.getClass())
     {
       return false;
     }
 
-    Organization other = (Organization) obj;
+    Organization other = (Organization) object;
 
     return (id != null) && id.equals(other.id);
   }
 
   /**
-   * Returns the ID used to uniquely identify the organization.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @return the ID used to uniquely identify the organization
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -176,11 +222,11 @@ public class Organization
   }
 
   /**
-   * Set the ID used to uniquely identify the organization.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @param id the ID used to uniquely identify the organization
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

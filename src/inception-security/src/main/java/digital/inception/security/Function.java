@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,6 +27,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -45,11 +51,21 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "Function", namespace = "http://security.inception.digital",
     propOrder = { "code", "name", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "security", name = "functions")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Function
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The roles the user is associated with.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(mappedBy = "functions")
+  private Set<Role> roles = new HashSet<>();
 
   /**
    * The code used to uniquely identify the function.
@@ -59,6 +75,8 @@ public class Function
   @XmlElement(name = "Code", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "code", nullable = false, length = 100)
   private String code;
 
   /**
@@ -67,7 +85,8 @@ public class Function
   @ApiModelProperty(value = "The description for the function")
   @JsonProperty
   @XmlElement(name = "Description")
-  @Size(max = 1000)
+  @Size(max = 100)
+  @Column(name = "description", length = 100)
   private String description;
 
   /**
@@ -78,6 +97,7 @@ public class Function
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -97,6 +117,37 @@ public class Function
     this.code = code;
     this.name = name;
     this.description = description;
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Function other = (Function) object;
+
+    return (code != null) && code.equals(other.code);
   }
 
   /**
@@ -130,6 +181,29 @@ public class Function
   }
 
   /**
+   * Returns the roles the user is associated with.
+   *
+   * @return the roles the user is associated with
+   */
+  public Set<Role> getRoles()
+  {
+    return roles;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (code == null)
+        ? 0
+        : code.hashCode();
+  }
+
+  /**
    * Set the code used to uniquely identify the function.
    *
    * @param code the code used to uniquely identify the function
@@ -157,5 +231,15 @@ public class Function
   public void setName(String name)
   {
     this.name = name;
+  }
+
+  /**
+   * Set the roles the user is associated with.
+   *
+   * @param roles the roles the user is associated with
+   */
+  public void setRoles(Set<Role> roles)
+  {
+    this.roles = roles;
   }
 }

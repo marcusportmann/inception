@@ -57,7 +57,7 @@ export class UserDatasource implements DataSource<User> {
   /**
    * Load the users.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory the users are
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory the users are
    *                        associated with.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by last name.

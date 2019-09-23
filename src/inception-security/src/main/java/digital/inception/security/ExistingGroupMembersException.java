@@ -55,8 +55,7 @@ public class ExistingGroupMembersException extends ServiceException
    */
   public ExistingGroupMembersException(String groupName)
   {
-    super(String.format(
-        "The security group (%s) could not be deleted since it is still associated with 1 or more user(s)",
-        groupName));
+    super("The security group (" + groupName +
+      ") could not be deleted since it is still associated with 1 or more user(s)");
   }
 }

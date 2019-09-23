@@ -13,7 +13,7 @@ CREATE TABLE error.error_reports (
   description         VARCHAR(4000) NOT NULL,
   detail              CLOB          NOT NULL,
   created             TIMESTAMP     NOT NULL,
-  who                 VARCHAR(1000),
+  who                 VARCHAR(100),
   device_id           UUID,
   feedback            VARCHAR(4000),
   data                CLOB,

@@ -8,7 +8,7 @@ CREATE SCHEMA sample;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE sample.data (
   id              BIGINT        NOT NULL,
-  name            VARCHAR(4000) NOT NULL,
+  name            VARCHAR(100) NOT NULL,
   integer_value   INTEGER,
   string_value    VARCHAR(4000),
   date_value      DATE,

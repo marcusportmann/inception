@@ -62,32 +62,52 @@ public class CodeId
   /**
    * Indicates whether some other object is "equal to" this one.
    *
-   * @param obj the reference object with which to compare
+   * @param object the reference object with which to compare
    *
-   * @return <code>true</code> if this object is the same as the obj argument otherwise
+   * @return <code>true</code> if this object is the same as the object argument otherwise
    *         <code>false</code>
    */
   @Override
-  public boolean equals(Object obj)
+  public boolean equals(Object object)
   {
-    if (this == obj)
+    if (this == object)
     {
       return true;
     }
 
-    if (obj == null)
+    if (object == null)
     {
       return false;
     }
 
-    if (getClass() != obj.getClass())
+    if (getClass() != object.getClass())
     {
       return false;
     }
 
-    CodeId other = (CodeId) obj;
+    CodeId other = (CodeId) object;
 
     return codeCategoryId.equals(other.codeCategoryId) && id.equals(other.id);
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the code category the code is associated with.
+   *
+   * @return the ID used to uniquely identify the code category the code is associated with
+   */
+  public String getCodeCategoryId()
+  {
+    return codeCategoryId;
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the code.
+   *
+   * @return the ID used to uniquely identify the code
+   */
+  public String getId()
+  {
+    return id;
   }
 
   /**
@@ -103,5 +123,26 @@ public class CodeId
         : codeCategoryId.hashCode()) + ((id == null)
         ? 0
         : id.hashCode());
+  }
+
+  /**
+   * Set the ID used to uniquely identify the code category the code is associated with.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
+   */
+  public void setCodeCategoryId(String codeCategoryId)
+  {
+    this.codeCategoryId = codeCategoryId;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the code.
+   *
+   * @param id the ID used to uniquely identify the code
+   */
+  public void setId(String id)
+  {
+    this.id = id;
   }
 }

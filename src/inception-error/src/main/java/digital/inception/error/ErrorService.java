@@ -118,8 +118,8 @@ public class ErrorService
     }
     catch (Throwable e)
     {
-      throw new ErrorServiceException(String.format("Failed to create the error report (%s)",
-          errorReport.getId()), e);
+      throw new ErrorServiceException("Failed to create the error report (" + errorReport.getId()
+          + ")", e);
     }
   }
 
@@ -137,11 +137,11 @@ public class ErrorService
   {
     try
     {
-      Optional<ErrorReport> errorReport = errorReportRepository.findById(errorReportId);
+      Optional<ErrorReport> errorReportOptional = errorReportRepository.findById(errorReportId);
 
-      if (errorReport.isPresent())
+      if (errorReportOptional.isPresent())
       {
-        return errorReport.get();
+        return errorReportOptional.get();
       }
       else
       {
@@ -154,8 +154,8 @@ public class ErrorService
     }
     catch (Throwable e)
     {
-      throw new ErrorServiceException(String.format("Failed to retrieve the error report (%s)",
-          errorReportId), e);
+      throw new ErrorServiceException("Failed to retrieve the error report (" + errorReportId
+          + ")", e);
     }
   }
 
@@ -174,12 +174,12 @@ public class ErrorService
   {
     try
     {
-      Optional<ErrorReportSummary> errorReportSummary = errorReportSummaryRepository.findById(
-          errorReportId);
+      Optional<ErrorReportSummary> errorReportSummaryOptional =
+          errorReportSummaryRepository.findById(errorReportId);
 
-      if (errorReportSummary.isPresent())
+      if (errorReportSummaryOptional.isPresent())
       {
-        return errorReportSummary.get();
+        return errorReportSummaryOptional.get();
       }
       else
       {
@@ -192,8 +192,8 @@ public class ErrorService
     }
     catch (Throwable e)
     {
-      throw new ErrorServiceException(String.format(
-          "Failed to retrieve the summary for the error report (%s)", errorReportId), e);
+      throw new ErrorServiceException("Failed to retrieve the summary for the error report ("
+          + errorReportId + ")", e);
     }
   }
 

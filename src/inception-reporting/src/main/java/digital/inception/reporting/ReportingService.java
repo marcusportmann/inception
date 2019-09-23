@@ -116,8 +116,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to create the report definition (%s)", reportDefinition.getId()), e);
+      throw new ReportingServiceException("Failed to create the report definition ("
+          + reportDefinition.getId() + ")", e);
     }
   }
 
@@ -144,9 +144,9 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to create the PDF for the report using the report definition (%s)",
-          reportDefinitionId), e);
+      throw new ReportingServiceException(
+          "Failed to create the PDF for the report using the report definition ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -167,10 +167,10 @@ public class ReportingService
   {
     try
     {
-      Optional<ReportDefinition> reportDefinition = reportDefinitionRepository.findById(
+      Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
           reportDefinitionId);
 
-      if (reportDefinition.isEmpty())
+      if (reportDefinitionOptional.isEmpty())
       {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
@@ -188,7 +188,7 @@ public class ReportingService
       }
 
       JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
-          reportDefinition.get().getTemplate()), localParameters, connection);
+          reportDefinitionOptional.get().getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     }
@@ -198,9 +198,9 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to create the PDF for the report using the report definition (%s)",
-          reportDefinitionId), e);
+      throw new ReportingServiceException(
+          "Failed to create the PDF for the report using the report definition ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -252,9 +252,9 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to create the PDF for the report using the report definintion (%s)",
-          reportDefinitionId), e);
+      throw new ReportingServiceException(
+          "Failed to create the PDF for the report using the report definintion ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -283,8 +283,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to delete the report definition (%s)", reportDefinitionId), e);
+      throw new ReportingServiceException("Failed to delete the report definition ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -331,12 +331,12 @@ public class ReportingService
   {
     try
     {
-      Optional<ReportDefinition> reportDefinition = reportDefinitionRepository.findById(
+      Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
           reportDefinitionId);
 
-      if (reportDefinition.isPresent())
+      if (reportDefinitionOptional.isPresent())
       {
-        return reportDefinition.get();
+        return reportDefinitionOptional.get();
       }
       else
       {
@@ -349,8 +349,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to retrieve the report definition (%s)", reportDefinitionId), e);
+      throw new ReportingServiceException("Failed to retrieve the report definition ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -388,12 +388,12 @@ public class ReportingService
   {
     try
     {
-      Optional<ReportDefinitionSummary> reportDefinitionSummary =
+      Optional<ReportDefinitionSummary> reportDefinitionSummaryOptional =
           reportDefinitionSummaryRepository.findById(reportDefinitionId);
 
-      if (reportDefinitionSummary.isPresent())
+      if (reportDefinitionSummaryOptional.isPresent())
       {
-        return reportDefinitionSummary.get();
+        return reportDefinitionSummaryOptional.get();
       }
       else
       {
@@ -406,8 +406,9 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to retrieve the summary for the report definition (%s)", reportDefinitionId), e);
+      throw new ReportingServiceException(
+          "Failed to retrieve the summary for the report definition (" + reportDefinitionId + ")",
+          e);
     }
   }
 
@@ -448,8 +449,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to check whether the report definition (%s)", reportDefinitionId), e);
+      throw new ReportingServiceException("Failed to check whether the report definition ("
+          + reportDefinitionId + ")", e);
     }
   }
 
@@ -489,8 +490,8 @@ public class ReportingService
     }
     catch (Throwable e)
     {
-      throw new ReportingServiceException(String.format(
-          "Failed to update the report definition (%s)", reportDefinition.getId()), e);
+      throw new ReportingServiceException("Failed to update the report definition ("
+          + reportDefinition.getId() + ")", e);
     }
   }
 }

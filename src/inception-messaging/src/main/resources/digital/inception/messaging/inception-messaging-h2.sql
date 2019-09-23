@@ -8,7 +8,7 @@ CREATE SCHEMA messaging;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE messaging.message_types (
   id   UUID          NOT NULL,
-  name VARCHAR(4000) NOT NULL,
+  name VARCHAR(100) NOT NULL,
 
   PRIMARY KEY (id)
 );
@@ -32,7 +32,7 @@ COMMENT ON COLUMN messaging.message_statuses.name IS 'The name of the message st
 
 CREATE TABLE messaging.messages (
   id                UUID          NOT NULL,
-  username          VARCHAR(1000) NOT NULL,
+  username          VARCHAR(100) NOT NULL,
   device_id         UUID          NOT NULL,
   type_id           UUID          NOT NULL,
   correlation_id    UUID,
@@ -106,7 +106,7 @@ CREATE TABLE messaging.message_parts (
   download_attempts      INTEGER,
   status                 INTEGER       NOT NULL,
   message_id             UUID          NOT NULL,
-  message_username       VARCHAR(1000) NOT NULL,
+  message_username       VARCHAR(100) NOT NULL,
   message_device_id      UUID          NOT NULL,
   message_type_id        UUID          NOT NULL,
   message_correlation_id UUID,
@@ -171,7 +171,7 @@ COMMENT ON COLUMN messaging.message_parts.data IS 'The data for the message part
 
 CREATE TABLE messaging.archived_messages (
   id             UUID          NOT NULL,
-  username       VARCHAR(1000) NOT NULL,
+  username       VARCHAR(100) NOT NULL,
   device_id      UUID          NOT NULL,
   type_id        UUID          NOT NULL,
   correlation_id UUID,

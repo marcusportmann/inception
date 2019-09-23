@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -34,15 +35,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Constructor;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
@@ -70,13 +63,14 @@ public class SecurityService
   /**
    * The ID used to uniquely identify the Administrators group.
    */
-  public static final String ADMINISTRATORS_GROUP_ID = "a9e01fa2-f017-46e2-8187-424bf50a4f33";
+  public static final UUID ADMINISTRATORS_GROUP_ID = UUID.fromString(
+      "a9e01fa2-f017-46e2-8187-424bf50a4f33");
 
   /**
    * The ID used to uniquely identify the Administration user directory.
    */
-  public static final String ADMINISTRATION_USER_DIRECTORY_ID =
-      "4ef18395-423a-4df6-b7d7-6bcdd85956e4";
+  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID = UUID.fromString(
+      "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
    * The ID used to uniquely identify the internal user directory type.
@@ -100,7 +94,7 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-  private Map<String, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
   private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
@@ -119,30 +113,85 @@ public class SecurityService
   private IDGenerator idGenerator;
 
   /**
+   * The User Directory Repository.
+   */
+  private UserDirectoryRepository userDirectoryRepository;
+
+  /**
+   * The User Repository.
+   */
+  private UserRepository userRepository;
+
+  /**
+   * The Function Repository.
+   */
+  private FunctionRepository functionRepository;
+
+  /**
+   * The Organization Repository.
+   */
+  private OrganizationRepository organizationRepository;
+
+  /**
+   * The User Directory Type Repository.
+   */
+  private UserDirectoryTypeRepository userDirectoryTypeRepository;
+
+  /**
+   * The Group repository.
+   */
+  private GroupRepository groupRepository;
+
+  /**
+   * The User Directory Summary Repository.
+   */
+  private UserDirectorySummaryRepository userDirectorySummaryRepository;
+
+  /**
    * Constructs a new <code>SecurityService</code>.
    *
-   * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
-   * @param idGenerator        the ID generator
+   * @param applicationContext             the Spring application context
+   * @param dataSource                     the data source used to provide connections to the
+   *                                       application database
+   * @param idGenerator                    the ID generator
+   * @param functionRepository             the Function Repository
+   * @param groupRepository                the Group Repository
+   * @param organizationRepository         the Organization Repository
+   * @param userDirectoryRepository        the User Directory Repository
+   * @param userDirectorySummaryRepository the User Directory Summary Repository
+   * @param userDirectoryTypeRepository    the User Directory Type Repository
+   * @param userRepository                 the User Repository
    */
   public SecurityService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator)
+      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator,
+      FunctionRepository functionRepository, GroupRepository groupRepository,
+      OrganizationRepository organizationRepository,
+      UserDirectoryRepository userDirectoryRepository,
+      UserDirectorySummaryRepository userDirectorySummaryRepository,
+      UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
   {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
     this.idGenerator = idGenerator;
+
+    this.functionRepository = functionRepository;
+    this.organizationRepository = organizationRepository;
+    this.userDirectoryRepository = userDirectoryRepository;
+    this.userDirectorySummaryRepository = userDirectorySummaryRepository;
+    this.userDirectoryTypeRepository = userDirectoryTypeRepository;
+    this.userRepository = userRepository;
   }
 
   /**
    * Add the user to the security group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    * @param groupName       the name of the security group uniquely identifying the security group
    */
   @Override
-  public void addUserToGroup(String userDirectoryId, String username, String groupName)
+  public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -159,7 +208,8 @@ public class SecurityService
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId      the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId      the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the user directory
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
@@ -168,7 +218,7 @@ public class SecurityService
    * @param reason               the reason for changing the password
    */
   @Override
-  public void adminChangePassword(String userDirectoryId, String username, String newPassword,
+  public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
@@ -213,14 +263,14 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   @Override
-  public String authenticate(String username, String password)
+  public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      String internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -228,9 +278,8 @@ public class SecurityService
 
         if (internalUserDirectory == null)
         {
-          throw new SecurityServiceException(String.format(
-              "The user directory ID (%s) for the internal user (%s) is invalid",
-              internalUserDirectoryId, username));
+          throw new SecurityServiceException("The user directory ID (" + internalUserDirectoryId
+              + ") for the internal user (" + username + ") is invalid");
         }
         else
         {
@@ -245,7 +294,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can authenticate this
          * user.
          */
-        for (String userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -273,8 +322,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to authenticate the user (%s)",
-          username), e);
+      throw new SecurityServiceException("Failed to authenticate the user (" + username + ")", e);
     }
   }
 
@@ -288,14 +336,14 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   @Override
-  public String changePassword(String username, String password, String newPassword)
+  public UUID changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      String internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -303,9 +351,8 @@ public class SecurityService
 
         if (internalUserDirectory == null)
         {
-          throw new SecurityServiceException(String.format(
-              "The user directory ID (%s) for the internal user (%s) is invalid",
-              internalUserDirectoryId, username));
+          throw new SecurityServiceException("The user directory ID (" + internalUserDirectoryId
+              + ") for the internal user (" + username + ") is invalid");
         }
         else
         {
@@ -320,7 +367,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can change the
          * password for this user.
          */
-        for (String userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -348,8 +395,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s)", username), e);
+      throw new SecurityServiceException("Failed to change the password for the user (" + username
+          + ")", e);
     }
   }
 
@@ -363,27 +410,14 @@ public class SecurityService
     throws DuplicateFunctionException, SecurityServiceException
 
   {
-    String createFunctionSQL =
-        "INSERT INTO security.functions (code, name, description) VALUES (?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createFunctionSQL))
+    try
     {
-      if (functionExists(connection, function.getCode()))
+      if (functionRepository.existsById(function.getCode()))
       {
         throw new DuplicateFunctionException(function.getCode());
       }
 
-      statement.setString(1, function.getCode());
-      statement.setString(2, function.getName());
-      statement.setString(3, function.getDescription());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createFunctionSQL));
-      }
+      functionRepository.saveAndFlush(function);
     }
     catch (DuplicateFunctionException e)
     {
@@ -391,19 +425,20 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to create the function (%s)",
-          function.getCode()), e);
+      throw new SecurityServiceException("Failed to create the function (" + function.getCode()
+          + ")", e);
     }
   }
 
   /**
    * Create the new security group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param group           the security group
    */
   @Override
-  public void createGroup(String userDirectoryId, Group group)
+  public void createGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -430,81 +465,28 @@ public class SecurityService
   public UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
     throws DuplicateOrganizationException, SecurityServiceException
   {
+    UserDirectory userDirectory = null;
+
     try
     {
-      UserDirectory userDirectory = null;
-
-      try (Connection connection = dataSource.getConnection())
+      if (organizationRepository.existsById(organization.getId()))
       {
-        String createOrganizationSQL =
-            "INSERT INTO security.organizations (id, name, status) VALUES (?, ?, ?)";
-
-        try (PreparedStatement statement = connection.prepareStatement(createOrganizationSQL))
-        {
-          if (organizationWithIdExists(connection, organization.getId()))
-          {
-            throw new DuplicateOrganizationException(organization.getId());
-          }
-
-          if (organizationWithNameExists(connection, organization.getName()))
-          {
-            throw new DuplicateOrganizationException(organization.getName());
-          }
-
-          statement.setObject(1, UUID.fromString(organization.getId()));
-          statement.setString(2, organization.getName());
-          statement.setInt(3, organization.getStatus().code());
-
-          if (statement.executeUpdate() != 1)
-          {
-            throw new SecurityServiceException(String.format(
-                "No rows were affected as a result of executing the SQL statement (%s)",
-                createOrganizationSQL));
-          }
-        }
-
-        String addUserDirectoryToOrganizationSQL =
-            "INSERT INTO security.user_directory_to_organization_map "
-            + "(user_directory_id, organization_id) VALUES (?, ?)";
-
-        if (createUserDirectory)
-        {
-          userDirectory = newInternalUserDirectoryForOrganization(organization);
-
-          String createUserDirectorySQL = "INSERT INTO security.user_directories "
-              + "(id, type, name, configuration) VALUES (?, ?, ?, ?)";
-
-          try (PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
-          {
-            statement.setObject(1, UUID.fromString(userDirectory.getId()));
-            statement.setString(2, userDirectory.getType());
-            statement.setString(3, userDirectory.getName());
-            statement.setString(4, userDirectory.getConfiguration());
-
-            if (statement.executeUpdate() != 1)
-            {
-              throw new SecurityServiceException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  createUserDirectorySQL));
-            }
-          }
-
-          // Link the new user directory to the new organization
-          try (PreparedStatement statement = connection.prepareStatement(
-              addUserDirectoryToOrganizationSQL))
-          {
-            statement.setObject(1, UUID.fromString(userDirectory.getId()));
-            statement.setObject(2, UUID.fromString(organization.getId()));
-
-            if (statement.executeUpdate() != 1)
-            {
-              throw new SecurityServiceException(String.format(
-                  "No rows were affected as a result of executing the SQL statement (%s)",
-                  addUserDirectoryToOrganizationSQL));
-            }
-          }
-        }
+        throw new DuplicateOrganizationException(organization.getId());
       }
+
+      if (organizationRepository.existsByNameIgnoreCase(organization.getName()))
+      {
+        throw new DuplicateOrganizationException(organization.getName());
+      }
+
+      if (createUserDirectory)
+      {
+        userDirectory = newInternalUserDirectoryForOrganization(organization);
+
+        organization.linkUserDirectory(userDirectory);
+      }
+
+      organizationRepository.save(organization);
 
       try
       {
@@ -523,21 +505,22 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to create the organization (%s)",
-          organization.getId()), e);
+      throw new SecurityServiceException("Failed to create the organization ("
+          + organization.getId() + ")", e);
     }
   }
 
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
    */
   @Override
-  public void createUser(String userDirectoryId, User user, boolean expiredPassword,
+  public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
   {
@@ -560,33 +543,19 @@ public class SecurityService
   public void createUserDirectory(UserDirectory userDirectory)
     throws DuplicateUserDirectoryException, SecurityServiceException
   {
-    String createUserDirectorySQL = "INSERT INTO security.user_directories "
-        + "(id, type, name, configuration) VALUES (?, ?, ?, ?)";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createUserDirectorySQL))
+    try
     {
-      if (userDirectoryWithIdExists(connection, userDirectory.getId()))
+      if (userDirectoryRepository.existsById(userDirectory.getId()))
       {
         throw new DuplicateUserDirectoryException(userDirectory.getId());
       }
 
-      if (userDirectoryWithNameExists(connection, userDirectory.getName()))
+      if (userDirectoryRepository.existsByNameIgnoreCase(userDirectory.getName()))
       {
         throw new DuplicateUserDirectoryException(userDirectory.getName());
       }
 
-      statement.setObject(1, UUID.fromString(userDirectory.getId()));
-      statement.setString(2, userDirectory.getType());
-      statement.setString(3, userDirectory.getName());
-      statement.setString(4, userDirectory.getConfiguration());
-
-      if (statement.executeUpdate() != 1)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            createUserDirectorySQL));
-      }
+      userDirectoryRepository.saveAndFlush(userDirectory);
 
       try
       {
@@ -617,24 +586,14 @@ public class SecurityService
   public void deleteFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
-    String deleteFunctionSQL = "DELETE FROM security.functions WHERE code=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteFunctionSQL))
+    try
     {
-      if (!functionExists(connection, functionCode))
+      if (!functionRepository.existsById(functionCode))
       {
         throw new FunctionNotFoundException(functionCode);
       }
 
-      statement.setString(1, functionCode);
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteFunctionSQL));
-      }
+      functionRepository.deleteById(functionCode);
     }
     catch (FunctionNotFoundException e)
     {
@@ -650,11 +609,12 @@ public class SecurityService
   /**
    * Delete the security group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the name of the security group uniquely identifying the security group
    */
   @Override
-  public void deleteGroup(String userDirectoryId, String groupName)
+  public void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityServiceException
   {
@@ -671,30 +631,21 @@ public class SecurityService
   /**
    * Delete the organization.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    */
   @Override
-  public void deleteOrganization(String organizationId)
+  public void deleteOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String deleteOrganizationSQL = "DELETE FROM security.organizations WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteOrganizationSQL))
+    try
     {
-      if (!organizationExists(connection, organizationId))
+      if (!organizationRepository.existsById(organizationId))
       {
         throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            deleteOrganizationSQL));
-      }
+      organizationRepository.deleteById(organizationId);
     }
     catch (OrganizationNotFoundException e)
     {
@@ -710,11 +661,12 @@ public class SecurityService
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    */
   @Override
-  public void deleteUser(String userDirectoryId, String username)
+  public void deleteUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -730,23 +682,21 @@ public class SecurityService
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
   @Override
-  public void deleteUserDirectory(String userDirectoryId)
+  public void deleteUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String deleteUserDirectorySQL = "DELETE FROM security.user_directories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(deleteUserDirectorySQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(userDirectoryId));
-
-      if (statement.executeUpdate() <= 0)
+      if (!userDirectoryRepository.existsById(userDirectoryId))
       {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
+
+      userDirectoryRepository.deleteById(userDirectoryId);
 
       try
       {
@@ -771,13 +721,14 @@ public class SecurityService
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param attributes      the attribute criteria used to select the users
    *
    * @return the users whose attributes match the attribute criteria
    */
   @Override
-  public List<User> findUsers(String userDirectoryId, List<Attribute> attributes)
+  public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -801,26 +752,17 @@ public class SecurityService
   public Function getFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
-    String getFunctionSQL = "SELECT code, name, description FROM security.functions WHERE code=?";
-
     try
     {
-      try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(getFunctionSQL))
-      {
-        statement.setString(1, functionCode);
+      Optional<Function> functionOptional = functionRepository.findById(functionCode);
 
-        try (ResultSet rs = statement.executeQuery())
-        {
-          if (rs.next())
-          {
-            return buildFunctionFromResultSet(rs);
-          }
-          else
-          {
-            throw new FunctionNotFoundException(functionCode);
-          }
-        }
+      if (functionOptional.isPresent())
+      {
+        return functionOptional.get();
+      }
+      else
+      {
+        throw new FunctionNotFoundException(functionCode);
       }
     }
     catch (FunctionNotFoundException e)
@@ -837,13 +779,14 @@ public class SecurityService
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the authorised function codes for the user
    */
   @Override
-  public List<String> getFunctionCodesForUser(String userDirectoryId, String username)
+  public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -865,22 +808,9 @@ public class SecurityService
   public List<Function> getFunctions()
     throws SecurityServiceException
   {
-    String getFunctionsSQL = "SELECT code, name, description FROM security.functions";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getFunctionsSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Function> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildFunctionFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return functionRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -891,13 +821,14 @@ public class SecurityService
   /**
    * Retrieve the security group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param groupName       the name of the security group uniquely identifying the security group
    *
    * @return the security group
    */
   @Override
-  public Group getGroup(String userDirectoryId, String groupName)
+  public Group getGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -913,13 +844,14 @@ public class SecurityService
   /**
    * Retrieve the security group names for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the security group names for the user
    */
   @Override
-  public List<String> getGroupNamesForUser(String userDirectoryId, String username)
+  public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -935,12 +867,13 @@ public class SecurityService
   /**
    * Retrieve all the security groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the security groups
    */
   @Override
-  public List<Group> getGroups(String userDirectoryId)
+  public List<Group> getGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -956,13 +889,14 @@ public class SecurityService
   /**
    * Retrieve the security groups for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param username        the username identifying the user
    *
    * @return the security groups for the user
    */
   @Override
-  public List<Group> getGroupsForUser(String userDirectoryId, String username)
+  public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -978,12 +912,13 @@ public class SecurityService
   /**
    * Retrieve the number of security groups
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the number of security groups
    */
   @Override
-  public int getNumberOfGroups(String userDirectoryId)
+  public long getNumberOfGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1002,7 +937,7 @@ public class SecurityService
    * @return the number of organizations
    */
   @Override
-  public int getNumberOfOrganizations()
+  public long getNumberOfOrganizations()
     throws SecurityServiceException
   {
     return getNumberOfOrganizations(null);
@@ -1016,34 +951,19 @@ public class SecurityService
    * @return the number of organizations
    */
   @Override
-  public int getNumberOfOrganizations(String filter)
+  public long getNumberOfOrganizations(String filter)
     throws SecurityServiceException
   {
-    String getNumberOfOrganizationsSQL = "SELECT COUNT(id) FROM security.organizations";
-
-    if (!StringUtils.isEmpty(filter))
+    try
     {
-      getNumberOfOrganizationsSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfOrganizationsSQL))
-    {
-      if (!StringUtils.isEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
-        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
+        return organizationRepository.count();
       }
-
-      try (ResultSet rs = statement.executeQuery())
+      else
       {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
+        return organizationRepository.countByNameContainingIgnoreCase(String.format("%%%s%%",
+            filter.toUpperCase()));
       }
     }
     catch (Throwable e)
@@ -1058,7 +978,7 @@ public class SecurityService
    * @return the number of user directories
    */
   @Override
-  public int getNumberOfUserDirectories()
+  public long getNumberOfUserDirectories()
     throws SecurityServiceException
   {
     return getNumberOfUserDirectories(null);
@@ -1072,34 +992,19 @@ public class SecurityService
    * @return the number of user directories
    */
   @Override
-  public int getNumberOfUserDirectories(String filter)
+  public long getNumberOfUserDirectories(String filter)
     throws SecurityServiceException
   {
-    String getNumberOfUserDirectoriesSQL = "SELECT COUNT(id) FROM security.user_directories";
-
-    if (!StringUtils.isEmpty(filter))
+    try
     {
-      getNumberOfUserDirectoriesSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getNumberOfUserDirectoriesSQL))
-    {
-      if (!StringUtils.isEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
-        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
+        return userDirectoryRepository.count();
       }
-
-      try (ResultSet rs = statement.executeQuery())
+      else
       {
-        if (rs.next())
-        {
-          return rs.getInt(1);
-        }
-        else
-        {
-          return 0;
-        }
+        return userDirectoryRepository.countByNameContainingIgnoreCase(String.format("%%%s%%",
+            filter.toUpperCase()));
       }
     }
     catch (Throwable e)
@@ -1116,7 +1021,7 @@ public class SecurityService
    * @return the number of users
    */
   @Override
-  public int getNumberOfUsers(String userDirectoryId)
+  public long getNumberOfUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     return getNumberOfUsers(userDirectoryId, null);
@@ -1131,7 +1036,7 @@ public class SecurityService
    * @return the number of users
    */
   @Override
-  public int getNumberOfUsers(String userDirectoryId, String filter)
+  public long getNumberOfUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1147,31 +1052,26 @@ public class SecurityService
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the organization
    */
   @Override
-  public Organization getOrganization(String organizationId)
+  public Organization getOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String getOrganizationSQL = "SELECT id, name, status FROM security.organizations WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganizationSQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(organizationId));
+      Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (organizationOptional.isPresent())
       {
-        if (rs.next())
-        {
-          return buildOrganizationFromResultSet(rs);
-        }
-        else
-        {
-          throw new OrganizationNotFoundException(organizationId);
-        }
+        return organizationOptional.get();
+      }
+      else
+      {
+        throw new OrganizationNotFoundException(organizationId);
       }
     }
     catch (OrganizationNotFoundException e)
@@ -1195,35 +1095,17 @@ public class SecurityService
    *         with
    */
   @Override
-  public List<String> getOrganizationIdsForUserDirectory(String userDirectoryId)
+  public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String getOrganizationIdsForUserDirectorySQL =
-        "SELECT organization_id FROM security.user_directory_to_organization_map "
-        + "WHERE user_directory_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getOrganizationIdsForUserDirectorySQL))
+    try
     {
-      if (!userDirectoryExists(connection, userDirectoryId))
+      if (!userDirectoryRepository.existsById(userDirectoryId))
       {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
-      statement.setObject(1, UUID.fromString(userDirectoryId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<String> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(rs.getString(1));
-        }
-
-        return list;
-      }
+      return userDirectoryRepository.getOrganizationIdsById(userDirectoryId);
     }
     catch (UserDirectoryNotFoundException e)
     {
@@ -1246,23 +1128,9 @@ public class SecurityService
   public List<Organization> getOrganizations()
     throws SecurityServiceException
   {
-    String getOrganizationsSQL =
-        "SELECT id, name, status FROM security.organizations ORDER BY name";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Organization> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildOrganizationFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return organizationRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -1285,45 +1153,42 @@ public class SecurityService
       Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getOrganizationsSQL = "SELECT id, name, status FROM security.organizations";
-
-    if (!StringUtils.isEmpty(filter))
-    {
-      getOrganizationsSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    getOrganizationsSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
-        ? "DESC"
-        : "ASC");
+    PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null))
     {
-      getOrganizationsSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
-
+      pageRequest = PageRequest.of(pageIndex, pageSize);
     }
     else
     {
-      getOrganizationsSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+      pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
     }
 
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getOrganizationsSQL))
+    try
     {
-      if (!StringUtils.isEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
-        statement.setString(1, String.format("%%%s%%", filter.toUpperCase()));
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Organization> list = new ArrayList<>();
-
-        while (rs.next())
+        if (sortDirection == SortDirection.ASCENDING)
         {
-          list.add(buildOrganizationFromResultSet(rs));
+          return organizationRepository.findAllByOrderByNameAsc(pageRequest);
         }
-
-        return list;
+        else
+        {
+          return organizationRepository.findAllByOrderByNameDesc(pageRequest);
+        }
+      }
+      else
+      {
+        if (sortDirection == SortDirection.ASCENDING)
+        {
+          return organizationRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter,
+              pageRequest);
+        }
+        else
+        {
+          return organizationRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter,
+              pageRequest);
+        }
       }
     }
     catch (Throwable e)
@@ -1356,36 +1221,17 @@ public class SecurityService
    * @return the organizations the user directory is associated with
    */
   @Override
-  public List<Organization> getOrganizationsForUserDirectory(String userDirectoryId)
+  public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String getOrganizationsForUserDirectorySQL =
-        "SELECT o.id, o.name, o.status FROM security.organizations o INNER JOIN "
-        + "security.user_directory_to_organization_map udtom ON o.id = udtom.organization_id WHERE "
-        + "udtom.user_directory_id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getOrganizationsForUserDirectorySQL))
+    try
     {
-      if (!userDirectoryExists(connection, userDirectoryId))
+      if (!userDirectoryRepository.existsById(userDirectoryId))
       {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
-      statement.setObject(1, UUID.fromString(userDirectoryId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<Organization> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildOrganizationFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return organizationRepository.findAllByUserDirectoryId(userDirectoryId);
     }
     catch (UserDirectoryNotFoundException e)
     {
@@ -1408,7 +1254,7 @@ public class SecurityService
    * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleCodesForUser(String userDirectoryId, String username)
+  public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1430,7 +1276,7 @@ public class SecurityService
    * @return the user
    */
   @Override
-  public User getUser(String userDirectoryId, String username)
+  public User getUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1452,23 +1298,9 @@ public class SecurityService
   public List<UserDirectory> getUserDirectories()
     throws SecurityServiceException
   {
-    String getUserDirectoriesSQL =
-        "SELECT id, type, name, configuration FROM security.user_directories";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectory> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildUserDirectoryFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return userDirectoryRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -1491,48 +1323,42 @@ public class SecurityService
       Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getUserDirectoriesSQL =
-        "SELECT id, type, name, configuration FROM security.user_directories";
-
-    if (!StringUtils.isEmpty(filter))
-    {
-      getUserDirectoriesSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    getUserDirectoriesSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
-        ? "DESC"
-        : "ASC");
+    PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null))
     {
-      getUserDirectoriesSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
-
+      pageRequest = PageRequest.of(pageIndex, pageSize);
     }
     else
     {
-      getUserDirectoriesSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+      pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
     }
 
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectoriesSQL))
+    try
     {
-      if (!StringUtils.isEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
-        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
-
-        statement.setString(1, filterBuffer);
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectory> list = new ArrayList<>();
-
-        while (rs.next())
+        if (sortDirection == SortDirection.ASCENDING)
         {
-          list.add(buildUserDirectoryFromResultSet(rs));
+          return userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
         }
-
-        return list;
+        else
+        {
+          return userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
+        }
+      }
+      else
+      {
+        if (sortDirection == SortDirection.ASCENDING)
+        {
+          return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter,
+              pageRequest);
+        }
+        else
+        {
+          return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter,
+              pageRequest);
+        }
       }
     }
     catch (Throwable e)
@@ -1544,41 +1370,23 @@ public class SecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(String organizationId)
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String getUserDirectoriesForOrganizationSQL =
-        "SELECT ud.id, ud.type, ud.name, ud.configuration FROM security.user_directories ud "
-        + "INNER JOIN security.user_directory_to_organization_map udtom "
-        + "ON ud.id = udtom.user_directory_id WHERE udtom.organization_id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getUserDirectoriesForOrganizationSQL))
+    try
     {
-      if (!organizationExists(connection, organizationId))
+      if (!organizationRepository.existsById(organizationId))
       {
         throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectory> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildUserDirectoryFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return userDirectoryRepository.findAllByOrganizationId(organizationId);
     }
     catch (OrganizationNotFoundException e)
     {
@@ -1595,32 +1403,27 @@ public class SecurityService
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the user directory
    */
   @Override
-  public UserDirectory getUserDirectory(String userDirectoryId)
+  public UserDirectory getUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String getUserDirectorySQL = "SELECT id, type, name, configuration "
-        + "FROM security.user_directories WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectorySQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(userDirectoryId));
+      Optional<UserDirectory> userDirectoryOptional = userDirectoryRepository.findById(
+          userDirectoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (userDirectoryOptional.isPresent())
       {
-        if (rs.next())
-        {
-          return buildUserDirectoryFromResultSet(rs);
-        }
-        else
-        {
-          throw new UserDirectoryNotFoundException(userDirectoryId);
-        }
+        return userDirectoryOptional.get();
+      }
+      else
+      {
+        throw new UserDirectoryNotFoundException(userDirectoryId);
       }
     }
     catch (UserDirectoryNotFoundException e)
@@ -1644,13 +1447,13 @@ public class SecurityService
    *         username is associated with or <code>null</code> if the user cannot be found
    */
   @Override
-  public String getUserDirectoryIdForUser(String username)
+  public UUID getUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      String internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -1662,7 +1465,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if the user is associated with one
          * of them.
          */
-        for (String userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -1692,41 +1495,23 @@ public class SecurityService
    * Retrieve the IDs used to uniquely identify the user directories the organization is associated
    * with.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the organization
    *
    * @return the IDs used to uniquely identify the user directories the organization is associated
    *         with
    */
   @Override
-  public List<String> getUserDirectoryIdsForOrganization(String organizationId)
+  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String getUserDirectoryIdsForOrganizationSQL =
-        "SELECT udtom.user_directory_id FROM security.user_directory_to_organization_map udtom "
-        + "WHERE udtom.organization_id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getUserDirectoryIdsForOrganizationSQL))
+    try
     {
-      if (!organizationExists(connection, organizationId))
+      if (!organizationRepository.existsById(organizationId))
       {
         throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<String> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(rs.getString(1));
-        }
-
-        return list;
-      }
+      return organizationRepository.getUserDirectoryIdsById(organizationId);
     }
     catch (OrganizationNotFoundException e)
     {
@@ -1755,47 +1540,42 @@ public class SecurityService
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws SecurityServiceException
   {
-    String getUserDirectorySummariesSQL = "SELECT id, type, name FROM security.user_directories";
-
-    if (!StringUtils.isEmpty(filter))
-    {
-      getUserDirectorySummariesSQL += " WHERE (UPPER(name) LIKE ?)";
-    }
-
-    getUserDirectorySummariesSQL += " ORDER BY name " + ((sortDirection == SortDirection.DESCENDING)
-        ? "DESC"
-        : "ASC");
+    PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null))
     {
-      getUserDirectorySummariesSQL += " LIMIT " + pageSize + " OFFSET " + (pageIndex * pageSize);
-
+      pageRequest = PageRequest.of(pageIndex, pageSize);
     }
     else
     {
-      getUserDirectorySummariesSQL += " LIMIT " + MAX_FILTERED_ORGANISATIONS;
+      pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
     }
 
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectorySummariesSQL))
+    try
     {
-      if (!StringUtils.isEmpty(filter))
+      if (StringUtils.isEmpty(filter))
       {
-        String filterBuffer = String.format("%%%s%%", filter.toUpperCase());
-
-        statement.setString(1, filterBuffer);
-      }
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectorySummary> list = new ArrayList<>();
-
-        while (rs.next())
+        if (sortDirection == SortDirection.ASCENDING)
         {
-          list.add(buildUserDirectorySummaryFromResultSet(rs));
+          return userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
         }
-
-        return list;
+        else
+        {
+          return userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
+        }
+      }
+      else
+      {
+        if (sortDirection == SortDirection.ASCENDING)
+        {
+          return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
+              filter, pageRequest);
+        }
+        else
+        {
+          return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
+              filter, pageRequest);
+        }
       }
     }
     catch (Throwable e)
@@ -1808,42 +1588,23 @@ public class SecurityService
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId the ID used to uniquely identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization
    *
    * @return the summaries for the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(String organizationId)
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String getUserDirectorySummariesForOrganizationSQL =
-        "SELECT ud.id, ud.type, ud.name FROM security.user_directories ud "
-        + "INNER JOIN security.user_directory_to_organization_map udtom "
-        + "ON ud.id = udtom.user_directory_id INNER JOIN security.organizations o "
-        + "ON udtom.organization_id = o.id WHERE o.id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getUserDirectorySummariesForOrganizationSQL))
+    try
     {
-      if (!organizationExists(connection, organizationId))
+      if (!organizationRepository.existsById(organizationId))
       {
         throw new OrganizationNotFoundException(organizationId);
       }
 
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectorySummary> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(buildUserDirectorySummaryFromResultSet(rs));
-        }
-
-        return list;
-      }
+      return userDirectorySummaryRepository.findAllByOrganizationId(organizationId);
     }
     catch (OrganizationNotFoundException e)
     {
@@ -1859,35 +1620,36 @@ public class SecurityService
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    *
    * @return the user directory type for the user directory
    */
   @Override
-  public UserDirectoryType getUserDirectoryTypeForUserDirectory(String userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
+        SecurityServiceException
   {
-    String getUserDirectoryTypeForUserDirectorySQL =
-        "SELECT udt.code, udt.name, udt.user_directory_class "
-        + "FROM security.user_directories ud INNER JOIN security.user_directory_types udt "
-        + "ON ud.type = udt.code WHERE ud.id = ?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getUserDirectoryTypeForUserDirectorySQL))
+    try
     {
-      statement.setObject(1, UUID.fromString(userDirectoryId));
+      Optional<String> typeOptional = userDirectoryRepository.getTypeForUserDirectoryById(
+          userDirectoryId);
 
-      try (ResultSet rs = statement.executeQuery())
+      if (typeOptional.isEmpty())
       {
-        if (rs.next())
-        {
-          return new UserDirectoryType(rs.getString(1), rs.getString(2), rs.getString(3));
-        }
-        else
-        {
-          throw new UserDirectoryNotFoundException(userDirectoryId);
-        }
+        throw new UserDirectoryNotFoundException(userDirectoryId);
+      }
+
+      Optional<UserDirectoryType> userDirectoryTypeOptional = userDirectoryTypeRepository.findById(
+          typeOptional.get());
+
+      if (userDirectoryTypeOptional.isPresent())
+      {
+        return userDirectoryTypeOptional.get();
+      }
+      else
+      {
+        throw new UserDirectoryTypeNotFoundException(typeOptional.get());
       }
     }
     catch (UserDirectoryNotFoundException e)
@@ -1911,23 +1673,9 @@ public class SecurityService
   public List<UserDirectoryType> getUserDirectoryTypes()
     throws SecurityServiceException
   {
-    String getUserDirectoryTypesSQL = "SELECT code, name, user_directory_class "
-        + "FROM security.user_directory_types";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getUserDirectoryTypesSQL))
+    try
     {
-      try (ResultSet rs = statement.executeQuery())
-      {
-        List<UserDirectoryType> list = new ArrayList<>();
-
-        while (rs.next())
-        {
-          list.add(new UserDirectoryType(rs.getString(1), rs.getString(2), rs.getString(3)));
-        }
-
-        return list;
-      }
+      return userDirectoryTypeRepository.findAll();
     }
     catch (Throwable e)
     {
@@ -1943,7 +1691,7 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(String userDirectoryId)
+  public List<User> getUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1969,7 +1717,7 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(String userDirectoryId, String filter, UserSortBy sortBy,
+  public List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
@@ -1994,7 +1742,7 @@ public class SecurityService
    *         otherwise
    */
   @Override
-  public boolean isUserInGroup(String userDirectoryId, String username, String groupName)
+  public boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -2017,7 +1765,7 @@ public class SecurityService
   {
     try
     {
-      Map<String, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+      Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
 
@@ -2042,18 +1790,19 @@ public class SecurityService
         {
           Class<?> clazz = userDirectoryType.getUserDirectoryClass();
 
-          Class<? extends IUserDirectory> userDirectoryClass = clazz.asSubclass(
-              IUserDirectory.class);
-
-          if (userDirectoryClass == null)
+          if (!IUserDirectory.class.isAssignableFrom(clazz))
           {
             throw new SecurityServiceException(String.format(
                 "The user directory class (%s) does not implement the IUserDirectory interface",
                 userDirectoryType.getUserDirectoryClassName()));
           }
 
+          Class<? extends IUserDirectory> userDirectoryClass = clazz.asSubclass(
+              IUserDirectory.class);
+
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-              userDirectoryClass.getConstructor(String.class, List.class);
+              userDirectoryClass.getConstructor(UUID.class, List.class, GroupRepository.class,
+              UserRepository.class);
 
           if (userDirectoryClassConstructor == null)
           {
@@ -2063,7 +1812,8 @@ public class SecurityService
           }
 
           IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
-              userDirectory.getId(), userDirectory.getParameters());
+              userDirectory.getId(), userDirectory.getParameters(), groupRepository,
+              userRepository);
 
           applicationContext.getAutowireCapableBeanFactory().autowireBean(userDirectoryInstance);
 
@@ -2093,7 +1843,7 @@ public class SecurityService
    * @param groupName       the security group name
    */
   @Override
-  public void removeUserFromGroup(String userDirectoryId, String username, String groupName)
+  public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -2116,7 +1866,7 @@ public class SecurityService
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsGroupAdministration(String userDirectoryId)
+  public boolean supportsGroupAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2138,7 +1888,7 @@ public class SecurityService
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsUserAdministration(String userDirectoryId)
+  public boolean supportsUserAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2160,29 +1910,14 @@ public class SecurityService
   public void updateFunction(Function function)
     throws FunctionNotFoundException, SecurityServiceException
   {
-    String updateFunctionSQL = "UPDATE security.functions SET name=?, description=? WHERE code=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateFunctionSQL))
+    try
     {
-      if (!functionExists(connection, function.getCode()))
+      if (!functionRepository.existsById(function.getCode()))
       {
         throw new FunctionNotFoundException(function.getCode());
       }
 
-      statement.setString(1, function.getName());
-      statement.setString(2,
-          StringUtils.isEmpty(function.getDescription())
-          ? ""
-          : function.getDescription());
-      statement.setString(3, function.getCode());
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            updateFunctionSQL));
-      }
+      functionRepository.saveAndFlush(function);
     }
     catch (FunctionNotFoundException e)
     {
@@ -2198,11 +1933,12 @@ public class SecurityService
   /**
    * Update the security group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param group           the security group
    */
   @Override
-  public void updateGroup(String userDirectoryId, Group group)
+  public void updateGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2224,26 +1960,14 @@ public class SecurityService
   public void updateOrganization(Organization organization)
     throws OrganizationNotFoundException, SecurityServiceException
   {
-    String updateOrganizationSQL = "UPDATE security.organizations SET name=?, status=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateOrganizationSQL))
+    try
     {
-      if (!organizationExists(connection, organization.getId()))
+      if (!organizationRepository.existsById(organization.getId()))
       {
         throw new OrganizationNotFoundException(organization.getId());
       }
 
-      statement.setString(1, organization.getName());
-      statement.setInt(2, organization.getStatus().code());
-      statement.setObject(3, UUID.fromString(organization.getId()));
-
-      if (statement.executeUpdate() <= 0)
-      {
-        throw new SecurityServiceException(String.format(
-            "No rows were affected as a result of executing the SQL statement (%s)",
-            updateOrganizationSQL));
-      }
+      organizationRepository.saveAndFlush(organization);
     }
     catch (OrganizationNotFoundException e)
     {
@@ -2259,14 +1983,14 @@ public class SecurityService
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update
    */
   @Override
-  public void updateUser(String userDirectoryId, User user, boolean expirePassword,
-      boolean lockUser)
+  public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2288,20 +2012,14 @@ public class SecurityService
   public void updateUserDirectory(UserDirectory userDirectory)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
-    String updateUserDirectorySQL = "UPDATE security.user_directories "
-        + "SET name=?, configuration=? WHERE id=?";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(updateUserDirectorySQL))
+    try
     {
-      statement.setString(1, userDirectory.getName());
-      statement.setString(2, userDirectory.getConfiguration());
-      statement.setObject(3, UUID.fromString(userDirectory.getId()));
-
-      if (statement.executeUpdate() != 1)
+      if (!userDirectoryRepository.existsById(userDirectory.getId()))
       {
         throw new UserDirectoryNotFoundException(userDirectory.getId());
       }
+
+      userDirectoryRepository.saveAndFlush(userDirectory);
     }
     catch (UserDirectoryNotFoundException e)
     {
@@ -2315,156 +2033,30 @@ public class SecurityService
   }
 
   /**
-   * Create a new <code>Function</code> instance and populate it with the contents of the
-   * current row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>Function</code> instance
-   *
-   * @return the populated <code>Function</code> instance
-   */
-  private Function buildFunctionFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    Function function = new Function();
-
-    function.setCode(rs.getString(1));
-    function.setName(rs.getString(2));
-
-    String description = rs.getString(3);
-
-    function.setDescription(StringUtils.isEmpty(description)
-        ? ""
-        : description);
-
-    return function;
-  }
-
-  /**
-   * Create a new <code>Organization</code> instance and populate it with the contents of the
-   * current row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>Organization</code> instance
-   *
-   * @return the populated <code>Organization</code> instance
-   */
-  private Organization buildOrganizationFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    Organization organization = new Organization();
-    organization.setId(rs.getString(1));
-    organization.setName(rs.getString(2));
-    organization.setStatus(OrganizationStatus.fromCode(rs.getInt(3)));
-
-    return organization;
-  }
-
-  /**
-   * Create a new <code>UserDirectory</code> instance and populate it with the contents of the
-   * current row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>UserDirectory</code> instance
-   *
-   * @return the populated <code>UserDirectory</code> instance
-   */
-  private UserDirectory buildUserDirectoryFromResultSet(ResultSet rs)
-    throws SQLException, SecurityServiceException
-  {
-    UserDirectory userDirectory = new UserDirectory();
-    userDirectory.setId(rs.getString(1));
-    userDirectory.setType(rs.getString(2));
-    userDirectory.setName(rs.getString(3));
-    userDirectory.setConfiguration(rs.getString(4));
-
-    return userDirectory;
-  }
-
-  /**
-   * Create a new <code>UserDirectorySummary</code> instance and populate it with the contents of
-   * the current row in the specified <code>ResultSet</code>.
-   *
-   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-   *           <code>UserDirectorySummary</code> instance
-   *
-   * @return the populated <code>UserDirectorySummary</code> instance
-   */
-  private UserDirectorySummary buildUserDirectorySummaryFromResultSet(ResultSet rs)
-    throws SQLException
-  {
-    UserDirectorySummary userDirectorySummary = new UserDirectorySummary();
-    userDirectorySummary.setId(rs.getString(1));
-    userDirectorySummary.setType(rs.getString(2));
-    userDirectorySummary.setName(rs.getString(3));
-
-    return userDirectorySummary;
-  }
-
-  /**
-   * Returns whether a function with the specified ID already exists.
-   *
-   * @param connection   the existing database connection to use
-   * @param functionCode the code used to uniquely identify the function
-   *
-   * @return <code>true</code> if a function with the specified code already exists or
-   *         <code>false</code> otherwise
-   */
-  private boolean functionExists(Connection connection, String functionCode)
-    throws SQLException
-  {
-    String getFunctionCodeSQL = "SELECT code FROM security.functions WHERE code=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodeSQL))
-    {
-      statement.setString(1, functionCode);
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next();
-      }
-    }
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the internal user directory the internal user with
-   * the specified username is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   * directory the internal user with the specified username is associated with.
    *
    * @param username the username uniquely identifying the internal user
    *
-   * @return the ID used to uniquely identify the internal user directory the internal user with the
-   *         specified username is associated with or <code>null</code> if an internal user with the
-   *         specified username could not be found
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
+   *         directory the internal user with the specified username is associated with or
+   *         <code>null</code> if an internal user with the specified username could not be found
    */
-  private String getInternalUserDirectoryIdForUser(String username)
+  private UUID getInternalUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
-    String getInternalUserDirectoryIdForUserSQL = "SELECT user_directory_id FROM "
-        + "security.users WHERE UPPER(username)=UPPER(CAST(? AS VARCHAR(100)))";
-
-    try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(
-          getInternalUserDirectoryIdForUserSQL))
+    try
     {
-      statement.setString(1, username);
+      Optional<UUID> userDirectoryIdOptional =
+          userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
 
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
-          return rs.getString(1);
-        }
-        else
-        {
-          return null;
-        }
-      }
+      return userDirectoryIdOptional.orElse(null);
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the ID for the internal user directory for the internal user (%s)",
-          username), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the ID for the internal user directory for the internal user ("
+          + username + ")", e);
     }
   }
 
@@ -2495,7 +2087,7 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(idGenerator.nextUUID().toString());
+    userDirectory.setId(idGenerator.nextUUID());
     userDirectory.setType("InternalUserDirectory");
     userDirectory.setName(organization.getName() + " Internal User Directory");
 
@@ -2510,99 +2102,6 @@ public class SecurityService
     userDirectory.setConfiguration(buffer);
 
     return userDirectory;
-  }
-
-  /**
-   * Returns <code>true</code> if the organization exists or <code>false</code> otherwise.
-   *
-   * @param connection     the existing database connection to use
-   * @param organizationId the ID used to uniquely identify the organization
-   *
-   * @return <code>true</code> if the organization exists or <code>false</code> otherwise
-   */
-  private boolean organizationExists(Connection connection, String organizationId)
-    throws SecurityServiceException
-  {
-    String organizationExistsSQL = "SELECT COUNT(id) FROM security.organizations WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(organizationExistsSQL))
-    {
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether the organization (%s) exists", organizationId), e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if an organization with the specified ID exists or
-   * <code>false</code> otherwise.
-   *
-   * @param connection     the existing database connection to use
-   * @param organizationId the ID used to uniquely identify the organization
-   *
-   * @return <code>true</code> if an organization with the specified ID exists or
-   *         <code>false</code> otherwise
-   */
-  private boolean organizationWithIdExists(Connection connection, String organizationId)
-    throws SecurityServiceException
-  {
-    String organizationWithIdExistsSQL =
-        "SELECT COUNT(id) FROM security.organizations WHERE id = ?";
-
-    try (PreparedStatement statement = connection.prepareStatement(organizationWithIdExistsSQL))
-    {
-      statement.setObject(1, UUID.fromString(organizationId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether an organization with the ID (%s) exists", organizationId), e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if an organization with the specified name exists or
-   * <code>false</code> otherwise.
-   *
-   * @param connection the existing database connection to use
-   * @param name       the organization name
-   *
-   * @return <code>true</code> if an organization with the specified name exists or
-   *         <code>false</code> otherwise
-   */
-  private boolean organizationWithNameExists(Connection connection, String name)
-    throws SecurityServiceException
-  {
-    String organizationWithNameExistsSQL =
-        "SELECT COUNT(id) FROM security.organizations WHERE (UPPER(name) LIKE ?)";
-
-    try (PreparedStatement statement = connection.prepareStatement(organizationWithNameExistsSQL))
-    {
-      statement.setString(1, name.toUpperCase());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether an organization with the name (%s) exists", name), e);
-    }
   }
 
   /**
@@ -2638,99 +2137,6 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException("Failed to reload the user directory types", e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if the user directory exists or <code>false</code> otherwise.
-   *
-   * @param connection      the existing database connection to use
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if the user directory exists or <code>false</code> otherwise
-   */
-  private boolean userDirectoryExists(Connection connection, String userDirectoryId)
-    throws SecurityServiceException
-  {
-    String userDirectoryExistsSQL = "SELECT COUNT(id) FROM security.user_directories WHERE id=?";
-
-    try (PreparedStatement statement = connection.prepareStatement(userDirectoryExistsSQL))
-    {
-      statement.setObject(1, UUID.fromString(userDirectoryId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether the user_directory (%s) exists", userDirectoryId), e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if a user directory with the specified ID exists or
-   * <code>false</code> otherwise.
-   *
-   * @param connection      the existing database connection to use
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if a user directory with the specified ID exists or
-   *         <code>false</code> otherwise
-   */
-  private boolean userDirectoryWithIdExists(Connection connection, String userDirectoryId)
-    throws SecurityServiceException
-  {
-    String userDirectoryWithIdExistsSQL =
-        "SELECT COUNT(id) FROM security.user_directories WHERE id = ?";
-
-    try (PreparedStatement statement = connection.prepareStatement(userDirectoryWithIdExistsSQL))
-    {
-      statement.setObject(1, UUID.fromString(userDirectoryId));
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether a user directory with the ID (%s) exists", userDirectoryId), e);
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if a user directory with the specified name exists or
-   * <code>false</code> otherwise.
-   *
-   * @param connection the existing database connection to use
-   * @param name       the user directory name
-   *
-   * @return <code>true</code> if a user directory with the specified name exists or
-   *         <code>false</code> otherwise
-   */
-  private boolean userDirectoryWithNameExists(Connection connection, String name)
-    throws SecurityServiceException
-  {
-    String userDirectoryWithNameExistsSQL =
-        "SELECT COUNT(id) FROM security.user_directories WHERE (UPPER(name) LIKE ?)";
-
-    try (PreparedStatement statement = connection.prepareStatement(userDirectoryWithNameExistsSQL))
-    {
-      statement.setString(1, name.toUpperCase());
-
-      try (ResultSet rs = statement.executeQuery())
-      {
-        return rs.next() && (rs.getInt(1) > 0);
-      }
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether a user directory with the name (%s) exists", name), e);
     }
   }
 }

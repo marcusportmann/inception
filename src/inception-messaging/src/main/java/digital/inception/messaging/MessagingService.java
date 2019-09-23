@@ -199,7 +199,7 @@ public class MessagingService
   @Override
   public void afterPropertiesSet()
   {
-    logger.info(String.format("Initializing the Messaging Service (%s)", instanceName));
+    logger.info("Initializing the Messaging Service (" + instanceName + ")");
 
     messageHandlers = new HashMap<>();
 
@@ -236,12 +236,14 @@ public class MessagingService
   {
     try
     {
-      return messagePartRepository.getNumberOfMessagePartsForMessageQueuedForAssembly(messageId) == totalParts;
+      return messagePartRepository.countMessagePartsQueuedForAssemblyByMessageId(messageId)
+          == totalParts;
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format("Failed to check whether all the message "
-          + "parts for the message (%s) have been queued for assembly", messageId), e);
+      throw new MessagingServiceException(
+          "Failed to check whether all the message parts for the message (" + messageId
+          + ") have been queued for assembly", e);
     }
   }
 
@@ -265,8 +267,8 @@ public class MessagingService
       }
       catch (Throwable e)
       {
-        throw new MessagingServiceException(String.format("Failed to archive the message (%s)",
-            message.getId()), e);
+        throw new MessagingServiceException("Failed to archive the message (" + message.getId()
+            + ")", e);
       }
     }
   }
@@ -288,8 +290,7 @@ public class MessagingService
       if (allMessagePartsForMessageQueuedForAssembly(messageId, totalParts))
       {
         // Retrieve the message parts queued for assembly
-        List<MessagePart> messageParts = getMessagePartsQueuedForAssembly(
-          messageId, instanceName);
+        List<MessagePart> messageParts = getMessagePartsQueuedForAssembly(messageId, instanceName);
 
         /*
          * If there are no message parts that are queued for assembly then this is not necessarily
@@ -299,9 +300,8 @@ public class MessagingService
         {
           if (logger.isDebugEnabled())
           {
-            logger.debug(
-              String.format("No message parts found for message (%s) that are queued for assembly",
-                messageId));
+            logger.debug("No message parts found for message (" + messageId
+                + ") that are queued for assembly");
           }
 
           return;
@@ -332,22 +332,24 @@ public class MessagingService
           // Delete the message parts
           deleteMessagePartsForMessage(messageId);
 
-          logger.error(String.format(
-            "Failed to verify the checksum for the reconstructed message (%s) with type (%s) "
-              + "from the user (%s) and device (%s). Found %d bytes of message data with the hash "
-              + "(%s) that was reconstructed from %d message parts. The message will NOT be processed",
-            firstMessagePart.getMessageId(), firstMessagePart.getMessageTypeId(),
-            firstMessagePart.getMessageUsername(), firstMessagePart.getMessageDeviceId(), reconstructedData
-              .length, messageChecksum, messageParts.size()));
+          logger.error("Failed to verify the checksum for the reconstructed message ("
+              + firstMessagePart.getMessageId() + ") with type ("
+              + firstMessagePart.getMessageTypeId() + ") " + "from the user ("
+              + firstMessagePart.getMessageUsername() + ") and device ("
+              + firstMessagePart.getMessageDeviceId() + "). Found " + reconstructedData.length
+              + " bytes of message data with the hash " + "(" + messageChecksum
+              + ") that was reconstructed from " + messageParts.size()
+              + " message parts. The message will NOT be processed");
 
           return;
         }
 
-        Message message = new Message(firstMessagePart.getMessageId(), firstMessagePart.getMessageUsername(),
-          firstMessagePart.getMessageDeviceId(), firstMessagePart.getMessageTypeId(),
-          firstMessagePart.getMessageCorrelationId(), firstMessagePart.getMessagePriority(),
-          firstMessagePart.getMessageCreated(), reconstructedData, firstMessagePart.getMessageDataHash(),
-          firstMessagePart.getMessageEncryptionIV());
+        Message message = new Message(firstMessagePart.getMessageId(),
+            firstMessagePart.getMessageUsername(), firstMessagePart.getMessageDeviceId(),
+            firstMessagePart.getMessageTypeId(), firstMessagePart.getMessageCorrelationId(),
+            firstMessagePart.getMessagePriority(), firstMessagePart.getMessageCreated(),
+            reconstructedData, firstMessagePart.getMessageDataHash(),
+            firstMessagePart.getMessageEncryptionIV());
 
         // Queue the message for processing
         queueMessageForProcessingAndProcessMessage(message);
@@ -358,8 +360,8 @@ public class MessagingService
     }
     catch (Exception e)
     {
-      throw new MessagingServiceException(String.format(
-        "Failed to assemble the message parts for the message (%s)", messageId), e);
+      throw new MessagingServiceException("Failed to assemble the message parts for the message ("
+          + messageId + ")", e);
     }
   }
 
@@ -409,8 +411,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format("Failed to create the message (%s)",
-          message.getId()), e);
+      throw new MessagingServiceException("Failed to create the message (" + message.getId() + ")",
+          e);
 
     }
   }
@@ -432,8 +434,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to add the message part (%s) to the database", messagePart.getId()), e);
+      throw new MessagingServiceException("Failed to add the message part (" + messagePart.getId()
+          + ") to the database", e);
     }
   }
 
@@ -485,12 +487,12 @@ public class MessagingService
 
       if (!messageChecksum.equals(message.getDataHash()))
       {
-        logger.warn(String.format(
-            "Data hash verification failed for the message (%s) from the user (%s) and device "
-            + "(%s). %d (%d) bytes of message data was encrypted using the encryption IV (%s). "
-            + "Expected data hash (%s) but got (%s)", message.getId(), message.getUsername(),
-            message.getDeviceId(), message.getData().length, decryptedData.length,
-            message.getEncryptionIV(), message.getDataHash(), messageChecksum));
+        logger.warn("Data hash verification failed for the message (" + message.getId()
+            + ") from the user (" + message.getUsername() + ") and device ("
+            + message.getDeviceId() + "). " + message.getData().length + " (" + decryptedData
+            .length + ") bytes of message data was encrypted using the encryption IV ("
+            + message.getEncryptionIV() + "). " + "Expected data hash (" + message.getDataHash()
+            + ") but got (" + messageChecksum + ")");
 
         return false;
       }
@@ -505,9 +507,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to decrypt the data for the message (%s) from the user (%s) and device (%s)",
-          message.getId(), message.getUsername(), message.getDeviceId()), e);
+      throw new MessagingServiceException("Failed to decrypt the data for the message ("
+          + message.getId() + ") from the user (" + message.getUsername() + ") and device ("
+          + message.getDeviceId() + ")", e);
     }
   }
 
@@ -549,8 +551,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format("Failed to delete the message (%s)",
-          messageId), e);
+      throw new MessagingServiceException("Failed to delete the message (" + messageId + ")", e);
     }
   }
 
@@ -580,8 +581,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format("Failed to delete the message part (%s)",
-          messagePartId), e);
+      throw new MessagingServiceException("Failed to delete the message part (" + messagePartId
+          + ")", e);
     }
   }
 
@@ -597,12 +598,12 @@ public class MessagingService
   {
     try
     {
-      messagePartRepository.deleteMessagePartsForMessage(messageId);
+      messagePartRepository.deleteMessagePartsByMessageId(messageId);
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to delete the message parts for the message (%s)", messageId), e);
+      throw new MessagingServiceException("Failed to delete the message parts for the message ("
+          + messageId + ")", e);
     }
   }
 
@@ -635,9 +636,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to derive the encryption key for the user (%s) and device (%s)", username,
-          deviceId), e);
+      throw new MessagingServiceException("Failed to derive the encryption key for the user ("
+          + username + ") and device (" + deviceId + ")", e);
     }
   }
 
@@ -697,9 +697,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to encrypt the data for the message (%s) from the user (%s) and device (%s)",
-          message.getId(), message.getUsername(), message.getDeviceId()), e);
+      throw new MessagingServiceException("Failed to encrypt the data for the message ("
+          + message.getId() + ") from the user (" + message.getUsername() + ") and device ("
+          + message.getDeviceId() + ")", e);
     }
   }
 
@@ -726,11 +726,11 @@ public class MessagingService
   {
     try
     {
-      Optional<Message> message = messageRepository.findById(messageId);
+      Optional<Message> messageOptional = messageRepository.findById(messageId);
 
-      if (message.isPresent())
+      if (messageOptional.isPresent())
       {
-        return message.get();
+        return messageOptional.get();
       }
       else
       {
@@ -743,8 +743,7 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format("Failed to retrieve the message (%s)",
-          messageId), e);
+      throw new MessagingServiceException("Failed to retrieve the message (" + messageId + ")", e);
     }
   }
 
@@ -765,7 +764,8 @@ public class MessagingService
     try
     {
       List<MessagePart> messageParts =
-          messagePartRepository.findMessagePartsQueuedForAssemblyForMessageForWrite(messageId);
+          messagePartRepository.findMessagePartsByMessageIdAndStatusForWrite(messageId,
+          MessagePartStatus.QUEUED_FOR_ASSEMBLY);
 
       for (MessagePart messagePart : messageParts)
       {
@@ -781,9 +781,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to retrieve the message parts that have been queued for assembly for the message (%s)",
-          messageId), e);
+      throw new MessagingServiceException(
+          "Failed to retrieve the message parts that have been queued for assembly for the message "
+          + "(" + messageId + ")", e);
     }
   }
 
@@ -813,13 +813,13 @@ public class MessagingService
        * parts locked in a "Downloading" state.
        */
       List<MessagePart> messageParts =
-          messagePartRepository.findMessagePartsWithStatusForUserAndDeviceForWrite(MessagePartStatus
-          .DOWNLOADING, username, deviceId, pageRequest);
+          messagePartRepository.findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(username,
+          deviceId, MessagePartStatus.DOWNLOADING, pageRequest);
 
       if (messageParts.size() == 0)
       {
-        messageParts = messagePartRepository.findMessagePartsWithStatusForUserAndDeviceForWrite(
-            MessagePartStatus.QUEUED_FOR_DOWNLOAD, username, deviceId, pageRequest);
+        messageParts = messagePartRepository.findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(
+            username, deviceId, MessagePartStatus.QUEUED_FOR_DOWNLOAD, pageRequest);
       }
 
       for (MessagePart messagePart : messageParts)
@@ -837,9 +837,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to retrieve the message parts for the user (%s) that have been queued for "
-          + "download by the device (%s)", username, deviceId), e);
+      throw new MessagingServiceException("Failed to retrieve the message parts for the user ("
+          + username + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
   }
 
@@ -893,10 +892,10 @@ public class MessagingService
           {
             if (logger.isDebugEnabled())
             {
-              logger.debug(String.format(
-                  "The message (%s) that was originally locked for download using the lock "
-                  + "name (%s) will now be locked for download using the lock name (%s)",
-                  message.getId(), message.getLockName(), instanceName));
+              logger.debug("The message (" + message.getId()
+                  + ") that was originally locked for download using the lock name ("
+                  + message.getLockName()
+                  + ") will now be locked for download using the lock name (" + instanceName + ")");
             }
           }
         }
@@ -914,9 +913,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to retrieve the messages for the user (%s) that have been queued for download by "
-          + "the device (%s)", username, deviceId), e);
+      throw new MessagingServiceException("Failed to retrieve the messages for the user ("
+          + username + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
   }
 
@@ -1018,8 +1016,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to check whether the message (%s) is archived", messageId), e);
+      throw new MessagingServiceException("Failed to check whether the message (" + messageId
+          + ") is archived", e);
     }
   }
 
@@ -1043,9 +1041,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to check whether the message part (%s) is queued for assembly", messagePartId),
-          e);
+      throw new MessagingServiceException("Failed to check whether the message part ("
+          + messagePartId + ") is queued for assembly", e);
     }
   }
 
@@ -1088,14 +1085,15 @@ public class MessagingService
   {
     if (logger.isDebugEnabled())
     {
-      logger.debug(String.format("Processing message (%s) with type (%s)", message.getId(),
-          message.getTypeId()));
+      logger.debug("Processing message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ")");
     }
 
     if (!messageHandlers.containsKey(message.getTypeId()))
     {
-      throw new MessagingServiceException(String.format(
-          "No message handler registered to process messages with type (%s)", message.getTypeId()));
+      throw new MessagingServiceException(
+          "No message handler registered to process messages with type (" + message.getTypeId()
+          + ")");
     }
 
     IMessageHandler messageHandler = messageHandlers.get(message.getTypeId());
@@ -1106,9 +1104,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to process the message (%s) with type (%s)", message.getId(),
-          message.getTypeId()), e);
+      throw new MessagingServiceException("Failed to process the message (" + message.getId()
+          + ") with type (" + message.getTypeId() + ")", e);
     }
   }
 
@@ -1183,14 +1180,14 @@ public class MessagingService
           createMessagePart(messagePart);
         }
 
-        logger.debug(String.format("Queued %d message parts for download for the message (%s)",
-            numberOfParts, message.getId()));
+        logger.debug("Queued " + numberOfParts + " message parts for download for the message ("
+            + message.getId() + ")");
       }
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to queue the message (%s) for download", message.getId()), e);
+      throw new MessagingServiceException("Failed to queue the message (" + message.getId()
+          + ") for download", e);
     }
 
     // Archive the message
@@ -1220,14 +1217,14 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to queue the message (%s) for processing", message.getId()), e);
+      throw new MessagingServiceException("Failed to queue the message (" + message.getId()
+          + ") for processing", e);
     }
 
     if (logger.isDebugEnabled())
     {
-      logger.debug(String.format("Queued message (%s) with type (%s) for processing",
-          message.getId(), message.getTypeId()));
+      logger.debug("Queued message (" + message.getId() + ") with type (" + message.getTypeId()
+          + ") for processing");
 
       logger.debug(message.toString());
     }
@@ -1276,9 +1273,9 @@ public class MessagingService
       // Verify that the message has not already been queued for processing
       if (isMessageArchived(messagePart.getMessageId()))
       {
-        logger.debug(String.format(
-            "The message (%s) has already been queued for processing so the message part (%s) will be ignored",
-            messagePart.getMessageId(), messagePart.getId()));
+        logger.debug("The message (" + messagePart.getMessageId()
+            + ") has already been queued for processing so the message part ("
+            + messagePart.getId() + ") will be ignored");
 
         return;
       }
@@ -1294,8 +1291,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to queue the message part (%s) for assembly", messagePart.getId()), e);
+      throw new MessagingServiceException("Failed to queue the message part ("
+          + messagePart.getId() + ") for assembly", e);
     }
   }
 
@@ -1324,7 +1321,7 @@ public class MessagingService
     try
     {
       applicationContext.getBean(BackgroundMessageAssembler.class).assembleMessage(
-        messagePart.getMessageId(), messagePart.getTotalParts());
+          messagePart.getMessageId(), messagePart.getTotalParts());
     }
     catch (Throwable e)
     {
@@ -1350,9 +1347,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to reset the locks for the messages with the status (%s) that have been locked "
-          + "using the lock name (%s)", status, instanceName), e);
+      throw new MessagingServiceException(
+          "Failed to reset the locks for the messages with the status (" + status
+          + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -1374,9 +1371,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to reset the locks for the message parts with the status (%s) that have been "
-          + "locked using the lock name (%s)", status, instanceName), e);
+      throw new MessagingServiceException(
+          "Failed to reset the locks for the message parts with the status (" + status
+          + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -1394,13 +1391,12 @@ public class MessagingService
   {
     try
     {
-      messagePartRepository.setMessagePartStatus(messagePartId, status);
+      messagePartRepository.setStatusById(messagePartId, status);
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to set the status for the message part (%s) to (%s)", messagePartId,
-          status.toString()), e);
+      throw new MessagingServiceException("Failed to set the status for the message part ("
+          + messagePartId + ") to (" + status.toString() + ")", e);
     }
   }
 
@@ -1421,9 +1417,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to set the status for the message (%s) to (%s)", messageId, status.toString()),
-          e);
+      throw new MessagingServiceException("Failed to set the status for the message (" + messageId
+          + ") to (" + status.toString() + ")", e);
     }
   }
 
@@ -1447,9 +1442,8 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to unlock and set the status for the message (%s) to (%s)", message.getId(),
-          status.toString()), e);
+      throw new MessagingServiceException("Failed to unlock and set the status for the message ("
+          + message.getId() + ") to (" + status.toString() + ")", e);
     }
   }
 
@@ -1471,9 +1465,9 @@ public class MessagingService
     }
     catch (Throwable e)
     {
-      throw new MessagingServiceException(String.format(
-          "Failed to unlock and set the status for the message part (%s) to (%s)", messagePartId,
-          status.toString()), e);
+      throw new MessagingServiceException(
+          "Failed to unlock and set the status for the message part (" + messagePartId + ") to ("
+          + status.toString() + ")", e);
     }
   }
 
@@ -1512,8 +1506,8 @@ public class MessagingService
     {
       try
       {
-        logger.info(String.format("Initializing the message handler (%s) with class (%s)",
-            messageHandlerConfig.getName(), messageHandlerConfig.getClassName()));
+        logger.info("Initializing the message handler (" + messageHandlerConfig.getName()
+            + ") with class (" + messageHandlerConfig.getClassName() + ")");
 
         Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(
             messageHandlerConfig.getClassName());
@@ -1539,11 +1533,10 @@ public class MessagingService
               IMessageHandler existingMessageHandler = messageHandlers.get(
                   messageConfig.getMessageTypeId());
 
-              logger.warn(String.format(
-                  "Failed to register the message handler (%s) for the message type (%s) since "
-                  + "another message handler (%s) has already been registered to process messages "
-                  + "of this type", messageHandler.getClass().getName(),
-                  messageConfig.getMessageTypeId(), existingMessageHandler.getClass().getName()));
+              logger.warn("Failed to register the message handler (" + messageHandler.getClass()
+                  .getName() + ") for the message type (" + messageConfig.getMessageTypeId()
+                  + ") since another message handler (" + existingMessageHandler.getClass()
+                  .getName() + ") has already been registered to process messages of this type");
             }
             else
             {
@@ -1553,16 +1546,16 @@ public class MessagingService
         }
         else
         {
-          logger.error(String.format(
-              "Failed to register the message handler (%s) since the message handler class does "
-              + "not provide a constructor with the required signature",
-              messageHandlerConfig.getClassName()));
+          logger.error("Failed to register the message handler ("
+              + messageHandlerConfig.getClassName()
+              + ") since the message handler class does not provide a constructor with the required"
+              + " signature");
         }
       }
       catch (Throwable e)
       {
-        logger.error(String.format("Failed to initialize the message handler (%s) with class (%s)",
-            messageHandlerConfig.getName(), messageHandlerConfig.getClassName()), e);
+        logger.error("Failed to initialize the message handler (" + messageHandlerConfig.getName()
+            + ") with class (" + messageHandlerConfig.getClassName() + ")", e);
       }
     }
   }
@@ -1689,8 +1682,8 @@ public class MessagingService
 
         if (logger.isDebugEnabled())
         {
-          logger.debug(String.format("Reading the messaging configuration file (%s)",
-              configurationFile.toURI().toString()));
+          logger.debug("Reading the messaging configuration file (" + configurationFile.toURI()
+              .toString() + ")");
         }
 
         // Retrieve a document builder instance using the factory

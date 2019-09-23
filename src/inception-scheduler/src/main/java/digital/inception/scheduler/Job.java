@@ -69,6 +69,19 @@ public class Job
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The parameters for the job.
+   */
+  @ApiModelProperty(value = "The parameters for the job")
+  @JsonProperty
+  @XmlElementWrapper(name = "Parameters")
+  @XmlElement(name = "Parameter")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
+      nullable = false)
+  private Set<JobParameter> parameters = new HashSet<>();
+
+  /**
    * Is the job enabled for execution?
    */
   @ApiModelProperty(value = "Is the job enabled for execution", required = true)
@@ -156,19 +169,6 @@ public class Job
   private LocalDateTime nextExecution;
 
   /**
-   * The parameters for the job.
-   */
-  @ApiModelProperty(value = "The parameters for the job")
-  @JsonProperty
-  @XmlElementWrapper(name = "Parameters")
-  @XmlElement(name = "Parameter")
-  @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
-      nullable = false)
-  private Set<JobParameter> parameters = new HashSet<>();
-
-  /**
    * The cron-style scheduling pattern for the job.
    */
   @ApiModelProperty(value = "The cron-style scheduling pattern for the job", required = true)
@@ -236,6 +236,37 @@ public class Job
     parameter.setJobId(this.getId());
 
     this.parameters.add(parameter);
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Job other = (Job) object;
+
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -336,6 +367,19 @@ public class Job
   public JobStatus getStatus()
   {
     return status;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

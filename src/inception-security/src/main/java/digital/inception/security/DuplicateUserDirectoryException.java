@@ -53,10 +53,22 @@ public class DuplicateUserDirectoryException extends ServiceException
   /**
    * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
-   * @param idOrName the ID or name of the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
-  public DuplicateUserDirectoryException(String idOrName)
+  public DuplicateUserDirectoryException(UUID userDirectoryId)
   {
-    super(String.format("A user directory with the ID or name (%s) already exists", idOrName));
+    super("A user directory with the ID (" + userDirectoryId + ") already exists");
   }
+
+  /**
+   * Constructs a new <code>DuplicateUserDirectoryException</code>.
+   *
+   * @param name the name of the user directory
+   */
+  public DuplicateUserDirectoryException(String name)
+  {
+    super("A user directory with the name (" + name + ") already exists");
+  }
+
 }

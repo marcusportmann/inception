@@ -21,24 +21,31 @@ package digital.inception.messaging;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import org.springframework.util.StringUtils;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDateTime;
+
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.persistence.*;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>Message</code> class holds the information for a message.
@@ -50,13 +57,13 @@ import java.util.UUID;
 @ApiModel(value = "Message")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
-    "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed",
-    "lockName", "encryptionIV", "dataHash" })
+    "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed", "lockName",
+    "encryptionIV", "dataHash" })
 @XmlRootElement(name = "Message", namespace = "http://messaging.inception.digital")
 @XmlType(name = "Message", namespace = "http://messaging.inception.digital",
     propOrder = { "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
-        "created", "sendAttempts", "processAttempts", "downloadAttempts",
-        "lastProcessed", "lockName", "encryptionIV", "dataHash" })
+        "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed",
+        "lockName", "encryptionIV", "dataHash" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "messaging", name = "messages")
@@ -111,7 +118,7 @@ public class Message
       value = "The hash of the unencrypted data for the message if the message is encrypted")
   @JsonProperty
   @XmlElement(name = "DataHash")
-  @Size(min = 1, max = 100)
+  @Size(max = 100)
   @Column(name = "data_hash", length = 100)
   private String dataHash;
 
@@ -175,8 +182,7 @@ public class Message
   /**
    * The name of the entity that has locked this message for processing.
    */
-  @ApiModelProperty(
-      value = "The name of the entity that has locked this message for processing")
+  @ApiModelProperty(value = "The name of the entity that has locked this message for processing")
   @JsonProperty
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
@@ -243,8 +249,8 @@ public class Message
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
-  @Size(min = 1, max = 1000)
-  @Column(name = "username", nullable = false, length = 1000)
+  @Size(min = 1, max = 100)
+  @Column(name = "username", nullable = false, length = 100)
   private String username;
 
   /**
@@ -496,6 +502,37 @@ public class Message
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    Message other = (Message) object;
+
+    return (id != null) && id.equals(other.id);
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to correlate the message.
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the message
@@ -660,6 +697,19 @@ public class Message
   public String getUsername()
   {
     return username;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**

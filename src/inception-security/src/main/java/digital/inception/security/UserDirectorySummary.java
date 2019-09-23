@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -26,6 +27,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,20 +51,37 @@ import javax.xml.bind.annotation.*;
 @XmlType(name = "UserDirectorySummary", namespace = "http://security.inception.digital",
     propOrder = { "id", "type", "name" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@Entity
+@Table(schema = "security", name = "user_directories")
+@SuppressWarnings({ "unused" })
 public class UserDirectorySummary
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The user directories associated with the organization.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.REFRESH })
+  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+      joinColumns = @JoinColumn(name = "organization_id") ,
+      inverseJoinColumns = @JoinColumn(name = "user_directory_id"))
+  private Set<Organization> organizations = new HashSet<>();
+
+  /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  private String id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
   /**
    * The name of the user directory.
@@ -66,7 +90,8 @@ public class UserDirectorySummary
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 4000)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /**
@@ -78,6 +103,7 @@ public class UserDirectorySummary
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 100)
+  @Column(name = "type", nullable = false, length = 100)
   private String type;
 
   /**
@@ -86,11 +112,42 @@ public class UserDirectorySummary
   public UserDirectorySummary() {}
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   *
+   * @return <code>true</code> if this object is the same as the object argument otherwise
+   *         <code>false</code>
+   */
+  @Override
+  public boolean equals(Object object)
+  {
+    if (this == object)
+    {
+      return true;
+    }
+
+    if (object == null)
+    {
+      return false;
+    }
+
+    if (getClass() != object.getClass())
+    {
+      return false;
+    }
+
+    UserDirectorySummary other = (UserDirectorySummary) object;
+
+    return (id != null) && id.equals(other.id);
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -116,11 +173,24 @@ public class UserDirectorySummary
   }
 
   /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode()
+  {
+    return (id == null)
+        ? 0
+        : id.hashCode();
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
