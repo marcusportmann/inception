@@ -42,7 +42,7 @@ public class OrganizationData
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
-  private String id;
+  private UUID id;
 
   /**
    * The name of the organization.
@@ -58,7 +58,7 @@ public class OrganizationData
   {
     try
     {
-      this.id = element.getChildText("Id");
+      this.id = UUID.fromString(element.getChildText("Id"));
       this.name = StringUtils.isEmpty(element.getChildText("Name"))
           ? ""
           : element.getChildText("Name");
@@ -85,7 +85,7 @@ public class OrganizationData
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public String getId()
+  public UUID getId()
   {
     return id;
   }
@@ -105,7 +105,7 @@ public class OrganizationData
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public void setId(String id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

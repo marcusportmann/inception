@@ -25,6 +25,7 @@ import digital.inception.validation.ValidationError;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -95,7 +96,7 @@ public class SecurityWebService
    */
   @WebMethod(operationName = "DeleteOrganization")
   public void deleteOrganization(@WebParam(name = "OrganizationId")
-  @XmlElement(required = true) String organizationId)
+  @XmlElement(required = true) UUID organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     if (organizationId == null)
@@ -138,7 +139,7 @@ public class SecurityWebService
   @WebMethod(operationName = "GetUserDirectoriesForOrganization")
   @WebResult(name = "UserDirectory")
   public List<UserDirectory> getUserDirectoriesForOrganization(@WebParam(name = "OrganizationId")
-  @XmlElement(required = true) String organizationId)
+  @XmlElement(required = true) UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     return securityService.getUserDirectoriesForOrganization(organizationId);
