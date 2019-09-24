@@ -31,6 +31,8 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
@@ -73,6 +75,7 @@ public class SecurityServiceTest
    * Test the functionality to add a user to a group.
    */
   @Test
+  //@Transactional(propagation = Propagation.NEVER)
   public void addUserToGroupTest()
     throws Exception
   {

@@ -24,7 +24,6 @@ import digital.inception.core.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -174,7 +173,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    */
   @Override
-  @Transactional
   public void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
@@ -223,7 +221,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param reason               the reason for changing the password
    */
   @Override
-  @Transactional
   public void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
     throws UserNotFoundException, SecurityServiceException
@@ -285,7 +282,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param password the password being used to authenticate
    */
   @Override
-  @Transactional
   public void authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
@@ -345,7 +341,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param newPassword the new password
    */
   @Override
-  @Transactional
   public void changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
@@ -413,7 +408,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param group the security group
    */
   @Override
-  @Transactional
   public void createGroup(Group group)
     throws DuplicateGroupException, SecurityServiceException
   {
@@ -425,7 +419,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateGroupException(group.getGroupName());
       }
 
-      group.setId(idGenerator.nextUUID());
+      //group.setId(idGenerator.nextUUID());
       group.setUserDirectoryId(getUserDirectoryId());
 
       getGroupRepository().saveAndFlush(group);
@@ -450,7 +444,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param userLocked      create the user locked
    */
   @Override
-  @Transactional
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
     throws DuplicateUserException, SecurityServiceException
   {
@@ -519,7 +512,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the name of the security group uniquely identifying the security group
    */
   @Override
-  @Transactional
   public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
   {
@@ -559,7 +551,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param username the username identifying the user
    */
   @Override
-  @Transactional
   public void deleteUser(String username)
     throws UserNotFoundException, SecurityServiceException
   {
@@ -1110,7 +1101,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupName the security group name
    */
   @Override
-  @Transactional
   public void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
@@ -1216,7 +1206,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param lockUser       lock the user as part of the update
    */
   @Override
-  @Transactional
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
     throws UserNotFoundException, SecurityServiceException
   {

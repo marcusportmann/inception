@@ -19,26 +19,23 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.lang.reflect.Constructor;
-
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.
@@ -103,11 +100,6 @@ public class SecurityService
   private ApplicationContext applicationContext;
 
   /**
-   * The data source used to provide connections to the application database.
-   */
-  private DataSource dataSource;
-
-  /**
    * The ID generator.
    */
   private IDGenerator idGenerator;
@@ -151,8 +143,6 @@ public class SecurityService
    * Constructs a new <code>SecurityService</code>.
    *
    * @param applicationContext             the Spring application context
-   * @param dataSource                     the data source used to provide connections to the
-   *                                       application database
    * @param idGenerator                    the ID generator
    * @param functionRepository             the Function Repository
    * @param groupRepository                the Group Repository
@@ -162,8 +152,7 @@ public class SecurityService
    * @param userDirectoryTypeRepository    the User Directory Type Repository
    * @param userRepository                 the User Repository
    */
-  public SecurityService(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, IDGenerator idGenerator,
+  public SecurityService(ApplicationContext applicationContext, IDGenerator idGenerator,
       FunctionRepository functionRepository, GroupRepository groupRepository,
       OrganizationRepository organizationRepository,
       UserDirectoryRepository userDirectoryRepository,
@@ -171,10 +160,10 @@ public class SecurityService
       UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
   {
     this.applicationContext = applicationContext;
-    this.dataSource = dataSource;
     this.idGenerator = idGenerator;
 
     this.functionRepository = functionRepository;
+    this.groupRepository = groupRepository;
     this.organizationRepository = organizationRepository;
     this.userDirectoryRepository = userDirectoryRepository;
     this.userDirectorySummaryRepository = userDirectorySummaryRepository;
@@ -191,6 +180,7 @@ public class SecurityService
    * @param groupName       the name of the security group uniquely identifying the security group
    */
   @Override
+  @Transactional
   public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
@@ -218,6 +208,7 @@ public class SecurityService
    * @param reason               the reason for changing the password
    */
   @Override
+  @Transactional
   public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
@@ -263,6 +254,7 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   @Override
+  @Transactional
   public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
@@ -336,6 +328,7 @@ public class SecurityService
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   @Override
+  @Transactional
   public UUID changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
@@ -406,6 +399,7 @@ public class SecurityService
    * @param function the function
    */
   @Override
+  @Transactional
   public void createFunction(Function function)
     throws DuplicateFunctionException, SecurityServiceException
 
@@ -438,6 +432,7 @@ public class SecurityService
    * @param group           the security group
    */
   @Override
+  @Transactional
   public void createGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
   {
@@ -520,6 +515,7 @@ public class SecurityService
    * @param userLocked      create the user locked
    */
   @Override
+  @Transactional
   public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
@@ -540,6 +536,7 @@ public class SecurityService
    * @param userDirectory the user directory
    */
   @Override
+  @Transactional
   public void createUserDirectory(UserDirectory userDirectory)
     throws DuplicateUserDirectoryException, SecurityServiceException
   {
@@ -583,6 +580,7 @@ public class SecurityService
    * @param functionCode the code used to uniquely identify the function
    */
   @Override
+  @Transactional
   public void deleteFunction(String functionCode)
     throws FunctionNotFoundException, SecurityServiceException
   {
@@ -614,6 +612,7 @@ public class SecurityService
    * @param groupName       the name of the security group uniquely identifying the security group
    */
   @Override
+  @Transactional
   public void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityServiceException
@@ -635,6 +634,7 @@ public class SecurityService
    *                       organization
    */
   @Override
+  @Transactional
   public void deleteOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
@@ -666,6 +666,7 @@ public class SecurityService
    * @param username        the username identifying the user
    */
   @Override
+  @Transactional
   public void deleteUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
@@ -686,6 +687,7 @@ public class SecurityService
    *                        user directory
    */
   @Override
+  @Transactional
   public void deleteUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
@@ -1652,7 +1654,7 @@ public class SecurityService
         throw new UserDirectoryTypeNotFoundException(typeOptional.get());
       }
     }
-    catch (UserDirectoryNotFoundException e)
+    catch (UserDirectoryNotFoundException | UserDirectoryTypeNotFoundException e)
     {
       throw e;
     }
@@ -1843,6 +1845,7 @@ public class SecurityService
    * @param groupName       the security group name
    */
   @Override
+  @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
@@ -1907,6 +1910,7 @@ public class SecurityService
    * @param function the function
    */
   @Override
+  @Transactional
   public void updateFunction(Function function)
     throws FunctionNotFoundException, SecurityServiceException
   {
@@ -1938,6 +1942,7 @@ public class SecurityService
    * @param group           the security group
    */
   @Override
+  @Transactional
   public void updateGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
@@ -1957,6 +1962,7 @@ public class SecurityService
    * @param organization the organization
    */
   @Override
+  @Transactional
   public void updateOrganization(Organization organization)
     throws OrganizationNotFoundException, SecurityServiceException
   {
@@ -1990,6 +1996,7 @@ public class SecurityService
    * @param lockUser        lock the user as part of the update
    */
   @Override
+  @Transactional
   public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
@@ -2009,6 +2016,7 @@ public class SecurityService
    * @param userDirectory the user directory
    */
   @Override
+  @Transactional
   public void updateUserDirectory(UserDirectory userDirectory)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {

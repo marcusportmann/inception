@@ -172,6 +172,7 @@ public class UserDirectory
    */
   @JsonIgnore
   @XmlTransient
+  @Access(AccessType.PROPERTY)
   @Column(name = "configuration", nullable = false, length = 4000)
   public String getConfiguration()
   {

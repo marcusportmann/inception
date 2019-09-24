@@ -65,8 +65,8 @@ public class Group
   @XmlTransient
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(schema = "security", name = "role_to_group_map",
-      joinColumns = @JoinColumn(name = "role_id") ,
-      inverseJoinColumns = @JoinColumn(name = "group_id"))
+      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
   private Set<Role> roles = new HashSet<>();
 
   /**
@@ -76,8 +76,8 @@ public class Group
   @XmlTransient
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(schema = "security", name = "user_to_group_map",
-      joinColumns = @JoinColumn(name = "user_id") ,
-      inverseJoinColumns = @JoinColumn(name = "group_id"))
+      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();
 
   /**
@@ -113,6 +113,7 @@ public class Group
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
+  @GeneratedValue
   @Column(name = "id", nullable = false)
   private UUID id;
 

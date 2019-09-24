@@ -65,8 +65,8 @@ public class Role
   @XmlTransient
   @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
   @JoinTable(schema = "security", name = "function_to_role_map",
-      joinColumns = @JoinColumn(name = "function_id") ,
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
+      joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code") ,
+      inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
   private Set<Function> functions = new HashSet<>();
 
   /**

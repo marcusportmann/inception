@@ -99,8 +99,8 @@ public class Organization
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-    joinColumns = @JoinColumn(name = "user_directory_id"),
-    inverseJoinColumns = @JoinColumn(name = "organization_id")
+    joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id")
   )
   private Set<UserDirectory> userDirectories = new HashSet<>();
 

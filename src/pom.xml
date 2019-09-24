@@ -75,6 +75,7 @@
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
+    <atomikos.version>5.0.1</atomikos.version>
     <apache-avro.version>1.8.2</apache-avro.version>
     <cglib.version>3.2.12</cglib.version>
     <commons-io.version>2.6</commons-io.version>
@@ -103,6 +104,11 @@
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
         <version>${cglib.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.atomikos</groupId>
+        <artifactId>transactions</artifactId>
+        <version>${atomikos.version}</version>
       </dependency>
       <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
