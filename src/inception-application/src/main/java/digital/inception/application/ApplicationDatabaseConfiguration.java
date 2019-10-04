@@ -19,13 +19,16 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
+
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,17 +46,21 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.*;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
 
 /**
  * The <code>ApplicationDatabaseConfiguration</code> class provides access to the application
@@ -157,7 +164,6 @@ public class ApplicationDatabaseConfiguration
   @Value("${application.database.password:#{null}}")
   private String password;
 
-
   /**
    * Is transaction recovery enabled for the application database.
    */
@@ -204,10 +210,12 @@ public class ApplicationDatabaseConfiguration
 
       TransactionManager transactionManager = applicationContext.getBean(TransactionManager.class);
 
-      TransactionSynchronizationRegistry transactionSynchronizationRegistry = applicationContext.getBean(TransactionSynchronizationRegistry.class);
+      TransactionSynchronizationRegistry transactionSynchronizationRegistry =
+          applicationContext.getBean(TransactionSynchronizationRegistry.class);
 
       Properties agroalProperties = new Properties();
       agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, url);
+
       if (!StringUtils.isEmpty(username))
       {
         agroalProperties.setProperty(AgroalPropertiesReader.PRINCIPAL, username);
@@ -227,70 +235,56 @@ public class ApplicationDatabaseConfiguration
 
         if (!StringUtils.isEmpty(recoveryPassword))
         {
-          agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL, recoveryPassword);
+          agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL,
+              recoveryPassword);
         }
       }
 
-
       agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, dataSourceClass);
 
-      agroalProperties.setProperty(AgroalPropertiesReader.MIN_SIZE, minPoolSize > 0 ? Integer.toString(minPoolSize) : "1");
-      agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, maxPoolSize > 0 ? Integer.toString(maxPoolSize) : "5");
+      agroalProperties.setProperty(AgroalPropertiesReader.MIN_SIZE,
+          (minPoolSize > 0)
+          ? Integer.toString(minPoolSize)
+          : "1");
+      agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE,
+          (maxPoolSize > 0)
+          ? Integer.toString(maxPoolSize)
+          : "5");
 
-      AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(agroalProperties);
-      AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier = agroalReaderProperties2.modify();
+      AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(
+          agroalProperties);
+      AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
+          agroalReaderProperties2.modify();
       TransactionIntegration transactionIntegration = new NarayanaTransactionIntegration(
-        transactionManager,
-        transactionSynchronizationRegistry);
+          transactionManager, transactionSynchronizationRegistry);
 
+//    TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
+//      com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
+//      "java:/agroalds2", false, recoveryManagerService);
 
-
-//          TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-//            com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
-//            "java:/agroalds2", false, recoveryManagerService);
-
-
-      agroalDataSourceConfigurationSupplier.connectionPoolConfiguration().transactionIntegration(transactionIntegration);
+      agroalDataSourceConfigurationSupplier.connectionPoolConfiguration().transactionIntegration(
+          transactionIntegration);
 
       dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
 
-
-
-
-//      /*
-//       * The SAP JDBC driver does not return a DataSource, instead it provides connections so we
-//       * make use of the DriverManagerDataSource.
-//       */
-//      if (dataSourceClass.equals("com.sap.db.jdbc.Driver"))
-//      {
-//        DriverManagerDataSource ds = new DriverManagerDataSource();
-//        ds.setDriverClassName(dataSourceClass);
-//        ds.setUrl(url);
-//        dataSource = ds;
-//      }
-//      else
-//      {
-//        Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
-//            .loadClass(this.dataSourceClass).asSubclass(DataSource.class);
+//    /*
+//     * The SAP JDBC driver does not return a DataSource, instead it provides connections so we
+//     * make use of the DriverManagerDataSource.
+//     */
+//    if (dataSourceClass.equals("com.sap.db.jdbc.Driver"))
+//    {
+//      DriverManagerDataSource ds = new DriverManagerDataSource();
+//      ds.setDriverClassName(dataSourceClass);
+//      ds.setUrl(url);
+//      dataSource = ds;
+//    }
+//    else
+//    {
+//      Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
+//          .loadClass(this.dataSourceClass).asSubclass(DataSource.class);
 //
-//        dataSource = DataSourceBuilder.create().type(dataSourceClass).url(url).build();
-//      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(url).build();
+//    }
 
       Database databaseVendor = Database.DEFAULT;
 
@@ -354,67 +348,6 @@ public class ApplicationDatabaseConfiguration
       }
 
       return dataSource;
-
-//      if (dataSource instanceof XADataSource)
-//      {
-//        return new TransactionalDataSource((XADataSource) dataSource);
-//
-//        /*
-//         * AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
-//         *
-//         * atomikosDataSourceBean.setUniqueResourceName("ApplicationDataSource");
-//         * atomikosDataSourceBean.setXaDataSource((XADataSource) dataSource);
-//         *
-//         * if (databaseVendor == Database.SQL_SERVER)
-//         * {
-//         * // Set the test query
-//         * atomikosDataSourceBean.setTestQuery("SELECT 1;");
-//         *
-//         * // Set the XA properties if they are available
-//         * // See: https://www.atomikos.com/Documentation/ConfiguringSQLServer
-//         * if ((!StringUtils.isEmpty(xaServerName))
-//         *     && (!StringUtils.isEmpty(xaUsername))
-//         *     && (!StringUtils.isEmpty(xaPassword)))
-//         * {
-//         *   Properties p = new Properties();
-//         *   p.setProperty("serverName", xaServerName);
-//         *   p.setProperty("user", xaUsername);
-//         *   p.setProperty("password", xaPassword);
-//         *
-//         *   atomikosDataSourceBean.setXaProperties(p);
-//         * }
-//         * else
-//         * {
-//         *   throw new FatalBeanException(
-//         *       "No XA properties specified for the AtomikosDataSourceBean for Microsoft SQL Server");
-//         * }
-//         * }
-//         *
-//         * if (minPoolSize > 0)
-//         * {
-//         * atomikosDataSourceBean.setMinPoolSize(minPoolSize);
-//         * }
-//         * else
-//         * {
-//         * atomikosDataSourceBean.setMinPoolSize(1);
-//         * }
-//         *
-//         * if (maxPoolSize > 0)
-//         * {
-//         * atomikosDataSourceBean.setMaxPoolSize(maxPoolSize);
-//         * }
-//         * else
-//         * {
-//         * atomikosDataSourceBean.setMinPoolSize(5);
-//         * }
-//         *
-//         * return atomikosDataSourceBean;
-//         */
-//      }
-//      else
-//      {
-//        return dataSource;
-//      }
     }
     catch (Throwable e)
     {

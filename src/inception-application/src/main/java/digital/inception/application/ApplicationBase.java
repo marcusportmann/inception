@@ -93,21 +93,6 @@ public abstract class ApplicationBase
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
 
-  static
-  {
-    System.setProperty("com.atomikos.icatch.registered", "true");
-
-    try
-    {
-      System.setProperty("com.atomikos.icatch.tm_unique_name", NetworkUtil.getLocalHostLANAddress()
-          .getHostAddress());
-    }
-    catch (Throwable e)
-    {
-      logger.error("Failed to set the Atomikos transaction manager unique name", e);
-    }
-  }
-
   /**
    * The Spring application context.
    */

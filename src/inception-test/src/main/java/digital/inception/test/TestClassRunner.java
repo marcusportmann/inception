@@ -44,11 +44,6 @@ import javax.transaction.Transaction;
  */
 public class TestClassRunner extends SpringJUnit4ClassRunner
 {
-  static
-  {
-    System.setProperty("com.atomikos.icatch.registered", "true");
-  }
-
   /**
    * Constructs a new <code>TestClassRunner</code>.
    *
