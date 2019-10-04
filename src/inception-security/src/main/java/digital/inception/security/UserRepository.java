@@ -69,6 +69,8 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   List<User> findByUserDirectoryId(UUID userDirectoryId);
 
+  List<User> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
+
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
 //@Query("select j from Job j where upper(j.name) like :filter or upper(j.jobClass) like :filter")

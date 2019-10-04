@@ -99,8 +99,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
       .subscribe((userDirectoryType: UserDirectoryType) => {
         this.userDirectoryType = userDirectoryType;
 
-        this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', '', 0,
-          UserStatus.Active);
+        this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
 
         if (this.userDirectoryType!.code === 'InternalUserDirectory') {
           this.newUserForm.addControl('expiredPassword', new FormControl(false));

@@ -1004,7 +1004,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (StringUtils.isEmpty(filter))
       {
-        return getUserRepository().findAll(pageable).getContent();
+        return getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
       }
       else
       {

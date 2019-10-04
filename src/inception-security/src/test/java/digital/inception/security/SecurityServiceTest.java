@@ -734,7 +734,7 @@ public class SecurityServiceTest
 
     List<Organization> beforeRetrievedOrganizations = securityService.getOrganizations();
 
-    securityService.createOrganization(organization, false);
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     Organization retrievedOrganization = securityService.getOrganization(organization.getId());
 
@@ -787,6 +787,13 @@ public class SecurityServiceTest
         filteredOrganizations.size());
 
     compareOrganizations(organization, filteredOrganizations.get(0));
+
+    List<UserDirectorySummary> userDirectorySummaries = securityService.getUserDirectorySummariesForOrganization(organization.getId());
+
+    assertEquals("The correct number of user directory summaries (1) was not retrieved for the organization", 1,
+      userDirectorySummaries.size());
+
+    assertEquals("The correct user directory summary was not retrieved", userDirectory.getId(), userDirectorySummaries.get(0).getId());
 
     organization.setName("Updated " + organization.getName());
 
@@ -1011,6 +1018,13 @@ public class SecurityServiceTest
         filteredUserDirectories.size());
 
     compareUserDirectories(userDirectory, filteredUserDirectories.get(0));
+
+    List<UserDirectorySummary> filteredUserDirectorySummaries =
+        securityService.getUserDirectorySummaries(userDirectory.getName(), SortDirection.ASCENDING,
+        null, null);
+
+    assertEquals("The correct number of filtered user directory summaries (1) was not retrieved",
+        1, filteredUserDirectorySummaries.size());
 
     userDirectory.setName("Updated " + userDirectory.getName());
 

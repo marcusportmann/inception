@@ -52,12 +52,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @ApiModel(value = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-    "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
+    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry",
         "readOnly" })
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(name = "User", namespace = "http://security.inception.digital",
     propOrder = { "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-        "phoneNumber", "email", "password", "passwordAttempts", "passwordExpiry", "status",
+        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry",
         "readOnly" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity

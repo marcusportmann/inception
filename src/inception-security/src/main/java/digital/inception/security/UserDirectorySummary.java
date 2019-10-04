@@ -66,8 +66,8 @@ public class UserDirectorySummary
   @XmlTransient
   @ManyToMany(cascade = { CascadeType.REFRESH })
   @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id") ,
-      inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
+      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
   private Set<Organization> organizations = new HashSet<>();
 
   /**

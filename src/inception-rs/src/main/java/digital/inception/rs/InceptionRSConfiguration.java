@@ -50,13 +50,13 @@ public class InceptionRSConfiguration
   /**
    * Instruct browsers to allow the specified headers.
    */
-  @Value("${server.cors.allowedHeaders:")
+  @Value("${server.cors.allowedHeaders:}")
   private String[] corsAllowedHeaders;
 
   /**
    * Instruct browsers to allow the specified methods.
    */
-  @Value("${server.cors.allowedMethods:")
+  @Value("${server.cors.allowedMethods:}")
   private String[] corsAllowedMethods;
 
   /**
