@@ -98,7 +98,7 @@ public class SMSService
   /**
    * The maximum number of times sending will be attempted for a SMS.
    */
-  @Value("${application.sms.maximumSendAttempts:#{100}}")
+  @Value("${application.sms.maximumSendAttempts:100}")
   private int maximumSendAttempts;
 
   /**
@@ -122,7 +122,7 @@ public class SMSService
   /**
    *  The delay in milliseconds to wait before re-attempting to send a SMS.
    */
-  @Value("${application.sms.sendRetryDelay:#{600000}}")
+  @Value("${application.sms.sendRetryDelay:600000}")
   private int sendRetryDelay;
 
   /**

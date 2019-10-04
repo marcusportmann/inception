@@ -18,16 +18,13 @@ package digital.inception.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.atomikos.jdbc.AtomikosDataSourceBean;
-
 import digital.inception.core.util.JDBCUtil;
-
-import net.sf.cglib.proxy.Enhancer;
-
-import org.h2.jdbcx.JdbcDataSource;
-
+import io.agroal.api.AgroalDataSource;
+import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
+import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
+import io.agroal.api.transaction.TransactionIntegration;
+import io.agroal.narayana.NarayanaTransactionIntegration;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
@@ -47,20 +44,20 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
 import java.io.IOException;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
@@ -86,7 +83,7 @@ public class TestConfiguration
 {
   private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /**
    * The resources on the classpath that contain the SQL statements used to initialize the in-memory
@@ -99,11 +96,13 @@ public class TestConfiguration
    * Constructs a new <code>TestConfiguration</code>.
    *
    * @param applicationContext the Spring application context
+   *
    */
   public TestConfiguration(ApplicationContext applicationContext)
   {
     this.applicationContext = applicationContext;
   }
+
 
   /**
    * Returns the application entity manager factory associated with the application data source.
@@ -128,16 +127,14 @@ public class TestConfiguration
         getJpaPackagesToScan()));
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
-        PlatformTransactionManager.class);
+    Map<String, Object> jpaPropertyMap =
+      localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
-    if ((platformTransactionManager instanceof JtaTransactionManager))
+    PlatformTransactionManager transactionManager = applicationContext.getBean(PlatformTransactionManager.class);
+
+    if (transactionManager instanceof JtaTransactionManager)
     {
-      Map<String, Object> jpaPropertyMap =
-          localContainerEntityManagerFactoryBean.getJpaPropertyMap();
-
-      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) platformTransactionManager)));
+      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(((JtaTransactionManager) transactionManager)));
     }
 
     return localContainerEntityManagerFactoryBean;
@@ -184,27 +181,35 @@ public class TestConfiguration
       {
         try
         {
-          JdbcDataSource jdbcDataSource = new JdbcDataSource();
+          TransactionManager transactionManager = applicationContext.getBean(TransactionManager.class);
 
-          jdbcDataSource.setURL("jdbc:h2:mem:" + Thread.currentThread().getName()
-              + ";MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+          TransactionSynchronizationRegistry transactionSynchronizationRegistry = applicationContext.getBean(TransactionSynchronizationRegistry.class);
 
-          Runtime.getRuntime().addShutdownHook(new Thread(() ->
-              {
-                try
-                {
-                  try (Connection connection = jdbcDataSource.getConnection())
-                  {
-                    JDBCUtil.shutdownHsqlDatabase(connection);
-                  }
-                }
-                catch (Throwable e)
-                {
-                  throw new RuntimeException(
-                      "Failed to shutdown the in-memory application database", e);
-                }
-              }
-              ));
+          Properties agroalProperties = new Properties();
+          agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, "jdbc:h2:mem:" + Thread.currentThread().getName()
+            + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+          //db2Agroal.setProperty(AgroalPropertiesReader.PRINCIPAL, AgroalH2Utils.DB_USER);
+          //db2Agroal.setProperty(AgroalPropertiesReader.CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
+          //db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, AgroalH2Utils.DB_USER);
+          //db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
+          agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
+          agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "10");
+          AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(agroalProperties);
+          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier = agroalReaderProperties2.modify();
+          TransactionIntegration transactionIntegration = new NarayanaTransactionIntegration(
+            transactionManager,
+            transactionSynchronizationRegistry);
+
+
+
+//          TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
+//            com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
+//            "java:/agroalds2", false, recoveryManagerService);
+
+
+          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration().transactionIntegration(transactionIntegration);
+
+          dataSource = new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
 
           /*
            * Initialize the in-memory database using the SQL statements contained in the resources
@@ -215,7 +220,7 @@ public class TestConfiguration
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
                 && databaseInitResource.getFilename().startsWith("inception-"))
             {
-              loadSQL(jdbcDataSource, databaseInitResource);
+              loadSQL(dataSource, databaseInitResource);
             }
           }
 
@@ -228,25 +233,9 @@ public class TestConfiguration
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
                 && (!databaseInitResource.getFilename().startsWith("inception-")))
             {
-              loadSQL(jdbcDataSource, databaseInitResource);
+              loadSQL(dataSource, databaseInitResource);
             }
           }
-
-          Enhancer enhancer = new Enhancer();
-          enhancer.setSuperclass(AtomikosDataSourceBean.class);
-          enhancer.setCallback(new DataSourceTracker());
-
-          AtomikosDataSourceBean atomikosDataSourceBean =
-              (AtomikosDataSourceBean) enhancer.create();
-
-          atomikosDataSourceBean.setUniqueResourceName(Thread.currentThread().getName()
-              + "-ApplicationDataSource");
-
-          atomikosDataSourceBean.setXaDataSource(jdbcDataSource);
-          atomikosDataSourceBean.setMinPoolSize(5);
-          atomikosDataSourceBean.setMaxPoolSize(10);
-
-          dataSource = atomikosDataSourceBean;
         }
         catch (Throwable e)
         {
@@ -272,7 +261,7 @@ public class TestConfiguration
     return packagesToScan;
   }
 
-  private void loadSQL(JdbcDataSource jdbcDataSource, Resource databaseInitResource)
+  private void loadSQL(DataSource dataSource, Resource databaseInitResource)
     throws IOException, SQLException
   {
     try
@@ -281,7 +270,7 @@ public class TestConfiguration
       List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
 
       // Get a connection to the in-memory database
-      try (Connection connection = jdbcDataSource.getConnection())
+      try (Connection connection = dataSource.getConnection())
       {
         for (String sqlStatement : sqlStatements)
         {
@@ -290,11 +279,13 @@ public class TestConfiguration
             statement.execute(sqlStatement);
           }
         }
+
+        connection.commit();
       }
     }
     catch (SQLException e)
     {
-      try (Connection connection = jdbcDataSource.getConnection())
+      try (Connection connection = dataSource.getConnection())
       {
         JDBCUtil.shutdownHsqlDatabase(connection);
       }

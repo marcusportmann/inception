@@ -20,17 +20,12 @@ package digital.inception.security;
 
 import digital.inception.core.util.Base64Util;
 
-import org.springframework.util.StringUtils;
-
 //~--- JDK imports ------------------------------------------------------------
 
 import java.nio.charset.StandardCharsets;
 
 import java.security.MessageDigest;
 
-import java.sql.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

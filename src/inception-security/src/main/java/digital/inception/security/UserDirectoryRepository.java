@@ -46,24 +46,21 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
 
   boolean existsByNameIgnoreCase(String name);
 
-  @Query("select ud from UserDirectory ud join Organization o where o.id = :organizationId")
-  List<UserDirectory> findAllByOrganizationId(@Param("organizationId")UUID organizationId);
-
-  @Query("select o.id from Organization o join UserDirectory ud where ud.id = :userDirectoryId")
-  List<UUID> getOrganizationIdsById(@Param("userDirectoryId")UUID userDirectoryId);
-
-  @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
-  Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId")UUID userDirectoryId);
-
-
   List<UserDirectory> findAllByOrderByNameAsc(Pageable pageable);
 
   List<UserDirectory> findAllByOrderByNameDesc(Pageable pageable);
+
+  @Query("select ud from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
+  List<UserDirectory> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
 
   List<UserDirectory> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
   List<UserDirectory> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
 
+  @Query(
+      "select o.id from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
+  List<UUID> getOrganizationIdsById(@Param("userDirectoryId") UUID userDirectoryId);
 
-
+  @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
+  Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);
 }

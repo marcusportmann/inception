@@ -32,6 +32,8 @@ import java.sql.Connection;
 
 import java.util.Map;
 
+import javax.sql.XAConnection;
+
 import javax.transaction.Transaction;
 
 /**
@@ -80,12 +82,13 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
   {
     super.runChild(method, notifier);
 
-    checkForActiveTransactions(method,
-        TransactionManagerTransactionTracker.getActiveTransactionStackTraces());
+    checkForActiveTransactions(method, TransactionManagerProxy.getActiveTransactionStackTraces());
 
-    checkForActiveTransactions(method, UserTransactionTracker.getActiveTransactionStackTraces());
+    checkForActiveTransactions(method, UserTransactionProxy.getActiveTransactionStackTraces());
 
-    checkForOpenDatabaseConnections(method, DataSourceTracker.getActiveDatabaseConnections());
+    checkForOpenDatabaseConnections(method, DataSourceProxy.getActiveDatabaseConnections());
+
+    checkForOpenXADatabaseConnections(method, XADataSourceProxy.getActiveXADatabaseConnections());
   }
 
   private void checkForActiveTransactions(FrameworkMethod method, Map<Transaction,
@@ -121,8 +124,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
   {
     for (Connection connection : activeDatabaseConnections.keySet())
     {
-      StackTraceElement[] stackTrace = DataSourceTracker.getActiveDatabaseConnections().get(
-          connection);
+      StackTraceElement[] stackTrace = activeDatabaseConnections.get(connection);
 
       for (int i = 0; i < stackTrace.length; i++)
       {
@@ -143,6 +145,33 @@ public class TestClassRunner extends SpringJUnit4ClassRunner
         }
       }
     }
+  }
 
+  private void checkForOpenXADatabaseConnections(FrameworkMethod method, Map<XAConnection,
+      StackTraceElement[]> activeXADatabaseConnections)
+  {
+    for (XAConnection connection : activeXADatabaseConnections.keySet())
+    {
+      StackTraceElement[] stackTrace = activeXADatabaseConnections.get(connection);
+
+      for (int i = 0; i < stackTrace.length; i++)
+      {
+        if (stackTrace[i].getMethodName().equals("getXAConnection"))
+        {
+          LoggerFactory.getLogger(TestClassRunner.class).warn(
+              "Failed to successfully execute the test (" + method.getName() + "): Found an "
+              + "unexpected open XA database connection (" + connection.toString() + ") that was "
+              + "retrieved by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+
+          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
+              + "): Found an unexpected open XA database connection (" + connection.toString()
+              + ") that was retrieved by the method (" + stackTrace[i + 1].getMethodName()
+              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
+              + stackTrace[i + 1].getLineNumber() + ")");
+        }
+      }
+    }
   }
 }

@@ -132,7 +132,7 @@ public class SystemMessageTest
 
     OrganizationData organization = organizations.get(0);
 
-    assertEquals("c1685b92-9fe5-453a-995b-89d8c0f29cb5", organization.getId());
+    assertEquals(UUID.fromString("c1685b92-9fe5-453a-995b-89d8c0f29cb5"), organization.getId());
     assertEquals("Administration", organization.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());

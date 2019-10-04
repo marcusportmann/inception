@@ -69,7 +69,7 @@ public class SchedulerService
   /*
    * The delay in milliseconds between successive attempts to execute a job.
    */
-  @Value("${application.scheduler.jobExecutionRetryDelay:#{60000}}")
+  @Value("${application.scheduler.jobExecutionRetryDelay:60000}")
   private int jobExecutionRetryDelay;
 
   /**
@@ -80,7 +80,7 @@ public class SchedulerService
   /*
    * The maximum number of times execution will be attempted for a job.
    */
-  @Value("${application.scheduler.maximumJobExecutionAttempts:#{144}}")
+  @Value("${application.scheduler.maximumJobExecutionAttempts:144}")
   private int maximumJobExecutionAttempts;
 
   /**
@@ -241,7 +241,7 @@ public class SchedulerService
     {
       if (!StringUtils.isEmpty(filter))
       {
-        return jobRepository.findFiltered("%" + filter.toUpperCase() + "%");
+        return jobRepository.findFiltered("%" + filter + "%");
       }
       else
       {

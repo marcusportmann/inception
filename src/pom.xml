@@ -75,7 +75,7 @@
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
-    <atomikos.version>5.0.1</atomikos.version>
+    <agroal-pool.version>1.6</agroal-pool.version>
     <apache-avro.version>1.8.2</apache-avro.version>
     <cglib.version>3.2.12</cglib.version>
     <commons-io.version>2.6</commons-io.version>
@@ -88,9 +88,15 @@
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <metrics-core.version>4.0.5</metrics-core.version>
     <mssql-jdbc.version>7.2.1.jre11</mssql-jdbc.version>
+    <narayana.version>5.9.8.Final</narayana.version>
+
+
     <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
+
+    <!--<spring-boot-starter-jta-narayana.version>2.0.9.RELEASE</spring-boot-starter-jta-narayana.version>-->
+
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
@@ -106,11 +112,6 @@
         <version>${cglib.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.atomikos</groupId>
-        <artifactId>transactions</artifactId>
-        <version>${atomikos.version}</version>
-      </dependency>
-      <dependency>
         <groupId>com.microsoft.sqlserver</groupId>
         <artifactId>mssql-jdbc</artifactId>
         <version>${mssql-jdbc.version}</version>
@@ -124,6 +125,16 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons-io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.agroal</groupId>
+        <artifactId>agroal-pool</artifactId>
+        <version>${agroal-pool.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.agroal</groupId>
+        <artifactId>agroal-narayana</artifactId>
+        <version>${agroal-pool.version}</version>
       </dependency>
       <dependency>
         <groupId>io.dropwizard.metrics</groupId>
@@ -185,6 +196,36 @@
         <artifactId>hibernate-validator</artifactId>
         <version>${hibernate-validator.version}</version>
       </dependency>
+
+      <!--
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jta-narayana</artifactId>
+        <version>${spring-boot-starter-jta-narayana.version}</version>
+      </dependency>
+      -->
+
+      <dependency>
+        <groupId>org.jboss.narayana.jta</groupId>
+        <artifactId>jdbc</artifactId>
+        <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.narayana.jta</groupId>
+        <artifactId>jms</artifactId>
+        <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.narayana.jta</groupId>
+        <artifactId>jta</artifactId>
+        <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.narayana.jts</groupId>
+        <artifactId>narayana-jts-integration</artifactId>
+        <version>${narayana.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-jwt</artifactId>

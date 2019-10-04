@@ -16,9 +16,14 @@
 
 package digital.inception.security;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.annotations.ApiModel;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
@@ -37,10 +42,8 @@ public enum PasswordChangeReason
 {
   @XmlEnumValue("User")
   USER(0, "User"),
-
   @XmlEnumValue("Administrative")
   ADMINISTRATIVE(1, "Administrative"),
-
   @XmlEnumValue("Forgotten")
   FORGOTTEN(2, "Forgotten");
 

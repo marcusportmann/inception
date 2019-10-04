@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.*;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -57,6 +58,17 @@ public class Organization
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The user directories associated with the organization.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
+  private Set<UserDirectory> userDirectories = new HashSet<>();
 
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
@@ -91,41 +103,6 @@ public class Organization
   @XmlElement(name = "Status", required = true)
   @Column(name = "status", nullable = false)
   private OrganizationStatus status;
-
-  /**
-   * The user directories associated with the organization.
-   */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-    joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id")
-  )
-  private Set<UserDirectory> userDirectories = new HashSet<>();
-
-  /**
-   * Link the user directory to the organization.
-   *
-   * @param userDirectory the user directory
-   */
-  public void linkUserDirectory(UserDirectory userDirectory)
-  {
-    userDirectories.add(userDirectory);
-    userDirectory.getOrganizations().add(this);
-  }
-
-  /**
-   * Unlink the user directory from the organization.
-   *
-   * @param userDirectory the user directory
-   */
-  public void unlinkUserDirectory(UserDirectory userDirectory)
-  {
-    userDirectories.remove(userDirectory);
-    userDirectory.getOrganizations().remove(this);
-  }
-
 
   /**
    * Constructs a new <code>Organization</code>.
@@ -209,6 +186,16 @@ public class Organization
   }
 
   /**
+   * Returns the user directories associated with the organization.
+   *
+   * @return the user directories associated with the organization
+   */
+  public Set<UserDirectory> getUserDirectories()
+  {
+    return userDirectories;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -219,6 +206,17 @@ public class Organization
     return (id == null)
         ? 0
         : id.hashCode();
+  }
+
+  /**
+   * Link the user directory to the organization.
+   *
+   * @param userDirectory the user directory
+   */
+  public void linkUserDirectory(UserDirectory userDirectory)
+  {
+    userDirectories.add(userDirectory);
+    userDirectory.getOrganizations().add(this);
   }
 
   /**
@@ -249,5 +247,26 @@ public class Organization
   public void setStatus(OrganizationStatus status)
   {
     this.status = status;
+  }
+
+  /**
+   * Set the user directories associated with the organization.
+   *
+   * @param userDirectories the user directories associated with the organization
+   */
+  public void setUserDirectories(Set<UserDirectory> userDirectories)
+  {
+    this.userDirectories = userDirectories;
+  }
+
+  /**
+   * Unlink the user directory from the organization.
+   *
+   * @param userDirectory the user directory
+   */
+  public void unlinkUserDirectory(UserDirectory userDirectory)
+  {
+    userDirectories.remove(userDirectory);
+    userDirectory.getOrganizations().remove(this);
   }
 }

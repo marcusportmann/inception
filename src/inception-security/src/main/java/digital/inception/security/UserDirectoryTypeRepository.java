@@ -23,12 +23,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * The <code>UserDirectoryTypeRepository</code> interface declares the repository for the
  * <code>UserDirectoryType</code> domain type.

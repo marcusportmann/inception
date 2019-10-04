@@ -19,8 +19,10 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -28,14 +30,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.lang.reflect.Constructor;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.
@@ -456,7 +459,7 @@ public class SecurityService
    *         <code>null</code> if no user directory was created
    */
   @Override
-  @Transactional(rollbackFor = Exception.class)
+  @Transactional
   public UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
     throws DuplicateOrganizationException, SecurityServiceException
   {
@@ -481,7 +484,7 @@ public class SecurityService
         organization.linkUserDirectory(userDirectory);
       }
 
-      organizationRepository.save(organization);
+      organizationRepository.saveAndFlush(organization);
 
       try
       {
@@ -569,8 +572,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to create the user directory (%s)",
-          userDirectory.getName()), e);
+      throw new SecurityServiceException("Failed to create the user directory ("
+          + userDirectory.getName() + ")", e);
     }
   }
 
@@ -599,8 +602,7 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the function (%s)",
-          functionCode), e);
+      throw new SecurityServiceException("Failed to delete the function (" + functionCode + ")", e);
     }
   }
 
@@ -653,8 +655,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the organization (%s)",
-          organizationId), e);
+      throw new SecurityServiceException("Failed to delete the organization (" + organizationId
+          + ")", e);
     }
   }
 
@@ -715,8 +717,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to delete the user directory (%s)",
-          userDirectoryId), e);
+      throw new SecurityServiceException("Failed to delete the user directory (" + userDirectoryId
+          + ")", e);
     }
   }
 
@@ -773,8 +775,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the function (%s)",
-          functionCode), e);
+      throw new SecurityServiceException("Failed to retrieve the function (" + functionCode + ")",
+          e);
     }
   }
 
@@ -964,8 +966,8 @@ public class SecurityService
       }
       else
       {
-        return organizationRepository.countByNameContainingIgnoreCase(String.format("%%%s%%",
-            filter.toUpperCase()));
+        return organizationRepository.countByNameContainingIgnoreCase("%" + filter.toUpperCase()
+            + "%");
       }
     }
     catch (Throwable e)
@@ -1005,8 +1007,8 @@ public class SecurityService
       }
       else
       {
-        return userDirectoryRepository.countByNameContainingIgnoreCase(String.format("%%%s%%",
-            filter.toUpperCase()));
+        return userDirectoryRepository.countByNameContainingIgnoreCase("%" + filter.toUpperCase()
+            + "%");
       }
     }
     catch (Throwable e)
@@ -1082,8 +1084,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the organization (%s)",
-          organizationId), e);
+      throw new SecurityServiceException("Failed to retrieve the organization (" + organizationId
+          + ")", e);
     }
   }
 
@@ -1115,9 +1117,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the IDs for the organizations for the user directory (%s)",
-          userDirectoryId), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the IDs for the organizations for the user directory ("
+          + userDirectoryId + ")", e);
     }
   }
 
@@ -1241,9 +1243,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the organizations associated with the user directory (%s)",
-          userDirectoryId), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the organizations associated with the user directory ("
+          + userDirectoryId + ")", e);
     }
   }
 
@@ -1396,9 +1398,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directories associated with the organization (%s)",
-          organizationId), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the user directories associated with the organization ("
+          + organizationId + ")", e);
     }
   }
 
@@ -1434,8 +1436,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory (%s)", userDirectoryId), e);
+      throw new SecurityServiceException("Failed to retrieve the user directory ("
+          + userDirectoryId + ")", e);
     }
   }
 
@@ -1488,8 +1490,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory ID for the user (%s)", username), e);
+      throw new SecurityServiceException("Failed to retrieve the user directory ID for the user ("
+          + username + ")", e);
     }
   }
 
@@ -1521,9 +1523,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the IDs for the user directories associated with the organization (%s)",
-          organizationId), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the IDs for the user directories associated with the organization ("
+          + organizationId + ")", e);
     }
   }
 
@@ -1614,8 +1616,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to retrieve the summaries for the"
-          + " user directories associated with the organization (%s)", organizationId), e);
+      throw new SecurityServiceException("Failed to retrieve the summaries for the user "
+          + "directories associated with the organization (" + organizationId + ")", e);
     }
   }
 
@@ -1660,9 +1662,9 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user directory type for the user directory (%s)",
-          userDirectoryId), e);
+      throw new SecurityServiceException(
+        "Failed to retrieve the user directory type for the user directory (" + userDirectoryId +
+          ")", e);
     }
   }
 
@@ -1781,9 +1783,8 @@ public class SecurityService
 
         if (userDirectoryType == null)
         {
-          logger.error(String.format(
-              "Failed to load the user directory (%s): The user directory type (%s) was not loaded",
-              userDirectory.getId(), userDirectory.getType()));
+          logger.error("Failed to load the user directory (" + userDirectory.getId()
+              + "): The user directory type (" + userDirectory.getType() + ") was not loaded");
 
           continue;
         }
@@ -1794,9 +1795,9 @@ public class SecurityService
 
           if (!IUserDirectory.class.isAssignableFrom(clazz))
           {
-            throw new SecurityServiceException(String.format(
-                "The user directory class (%s) does not implement the IUserDirectory interface",
-                userDirectoryType.getUserDirectoryClassName()));
+            throw new SecurityServiceException("The user directory class ("
+                + userDirectoryType.getUserDirectoryClassName()
+                + ") does not implement the IUserDirectory interface");
           }
 
           Class<? extends IUserDirectory> userDirectoryClass = clazz.asSubclass(
@@ -1808,9 +1809,9 @@ public class SecurityService
 
           if (userDirectoryClassConstructor == null)
           {
-            throw new SecurityServiceException(String.format(
-                "The user directory class (%s) does not provide a valid constructor (long, "
-                + "Map<String,String>)", userDirectoryType.getUserDirectoryClassName()));
+            throw new SecurityServiceException("The user directory class ("
+                + userDirectoryType.getUserDirectoryClassName()
+                + ") does not provide a valid constructor (long, Map<String,String>)");
           }
 
           IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
@@ -1823,9 +1824,8 @@ public class SecurityService
         }
         catch (Throwable e)
         {
-          throw new SecurityServiceException(String.format(
-              "Failed to initialize the user directory (%s)(%s)", userDirectory.getId(),
-              userDirectory.getName()), e);
+          throw new SecurityServiceException("Failed to initialize the user directory ("
+              + userDirectory.getId() + ")(" + userDirectory.getName() + ")", e);
         }
       }
 
@@ -1929,8 +1929,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to update the function (%s)",
-          function.getCode()), e);
+      throw new SecurityServiceException("Failed to update the function (" + function.getCode()
+          + ")", e);
     }
   }
 
@@ -1981,8 +1981,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to update the organization (%s)",
-          organization.getId()), e);
+      throw new SecurityServiceException("Failed to update the organization ("
+          + organization.getId() + ")", e);
     }
   }
 
@@ -2035,8 +2035,8 @@ public class SecurityService
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format("Failed to update the user directory (%s)",
-          userDirectory.getName()), e);
+      throw new SecurityServiceException("Failed to update the user directory ("
+          + userDirectory.getName() + ")", e);
     }
   }
 
@@ -2130,9 +2130,8 @@ public class SecurityService
         }
         catch (Throwable e)
         {
-          logger.error(String.format("Failed to load the user directory type (%s): "
-              + "Failed to retrieve the user directory class for the user directory type",
-              userDirectoryType.getCode()), e);
+          logger.error("Failed to load the user directory type (" + userDirectoryType.getCode()
+              + "): Failed to retrieve the user directory class for the user directory type", e);
 
           continue;
         }

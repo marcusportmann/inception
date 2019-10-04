@@ -46,7 +46,8 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Query("delete from Job j where j.id = :jobId")
   void deleteById(@Param("jobId") UUID jobId);
 
-  @Query("select j from Job j where upper(j.name) like :filter or upper(j.jobClass) like :filter")
+  @Query("select j from Job j where upper(j.name) like upper(:filter) or upper(j.jobClass) "
+      + "like upper(:filter)")
   List<Job> findFiltered(String filter);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)

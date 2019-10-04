@@ -44,44 +44,44 @@ public class InceptionRSConfiguration
    * Instruct browsers to expose the response to frontend JavaScript code when the request's
    * credentials mode (Request.credentials) is "include".
    */
-  @Value("${server.cors.allowCredentials:#{false}}")
+  @Value("${server.cors.allowCredentials:false}")
   private boolean corsAllowCredentials;
 
   /**
    * Instruct browsers to allow the specified headers.
    */
-  @Value("${server.cors.allowedHeaders:#{false}}")
+  @Value("${server.cors.allowedHeaders:")
   private String[] corsAllowedHeaders;
 
   /**
    * Instruct browsers to allow the specified methods.
    */
-  @Value("${server.cors.allowedMethods:#{false}}")
+  @Value("${server.cors.allowedMethods:")
   private String[] corsAllowedMethods;
 
   /**
    * Instruct browsers to allow code from the specified origins.
    */
-  @Value("${server.cors.allowedOrigins:#{false}}")
+  @Value("${server.cors.allowedOrigins:}")
   private String[] corsAllowedOrigins;
 
   /**
    * Enable cross-origin resource sharing (CORS).
    */
-  @Value("${server.cors.enabled:#{false}}")
+  @Value("${server.cors.enabled:false}")
   private boolean corsEnabled;
 
   /**
    * Instruct browsers to expose the specified headers.
    */
-  @Value("${server.cors.exposedHeaders:#{false}}")
+  @Value("${server.cors.exposedHeaders:}")
   private String[] corsExposedHeaders;
 
   /**
    * How long the results of a preflight request (that is the information contained in the
    * Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.
    */
-  @Value("${server.cors.maxAge:#{3600}}")
+  @Value("${server.cors.maxAge:3600}")
   private long corsMaxAge;
 
   /**

@@ -49,13 +49,14 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
 
   List<Organization> findAllByOrderByNameDesc(Pageable pageable);
 
-  @Query("select o from Organization o join UserDirectory ud where ud.id = :userDirectoryId")
+  @Query("select o from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
   List<Organization> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   List<Organization> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
   List<Organization> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
 
-  @Query("select ud.id from UserDirectory ud join Organization o where o.id = :organizationId")
+  @Query(
+      "select ud.id from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
   List<UUID> getUserDirectoryIdsById(@Param("organizationId") UUID organizationId);
 }

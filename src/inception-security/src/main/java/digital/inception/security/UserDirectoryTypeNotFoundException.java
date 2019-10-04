@@ -38,8 +38,9 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The user directory type could not be found")
-@WebFault(name = "UserDirectoryTypeNotFoundException", targetNamespace = "http://security.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+@WebFault(name = "UserDirectoryTypeNotFoundException",
+    targetNamespace = "http://security.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused" })
 public class UserDirectoryTypeNotFoundException extends ServiceException

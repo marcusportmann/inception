@@ -19,24 +19,21 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
-import digital.inception.test.DataSourceTracker;
-
+import digital.inception.test.DataSourceProxy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-//~--- JDK imports ------------------------------------------------------------
-
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.Map;
 import java.util.Set;
 
-import javax.sql.DataSource;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -90,10 +87,10 @@ public class TestTransactionalService
       statement.setString(2, testData.getName());
       statement.setString(3, testData.getValue());
 
-      Set<Connection> connections = DataSourceTracker.getActiveDatabaseConnections().keySet();
+      Set<Connection> connections = DataSourceProxy.getActiveDatabaseConnections().keySet();
 
       Map<Connection, StackTraceElement[]> connectionMap =
-          DataSourceTracker.getActiveDatabaseConnections();
+        DataSourceProxy.getActiveDatabaseConnections();
 
       if (statement.executeUpdate() != 1)
       {

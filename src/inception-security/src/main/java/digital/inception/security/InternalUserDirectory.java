@@ -22,26 +22,17 @@ import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.PasswordUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -70,12 +61,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
-//  /**
-//   * The data source used to provide connections to the application database.
-//   */
-//  @Autowired
-//  @Qualifier("applicationDataSource")
-//  private DataSource dataSource;
+///**
+// * The data source used to provide connections to the application database.
+// */
+//@Autowired
+//@Qualifier("applicationDataSource")
+//private DataSource dataSource;
 
   /**
    * The ID generator.
@@ -419,7 +410,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateGroupException(group.getGroupName());
       }
 
-      //group.setId(idGenerator.nextUUID());
+      // group.setId(idGenerator.nextUUID());
       group.setUserDirectoryId(getUserDirectoryId());
 
       getGroupRepository().saveAndFlush(group);
@@ -594,6 +585,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       User userCriteria = new User();
 
+      userCriteria.setUserDirectoryId(getUserDirectoryId());
+
       for (Attribute attribute : attributes)
       {
         if (attribute.getName().equalsIgnoreCase("status"))
@@ -630,7 +623,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
       }
 
-      ExampleMatcher matcher = ExampleMatcher.matching().withIncludeNullValues().withIgnoreCase()
+      ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues().withIgnoreCase()
           .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
       return getUserRepository().findAll(Example.of(userCriteria, matcher));
@@ -771,9 +764,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user directory (%s)",
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the security groups for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
@@ -799,7 +792,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      return getGroupRepository().findGroupsForUserById(userIdOptional.get());
+      return getUserRepository().getGroupsByUserId(userIdOptional.get());
     }
     catch (UserNotFoundException e)
     {
@@ -807,9 +800,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security groups for the user (%s) for the user directory (%s)",
-          username, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the security groups for the user ("
+          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -828,9 +820,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of security groups for the user directory (%s)",
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the number of security groups for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -849,19 +841,18 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       if (StringUtils.isEmpty(filter))
       {
-        return getUserRepository().count();
+        return getUserRepository().countByUserDirectoryId(getUserDirectoryId());
       }
       else
       {
-        return getUserRepository().countByUsernameIgnoreCaseContainingOrFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining(
-            filter, filter, filter);
+        return getUserRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
       }
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the number of users for the user directory (%s)",
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the number of users for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
@@ -895,9 +886,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the role codes for the user (%s) for the user directory (%s)",
-          username, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the role codes for the user ("
+          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -932,9 +922,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -953,8 +942,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the users for the user directory (%s)", getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the users for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -977,6 +966,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     try
     {
       Pageable pageable = null;
+
+      if (pageIndex == null)
+      {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null)
+      {
+        pageSize = maxFilteredUsers;
+      }
 
       if (sortBy == UserSortBy.USERNAME)
       {
@@ -1009,16 +1008,15 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       else
       {
-        return getUserRepository().findByUsernameIgnoreCaseContainingOrFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining(
-            filter, filter, filter, pageable);
+        return getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
       }
 
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the filtered users for the user directory (%s)",
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the filtered users for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
@@ -1041,9 +1039,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to check whether the user (%s) is an existing user for the user directory (%s)",
-          username, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to check whether the user (" + username
+          + ") is an existing user for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1088,9 +1085,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to check if the user (%s) is in the security group (%s) for the user directory "
-          + "(%s)", username, groupName, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to check if the user (" + username
+          + ") is in the security group (" + groupName + ") for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1132,9 +1129,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s)",
-          username, groupName, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to remove the user (" + username
+          + ") from the security group (" + groupName + ") for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1192,9 +1189,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to update the security group (%s) for the user directory (%s)",
-          group.getGroupName(), getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to update the security group ("
+          + group.getGroupName() + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1248,7 +1244,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (!StringUtils.isEmpty(user.getPassword()))
       {
-        existingUser.setPhoneNumber(user.getPassword());
+        existingUser.setPassword(createPasswordHash(user.getPassword()));
       }
 
       if (lockUser)
@@ -1277,9 +1273,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to update the user (%s) for the user directory (%s)", user.getUsername(),
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to update the user (" + user.getUsername()
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 

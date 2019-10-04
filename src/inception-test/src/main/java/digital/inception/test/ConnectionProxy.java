@@ -57,7 +57,7 @@ public class ConnectionProxy
   public void close()
     throws SQLException
   {
-    DataSourceTracker.getActiveDatabaseConnections().remove(this);
+    DataSourceProxy.getActiveDatabaseConnections().remove(this);
 
     connection.close();
   }
@@ -235,7 +235,7 @@ public class ConnectionProxy
   public boolean isWrapperFor(Class<?> iface)
     throws SQLException
   {
-    return connection.isWrapperFor(iface);
+    return iface.isAssignableFrom(getClass());
   }
 
   @Override
@@ -422,10 +422,21 @@ public class ConnectionProxy
     return connection.toString();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T unwrap(Class<T> iface)
     throws SQLException
   {
-    return connection.unwrap(iface);
+    if (isWrapperFor(iface))
+    {
+      return (T) this;
+    }
+
+    if (iface.isAssignableFrom(this.connection.getClass()))
+    {
+      return (T) this.connection;
+    }
+
+    throw new SQLException(getClass() + " is not a wrapper for " + iface);
   }
 }

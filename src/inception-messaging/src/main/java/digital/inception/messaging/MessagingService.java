@@ -139,7 +139,7 @@ public class MessagingService
   /**
    * The maximum number of times processing will be attempted for a message.
    */
-  @Value("${application.messaging.maximumProcessingAttempts:#{1000}}")
+  @Value("${application.messaging.maximumProcessingAttempts:1000}")
   private int maximumProcessingAttempts;
 
   /**
@@ -166,7 +166,7 @@ public class MessagingService
   /**
    * The delay in milliseconds to wait before re-attempting to process a message.
    */
-  @Value("${application.messaging.processingRetryDelay:#{60000}}")
+  @Value("${application.messaging.processingRetryDelay:60000}")
   private int processingRetryDelay;
 
   /**

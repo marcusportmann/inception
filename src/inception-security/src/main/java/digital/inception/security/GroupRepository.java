@@ -22,6 +22,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -45,10 +46,14 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   long countByUserDirectoryId(UUID userDirectoryId);
 
+  @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
+  long countUsersById(@Param("groupId") UUID groupId);
+
   @Modifying
   @Query("delete from Group g where g.id = :groupId")
   void deleteById(@Param("groupId") UUID groupId);
 
+  @Transactional
   boolean existsByUserDirectoryIdAndGroupNameIgnoreCase(UUID userDirectoryId, String groupName);
 
   List<Group> findByUserDirectoryId(UUID userDirectoryId);
@@ -56,16 +61,10 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
   Optional<Group> findByUserDirectoryIdAndGroupNameIgnoreCase(UUID userDirectoryId,
       String groupName);
 
-  @Query("select g from Group g inner join User u where u.id = :userId")
-  List<Group> findGroupsForUserById(@Param("userId") UUID userId);
-
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
       + "upper(g.groupName) like upper(:groupName)")
   Optional<UUID> getIdByUserDirectoryIdAndGroupNameIgnoreCase(@Param(
       "userDirectoryId") UUID userDirectoryId, @Param("groupName") String groupName);
-
-  @Query("select count(u.id) from Group g inner join User u where g.id = :groupId")
-  long countUsersById(@Param("groupId") UUID groupId);
 
   @Modifying
   @Query(value = "delete from security.user_to_group_map "
