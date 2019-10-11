@@ -95,9 +95,9 @@ INSERT INTO security.users (id, user_directory_id, username, status, first_name,
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
   VALUES ('22166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amir.Wells@refrigeratorsignal.com'), 1, 'Amir', 'Wells', '', '', 'Amir.Wells@refrigeratorsignal.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
-INSERT INTO security.groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('956c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Organization Administrators', 'Organization Administrators');
-INSERT INTO security.groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('146c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Password Resetters', 'Password Resetters');
 
 INSERT INTO security.user_to_group_map (user_id, group_id)
@@ -292,9 +292,9 @@ INSERT INTO security.users (id, user_directory_id, username, status, first_name,
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
   VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'davis', 1, 'Davis', 'Parks', '', '', 'davis@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
-INSERT INTO security.groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('69aea0f3-5798-4ee8-9082-6c41feba3472', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Organization Administrators', 'Organization Administrators');
-INSERT INTO security.groups (id, user_directory_id, groupname, description)
+INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Password Resetters', 'Password Resetters');
 
 INSERT INTO security.user_to_group_map (user_id, group_id)

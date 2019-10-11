@@ -27,8 +27,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 /**
  * The <code>OrganizationData</code> class holds the information for an organization.
  *
@@ -40,9 +38,9 @@ public class OrganizationData
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * The ID used to uniquely identify the organization.
    */
-  private UUID id;
+  private Long id;
 
   /**
    * The name of the organization.
@@ -58,7 +56,7 @@ public class OrganizationData
   {
     try
     {
-      this.id = UUID.fromString(element.getChildText("Id"));
+      this.id = Long.parseLong(element.getChildText("Id"));
       this.name = StringUtils.isEmpty(element.getChildText("Name"))
           ? ""
           : element.getChildText("Name");
@@ -81,11 +79,11 @@ public class OrganizationData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Returns the ID used to uniquely identify the organization.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @return the ID used to uniquely identify the organization
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -101,11 +99,11 @@ public class OrganizationData
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Set the ID used to uniquely identify the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param id the ID used to uniquely identify the organization
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

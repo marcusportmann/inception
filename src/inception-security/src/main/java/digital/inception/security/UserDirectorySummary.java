@@ -30,7 +30,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -60,28 +59,15 @@ public class UserDirectorySummary
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The user directories associated with the organization.
+   * The ID used to uniquely identify the user directory.
    */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(cascade = { CascadeType.REFRESH })
-  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id") ,
-      inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
-  private Set<Organization> organizations = new HashSet<>();
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
 
   /**
    * The name of the user directory.
@@ -93,6 +79,17 @@ public class UserDirectorySummary
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
+
+  /**
+   * The user directories associated with the organization.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.REFRESH })
+  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
+  private Set<Organization> organizations = new HashSet<>();
 
   /**
    * The code used to uniquely identify the user directory type.
@@ -143,11 +140,11 @@ public class UserDirectorySummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the ID used to uniquely identify the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the ID used to uniquely identify the user directory
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -180,17 +177,15 @@ public class UserDirectorySummary
   @Override
   public int hashCode()
   {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (int) (id ^ (id >>> 32));
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Set the ID used to uniquely identify the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param id the ID used to uniquely identify the user directory
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

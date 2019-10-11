@@ -352,10 +352,10 @@
 //  }
 //
 //  /**
-//   * Add the user to the security group.
+//   * Add the user to the group.
 //   *
 //   * @param username  the username identifying the user
-//   * @param groupName the name of the security group uniquely identifying the security group
+//   * @param groupName the name identifying the group
 //   */
 //  @Override
 //  public void addUserToGroup(String username, String groupName)
@@ -418,7 +418,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to add the user (%s) to the security group (%s) for the user directory (%s)",
+//          "Failed to add the user (%s) to the group (%s) for the user directory (%s)",
 //          username, groupName, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -663,9 +663,9 @@
 //  }
 //
 //  /**
-//   * Create the new security group.
+//   * Create the new group.
 //   *
-//   * @param group the security group
+//   * @param group the group
 //   */
 //  @Override
 //  public void createGroup(Group group)
@@ -677,11 +677,11 @@
 //    {
 //      dirContext = getDirContext(bindDN, bindPassword);
 //
-//      LdapName groupDN = getGroupDN(dirContext, group.getGroupName());
+//      LdapName groupDN = getGroupDN(dirContext, group.getName());
 //
 //      if (groupDN != null)
 //      {
-//        throw new DuplicateGroupException(group.getGroupName());
+//        throw new DuplicateGroupException(group.getName());
 //      }
 //
 //      Attributes attributes = new BasicAttributes();
@@ -689,7 +689,7 @@
 //      attributes.put(new BasicAttribute("objectclass", "top"));
 //      attributes.put(new BasicAttribute("objectclass", groupObjectClass));
 //
-//      attributes.put(new BasicAttribute(groupNameAttribute, group.getGroupName()));
+//      attributes.put(new BasicAttribute(groupNameAttribute, group.getName()));
 //
 //      if (!StringUtils.isEmpty(groupDescriptionAttribute))
 //      {
@@ -699,13 +699,13 @@
 //            : group.getDescription()));
 //      }
 //
-//      dirContext.bind(groupNameAttribute + "=" + group.getGroupName() + ","
+//      dirContext.bind(groupNameAttribute + "=" + group.getName() + ","
 //          + groupBaseDN.toString(), dirContext, attributes);
 //
 //      // Create the corresponding group in the database that will be used to map to one or more roles
 //      String groupId = idGenerator.nextUUID().toString();
 //
-//      createGroup(connection, groupId, group.getGroupName(), group.getDescription());
+//      createGroup(connection, groupId, group.getName(), group.getDescription());
 //
 //      group.setId(groupId);
 //      group.setUserDirectoryId(getUserDirectoryId());
@@ -717,8 +717,8 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to create the security group (%s) for the user directory (%s)",
-//          group.getGroupName(), getUserDirectoryId()), e);
+//          "Failed to create the group (%s) for the user directory (%s)",
+//          group.getName(), getUserDirectoryId()), e);
 //    }
 //    finally
 //    {
@@ -839,12 +839,12 @@
 //  }
 //
 //  /**
-//   * Delete the security group.
+//   * Delete the group.
 //   *
-//   * @param groupName the name of the security group uniquely identifying the security group
+//   * @param name the name identifying the group
 //   */
 //  @Override
-//  public void deleteGroup(String groupName)
+//  public void deleteGroup(String name)
 //    throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
 //  {
 //    DirContext dirContext = null;
@@ -857,7 +857,7 @@
 //
 //      if (groupDN == null)
 //      {
-//        throw new GroupNotFoundException(groupName);
+//        throw new GroupNotFoundException(name);
 //      }
 //
 //      Attributes attributes = dirContext.getAttributes(groupDN, groupMemberAttributeArray);
@@ -871,7 +871,7 @@
 //      dirContext.destroySubcontext(groupDN);
 //
 //      // Delete the corresponding group in the database
-//      deleteGroup(connection, groupName);
+//      deleteGroup(connection, name);
 //    }
 //    catch (GroupNotFoundException | ExistingGroupMembersException e)
 //    {
@@ -880,7 +880,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
+//          "Failed to delete the group (%s) for the user directory (%s)", name,
 //          getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1119,11 +1119,11 @@
 //  }
 //
 //  /**
-//   * Retrieve the security group.
+//   * Retrieve the group.
 //   *
-//   * @param groupName the name of the security group uniquely identifying the security group
+//   * @param groupName the name identifying the group
 //   *
-//   * @return the security group
+//   * @return the group
 //   */
 //  @Override
 //  public Group getGroup(String groupName)
@@ -1161,7 +1161,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the security group (%s) for the user directory (%s)", groupName,
+//          "Failed to retrieve the group (%s) for the user directory (%s)", groupName,
 //          getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1172,11 +1172,11 @@
 //  }
 //
 //  /**
-//   * Retrieve the security group names for the user.
+//   * Retrieve the names identifying the groups for the user.
 //   *
 //   * @param username the username identifying the user
 //   *
-//   * @return the security group names for the user
+//   * @return the names identifying the groups for the user
 //   */
 //  @Override
 //  public List<String> getGroupNamesForUser(String username)
@@ -1227,7 +1227,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the security group names for the user (%s) for the user directory (%s)",
+//          "Failed to retrieve the names identifying the groups for the user (%s) for the user directory (%s)",
 //          username, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1238,9 +1238,9 @@
 //  }
 //
 //  /**
-//   * Retrieve all the security groups.
+//   * Retrieve all the groups.
 //   *
-//   * @return the security groups
+//   * @return the groups
 //   */
 //  @Override
 //  public List<Group> getGroups()
@@ -1274,7 +1274,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the security groups for the user directory (%s)",
+//          "Failed to retrieve the groups for the user directory (%s)",
 //          getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1285,11 +1285,11 @@
 //  }
 //
 //  /**
-//   * Retrieve the security groups for the user.
+//   * Retrieve the groups for the user.
 //   *
 //   * @param username the username identifying the user
 //   *
-//   * @return the security groups for the user
+//   * @return the groups for the user
 //   */
 //  @Override
 //  public List<Group> getGroupsForUser(String username)
@@ -1334,7 +1334,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the security groups for the user (%s) for the user directory (%s)",
+//          "Failed to retrieve the groups for the user (%s) for the user directory (%s)",
 //          username, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1345,9 +1345,9 @@
 //  }
 //
 //  /**
-//   * Retrieve the number of security groups
+//   * Retrieve the number of groups
 //   *
-//   * @return the number of security groups
+//   * @return the number of groups
 //   */
 //  @Override
 //  public long getNumberOfGroups()
@@ -1384,7 +1384,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the number of security groups for the user directory (%s):%s",
+//          "Failed to retrieve the number of groups for the user directory (%s):%s",
 //          getUserDirectoryId(), e.getMessage()), e);
 //    }
 //    finally
@@ -1769,12 +1769,12 @@
 //  }
 //
 //  /**
-//   * Is the user in the security group?
+//   * Is the user in the group?
 //   *
 //   * @param username  the username identifying the user
-//   * @param groupName the name of the security group uniquely identifying the security group
+//   * @param groupName the name identifying the group
 //   *
-//   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+//   * @return <code>true</code> if the user is a member of the group or <code>false</code>
 //   *         otherwise
 //   */
 //  @Override
@@ -1827,7 +1827,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to check if the user (%s) is in the security group (%s) for the user directory (%s)",
+//          "Failed to check if the user (%s) is in the group (%s) for the user directory (%s)",
 //          username, groupName, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1837,10 +1837,10 @@
 //  }
 //
 //  /**
-//   * Remove the user from the security group.
+//   * Remove the user from the group.
 //   *
 //   * @param username  the username identifying the user
-//   * @param groupName the security group name
+//   * @param groupName the name identifying the group
 //   */
 //  @Override
 //  public void removeUserFromGroup(String username, String groupName)
@@ -1905,7 +1905,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to remove the user (%s) from the security group (%s) for the user directory (%s)",
+//          "Failed to remove the user (%s) from the group (%s) for the user directory (%s)",
 //          username, groupName, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1915,9 +1915,9 @@
 //  }
 //
 //  /**
-//   * Does the user directory support administering security groups.
+//   * Does the user directory support administering groups.
 //   *
-//   * @return <code>true</code> if the user directory supports administering security groups or
+//   * @return <code>true</code> if the user directory supports administering groups or
 //   *         <code>false</code> otherwise
 //   */
 //  @Override
@@ -1939,9 +1939,9 @@
 //  }
 //
 //  /**
-//   * Update the security group.
+//   * Update the group.
 //   *
-//   * @param group the security group
+//   * @param group the group
 //   */
 //  @Override
 //  public void updateGroup(Group group)
@@ -1953,11 +1953,11 @@
 //    {
 //      dirContext = getDirContext(bindDN, bindPassword);
 //
-//      LdapName groupDN = getGroupDN(dirContext, group.getGroupName());
+//      LdapName groupDN = getGroupDN(dirContext, group.getName());
 //
 //      if (groupDN == null)
 //      {
-//        throw new GroupNotFoundException(group.getGroupName());
+//        throw new GroupNotFoundException(group.getName());
 //      }
 //
 //      List<ModificationItem> modificationItems = new ArrayList<>();
@@ -1977,9 +1977,9 @@
 //      }
 //
 //      // Update the corresponding group in the database
-//      String groupId = getGroupId(connection, group.getGroupName());
+//      String groupId = getGroupId(connection, group.getName());
 //
-//      updateGroup(connection, groupId, group.getGroupName(), group.getDescription());
+//      updateGroup(connection, groupId, group.getName(), group.getDescription());
 //    }
 //    catch (GroupNotFoundException e)
 //    {
@@ -1988,8 +1988,8 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to update the security group (%s) for the user directory (%s)",
-//          group.getGroupName(), getUserDirectoryId()), e);
+//          "Failed to update the group (%s) for the user directory (%s)",
+//          group.getName(), getUserDirectoryId()), e);
 //    }
 //    finally
 //    {
@@ -2304,14 +2304,14 @@
 //        }
 //
 //        throw new SecurityServiceException(String.format(
-//            "Found multiple security groups (%d) with the security group name (%s) with DNs %s",
+//            "Found multiple groups (%d) with the names identifying the group (%s) with DNs %s",
 //            groupDNs.size(), groupName, buffer.toString()));
 //      }
 //    }
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the DN for the security group (%s) from the LDAP directory (%s:%d)",
+//          "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
 //          groupName, host, port), e);
 //    }
 //    finally

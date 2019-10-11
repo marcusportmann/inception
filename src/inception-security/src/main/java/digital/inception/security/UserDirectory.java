@@ -42,7 +42,10 @@ import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -75,6 +78,31 @@ public class UserDirectory
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The ID used to uniquely identify the user directory.
+   */
+  @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @SequenceGenerator(schema = "security", name = "user_directory_id_seq",
+      sequenceName = "user_directory_id_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_directory_id_seq")
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
+
+  /**
+   * The name of the user directory.
+   */
+  @ApiModelProperty(value = "The name of the user directory", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
+
+  /**
    * The parameters for the user directory.
    */
   @ApiModelProperty(value = "The parameters for the user directory", required = true)
@@ -92,30 +120,6 @@ public class UserDirectory
   @XmlTransient
   @ManyToMany(mappedBy = "userDirectories")
   private Set<Organization> organizations = new HashSet<>();
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
-  /**
-   * The name of the user directory.
-   */
-  @ApiModelProperty(value = "The name of the user directory", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
 
   /**
    * The code used to uniquely identify the user directory type.
@@ -198,11 +202,11 @@ public class UserDirectory
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the ID used to uniquely identify the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the ID used to uniquely identify the user directory
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -256,9 +260,8 @@ public class UserDirectory
   public int hashCode()
   {
     return (id == null)
-        ? 0
-        : id.hashCode();
-  }
+      ? 0
+      : id.hashCode();  }
 
   /**
    * Set the XML configuration data for the user directory.
@@ -307,11 +310,11 @@ public class UserDirectory
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Set the ID used to uniquely identify the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param id the ID used to uniquely identify the user directory
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

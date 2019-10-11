@@ -75,7 +75,7 @@ public class SMS
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sms_id_seq")
   @Id
   @Column(name = "id", nullable = false)
-  private long id;
+  private Long id;
 
   /**
    * The date and time the last attempt was made to send the SMS.
@@ -180,7 +180,7 @@ public class SMS
    * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  SMS(long id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
+  SMS(Long id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
       String lockName, LocalDateTime lastProcessed)
   {
     this.id = id;
@@ -220,7 +220,7 @@ public class SMS
 
     SMS other = (SMS) object;
 
-    return id == other.id;
+    return (id != null) && id.equals(other.id);
   }
 
   /**
@@ -228,7 +228,7 @@ public class SMS
    *
    * @return the ID used to uniquely identify the SMS
    */
-  public long getId()
+  public Long getId()
   {
     return id;
   }
@@ -301,8 +301,9 @@ public class SMS
   @Override
   public int hashCode()
   {
-    return (int) (id ^ (id >>> 32));
-  }
+    return (id == null)
+      ? 0
+      : id.hashCode();  }
 
   /**
    * Increment the number of times that the sending of the SMS was attempted.
@@ -324,7 +325,7 @@ public class SMS
    *
    * @param id the ID used to uniquely identify the SMS
    */
-  public void setId(long id)
+  public void setId(Long id)
   {
     this.id = id;
   }

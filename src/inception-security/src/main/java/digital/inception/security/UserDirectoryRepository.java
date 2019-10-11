@@ -28,7 +28,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The <code>UserDirectoryRepository</code> interface declares the repository for the
@@ -36,13 +35,13 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UUID>
+public interface UserDirectoryRepository extends JpaRepository<UserDirectory, Long>
 {
   long countByNameContainingIgnoreCase(String name);
 
   @Modifying
   @Query("delete from UserDirectory ud where ud.id = :userDirectoryId")
-  void deleteById(@Param("userDirectoryId") UUID userDirectoryId);
+  void deleteById(@Param("userDirectoryId") Long userDirectoryId);
 
   boolean existsByNameIgnoreCase(String name);
 
@@ -51,7 +50,7 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
   List<UserDirectory> findAllByOrderByNameDesc(Pageable pageable);
 
   @Query("select ud from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
-  List<UserDirectory> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
+  List<UserDirectory> findAllByOrganizationId(@Param("organizationId") Long organizationId);
 
   List<UserDirectory> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
@@ -59,8 +58,8 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
 
   @Query(
       "select o.id from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
-  List<UUID> getOrganizationIdsById(@Param("userDirectoryId") UUID userDirectoryId);
+  List<Long> getOrganizationIdsById(@Param("userDirectoryId") Long userDirectoryId);
 
   @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
-  Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);
+  Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId") Long userDirectoryId);
 }

@@ -30,7 +30,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -40,23 +39,59 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>Group</code> class holds the information for a security group.
+ * The <code>Group</code> class holds the information for a group.
  *
  * @author Marcus Portmann
  */
 @ApiModel(value = "Group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "userDirectoryId", "groupName", "description" })
+@JsonPropertyOrder({ "id", "userDirectoryId", "name", "description" })
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
 @XmlType(name = "Group", namespace = "http://security.inception.digital",
-    propOrder = { "id", "userDirectoryId", "groupName", "description" })
+    propOrder = { "id", "userDirectoryId", "name", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "groups")
+@SuppressWarnings({ "unused" })
 public class Group
   implements java.io.Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The description for the group.
+   */
+  @ApiModelProperty(value = "The description for the group")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 100)
+  @Column(name = "description", length = 100)
+  private String description;
+
+  /**
+   * The ID used to uniquely identify the group.
+   */
+  @ApiModelProperty(value = "The ID used to uniquely identify the group", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @SequenceGenerator(schema = "security", name = "group_id_seq", sequenceName = "group_id_seq",
+      allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_id_seq")
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
+
+  /**
+   * The name identifying the group.
+   */
+  @ApiModelProperty(value = "The name identifying the group", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
 
   /**
    * The roles associated with the group.
@@ -70,6 +105,18 @@ public class Group
   private Set<Role> roles = new HashSet<>();
 
   /**
+   * The ID used to uniquely identify the user directory the group is associated with
+   */
+  @ApiModelProperty(
+      value = "The ID used to uniquely identify the user directory the group is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "UserDirectoryId", required = true)
+  @NotNull
+  @Column(name = "user_directory_id", nullable = false)
+  private Long userDirectoryId;
+
+  /**
    * The users associated with the group.
    */
   @JsonIgnore
@@ -81,56 +128,6 @@ public class Group
   private Set<User> users = new HashSet<>();
 
   /**
-   * The description for the security group.
-   */
-  @ApiModelProperty(value = "The description for the security group")
-  @JsonProperty
-  @XmlElement(name = "Description")
-  @Size(max = 100)
-  @Column(name = "description", length = 100)
-  private String description;
-
-  /**
-   * The name of the security group uniquely identifying the security group.
-   */
-  @ApiModelProperty(
-      value = "The name of the security group uniquely identifying the security group",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "GroupName", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "groupname", nullable = false, length = 100)
-  private String groupName;
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the security group.
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the security group",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @GeneratedValue
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * security group is associated with
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the security group is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectoryId", required = true)
-  @NotNull
-  @Column(name = "user_directory_id", nullable = false)
-  private UUID userDirectoryId;
-
-  /**
    * Constructs a new <code>Group</code>.
    */
   public Group() {}
@@ -138,28 +135,27 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
-  public Group(String groupName)
+  public Group(String name)
   {
-    this.groupName = groupName;
+    this.name = name;
   }
 
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param id              the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        security group
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the security group is associated with
-   * @param groupName       the name of the security group uniquely identifying the security group
-   * @param description     the description for the security group
+   * @param id              the ID used to uniquely identify the group
+   * @param userDirectoryId the ID used to uniquely identify the user directory the group
+   *                        is associated with
+   * @param name            the name identifying the group
+   * @param description     the description for the group
    */
-  public Group(UUID id, UUID userDirectoryId, String groupName, String description)
+  public Group(Long id, Long userDirectoryId, String name, String description)
   {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
-    this.groupName = groupName;
+    this.name = name;
     this.description = description;
   }
 
@@ -217,9 +213,9 @@ public class Group
   }
 
   /**
-   * Returns the description for the security group.
+   * Returns the description for the group.
    *
-   * @return the description for the security group
+   * @return the description for the group
    */
   public String getDescription()
   {
@@ -227,23 +223,23 @@ public class Group
   }
 
   /**
-   * Returns the name of the security group uniquely identifying the security group.
+   * Returns the ID used to uniquely identify the group.
    *
-   * @return the name of the security group uniquely identifying the security group
+   * @return the ID used to uniquely identify the group
    */
-  public String getGroupName()
+  public Long getId()
   {
-    return groupName;
+    return id;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the security group.
+   * Returns the name identifying the group.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   * @return the name identifying the group
    */
-  public UUID getId()
+  public String getName()
   {
-    return id;
+    return name;
   }
 
   /**
@@ -257,13 +253,11 @@ public class Group
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the security group is associated with.
+   * Returns the ID used to uniquely identify the user directory the group is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the security group is associated with
+   * @return the ID used to uniquely identify the user directory the group is associated with
    */
-  public UUID getUserDirectoryId()
+  public Long getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -314,9 +308,9 @@ public class Group
   }
 
   /**
-   * Set the description for the security group.
+   * Set the description for the group.
    *
-   * @param description the description for the security group
+   * @param description the description for the group
    */
   public void setDescription(String description)
   {
@@ -324,11 +318,11 @@ public class Group
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the security group.
+   * Set the ID used to uniquely identify the group.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the security group
+   * @param id the ID used to uniquely identify the group
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }
@@ -344,13 +338,12 @@ public class Group
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * security group is associated with.
+   * Set the ID used to uniquely identify the user directory the group is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the security group is associated with
+   * @param userDirectoryId the ID used to uniquely identify the user directory the group is
+   *                        associated with
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
+  public void setUserDirectoryId(Long userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

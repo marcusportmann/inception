@@ -30,7 +30,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -60,28 +59,18 @@ public class Organization
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The user directories associated with the organization.
+   * The ID used to uniquely identify the organization.
    */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id") ,
-      inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
-  private Set<UserDirectory> userDirectories = new HashSet<>();
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @SequenceGenerator(schema = "security", name = "organization_id_seq",
+      sequenceName = "organization_id_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_id_seq")
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
 
   /**
    * The name of the organization.
@@ -105,6 +94,17 @@ public class Organization
   private OrganizationStatus status;
 
   /**
+   * The user directories associated with the organization.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id") ,
+      inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
+  private Set<UserDirectory> userDirectories = new HashSet<>();
+
+  /**
    * Constructs a new <code>Organization</code>.
    */
   public Organization() {}
@@ -112,12 +112,23 @@ public class Organization
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the
-   *               organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(UUID id, String name, OrganizationStatus status)
+  public Organization(String name, OrganizationStatus status)
+  {
+    this.name = name;
+    this.status = status;
+  }
+
+  /**
+   * Constructs a new <code>Organization</code>.
+   *
+   * @param id     the ID used to uniquely identify the organization
+   * @param name   the name of the organization
+   * @param status the status for the organization
+   */
+  public Organization(Long id, String name, OrganizationStatus status)
   {
     this.id = id;
     this.name = name;
@@ -156,11 +167,11 @@ public class Organization
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Returns the ID used to uniquely identify the organization.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @return the ID used to uniquely identify the organization
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -220,11 +231,11 @@ public class Organization
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Set the ID used to uniquely identify the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param id the ID used to uniquely identify the organization
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The <code>GroupRepository</code> interface declares the repository for the
@@ -36,39 +35,38 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface GroupRepository extends JpaRepository<Group, UUID>
+public interface GroupRepository extends JpaRepository<Group, Long>
 {
   @Modifying
   @Query(value = "insert into security.user_to_group_map(user_id, group_id) "
       + "values (:userId, :groupId)",
       nativeQuery = true)
-  void addUserToGroup(@Param("userId") UUID userId, @Param("groupId") UUID groupId);
+  void addUserToGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
-  long countByUserDirectoryId(UUID userDirectoryId);
+  long countByUserDirectoryId(Long userDirectoryId);
 
   @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
-  long countUsersById(@Param("groupId") UUID groupId);
+  long countUsersById(@Param("groupId") Long groupId);
 
   @Modifying
   @Query("delete from Group g where g.id = :groupId")
-  void deleteById(@Param("groupId") UUID groupId);
+  void deleteById(@Param("groupId") Long groupId);
 
   @Transactional
-  boolean existsByUserDirectoryIdAndGroupNameIgnoreCase(UUID userDirectoryId, String groupName);
+  boolean existsByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
 
-  List<Group> findByUserDirectoryId(UUID userDirectoryId);
+  List<Group> findByUserDirectoryId(Long userDirectoryId);
 
-  Optional<Group> findByUserDirectoryIdAndGroupNameIgnoreCase(UUID userDirectoryId,
-      String groupName);
+  Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
 
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
-      + "upper(g.groupName) like upper(:groupName)")
-  Optional<UUID> getIdByUserDirectoryIdAndGroupNameIgnoreCase(@Param(
-      "userDirectoryId") UUID userDirectoryId, @Param("groupName") String groupName);
+      + "upper(g.name) like upper(:name)")
+  Optional<Long> getIdByUserDirectoryIdAndNameIgnoreCase(@Param(
+      "userDirectoryId") Long userDirectoryId, @Param("name") String name);
 
   @Modifying
   @Query(value = "delete from security.user_to_group_map "
       + "where user_id = :userId and group_id=:groupId",
       nativeQuery = true)
-  void removeUserFromGroup(@Param("userId") UUID userId, @Param("groupId") UUID groupId);
+  void removeUserFromGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
 }

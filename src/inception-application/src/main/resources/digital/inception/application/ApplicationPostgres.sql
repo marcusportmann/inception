@@ -65,6 +65,10 @@ DROP TABLE IF EXISTS test.test_data CASCADE;
 -- -------------------------------------------------------------------------------------------------
 -- DROP SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+DROP SEQUENCE IF EXISTS security.group_id_seq;
+DROP SEQUENCE IF EXISTS security.organization_id_seq;
+DROP SEQUENCE IF EXISTS security.user_directory_id_seq;
+DROP SEQUENCE IF EXISTS security.user_id_seq;
 DROP SEQUENCE IF EXISTS sms.sms_id_seq;
 
 
@@ -143,7 +147,11 @@ CREATE SCHEMA test;
 -------------------------------------------------------------------------------------------------
 -- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
-CREATE SEQUENCE sms.sms_id_seq;
+CREATE SEQUENCE security.group_id_seq START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE security.organization_id_seq START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE security.user_directory_id_seq START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE security.user_id_seq START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE sms.sms_id_seq START WITH 1000000 INCREMENT BY 1;
 
 
 -- -------------------------------------------------------------------------------------------------
@@ -488,7 +496,7 @@ COMMENT ON COLUMN scheduler.job_parameters.value IS 'The value of the job parame
 
 
 CREATE TABLE security.organizations (
-  id     UUID    NOT NULL,
+  id     BIGINT  NOT NULL,
   name   TEXT    NOT NULL,
   status INTEGER NOT NULL,
 
@@ -520,10 +528,10 @@ COMMENT ON COLUMN security.user_directory_types.user_directory_class IS 'The ful
 
 
 CREATE TABLE security.user_directories (
-  id            UUID NOT NULL,
-  type          TEXT NOT NULL,
-  name          TEXT NOT NULL,
-  configuration TEXT NOT NULL,
+  id            BIGINT NOT NULL,
+  type          TEXT   NOT NULL,
+  name          TEXT   NOT NULL,
+  configuration TEXT   NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES security.user_directory_types(code) ON DELETE CASCADE
@@ -531,7 +539,7 @@ CREATE TABLE security.user_directories (
 
 CREATE INDEX user_directories_name_ix ON security.user_directories(name);
 
-COMMENT ON COLUMN security.user_directories.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directories.id IS 'The ID used to uniquely identify the user directory';
 
 COMMENT ON COLUMN security.user_directories.type IS 'The code used to uniquely identify the user directory type';
 
@@ -541,8 +549,8 @@ COMMENT ON COLUMN security.user_directories.configuration IS 'The XML configurat
 
 
 CREATE TABLE security.user_directory_to_organization_map (
-  user_directory_id UUID NOT NULL,
-  organization_id   UUID NOT NULL,
+  user_directory_id BIGINT NOT NULL,
+  organization_id   BIGINT NOT NULL,
 
   PRIMARY KEY (user_directory_id, organization_id),
   CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE,
@@ -553,14 +561,14 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON security
 
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON security.user_directory_to_organization_map(organization_id);
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The ID used to uniquely identify the user directory';
 
 COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The ID used to uniquely identify the organization';
 
 
 CREATE TABLE security.users (
-  id                UUID    NOT NULL,
-  user_directory_id UUID    NOT NULL,
+  id                BIGINT  NOT NULL,
+  user_directory_id BIGINT  NOT NULL,
   username          TEXT    NOT NULL,
   status            INTEGER NOT NULL,
   first_name        TEXT    NOT NULL DEFAULT '',
@@ -580,9 +588,9 @@ CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
 CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.users.id IS 'The ID used to uniquely identify the user';
 
-COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with';
+COMMENT ON COLUMN security.users.user_directory_id IS 'The ID used to uniquely identify the user directory the user is associated with';
 
 COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
@@ -606,12 +614,11 @@ COMMENT ON COLUMN security.users.password_expiry IS 'The date and time that the 
 
 
 CREATE TABLE security.users_password_history (
-  id               UUID      NOT NULL,
-  user_id UUID      NOT NULL,
-  changed          TIMESTAMP NOT NULL,
-  password         TEXT,
+  user_id  BIGINT    NOT NULL,
+  changed  TIMESTAMP NOT NULL,
+  password TEXT,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (user_id, changed),
   CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE
 );
 
@@ -619,9 +626,7 @@ CREATE INDEX users_password_history_user_id_ix ON security.users_password_histor
 
 CREATE INDEX users_password_history_changed_ix ON security.users_password_history(changed);
 
-COMMENT ON COLUMN security.users_password_history.id IS 'The ID used to uniquely identify the password history entry';
-
-COMMENT ON COLUMN security.users_password_history.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.users_password_history.user_id IS 'The ID used to uniquely identify the user';
 
 COMMENT ON COLUMN security.users_password_history.changed IS 'When the password change took place for the user';
 
@@ -629,9 +634,9 @@ COMMENT ON COLUMN security.users_password_history.password IS 'The password for 
 
 
 CREATE TABLE security.groups (
-  id                UUID NOT NULL,
-  user_directory_id UUID NOT NULL,
-  groupname         TEXT NOT NULL,
+  id                BIGINT NOT NULL,
+  user_directory_id BIGINT NOT NULL,
+  name              TEXT   NOT NULL,
   description       TEXT,
 
   PRIMARY KEY (id),
@@ -640,20 +645,20 @@ CREATE TABLE security.groups (
 
 CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
 
-CREATE INDEX groups_groupname_ix ON security.groups(groupname);
+CREATE INDEX groups_name_ix ON security.groups(name);
 
 COMMENT ON COLUMN security.groups.id IS 'The ID used to uniquely identify the group';
 
-COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
+COMMENT ON COLUMN security.groups.user_directory_id IS 'The ID used to uniquely identify the user directory the group is associated with';
 
-COMMENT ON COLUMN security.groups.groupname IS 'The group name for the group';
+COMMENT ON COLUMN security.groups.name IS 'The name for the group';
 
 COMMENT ON COLUMN security.groups.description IS 'A description for the group';
 
 
 CREATE TABLE security.user_to_group_map (
-  user_id  UUID NOT NULL,
-  group_id UUID NOT NULL,
+  user_id  BIGINT NOT NULL,
+  group_id BIGINT NOT NULL,
 
   PRIMARY KEY (user_id, group_id),
   CONSTRAINT user_to_group_map_user_fk FOREIGN KEY (user_id) REFERENCES security.users(id) ON DELETE CASCADE,
@@ -664,7 +669,7 @@ CREATE INDEX user_to_group_map_user_id_ix ON security.user_to_group_map(user_id)
 
 CREATE INDEX user_to_group_map_group_id_ix ON security.user_to_group_map(group_id);
 
-COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
+COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The ID used to uniquely identify the user';
 
 COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The ID used to uniquely identify the group';
 
@@ -718,8 +723,8 @@ COMMENT ON COLUMN security.function_to_role_map.role_code IS 'The code used to u
 
 
 CREATE TABLE security.role_to_group_map (
-  role_code TEXT NOT NULL,
-  group_id  UUID NOT NULL,
+  role_code TEXT   NOT NULL,
+  group_id  BIGINT NOT NULL,
 
   PRIMARY KEY (role_code, group_id),
   CONSTRAINT role_to_group_map_role_fk FOREIGN KEY (role_code) REFERENCES security.roles(code) ON DELETE CASCADE,
@@ -855,7 +860,7 @@ COMMENT ON COLUMN test.test_data.value IS 'The value for the test data';
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO security.organizations (id, name, status)
-  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
+  VALUES (0, 'Administration', 1);
 
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
@@ -863,19 +868,19 @@ INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type, name, configuration)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES (0, 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
+  VALUES (0, 0);
 
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, );
+  VALUES (0, 0, 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, );
 
-INSERT INTO security.groups (id, user_directory_id, groupname, description)
-  VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
+INSERT INTO security.groups (id, user_directory_id, name, description)
+  VALUES (0, 0, 'Administrators', 'Administrators');
 
 INSERT INTO security.user_to_group_map (user_id, group_id)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
+  VALUES (0, 0);
 
 INSERT INTO security.functions (code, name, description)
   VALUES ('Application.Dashboard', 'Dashboard', 'Dashboard');
@@ -940,7 +945,7 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.ResetUserPassword', 'PasswordResetter');
 
 INSERT INTO security.role_to_group_map (role_code, group_id)
-  VALUES ('Administrator', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
+  VALUES ('Administrator', 0); -- Assign the Administrator role to the Administrators group
 
 INSERT INTO messaging.message_types (id, name)
   VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');

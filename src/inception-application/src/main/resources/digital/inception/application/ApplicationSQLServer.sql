@@ -64,6 +64,18 @@ GO
 -- -------------------------------------------------------------------------------------------------
 -- DROP SCHEMAS
 -- -------------------------------------------------------------------------------------------------
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'GROUP_ID_SEQ')
+DROP SEQUENCE "SECURITY"."GROUP_ID_SEQ"
+GO
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'ORGANIZATION_ID_SEQ')
+DROP SEQUENCE "SECURITY"."ORGANIZATION_ID_SEQ"
+GO
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'USER_DIRECTORY_ID_SEQ')
+DROP SEQUENCE "SECURITY"."USER_DIRECTORY_ID_SEQ"
+GO
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'USER_ID_SEQ')
+DROP SEQUENCE "SECURITY"."USER_ID_SEQ"
+GO
 IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'SMS_ID_SEQ')
 DROP SEQUENCE "SMS"."SMS_ID_SEQ"
 GO
@@ -122,9 +134,13 @@ GO
 
 
 -- -------------------------------------------------------------------------------------------------
--- CREATE SCHEMAS
+-- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
-CREATE SCHEMA "SMS"."SMS_ID_SEQ";
+CREATE SEQUENCE "SECURITY"."GROUP_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE "SECURITY"."ORGANIZATION_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE "SECURITY"."USER_DIRECTORY_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE "SECURITY"."USER_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
+CREATE SEQUENCE "SMS"."SMS_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 GO
 
 
@@ -647,9 +663,9 @@ GO
 
 
 CREATE TABLE "SECURITY"."ORGANIZATIONS" (
-  id     UNIQUEIDENTIFIER NOT NULL,
-  name   NVARCHAR(100)   NOT NULL,
-  status INTEGER          NOT NULL,
+  id     BIGINT        NOT NULL,
+  name   NVARCHAR(100) NOT NULL,
+  status INTEGER       NOT NULL,
 
   PRIMARY KEY (id)
 );
@@ -694,10 +710,10 @@ EXEC sys.sp_addextendedproperty
 
 
 CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
-  id      UNIQUEIDENTIFIER NOT NULL,
-  type    NVARCHAR(100)    NOT NULL,
-  name    NVARCHAR(100)    NOT NULL,
-  config  NVARCHAR(MAX)    NOT NULL,
+  id      BIGINT        NOT NULL,
+  type    NVARCHAR(100) NOT NULL,
+  name    NVARCHAR(100) NOT NULL,
+  config  NVARCHAR(MAX) NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES "SECURITY"."USER_DIRECTORY_TYPES"(code) ON DELETE CASCADE
@@ -706,7 +722,7 @@ CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
 CREATE INDEX user_directories_name_ix ON "SECURITY"."USER_DIRECTORIES"(name);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORIES', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
@@ -725,8 +741,8 @@ GO
 
 
 CREATE TABLE "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (
-  user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  organization_id   UNIQUEIDENTIFIER NOT NULL,
+  user_directory_id BIGINT NOT NULL,
+  organization_id   BIGINT NOT NULL,
 
   PRIMARY KEY (user_directory_id, organization_id),
   CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES "SECURITY"."USER_DIRECTORIES"(id) ON DELETE CASCADE,
@@ -738,7 +754,7 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON "SECURIT
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP"(organization_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TO_ORGANIZATION_MAP', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -749,18 +765,18 @@ GO
 
 
 CREATE TABLE "SECURITY"."USERS" (
-  id                UNIQUEIDENTIFIER NOT NULL,
-  user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  username          NVARCHAR(100)    NOT NULL,
-  status            INTEGER          NOT NULL,
-  first_name        NVARCHAR(100)    NOT NULL DEFAULT '',
-  last_name         NVARCHAR(100)    NOT NULL DEFAULT '',
-  phone             NVARCHAR(100)    NOT NULL DEFAULT '',
-  mobile            NVARCHAR(100)    NOT NULL DEFAULT '',
-  email             NVARCHAR(100)    NOT NULL DEFAULT '',
-  password          NVARCHAR(100)    NOT NULL DEFAULT '',
-  password_attempts INTEGER          NOT NULL DEFAULT 0,
-  password_expiry   DATETIME         NOT NULL,
+  id                BIGINT        NOT NULL,
+  user_directory_id BIGINT        NOT NULL,
+  username          NVARCHAR(100) NOT NULL,
+  status            INTEGER       NOT NULL,
+  first_name        NVARCHAR(100) NOT NULL DEFAULT '',
+  last_name         NVARCHAR(100) NOT NULL DEFAULT '',
+  phone             NVARCHAR(100) NOT NULL DEFAULT '',
+  mobile            NVARCHAR(100) NOT NULL DEFAULT '',
+  email             NVARCHAR(100) NOT NULL DEFAULT '',
+  password          NVARCHAR(100) NOT NULL DEFAULT '',
+  password_attempts INTEGER       NOT NULL DEFAULT 0,
+  password_expiry   DATETIME      NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES "SECURITY"."USER_DIRECTORIES"(id) ON DELETE CASCADE
@@ -771,11 +787,11 @@ CREATE INDEX users_user_directory_id_ix ON "SECURITY"."USERS"(user_directory_id)
 CREATE UNIQUE INDEX users_username_ix ON "SECURITY"."USERS"(username);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the user is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -822,12 +838,11 @@ GO
 
 
 CREATE TABLE "SECURITY"."USERS_PASSWORD_HISTORY" (
-  id               UNIQUEIDENTIFIER NOT NULL,
-  user_id UNIQUEIDENTIFIER NOT NULL,
-  changed          DATETIME         NOT NULL,
-  password         NVARCHAR(100),
+  user_id  BIGINT   NOT NULL,
+  changed  DATETIME NOT NULL,
+  password NVARCHAR(100),
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (user_id, changed),
   CONSTRAINT users_password_history_user_id_fk FOREIGN KEY (user_id) REFERENCES "SECURITY"."USERS"(id) ON DELETE CASCADE
 );
 
@@ -836,11 +851,7 @@ CREATE INDEX users_password_history_user_id_ix ON "SECURITY"."USERS_PASSWORD_HIS
 CREATE INDEX users_password_history_changed_ix ON "SECURITY"."USERS_PASSWORD_HISTORY"(changed);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the password history entry' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -855,9 +866,9 @@ GO
 
 
 CREATE TABLE "SECURITY"."GROUPS" (
-  id                UNIQUEIDENTIFIER NOT NULL,
-  user_directory_id UNIQUEIDENTIFIER NOT NULL,
-  groupname         NVARCHAR(100)    NOT NULL,
+  id                BIGINT        NOT NULL,
+  user_directory_id BIGINT        NOT NULL,
+  name              NVARCHAR(100) NOT NULL,
   description       NVARCHAR(100),
 
   PRIMARY KEY (id),
@@ -866,19 +877,19 @@ CREATE TABLE "SECURITY"."GROUPS" (
 
 CREATE INDEX groups_user_directory_id_ix ON "SECURITY"."GROUPS"(user_directory_id);
 
-CREATE INDEX groups_groupname_ix ON "SECURITY"."GROUPS"(groupname);
+CREATE INDEX groups_name_ix ON "SECURITY"."GROUPS"(name);
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user directory the group is associated with' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_ID';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The group name for the group' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'GROUPNAME';
+@name=N'MS_Description', @value=N'The name for the group' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'NAME';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'A description for the group' ,
@@ -888,8 +899,8 @@ GO
 
 
 CREATE TABLE "SECURITY"."USER_TO_GROUP_MAP" (
-  user_id  UNIQUEIDENTIFIER NOT NULL,
-  group_id UNIQUEIDENTIFIER NOT NULL,
+  user_id  BIGINT NOT NULL,
+  group_id BIGINT NOT NULL,
 
   PRIMARY KEY (user_id, group_id)
 );
@@ -899,7 +910,7 @@ CREATE INDEX user_to_group_map_user_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(user
 CREATE INDEX user_to_group_map_group_id_ix ON "SECURITY"."USER_TO_GROUP_MAP"(group_id);
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The Universally Unique Identifier (UUID) used to uniquely identify the user' ,
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_TO_GROUP_MAP', @level2type=N'COLUMN', @level2name=N'USER_ID';
 
 EXEC sys.sp_addextendedproperty
@@ -909,7 +920,7 @@ GO
 
 CREATE TRIGGER groups_on_delete_user_to_group_map_trigger
   ON "SECURITY"."GROUPS"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
+  FOR DELETE AS BEGIN DECLARE @ID BIGINT DECLARE C CURSOR FOR
 SELECT deleted.id
   FROM deleted open C FETCH NEXT
   FROM C
@@ -922,7 +933,7 @@ DELETE
 
 CREATE TRIGGER users_on_delete_user_to_group_map_trigger
   ON "SECURITY"."USERS"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
+  FOR DELETE AS BEGIN DECLARE @ID BIGINT DECLARE C CURSOR FOR
 SELECT deleted.id
   FROM deleted open C FETCH NEXT
   FROM C
@@ -1030,8 +1041,8 @@ DELETE
 
 
 CREATE TABLE "SECURITY"."ROLE_TO_GROUP_MAP" (
-  role_code NVARCHAR(100)    NOT NULL,
-  group_id  UNIQUEIDENTIFIER NOT NULL,
+  role_code NVARCHAR(100) NOT NULL,
+  group_id  BIGINT        NOT NULL,
 
   PRIMARY KEY (role_code, group_id),
 );
@@ -1051,7 +1062,7 @@ GO
 
 CREATE TRIGGER roles_on_delete_role_to_group_map_trigger
   ON "SECURITY"."ROLES"
-  FOR DELETE AS BEGIN DECLARE @CODE UNIQUEIDENTIFIER DECLARE C CURSOR FOR
+  FOR DELETE AS BEGIN DECLARE @CODE BIGINT DECLARE C CURSOR FOR
 SELECT deleted.code
   FROM deleted open C FETCH NEXT
   FROM C
@@ -1064,7 +1075,7 @@ DELETE
 
 CREATE TRIGGER groups_on_delete_role_to_group_map_trigger
   ON "SECURITY"."GROUPS"
-  FOR DELETE AS BEGIN DECLARE @ID UNIQUEIDENTIFIER DECLARE C CURSOR FOR
+  FOR DELETE AS BEGIN DECLARE @ID BIGINT DECLARE C CURSOR FOR
 SELECT deleted.id
   FROM deleted open C FETCH NEXT
   FROM C
@@ -1261,7 +1272,7 @@ GO
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO "SECURITY"."ORGANIZATIONS" (id, name, status)
-  VALUES ('c1685b92-9fe5-453a-995b-89d8c0f29cb5', 'Administration', 1);
+  VALUES (0, 'Administration', 1);
 
 INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
@@ -1269,19 +1280,19 @@ INSERT INTO "SECURITY"."USER_DIRECTORY_TYPES" (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO "SECURITY"."USER_DIRECTORIES" (id, type, name, config)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
+  VALUES (0, 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
 INSERT INTO "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (user_directory_id, organization_id)
-  VALUES ('4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'c1685b92-9fe5-453a-995b-89d8c0f29cb5');
+  VALUES (0, 0);
 
 INSERT INTO "SECURITY"."USERS" (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
+  VALUES (0, 0, 'administrator', 1, '', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0);
 
-INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, groupname, description)
-  VALUES ('a9e01fa2-f017-46e2-8187-424bf50a4f33', '4ef18395-423a-4df6-b7d7-6bcdd85956e4', 'Administrators', 'Administrators');
+INSERT INTO "SECURITY"."GROUPS" (id, user_directory_id, name, description)
+  VALUES (0, 0, 'Administrators', 'Administrators');
 
 INSERT INTO "SECURITY"."USER_TO_GROUP_MAP" (user_id, group_id)
-  VALUES ('b2bbf431-4af8-4104-b96c-d33b5f66d1e4', 'a9e01fa2-f017-46e2-8187-424bf50a4f33');
+  VALUES (0, 0);
 
 INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
   VALUES ('Application.SecureHome', 'Secure Home', 'Secure Home');
@@ -1347,7 +1358,7 @@ INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
   VALUES ('Security.ResetUserPassword', 'PasswordResetter');
 
 INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_code, group_id)
-  VALUES ('Administrator', 'a9e01fa2-f017-46e2-8187-424bf50a4f33'); -- Assign the Administrator role to the Administrators group
+  VALUES ('Administrator', 0); -- Assign the Administrator role to the Administrators group
 
 INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
   VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');

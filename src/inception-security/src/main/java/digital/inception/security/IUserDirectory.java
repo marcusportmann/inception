@@ -22,17 +22,17 @@ import java.util.List;
 
 /**
  * The <code>IUserDirectoryProvider</code> interface defines the functionality provided by a user
- * directory, which manages users and security groups.
+ * directory, which manages users and groups.
  *
  * @author Marcus Portmann
  */
 interface IUserDirectory
 {
   /**
-   * Add the user to the security group.
+   * Add the user to the group.
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param groupName the name identifying the group
    */
   void addUserToGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
@@ -73,9 +73,9 @@ interface IUserDirectory
         ExistingPasswordException, SecurityServiceException;
 
   /**
-   * Create the new security group.
+   * Create the new group.
    *
-   * @param group the security group
+   * @param group the group
    */
   void createGroup(Group group)
     throws DuplicateGroupException, SecurityServiceException;
@@ -91,11 +91,11 @@ interface IUserDirectory
     throws DuplicateUserException, SecurityServiceException;
 
   /**
-   * Delete the security group.
+   * Delete the group.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
-  void deleteGroup(String groupName)
+  void deleteGroup(String name)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException;
 
   /**
@@ -127,47 +127,47 @@ interface IUserDirectory
     throws UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the security group.
+   * Retrieve the group.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    *
-   * @return the security group
+   * @return the group
    */
-  Group getGroup(String groupName)
+  Group getGroup(String name)
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the security group names for the user.
+   * Retrieve the names identifying the groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the security group names for the user
+   * @return the names identifying the groups for the user
    */
   List<String> getGroupNamesForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve all the security groups.
+   * Retrieve all the groups.
    *
-   * @return the security groups
+   * @return the groups
    */
   List<Group> getGroups()
     throws SecurityServiceException;
 
   /**
-   * Retrieve the security groups for the user.
+   * Retrieve the groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the security groups for the user
+   * @return the groups for the user
    */
   List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the number of security groups
+   * Retrieve the number of groups
    *
-   * @return the number of security groups
+   * @return the number of groups
    */
   long getNumberOfGroups()
     throws SecurityServiceException;
@@ -237,30 +237,30 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
-   * Is the user in the security group?
+   * Is the user in the group?
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param groupName the name identifying the group
    *
-   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   * @return <code>true</code> if the user is a member of the group or <code>false</code>
    *         otherwise
    */
   boolean isUserInGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Remove the user from the security group.
+   * Remove the user from the group.
    *
    * @param username  the username identifying the user
-   * @param groupName the security group name
+   * @param groupName the name identifying the group
    */
   void removeUserFromGroup(String username, String groupName)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Does the user directory support administering security groups.
+   * Does the user directory support administering groups.
    *
-   * @return <code>true</code> if the user directory supports administering security groups or
+   * @return <code>true</code> if the user directory supports administering groups or
    *         <code>false</code> otherwise
    */
   boolean supportsGroupAdministration();
@@ -274,9 +274,9 @@ interface IUserDirectory
   boolean supportsUserAdministration();
 
   /**
-   * Update the security group.
+   * Update the group.
    *
-   * @param group the security group
+   * @param group the group
    */
   void updateGroup(Group group)
     throws GroupNotFoundException, SecurityServiceException;

@@ -6,14 +6,14 @@ CREATE SCHEMA sms;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
-create sequence sms.sms_id_seq;
+CREATE SEQUENCE sms.sms_id_seq START WITH 1000000 INCREMENT BY 1;
 
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE sms.sms (
   id             BIGINT        NOT NULL,
-  mobile_number  VARCHAR(100) NOT NULL,
+  mobile_number  VARCHAR(100)  NOT NULL,
   message        VARCHAR(1000) NOT NULL,
   status         INTEGER       NOT NULL,
   send_attempts  INTEGER,

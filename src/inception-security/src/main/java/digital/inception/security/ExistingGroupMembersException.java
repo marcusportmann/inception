@@ -31,14 +31,14 @@ import javax.xml.ws.WebFault;
 
 /**
  * A <code>ExistingGroupMembersException</code> is thrown to indicate that a security operation
- * failed as a result of existing security group members.
+ * failed as a result of existing group members.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-    reason = "The security group could not be deleted since it is still associated with 1 or more user(s)")
+    reason = "The group could not be deleted since it is still associated with 1 or more user(s)")
 @WebFault(name = "ExistingGroupMembersException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
@@ -51,11 +51,11 @@ public class ExistingGroupMembersException extends ServiceException
   /**
    * Constructs a new <code>ExistingGroupMembersException</code>.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
-  public ExistingGroupMembersException(String groupName)
+  public ExistingGroupMembersException(String name)
   {
-    super("The security group (" + groupName
+    super("The group (" + name
         + ") could not be deleted since it is still associated with 1 or more user(s)");
   }
 }

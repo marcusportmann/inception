@@ -31,7 +31,7 @@ import javax.xml.ws.WebFault;
 
 /**
  * A <code>GroupNotFoundException</code> is thrown to indicate that a security operation failed as
- * a result of a security group that could not be found.
+ * a result of a group that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -49,10 +49,10 @@ public class GroupNotFoundException extends ServiceException
   /**
    * Constructs a new <code>GroupNotFoundException</code>.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
-  public GroupNotFoundException(String groupName)
+  public GroupNotFoundException(String name)
   {
-    super("The security group (" + groupName + ") could not be found");
+    super("The group (" + name + ") could not be found");
   }
 }

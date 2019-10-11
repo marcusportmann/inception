@@ -18,21 +18,16 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.PasswordUtil;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -61,19 +56,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
-///**
-// * The data source used to provide connections to the application database.
-// */
-//@Autowired
-//@Qualifier("applicationDataSource")
-//private DataSource dataSource;
-
-  /**
-   * The ID generator.
-   */
-  @Autowired
-  private IDGenerator idGenerator;
-
   /**
    * The maximum number of filtered users to return.
    */
@@ -97,13 +79,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param parameters      the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository
    */
-  public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
+  public InternalUserDirectory(Long userDirectoryId, List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository, UserRepository userRepository)
     throws SecurityServiceException
   {
@@ -158,10 +139,10 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Add the user to the security group.
+   * Add the user to the group.
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param groupName the name identifying the group
    */
   @Override
   public void addUserToGroup(String username, String groupName)
@@ -169,7 +150,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -178,9 +159,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      Optional<UUID> groupIdOptional =
-          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          groupName);
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
       {
@@ -196,8 +176,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to add the user (%s) to the security group (%s) for the user directory (%s)",
-          username, groupName, getUserDirectoryId()), e);
+          "Failed to add the user (%s) to the group (%s) for the user directory (%s)", username,
+          groupName, getUserDirectoryId()), e);
     }
   }
 
@@ -218,7 +198,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -251,8 +231,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       getUserRepository().changePassword(userIdOptional.get(), newPasswordHash, passwordAttempts,
           Optional.of(passwordExpiry));
 
-      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), userIdOptional.get(),
-          newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), newPasswordHash);
     }
     catch (UserNotFoundException e)
     {
@@ -377,8 +356,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       getUserRepository().changePassword(user.getId(), newPasswordHash, 0, Optional.of(
           passwordExpiry));
 
-      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(),
-          newPasswordHash);
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
     }
     catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
         | UserLockedException e)
@@ -394,9 +372,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Create the new security group.
+   * Create the new group.
    *
-   * @param group the security group
+   * @param group the group
    */
   @Override
   public void createGroup(Group group)
@@ -404,13 +382,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      if (getGroupRepository().existsByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          group.getGroupName()))
+      if (getGroupRepository().existsByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(),
+          group.getName()))
       {
-        throw new DuplicateGroupException(group.getGroupName());
+        throw new DuplicateGroupException(group.getName());
       }
 
-      // group.setId(idGenerator.nextUUID());
       group.setUserDirectoryId(getUserDirectoryId());
 
       getGroupRepository().saveAndFlush(group);
@@ -422,8 +399,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to create the security group (%s) for the user directory (%s)",
-          group.getGroupName(), getUserDirectoryId()), e);
+          "Failed to create the group (%s) for the user directory (%s)", group.getName(),
+          getUserDirectoryId()), e);
     }
   }
 
@@ -446,7 +423,6 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateUserException(user.getUsername());
       }
 
-      user.setId(idGenerator.nextUUID());
       user.setUserDirectoryId(getUserDirectoryId());
 
       if (!isNullOrEmpty(user.getPassword()))
@@ -482,8 +458,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       getUserRepository().saveAndFlush(user);
 
-      getUserRepository().savePasswordInPasswordHistory(UUID.randomUUID(), user.getId(),
-          user.getPassword());
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), user.getPassword());
     }
     catch (DuplicateUserException e)
     {
@@ -498,28 +473,27 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Delete the security group.
+   * Delete the group.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
   @Override
-  public void deleteGroup(String groupName)
+  public void deleteGroup(String name)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
   {
     try
     {
-      Optional<UUID> groupIdOptional =
-          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          groupName);
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), name);
 
       if (groupIdOptional.isEmpty())
       {
-        throw new GroupNotFoundException(groupName);
+        throw new GroupNotFoundException(name);
       }
 
       if (getGroupRepository().countUsersById(groupIdOptional.get()) > 0)
       {
-        throw new ExistingGroupMembersException(groupName);
+        throw new ExistingGroupMembersException(name);
       }
 
       getGroupRepository().deleteById(groupIdOptional.get());
@@ -531,7 +505,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the security group (%s) for the user directory (%s)", groupName,
+          "Failed to delete the group (%s) for the user directory (%s)", name,
           getUserDirectoryId()), e);
     }
   }
@@ -547,7 +521,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -652,7 +626,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -676,21 +650,20 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the security group.
+   * Retrieve the group.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    *
    * @return the group
    */
   @Override
-  public Group getGroup(String groupName)
+  public Group getGroup(String name)
     throws GroupNotFoundException, SecurityServiceException
   {
     try
     {
-      Optional<Group> groupOptional =
-          getGroupRepository().findByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          groupName);
+      Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), name);
 
       if (groupOptional.isPresent())
       {
@@ -698,7 +671,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       else
       {
-        throw new GroupNotFoundException(groupName);
+        throw new GroupNotFoundException(name);
       }
     }
     catch (GroupNotFoundException e)
@@ -708,17 +681,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group (%s) for the user directory (%s)", groupName,
+          "Failed to retrieve the group (%s) for the user directory (%s)", name,
           getUserDirectoryId()), e);
     }
   }
 
   /**
-   * Retrieve the security group names for the user.
+   * Retrieve the names identifying the groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the security group names for the user
+   * @return the names identifying the groups for the user
    */
   @Override
   public List<String> getGroupNamesForUser(String username)
@@ -726,7 +699,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -744,15 +717,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the security group names for the user (%s) for the user directory (%s)",
+          "Failed to retrieve the names identifying the groups for the user (%s) for the user directory (%s)",
           username, getUserDirectoryId()), e);
     }
   }
 
   /**
-   * Retrieve all the security groups.
+   * Retrieve all the groups.
    *
-   * @return the security groups
+   * @return the groups
    */
   @Override
   public List<Group> getGroups()
@@ -764,18 +737,17 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(
-          "Failed to retrieve the security groups for the user directory (" + getUserDirectoryId()
-          + ")", e);
+      throw new SecurityServiceException("Failed to retrieve the groups for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
   /**
-   * Retrieve the security groups for the user.
+   * Retrieve the groups for the user.
    *
    * @param username the username identifying the user
    *
-   * @return the security groups for the user
+   * @return the groups for the user
    */
   @Override
   public List<Group> getGroupsForUser(String username)
@@ -783,7 +755,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -800,15 +772,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException("Failed to retrieve the security groups for the user ("
-          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityServiceException("Failed to retrieve the groups for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
   /**
-   * Retrieve the number of security groups.
+   * Retrieve the number of groups.
    *
-   * @return the number of security groups
+   * @return the number of groups
    */
   @Override
   public long getNumberOfGroups()
@@ -821,8 +793,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(
-          "Failed to retrieve the number of security groups for the user directory ("
-          + getUserDirectoryId() + ")", e);
+          "Failed to retrieve the number of groups for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
@@ -869,7 +841,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1045,12 +1017,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Is the user in the security group?
+   * Is the user in the group?
    *
    * @param username  the username identifying the user
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param groupName the name identifying the group
    *
-   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   * @return <code>true</code> if the user is a member of the group or <code>false</code>
    * otherwise
    */
   @Override
@@ -1059,7 +1031,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1068,9 +1040,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      Optional<UUID> groupIdOptional =
-          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          groupName);
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
       {
@@ -1086,16 +1057,16 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException("Failed to check if the user (" + username
-          + ") is in the security group (" + groupName + ") for the user directory ("
-          + getUserDirectoryId() + ")", e);
+          + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
   /**
-   * Remove the user from the security group.
+   * Remove the user from the group.
    *
    * @param username  the username identifying the user
-   * @param groupName the security group name
+   * @param groupName the name identifying the group
    */
   @Override
   public void removeUserFromGroup(String username, String groupName)
@@ -1103,7 +1074,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> userIdOptional =
+      Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1112,9 +1083,8 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      Optional<UUID> groupIdOptional =
-          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          groupName);
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
       {
@@ -1130,15 +1100,15 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException("Failed to remove the user (" + username
-          + ") from the security group (" + groupName + ") for the user directory ("
-          + getUserDirectoryId() + ")", e);
+          + ") from the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
+          + ")", e);
     }
   }
 
   /**
-   * Does the user directory support administering security groups.
+   * Does the user directory support administering groups.
    *
-   * @return <code>true</code> if the user directory supports administering security groups or
+   * @return <code>true</code> if the user directory supports administering groups or
    * <code>false</code> otherwise
    */
   @Override
@@ -1160,9 +1130,9 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Update the security group.
+   * Update the group.
    *
-   * @param group the security group
+   * @param group the group
    */
   @Override
   public void updateGroup(Group group)
@@ -1170,13 +1140,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> groupIdOptional =
-          getGroupRepository().getIdByUserDirectoryIdAndGroupNameIgnoreCase(getUserDirectoryId(),
-          group.getGroupName());
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), group.getName());
 
       if (groupIdOptional.isEmpty())
       {
-        throw new GroupNotFoundException(group.getGroupName());
+        throw new GroupNotFoundException(group.getName());
       }
 
       group.setId(groupIdOptional.get());
@@ -1189,8 +1158,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException("Failed to update the security group ("
-          + group.getGroupName() + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityServiceException("Failed to update the group (" + group.getName()
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1278,368 +1247,6 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
   }
 
-///**
-// * Build the JDBC <code>PreparedStatement</code> for the SQL query that will select the users
-// * in the USERS table using the values of the specified attributes as the selection criteria.
-// *
-// * @param connection the existing database connection to use
-// * @param attributes the attributes to be used as the selection criteria
-// *
-// * @return the <code>PreparedStatement</code> for the SQL query that will select the users in the
-// * USERS table using the values of the specified attributes as the selection criteria
-// */
-//private PreparedStatement buildFindUsersStatement(Connection connection,
-//    List<Attribute> attributes)
-//  throws InvalidAttributeException, SQLException
-//{
-//  // Build the SQL statement to select the users
-//  StringBuilder buffer = new StringBuilder();
-//
-//  buffer.append("SELECT id, username, status, first_name, last_name, phone, mobile, email, ");
-//  buffer.append("password, password_attempts, password_expiry FROM security.users");
-//
-//  if (attributes.size() > 0)
-//  {
-//    // Build the parameters for the "WHERE" clause for the SQL statement
-//    StringBuilder whereParameters = new StringBuilder();
-//
-//    for (Attribute attribute : attributes)
-//    {
-//      whereParameters.append(" AND ");
-//
-//      if (attribute.getName().equalsIgnoreCase("status"))
-//      {
-//        whereParameters.append("status = ?");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("email"))
-//      {
-//        whereParameters.append("LOWER(email) LIKE LOWER(?)");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("firstName"))
-//      {
-//        whereParameters.append("LOWER(first_name) LIKE LOWER(?)");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("lastName"))
-//      {
-//        whereParameters.append("LOWER(last_name) LIKE LOWER(?)");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-//      {
-//        whereParameters.append("LOWER(phone) LIKE LOWER(?)");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-//      {
-//        whereParameters.append("LOWER(mobile) LIKE LOWER(?)");
-//      }
-//      else if (attribute.getName().equalsIgnoreCase("username"))
-//      {
-//        whereParameters.append("LOWER(username) LIKE LOWER(?)");
-//      }
-//      else
-//      {
-//        throw new InvalidAttributeException(attribute.getName());
-//      }
-//    }
-//
-//    buffer.append(" WHERE user_directory_id=?");
-//    buffer.append(whereParameters.toString());
-//  }
-//  else
-//  {
-//    buffer.append(" WHERE user_directory_id=?");
-//  }
-//
-//  PreparedStatement statement = connection.prepareStatement(buffer.toString());
-//
-//  statement.setObject(1, UUID.fromString(getUserDirectoryId()));
-//
-//  // Set the parameters for the prepared statement
-//  int parameterIndex = 2;
-//
-//  for (Attribute attribute : attributes)
-//  {
-//    if (attribute.getName().equalsIgnoreCase("status"))
-//    {
-//      statement.setInt(parameterIndex, Integer.parseInt(attribute.getStringValue()));
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("email"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("firstName"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("lastName"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//    else if (attribute.getName().equalsIgnoreCase("username"))
-//    {
-//      statement.setString(parameterIndex, attribute.getStringValue());
-//      parameterIndex++;
-//    }
-//  }
-//
-//  return statement;
-//}
-
-//  /**
-//   * Create a new <code>User</code> instance and populate it with the contents of the current
-//   * row in the specified <code>ResultSet</code>.
-//   *
-//   * @param rs the <code>ResultSet</code> whose current row will be used to populate the
-//   *           <code>User</code> instance
-//   *
-//   * @return the populated <code>User</code> instance
-//   */
-//  private User buildUserFromResultSet(ResultSet rs)
-//    throws SQLException
-//  {
-//    User user = new User();
-//
-//    user.setId(rs.getObject(1, UUID.class));
-//    user.setUsername(rs.getString(2));
-//    user.setUserDirectoryId(getUserDirectoryId());
-//    user.setStatus(UserStatus.fromCode(rs.getInt(3)));
-//
-//    String firstName = rs.getString(4);
-//
-//    user.setFirstName(StringUtils.isEmpty(firstName)
-//        ? ""
-//        : firstName);
-//
-//    String lastName = rs.getString(5);
-//
-//    user.setLastName(StringUtils.isEmpty(lastName)
-//        ? ""
-//        : lastName);
-//
-//    String phoneNumber = rs.getString(6);
-//
-//    user.setPhoneNumber(StringUtils.isEmpty(phoneNumber)
-//        ? ""
-//        : phoneNumber);
-//
-//    String mobilePhoneNumber = rs.getString(7);
-//
-//    user.setMobileNumber(StringUtils.isEmpty(mobilePhoneNumber)
-//        ? ""
-//        : mobilePhoneNumber);
-//
-//    String email = rs.getString(8);
-//
-//    user.setEmail(StringUtils.isEmpty(email)
-//        ? ""
-//        : email);
-//
-//    String password = rs.getString(9);
-//
-//    user.setPassword(StringUtils.isEmpty(password)
-//        ? ""
-//        : password);
-//
-//    if (rs.getObject(10) != null)
-//    {
-//      user.setPasswordAttempts(rs.getInt(10));
-//    }
-//
-//    if (rs.getObject(11) != null)
-//    {
-//      user.setPasswordExpiry(rs.getTimestamp(11).toLocalDateTime());
-//    }
-//
-//    return user;
-//  }
-
-//  /**
-//   * Retrieve the authorised function codes for the user.
-//   *
-//   * @param connection the existing database connection to use
-//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-//   *
-//   * @return the authorised function codes for the user
-//   */
-//  private List<String> getFunctionCodesForUserId(Connection connection, String userId)
-//    throws SQLException
-//  {
-//    String getFunctionCodesForUserIdSQL =
-//        "SELECT DISTINCT ftrm.function_code FROM security.function_to_role_map ftrm "
-//        + "INNER JOIN security.role_to_group_map rtgm ON rtgm.role_code = ftrm.role_code "
-//        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
-//        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
-//
-//    List<String> functionCodes = new ArrayList<>();
-//
-//    try (PreparedStatement statement = connection.prepareStatement(getFunctionCodesForUserIdSQL))
-//    {
-//      statement.setObject(1, UUID.fromString(userId));
-//
-//      try (ResultSet rs = statement.executeQuery())
-//      {
-//        while (rs.next())
-//        {
-//          functionCodes.add(rs.getString(1));
-//        }
-//
-//        return functionCodes;
-//      }
-//    }
-//  }
-
-//  /**
-//   * Retrieve the names for all the security groups that the user with the specific numeric
-//   * ID is associated with.
-//   *
-//   * @param connection the existing database connection
-//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-//   *
-//   * @return the security groups
-//   */
-//  private List<String> getGroupNamesForUser(Connection connection, String userId)
-//    throws SQLException
-//  {
-//    String getGroupNamesForUserSQL = "SELECT groupname FROM "
-//        + "security.groups g, security.user_to_group_map utgm "
-//        + "WHERE g.id = utgm.group_id AND utgm.user_id=? ORDER BY g.groupname";
-//
-//    try (PreparedStatement statement = connection.prepareStatement(getGroupNamesForUserSQL))
-//    {
-//      statement.setObject(1, UUID.fromString(userId));
-//
-//      try (ResultSet rs = statement.executeQuery())
-//      {
-//        List<String> list = new ArrayList<>();
-//
-//        while (rs.next())
-//        {
-//          list.add(rs.getString(1));
-//        }
-//
-//        return list;
-//      }
-//    }
-//  }
-
-///**
-// * Retrieve all the internal security groups that the user with the specific numeric ID
-// * is associated with.
-// *
-// * @param connection the existing database connection
-// * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-// *
-// * @return the internal security groups
-// */
-//private List<Group> getGroupsForUser(Connection connection, String userId)
-//  throws SQLException
-//{
-//  String getGroupsForUserSQL = "SELECT id, groupname, description FROM "
-//      + "security.groups g, security.user_to_group_map utgm "
-//      + "WHERE g.id = utgm.group_id AND utgm.user_id=? " + "ORDER BY g.groupname";
-//
-//  try (PreparedStatement statement = connection.prepareStatement(getGroupsForUserSQL))
-//  {
-//    statement.setObject(1, UUID.fromString(userId));
-//
-//    try (ResultSet rs = statement.executeQuery())
-//    {
-//      List<Group> list = new ArrayList<>();
-//
-//      while (rs.next())
-//      {
-//        Group group = new Group(rs.getString(2));
-//
-//        group.setId(rs.getString(1));
-//        group.setUserDirectoryId(getUserDirectoryId());
-//        group.setDescription(rs.getString(3));
-//        list.add(group);
-//      }
-//
-//      return list;
-//    }
-//  }
-//}
-
-//  /**
-//   * Retrieve the number of users for the internal security group.
-//   *
-//   * @param connection the existing database connection
-//   * @param groupId    the ID used to uniquely identify the internal security group
-//   *
-//   * @return the number of users for the internal security group
-//   */
-//  private long getNumberOfUsersForGroup(Connection connection, String groupId)
-//    throws SQLException
-//  {
-//    String getNumberOfUsersForGroupSQL = "SELECT COUNT (user_id) FROM security.user_to_group_map "
-//        + "WHERE group_id=?";
-//
-//    try (PreparedStatement statement = connection.prepareStatement(getNumberOfUsersForGroupSQL))
-//    {
-//      statement.setObject(1, UUID.fromString(groupId));
-//
-//      try (ResultSet rs = statement.executeQuery())
-//      {
-//        if (rs.next())
-//        {
-//          return rs.getLong(1);
-//        }
-//        else
-//        {
-//          return 0;
-//        }
-//      }
-//    }
-//  }
-
-//  /**
-//   * Retrieve the codes for the roles that the user has been assigned.
-//   *
-//   * @param connection the existing database connection to use
-//   * @param userId     the Universally Unique Identifier (UUID) used to uniquely identify the user
-//   *
-//   * @return the codes for the roles that the user has been assigned
-//   */
-//  private List<String> getRoleCodesForUserId(Connection connection, String userId)
-//    throws SQLException
-//  {
-//    String getRoleCodesForUserIdSQL =
-//        "SELECT DISTINCT rtgm.role_code FROM security.role_to_group_map rtgm "
-//        + "INNER JOIN security.groups g ON g.id = rtgm.group_id "
-//        + "INNER JOIN security.user_to_group_map utgm ON utgm.group_id = g.ID WHERE utgm.user_id=?";
-//
-//    List<String> roleCodes = new ArrayList<>();
-//
-//    try (PreparedStatement statement = connection.prepareStatement(getRoleCodesForUserIdSQL))
-//    {
-//      statement.setObject(1, UUID.fromString(userId));
-//
-//      try (ResultSet rs = statement.executeQuery())
-//      {
-//        while (rs.next())
-//        {
-//          roleCodes.add(rs.getString(1));
-//        }
-//
-//        return roleCodes;
-//      }
-//    }
-//  }
-
   /**
    * Is the password, given by the specified password hash, a historical password that cannot
    * be reused for a period of time i.e. was the password used previously in the last X months.
@@ -1650,7 +1257,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @return <code>true</code> if the password was previously used and cannot be reused for a
    *         period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(UUID userId, String passwordHash)
+  private boolean isPasswordInHistory(Long userId, String passwordHash)
   {
     LocalDateTime after = LocalDateTime.now();
     after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);

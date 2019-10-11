@@ -31,12 +31,12 @@ import javax.xml.ws.WebFault;
 
 /**
  * A <code>DuplicateGroupException</code> is thrown to indicate that a security operation failed as
- * a result of a duplicate security group.
+ * a result of a duplicate group.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT,
-    reason = "A security group with the specified name already exists")
+    reason = "A group with the specified name already exists")
 @WebFault(name = "DuplicateGroupException", targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -48,10 +48,10 @@ public class DuplicateGroupException extends ServiceException
   /**
    * Constructs a new <code>DuplicateGroupException</code>.
    *
-   * @param groupName the name of the security group uniquely identifying the security group
+   * @param name the name identifying the group
    */
-  public DuplicateGroupException(String groupName)
+  public DuplicateGroupException(String name)
   {
-    super("A security group with the name (" + groupName + ") already exists");
+    super("A group with the name (" + name + ") already exists");
   }
 }

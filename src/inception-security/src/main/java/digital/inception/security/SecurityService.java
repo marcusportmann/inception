@@ -18,8 +18,6 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.persistence.IDGenerator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +35,6 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -51,6 +48,16 @@ public class SecurityService
   implements ISecurityService, InitializingBean
 {
   /**
+   * The ID used to uniquely identify the Administration user directory.
+   */
+  public static final Long ADMINISTRATION_USER_DIRECTORY_ID = 0L;
+
+  /**
+   * The ID used to uniquely identify the Administrators group.
+   */
+  public static final Long ADMINISTRATORS_GROUP_ID = 0L;
+
+  /**
    * The name of the Administrators group.
    */
   public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
@@ -59,18 +66,6 @@ public class SecurityService
    * The name of the Administrator role.
    */
   public static final String ADMINISTRATOR_ROLE_NAME = "Administrator";
-
-  /**
-   * The ID used to uniquely identify the Administrators group.
-   */
-  public static final UUID ADMINISTRATORS_GROUP_ID = UUID.fromString(
-      "a9e01fa2-f017-46e2-8187-424bf50a4f33");
-
-  /**
-   * The ID used to uniquely identify the Administration user directory.
-   */
-  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID = UUID.fromString(
-      "4ef18395-423a-4df6-b7d7-6bcdd85956e4");
 
   /**
    * The ID used to uniquely identify the internal user directory type.
@@ -94,8 +89,6 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-  private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
 
   /**
    * The Spring application context.
@@ -103,34 +96,9 @@ public class SecurityService
   private ApplicationContext applicationContext;
 
   /**
-   * The ID generator.
-   */
-  private IDGenerator idGenerator;
-
-  /**
-   * The User Directory Repository.
-   */
-  private UserDirectoryRepository userDirectoryRepository;
-
-  /**
-   * The User Repository.
-   */
-  private UserRepository userRepository;
-
-  /**
    * The Function Repository.
    */
   private FunctionRepository functionRepository;
-
-  /**
-   * The Organization Repository.
-   */
-  private OrganizationRepository organizationRepository;
-
-  /**
-   * The User Directory Type Repository.
-   */
-  private UserDirectoryTypeRepository userDirectoryTypeRepository;
 
   /**
    * The Group repository.
@@ -138,15 +106,44 @@ public class SecurityService
   private GroupRepository groupRepository;
 
   /**
+   * The Organization Repository.
+   */
+  private OrganizationRepository organizationRepository;
+
+  /**
+   * The user directories.
+   */
+  private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+
+  /**
+   * The User Directory Repository.
+   */
+  private UserDirectoryRepository userDirectoryRepository;
+
+  /**
    * The User Directory Summary Repository.
    */
   private UserDirectorySummaryRepository userDirectorySummaryRepository;
 
   /**
+   * The User Directory Type Repository.
+   */
+  private UserDirectoryTypeRepository userDirectoryTypeRepository;
+
+  /**
+   * The user directory types.
+   */
+  private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
+
+  /**
+   * The User Repository.
+   */
+  private UserRepository userRepository;
+
+  /**
    * Constructs a new <code>SecurityService</code>.
    *
    * @param applicationContext             the Spring application context
-   * @param idGenerator                    the ID generator
    * @param functionRepository             the Function Repository
    * @param groupRepository                the Group Repository
    * @param organizationRepository         the Organization Repository
@@ -155,7 +152,7 @@ public class SecurityService
    * @param userDirectoryTypeRepository    the User Directory Type Repository
    * @param userRepository                 the User Repository
    */
-  public SecurityService(ApplicationContext applicationContext, IDGenerator idGenerator,
+  public SecurityService(ApplicationContext applicationContext,
       FunctionRepository functionRepository, GroupRepository groupRepository,
       OrganizationRepository organizationRepository,
       UserDirectoryRepository userDirectoryRepository,
@@ -163,8 +160,6 @@ public class SecurityService
       UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
   {
     this.applicationContext = applicationContext;
-    this.idGenerator = idGenerator;
-
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
     this.organizationRepository = organizationRepository;
@@ -175,16 +170,15 @@ public class SecurityService
   }
 
   /**
-   * Add the user to the security group.
+   * Add the user to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
-   * @param groupName       the name of the security group uniquely identifying the security group
+   * @param groupName       the name identifying the group
    */
   @Override
   @Transactional
-  public void addUserToGroup(UUID userDirectoryId, String username, String groupName)
+  public void addUserToGroup(Long userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -201,8 +195,7 @@ public class SecurityService
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId      the Universally Unique Identifier (UUID) used to uniquely identify
-   *                             the user directory
+   * @param userDirectoryId      the ID used to uniquely identify the user directory
    * @param username             the username identifying the user
    * @param newPassword          the new password
    * @param expirePassword       expire the user's password
@@ -212,7 +205,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
+  public void adminChangePassword(Long userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
@@ -258,14 +251,14 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public UUID authenticate(String username, String password)
+  public Long authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -289,7 +282,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can authenticate this
          * user.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
+        for (Long userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -328,18 +321,18 @@ public class SecurityService
    * @param password    the password for the user that is used to authorise the operation
    * @param newPassword the new password
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the ID used to uniquely identify the user directory
    */
   @Override
   @Transactional
-  public UUID changePassword(String username, String password, String newPassword)
+  public Long changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -363,7 +356,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can change the
          * password for this user.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
+        for (Long userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -405,7 +398,6 @@ public class SecurityService
   @Transactional
   public void createFunction(Function function)
     throws DuplicateFunctionException, SecurityServiceException
-
   {
     try
     {
@@ -428,15 +420,14 @@ public class SecurityService
   }
 
   /**
-   * Create the new security group.
+   * Create the new group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param group           the security group
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param group           the group
    */
   @Override
   @Transactional
-  public void createGroup(UUID userDirectoryId, Group group)
+  public void createGroup(Long userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -467,7 +458,7 @@ public class SecurityService
 
     try
     {
-      if (organizationRepository.existsById(organization.getId()))
+      if ((organization.getId() != null) && organizationRepository.existsById(organization.getId()))
       {
         throw new DuplicateOrganizationException(organization.getId());
       }
@@ -511,15 +502,14 @@ public class SecurityService
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
    */
   @Override
   @Transactional
-  public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
+  public void createUser(Long userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
   {
@@ -545,7 +535,7 @@ public class SecurityService
   {
     try
     {
-      if (userDirectoryRepository.existsById(userDirectory.getId()))
+      if ((userDirectory.getId() != null) && userDirectoryRepository.existsById(userDirectory.getId()))
       {
         throw new DuplicateUserDirectoryException(userDirectory.getId());
       }
@@ -607,15 +597,14 @@ public class SecurityService
   }
 
   /**
-   * Delete the security group.
+   * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name of the security group uniquely identifying the security group
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param name            the name identifying the group
    */
   @Override
   @Transactional
-  public void deleteGroup(UUID userDirectoryId, String groupName)
+  public void deleteGroup(Long userDirectoryId, String name)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityServiceException
   {
@@ -626,18 +615,17 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.deleteGroup(groupName);
+    userDirectory.deleteGroup(name);
   }
 
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    */
   @Override
   @Transactional
-  public void deleteOrganization(UUID organizationId)
+  public void deleteOrganization(Long organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -663,13 +651,12 @@ public class SecurityService
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    */
   @Override
   @Transactional
-  public void deleteUser(UUID userDirectoryId, String username)
+  public void deleteUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -685,12 +672,11 @@ public class SecurityService
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    */
   @Override
   @Transactional
-  public void deleteUserDirectory(UUID userDirectoryId)
+  public void deleteUserDirectory(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -725,14 +711,13 @@ public class SecurityService
   /**
    * Retrieve the users matching the attribute criteria.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param attributes      the attribute criteria used to select the users
    *
    * @return the users whose attributes match the attribute criteria
    */
   @Override
-  public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
+  public List<User> findUsers(Long userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -783,14 +768,13 @@ public class SecurityService
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the authorised function codes for the user
    */
   @Override
-  public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
+  public List<String> getFunctionCodesForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -823,16 +807,15 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the security group.
+   * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name of the security group uniquely identifying the security group
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param name            the name identifying the group
    *
-   * @return the security group
+   * @return the group
    */
   @Override
-  public Group getGroup(UUID userDirectoryId, String groupName)
+  public Group getGroup(Long userDirectoryId, String name)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -842,20 +825,19 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getGroup(groupName);
+    return userDirectory.getGroup(name);
   }
 
   /**
-   * Retrieve the security group names for the user.
+   * Retrieve the names identifying the groups for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the security group names for the user
+   * @return the names identifying the groups for the user
    */
   @Override
-  public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
+  public List<String> getGroupNamesForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -869,15 +851,14 @@ public class SecurityService
   }
 
   /**
-   * Retrieve all the security groups.
+   * Retrieve all the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
-   * @return the security groups
+   * @return the groups
    */
   @Override
-  public List<Group> getGroups(UUID userDirectoryId)
+  public List<Group> getGroups(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -891,16 +872,15 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the security groups for the user.
+   * Retrieve the groups for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the security groups for the user
+   * @return the groups for the user
    */
   @Override
-  public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
+  public List<Group> getGroupsForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -914,15 +894,14 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the number of security groups
+   * Retrieve the number of groups
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
-   * @return the number of security groups
+   * @return the number of groups
    */
   @Override
-  public long getNumberOfGroups(UUID userDirectoryId)
+  public long getNumberOfGroups(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1020,12 +999,12 @@ public class SecurityService
   /**
    * Retrieve the number of users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the number of users
    */
   @Override
-  public long getNumberOfUsers(UUID userDirectoryId)
+  public long getNumberOfUsers(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     return getNumberOfUsers(userDirectoryId, null);
@@ -1034,13 +1013,13 @@ public class SecurityService
   /**
    * Retrieve the number of users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param filter          the optional filter to apply to the users
    *
    * @return the number of users
    */
   @Override
-  public long getNumberOfUsers(UUID userDirectoryId, String filter)
+  public long getNumberOfUsers(Long userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1056,13 +1035,12 @@ public class SecurityService
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the organization
    */
   @Override
-  public Organization getOrganization(UUID organizationId)
+  public Organization getOrganization(Long organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1093,13 +1071,13 @@ public class SecurityService
    * Retrieve the IDs used to uniquely identify the organizations the user directory is associated
    * with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the IDs used to uniquely identify the organizations the user directory is associated
    *         with
    */
   @Override
-  public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
+  public List<Long> getOrganizationIdsForUserDirectory(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1220,12 +1198,12 @@ public class SecurityService
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the organizations the user directory is associated with
    */
   @Override
-  public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
+  public List<Organization> getOrganizationsForUserDirectory(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1252,13 +1230,13 @@ public class SecurityService
   /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
+  public List<String> getRoleCodesForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1274,13 +1252,13 @@ public class SecurityService
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the user
    */
   @Override
-  public User getUser(UUID userDirectoryId, String username)
+  public User getUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1374,13 +1352,12 @@ public class SecurityService
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
+  public List<UserDirectory> getUserDirectoriesForOrganization(Long organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1407,13 +1384,12 @@ public class SecurityService
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the user directory
    */
   @Override
-  public UserDirectory getUserDirectory(UUID userDirectoryId)
+  public UserDirectory getUserDirectory(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1442,22 +1418,22 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the Universally Unique Identifier (UUID) used to uniquely identify the user directory that the user with the specified
+   * Retrieve the ID used to uniquely identify the user directory that the user with the specified
    * username is associated with.
    *
    * @param username the username identifying the user
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory that the user with the specified
+   * @return the ID used to uniquely identify the user directory that the user with the specified
    *         username is associated with or <code>null</code> if the user cannot be found
    */
   @Override
-  public UUID getUserDirectoryIdForUser(String username)
+  public Long getUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -1469,7 +1445,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if the user is associated with one
          * of them.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
+        for (Long userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -1499,13 +1475,13 @@ public class SecurityService
    * Retrieve the IDs used to uniquely identify the user directories the organization is associated
    * with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the IDs used to uniquely identify the user directories the organization is associated
    *         with
    */
   @Override
-  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
+  public List<Long> getUserDirectoryIdsForOrganization(Long organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1592,13 +1568,12 @@ public class SecurityService
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the summaries for the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(Long organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1624,13 +1599,12 @@ public class SecurityService
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the user directory type for the user directory
    */
   @Override
-  public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(Long userDirectoryId)
     throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
         SecurityServiceException
   {
@@ -1663,8 +1637,8 @@ public class SecurityService
     catch (Throwable e)
     {
       throw new SecurityServiceException(
-        "Failed to retrieve the user directory type for the user directory (" + userDirectoryId +
-          ")", e);
+          "Failed to retrieve the user directory type for the user directory (" + userDirectoryId
+          + ")", e);
     }
   }
 
@@ -1690,12 +1664,12 @@ public class SecurityService
   /**
    * Retrieve all the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the users
    */
   @Override
-  public List<User> getUsers(UUID userDirectoryId)
+  public List<User> getUsers(Long userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1711,7 +1685,7 @@ public class SecurityService
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param filter          the optional filter to apply to the users
    * @param sortBy          the optional method used to sort the users e.g. by last name
    * @param sortDirection   the optional sort direction to apply to the users
@@ -1721,7 +1695,7 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
+  public List<User> getUsers(Long userDirectoryId, String filter, UserSortBy sortBy,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
@@ -1736,17 +1710,17 @@ public class SecurityService
   }
 
   /**
-   * Is the user in the security group?
+   * Is the user in the group?
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
-   * @param groupName       the name of the security group uniquely identifying the security group
+   * @param groupName       the name identifying the group
    *
-   * @return <code>true</code> if the user is a member of the security group or <code>false</code>
+   * @return <code>true</code> if the user is a member of the group or <code>false</code>
    *         otherwise
    */
   @Override
-  public boolean isUserInGroup(UUID userDirectoryId, String username, String groupName)
+  public boolean isUserInGroup(Long userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -1769,7 +1743,7 @@ public class SecurityService
   {
     try
     {
-      Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+      Map<Long, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
 
@@ -1804,7 +1778,7 @@ public class SecurityService
               IUserDirectory.class);
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-              userDirectoryClass.getConstructor(UUID.class, List.class, GroupRepository.class,
+              userDirectoryClass.getConstructor(Long.class, List.class, GroupRepository.class,
               UserRepository.class);
 
           if (userDirectoryClassConstructor == null)
@@ -1838,15 +1812,15 @@ public class SecurityService
   }
 
   /**
-   * Remove the user from the security group.
+   * Remove the user from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
-   * @param groupName       the security group name
+   * @param groupName       the name identifying the group
    */
   @Override
   @Transactional
-  public void removeUserFromGroup(UUID userDirectoryId, String username, String groupName)
+  public void removeUserFromGroup(Long userDirectoryId, String username, String groupName)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -1861,15 +1835,15 @@ public class SecurityService
   }
 
   /**
-   * Does the user directory support administering security groups.
+   * Does the user directory support administering groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
-   * @return <code>true</code> if the user directory supports administering security groups or
+   * @return <code>true</code> if the user directory supports administering groups or
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsGroupAdministration(UUID userDirectoryId)
+  public boolean supportsGroupAdministration(Long userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1885,13 +1859,13 @@ public class SecurityService
   /**
    * Does the user directory support administering users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return <code>true</code> if the user directory supports administering users or
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsUserAdministration(UUID userDirectoryId)
+  public boolean supportsUserAdministration(Long userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1935,15 +1909,14 @@ public class SecurityService
   }
 
   /**
-   * Update the security group.
+   * Update the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param group           the security group
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param group           the group
    */
   @Override
   @Transactional
-  public void updateGroup(UUID userDirectoryId, Group group)
+  public void updateGroup(Long userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1989,15 +1962,14 @@ public class SecurityService
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param user            the user
    * @param expirePassword  expire the user's password as part of the update
    * @param lockUser        lock the user as part of the update
    */
   @Override
   @Transactional
-  public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+  public void updateUser(Long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2041,21 +2013,21 @@ public class SecurityService
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   * directory the internal user with the specified username is associated with.
+   * Returns the ID used to uniquely identify the internal user directory the internal user with the
+   * specified username is associated with.
    *
    * @param username the username uniquely identifying the internal user
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   *         directory the internal user with the specified username is associated with or
-   *         <code>null</code> if an internal user with the specified username could not be found
+   * @return the ID used to uniquely identify the internal user directory the internal user with the
+   *         specified username is associated with or <code>null</code> if an internal user with the
+   *         specified username could not be found
    */
-  private UUID getInternalUserDirectoryIdForUser(String username)
+  private Long getInternalUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
     try
     {
-      Optional<UUID> userDirectoryIdOptional =
+      Optional<Long> userDirectoryIdOptional =
           userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
 
       return userDirectoryIdOptional.orElse(null);
@@ -2095,7 +2067,6 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(idGenerator.nextUUID());
     userDirectory.setType("InternalUserDirectory");
     userDirectory.setName(organization.getName() + " Internal User Directory");
 
