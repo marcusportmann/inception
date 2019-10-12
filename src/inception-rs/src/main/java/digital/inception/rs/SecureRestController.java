@@ -37,6 +37,34 @@ import java.util.List;
 public abstract class SecureRestController
 {
   /**
+   * Returns the <code>Long</code> value portion of the authorities with the specified prefix.
+   *
+   * @param authentication the authenticated principal associated with the authenticated request
+   * @param prefix         the authority prefix
+   *
+   * @return the <code>Long</code> value portion of the authorities with the specified prefix
+   */
+  protected List<Long> getLongValuesForAuthoritiesWithPrefix(Authentication authentication,
+      String prefix)
+  {
+    var values = new ArrayList<Long>();
+
+    for (GrantedAuthority authority : authentication.getAuthorities())
+    {
+      if (authority.getAuthority().startsWith(prefix))
+      {
+        try
+        {
+          values.add(Long.parseLong(authority.getAuthority().substring(prefix.length())));
+        }
+        catch (Throwable ignored) {}
+      }
+    }
+
+    return values;
+  }
+
+  /**
    * Returns the value portion of the authority with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request

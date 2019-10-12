@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -126,8 +125,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Create the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param user            the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked      create the user locked
@@ -147,9 +145,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void createUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "user", value = "The user", required = true)
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "user", value = "The user", required = true)
   @RequestBody User user, @ApiParam(name = "expiredPassword",
       value = "Create the user with its password expired")
   @RequestParam(value = "expiredPassword", required = false) Boolean expiredPassword, @ApiParam(
@@ -233,8 +230,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    */
   @ApiOperation(value = "Delete the organization", notes = "Delete the organization")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -251,9 +247,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void deleteOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+      value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable Long organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     if (StringUtils.isEmpty(organizationId))
@@ -267,8 +262,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    */
   @ApiOperation(value = "Delete the user", notes = "Delete the user")
@@ -284,9 +278,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void deleteUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -308,8 +301,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    */
   @ApiOperation(value = "Delete the user directory", notes = "Delete the user directory")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -326,9 +318,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public void deleteUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     if (StringUtils.isEmpty(userDirectoryId))
@@ -342,8 +333,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the organization
    */
@@ -361,9 +351,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public Organization getOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+      value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable Long organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -420,8 +409,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the organizations the user directory is associated with
    */
@@ -439,9 +427,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(@ApiParam(
       name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -472,8 +459,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
    * @return the user
@@ -491,9 +477,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public User getUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -571,8 +556,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the user directories the organization is associated with
    */
@@ -592,9 +576,8 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(@ApiParam(
       name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+      value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable Long organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -623,8 +606,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the user directory
    */
@@ -642,9 +624,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public UserDirectory getUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -703,7 +684,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param organizationId the ID used to uniquely identify the organization
    *
    * @return the summaries for the user directories the organization is associated with
    */
@@ -724,9 +705,8 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
       @ApiParam(name = "organizationId",
-          value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-          required = true)
-  @PathVariable UUID organizationId)
+          value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable Long organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -755,8 +735,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the user directory type for the user directory
    */
@@ -776,9 +755,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException,
         UserDirectoryTypeNotFoundException, SecurityServiceException
   {
@@ -823,8 +801,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param filter          the optional filter to apply to the users
    * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   the optional sort direction to apply to the users
@@ -846,9 +823,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public ResponseEntity<List<User>> getUsers(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "filter",
       value = "The optional filter to apply to the users")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortBy",
       value = "The optional method used to sort the users e.g. by last name")
@@ -891,8 +867,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Update the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the ID used to uniquely identify the organization
    * @param organization   the organization
    */
   @ApiOperation(value = "Update the organization", notes = "Update the organization")
@@ -910,9 +885,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void updateOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId, @ApiParam(name = "organization", value = "The organization",
+      value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable Long organizationId, @ApiParam(name = "organization", value = "The organization",
       required = true)
   @RequestBody Organization organization)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
@@ -948,8 +922,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    * @param user            the user
    * @param expirePassword  expire the user's password
@@ -968,9 +941,8 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void updateUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username, @ApiParam(name = "user", value = "The user", required = true)
   @RequestBody User user, @ApiParam(name = "expirePassword", value = "Expire the user's password")
@@ -1024,8 +996,7 @@ public class SecurityRestController extends SecureRestController
   /**
    * Update the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param userDirectory   the user directory
    */
   @ApiOperation(value = "Update the user directory", notes = "Update the user directory")
@@ -1043,9 +1014,8 @@ public class SecurityRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public void updateUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "userDirectory",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable Long userDirectoryId, @ApiParam(name = "userDirectory",
       value = "The user directory", required = true)
   @RequestBody UserDirectory userDirectory)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
@@ -1084,13 +1054,12 @@ public class SecurityRestController extends SecureRestController
    * directory.
    *
    * @param authentication  the authenticated principal
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *         the user directory or <code>false</code> otherwise
    */
-  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
+  protected boolean hasAccessToUserDirectory(Authentication authentication, Long userDirectoryId)
     throws AccessDeniedException
   {
     // If the user is not authenticated then they cannot have access
@@ -1106,11 +1075,9 @@ public class SecurityRestController extends SecureRestController
     }
 
     // If the user is associated with the user directory then they have access
-    List<String> userDirectoryAuthorityValues = getValuesForAuthoritiesWithPrefix(authentication,
+    List<Long> userDirectoryAuthorityValues = getLongValuesForAuthoritiesWithPrefix(authentication,
         "USER_DIRECTORY_");
 
-    return userDirectoryAuthorityValues.stream().anyMatch(
-        userDirectoryAuthorityValue -> userDirectoryId.equals(UUID.fromString(
-        userDirectoryAuthorityValue)));
+    return userDirectoryAuthorityValues.stream().anyMatch(userDirectoryId::equals);
   }
 }

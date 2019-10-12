@@ -44,7 +44,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -184,7 +183,7 @@ public class SystemMessageHandler extends MessageHandler
 
       try
       {
-        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(),
+        Long userDirectoryId = securityService.authenticate(requestData.getUsername(),
             requestData.getPassword());
 
         List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
@@ -220,8 +219,7 @@ public class SystemMessageHandler extends MessageHandler
             requestData.getUsername(), e.getMessage()));
       }
 
-      return messageTranslator.toMessage(responseData,
-          requestMessage.getCorrelationId());
+      return messageTranslator.toMessage(responseData, requestMessage.getCorrelationId());
     }
     catch (Throwable e)
     {
