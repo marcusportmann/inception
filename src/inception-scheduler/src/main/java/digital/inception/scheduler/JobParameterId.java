@@ -20,8 +20,6 @@ package digital.inception.scheduler;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 /**
  * The <code>JobParameterId</code> class implements the ID class for the <code>JobParameter</code>
  * class.
@@ -33,9 +31,9 @@ public class JobParameterId
   implements Serializable
 {
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter is associated with.
+   * The job the job parameter is associated with.
    */
-  private UUID jobId;
+  private Job job;
 
   /**
    * The name of the job parameter.
@@ -46,19 +44,6 @@ public class JobParameterId
    * Constructs a new <code>JobParameterId</code>.
    */
   public JobParameterId() {}
-
-  /**
-   * Constructs a new <code>JobParameterId</code>.
-   *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
-   * @param name  the name of the job parameter
-   */
-  public JobParameterId(UUID jobId, String name)
-  {
-    this.jobId = jobId;
-    this.name = name;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -88,7 +73,12 @@ public class JobParameterId
 
     JobParameterId other = (JobParameterId) object;
 
-    return jobId.equals(other.jobId) && name.equals(other.name);
+    return (job != null)
+        && (job.getId() != null)
+        && (other.job != null)
+        && (other.job.getId() != null)
+        && job.getId().equals(other.job.getId())
+        && name.equals(other.name);
   }
 
   /**
@@ -99,9 +89,9 @@ public class JobParameterId
   @Override
   public int hashCode()
   {
-    return ((jobId == null)
+    return (((job == null) || (job.getId() == null))
         ? 0
-        : jobId.hashCode()) + ((name == null)
+        : job.getId().hashCode()) + ((name == null)
         ? 0
         : name.hashCode());
   }

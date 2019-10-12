@@ -4,12 +4,17 @@
 CREATE SCHEMA scheduler;
 
 -- -------------------------------------------------------------------------------------------------
+-- CREATE SEQUENCES
+-- -------------------------------------------------------------------------------------------------
+CREATE SEQUENCE scheduler.job_id_seq START WITH 1000000 INCREMENT BY 1;
+
+-- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE scheduler.jobs (
-  id                 UUID          NOT NULL,
-  name               VARCHAR(100) NOT NULL,
-  scheduling_pattern VARCHAR(100) NOT NULL,
+  id                 BIGINT        NOT NULL,
+  name               VARCHAR(100)  NOT NULL,
+  scheduling_pattern VARCHAR(100)  NOT NULL,
   job_class          VARCHAR(1000) NOT NULL,
   enabled            BOOLEAN       NOT NULL,
   status             INTEGER       NOT NULL,
@@ -43,8 +48,8 @@ COMMENT ON COLUMN scheduler.jobs.next_execution IS 'The date and time created th
 
 
 CREATE TABLE scheduler.job_parameters (
-  job_id UUID          NOT NULL,
-  name   VARCHAR(100) NOT NULL,
+  job_id BIGINT        NOT NULL,
+  name   VARCHAR(100)  NOT NULL,
   value  VARCHAR(4000) NOT NULL,
 
   PRIMARY KEY (job_id, name),

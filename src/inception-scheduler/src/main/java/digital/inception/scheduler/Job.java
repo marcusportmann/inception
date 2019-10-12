@@ -35,7 +35,6 @@ import java.time.LocalDateTime;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -69,19 +68,6 @@ public class Job
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The parameters for the job.
-   */
-  @ApiModelProperty(value = "The parameters for the job")
-  @JsonProperty
-  @XmlElementWrapper(name = "Parameters")
-  @XmlElement(name = "Parameter")
-  @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
-      nullable = false)
-  private Set<JobParameter> parameters = new HashSet<>();
-
-  /**
    * Is the job enabled for execution?
    */
   @ApiModelProperty(value = "Is the job enabled for execution", required = true)
@@ -102,17 +88,18 @@ public class Job
   private Integer executionAttempts;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * The ID used to uniquely identify the job.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @SequenceGenerator(schema = "scheduler", name = "job_id_seq", sequenceName = "job_id_seq",
+      allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_id_seq")
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
 
   /**
    * The fully qualified name of the Java class that implements the job.
@@ -169,6 +156,19 @@ public class Job
   private LocalDateTime nextExecution;
 
   /**
+   * The parameters for the job.
+   */
+  @ApiModelProperty(value = "The parameters for the job")
+  @JsonProperty
+  @XmlElementWrapper(name = "Parameters")
+  @XmlElement(name = "Parameter")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
+      nullable = false)
+  private Set<JobParameter> parameters = new HashSet<>();
+
+  /**
    * The cron-style scheduling pattern for the job.
    */
   @ApiModelProperty(value = "The cron-style scheduling pattern for the job", required = true)
@@ -197,8 +197,7 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                          job
+   * @param id                the ID used to uniquely identify the job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
@@ -210,7 +209,7 @@ public class Job
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
    */
-  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean enabled,
+  public Job(Long id, String name, String schedulingPattern, String jobClass, boolean enabled,
       JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
       LocalDateTime nextExecution)
   {
@@ -233,7 +232,7 @@ public class Job
    */
   public void addParameter(JobParameter parameter)
   {
-    parameter.setJobId(this.getId());
+    parameter.setJob(this);
 
     this.parameters.add(parameter);
   }
@@ -280,11 +279,11 @@ public class Job
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Returns the ID used to uniquely identify the job.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @return the ID used to uniquely identify the job
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -430,11 +429,11 @@ public class Job
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Set the ID used to uniquely identify the job.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the scheduled job
+   * @param id the ID used to uniquely identify the scheduled job
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

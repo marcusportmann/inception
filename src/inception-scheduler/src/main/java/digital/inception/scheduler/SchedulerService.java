@@ -37,7 +37,10 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -54,9 +57,6 @@ public class SchedulerService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
-
   /**
    * The Spring application context.
    */
@@ -65,6 +65,9 @@ public class SchedulerService
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
+
+  /* The name of the Scheduler Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
@@ -127,11 +130,11 @@ public class SchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
   @Override
   @Transactional
-  public void deleteJob(UUID jobId)
+  public void deleteJob(Long jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -258,12 +261,12 @@ public class SchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the job
    */
   @Override
-  public Job getJob(UUID jobId)
+  public Job getJob(Long jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -413,14 +416,13 @@ public class SchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the job
+   * @param jobId             the ID used to uniquely identify the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
   @Override
   @Transactional
-  public void rescheduleJob(UUID jobId, String schedulingPattern)
+  public void rescheduleJob(Long jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
     try
@@ -523,12 +525,12 @@ public class SchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the job
    */
   @Override
   @Transactional
-  public void setJobStatus(UUID jobId, JobStatus status)
+  public void setJobStatus(Long jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -554,12 +556,12 @@ public class SchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   @Override
   @Transactional
-  public void unlockJob(UUID jobId, JobStatus status)
+  public void unlockJob(Long jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try

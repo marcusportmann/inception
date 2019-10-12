@@ -30,7 +30,6 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.LockModeType;
 
@@ -40,11 +39,11 @@ import javax.persistence.LockModeType;
  *
  * @author Marcus Portmann
  */
-public interface JobRepository extends JpaRepository<Job, UUID>
+public interface JobRepository extends JpaRepository<Job, Long>
 {
   @Modifying
   @Query("delete from Job j where j.id = :jobId")
-  void deleteById(@Param("jobId") UUID jobId);
+  void deleteById(@Param("jobId") Long jobId);
 
   @Query("select j from Job j where upper(j.name) like upper(:filter) or upper(j.jobClass) "
       + "like upper(:filter)")
@@ -67,7 +66,7 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Query("update Job j set j.lockName = :lockName, j.status = 2, "
       + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
       + "where j.id = :jobId")
-  void lockJobForExecution(@Param("jobId") UUID jobId, @Param("lockName") String lockName, @Param(
+  void lockJobForExecution(@Param("jobId") Long jobId, @Param("lockName") String lockName, @Param(
       "when") LocalDateTime when);
 
   @Modifying
@@ -79,13 +78,13 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Modifying
   @Query("update Job j set j.status = 1, j.executionAttempts = null, "
       + "j.nextExecution = :nextExecution where j.id = :jobId")
-  void scheduleJob(@Param("jobId") UUID jobId, @Param("nextExecution") LocalDateTime nextExecution);
+  void scheduleJob(@Param("jobId") Long jobId, @Param("nextExecution") LocalDateTime nextExecution);
 
   @Modifying
   @Query("update Job j set j.status = :status where j.id = :jobId")
-  void setJobStatus(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
+  void setJobStatus(@Param("jobId") Long jobId, @Param("status") JobStatus status);
 
   @Modifying
   @Query("update Job j set j.status = :status, j.lockName = null where j.id = :jobId")
-  void unlockJob(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
+  void unlockJob(@Param("jobId") Long jobId, @Param("status") JobStatus status);
 }

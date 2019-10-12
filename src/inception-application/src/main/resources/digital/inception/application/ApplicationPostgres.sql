@@ -65,6 +65,7 @@ DROP TABLE IF EXISTS test.test_data CASCADE;
 -- -------------------------------------------------------------------------------------------------
 -- DROP SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+DROP SEQUENCE IF EXISTS scheduler.job_id_seq;
 DROP SEQUENCE IF EXISTS security.group_id_seq;
 DROP SEQUENCE IF EXISTS security.organization_id_seq;
 DROP SEQUENCE IF EXISTS security.user_directory_id_seq;
@@ -147,6 +148,7 @@ CREATE SCHEMA test;
 -------------------------------------------------------------------------------------------------
 -- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+CREATE SEQUENCE scheduler.job_id_seq START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE security.group_id_seq START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE security.organization_id_seq START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE security.user_directory_id_seq START WITH 1000000 INCREMENT BY 1;
@@ -440,7 +442,7 @@ COMMENT ON COLUMN reporting.report_definitions.template IS 'The JasperReports te
 
 
 CREATE TABLE scheduler.jobs (
-  id                 UUID    NOT NULL,
+  id                 BIGINT  NOT NULL,
   name               TEXT    NOT NULL,
   scheduling_pattern TEXT    NOT NULL,
   job_class          TEXT    NOT NULL,
@@ -476,9 +478,9 @@ COMMENT ON COLUMN scheduler.jobs.next_execution IS 'The date and time created th
 
 
 CREATE TABLE scheduler.job_parameters (
-  job_id UUID NOT NULL,
-  name   TEXT NOT NULL,
-  value  TEXT NOT NULL,
+  job_id BIGINT NOT NULL,
+  name   TEXT   NOT NULL,
+  value  TEXT   NOT NULL,
 
   PRIMARY KEY (job_id, name),
   CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES scheduler.jobs(id) ON DELETE CASCADE

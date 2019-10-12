@@ -136,6 +136,7 @@ GO
 -- -------------------------------------------------------------------------------------------------
 -- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+CREATE SEQUENCE "SCHEDULER"."JOB_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SECURITY"."GROUP_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SECURITY"."ORGANIZATION_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SECURITY"."USER_DIRECTORY_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
@@ -577,7 +578,7 @@ GO
 
 
 CREATE TABLE "SCHEDULER"."JOBS" (
-  id                 UNIQUEIDENTIFIER NOT NULL,
+  id                 BIGINT NOT NULL,
   name               NVARCHAR(100)    NOT NULL,
   scheduling_pattern NVARCHAR(100)   NOT NULL,
   job_class          NVARCHAR(1000)   NOT NULL,
@@ -635,9 +636,9 @@ GO
 
 
 CREATE TABLE "SCHEDULER"."JOB_PARAMETERS" (
-  job_id UNIQUEIDENTIFIER NOT NULL,
-  name   NVARCHAR(100)    NOT NULL,
-  value  NVARCHAR(MAX)    NOT NULL,
+  job_id BIGINT        NOT NULL,
+  name   NVARCHAR(100) NOT NULL,
+  value  NVARCHAR(MAX) NOT NULL,
 
   PRIMARY KEY (job_id, name),
   CONSTRAINT job_parameters_job_fk FOREIGN KEY (job_id) REFERENCES "SCHEDULER"."JOBS"(id) ON DELETE CASCADE

@@ -29,8 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
@@ -45,33 +43,25 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "JobParameter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "jobId", "name", "value" })
+@JsonPropertyOrder({ "name", "value" })
 @XmlRootElement(name = "JobParameter", namespace = "http://scheduler.inception.digital")
 @XmlType(name = "JobParameter", namespace = "http://scheduler.inception.digital",
-    propOrder = { "jobId", "name", "value" })
+    propOrder = { "name", "value" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "scheduler", name = "job_parameters")
 @IdClass(JobParameterId.class)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({ "unused" })
 public class JobParameter
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter
-   * is associated with.
+   * The job the job parameter is associated with.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job the job parameter is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "JobId", required = true)
-  @NotNull
-  @Id
-  @Column(name = "job_id", nullable = false)
-  private UUID jobId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Job job;
 
   /**
    * The name of the job parameter.
@@ -114,21 +104,6 @@ public class JobParameter
   }
 
   /**
-   * Constructs a new <code>JobParameter</code>.
-   *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
-   * @param name  the name of the job parameter
-   * @param value the value of the job parameter
-   */
-  public JobParameter(UUID jobId, String name, String value)
-  {
-    this.jobId = jobId;
-    this.name = name;
-    this.value = value;
-  }
-
-  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -156,20 +131,19 @@ public class JobParameter
 
     JobParameter other = (JobParameter) object;
 
-    return ((jobId != null) && jobId.equals(other.jobId))
+    return ((job != null) && (job.getId() != null) && (other.job != null) && (other.job.getId()
+        != null) && job.getId().equals(other.job.getId()))
         && ((name != null) && name.equals(other.name));
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
+   * Returns the job the job parameter is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   *         parameter is associated with
+   * @return the job the job parameter is associated with
    */
-  public UUID getJobId()
+  public Job getJob()
   {
-    return jobId;
+    return job;
   }
 
   /**
@@ -200,23 +174,21 @@ public class JobParameter
   @Override
   public int hashCode()
   {
-    return ((jobId == null)
+    return (((job == null) || (job.getId() == null))
         ? 0
-        : jobId.hashCode()) + ((name == null)
+        : job.getId().hashCode()) + ((name == null)
         ? 0
         : name.hashCode());
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job the job
-   * parameter is associated with.
+   * Set the job the job parameter is associated with.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job the
-   *              job parameter is associated with
+   * @param job the job the job parameter is associated with
    */
-  public void setJobId(UUID jobId)
+  public void setJob(Job job)
   {
-    this.jobId = jobId;
+    this.job = job;
   }
 
   /**

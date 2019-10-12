@@ -40,7 +40,6 @@ import static org.junit.Assert.fail;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
@@ -209,7 +208,6 @@ public class SchedulerServiceTest
     jobCount++;
 
     Job job = new Job();
-    job.setId(UUID.randomUUID());
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("digital.inception.scheduler.TestJob");
@@ -248,9 +246,8 @@ public class SchedulerServiceTest
       {
         if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName()))
         {
-          assertEquals(
-            "The values for the two job parameters (" + job1Parameter.getName() + ") do not match",
-            job1Parameter.getValue(), job2Parameter.getValue());
+          assertEquals("The values for the two job parameters (" + job1Parameter.getName()
+              + ") do not match", job1Parameter.getValue(), job2Parameter.getValue());
 
           foundParameter = true;
         }
