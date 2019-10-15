@@ -23,9 +23,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
+import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -63,7 +66,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(schema = "scheduler", name = "jobs")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Job
-  implements Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -94,9 +97,9 @@ public class Job
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "scheduler", name = "job_id_seq", sequenceName = "job_id_seq",
-      allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_id_seq")
+  @GenericGenerator(name = "job_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "job_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
   private Long id;

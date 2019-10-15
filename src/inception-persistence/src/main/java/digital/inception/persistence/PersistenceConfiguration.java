@@ -61,6 +61,12 @@ public class PersistenceConfiguration
   private ApplicationContext applicationContext;
 
   /**
+   * The optional comma-delimited packages on the classpath to scan for JPA entities.
+   */
+  @Value("${application.database.packagesToScanForEntities:#{null}}")
+  private String packagesToScanForEntities;
+
+  /**
    * Constructs a new <code>PersistenceConfiguration</code>.
    *
    * @param applicationContext the Spring application context
@@ -150,12 +156,6 @@ public class PersistenceConfiguration
   }
 
   /**
-   * The optional comma-delimited packages on the classpath to scan for JPA entities.
-   */
-  @Value("${application.database.packagesToScanForEntities:#{null}}")
-  private String packagesToScanForEntities;
-
-  /**
    * Returns the names of the packages to scan for JPA entities.
    *
    * @return the names of the packages to scan for JPA entities
@@ -175,5 +175,4 @@ public class PersistenceConfiguration
 
     return packagesToScanForEntities;
   }
-
 }

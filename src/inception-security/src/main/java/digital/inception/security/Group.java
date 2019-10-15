@@ -23,10 +23,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import digital.inception.persistence.Identifiable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.hibernate.annotations.GenericGenerator;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +60,7 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "security", name = "groups")
 @SuppressWarnings({ "unused" })
 public class Group
-  implements java.io.Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -75,9 +81,9 @@ public class Group
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "security", name = "group_id_seq", sequenceName = "group_id_seq",
-      allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "group_id_seq")
+  @GenericGenerator(name = "group_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "group_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
@@ -325,6 +331,16 @@ public class Group
   public void setId(Long id)
   {
     this.id = id;
+  }
+
+  /**
+   * Set the name identifying the group.
+   *
+   * @param name the name identifying the group
+   */
+  public void setName(String name)
+  {
+    this.name = name;
   }
 
   /**

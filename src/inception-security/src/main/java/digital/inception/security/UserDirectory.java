@@ -26,9 +26,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
+import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import org.springframework.util.StringUtils;
 
@@ -41,6 +44,7 @@ import org.xml.sax.InputSource;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,7 +77,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 @Table(schema = "security", name = "user_directories")
 @SuppressWarnings({ "unused" })
 public class UserDirectory
-  implements java.io.Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -84,9 +88,9 @@ public class UserDirectory
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "security", name = "user_directory_id_seq",
-      sequenceName = "user_directory_id_seq", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_directory_id_seq")
+  @GenericGenerator(name = "user_directory_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "user_directory_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
@@ -260,8 +264,9 @@ public class UserDirectory
   public int hashCode()
   {
     return (id == null)
-      ? 0
-      : id.hashCode();  }
+        ? 0
+        : id.hashCode();
+  }
 
   /**
    * Set the XML configuration data for the user directory.

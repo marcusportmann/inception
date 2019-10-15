@@ -23,10 +23,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import digital.inception.persistence.Identifiable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.hibernate.annotations.GenericGenerator;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +60,7 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "security", name = "organizations")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Organization
-  implements java.io.Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -65,9 +71,9 @@ public class Organization
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "security", name = "organization_id_seq",
-      sequenceName = "organization_id_seq", allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_id_seq")
+  @GenericGenerator(name = "organization_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "organization_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
   private Long id;

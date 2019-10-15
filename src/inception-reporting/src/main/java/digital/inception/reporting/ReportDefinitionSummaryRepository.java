@@ -20,10 +20,6 @@ package digital.inception.reporting;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-//~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
 /**
  * The <code>ReportDefinitionSummaryRepository</code> interface declares the repository for the
  * <code>ReportDefinitionSummary</code> domain type.
@@ -32,6 +28,4 @@ import java.util.UUID;
  */
 public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
     Long>
-{
-
-}
+{}

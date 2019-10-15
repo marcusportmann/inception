@@ -208,6 +208,7 @@ public class SchedulerServiceTest
     jobCount++;
 
     Job job = new Job();
+    job.setId((long)jobCount);
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("digital.inception.scheduler.TestJob");

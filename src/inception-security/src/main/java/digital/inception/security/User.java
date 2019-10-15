@@ -24,11 +24,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
+import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import org.hibernate.annotations.GenericGenerator;
+
 //~--- JDK imports ------------------------------------------------------------
+
+import java.io.Serializable;
 
 import java.time.LocalDateTime;
 
@@ -63,7 +68,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(schema = "security", name = "users")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class User
-  implements java.io.Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -104,9 +109,9 @@ public class User
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "security", name = "user_id_seq", sequenceName = "user_id_seq",
-      allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+  @GenericGenerator(name = "user_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "user_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
   private Long id;
@@ -421,8 +426,9 @@ public class User
   public int hashCode()
   {
     return (id == null)
-      ? 0
-      : id.hashCode();  }
+        ? 0
+        : id.hashCode();
+  }
 
   /**
    * Is the user active?

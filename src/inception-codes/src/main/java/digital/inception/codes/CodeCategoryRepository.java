@@ -28,7 +28,6 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The <code>CodeCategoryRepository</code> interface declares the repository for the

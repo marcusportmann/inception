@@ -26,7 +26,6 @@ import org.springframework.data.repository.query.Param;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>CodeRepository</code> interface declares the repository for the

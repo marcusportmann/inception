@@ -2067,6 +2067,11 @@ public class SecurityService
   {
     UserDirectory userDirectory = new UserDirectory();
 
+    if (organization.getId() != null)
+    {
+      userDirectory.setId(organization.getId());
+    }
+
     userDirectory.setType("InternalUserDirectory");
     userDirectory.setName(organization.getName() + " Internal User Directory");
 

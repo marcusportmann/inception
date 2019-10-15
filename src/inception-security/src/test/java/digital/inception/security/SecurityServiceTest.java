@@ -778,6 +778,12 @@ public class SecurityServiceTest
           + "deleted");
     }
     catch (OrganizationNotFoundException ignored) {}
+
+    Organization organizationWithoutId = getTestOrganizationDetails();
+    organizationWithoutId.setId(null);
+
+    UserDirectory userDirectoryWithoutId = securityService.createOrganization(
+        organizationWithoutId, true);
   }
 
   /**
@@ -1110,6 +1116,7 @@ public class SecurityServiceTest
   {
     User user = new User();
 
+    user.setId((long) number);
     user.setUsername("Numbered Test Username " + number);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Numbered Test E-Mail " + number);
@@ -1139,8 +1146,10 @@ public class SecurityServiceTest
   {
     groupCount++;
 
-    Group group = new Group("Test Group " + groupCount);
+    Group group = new Group();
 
+    group.setId((long) groupCount);
+    group.setName("Test Group " + groupCount);
     group.setDescription("Test Group Description " + groupCount);
 
     return group;
@@ -1150,8 +1159,13 @@ public class SecurityServiceTest
   {
     organizationCount++;
 
-    return new Organization("Test Organization Name " + organizationCount, OrganizationStatus
-        .ACTIVE);
+    Organization organization = new Organization();
+
+    organization.setId((long) organizationCount);
+    organization.setName("Test Organization Name " + organizationCount);
+    organization.setStatus(OrganizationStatus.ACTIVE);
+
+    return organization;
   }
 
   private static synchronized User getTestUserDetails()
@@ -1160,6 +1174,7 @@ public class SecurityServiceTest
 
     User user = new User();
 
+    user.setId((long) userCount);
     user.setUsername("Test User Username " + userCount);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Test User E-Mail " + userCount);
@@ -1179,6 +1194,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = new UserDirectory();
 
+    userDirectory.setId((long) userDirectoryCount);
     userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
