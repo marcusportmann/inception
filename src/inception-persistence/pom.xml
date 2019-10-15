@@ -3,8 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-data</artifactId>
-  <name>inception-data</name>
+  <artifactId>inception-persistence</artifactId>
+  <name>inception-persistence</name>
 
   <parent>
     <groupId>digital.inception</groupId>
@@ -20,18 +20,29 @@
     </dependency>
 
     <!-- Dependencies -->
+    <!--
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>javax.persistence-api</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
     </dependency>
+
 
     <!-- Test Dependencies -->
     <dependency>

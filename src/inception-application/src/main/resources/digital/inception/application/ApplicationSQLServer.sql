@@ -62,8 +62,14 @@ GO
 
 
 -- -------------------------------------------------------------------------------------------------
--- DROP SCHEMAS
+-- DROP SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'REPORT_DEFINITION_ID_SEQ')
+DROP SEQUENCE "REPORTING"."REPORT_DEFINITION_ID_SEQ"
+GO
+IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'JOB_ID_SEQ')
+DROP SEQUENCE "SCHEDULER"."JOB_ID_SEQ"
+GO
 IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'GROUP_ID_SEQ')
 DROP SEQUENCE "SECURITY"."GROUP_ID_SEQ"
 GO
@@ -136,6 +142,7 @@ GO
 -- -------------------------------------------------------------------------------------------------
 -- CREATE SEQUENCES
 -- -------------------------------------------------------------------------------------------------
+CREATE SEQUENCE "REPORTING"."REPORT_DEFINITION_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SCHEDULER"."JOB_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SECURITY"."GROUP_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
 CREATE SEQUENCE "SECURITY"."ORGANIZATION_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;

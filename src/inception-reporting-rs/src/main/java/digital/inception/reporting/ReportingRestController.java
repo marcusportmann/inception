@@ -126,7 +126,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -141,8 +141,8 @@ public class ReportingRestController extends SecureRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition", required = true)
-  @PathVariable UUID reportDefinitionId)
+      value = "The ID used to uniquely identify the report definition", required = true)
+  @PathVariable Long reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (reportDefinitionId == null)
@@ -269,7 +269,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Update the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportDefinition   the report definition
    */
   @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
@@ -286,7 +286,7 @@ public class ReportingRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The ID used to uniquely identify the reportDefinition", required = true)
-  @PathVariable String reportDefinitionId, @ApiParam(name = "reportDefinition",
+  @PathVariable Long reportDefinitionId, @ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException

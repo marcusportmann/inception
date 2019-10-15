@@ -27,7 +27,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.sql.Connection;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -113,12 +116,11 @@ public class ReportingWebService
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @WebMethod(operationName = "DeleteReportDefinition")
   public void deleteReportDefinition(@WebParam(name = "ReportDefinitionId")
-  @XmlElement(required = true) UUID reportDefinitionId)
+  @XmlElement(required = true) Long reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (reportDefinitionId == null)
@@ -132,8 +134,7 @@ public class ReportingWebService
   /**
    * Generate the PDF report.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportParameters   the report parameters
    *
    * @return the PDF report
@@ -141,7 +142,7 @@ public class ReportingWebService
   @WebMethod(operationName = "GenerateReport")
   @WebResult(name = "Report")
   public byte[] generateReport(@WebParam(name = "ReportDefinitionId")
-  @XmlElement(required = true) UUID reportDefinitionId, @WebParam(name = "ReportParameters")
+  @XmlElement(required = true) Long reportDefinitionId, @WebParam(name = "ReportParameters")
   @XmlElement(required = true) List<ReportParameter> reportParameters)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {

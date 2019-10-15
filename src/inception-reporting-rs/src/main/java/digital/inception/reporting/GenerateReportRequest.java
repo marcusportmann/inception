@@ -30,7 +30,6 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>ReportDefinition</code> class holds the information for a report definition.
@@ -47,12 +46,12 @@ public class GenerateReportRequest
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
-  private UUID reportDefinitionId;
+  private Long reportDefinitionId;
 
   /**
    * The report parameters.
@@ -69,24 +68,21 @@ public class GenerateReportRequest
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportParameters   the report parameters
    */
-  public GenerateReportRequest(UUID reportDefinitionId, List<ReportParameter> reportParameters)
+  public GenerateReportRequest(Long reportDefinitionId, List<ReportParameter> reportParameters)
   {
     this.reportDefinitionId = reportDefinitionId;
     this.reportParameters = reportParameters;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
-   * definition.
+   * Returns the ID used to uniquely identify the report definition.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *         definition
+   * @return the ID used to uniquely identify the report definition
    */
-  public UUID getReportDefinitionId()
+  public Long getReportDefinitionId()
   {
     return reportDefinitionId;
   }
@@ -102,12 +98,11 @@ public class GenerateReportRequest
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * Set the ID used to uniquely identify the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public void setReportDefinitionId(UUID reportDefinitionId)
+  public void setReportDefinitionId(Long reportDefinitionId)
   {
     this.reportDefinitionId = reportDefinitionId;
   }

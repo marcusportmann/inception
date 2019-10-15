@@ -45,8 +45,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.DependsOn;
 
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -58,7 +59,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -74,6 +74,8 @@ import javax.xml.ws.Endpoint;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = false)
+@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+  basePackages = { "digital.inception.sample" })
 @EnableSwagger2
 public class SampleApplication extends Application
   implements InitializingBean
@@ -112,14 +114,14 @@ public class SampleApplication extends Application
   private ISampleService sampleService;
 
   /**
-   * The Security Service.
-   */
-  private ISecurityService securityService;
-
-  /**
    * The Scheduler Service.
    */
   private ISchedulerService schedulerService;
+
+  /**
+   * The Security Service.
+   */
+  private ISecurityService securityService;
 
   /**
    * The JSR-303 validator.
@@ -181,8 +183,8 @@ public class SampleApplication extends Application
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
           "digital/inception/sample/SampleReport.jasper");
 
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
-          "2a4b74e8-7f03-416f-b058-b35bb06944ef"), "Sample Report", sampleReportDefinitionData);
+      ReportDefinition sampleReportDefinition = new ReportDefinition(1L, "Sample Report",
+          sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {

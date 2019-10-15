@@ -19,12 +19,15 @@ package digital.inception.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
+
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
+
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
@@ -44,20 +47,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
+//~--- JDK imports ------------------------------------------------------------
+
 import java.io.IOException;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-//~--- JDK imports ------------------------------------------------------------
+import javax.sql.DataSource;
+
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
 
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
@@ -73,10 +80,13 @@ import java.util.concurrent.Executor;
     excludeFilters = { @ComponentScan.Filter(value = SpringBootApplication.class,
         type = FilterType.ANNOTATION) ,
         @ComponentScan.Filter(
-            pattern = "digital\\.inception\\application\\.ApplicationDatabaseConfiguration",
+            pattern = "digital\\.inception\\.application\\.ApplicationDatabaseConfiguration",
                 type = FilterType.REGEX) ,
         @ComponentScan.Filter(
-            pattern = "digital\\.inception\\application\\.ApplicationTransactionManager",
+            pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
+                type = FilterType.REGEX) ,
+        @ComponentScan.Filter(
+            pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
                 type = FilterType.REGEX) })
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration
@@ -103,7 +113,6 @@ public class TestConfiguration
     this.applicationContext = applicationContext;
   }
 
-
   /**
    * Returns the application entity manager factory associated with the application data source.
    *
@@ -124,17 +133,18 @@ public class TestConfiguration
     localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
     localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
     localContainerEntityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-        getJpaPackagesToScan()));
+        packagesToScanForEntities()));
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    Map<String, Object> jpaPropertyMap =
-      localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+    Map<String, Object> jpaPropertyMap = localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
-    PlatformTransactionManager transactionManager = applicationContext.getBean(PlatformTransactionManager.class);
+    PlatformTransactionManager transactionManager = applicationContext.getBean(
+        PlatformTransactionManager.class);
 
     if (transactionManager instanceof JtaTransactionManager)
     {
-      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(((JtaTransactionManager) transactionManager)));
+      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
+          ((JtaTransactionManager) transactionManager)));
     }
 
     return localContainerEntityManagerFactoryBean;
@@ -181,35 +191,41 @@ public class TestConfiguration
       {
         try
         {
-          TransactionManager transactionManager = applicationContext.getBean(TransactionManager.class);
+          TransactionManager transactionManager = applicationContext.getBean(
+              TransactionManager.class);
 
-          TransactionSynchronizationRegistry transactionSynchronizationRegistry = applicationContext.getBean(TransactionSynchronizationRegistry.class);
+          TransactionSynchronizationRegistry transactionSynchronizationRegistry =
+              applicationContext.getBean(TransactionSynchronizationRegistry.class);
 
           Properties agroalProperties = new Properties();
-          agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, "jdbc:h2:mem:" + Thread.currentThread().getName()
-            + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-          //db2Agroal.setProperty(AgroalPropertiesReader.PRINCIPAL, AgroalH2Utils.DB_USER);
-          //db2Agroal.setProperty(AgroalPropertiesReader.CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
-          //db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, AgroalH2Utils.DB_USER);
-          //db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
-          agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
+          agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, "jdbc:h2:mem:"
+              + Thread.currentThread().getName()
+              + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+
+          // db2Agroal.setProperty(AgroalPropertiesReader.PRINCIPAL, AgroalH2Utils.DB_USER);
+          // db2Agroal.setProperty(AgroalPropertiesReader.CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
+          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, AgroalH2Utils.DB_USER);
+          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
+          agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME,
+              "org.h2.jdbcx.JdbcDataSource");
           agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "10");
-          AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(agroalProperties);
-          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier = agroalReaderProperties2.modify();
+
+          AgroalPropertiesReader agroalReaderProperties2 =
+              new AgroalPropertiesReader().readProperties(agroalProperties);
+          AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
+              agroalReaderProperties2.modify();
           TransactionIntegration transactionIntegration = new NarayanaTransactionIntegration(
-            transactionManager,
-            transactionSynchronizationRegistry);
+              transactionManager, transactionSynchronizationRegistry);
 
+//        TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
+//          com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
+//          "java:/agroalds2", false, recoveryManagerService);
 
+          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration()
+              .transactionIntegration(transactionIntegration);
 
-//          TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-//            com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
-//            "java:/agroalds2", false, recoveryManagerService);
-
-
-          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration().transactionIntegration(transactionIntegration);
-
-          dataSource = new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
+          dataSource = new DataSourceProxy(AgroalDataSource.from(
+              agroalDataSourceConfigurationSupplier));
 
           /*
            * Initialize the in-memory database using the SQL statements contained in the resources
@@ -248,11 +264,11 @@ public class TestConfiguration
   }
 
   /**
-   * Returns the names of the packages to scan for JPA classes.
+   * Returns the names of the packages to scan for JPA entity classes.
    *
-   * @return the names of the packages to scan for JPA classes
+   * @return the names of the packages to scan for JPA entity classes
    */
-  protected List<String> getJpaPackagesToScan()
+  protected List<String> packagesToScanForEntities()
   {
     List<String> packagesToScan = new ArrayList<>();
 

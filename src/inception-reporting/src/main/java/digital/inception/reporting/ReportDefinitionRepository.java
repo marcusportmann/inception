@@ -33,9 +33,9 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, UUID>
+public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, Long>
 {
   @Modifying
   @Query("delete from ReportDefinition rd where rd.id = :reportDefinitionId")
-  void deleteById(@Param("reportDefinitionId") UUID reportDefinitionId);
+  void deleteById(@Param("reportDefinitionId") Long reportDefinitionId);
 }

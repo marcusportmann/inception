@@ -16,7 +16,7 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-data</artifactId>
+      <artifactId>inception-persistence</artifactId>
     </dependency>
 
     <!-- Dependencies -->

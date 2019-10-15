@@ -29,8 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -63,17 +61,16 @@ public class ReportDefinitionSummary
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
 
   /**
    * The name of the report definition.
@@ -95,11 +92,10 @@ public class ReportDefinitionSummary
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *             definition
+   * @param id   the ID used to uniquely identify the report definition
    * @param name the name of the report definition
    */
-  ReportDefinitionSummary(UUID id, String name)
+  ReportDefinitionSummary(Long id, String name)
   {
     this.id = id;
     this.name = name;
@@ -137,13 +133,11 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
-   * definition.
+   * Returns the ID used to uniquely identify the report definition.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *         definition
+   * @return the ID used to uniquely identify the report definition
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }

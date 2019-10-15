@@ -22,19 +22,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import digital.inception.persistence.Identifiable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -57,22 +56,24 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "reporting", name = "report_definitions")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportDefinition
-  implements Serializable
+  implements Identifiable<Long>, Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @GenericGenerator(name = "report_definition_id",
+      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
+  @GeneratedValue(generator = "report_definition_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private Long id;
 
   /**
    * The name of the report definition.
@@ -104,12 +105,11 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id       the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *                 definition
+   * @param id       the ID used to uniquely identify the report definition
    * @param name     the name of the report definition
    * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(UUID id, String name, byte[] template)
+  public ReportDefinition(Long id, String name, byte[] template)
   {
     this.id = id;
     this.name = name;
@@ -148,13 +148,11 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
-   * definition.
+   * Returns the ID used to uniquely identify the report definition.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *         definition
+   * @return the ID used to uniquely identify the report definition
    */
-  public UUID getId()
+  public Long getId()
   {
     return id;
   }
@@ -193,12 +191,11 @@ public class ReportDefinition
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * Set the ID used to uniquely identify the report definition.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the report
-   *           definition
+   * @param id the ID used to uniquely identify the report definition
    */
-  public void setId(UUID id)
+  public void setId(Long id)
   {
     this.id = id;
   }

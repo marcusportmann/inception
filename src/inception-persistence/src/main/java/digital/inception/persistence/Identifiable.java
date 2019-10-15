@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package digital.inception.reporting;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.data.jpa.repository.JpaRepository;
+package digital.inception.persistence;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
+import java.io.Serializable;
 
 /**
- * The <code>ReportDefinitionSummaryRepository</code> interface declares the repository for the
- * <code>ReportDefinitionSummary</code> domain type.
+ * The <code>Identifiable</code> interface defines the interface that must be implemented by JPA
+ * entity classes that have an ID that can be explicitly specified in place of an automatically
+ * generated value for an identity column in the database.
+ *
+ * @param <T>
  *
  * @author Marcus Portmann
  */
-public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
-    Long>
+public interface Identifiable<T extends Serializable>
 {
-
+  /**
+   * Returns the ID for the entity.
+   *
+   * @return the ID for the entity
+   */
+  T getId();
 }

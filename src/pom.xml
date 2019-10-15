@@ -95,7 +95,7 @@
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger-annotations.version>1.5.22</swagger-annotations.version>
+    <swagger.version>1.5.22</swagger.version>
     <wss4j-ws-security-common.version>2.2.4</wss4j-ws-security-common.version>
   </properties>
 
@@ -149,7 +149,12 @@
       <dependency>
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
-        <version>${swagger-annotations.version}</version>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-models</artifactId>
+        <version>${swagger.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.jws</groupId>
@@ -211,7 +216,6 @@
         <artifactId>narayana-jts-integration</artifactId>
         <version>${narayana.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-jwt</artifactId>
@@ -274,11 +278,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-data</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-error</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -290,11 +289,6 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-error-ws</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-rs</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -320,6 +314,11 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-messaging-ws</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-persistence</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -434,7 +433,6 @@
     <module>inception-configuration</module>
     <module>inception-configuration-rs</module>
     <module>inception-configuration-ws</module>
-    <module>inception-data</module>
     <module>inception-error</module>
     <module>inception-error-rs</module>
     <module>inception-error-ws</module>
@@ -444,6 +442,7 @@
     <module>inception-messaging</module>
     <module>inception-messaging-rs</module>
     <module>inception-messaging-ws</module>
+    <module>inception-persistence</module>
     <module>inception-reporting</module>
     <module>inception-reporting-rs</module>
     <module>inception-reporting-ws</module>

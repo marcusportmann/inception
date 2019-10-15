@@ -26,7 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -39,7 +38,9 @@ import static org.junit.Assert.*;
 
 import java.sql.Connection;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -68,7 +69,6 @@ public class ReportingServiceTest
    */
   @Autowired
   private IReportingService reportingService;
-
 
   /**
    * Test the create report PDF functionality.
@@ -156,11 +156,11 @@ public class ReportingServiceTest
 
     try
     {
-      retrievedReportDefinition = reportingService.getReportDefinition(reportDefinition.getId());
+      reportingService.getReportDefinition(reportDefinition.getId());
 
       fail("The report definition that should have been deleted was retrieved successfully");
     }
-    catch (ReportDefinitionNotFoundException e) {}
+    catch (ReportDefinitionNotFoundException ignored) {}
   }
 
   private static synchronized ReportDefinition getTestReportDefinitionDetails()
@@ -171,7 +171,7 @@ public class ReportingServiceTest
         "digital/inception/reporting/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId(UUID.randomUUID());
+    reportDefinition.setId((long) reportDefinitionCount);
     reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
     reportDefinition.setTemplate(testReportTemplate);
 
@@ -194,7 +194,7 @@ public class ReportingServiceTest
         reportDefinition1.getId(), reportDefinition2.getId());
     assertEquals("The name values for the two report definitions do not match",
         reportDefinition1.getName(), reportDefinition2.getName());
-    assertTrue("The template values for the two report definitions do not match", Arrays.equals(
-        reportDefinition1.getTemplate(), reportDefinition2.getTemplate()));
+    assertArrayEquals("The template values for the two report definitions do not match",
+        reportDefinition1.getTemplate(), reportDefinition2.getTemplate());
   }
 }
