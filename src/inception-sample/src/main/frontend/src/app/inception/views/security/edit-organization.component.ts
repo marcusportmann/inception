@@ -28,10 +28,7 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
-import {v4 as uuid} from 'uuid';
 import {Organization} from '../../services/security/organization';
-import {OrganizationStatus} from '../../services/security/organization-status';
-import {User} from '../../services/security/user';
 
 /**
  * The EditOrganizationComponent class implements the edit organization component.
@@ -50,22 +47,21 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
     // Initialise the form
     this.editOrganizationForm = new FormGroup({
-      name: new FormControl('',       [Validators.required, Validators.maxLength(4000)])
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-        id: '@@edit_organization_component_back_title',
-        value: 'Organizations'
-      }), ['../..'],
-      {relativeTo: this.activatedRoute});
+      id: '@@edit_organization_component_back_title',
+      value: 'Organizations'
+    }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
@@ -76,8 +72,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    const organizationId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('organizationId')!);
+    const organizationId = Number(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -102,8 +97,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -116,8 +110,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'],
-            {relativeTo: this.activatedRoute});
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

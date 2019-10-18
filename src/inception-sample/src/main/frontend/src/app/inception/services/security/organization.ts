@@ -26,7 +26,7 @@ export class Organization {
   /**
    * The ID used to uniquely identify the organization.
    */
-  id: number;
+  id: number | null;
 
   /**
    * The name of the organization.
@@ -45,7 +45,7 @@ export class Organization {
    * @param name   The name of the organization.
    * @param status The status for the organization.
    */
-  constructor(id: number, name: string, status: OrganizationStatus) {
+  constructor(id: number | null, name: string, status: OrganizationStatus) {
     this.id = id;
     this.name = name;
     this.status = status;

@@ -30,10 +30,9 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserDirectory} from '../../services/security/user-directory';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
-import {combineLatest, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {InternalUserDirectoryComponent} from './internal-user-directory.component';
 import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
-import uuid = require('uuid');
 
 /**
  * The NewUserDirectoryComponent class implements the new user directory component.
@@ -69,7 +68,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
     // Initialise the form
     this.newUserDirectoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       userDirectoryType: new FormControl('', [Validators.required])
     });
 
@@ -99,16 +98,13 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     this.spinnerService.showSpinner();
 
     this.securityService.getUserDirectoryTypes()
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((userDirectoryTypes: UserDirectoryType[]) => {
         this.userDirectoryTypes = userDirectoryTypes;
-        this.userDirectory = new UserDirectory(uuid(), '', '', []);
+        this.userDirectory = new UserDirectory(null, '', '', []);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

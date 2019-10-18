@@ -15,18 +15,17 @@
  */
 
 import {SortDirection} from './sort-direction';
-import {User} from './user';
-import {UserSortBy} from './user-sort-by';
+import {Group} from "./group";
 
 /**
- * The Users class holds the results of a request to retrieve a list of users.
+ * The Groups class holds the results of a request to retrieve a list of groups.
  *
  * @author Marcus Portmann
  */
-export class Users {
+export class Groups {
 
   /**
-   * The optional filter that was applied to the users.
+   * The optional filter that was applied to the groups.
    */
   filter?: string;
 
@@ -41,22 +40,17 @@ export class Users {
   pageSize?: number;
 
   /**
-   * The users.
+   * The groups.
    */
-  users: User[];
+  groups: Group[];
 
   /**
-   * The optional method used to sort the users e.g. by last name.
-   */
-  sortBy?: UserSortBy;
-
-  /**
-   * The optional sort direction that was applied to the users.
+   * The optional sort direction that was applied to the groups.
    */
   sortDirection?: SortDirection;
 
   /**
-   * The total number of users.
+   * The total number of groups.
    */
   total: number;
 
@@ -66,25 +60,22 @@ export class Users {
   userDirectoryId: number;
 
   /**
-   * Constructs a new Users.
+   * Constructs a new Groups.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
-   * @param users           The users.
-   * @param total           The total number of users.
-   * @param filter          The optional filter that was applied to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
-   * @param sortDirection   The optional sort direction that was applied to the users.
+   * @param groups          The groups.
+   * @param total           The total number of groups.
+   * @param filter          The optional filter that was applied to the groups.
+   * @param sortDirection   The optional sort direction that was applied to the groups.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  constructor(userDirectoryId: number, users: User[], total: number, filter?: string,
-              sortBy?: UserSortBy, sortDirection?: SortDirection, pageIndex?: number,
-              pageSize?: number) {
+  constructor(userDirectoryId: number, groups: Group[], total: number, filter?: string,
+              sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
     this.userDirectoryId = userDirectoryId;
-    this.users = users;
+    this.groups = groups;
     this.total = total;
     this.filter = filter;
-    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;

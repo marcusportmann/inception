@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-import {Component, forwardRef, OnInit} from '@angular/core';
+import {Component, forwardRef} from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor, FormControl,
+  ControlValueAccessor,
+  FormControl,
   FormGroup,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
-  Validator, Validators
+  Validator,
+  Validators
 } from '@angular/forms';
 import {UserDirectoryParameter} from '../../services/security/user-directory-parameter';
 import {UserDirectoryUtil} from '../../services/security/user-directory-util';
@@ -31,17 +33,15 @@ import {UserDirectoryUtil} from '../../services/security/user-directory-util';
   selector: 'ldap-user-directory',
   templateUrl: 'ldap-user-directory.component.html',
   styleUrls: ['ldap-user-directory.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => LdapUserDirectoryComponent),
-      multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => LdapUserDirectoryComponent),
-      multi: true
-    }
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => LdapUserDirectoryComponent),
+    multi: true
+  }, {
+    provide: NG_VALIDATORS,
+    useExisting: forwardRef(() => LdapUserDirectoryComponent),
+    multi: true
+  }
   ]
 })
 export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
@@ -150,93 +150,71 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
 
   setParameters(parameters: UserDirectoryParameter[]) {
     this.ldapUserDirectoryForm.get('baseDN')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'BaseDN') ? UserDirectoryUtil.getParameter(parameters,
-        'BaseDN') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'BaseDN') ?
+        UserDirectoryUtil.getParameter(parameters, 'BaseDN') : '');
     this.ldapUserDirectoryForm.get('bindDN')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'BindDN') ? UserDirectoryUtil.getParameter(parameters,
-        'BindDN') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'BindDN') ?
+        UserDirectoryUtil.getParameter(parameters, 'BindDN') : '');
     this.ldapUserDirectoryForm.get('bindPassword')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'BindPassword') ? UserDirectoryUtil.getParameter(parameters,
-        'BindPassword') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'BindPassword') ?
+        UserDirectoryUtil.getParameter(parameters, 'BindPassword') : '');
     this.ldapUserDirectoryForm.get('groupBaseDN')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'GroupBaseDN') ? UserDirectoryUtil.getParameter(parameters,
-        'GroupBaseDN') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'GroupBaseDN') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupBaseDN') : '');
     this.ldapUserDirectoryForm.get('groupDescriptionAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'GroupDescriptionAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'GroupDescriptionAttribute') : 'description');
+      UserDirectoryUtil.hasParameter(parameters, 'GroupDescriptionAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupDescriptionAttribute') : 'description');
     this.ldapUserDirectoryForm.get('groupMemberAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'GroupMemberAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'GroupMemberAttribute') : 'member');
+      UserDirectoryUtil.hasParameter(parameters, 'GroupMemberAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupMemberAttribute') : 'member');
     this.ldapUserDirectoryForm.get('groupNameAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'GroupNameAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'GroupNameAttribute') : 'cn');
+      UserDirectoryUtil.hasParameter(parameters, 'GroupNameAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupNameAttribute') : 'cn');
     this.ldapUserDirectoryForm.get('groupObjectClass')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'GroupObjectClass') ? UserDirectoryUtil.getParameter(parameters,
-        'GroupObjectClass') : 'groupOfNames');
+      UserDirectoryUtil.hasParameter(parameters, 'GroupObjectClass') ?
+        UserDirectoryUtil.getParameter(parameters, 'GroupObjectClass') : 'groupOfNames');
     this.ldapUserDirectoryForm.get('host')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'Host') ? UserDirectoryUtil.getParameter(parameters,
-        'Host') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'Host') ?
+        UserDirectoryUtil.getParameter(parameters, 'Host') : '');
     this.ldapUserDirectoryForm.get('maxFilteredGroups')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'MaxFilteredGroups') ? UserDirectoryUtil.getParameter(parameters,
-        'MaxFilteredGroups') : '100');
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ?
+        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') : '100');
     this.ldapUserDirectoryForm.get('maxFilteredUsers')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'MaxFilteredUsers') ? UserDirectoryUtil.getParameter(parameters,
-        'MaxFilteredUsers') : '100');
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredUsers') ?
+        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredUsers') : '100');
     this.ldapUserDirectoryForm.get('port')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'Port') ? UserDirectoryUtil.getParameter(parameters,
-        'Port') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'Port') ?
+        UserDirectoryUtil.getParameter(parameters, 'Port') : '');
     this.ldapUserDirectoryForm.get('userBaseDN')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserBaseDN') ? UserDirectoryUtil.getParameter(parameters,
-        'UserBaseDN') : '');
+      UserDirectoryUtil.hasParameter(parameters, 'UserBaseDN') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserBaseDN') : '');
     this.ldapUserDirectoryForm.get('userObjectClass')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserObjectClass') ? UserDirectoryUtil.getParameter(parameters,
-        'UserObjectClass') : 'inetOrgPerson');
+      UserDirectoryUtil.hasParameter(parameters, 'UserObjectClass') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserObjectClass') : 'inetOrgPerson');
     this.ldapUserDirectoryForm.get('userEmailAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserEmailAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserEmailAttribute') : 'mail');
+      UserDirectoryUtil.hasParameter(parameters, 'UserEmailAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserEmailAttribute') : 'mail');
     this.ldapUserDirectoryForm.get('userFirstNameAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserFirstNameAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserFirstNameAttribute') : 'givenName');
+      UserDirectoryUtil.hasParameter(parameters, 'UserFirstNameAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserFirstNameAttribute') : 'givenName');
     this.ldapUserDirectoryForm.get('userFullNameAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserFullNameAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserFullNameAttribute') : 'cn');
+      UserDirectoryUtil.hasParameter(parameters, 'UserFullNameAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserFullNameAttribute') : 'cn');
     this.ldapUserDirectoryForm.get('userLastNameAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserLastNameAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserLastNameAttribute') : 'sn');
+      UserDirectoryUtil.hasParameter(parameters, 'UserLastNameAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserLastNameAttribute') : 'sn');
     this.ldapUserDirectoryForm.get('userMobileNumberAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserMobileNumberAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserMobileNumberAttribute') : 'mobile');
+      UserDirectoryUtil.hasParameter(parameters, 'UserMobileNumberAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserMobileNumberAttribute') : 'mobile');
     this.ldapUserDirectoryForm.get('userPhoneNumberAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserPhoneNumberAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserPhoneNumberAttribute') : 'telephoneNumber');
+      UserDirectoryUtil.hasParameter(parameters, 'UserPhoneNumberAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserPhoneNumberAttribute') : 'telephoneNumber');
     this.ldapUserDirectoryForm.get('userUsernameAttribute')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UserUsernameAttribute') ? UserDirectoryUtil.getParameter(parameters,
-        'UserUsernameAttribute') : 'uid');
+      UserDirectoryUtil.hasParameter(parameters, 'UserUsernameAttribute') ?
+        UserDirectoryUtil.getParameter(parameters, 'UserUsernameAttribute') : 'uid');
     this.ldapUserDirectoryForm.get('useSSL')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters,
-        'UseSSL') ? UserDirectoryUtil.getParameter(parameters,
-        'UseSSL') : 'false');
+      UserDirectoryUtil.hasParameter(parameters, 'UseSSL') ?
+        UserDirectoryUtil.getParameter(parameters, 'UseSSL') : 'false');
   }
 
   validate(c: AbstractControl): ValidationErrors | null {

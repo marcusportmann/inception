@@ -244,6 +244,21 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the groups.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param filter          the optional filter to apply to the groups
+   * @param sortDirection   the optional sort direction to apply to the groups
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the groups
+   */
+  List<Group> getGroups(Long userDirectoryId, String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the groups for the user.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -262,6 +277,17 @@ public interface ISecurityService
    * @return the number of groups
    */
   long getNumberOfGroups(Long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of groups.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param filter          the optional filter to apply to the groups
+   *
+   * @return the number of groups
+   */
+  long getNumberOfGroups(Long userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**

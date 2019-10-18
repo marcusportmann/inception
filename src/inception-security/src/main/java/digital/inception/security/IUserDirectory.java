@@ -93,9 +93,9 @@ interface IUserDirectory
   /**
    * Delete the group.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    */
-  void deleteGroup(String name)
+  void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException;
 
   /**
@@ -129,11 +129,11 @@ interface IUserDirectory
   /**
    * Retrieve the group.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    *
    * @return the group
    */
-  Group getGroup(String name)
+  Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
@@ -155,6 +155,20 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
+   * Retrieve the groups.
+   *
+   * @param filter        the optional filter to apply to the groups
+   * @param sortDirection the optional sort direction to apply to the groups
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the groups
+   */
+  List<Group> getGroups(String filter, SortDirection sortDirection, Integer pageIndex,
+      Integer pageSize)
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the groups for the user.
    *
    * @param username the username identifying the user
@@ -167,9 +181,11 @@ interface IUserDirectory
   /**
    * Retrieve the number of groups
    *
+   * @param filter the optional filter to apply to the groups
+   *
    * @return the number of groups
    */
-  long getNumberOfGroups()
+  long getNumberOfGroups(String filter)
     throws SecurityServiceException;
 
   /**

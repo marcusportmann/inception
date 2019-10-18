@@ -19,15 +19,17 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.PasswordUtil;
+
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+
 import java.util.List;
 import java.util.Optional;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -36,6 +38,11 @@ import java.util.Optional;
  */
 public class InternalUserDirectory extends UserDirectoryBase
 {
+  /**
+   * The default maximum number of filtered groups.
+   */
+  private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
+
   /**
    * The default maximum number of filtered users.
    */
@@ -55,6 +62,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default number of months to check password history against.
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
+
+  /**
+   * The maximum number of filtered groups to return.
+   */
+  private int maxFilteredGroups;
 
   /**
    * The maximum number of filtered users to return.
@@ -129,6 +141,15 @@ public class InternalUserDirectory extends UserDirectoryBase
       else
       {
         maxFilteredUsers = DEFAULT_MAX_FILTERED_USERS;
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroups"))
+      {
+        maxFilteredGroups = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredGroups");
+      }
+      else
+      {
+        maxFilteredGroups = DEFAULT_MAX_FILTERED_GROUPS;
       }
     }
     catch (Throwable e)
@@ -475,25 +496,25 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Delete the group.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    */
   @Override
-  public void deleteGroup(String name)
+  public void deleteGroup(String groupName)
     throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
   {
     try
     {
       Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
-          getUserDirectoryId(), name);
+          getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
       {
-        throw new GroupNotFoundException(name);
+        throw new GroupNotFoundException(groupName);
       }
 
       if (getGroupRepository().countUsersById(groupIdOptional.get()) > 0)
       {
-        throw new ExistingGroupMembersException(name);
+        throw new ExistingGroupMembersException(groupName);
       }
 
       getGroupRepository().deleteById(groupIdOptional.get());
@@ -505,7 +526,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to delete the group (%s) for the user directory (%s)", name,
+          "Failed to delete the group (%s) for the user directory (%s)", groupName,
           getUserDirectoryId()), e);
     }
   }
@@ -652,18 +673,18 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Retrieve the group.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    *
    * @return the group
    */
   @Override
-  public Group getGroup(String name)
+  public Group getGroup(String groupName)
     throws GroupNotFoundException, SecurityServiceException
   {
     try
     {
       Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
-          getUserDirectoryId(), name);
+          getUserDirectoryId(), groupName);
 
       if (groupOptional.isPresent())
       {
@@ -671,7 +692,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
       else
       {
-        throw new GroupNotFoundException(name);
+        throw new GroupNotFoundException(groupName);
       }
     }
     catch (GroupNotFoundException e)
@@ -681,7 +702,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the group (%s) for the user directory (%s)", name,
+          "Failed to retrieve the group (%s) for the user directory (%s)", groupName,
           getUserDirectoryId()), e);
     }
   }
@@ -743,6 +764,62 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Retrieve the groups.
+   *
+   * @param filter        the optional filter to apply to the groups
+   * @param sortDirection the optional sort direction to apply to the groups
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the groups
+   */
+  @Override
+  public List<Group> getGroups(String filter, SortDirection sortDirection, Integer pageIndex,
+      Integer pageSize)
+    throws SecurityServiceException
+  {
+    try
+    {
+      Pageable pageable = null;
+
+      if (pageIndex == null)
+      {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null)
+      {
+        pageSize = maxFilteredGroups;
+      }
+
+      pageable = PageRequest.of(pageIndex,
+          (pageSize > maxFilteredGroups)
+          ? maxFilteredGroups
+          : pageSize,
+          (sortDirection == SortDirection.ASCENDING)
+          ? Sort.Direction.ASC
+          : Sort.Direction.DESC, "name");
+
+      if (StringUtils.isEmpty(filter))
+      {
+        return getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
+      }
+      else
+      {
+        return getGroupRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%",
+            pageable);
+      }
+
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(
+          "Failed to retrieve the filtered groups for the user directory (" + getUserDirectoryId()
+          + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the groups for the user.
    *
    * @param username the username identifying the user
@@ -780,15 +857,24 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Retrieve the number of groups.
    *
+   * @param filter the optional filter to apply to the groups
+   *
    * @return the number of groups
    */
   @Override
-  public long getNumberOfGroups()
+  public long getNumberOfGroups(String filter)
     throws SecurityServiceException
   {
     try
     {
-      return getGroupRepository().countByUserDirectoryId(getUserDirectoryId());
+      if (StringUtils.isEmpty(filter))
+      {
+        return getGroupRepository().countByUserDirectoryId(getUserDirectoryId());
+      }
+      else
+      {
+        return getGroupRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
+      }
     }
     catch (Throwable e)
     {

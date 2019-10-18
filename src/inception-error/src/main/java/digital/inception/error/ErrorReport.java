@@ -148,7 +148,6 @@ public class ErrorReport
       value = "The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
-  @Size(max = 50)
   @Column(name = "device_id")
   private UUID deviceId;
 

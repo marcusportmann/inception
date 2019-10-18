@@ -104,11 +104,12 @@ public class User
 
   /**
    * The ID used to uniquely identify the user.
+   *
+   * The ID for a user that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
   @GenericGenerator(name = "user_id",
       strategy = "digital.inception.persistence.AssignedIdentityGenerator")
   @GeneratedValue(generator = "user_id", strategy = GenerationType.IDENTITY)

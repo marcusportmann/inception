@@ -32,23 +32,22 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {SortDirection} from '../../services/security/sort-direction';
 import {merge, Subscription} from 'rxjs';
 import {TableFilter} from '../../components/controls';
-import {UserDatasource} from '../../services/security/user.datasource';
 import {SessionService} from '../../services/session/session.service';
 import {Session} from '../../services/session/session';
 import {UserDirectorySummary} from '../../services/security/user-directory-summary';
 import {FormBuilder} from '@angular/forms';
 import {MatSelect, MatSelectChange} from '@angular/material';
-import {UserSortBy} from '../../services/security/user-sort-by';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
+import {GroupDatasource} from "../../services/security/group.datasource";
 
 /**
- * The UsersComponent class implements the users component.
+ * The GroupsComponent class implements the groups component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'users.component.html',
-  styleUrls: ['users.component.css'],
+  templateUrl: 'groups.component.html',
+  styleUrls: ['groups.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
   },
@@ -76,13 +75,13 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
   `
   ]
 })
-export class UsersComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
+export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
-  dataSource: UserDatasource;
+  dataSource: GroupDatasource;
 
-  displayedColumns = ['firstName', 'lastName', 'username', 'actions'];
+  displayedColumns = ['name', 'actions'];
 
   @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
@@ -102,13 +101,13 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    this.dataSource = new UserDatasource(this.sessionService, this.securityService);
+    this.dataSource = new GroupDatasource(this.sessionService, this.securityService);
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@users_component_title',
-      value: 'Users'
+      id: '@@groups_component_title',
+      value: 'Groups'
     })
   }
 
@@ -117,13 +116,13 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   }
 
   // noinspection JSUnusedLocalSymbols
-  deleteUser(username: string): void {
+  deleteGroup(groupName: string): void {
     // noinspection JSUnusedLocalSymbols
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@users_component_confirm_delete_user',
-          value: 'Are you sure you want to delete the user?'
+          id: '@@groups_component_confirm_delete_group',
+          value: 'Are you sure you want to delete the group?'
         })
       });
 
@@ -133,10 +132,10 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.deleteUser(this.userDirectoryId, username)
+          this.securityService.deleteGroup(this.userDirectoryId, groupName)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.loadUsers();
+              this.loadGroups();
             }, (error: Error) => {
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
                 (error instanceof SystemUnavailableError)) {
@@ -150,14 +149,14 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
       });
   }
 
-  editUser(username: string): void {
+  editGroup(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId + '/' + encodeURIComponent(username) + '/edit'],
+      [this.userDirectoryId + '/' + encodeURIComponent(groupName) + '/edit'],
       {relativeTo: this.activatedRoute});
   }
 
-  loadUsers(): void {
+  loadGroups(): void {
     let filter = '';
 
     if (!!this.tableFilter!.filter) {
@@ -166,23 +165,13 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
       filter = filter.toLowerCase();
     }
 
-    let sortBy: UserSortBy = UserSortBy.Username;
-
-    if (!!this.sort!.active) {
-      if (this.sort!.active === 'firstName') {
-        sortBy = UserSortBy.FirstName;
-      } else if (this.sort!.active === 'lastName') {
-        sortBy = UserSortBy.LastName;
-      }
-    }
-
     const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(this.userDirectoryId, filter, sortBy, sortDirection,
+    this.dataSource.load(this.userDirectoryId, filter, sortDirection,
       this.paginator!.pageIndex, this.paginator!.pageSize);
   }
 
-  newUser(): void {
+  newGroup(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate([this.userDirectoryId + '/new'], {relativeTo: this.activatedRoute});
   }
@@ -234,15 +223,15 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
     /*
      * NOTE: Changing the selected user directory will generate a "sort change" event, which will
-     *       trigger the load of the users. If we also merged the "selection change" event from the
+     *       trigger the load of the groups. If we also merged the "selection change" event from the
      *       userDirectorySelect MatSelect component instance we would trigger an unnecessary
-     *       duplicate reload of the users.
+     *       duplicate reload of the groups.
      */
     this.subscriptions.add(
       merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
         .pipe(tap(() => {
           if (!!this.userDirectoryId) {
-            this.loadUsers();
+            this.loadGroups();
           }
         })).subscribe());
 
@@ -256,17 +245,17 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
             this.userDirectories = userDirectories;
 
             /*
-             * If we only have one user directory available then load its users, otherwise if we
+             * If we only have one user directory available then load its groups, otherwise if we
              * have a pre-selected user directory and it is one of the available user directories
-             * then load its users.
+             * then load its groups.
              */
             if (userDirectories.length === 1) {
               this.userDirectoryId = userDirectories[0].id;
-              this.loadUsers();
+              this.loadGroups();
             } else if (!!this.userDirectoryId) {
               userDirectories.forEach((userDirectory: UserDirectorySummary) => {
                 if (userDirectory.id === this.userDirectoryId) {
-                  this.loadUsers();
+                  this.loadGroups();
                 }
               });
             }

@@ -535,7 +535,8 @@ public class SecurityService
   {
     try
     {
-      if ((userDirectory.getId() != null) && userDirectoryRepository.existsById(userDirectory.getId()))
+      if ((userDirectory.getId() != null)
+          && userDirectoryRepository.existsById(userDirectory.getId()))
       {
         throw new DuplicateUserDirectoryException(userDirectory.getId());
       }
@@ -600,11 +601,11 @@ public class SecurityService
    * Delete the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param name            the name identifying the group
+   * @param groupName       the name identifying the group
    */
   @Override
   @Transactional
-  public void deleteGroup(Long userDirectoryId, String name)
+  public void deleteGroup(Long userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityServiceException
   {
@@ -615,7 +616,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.deleteGroup(name);
+    userDirectory.deleteGroup(groupName);
   }
 
   /**
@@ -810,12 +811,12 @@ public class SecurityService
    * Retrieve the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param name            the name identifying the group
+   * @param groupName       the name identifying the group
    *
    * @return the group
    */
   @Override
-  public Group getGroup(Long userDirectoryId, String name)
+  public Group getGroup(Long userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -825,7 +826,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getGroup(name);
+    return userDirectory.getGroup(groupName);
   }
 
   /**
@@ -872,6 +873,32 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the groups.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param filter          the optional filter to apply to the groups
+   * @param sortDirection   the optional sort direction to apply to the groups
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the groups
+   */
+  @Override
+  public List<Group> getGroups(Long userDirectoryId, String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getGroups(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
    * Retrieve the groups for the user.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -911,7 +938,29 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getNumberOfGroups();
+    return userDirectory.getNumberOfGroups(null);
+  }
+
+  /**
+   * Retrieve the number of groups.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param filter          the optional filter to apply to the groups
+   *
+   * @return the number of groups
+   */
+  @Override
+  public long getNumberOfGroups(Long userDirectoryId, String filter)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getNumberOfGroups(filter);
   }
 
   /**

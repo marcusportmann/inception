@@ -121,11 +121,11 @@ export class AdminHeaderComponent implements OnInit {
               private sessionService: SessionService) {
   }
 
-  // tslint:disable-next-line
-  static breakpoint(breakpoint: any): any {
-    console.log(breakpoint);
-    return breakpoint ? breakpoint : '';
-  }
+  // // tslint:disable-next-line
+  // static breakpoint(breakpoint: any): any {
+  //   console.log(breakpoint);
+  //   return breakpoint ? breakpoint : '';
+  // }
 
   ngOnInit(): void {
     Replace(this.elementRef);

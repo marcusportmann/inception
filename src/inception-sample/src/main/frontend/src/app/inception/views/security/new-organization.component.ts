@@ -28,7 +28,6 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
-import {v4 as uuid} from 'uuid';
 import {Organization} from '../../services/security/organization';
 import {OrganizationStatus} from '../../services/security/organization-status';
 
@@ -49,23 +48,22 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
     // Initialise the form
     this.newOrganizationForm = new FormGroup({
       createUserDirectory: new FormControl(false),
-      name: new FormControl('',       [Validators.required, Validators.maxLength(4000)])
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-        id: '@@new_organization_component_back_title',
-        value: 'Organizations'
-      }), ['..'],
-      {relativeTo: this.activatedRoute});
+      id: '@@new_organization_component_back_title',
+      value: 'Organizations'
+    }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
@@ -76,13 +74,12 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
   }
 
   ngAfterViewInit(): void {
-    this.organization = new Organization(uuid(), '', OrganizationStatus.Active);
+    this.organization = new Organization(null, '', OrganizationStatus.Active);
   }
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -91,12 +88,12 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createOrganization(this.organization, this.newOrganizationForm.get('createUserDirectory')!.value)
+      this.securityService.createOrganization(this.organization,
+        this.newOrganizationForm.get('createUserDirectory')!.value)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'],
-            {relativeTo: this.activatedRoute});
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

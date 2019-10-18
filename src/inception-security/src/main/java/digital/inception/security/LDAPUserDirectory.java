@@ -841,10 +841,10 @@
 //  /**
 //   * Delete the group.
 //   *
-//   * @param name the name identifying the group
+//   * @param groupName the name identifying the group
 //   */
 //  @Override
-//  public void deleteGroup(String name)
+//  public void deleteGroup(String groupName)
 //    throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
 //  {
 //    DirContext dirContext = null;

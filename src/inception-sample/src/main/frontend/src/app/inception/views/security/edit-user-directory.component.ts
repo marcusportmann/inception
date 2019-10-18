@@ -43,7 +43,8 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
   templateUrl: 'edit-user-directory.component.html',
   styleUrls: ['edit-user-directory.component.css'],
 })
-export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit,
+  OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -59,35 +60,30 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,
-              private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private securityService: SecurityService,
+  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
+              private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
+              private i18n: I18n, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     // Initialise the form
     this.editUserDirectoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       userDirectoryType: new FormControl('', [Validators.required])
     });
 
-    this.subscriptions.add(
-      this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
-        .pipe(startWith(null), pairwise())
-        .subscribe(
-          ([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-            this.onUserDirectoryTypeSelected(previousUserDirectoryType,
-              currentUserDirectoryType);
-          }));
+    this.subscriptions.add(this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
+      .pipe(startWith(null), pairwise())
+      .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
+        this.onUserDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+      }));
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-        id: '@@edit_user_directory_component_back_title',
-        value: 'User Directories'
-      }), ['../..'],
-      {relativeTo: this.activatedRoute});
+      id: '@@edit_user_directory_component_back_title',
+      value: 'User Directories'
+    }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
@@ -98,13 +94,11 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     this.spinnerService.showSpinner();
 
-    combineLatest([
-      this.securityService.getUserDirectoryTypes(),
+    combineLatest([this.securityService.getUserDirectoryTypes(),
       this.securityService.getUserDirectory(userDirectoryId)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
@@ -131,8 +125,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -142,6 +135,8 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
       if (this.internalUserDirectory) {
         this.userDirectory.parameters = this.internalUserDirectory.getParameters();
+      } else if (this.ldapUserDirectory) {
+        this.userDirectory.parameters = this.ldapUserDirectory.getParameters();
       }
 
       this.spinnerService.showSpinner();
@@ -150,8 +145,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'],
-            {relativeTo: this.activatedRoute});
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

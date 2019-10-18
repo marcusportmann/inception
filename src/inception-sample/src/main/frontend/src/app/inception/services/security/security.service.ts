@@ -20,9 +20,14 @@ import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
-  DuplicateOrganizationError, DuplicateUserDirectoryError,
-  DuplicateUserError,
-  OrganizationNotFoundError, SecurityServiceError, UserDirectoryNotFoundError, UserNotFoundError
+  DuplicateGroupError,
+  DuplicateOrganizationError,
+  DuplicateUserDirectoryError,
+  DuplicateUserError, ExistingGroupMembersError,
+  OrganizationNotFoundError,
+  SecurityServiceError,
+  UserDirectoryNotFoundError,
+  UserNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {ApiError} from '../../errors/api-error';
@@ -37,9 +42,9 @@ import {UserDirectorySummary} from './user-directory-summary';
 import {UserSortBy} from './user-sort-by';
 import {UserDirectorySummaries} from './user-directory-summaries';
 import {UserDirectory} from './user-directory';
-import {CodeCategory} from '../codes/code-category';
-import {CodesServiceError} from '../codes/codes.service.errors';
 import {UserDirectoryType} from './user-directory-type';
+import {Group} from "./group";
+import {Groups} from "./groups";
 
 /**
  * The Security Service implementation.
@@ -60,6 +65,48 @@ export class SecurityService {
   }
 
   /**
+   * Create the new group.
+   *
+   * @param group The group to create.
+   *
+   * @return True if the group was created successfully or false otherwise.
+   */
+  createGroup(group: Group): Observable<boolean> {
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + group.userDirectoryId + '/groups',
+      group, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.status === 409) {
+          return throwError(new DuplicateGroupError(this.i18n({
+            id: '@@security_service_the_group_already_exists',
+            value: 'A group with the specified name already exists.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_create_the_group',
+            value: 'Failed to create the group.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Create the new organization.
    *
    * @param organization        The organization to create.
@@ -74,32 +121,33 @@ export class SecurityService {
     httpParams = httpParams.append('createUserDirectory',
       createUserDirectory === undefined ? 'false' : (createUserDirectory ? 'true' : 'false'));
 
-    return this.httpClient.post<boolean>(
-      environment.securityServiceUrlPrefix + '/organizations',
-      organization, {params: httpParams, observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    return this.httpClient.post<boolean>(environment.securityServiceUrlPrefix + '/organizations',
+      organization, {
+        params: httpParams,
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 409) {
-            return throwError(new DuplicateOrganizationError(this.i18n({
-              id: '@@security_service_the_organization_already_exists',
-              value: 'An organization with the specified ID or name already exists.'
-            }), apiError));
-          } else {
-            return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_create_the_organization',
-              value: 'Failed to create the organization.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 409) {
+          return throwError(new DuplicateOrganizationError(this.i18n({
+            id: '@@security_service_the_organization_already_exists',
+            value: 'An organization with the specified ID or name already exists.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_create_the_organization',
+            value: 'Failed to create the organization.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -115,69 +163,111 @@ export class SecurityService {
     let httpParams = new HttpParams();
     httpParams = httpParams.append('expiredPassword',
       expiredPassword === undefined ? 'false' : (expiredPassword ? 'true' : 'false'));
-    httpParams = httpParams.append(
-      'userLocked', userLocked === undefined ? 'false' : (userLocked ? 'true' : 'false'));
+    httpParams = httpParams.append('userLocked',
+      userLocked === undefined ? 'false' : (userLocked ? 'true' : 'false'));
 
     return this.httpClient.post<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      user.userDirectoryId) + '/users',
-      user, {params: httpParams, observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
+      environment.securityServiceUrlPrefix + '/user-directories/' + user.userDirectoryId + '/users',
+      user, {
+        params: httpParams,
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.status === 409) {
+          return throwError(new DuplicateUserError(this.i18n({
+            id: '@@security_service_the_user_already_exists',
+            value: 'A user with the specified username already exists.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_create_the_user',
+            value: 'Failed to create the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Create the new user directory.
+   *
+   * @param userDirectory The user directory to create.
+   *
+   * @return True if the user directory was created successfully or false otherwise.
+   */
+  createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
+    return this.httpClient.post<boolean>(environment.securityServiceUrlPrefix + '/user-directories',
+      userDirectory, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 409) {
+          return throwError(new DuplicateUserDirectoryError(this.i18n({
+            id: '@@security_service_the_user_directory_already_exists',
+            value: 'A user directory with the specified ID or name already exists.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_create_the_user_directory',
+            value: 'Failed to create the user directory.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Delete the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   *
+   * @return True if the group was deleted or false otherwise.
+   */
+  deleteGroup(userDirectoryId: number, groupName: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName), {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.status === 404) {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_group_could_not_be_found',
+              value: 'The group could not be found.'
             }), apiError));
           } else if (apiError.status === 409) {
-            return throwError(new DuplicateUserError(this.i18n({
-              id: '@@security_service_the_user_already_exists',
-              value: 'A user with the specified username already exists.'
-            }), apiError));
-          } else {
-            return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_create_the_user',
-              value: 'Failed to create the user.'
+            return throwError(new ExistingGroupMembersError(this.i18n({
+              id: '@@security_service_the_group_has_existing_members',
+              value: 'The group has existing members.'
             }), apiError));
           }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-        }
-      }));
-  }
-
-  /**
-   * Create the new user directory.
-   *
-   * @param organization The user directory to create.
-   *
-   * @return True if the user directory was created successfully or false otherwise.
-   */
-  createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
-    return this.httpClient.post<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories',
-      userDirectory, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
-
-          if (apiError.status === 409) {
-            return throwError(new DuplicateUserDirectoryError(this.i18n({
-              id: '@@security_service_the_user_directory_already_exists',
-              value: 'A user directory with the specified ID or name already exists.'
-            }), apiError));
-          } else {
+          else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_create_the_user_directory',
-              value: 'Failed to create the user directory.'
+              id: '@@security_service_failed_to_delete_the_group',
+              value: 'Failed to delete the group.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -191,65 +281,138 @@ export class SecurityService {
   /**
    * Delete the organization.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * @param organizationId The ID used to uniquely identify the organization.
    *
    * @return True if the organization was deleted or false otherwise.
    */
-  deleteOrganization(organizationId: string): Observable<boolean> {
+  deleteOrganization(organizationId: number): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId),
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId,
+      {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
-          return throwError(new OrganizationNotFoundError(this.i18n({
-            id: '@@security_service_the_organization_could_not_be_found',
-            value: 'The organization could not be found.'
-          }), apiError));
+          if (apiError.status === 404) {
+            return throwError(new OrganizationNotFoundError(this.i18n({
+              id: '@@security_service_the_organization_could_not_be_found',
+              value: 'The organization could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_delete_the_organization',
+              value: 'Failed to delete the organization.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_delete_the_organization',
-            value: 'Failed to delete the organization.'
-          }), apiError));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+      }));
   }
 
   /**
    * Delete the user.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param username        The username identifying the user.
    *
    * @return True if the user was deleted or false otherwise.
    */
-  deleteUser(userDirectoryId: string, username: string): Observable<boolean> {
+  deleteUser(userDirectoryId: number, username: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId) + '/users/' + encodeURIComponent(username),
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      encodeURIComponent(username), {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_user_could_not_be_found',
+              value: 'The user could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_delete_the_user',
+              value: 'Failed to delete the user.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Delete the user directory.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   *
+   * @return True if the user directory was deleted or false otherwise.
+   */
+  deleteUserDirectory(userDirectoryId: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId,
+      {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.status === 404) {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_delete_the_user_directory',
+              value: 'Failed to delete the user directory.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   *
+   * @return The group.
+   */
+  getGroup(userDirectoryId: number, groupName: string): Observable<Group> {
+    return this.httpClient.get<Group>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName), {reportProgress: true}).pipe(map((group: Group) => {
+      return group;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.status === 404) {
           return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
+            id: '@@security_service_the_group_could_not_be_found',
+            value: 'The group could not be found.'
           }), apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_delete_the_user',
-            value: 'Failed to delete the user.'
+            id: '@@security_service_failed_to_retrieve_the_group',
+            value: 'Failed to retrieve the group.'
           }), apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -261,18 +424,47 @@ export class SecurityService {
   }
 
   /**
-   * Delete the user directory.
+   * Retrieve the groups.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param filter          The optional filter to apply to the groups.
+   * @param sortDirection   The optional sort direction to apply to the groups.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
    *
-   * @return True if the user directory was deleted or false otherwise.
+   * @return The users.
    */
-  deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId),
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
+  getGroups(userDirectoryId: number, filter?: string, sortDirection?: SortDirection,
+           pageIndex?: number, pageSize?: number): Observable<Groups> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Group[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups', {
+        observe: 'response',
+        params,
+        reportProgress: true,
+      }).pipe(map((response: HttpResponse<Group[]>) => {
+      const totalCount = Number(response.headers.get('X-Total-Count'));
+
+      return new Groups(userDirectoryId, response.body ? response.body : [], totalCount, filter,
+        sortDirection, pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -284,8 +476,8 @@ export class SecurityService {
           }), apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_delete_the_user_directory',
-            value: 'Failed to delete the user directory.'
+            id: '@@security_service_failed_to_retrieve_the_groups',
+            value: 'Failed to retrieve the groups.'
           }), apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -299,13 +491,13 @@ export class SecurityService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * @param organizationId The ID used to uniquely identify the organization.
    *
    * @return The organization.
    */
-  getOrganization(organizationId: string): Observable<Organization> {
+  getOrganization(organizationId: number): Observable<Organization> {
     return this.httpClient.get<Organization>(
-      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(organizationId),
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId,
       {reportProgress: true}).pipe(map((organization: Organization) => {
       return organization;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -371,8 +563,7 @@ export class SecurityService {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
       return new Organizations(response.body ? response.body : [], totalCount, filter,
-        sortDirection, pageIndex,
-        pageSize);
+        sortDirection, pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -392,14 +583,13 @@ export class SecurityService {
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    *
    * @return The organizations the user directory is associated with.
    */
-  getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
+  getOrganizationsForUserDirectory(userDirectoryId: number): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId) +
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId +
       '/organizations', {reportProgress: true})
       .pipe(map((organizations: Organization[]) => {
         return organizations;
@@ -429,16 +619,15 @@ export class SecurityService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param username        The username identifying the user.
    *
    * @return The user.
    */
-  getUser(userDirectoryId: string, username: string): Observable<User> {
+  getUser(userDirectoryId: number, username: string): Observable<User> {
     return this.httpClient.get<User>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId) + '/users/' + encodeURIComponent(username),
-      {reportProgress: true}).pipe(map((user: User) => {
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      encodeURIComponent(username), {reportProgress: true}).pipe(map((user: User) => {
       return user;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -466,50 +655,49 @@ export class SecurityService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    *
    * @return The user directory.
    */
-  getUserDirectory(userDirectoryId: string): Observable<UserDirectory> {
+  getUserDirectory(userDirectoryId: number): Observable<UserDirectory> {
     return this.httpClient.get<UserDirectory>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId),
-      {reportProgress: true}).pipe(map((userDirectory: UserDirectory) => {
-      return userDirectory;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId,
+      {reportProgress: true})
+      .pipe(map((userDirectory: UserDirectory) => {
+        return userDirectory;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          if (apiError.status === 404) {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_retrieve_the_user_directory',
+              value: 'Failed to retrieve the user directory.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_user_directory',
-            value: 'Failed to retrieve the user directory.'
-          }), apiError));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+      }));
   }
 
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * @param organizationId The ID used to uniquely identify the organization.
    *
    * @return The summaries for the user directories the organization is associated with.
    */
-  getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
+  getUserDirectorySummariesForOrganization(organizationId: number): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(
-      organizationId) +
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId +
       '/user-directory-summaries', {reportProgress: true})
       .pipe(map((codeCategories: UserDirectorySummary[]) => {
         return codeCategories;
@@ -539,15 +727,14 @@ export class SecurityService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    *
    * @return The user directory type for the user directory.
    */
-  getUserDirectoryTypeForUserDirectory(userDirectoryId: string): Observable<UserDirectoryType> {
+  getUserDirectoryTypeForUserDirectory(userDirectoryId: number): Observable<UserDirectoryType> {
     return this.httpClient.get<UserDirectoryType>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId) + '/user-directory-type',
-      {reportProgress: true})
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId +
+      '/user-directory-type', {reportProgress: true})
       .pipe(map((userDirectoryType: UserDirectoryType) => {
         return userDirectoryType;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -602,7 +789,7 @@ export class SecurityService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   The optional sort direction to apply to the users.
@@ -611,7 +798,7 @@ export class SecurityService {
    *
    * @return The users.
    */
-  getUsers(userDirectoryId: string, filter?: string, sortBy?: UserSortBy,
+  getUsers(userDirectoryId: number, filter?: string, sortBy?: UserSortBy,
            sortDirection?: SortDirection, pageIndex?: number,
            pageSize?: number): Observable<Users> {
 
@@ -638,8 +825,7 @@ export class SecurityService {
     }
 
     return this.httpClient.get<User[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectoryId) + '/users', {
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
         observe: 'response',
         params,
         reportProgress: true,
@@ -647,8 +833,7 @@ export class SecurityService {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
       return new Users(userDirectoryId, response.body ? response.body : [], totalCount, filter,
-        sortBy, sortDirection,
-        pageIndex, pageSize);
+        sortBy, sortDirection, pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -712,8 +897,7 @@ export class SecurityService {
       const totalCount = Number(response.headers.get('X-Total-Count'));
 
       return new UserDirectorySummaries(response.body ? response.body : [], totalCount, filter,
-        sortDirection, pageIndex,
-        pageSize);
+        sortDirection, pageIndex, pageSize);
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -731,6 +915,43 @@ export class SecurityService {
   }
 
   /**
+   * Update the group.
+   *
+   * @param group The group to update.
+   *
+   * @return True if the group was updated successfully or false otherwise.
+   */
+  updateGroup(group: Group): Observable<boolean> {
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + group.userDirectoryId +
+      '/groups/' + encodeURIComponent(group.name), group, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_group_could_not_be_found',
+            value: 'The group could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_update_the_group',
+            value: 'Failed to update the group.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Update the organization.
    *
    * @param organization The organization to update.
@@ -739,9 +960,9 @@ export class SecurityService {
    */
   updateOrganization(organization: Organization): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.securityServiceUrlPrefix + '/organizations/' + encodeURIComponent(
-      organization.id), organization, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
+      environment.securityServiceUrlPrefix + '/organizations/' + organization.id, organization,
+      {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {
@@ -779,36 +1000,37 @@ export class SecurityService {
     let httpParams = new HttpParams();
     httpParams = httpParams.append('expirePassword',
       expirePassword === undefined ? 'false' : (expirePassword ? 'true' : 'false'));
-    httpParams = httpParams.append(
-      'lockUser', lockUser === undefined ? 'false' : (lockUser ? 'true' : 'false'));
+    httpParams = httpParams.append('lockUser',
+      lockUser === undefined ? 'false' : (lockUser ? 'true' : 'false'));
 
     return this.httpClient.put<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      user.userDirectoryId) + '/users/' +
-      encodeURIComponent(user.username), user, {params: httpParams, observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+      environment.securityServiceUrlPrefix + '/user-directories/' + user.userDirectoryId +
+      '/users/' + encodeURIComponent(user.username), user, {
+        params: httpParams,
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
-          } else {
-            return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_update_the_user',
-              value: 'Failed to update the user.'
-            }), apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        if (apiError.status === 404) {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_update_the_user',
+            value: 'Failed to update the user.'
+          }), apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -820,9 +1042,9 @@ export class SecurityService {
    */
   updateUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + encodeURIComponent(
-      userDirectory.id), userDirectory, {observe: 'response'}).pipe(
-      map((httpResponse: HttpResponse<boolean>) => {
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectory.id, userDirectory,
+      {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (ApiError.isApiError(httpErrorResponse)) {

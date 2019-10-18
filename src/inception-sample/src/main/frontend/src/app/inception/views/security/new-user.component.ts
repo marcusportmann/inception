@@ -30,7 +30,6 @@ import {User} from '../../services/security/user';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserStatus} from '../../services/security/user-status';
-import {v4 as uuid} from 'uuid';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
 
 /**
@@ -52,32 +51,33 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+              private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
     // Initialise the form
     this.newUserForm = new FormGroup({
-      confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
-      email: new FormControl('', [Validators.maxLength(4000)]),
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
-      mobileNumber: new FormControl('', [Validators.maxLength(4000)]),
-      password: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
-      phoneNumber: new FormControl('', [Validators.maxLength(4000)]),
-      username: new FormControl('', [Validators.required, Validators.maxLength(4000)])
+      confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      email: new FormControl('', [Validators.maxLength(100)]),
+      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      mobileNumber: new FormControl('', [Validators.maxLength(100)]),
+      password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      phoneNumber: new FormControl('', [Validators.maxLength(100)]),
+      username: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
-        id: '@@new_user_component_back_title',
-        value: 'Users'
-      }), ['../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
+      id: '@@new_user_component_back_title',
+      value: 'Users'
+    }), ['../..'], {
+      relativeTo: this.activatedRoute,
+      state: {userDirectoryId}
+    });
   }
 
   get title(): string {
@@ -88,8 +88,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -99,7 +98,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
       .subscribe((userDirectoryType: UserDirectoryType) => {
         this.userDirectoryType = userDirectoryType;
 
-        this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
+        this.user = new User(null, userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
 
         if (this.userDirectoryType!.code === 'InternalUserDirectory') {
           this.newUserForm.addControl('expiredPassword', new FormControl(false));
@@ -118,19 +117,20 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   onCancel(): void {
-    const userDirectoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'],
-      {relativeTo: this.activatedRoute, state: {userDirectoryId}});
+    this.router.navigate(['../..'], {
+      relativeTo: this.activatedRoute,
+      state: {userDirectoryId}
+    });
   }
 
   onOK(): void {
     if (this.user && this.newUserForm.valid) {
       // Check that the password and confirmation password match
-      if (this.newUserForm.get('password')!.value !== this.newUserForm.get(
-        'confirmPassword')!.value) {
+      if (this.newUserForm.get('password')!.value !==
+        this.newUserForm.get('confirmPassword')!.value) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
           id: '@@new_user_component_passwords_do_not_match',
           value: 'The passwords do not match.'
@@ -149,18 +149,18 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createUser(this.user,
-        this.newUserForm.contains('expiredPassword') ? this.newUserForm.get(
-          'expiredPassword')!.value : false,
+      this.securityService.createUser(this.user, this.newUserForm.contains('expiredPassword') ?
+        this.newUserForm.get('expiredPassword')!.value : false,
         this.newUserForm.contains('userLocked') ? this.newUserForm.get('userLocked')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = decodeURIComponent(
-            this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+          const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'],
-            {relativeTo: this.activatedRoute, state: {userDirectoryId}});
+          this.router.navigate(['../..'], {
+            relativeTo: this.activatedRoute,
+            state: {userDirectoryId}
+          });
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

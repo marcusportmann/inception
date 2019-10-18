@@ -66,11 +66,12 @@ public class Organization
 
   /**
    * The ID used to uniquely identify the organization.
+   *
+   * The ID for an organization that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
   @GenericGenerator(name = "organization_id",
       strategy = "digital.inception.persistence.AssignedIdentityGenerator")
   @GeneratedValue(generator = "organization_id", strategy = GenerationType.IDENTITY)

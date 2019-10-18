@@ -48,10 +48,10 @@ public class DuplicateGroupException extends ServiceException
   /**
    * Constructs a new <code>DuplicateGroupException</code>.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    */
-  public DuplicateGroupException(String name)
+  public DuplicateGroupException(String groupName)
   {
-    super("A group with the name (" + name + ") already exists");
+    super("A group with the name (" + groupName + ") already exists");
   }
 }

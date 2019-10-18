@@ -16,7 +16,7 @@
             <input type="text" matInput formControlName="firstName">
             <mat-error *ngIf="editUserForm.get('firstName').errors && !editUserForm.get('firstName').untouched">
               <span *ngIf="editUserForm.get('firstName').errors?.required" i18n="@@edit_user_component_error_first_name_required">A first name is required.</span>
-              <span *ngIf="editUserForm.get('firstName').errors?.maxlength" i18n="@@edit_user_component_error_first_name_maxlength">First name must not exceed 4000 characters.</span>
+              <span *ngIf="editUserForm.get('firstName').errors?.maxlength" i18n="@@edit_user_component_error_first_name_maxlength">First name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -26,7 +26,7 @@
             <input type="text" matInput formControlName="lastName">
             <mat-error *ngIf="editUserForm.get('lastName').errors && !editUserForm.get('lastName').untouched">
               <span *ngIf="editUserForm.get('lastName').errors?.required" i18n="@@edit_user_component_error_last_name_required">A last name is required.</span>
-              <span *ngIf="editUserForm.get('lastName').errors?.maxlength" i18n="@@edit_user_component_error_last_name_maxlength">Last name must not exceed 4000 characters.</span>
+              <span *ngIf="editUserForm.get('lastName').errors?.maxlength" i18n="@@edit_user_component_error_last_name_maxlength">Last name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -37,7 +37,7 @@
             <mat-label i18n="@@edit_user_component_label_email">E-mail</mat-label>
             <input type="text" matInput formControlName="email">
             <mat-error *ngIf="editUserForm.get('email').errors && !editUserForm.get('email').untouched">
-              <span *ngIf="editUserForm.get('email').errors?.maxlength" i18n="@@edit_user_component_error_email_maxlength">E-mail must not exceed 4000 characters.</span>
+              <span *ngIf="editUserForm.get('email').errors?.maxlength" i18n="@@edit_user_component_error_email_maxlength">E-mail must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -48,7 +48,7 @@
             <mat-label i18n="@@edit_user_component_label_phone_number">Phone Number</mat-label>
             <input type="text" matInput formControlName="phoneNumber">
             <mat-error *ngIf="editUserForm.get('phoneNumber').errors && !editUserForm.get('phoneNumber').untouched">
-              <span *ngIf="editUserForm.get('phoneNumber').errors?.maxlength" i18n="@@edit_user_component_error_phone_number_maxlength">Phone number must not exceed 4000 characters.</span>
+              <span *ngIf="editUserForm.get('phoneNumber').errors?.maxlength" i18n="@@edit_user_component_error_phone_number_maxlength">Phone number must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -57,7 +57,7 @@
             <mat-label i18n="@@edit_user_component_label_mobile_number">Mobile Number</mat-label>
             <input type="text" matInput formControlName="mobileNumber">
             <mat-error *ngIf="editUserForm.get('mobileNumber').errors && !editUserForm.get('mobileNumber').untouched">
-              <span *ngIf="editUserForm.get('mobileNumber').errors?.maxlength" i18n="@@edit_user_component_error_mobile_number_maxlength">Mobile number must not exceed 4000 characters.</span>
+              <span *ngIf="editUserForm.get('mobileNumber').errors?.maxlength" i18n="@@edit_user_component_error_mobile_number_maxlength">Mobile number must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

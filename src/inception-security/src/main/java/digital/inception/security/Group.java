@@ -76,11 +76,12 @@ public class Group
 
   /**
    * The ID used to uniquely identify the group.
+   *
+   * The ID for a group that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
   @GenericGenerator(name = "group_id",
       strategy = "digital.inception.persistence.AssignedIdentityGenerator")
   @GeneratedValue(generator = "group_id", strategy = GenerationType.IDENTITY)

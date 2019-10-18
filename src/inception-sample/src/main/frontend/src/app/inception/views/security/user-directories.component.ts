@@ -76,7 +76,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
     })
   }
 
-  deleteUserDirectory(userDirectoryId: string): void {
+  deleteUserDirectory(userDirectoryId: number): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({

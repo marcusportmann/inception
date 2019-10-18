@@ -20,6 +20,24 @@ import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
 
 /**
+ * The DuplicateGroupError class holds the information for a duplicate group error.
+ *
+ * @author Marcus Portmann
+ */
+export class DuplicateGroupError extends Error {
+
+  /**
+   * Constructs a new DuplicateGroupError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The DuplicateOrganizationError class holds the information for a duplicate organization error.
  *
  * @author Marcus Portmann
@@ -64,6 +82,24 @@ export class DuplicateUserError extends Error {
 
   /**
    * Constructs a new DuplicateUserError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The ExistingGroupMembersError class holds the information for an existing group members error.
+ *
+ * @author Marcus Portmann
+ */
+export class ExistingGroupMembersError extends Error {
+
+  /**
+   * Constructs a new ExistingGroupMembersError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

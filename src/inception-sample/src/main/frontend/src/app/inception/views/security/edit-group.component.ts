@@ -26,26 +26,26 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
-import {User} from '../../services/security/user';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
+import {Group} from "../../services/security/group";
 
 /**
- * The EditUserComponent class implements the edit user component.
+ * The EditGroupComponent class implements the edit group component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'edit-user.component.html',
-  styleUrls: ['edit-user.component.css'],
+  templateUrl: 'edit-group.component.html',
+  styleUrls: ['edit-group.component.css'],
 })
-export class EditUserComponent extends AdminContainerView implements AfterViewInit {
+export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
 
-  editUserForm: FormGroup;
+  editGroupForm: FormGroup;
 
-  user?: User;
+  group?: Group;
 
   userDirectoryType?: UserDirectoryType;
 
@@ -56,13 +56,9 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     super();
 
     // Initialise the form
-    this.editUserForm = new FormGroup({
-      email: new FormControl('', [Validators.maxLength(100)]),
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      mobileNumber: new FormControl('', [Validators.maxLength(100)]),
-      phoneNumber: new FormControl('', [Validators.maxLength(100)]),
-      username: new FormControl({
+    this.editGroupForm = new FormGroup({
+      description: new FormControl('', [Validators.maxLength(100)]),
+      name: new FormControl({
         value: '',
         disabled: true
       })
@@ -73,8 +69,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
-      id: '@@edit_user_component_back_title',
-      value: 'Users'
+      id: '@@edit_group_component_back_title',
+      value: 'Groups'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId}
@@ -83,38 +79,29 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_user_component_title',
-      value: 'Edit User'
+      id: '@@edit_group_component_title',
+      value: 'Edit Group'
     })
   }
 
   ngAfterViewInit(): void {
     const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    const username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+    const name = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('name')!);
 
-    // Retrieve the existing user and initialise the form fields
+    // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
 
     combineLatest([this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId),
-      this.securityService.getUser(userDirectoryId, username)
+      this.securityService.getGroup(userDirectoryId, name)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((results: [UserDirectoryType, User]) => {
+      .subscribe((results: [UserDirectoryType, Group]) => {
         this.userDirectoryType = results[0];
 
-        this.user = results[1];
+        this.group = results[1];
 
-        this.editUserForm.get('email')!.setValue(results[1].email);
-        this.editUserForm.get('firstName')!.setValue(results[1].firstName);
-        this.editUserForm.get('lastName')!.setValue(results[1].lastName);
-        this.editUserForm.get('mobileNumber')!.setValue(results[1].mobileNumber);
-        this.editUserForm.get('phoneNumber')!.setValue(results[1].phoneNumber);
-        this.editUserForm.get('username')!.setValue(results[1].username);
-
-        if (this.userDirectoryType!.code === 'InternalUserDirectory') {
-          this.editUserForm.addControl('expirePassword', new FormControl(false));
-          this.editUserForm.addControl('lockUser', new FormControl(false));
-        }
+        this.editGroupForm.get('description')!.setValue(results[1].description);
+        this.editGroupForm.get('name')!.setValue(results[1].name);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -138,18 +125,12 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   onOK(): void {
-    if (this.user && this.editUserForm.valid) {
-      this.user.firstName = this.editUserForm.get('firstName')!.value;
-      this.user.lastName = this.editUserForm.get('lastName')!.value;
-      this.user.mobileNumber = this.editUserForm.get('mobileNumber')!.value;
-      this.user.phoneNumber = this.editUserForm.get('phoneNumber')!.value;
-      this.user.email = this.editUserForm.get('email')!.value;
+    if (this.group && this.editGroupForm.valid) {
+      this.group.description = this.editGroupForm.get('description')!.value;
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updateUser(this.user, this.editUserForm.contains('expirePassword') ?
-        this.editUserForm.get('expirePassword')!.value : false,
-        this.editUserForm.contains('lockUser') ? this.editUserForm.get('lockUser')!.value : false)
+      this.securityService.updateGroup(this.group)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);

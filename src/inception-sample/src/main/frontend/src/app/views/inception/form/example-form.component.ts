@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
+import {ReplaySubject, Subject, Subscription} from "rxjs";
 
+/**
+ * The Title class holds title information for the example form component.
+ */
+class Title {
+  name: string;
+  value: string;
+
+  constructor(name: string, value: string) {
+    this.name = name;
+    this.value = value;
+  }
+}
 
 /**
  * The ExampleFormComponent class implements the example form component.
@@ -28,7 +41,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 @Component({
   templateUrl: 'example-form.component.html'
 })
-export class ExampleFormComponent implements OnInit {
+export class ExampleFormComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Subscription = new Subscription();
 
   static readonly MIN_DATE = new Date(1900, 1, 1);
 
@@ -36,23 +51,11 @@ export class ExampleFormComponent implements OnInit {
 
   exampleForm: FormGroup;
 
-  titles: Array<{}> = [{
-    name: 'Mr',
-    value: 'Mr'
-  }, {
-    name: 'Mrs',
-    value: 'Mrs'
-  }, {
-    name: 'Ms',
-    value: 'Ms'
-  }
-  ];
+  titles: Array<Title> = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms') ];
 
-  countryOptions = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland',
-    'Zimbabwe'
-  ];
+  countryOptions = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland', 'Zimbabwe'];
 
-  //filteredCountryOptions: Observable<string[]>;
+  filteredCountryOptions: Subject<string[]> = new ReplaySubject<string[]>();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
@@ -80,18 +83,26 @@ export class ExampleFormComponent implements OnInit {
   ngOnInit(): void {
     const favoriteCountryControl = this.exampleForm.get('favoriteCountry');
 
+    console.log('favoriteCountryControl = ', favoriteCountryControl);
+
     if (favoriteCountryControl) {
-      favoriteCountryControl.valueChanges
-        .pipe(startWith(''), map(value => this.filter(value)));
+      this.subscriptions.add(favoriteCountryControl.valueChanges
+        .pipe(startWith(''), map(value => {
+          this.filteredCountryOptions.next(this.filter(value))
+        })).subscribe());
     }
   }
 
   onSubmit(): void {
-    const favorityColorControl = this.exampleForm.get('favoriteColor');
+    const favoriteColorControl = this.exampleForm.get('favoriteColor');
 
-    if (favorityColorControl) {
-      console.log('favorite color = ', favorityColorControl.value);
+    if (favoriteColorControl) {
+      console.log('favorite color = ', favoriteColorControl.value);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   private filter(value: string): string[] {

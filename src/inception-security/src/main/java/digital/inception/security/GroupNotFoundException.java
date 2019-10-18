@@ -49,10 +49,10 @@ public class GroupNotFoundException extends ServiceException
   /**
    * Constructs a new <code>GroupNotFoundException</code>.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    */
-  public GroupNotFoundException(String name)
+  public GroupNotFoundException(String groupName)
   {
-    super("The group (" + name + ") could not be found");
+    super("The group (" + groupName + ") could not be found");
   }
 }

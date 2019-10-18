@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The UserDirectoryTitleResolver class provides the route data resolver that resolves the
- * title for the "User Directory" route in the navigation hierarchy.
+ * The GroupsTitleResolver class provides the route data resolver that resolves the
+ * title for the "Groups" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class UserDirectoryTitleResolver implements Resolve<string> {
+export class GroupsTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new UserDirectoryTitleResolver.
+   * Constructs a new GroupsTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,7 +42,15 @@ export class UserDirectoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    // TODO: Retrieve the name of the user directory and return here -- MARCUS
-    return of(activatedRouteSnapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+
+    if (!!userDirectoryId) {
+      return of (userDirectoryId);
+    } else {
+      return of(this.i18n({
+        id: '@@groups_title_resolver_title',
+        value: 'Groups'
+      }));
+    }
   }
 }

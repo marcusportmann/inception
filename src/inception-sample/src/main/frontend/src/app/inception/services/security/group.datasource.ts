@@ -20,21 +20,20 @@ import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 
 import {first} from 'rxjs/operators';
-import {User} from './user';
-import {Users} from './users';
 import {SessionService} from '../session/session.service';
-import {UserSortBy} from './user-sort-by';
+import {Group} from "./group";
+import {Groups} from "./groups";
 
 /**
- * The UserDatasource class implements the user data source.
+ * The GroupDatasource class implements the group data source.
  *
  * @author Marcus Portmann
  */
-export class UserDatasource implements DataSource<User> {
+export class GroupDatasource implements DataSource<Group> {
 
   private totalSubject: Subject<number> = new ReplaySubject<number>();
 
-  private dataSubject: Subject<User[]> = new ReplaySubject<User[]>();
+  private dataSubject: Subject<Group[]> = new ReplaySubject<Group[]>();
 
   private loadingSubject: Subject<boolean> = new ReplaySubject<boolean>();
 
@@ -45,7 +44,7 @@ export class UserDatasource implements DataSource<User> {
   constructor(private sessionService: SessionService, private securityService: SecurityService) {
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<User[] | ReadonlyArray<User>> {
+  connect(collectionViewer: CollectionViewer): Observable<Group[] | ReadonlyArray<Group>> {
     return this.dataSubject.asObservable();
   }
 
@@ -55,29 +54,28 @@ export class UserDatasource implements DataSource<User> {
   }
 
   /**
-   * Load the users.
+   * Load the groups.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory the users are
+   * @param userDirectoryId The ID used to uniquely identify the user directory the groups are
    *                        associated with.
-   * @param filter          The optional filter to apply to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
-   * @param sortDirection   The optional sort direction to apply to the users.
+   * @param filter          The optional filter to apply to the groups.
+   * @param sortDirection   The optional sort direction to apply to the groups.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId: number, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
+  load(userDirectoryId: number, filter?: string, sortDirection?: SortDirection,
        pageIndex?: number, pageSize?: number): void {
     this.loadingSubject.next(true);
 
-    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
+    this.securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex,
       pageSize)
       .pipe(first())
-      .subscribe((users: Users) => {
+      .subscribe((groups: Groups) => {
         this.loadingSubject.next(false);
 
-        this.totalSubject.next(users.total);
+        this.totalSubject.next(groups.total);
 
-        this.dataSubject.next(users.users);
+        this.dataSubject.next(groups.groups);
       }, (error: Error) => {
         this.loadingSubject.next(false);
 

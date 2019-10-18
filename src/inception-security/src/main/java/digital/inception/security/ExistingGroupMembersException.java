@@ -51,11 +51,11 @@ public class ExistingGroupMembersException extends ServiceException
   /**
    * Constructs a new <code>ExistingGroupMembersException</code>.
    *
-   * @param name the name identifying the group
+   * @param groupName the name identifying the group
    */
-  public ExistingGroupMembersException(String name)
+  public ExistingGroupMembersException(String groupName)
   {
-    super("The group (" + name
+    super("The group (" + groupName
         + ") could not be deleted since it is still associated with 1 or more user(s)");
   }
 }

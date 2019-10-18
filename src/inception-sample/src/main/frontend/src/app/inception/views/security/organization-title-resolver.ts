@@ -43,6 +43,6 @@ export class OrganizationTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     // TODO: Retrieve the name of the organization and return here -- MARCUS
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('organizationId')!));
+    return of(activatedRouteSnapshot.paramMap.get('organizationId')!);
   }
 }

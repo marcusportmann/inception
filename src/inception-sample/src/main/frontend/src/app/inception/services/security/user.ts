@@ -34,9 +34,9 @@ export class User {
   firstName: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * The ID used to uniquely identify the user.
    */
-  id: string;
+  id: number | null;
 
   /**
    * The last name for the user.
@@ -56,12 +56,12 @@ export class User {
   /**
    * The number of failed authentication attempts as a result of an incorrect password for the user.
    */
-  passwordAttempts?: number;
+  passwordAttempts?: number | undefined;
 
   /**
    * The date and time the password for the user expires.
    */
-  passwordExpiry?: Date;
+  passwordExpiry?: Date | undefined;
 
   /**
    * The phone number for the user.
@@ -71,7 +71,7 @@ export class User {
   /**
    * Is the user read-only.
    */
-  readOnly?: boolean;
+  readOnly?: boolean | undefined;
 
   /**
    * The status for the user.
@@ -79,10 +79,9 @@ export class User {
   status: UserStatus;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
-   * is associated with.
+   * The ID used to uniquely identify the user directory the user is associated with.
    */
-  userDirectoryId: string;
+  userDirectoryId: number;
 
   /**
    * The username for the user.
@@ -92,10 +91,9 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param id                The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                          user.
-   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                          user directory the user is associated with.
+   * @param id                The ID used to uniquely identify the user.
+   * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
+   *                          associated with.
    * @param username          The username for the user.
    * @param firstName         The first name for the user.
    * @param lastName          The last name for the user.
@@ -109,7 +107,7 @@ export class User {
    * @param passwordExpiry    The date and time the password for the user expires.
    * @param readOnly          Is the user read-only.
    */
-  constructor(id: string, userDirectoryId: string, username: string, firstName: string,
+  constructor(id: number | null, userDirectoryId: number, username: string, firstName: string,
               lastName: string, mobileNumber: string, phoneNumber: string, email: string,
               status: UserStatus, password: string, passwordAttempts?: number,
               passwordExpiry?: Date, readOnly?: boolean) {

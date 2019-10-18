@@ -83,11 +83,12 @@ public class UserDirectory
 
   /**
    * The ID used to uniquely identify the user directory.
+   *
+   * The ID for a user directory that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @NotNull
   @GenericGenerator(name = "user_directory_id",
       strategy = "digital.inception.persistence.AssignedIdentityGenerator")
   @GeneratedValue(generator = "user_directory_id", strategy = GenerationType.IDENTITY)

@@ -72,9 +72,6 @@ public class SecurityServiceTest
    * Test the functionality to add a user to a group.
    */
   @Test
-
-  // @Transactional
-  // @Transactional(propagation = Propagation.NEVER)
   public void addUserToGroupTest()
     throws Exception
   {
@@ -623,6 +620,19 @@ public class SecurityServiceTest
     assertEquals("The correct number of groups (1) was not retrieved", 1, retrievedGroups.size());
 
     compareGroups(group, retrievedGroups.get(0));
+
+    long numberOfFilteredGroups = securityService.getNumberOfGroups(userDirectory.getId(), "Test");
+
+    assertEquals("The correct number of filtered groups (1) was not retrieved", 1,
+        numberOfFilteredGroups);
+
+    List<Group> retrievedFilteredGroups = securityService.getGroups(userDirectory.getId(), "Test",
+        SortDirection.ASCENDING, null, null);
+
+    assertEquals("The correct number of filtered groups (1) was not retrieved", 1,
+        retrievedFilteredGroups.size());
+
+    compareGroups(group, retrievedFilteredGroups.get(0));
 
     group.setDescription("Test Updated Group Description");
     securityService.updateGroup(userDirectory.getId(), group);

@@ -76,7 +76,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
     })
   }
 
-  deleteOrganization(organizationId: string): void {
+  deleteOrganization(organizationId: number): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({

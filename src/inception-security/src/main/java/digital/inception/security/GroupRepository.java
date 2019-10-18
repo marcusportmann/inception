@@ -18,6 +18,7 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -45,6 +46,11 @@ public interface GroupRepository extends JpaRepository<Group, Long>
 
   long countByUserDirectoryId(Long userDirectoryId);
 
+  @Query(
+      "select count(g.id) from Group g where (upper(g.name) like upper(:filter)) and g.userDirectoryId = :userDirectoryId")
+  long countFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "filter") String filter);
+
   @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
   long countUsersById(@Param("groupId") Long groupId);
 
@@ -57,7 +63,14 @@ public interface GroupRepository extends JpaRepository<Group, Long>
 
   List<Group> findByUserDirectoryId(Long userDirectoryId);
 
+  List<Group> findByUserDirectoryId(Long userDirectoryId, Pageable pageable);
+
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
+
+  @Query(
+      "select g from Group g where (upper(g.name) like upper(:filter)) and g.userDirectoryId = :userDirectoryId")
+  List<Group> findFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "filter") String filter, Pageable pageable);
 
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
       + "upper(g.name) like upper(:name)")

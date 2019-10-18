@@ -49,11 +49,63 @@ import {UserDirectoryTitleResolver} from './user-directory-title-resolver';
 import {NewUserDirectoryComponent} from './new-user-directory.component';
 import {InternalUserDirectoryComponent} from './internal-user-directory.component';
 import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
+import {GroupsComponent} from './groups.component';
+import {GroupsTitleResolver} from './groups-title-resolver';
+import {EditGroupTitleResolver} from "./edit-group-title-resolver";
+import {GroupTitleResolver} from "./group-title-resolver";
+import {NewGroupTitleResolver} from "./new-group-title-resolver";
+import {NewGroupComponent} from './new-group.component';
+import {EditGroupComponent} from "./edit-group.component";
 
 const routes: Routes = [{
   path: '',
   redirectTo: 'overview'
 }, {
+  path: 'groups',
+  resolve: {
+    title: GroupsTitleResolver
+  },
+  children: [{
+    path: '',
+    canActivate: [CanActivateFunctionGuard],
+    component: GroupsComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.GroupAdministration']
+    }
+  }, {
+    path: ':userDirectoryId/new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewGroupComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.GroupAdministration']
+    },
+    resolve: {
+      title: NewGroupTitleResolver
+    }
+  }, {
+    path: ':userDirectoryId/:name',
+    pathMatch: 'full',
+    redirectTo: ':userDirectoryId/:name/edit'
+  }, {
+    path: ':userDirectoryId/:name',
+    resolve: {
+      title: GroupTitleResolver
+    },
+    children: [{
+      path: 'edit',
+      canActivate: [CanActivateFunctionGuard],
+      component: EditGroupComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.GroupAdministration']
+      },
+      resolve: {
+        title: EditGroupTitleResolver
+      }
+    }]
+  }]
+},
+  {
   path: 'overview',
   component: SecurityOverviewComponent,
   data: {
@@ -107,50 +159,6 @@ const routes: Routes = [{
     }]
   }]
 }, {
-  path: 'users',
-  resolve: {
-    title: UsersTitleResolver
-  },
-  children: [{
-    path: '',
-    canActivate: [CanActivateFunctionGuard],
-    component: UsersComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']
-    }
-  }, {
-    path: ':userDirectoryId/new',
-    pathMatch: 'full',
-    canActivate: [CanActivateFunctionGuard],
-    component: NewUserComponent,
-    data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
-    },
-    resolve: {
-      title: NewUserTitleResolver
-    }
-  }, {
-    path: ':userDirectoryId/:username',
-    pathMatch: 'full',
-    redirectTo: ':userDirectoryId/:username/edit'
-  }, {
-    path: ':userDirectoryId/:username',
-    resolve: {
-      title: UserTitleResolver
-    },
-    children: [{
-      path: 'edit',
-      canActivate: [CanActivateFunctionGuard],
-      component: EditUserComponent,
-      data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
-      },
-      resolve: {
-        title: EditUserTitleResolver
-      }
-    }]
-  }]
-}, {
   path: 'user-directories',
   resolve: {
     title: UserDirectoriesTitleResolver
@@ -194,7 +202,52 @@ const routes: Routes = [{
       }
     }]
   }]
-}
+},
+  {
+    path: 'users',
+    resolve: {
+      title: UsersTitleResolver
+    },
+    children: [{
+      path: '',
+      canActivate: [CanActivateFunctionGuard],
+      component: UsersComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']
+      }
+    }, {
+      path: ':userDirectoryId/new',
+      pathMatch: 'full',
+      canActivate: [CanActivateFunctionGuard],
+      component: NewUserComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
+      },
+      resolve: {
+        title: NewUserTitleResolver
+      }
+    }, {
+      path: ':userDirectoryId/:username',
+      pathMatch: 'full',
+      redirectTo: ':userDirectoryId/:username/edit'
+    }, {
+      path: ':userDirectoryId/:username',
+      resolve: {
+        title: UserTitleResolver
+      },
+      children: [{
+        path: 'edit',
+        canActivate: [CanActivateFunctionGuard],
+        component: EditUserComponent,
+        data: {
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']
+        },
+        resolve: {
+          title: EditUserTitleResolver
+        }
+      }]
+    }]
+  }
 ];
 
 @NgModule({
@@ -203,8 +256,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
-  providers: [EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UsersTitleResolver, UserTitleResolver]
+  declarations: [EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
+  providers: [EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }
