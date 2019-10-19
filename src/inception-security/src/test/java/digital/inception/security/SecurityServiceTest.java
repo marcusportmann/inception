@@ -88,7 +88,7 @@ public class SecurityServiceTest
     User user = getTestUserDetails();
 
     securityService.createUser(userDirectory.getId(), user, false, false);
-    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getName());
+    securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
@@ -284,7 +284,7 @@ public class SecurityServiceTest
     User user = getTestUserDetails();
 
     securityService.createUser(userDirectory.getId(), user, false, false);
-    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getName());
+    securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
@@ -568,7 +568,7 @@ public class SecurityServiceTest
         false);
 
     securityService.addUserToGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
-        user.getUsername(), "Administrators");
+         "Administrators", user.getUsername());
 
     List<String> groupNamesForUser = securityService.getGroupNamesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
@@ -621,6 +621,12 @@ public class SecurityServiceTest
 
     compareGroups(group, retrievedGroups.get(0));
 
+    List<String> retrievedGroupNames = securityService.getGroupNames(userDirectory.getId());
+
+    assertEquals("The correct number of group names (1) was not retrieved", 1, retrievedGroups.size());
+
+    assertEquals(group.getName(), retrievedGroupNames.get(0));
+
     long numberOfFilteredGroups = securityService.getNumberOfGroups(userDirectory.getId(), "Test");
 
     assertEquals("The correct number of filtered groups (1) was not retrieved", 1,
@@ -670,7 +676,7 @@ public class SecurityServiceTest
     User user = getTestUserDetails();
 
     securityService.createUser(userDirectory.getId(), user, false, false);
-    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getName());
+    securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
     assertTrue("Could not determine that the user (" + user.getUsername()
         + ") is a member of the group (" + group.getName() + ")", securityService.isUserInGroup(
         userDirectory.getId(), user.getUsername(), group.getName()));
@@ -824,7 +830,7 @@ public class SecurityServiceTest
     User user = getTestUserDetails();
 
     securityService.createUser(userDirectory.getId(), user, false, false);
-    securityService.addUserToGroup(userDirectory.getId(), user.getUsername(), group.getName());
+    securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
@@ -833,7 +839,7 @@ public class SecurityServiceTest
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getName() + ")", group.getName(), groupNames.get(0));
-    securityService.removeUserFromGroup(userDirectory.getId(), user.getUsername(), group.getName());
+    securityService.removeUserFromGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     groupNames = securityService.getGroupNamesForUser(userDirectory.getId(), user.getUsername());
 

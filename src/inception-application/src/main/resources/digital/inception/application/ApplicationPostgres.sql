@@ -637,7 +637,7 @@ CREATE TABLE security.groups (
 
 CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
 
-CREATE INDEX groups_name_ix ON security.groups(name);
+CREATE UNIQUE INDEX groups_user_directory_id_name_ix ON security.groups(user_directory_id, name);
 
 COMMENT ON COLUMN security.groups.id IS 'The ID used to uniquely identify the group';
 

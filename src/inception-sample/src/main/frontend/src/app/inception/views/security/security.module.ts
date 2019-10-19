@@ -56,6 +56,8 @@ import {GroupTitleResolver} from "./group-title-resolver";
 import {NewGroupTitleResolver} from "./new-group-title-resolver";
 import {NewGroupComponent} from './new-group.component';
 import {EditGroupComponent} from "./edit-group.component";
+import {UserGroupsComponent} from "./user-groups.component";
+import {UserGroupsTitleResolver} from "./user-groups-title-resolver";
 
 const routes: Routes = [{
   path: '',
@@ -245,6 +247,16 @@ const routes: Routes = [{
         resolve: {
           title: EditUserTitleResolver
         }
+      }, {
+        path: 'groups',
+        canActivate: [CanActivateFunctionGuard],
+        component: UserGroupsComponent,
+        data: {
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+        },
+        resolve: {
+          title: UserGroupsTitleResolver
+        }
       }]
     }]
   }
@@ -256,8 +268,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UsersComponent],
-  providers: [EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UsersTitleResolver, UserTitleResolver]
+  declarations: [EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UserGroupsComponent, UsersComponent],
+  providers: [EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UserGroupsTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }

@@ -42,7 +42,7 @@ public interface GroupRepository extends JpaRepository<Group, Long>
   @Query(value = "insert into security.user_to_group_map(user_id, group_id) "
       + "values (:userId, :groupId)",
       nativeQuery = true)
-  void addUserToGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
+  void addUserToGroup(@Param("groupId") Long groupId, @Param("userId") Long userId);
 
   long countByUserDirectoryId(Long userDirectoryId);
 
@@ -60,6 +60,9 @@ public interface GroupRepository extends JpaRepository<Group, Long>
 
   @Transactional
   boolean existsByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
+
+  @Query("select g.name from Group g where g.userDirectoryId = :userDirectoryId")
+  List<String> getNamesByUserDirectoryId(@Param("userDirectoryId")Long userDirectoryId);
 
   List<Group> findByUserDirectoryId(Long userDirectoryId);
 
@@ -81,5 +84,5 @@ public interface GroupRepository extends JpaRepository<Group, Long>
   @Query(value = "delete from security.user_to_group_map "
       + "where user_id = :userId and group_id=:groupId",
       nativeQuery = true)
-  void removeUserFromGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
+  void removeUserFromGroup(@Param("groupId") Long groupId, @Param("userId") Long userId);
 }

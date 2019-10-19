@@ -162,24 +162,15 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Add the user to the group.
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    */
   @Override
-  public void addUserToGroup(String username, String groupName)
+  public void addUserToGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     try
     {
-      Optional<Long> userIdOptional =
-          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
-
-      if (userIdOptional.isEmpty())
-      {
-        throw new UserNotFoundException(username);
-      }
-
       Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
@@ -188,7 +179,16 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(groupName);
       }
 
-      getGroupRepository().addUserToGroup(userIdOptional.get(), groupIdOptional.get());
+      Optional<Long> userIdOptional =
+        getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          username);
+
+      if (userIdOptional.isEmpty())
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      getGroupRepository().addUserToGroup(groupIdOptional.get(), userIdOptional.get());
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {
@@ -708,11 +708,32 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the names identifying the groups for the user.
+   * Retrieve all the group names.
+   *
+   * @return the group names
+   */
+  @Override
+  public List<String> getGroupNames()
+    throws SecurityServiceException
+  {
+    try
+    {
+      return getGroupRepository().getNamesByUserDirectoryId(getUserDirectoryId());
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(
+          "Failed to retrieve the group names for the user directory (" + getUserDirectoryId()
+          + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the names identifying the groups the user is a member of.
    *
    * @param username the username identifying the user
    *
-   * @return the names identifying the groups for the user
+   * @return the names identifying the groups the user is a member of
    */
   @Override
   public List<String> getGroupNamesForUser(String username)
@@ -738,7 +759,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the names identifying the groups for the user (%s) for the user directory (%s)",
+          "Failed to retrieve the names identifying the groups the user is a member of (%s) for the user directory (%s)",
           username, getUserDirectoryId()), e);
     }
   }
@@ -820,11 +841,11 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the groups the user is a member of.
    *
    * @param username the username identifying the user
    *
-   * @return the groups for the user
+   * @return the groups the user is a member of
    */
   @Override
   public List<Group> getGroupsForUser(String username)
@@ -849,8 +870,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException("Failed to retrieve the groups for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityServiceException("Failed to retrieve the groups the user is a member of ("
+          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1151,15 +1172,23 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Remove the user from the group.
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    */
   @Override
-  public void removeUserFromGroup(String username, String groupName)
+  public void removeUserFromGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     try
     {
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+        getUserDirectoryId(), groupName);
+
+      if (groupIdOptional.isEmpty())
+      {
+        throw new GroupNotFoundException(groupName);
+      }
+
       Optional<Long> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
@@ -1169,15 +1198,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
-          getUserDirectoryId(), groupName);
-
-      if (groupIdOptional.isEmpty())
-      {
-        throw new GroupNotFoundException(groupName);
-      }
-
-      getGroupRepository().removeUserFromGroup(userIdOptional.get(), groupIdOptional.get());
+      getGroupRepository().removeUserFromGroup(groupIdOptional.get(), userIdOptional.get());
     }
     catch (UserNotFoundException | GroupNotFoundException e)
     {

@@ -23,7 +23,8 @@ import {
   DuplicateGroupError,
   DuplicateOrganizationError,
   DuplicateUserDirectoryError,
-  DuplicateUserError, ExistingGroupMembersError,
+  DuplicateUserError,
+  ExistingGroupMembersError,
   OrganizationNotFoundError,
   SecurityServiceError,
   UserDirectoryNotFoundError,
@@ -424,6 +425,78 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve all the group names.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   *
+   * @return The group names.
+   */
+  getGroupNames(userDirectoryId: number): Observable<string[]> {
+    return this.httpClient.get<string[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/group-names', {
+        reportProgress: true,
+      }).pipe(map((groupNames: string[]) => {
+        return groupNames;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_group_names',
+            value: 'Failed to retrieve the group names.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the names identifying the groups the user is a member of.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param username        The username identifying the user.
+   *
+   * @return The names identifying the groups the user is a member of.
+   */
+  getGroupNamesForUser(userDirectoryId: number, username: string): Observable<string[]> {
+    return this.httpClient.get<string[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      encodeURIComponent(username) + '/group-names', {reportProgress: true}).pipe(map((groupNames: string[]) => {
+      return groupNames;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.status === 404) {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_group_names_for_the_user',
+            value: 'Failed to retrieve the group names for the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Retrieve the groups.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
@@ -432,7 +505,7 @@ export class SecurityService {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    *
-   * @return The users.
+   * @return The groups.
    */
   getGroups(userDirectoryId: number, filter?: string, sortDirection?: SortDirection,
            pageIndex?: number, pageSize?: number): Observable<Groups> {

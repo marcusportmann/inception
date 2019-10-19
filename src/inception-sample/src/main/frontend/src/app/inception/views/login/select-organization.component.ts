@@ -45,6 +45,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private sessionService: SessionService) {
+
     // Initialise the form controls
     this.organizationFormControl = new FormControl('', Validators.required);
 
@@ -61,7 +62,8 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   isOrganizationSelected(): boolean {
     if (this.selectOrganizationForm.valid) {
       if (this.organizationFormControl.value as Organization) {
-        if (!!this.organizationFormControl.value.id) {
+        if (typeof (this.organizationFormControl.value.id) !== 'undefined' &&
+          this.organizationFormControl.value.id !== null) {
           return true;
         }
       }

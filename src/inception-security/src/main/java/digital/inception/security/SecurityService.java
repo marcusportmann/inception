@@ -173,12 +173,12 @@ public class SecurityService
    * Add the user to the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param username        the username identifying the user
    * @param groupName       the name identifying the group
+   * @param username        the username identifying the user
    */
   @Override
   @Transactional
-  public void addUserToGroup(Long userDirectoryId, String username, String groupName)
+  public void addUserToGroup(Long userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -189,7 +189,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.addUserToGroup(username, groupName);
+    userDirectory.addUserToGroup(groupName, username);
   }
 
   /**
@@ -830,12 +830,33 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the names identifying the groups for the user.
+   * Retrieve all the group names.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the group names
+   */
+  @Override
+  public List<String> getGroupNames(Long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getGroupNames();
+  }
+
+  /**
+   * Retrieve the names identifying the groups the user is a member of.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the names identifying the groups for the user
+   * @return the names identifying the groups the user is a member of
    */
   @Override
   public List<String> getGroupNamesForUser(Long userDirectoryId, String username)
@@ -899,12 +920,12 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the groups the user is a member of.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the groups for the user
+   * @return the groups the user is a member of
    */
   @Override
   public List<Group> getGroupsForUser(Long userDirectoryId, String username)
@@ -1864,12 +1885,12 @@ public class SecurityService
    * Remove the user from the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param username        the username identifying the user
    * @param groupName       the name identifying the group
+   * @param username        the username identifying the user
    */
   @Override
   @Transactional
-  public void removeUserFromGroup(Long userDirectoryId, String username, String groupName)
+  public void removeUserFromGroup(Long userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -1880,7 +1901,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.removeUserFromGroup(username, groupName);
+    userDirectory.removeUserFromGroup(groupName, username);
   }
 
   /**

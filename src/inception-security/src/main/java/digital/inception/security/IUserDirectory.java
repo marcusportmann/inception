@@ -31,10 +31,10 @@ interface IUserDirectory
   /**
    * Add the user to the group.
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    */
-  void addUserToGroup(String username, String groupName)
+  void addUserToGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
@@ -137,11 +137,19 @@ interface IUserDirectory
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the names identifying the groups for the user.
+   * Retrieve all the group names.
+   *
+   * @return the group names
+   */
+  List<String> getGroupNames()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the names identifying the groups the user is a member of.
    *
    * @param username the username identifying the user
    *
-   * @return the names identifying the groups for the user
+   * @return the names identifying the groups the user is a member of
    */
   List<String> getGroupNamesForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
@@ -169,11 +177,11 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the groups the user is a member of.
    *
    * @param username the username identifying the user
    *
-   * @return the groups for the user
+   * @return the groups the user is a member of
    */
   List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
@@ -267,10 +275,10 @@ interface IUserDirectory
   /**
    * Remove the user from the group.
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    */
-  void removeUserFromGroup(String username, String groupName)
+  void removeUserFromGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**

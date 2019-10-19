@@ -56,6 +56,10 @@
         <i class="fas fa-edit"></i>
         <span i18n="@@users_component_menu_item_edit">Edit</span>
       </button>
+      <button mat-menu-item (click)="userGroups(username)">
+        <i class="fas fa-users"></i>
+        <span i18n="@@users_component_menu_item_groups">Groups</span>
+      </button>
       <button mat-menu-item (click)="deleteUser(username)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@users_component_menu_item_delete">Delete</span>

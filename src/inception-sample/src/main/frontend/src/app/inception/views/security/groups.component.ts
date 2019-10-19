@@ -50,30 +50,7 @@ import {GroupDatasource} from "../../services/security/group.datasource";
   styleUrls: ['groups.component.css'],
   host: {
     'class': 'flex flex-column flex-fill',
-  },
-  styles: [`
-    .select-user-directory-container
-    {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #c2cfd6;
-      padding: 8px !important;
-    }
-
-    .select-user-directory-container > span
-    {
-      white-space: nowrap;
-      flex: 0;
-      padding-right: 8px;
-    }
-
-    .select-user-directory-container > .mat-form-field
-    {
-      flex: 1;
-    }
-  `
-  ]
+  }
 })
 export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
 

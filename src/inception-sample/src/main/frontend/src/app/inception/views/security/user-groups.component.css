@@ -1,4 +1,4 @@
-.select-user-directory-container
+.add-user-to-group-container
 {
   display: flex;
   justify-content: space-between;
@@ -7,14 +7,19 @@
   padding: 8px !important;
 }
 
-.select-user-directory-container > span
+.add-user-to-group-container > span
 {
   white-space: nowrap;
   flex: 0;
   padding-right: 8px;
 }
 
-.select-user-directory-container > .mat-form-field
+.add-user-to-group-container > .mat-form-field
 {
   flex: 1;
+}
+
+.add-user-to-group-container > button
+{
+  margin-left: 8px;
 }

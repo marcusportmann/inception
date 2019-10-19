@@ -32,10 +32,10 @@ public interface ISecurityService
    * Add the user to the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param username        the username identifying the user
    * @param groupName       the name identifying the group
+   * @param username        the username identifying the user
    */
-  void addUserToGroup(Long userDirectoryId, String username, String groupName)
+  void addUserToGroup(Long userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException;
 
@@ -223,12 +223,22 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the names identifying the groups for the user.
+   * Retrieve all the group names.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the group names
+   */
+  List<String> getGroupNames(Long userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the names identifying the groups the user is a member of.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the names identifying the groups for the user
+   * @return the names identifying the groups the user is a member of
    */
   List<String> getGroupNamesForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
@@ -259,12 +269,12 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the groups for the user.
+   * Retrieve the groups the user is a member of.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param username        the username identifying the user
    *
-   * @return the groups for the user
+   * @return the groups the user is a member of
    */
   List<Group> getGroupsForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
@@ -582,10 +592,10 @@ public interface ISecurityService
    * Remove the user from the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param username        the username identifying the user
    * @param groupName       the name identifying the group
+   * @param username        the username identifying the user
    */
-  void removeUserFromGroup(Long userDirectoryId, String username, String groupName)
+  void removeUserFromGroup(Long userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException;
 

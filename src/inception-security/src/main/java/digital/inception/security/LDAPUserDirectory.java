@@ -354,11 +354,11 @@
 //  /**
 //   * Add the user to the group.
 //   *
-//   * @param username  the username identifying the user
 //   * @param groupName the name identifying the group
+//   * @param username  the username identifying the user
 //   */
 //  @Override
-//  public void addUserToGroup(String username, String groupName)
+//  public void addUserToGroup(String groupName, String username)
 //    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
 //  {
 //    DirContext dirContext = null;
@@ -1172,11 +1172,11 @@
 //  }
 //
 //  /**
-//   * Retrieve the names identifying the groups for the user.
+//   * Retrieve the names identifying the groups the user is a member of.
 //   *
 //   * @param username the username identifying the user
 //   *
-//   * @return the names identifying the groups for the user
+//   * @return the names identifying the groups the user is a member of
 //   */
 //  @Override
 //  public List<String> getGroupNamesForUser(String username)
@@ -1227,7 +1227,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the names identifying the groups for the user (%s) for the user directory (%s)",
+//          "Failed to retrieve the names identifying the groups the user is a member of (%s) for the user directory (%s)",
 //          username, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1285,11 +1285,11 @@
 //  }
 //
 //  /**
-//   * Retrieve the groups for the user.
+//   * Retrieve the groups the user is a member of.
 //   *
 //   * @param username the username identifying the user
 //   *
-//   * @return the groups for the user
+//   * @return the groups the user is a member of
 //   */
 //  @Override
 //  public List<Group> getGroupsForUser(String username)
@@ -1334,7 +1334,7 @@
 //    catch (Throwable e)
 //    {
 //      throw new SecurityServiceException(String.format(
-//          "Failed to retrieve the groups for the user (%s) for the user directory (%s)",
+//          "Failed to retrieve the groups the user is a member of (%s) for the user directory (%s)",
 //          username, getUserDirectoryId()), e);
 //    }
 //    finally
@@ -1839,11 +1839,11 @@
 //  /**
 //   * Remove the user from the group.
 //   *
-//   * @param username  the username identifying the user
 //   * @param groupName the name identifying the group
+//   * @param username  the username identifying the user
 //   */
 //  @Override
-//  public void removeUserFromGroup(String username, String groupName)
+//  public void removeUserFromGroup(String groupName, String username)
 //    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
 //  {
 //    DirContext dirContext = null;

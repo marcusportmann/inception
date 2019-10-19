@@ -877,7 +877,7 @@ CREATE TABLE "SECURITY"."GROUPS" (
 
 CREATE INDEX groups_user_directory_id_ix ON "SECURITY"."GROUPS"(user_directory_id);
 
-CREATE INDEX groups_name_ix ON "SECURITY"."GROUPS"(name);
+CREATE UNIQUE INDEX groups_user_directory_id_name_ix ON "SECURITY"."GROUPS"(user_directory_id, name);
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the group' ,
