@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler
@@ -42,7 +43,7 @@ public interface ISchedulerService
    *
    * @param jobId the ID used to uniquely identify the job
    */
-  void deleteJob(Long jobId)
+  void deleteJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**
@@ -70,7 +71,7 @@ public interface ISchedulerService
    *
    * @return the job
    */
-  Job getJob(Long jobId)
+  Job getJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**
@@ -122,7 +123,7 @@ public interface ISchedulerService
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
-  void rescheduleJob(Long jobId, String schedulingPattern)
+  void rescheduleJob(UUID jobId, String schedulingPattern)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**
@@ -149,7 +150,7 @@ public interface ISchedulerService
    * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the job
    */
-  void setJobStatus(Long jobId, JobStatus status)
+  void setJobStatus(UUID jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**
@@ -158,7 +159,7 @@ public interface ISchedulerService
    * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
-  void unlockJob(Long jobId, JobStatus status)
+  void unlockJob(UUID jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**

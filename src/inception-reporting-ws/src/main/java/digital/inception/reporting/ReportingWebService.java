@@ -27,10 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.sql.Connection;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -120,7 +117,7 @@ public class ReportingWebService
    */
   @WebMethod(operationName = "DeleteReportDefinition")
   public void deleteReportDefinition(@WebParam(name = "ReportDefinitionId")
-  @XmlElement(required = true) Long reportDefinitionId)
+  @XmlElement(required = true) UUID reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (reportDefinitionId == null)
@@ -142,7 +139,7 @@ public class ReportingWebService
   @WebMethod(operationName = "GenerateReport")
   @WebResult(name = "Report")
   public byte[] generateReport(@WebParam(name = "ReportDefinitionId")
-  @XmlElement(required = true) Long reportDefinitionId, @WebParam(name = "ReportParameters")
+  @XmlElement(required = true) UUID reportDefinitionId, @WebParam(name = "ReportParameters")
   @XmlElement(required = true) List<ReportParameter> reportParameters)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {

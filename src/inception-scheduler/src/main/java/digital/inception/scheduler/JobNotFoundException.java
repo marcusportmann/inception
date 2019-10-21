@@ -40,9 +40,8 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The job could not be found")
-@WebFault(name = "JobNotFoundException",
-  targetNamespace = "http://scheduler.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+@WebFault(name = "JobNotFoundException", targetNamespace = "http://scheduler.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobNotFoundException extends ServiceException
 {
@@ -53,7 +52,7 @@ public class JobNotFoundException extends ServiceException
    *
    * @param jobId the ID used to uniquely identify the job
    */
-  public JobNotFoundException(Long jobId)
+  public JobNotFoundException(UUID jobId)
   {
     super("The job with ID (" + jobId + ") could not be found");
   }

@@ -37,10 +37,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -134,7 +131,7 @@ public class SchedulerService
    */
   @Override
   @Transactional
-  public void deleteJob(Long jobId)
+  public void deleteJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -266,7 +263,7 @@ public class SchedulerService
    * @return the job
    */
   @Override
-  public Job getJob(Long jobId)
+  public Job getJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -422,7 +419,7 @@ public class SchedulerService
    */
   @Override
   @Transactional
-  public void rescheduleJob(Long jobId, String schedulingPattern)
+  public void rescheduleJob(UUID jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
     try
@@ -530,7 +527,7 @@ public class SchedulerService
    */
   @Override
   @Transactional
-  public void setJobStatus(Long jobId, JobStatus status)
+  public void setJobStatus(UUID jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -561,7 +558,7 @@ public class SchedulerService
    */
   @Override
   @Transactional
-  public void unlockJob(Long jobId, JobStatus status)
+  public void unlockJob(UUID jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try

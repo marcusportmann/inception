@@ -22,18 +22,19 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.persistence.Identifiable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
-import javax.persistence.*;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -56,7 +57,7 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "reporting", name = "report_definitions")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ReportDefinition
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -68,12 +69,9 @@ public class ReportDefinition
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @GenericGenerator(name = "report_definition_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "report_definition_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the report definition.
@@ -109,7 +107,7 @@ public class ReportDefinition
    * @param name     the name of the report definition
    * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(Long id, String name, byte[] template)
+  public ReportDefinition(UUID id, String name, byte[] template)
   {
     this.id = id;
     this.name = name;
@@ -152,7 +150,7 @@ public class ReportDefinition
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -195,7 +193,7 @@ public class ReportDefinition
    *
    * @param id the ID used to uniquely identify the report definition
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

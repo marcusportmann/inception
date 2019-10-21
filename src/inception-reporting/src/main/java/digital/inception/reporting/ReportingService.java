@@ -130,7 +130,7 @@ public class ReportingService
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters)
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try (Connection connection = dataSource.getConnection())
@@ -159,7 +159,7 @@ public class ReportingService
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -212,7 +212,7 @@ public class ReportingService
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters,
+  public byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Document document)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -261,7 +261,7 @@ public class ReportingService
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @Override
-  public void deleteReportDefinition(Long reportDefinitionId)
+  public void deleteReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try
@@ -321,7 +321,7 @@ public class ReportingService
    * @return the report definition
    */
   @Override
-  public ReportDefinition getReportDefinition(Long reportDefinitionId)
+  public ReportDefinition getReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try
@@ -377,7 +377,7 @@ public class ReportingService
    * @return the summary for the report definition
    */
   @Override
-  public ReportDefinitionSummary getReportDefinitionSummary(Long reportDefinitionId)
+  public ReportDefinitionSummary getReportDefinitionSummary(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
     try
@@ -433,7 +433,7 @@ public class ReportingService
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override
-  public boolean reportDefinitionExists(Long reportDefinitionId)
+  public boolean reportDefinitionExists(UUID reportDefinitionId)
     throws ReportingServiceException
   {
     try

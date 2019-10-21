@@ -48,12 +48,13 @@ public class ReportDefinitionNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
-  /**w
+  /**
+   * w
    * Constructs a new <code>ReportDefinitionNotFoundException</code>.
    *
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public ReportDefinitionNotFoundException(Long reportDefinitionId)
+  public ReportDefinitionNotFoundException(UUID reportDefinitionId)
   {
     super("The report definition with ID (" + reportDefinitionId + ") could not be found");
   }

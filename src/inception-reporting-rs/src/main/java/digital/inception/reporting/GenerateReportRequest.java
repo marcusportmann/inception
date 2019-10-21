@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>GenerateReportRequest</code> class holds the information for a request to generate a
@@ -52,7 +53,7 @@ public class GenerateReportRequest
   @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
-  private Long reportDefinitionId;
+  private UUID reportDefinitionId;
 
   /**
    * The report parameters.
@@ -72,7 +73,7 @@ public class GenerateReportRequest
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportParameters   the report parameters
    */
-  public GenerateReportRequest(Long reportDefinitionId, List<ReportParameter> reportParameters)
+  public GenerateReportRequest(UUID reportDefinitionId, List<ReportParameter> reportParameters)
   {
     this.reportDefinitionId = reportDefinitionId;
     this.reportParameters = reportParameters;
@@ -83,7 +84,7 @@ public class GenerateReportRequest
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public Long getReportDefinitionId()
+  public UUID getReportDefinitionId()
   {
     return reportDefinitionId;
   }
@@ -103,7 +104,7 @@ public class GenerateReportRequest
    *
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public void setReportDefinitionId(Long reportDefinitionId)
+  public void setReportDefinitionId(UUID reportDefinitionId)
   {
     this.reportDefinitionId = reportDefinitionId;
   }

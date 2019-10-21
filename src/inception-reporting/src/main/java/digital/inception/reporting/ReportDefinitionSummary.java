@@ -29,6 +29,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -70,7 +72,7 @@ public class ReportDefinitionSummary
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the report definition.
@@ -95,7 +97,7 @@ public class ReportDefinitionSummary
    * @param id   the ID used to uniquely identify the report definition
    * @param name the name of the report definition
    */
-  ReportDefinitionSummary(Long id, String name)
+  ReportDefinitionSummary(UUID id, String name)
   {
     this.id = id;
     this.name = name;
@@ -137,7 +139,7 @@ public class ReportDefinitionSummary
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }

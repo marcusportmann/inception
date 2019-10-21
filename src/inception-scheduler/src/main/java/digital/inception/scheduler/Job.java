@@ -23,12 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -38,6 +35,7 @@ import java.time.LocalDateTime;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -66,7 +64,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(schema = "scheduler", name = "jobs")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Job
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -97,12 +95,9 @@ public class Job
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @GenericGenerator(name = "job_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "job_id", strategy = GenerationType.IDENTITY)
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The fully qualified name of the Java class that implements the job.
@@ -212,7 +207,7 @@ public class Job
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
    */
-  public Job(Long id, String name, String schedulingPattern, String jobClass, boolean enabled,
+  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean enabled,
       JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
       LocalDateTime nextExecution)
   {
@@ -286,7 +281,7 @@ public class Job
    *
    * @return the ID used to uniquely identify the job
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -436,7 +431,7 @@ public class Job
    *
    * @param id the ID used to uniquely identify the scheduled job
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

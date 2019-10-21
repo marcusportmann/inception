@@ -26,6 +26,7 @@ import java.sql.Connection;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * The <code>IReportingService</code> interface defines the functionality provided by a Reporting
@@ -58,7 +59,7 @@ public interface IReportingService
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters)
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -70,7 +71,7 @@ public interface IReportingService
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters,
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
@@ -83,7 +84,7 @@ public interface IReportingService
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(Long reportDefinitionId, Map<String, Object> parameters, Document document)
+  byte[] createReportPDF(UUID reportDefinitionId, Map<String, Object> parameters, Document document)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -91,7 +92,7 @@ public interface IReportingService
    *
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  void deleteReportDefinition(Long reportDefinitionId)
+  void deleteReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -116,7 +117,7 @@ public interface IReportingService
    *
    * @return the report definition
    */
-  ReportDefinition getReportDefinition(Long reportDefinitionId)
+  ReportDefinition getReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -134,7 +135,7 @@ public interface IReportingService
    *
    * @return the summary for the report definition
    */
-  ReportDefinitionSummary getReportDefinitionSummary(Long reportDefinitionId)
+  ReportDefinitionSummary getReportDefinitionSummary(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
@@ -152,7 +153,7 @@ public interface IReportingService
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
-  boolean reportDefinitionExists(Long reportDefinitionId)
+  boolean reportDefinitionExists(UUID reportDefinitionId)
     throws ReportingServiceException;
 
   /**

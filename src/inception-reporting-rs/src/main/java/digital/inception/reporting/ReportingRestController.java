@@ -142,7 +142,7 @@ public class ReportingRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The ID used to uniquely identify the report definition", required = true)
-  @PathVariable Long reportDefinitionId)
+  @PathVariable UUID reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (reportDefinitionId == null)
@@ -172,8 +172,8 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/generate-report", method = RequestMethod.POST,
       produces = "application/pdf")
   public ResponseEntity<byte[]> generateReport(@ApiParam(name = "generateReportRequest",
-    value = "The request to generate a report", required = true)
-      @RequestBody GenerateReportRequest generateReportRequest)
+      value = "The request to generate a report", required = true)
+  @RequestBody GenerateReportRequest generateReportRequest)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (generateReportRequest == null)
@@ -287,7 +287,7 @@ public class ReportingRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The ID used to uniquely identify the reportDefinition", required = true)
-  @PathVariable Long reportDefinitionId, @ApiParam(name = "reportDefinition",
+  @PathVariable UUID reportDefinitionId, @ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
