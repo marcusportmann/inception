@@ -171,7 +171,8 @@ public class ReportingRestController extends SecureRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/generate-report", method = RequestMethod.POST,
       produces = "application/pdf")
-  public ResponseEntity<byte[]> generateReport(
+  public ResponseEntity<byte[]> generateReport(@ApiParam(name = "generateReportRequest",
+    value = "The request to generate a report", required = true)
       @RequestBody GenerateReportRequest generateReportRequest)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {

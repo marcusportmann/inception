@@ -29,6 +29,19 @@ import java.util.List;
 public interface ISecurityService
 {
   /**
+   * Add the group member to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param memberType      the group member type
+   * @param memberName      the group member name
+   */
+  void addGroupMember(Long userDirectoryId, String groupName, GroupMemberType memberType,
+      String memberName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
+        ExistingGroupMemberException, SecurityServiceException;
+
+  /**
    * Add the user to the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -223,6 +236,33 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the group members for the group
+   */
+  List<GroupMember> getGroupMembers(Long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the group members
+   * @param sortDirection   the optional sort direction to apply to the group members
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the group members for the group
+   */
+  List<GroupMember> getGroupMembers(Long userDirectoryId, String groupName, String filter,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve all the group names.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -278,6 +318,29 @@ public interface ISecurityService
    */
   List<Group> getGroupsForUser(Long userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfGroupMembers(Long userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfGroupMembers(Long userDirectoryId, String groupName, String filter)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of groups
@@ -572,13 +635,13 @@ public interface ISecurityService
    * Is the user in the group?
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param username        the username identifying the user
    * @param groupName       the name identifying the group
+   * @param username        the username identifying the user
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code>
    *         otherwise
    */
-  boolean isUserInGroup(Long userDirectoryId, String username, String groupName)
+  boolean isUserInGroup(Long userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException;
 
@@ -587,6 +650,19 @@ public interface ISecurityService
    */
   void reloadUserDirectories()
     throws SecurityServiceException;
+
+  /**
+   * Remove the group member from the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param memberType      the group member type
+   * @param memberName      the group member name
+   */
+  void removeGroupMember(Long userDirectoryId, String groupName, GroupMemberType memberType,
+      String memberName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
+        SecurityServiceException;
 
   /**
    * Remove the user from the group.

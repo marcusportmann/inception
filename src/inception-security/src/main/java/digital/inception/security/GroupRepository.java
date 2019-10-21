@@ -46,10 +46,20 @@ public interface GroupRepository extends JpaRepository<Group, Long>
 
   long countByUserDirectoryId(Long userDirectoryId);
 
-  @Query(
-      "select count(g.id) from Group g where (upper(g.name) like upper(:filter)) and g.userDirectoryId = :userDirectoryId")
+  @Query("select count(g.id) from Group g where (upper(g.name) like upper(:filter)) and "
+      + "g.userDirectoryId = :userDirectoryId")
   long countFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
       "filter") String filter);
+
+  @Query("select count(u.id) from Group g join g.users as u where g.userDirectoryId = "
+      + ":userDirectoryId and g.id = :groupId and (upper(u.username) like upper(:filter))")
+  long countFilteredUsernamesForGroup(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "groupId") Long groupId, @Param("filter") String filter);
+
+  @Query("select count(u.id) from Group g join g.users as u "
+      + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
+  Long countUsernamesForGroup(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "groupId") Long groupId);
 
   @Query("select count(u.id) from Group g join g.users as u where g.id = :groupId")
   long countUsersById(@Param("groupId") Long groupId);
@@ -61,24 +71,39 @@ public interface GroupRepository extends JpaRepository<Group, Long>
   @Transactional
   boolean existsByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
 
-  @Query("select g.name from Group g where g.userDirectoryId = :userDirectoryId")
-  List<String> getNamesByUserDirectoryId(@Param("userDirectoryId")Long userDirectoryId);
-
   List<Group> findByUserDirectoryId(Long userDirectoryId);
 
   List<Group> findByUserDirectoryId(Long userDirectoryId, Pageable pageable);
 
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(Long userDirectoryId, String name);
 
-  @Query(
-      "select g from Group g where (upper(g.name) like upper(:filter)) and g.userDirectoryId = :userDirectoryId")
+  @Query("select g from Group g where (upper(g.name) like upper(:filter)) and "
+      + "g.userDirectoryId = :userDirectoryId")
   List<Group> findFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
       "filter") String filter, Pageable pageable);
+
+  @Query("select u.username from Group g join g.users as u where g.userDirectoryId = "
+      + ":userDirectoryId and g.id = :groupId and (upper(u.username) like upper(:filter))")
+  List<String> getFilteredUsernamesForGroup(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "groupId") Long groupId, @Param("filter") String filter, Pageable pageable);
 
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
       + "upper(g.name) like upper(:name)")
   Optional<Long> getIdByUserDirectoryIdAndNameIgnoreCase(@Param(
       "userDirectoryId") Long userDirectoryId, @Param("name") String name);
+
+  @Query("select g.name from Group g where g.userDirectoryId = :userDirectoryId")
+  List<String> getNamesByUserDirectoryId(@Param("userDirectoryId") Long userDirectoryId);
+
+  @Query("select u.username from Group g join g.users as u "
+      + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
+  List<String> getUsernamesForGroup(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "groupId") Long groupId);
+
+  @Query("select u.username from Group g join g.users as u "
+      + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
+  List<String> getUsernamesForGroup(@Param("userDirectoryId") Long userDirectoryId, @Param(
+      "groupId") Long groupId, Pageable pageable);
 
   @Modifying
   @Query(value = "delete from security.user_to_group_map "

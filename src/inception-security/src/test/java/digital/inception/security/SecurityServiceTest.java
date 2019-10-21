@@ -585,6 +585,61 @@ public class SecurityServiceTest
   }
 
   /**
+   * Test the group membership functionality.
+   */
+  @Test
+  public void groupMembershipTest()
+  throws Exception
+  {
+    Organization organization = getTestOrganizationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+
+    Group group = getTestGroupDetails();
+
+    securityService.createGroup(userDirectory.getId(), group);
+
+    long numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group members (0) was not retrieved", 0, numberOfGroupMembers);
+
+    List<GroupMember> retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group members (0) was not retrieved", 0, retrievedGroupMembers.size());
+
+    User firstUser = getTestUserDetails();
+
+    securityService.createUser(userDirectory.getId(), firstUser, false, false);
+
+    User secondUser = getTestUserDetails();
+
+    securityService.createUser(userDirectory.getId(), secondUser, false, false);
+
+    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER, firstUser.getUsername());
+
+    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER, secondUser.getUsername());
+
+    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group members (2) was not retrieved", 2, numberOfGroupMembers);
+
+    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group members (2) was not retrieved", 2, retrievedGroupMembers.size());
+
+    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName(), firstUser.getUsername());
+
+    assertEquals("The correct number of group members (1) was not retrieved", 1, numberOfGroupMembers);
+
+    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName(), secondUser.getUsername(), null, null, null);
+
+    assertEquals("The correct number of group members (1) was not retrieved", 1, retrievedGroupMembers.size());
+
+
+  }
+
+
+  /**
    * Test the group functionality.
    */
   @Test
@@ -679,7 +734,7 @@ public class SecurityServiceTest
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
     assertTrue("Could not determine that the user (" + user.getUsername()
         + ") is a member of the group (" + group.getName() + ")", securityService.isUserInGroup(
-        userDirectory.getId(), user.getUsername(), group.getName()));
+        userDirectory.getId(), group.getName(), user.getUsername()));
   }
 
   /**

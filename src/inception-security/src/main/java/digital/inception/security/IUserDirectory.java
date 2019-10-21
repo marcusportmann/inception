@@ -29,6 +29,17 @@ import java.util.List;
 interface IUserDirectory
 {
   /**
+   * Add the group member to the group.
+   *
+   * @param groupName  the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   */
+  void addGroupMember(String groupName, GroupMemberType memberType, String memberName)
+    throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
+        SecurityServiceException;
+
+  /**
    * Add the user to the group.
    *
    * @param groupName the name identifying the group
@@ -137,6 +148,31 @@ interface IUserDirectory
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the group members for the group.
+   *
+   * @param groupName the name identifying the group
+   *
+   * @return the group members for the group
+   */
+  List<GroupMember> getGroupMembers(String groupName)
+    throws GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param groupName     the name identifying the group
+   * @param filter        the optional filter to apply to the group members
+   * @param sortDirection the optional sort direction to apply to the group members
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the group members for the group
+   */
+  List<GroupMember> getGroupMembers(String groupName, String filter, SortDirection sortDirection,
+      Integer pageIndex, Integer pageSize)
+    throws GroupNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve all the group names.
    *
    * @return the group names
@@ -185,6 +221,17 @@ interface IUserDirectory
    */
   List<Group> getGroupsForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param groupName the name identifying the group
+   * @param filter    the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfGroupMembers(String groupName, String filter)
+    throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of groups
@@ -263,14 +310,24 @@ interface IUserDirectory
   /**
    * Is the user in the group?
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code>
    *         otherwise
    */
-  boolean isUserInGroup(String username, String groupName)
+  boolean isUserInGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Remove the group member from the group.
+   *
+   * @param groupName  the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   */
+  void removeGroupMember(String groupName, GroupMemberType memberType, String memberName)
+    throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException;
 
   /**
    * Remove the user from the group.

@@ -112,7 +112,7 @@ public class Group
   private Set<Role> roles = new HashSet<>();
 
   /**
-   * The ID used to uniquely identify the user directory the group is associated with
+   * The ID used to uniquely identify the user directory the group is associated with.
    */
   @ApiModelProperty(
       value = "The ID used to uniquely identify the user directory the group is associated with",

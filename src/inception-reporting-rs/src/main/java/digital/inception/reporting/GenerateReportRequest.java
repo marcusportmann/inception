@@ -32,7 +32,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * The <code>ReportDefinition</code> class holds the information for a report definition.
+ * The <code>GenerateReportRequest</code> class holds the information for a request to generate a
+ * report.
  *
  * @author Marcus Portmann
  */

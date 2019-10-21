@@ -1771,14 +1771,14 @@
 //  /**
 //   * Is the user in the group?
 //   *
-//   * @param username  the username identifying the user
 //   * @param groupName the name identifying the group
+//   * @param username  the username identifying the user
 //   *
 //   * @return <code>true</code> if the user is a member of the group or <code>false</code>
 //   *         otherwise
 //   */
 //  @Override
-//  public boolean isUserInGroup(String username, String groupName)
+//  public boolean isUserInGroup(String groupName, String username)
 //    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
 //  {
 //    DirContext dirContext = null;

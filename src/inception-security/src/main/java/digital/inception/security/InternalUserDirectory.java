@@ -28,6 +28,8 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default maximum number of filtered groups.
    */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
+
+  /**
+   * The default maximum number of filtered group members.
+   */
+  private static final int DEFAULT_MAX_FILTERED_GROUP_MEMBERS = 100;
 
   /**
    * The default maximum number of filtered users.
@@ -62,6 +69,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The default number of months to check password history against.
    */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
+
+  /**
+   * The maximum number of filtered group members to return.
+   */
+  private int maxFilteredGroupMembers;
 
   /**
    * The maximum number of filtered groups to return.
@@ -151,12 +163,48 @@ public class InternalUserDirectory extends UserDirectoryBase
       {
         maxFilteredGroups = DEFAULT_MAX_FILTERED_GROUPS;
       }
+
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroupMembers"))
+      {
+        maxFilteredGroupMembers = UserDirectoryParameter.getIntegerValue(parameters,
+            "MaxFilteredGroupMembers");
+      }
+      else
+      {
+        maxFilteredGroupMembers = DEFAULT_MAX_FILTERED_GROUP_MEMBERS;
+      }
     }
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
           "Failed to initialize the user directory (%s)", userDirectoryId), e);
     }
+  }
+
+  /**
+   * Add the group member to the group.
+   *
+   * @param groupName  the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   */
+  @Override
+  public void addGroupMember(String groupName, GroupMemberType memberType, String memberName)
+    throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
+        SecurityServiceException
+  {
+    if (memberType != GroupMemberType.USER)
+    {
+      throw new SecurityServiceException("Unsupported group member type ("
+          + memberType.description() + ")");
+    }
+
+    if (isUserInGroup(groupName, memberName))
+    {
+      throw new ExistingGroupMemberException(memberType, memberName);
+    }
+
+    addUserToGroup(groupName, memberName);
   }
 
   /**
@@ -180,7 +228,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       }
 
       Optional<Long> userIdOptional =
-        getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
+          getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
       if (userIdOptional.isEmpty())
@@ -708,6 +756,133 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Retrieve the group members for the group.
+   *
+   * @param groupName the name identifying the group
+   *
+   * @return the group members for the group
+   */
+  @Override
+  public List<GroupMember> getGroupMembers(String groupName)
+    throws GroupNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
+
+      if (groupIdOptional.isEmpty())
+      {
+        throw new GroupNotFoundException(groupName);
+      }
+
+      List<String> usernames = getGroupRepository().getUsernamesForGroup(getUserDirectoryId(),
+          groupIdOptional.get());
+
+      List<GroupMember> groupMembers = new ArrayList<>();
+
+      for (String username : usernames)
+      {
+        groupMembers.add(new GroupMember(GroupMemberType.USER, username));
+      }
+
+      return groupMembers;
+    }
+    catch (GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the group members for the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param groupName     the name identifying the group
+   * @param filter        the optional filter to apply to the group members
+   * @param sortDirection the optional sort direction to apply to the group members
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the group members for the group
+   */
+  @Override
+  public List<GroupMember> getGroupMembers(String groupName, String filter,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+    throws GroupNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
+
+      if (groupIdOptional.isEmpty())
+      {
+        throw new GroupNotFoundException(groupName);
+      }
+
+      if (pageIndex == null)
+      {
+        pageIndex = 0;
+      }
+
+      if (pageSize == null)
+      {
+        pageSize = maxFilteredGroups;
+      }
+
+      Pageable pageable = PageRequest.of(pageIndex,
+          (pageSize > maxFilteredGroupMembers)
+          ? maxFilteredGroupMembers
+          : pageSize);
+
+      List<String> usernames;
+
+      if (StringUtils.isEmpty(filter))
+      {
+        usernames = getGroupRepository().getUsernamesForGroup(getUserDirectoryId(),
+            groupIdOptional.get(), pageable);
+      }
+      else
+      {
+        usernames = getGroupRepository().getFilteredUsernamesForGroup(getUserDirectoryId(),
+            groupIdOptional.get(), filter, pageable);
+      }
+
+      List<GroupMember> groupMembers = new ArrayList<>();
+
+      for (String username : usernames)
+      {
+        groupMembers.add(new GroupMember(GroupMemberType.USER, username));
+      }
+
+      if ((sortDirection == null) || (sortDirection == SortDirection.ASCENDING))
+      {
+        groupMembers.sort(Comparator.comparing(GroupMember::getMemberName));
+      }
+      else
+      {
+        groupMembers.sort(Comparator.comparing(GroupMember::getMemberName).reversed());
+      }
+
+      return groupMembers;
+    }
+    catch (GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the group members for the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
+    }
+  }
+
+  /**
    * Retrieve all the group names.
    *
    * @return the group names
@@ -801,8 +976,6 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Pageable pageable = null;
-
       if (pageIndex == null)
       {
         pageIndex = 0;
@@ -813,7 +986,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         pageSize = maxFilteredGroups;
       }
 
-      pageable = PageRequest.of(pageIndex,
+      Pageable pageable = PageRequest.of(pageIndex,
           (pageSize > maxFilteredGroups)
           ? maxFilteredGroups
           : pageSize,
@@ -872,6 +1045,51 @@ public class InternalUserDirectory extends UserDirectoryBase
     {
       throw new SecurityServiceException("Failed to retrieve the groups the user is a member of ("
           + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param groupName the name identifying the group
+   * @param filter    the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  @Override
+  public long getNumberOfGroupMembers(String groupName, String filter)
+    throws GroupNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
+
+      if (groupIdOptional.isEmpty())
+      {
+        throw new GroupNotFoundException(groupName);
+      }
+
+      if (StringUtils.isEmpty(filter))
+      {
+        return getGroupRepository().countUsernamesForGroup(getUserDirectoryId(),
+            groupIdOptional.get());
+      }
+      else
+      {
+        return getGroupRepository().countFilteredUsernamesForGroup(getUserDirectoryId(),
+            groupIdOptional.get(), filter);
+      }
+    }
+    catch (GroupNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(
+          "Failed to retrieve the number of group members for the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1126,14 +1344,14 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Is the user in the group?
    *
-   * @param username  the username identifying the user
    * @param groupName the name identifying the group
+   * @param username  the username identifying the user
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code>
    * otherwise
    */
   @Override
-  public boolean isUserInGroup(String username, String groupName)
+  public boolean isUserInGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     try
@@ -1170,6 +1388,33 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Remove the group member from the group.
+   *
+   * @param groupName  the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the group member name
+   */
+  @Override
+  public void removeGroupMember(String groupName, GroupMemberType memberType, String memberName)
+    throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException
+  {
+    if (memberType != GroupMemberType.USER)
+    {
+      throw new SecurityServiceException("Unsupported group member type ("
+          + memberType.description() + ")");
+    }
+
+    try
+    {
+      removeUserFromGroup(groupName, memberName);
+    }
+    catch (UserNotFoundException e)
+    {
+      throw new GroupMemberNotFoundException(memberType, memberName);
+    }
+  }
+
+  /**
    * Remove the user from the group.
    *
    * @param groupName the name identifying the group
@@ -1182,7 +1427,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try
     {
       Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
-        getUserDirectoryId(), groupName);
+          getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
       {
