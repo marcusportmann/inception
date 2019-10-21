@@ -1137,10 +1137,10 @@ GO
 
 
 CREATE TABLE "SMS"."SMS" (
-  id             BIGINT         NOT NULL,
-  mobile_number  NVARCHAR(100) NOT NULL,
-  message        NVARCHAR(1000) NOT NULL,
-  status         INTEGER        NOT NULL,
+  id             UNIQUEIDENTIFIER NOT NULL,
+  mobile_number  NVARCHAR(100)    NOT NULL,
+  message        NVARCHAR(1000)   NOT NULL,
+  status         INTEGER          NOT NULL,
   send_attempts  INTEGER,
   lock_name      NVARCHAR(100),
   last_processed DATETIME,

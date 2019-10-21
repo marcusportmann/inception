@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -70,12 +71,9 @@ public class SMS
   @JsonProperty(required = true)
   @XmlElement(name = "id", required = true)
   @NotNull
-  @SequenceGenerator(schema = "sms", name = "sms_id_seq", sequenceName = "sms_id_seq",
-      allocationSize = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sms_id_seq")
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The date and time the last attempt was made to send the SMS.
@@ -180,7 +178,7 @@ public class SMS
    * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
-  SMS(Long id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
+  SMS(UUID id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
       String lockName, LocalDateTime lastProcessed)
   {
     this.id = id;
@@ -228,7 +226,7 @@ public class SMS
    *
    * @return the ID used to uniquely identify the SMS
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -325,7 +323,7 @@ public class SMS
    *
    * @param id the ID used to uniquely identify the SMS
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

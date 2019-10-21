@@ -763,7 +763,7 @@ COMMENT ON COLUMN service_registry.service_registry.password IS 'The password to
 
 
 CREATE TABLE sms.sms (
-  id             BIGINT  NOT NULL,
+  id             UUID    NOT NULL,
   mobile_number  TEXT    NOT NULL,
   message        TEXT    NOT NULL,
   status         INTEGER NOT NULL,

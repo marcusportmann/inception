@@ -40,11 +40,11 @@ import javax.persistence.LockModeType;
  *
  * @author Marcus Portmann
  */
-public interface SMSRepository extends JpaRepository<SMS, Long>
+public interface SMSRepository extends JpaRepository<SMS, UUID>
 {
   @Modifying
   @Query("delete from SMS s where s.id = :smsId")
-  void deleteById(@Param("smsId") Long smsId);
+  void deleteById(@Param("smsId") UUID smsId);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select s from SMS s where s.status = 1 and (s.lastProcessed < :lastProcessedBefore "
@@ -55,7 +55,7 @@ public interface SMSRepository extends JpaRepository<SMS, Long>
   @Modifying
   @Query("update SMS s set s.lockName = :lockName, s.status = 2, "
       + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when " + "where s.id = :smsId")
-  void lockSMSForSending(@Param("smsId") Long smsId, @Param("lockName") String lockName, @Param(
+  void lockSMSForSending(@Param("smsId") UUID smsId, @Param("lockName") String lockName, @Param(
       "when") LocalDateTime when);
 
   @Modifying
@@ -66,10 +66,9 @@ public interface SMSRepository extends JpaRepository<SMS, Long>
 
   @Modifying
   @Query("update SMS s set s.status = :status where s.id = :smsId")
-  void setSMSStatus(@Param("smsId") Long smsId, @Param("status") SMSStatus status);
+  void setSMSStatus(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);
 
   @Modifying
   @Query("update SMS s set s.status = :status, s.lockName = null where s.id = :smsId")
-  void unlockSMS(@Param("smsId") Long smsId, @Param("status") SMSStatus status);
-
+  void unlockSMS(@Param("smsId") UUID smsId, @Param("status") SMSStatus status);
 }

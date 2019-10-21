@@ -4,15 +4,10 @@
 CREATE SCHEMA sms;
 
 -- -------------------------------------------------------------------------------------------------
--- CREATE SEQUENCES
--- -------------------------------------------------------------------------------------------------
-CREATE SEQUENCE sms.sms_id_seq START WITH 1000000 INCREMENT BY 1;
-
--- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE sms.sms (
-  id             BIGINT        NOT NULL,
+  id             UUID          NOT NULL,
   mobile_number  VARCHAR(100)  NOT NULL,
   message        VARCHAR(1000) NOT NULL,
   status         INTEGER       NOT NULL,

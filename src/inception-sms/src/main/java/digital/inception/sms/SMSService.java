@@ -56,6 +56,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -83,17 +84,17 @@ public class SMSService
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
 
-  /* The name of the SMS Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
+  /**
+   * The Spring application context.
+   */
+  private ApplicationContext applicationContext;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /**
-   * The Spring application context.
-   */
-  private ApplicationContext applicationContext;
+  /* The name of the SMS Service instance. */
+  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
   /**
    * The maximum number of times sending will be attempted for a SMS.
@@ -152,6 +153,11 @@ public class SMSService
   {
     try
     {
+      if (sms.getId() == null)
+      {
+        sms.setId(UUID.randomUUID());
+      }
+
       smsRepository.saveAndFlush(sms);
     }
     catch (Throwable e)
@@ -166,7 +172,7 @@ public class SMSService
    * @param smsId the ID uniquely identifying the SMS
    */
   @Override
-  public void deleteSMS(long smsId)
+  public void deleteSMS(UUID smsId)
     throws SMSNotFoundException, SMSServiceException
   {
     try
@@ -297,7 +303,7 @@ public class SMSService
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
-  public SMS getSMS(long smsId)
+  public SMS getSMS(UUID smsId)
     throws SMSNotFoundException, SMSServiceException
   {
     try
@@ -383,7 +389,7 @@ public class SMSService
    *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
-  public boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
+  public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
     throws SMSServiceException
   {
     try
@@ -515,7 +521,7 @@ public class SMSService
    */
   @Override
   @Transactional
-  public void setSMSStatus(long smsId, SMSStatus status)
+  public void setSMSStatus(UUID smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
     try
@@ -546,7 +552,7 @@ public class SMSService
    */
   @Override
   @Transactional
-  public void unlockSMS(long smsId, SMSStatus status)
+  public void unlockSMS(UUID smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException
   {
     try
@@ -569,7 +575,7 @@ public class SMSService
     }
   }
 
-  private String buildSendDataXml(long smsId, String mobileNumber, String message)
+  private String buildSendDataXml(UUID smsId, String mobileNumber, String message)
   {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");

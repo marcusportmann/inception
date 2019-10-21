@@ -16,6 +16,10 @@
 
 package digital.inception.sms;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.UUID;
+
 /**
  * The <code>ISMSService</code> interface defines the functionality provided by an SMS Service
  * implementation.
@@ -38,7 +42,7 @@ public interface ISMSService
    *
    * @param smsId the ID uniquely identifying the SMS
    */
-  void deleteSMS(long smsId)
+  void deleteSMS(UUID smsId)
     throws SMSNotFoundException, SMSServiceException;
 
   /**
@@ -74,7 +78,7 @@ public interface ISMSService
    *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
-  SMS getSMS(long smsId)
+  SMS getSMS(UUID smsId)
     throws SMSNotFoundException, SMSServiceException;
 
   /**
@@ -108,7 +112,7 @@ public interface ISMSService
    *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
-  boolean sendSMSSynchronously(long smsId, String mobileNumber, String message)
+  boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
     throws SMSServiceException;
 
   /**
@@ -117,7 +121,7 @@ public interface ISMSService
    * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  void setSMSStatus(long smsId, SMSStatus status)
+  void setSMSStatus(UUID smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException;
 
   /**
@@ -126,6 +130,6 @@ public interface ISMSService
    * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  void unlockSMS(long smsId, SMSStatus status)
+  void unlockSMS(UUID smsId, SMSStatus status)
     throws SMSNotFoundException, SMSServiceException;
 }

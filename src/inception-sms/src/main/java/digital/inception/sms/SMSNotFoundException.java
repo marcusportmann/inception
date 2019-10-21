@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.UUID;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
@@ -50,7 +52,7 @@ public class SMSNotFoundException extends ServiceException
    *
    * @param smsId the ID used to uniquely identify the SMS
    */
-  public SMSNotFoundException(long smsId)
+  public SMSNotFoundException(UUID smsId)
   {
     super("The SMS with ID (" + smsId + ") could not be found");
   }
