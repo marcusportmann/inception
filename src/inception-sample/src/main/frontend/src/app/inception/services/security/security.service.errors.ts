@@ -92,6 +92,24 @@ export class DuplicateUserError extends Error {
 }
 
 /**
+ * The ExistingGroupMemberError class holds the information for an existing group member error.
+ *
+ * @author Marcus Portmann
+ */
+export class ExistingGroupMemberError extends Error {
+
+  /**
+   * Constructs a new ExistingGroupMembersError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The ExistingGroupMembersError class holds the information for an existing group members error.
  *
  * @author Marcus Portmann
@@ -100,6 +118,24 @@ export class ExistingGroupMembersError extends Error {
 
   /**
    * Constructs a new ExistingGroupMembersError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The GroupMemberNotFoundError class holds the information for a group member not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class GroupMemberNotFoundError extends Error {
+
+  /**
+   * Constructs a new GroupMemberNotFoundError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

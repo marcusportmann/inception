@@ -83,6 +83,7 @@ public class SecurityRestController extends SecureRestController
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param groupName       the name identifying the group
+   * @param groupMember     the group member
    */
   @ApiOperation(value = "Add the group member", notes = "Add the group member")
   @ApiResponses(value = { @ApiResponse(code = 204,

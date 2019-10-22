@@ -63,7 +63,7 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
+          if (apiError.code === 'ConfigurationNotFoundError') {
             return throwError(new ConfigurationNotFoundError(this.i18n({
               id: '@@configuration_service_the_configuration_could_not_be_found',
               value: 'The configuration could not be found.'
@@ -98,7 +98,7 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.status === 404) {
+          if (apiError.code === 'ConfigurationNotFoundError') {
             return throwError(new ConfigurationNotFoundError(this.i18n({
               id: '@@configuration_service_the_configuration_could_not_be_found',
               value: 'The configuration could not be found.'
@@ -133,7 +133,7 @@ export class ConfigurationService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'ConfigurationNotFoundError') {
           return throwError(new ConfigurationNotFoundError(this.i18n({
             id: '@@configuration_service_the_configuration_could_not_be_found',
             value: 'The configuration could not be found.'

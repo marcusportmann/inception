@@ -169,6 +169,7 @@ public class CodesRestController extends SecureRestController
    * Delete the code.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param codeId         the ID used to uniquely identify the code
    */
   @ApiOperation(value = "Delete the code", notes = "Delete the code")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was deleted successfully") ,

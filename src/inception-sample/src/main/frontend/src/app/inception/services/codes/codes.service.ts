@@ -180,7 +180,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeCategoryNotFoundError') {
           return throwError(new CodeCategoryNotFoundError(this.i18n({
             id: '@@codes_service_the_code_category_could_not_be_found',
             value: 'The code category could not be found.'
@@ -217,7 +217,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeNotFoundError') {
           return throwError(new CodeNotFoundError(this.i18n({
             id: '@@codes_service_the_code_could_not_be_found',
             value: 'The code could not be found.'
@@ -278,7 +278,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeCategoryNotFoundError') {
           return throwError(new CodeCategoryNotFoundError(this.i18n({
             id: '@@codes_service_the_code_category_could_not_be_found',
             value: 'The code category could not be found.'
@@ -313,7 +313,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeCategoryNotFoundError') {
           return throwError(new CodeCategoryNotFoundError(this.i18n({
             id: '@@codes_service_the_code_category_could_not_be_found',
             value: 'The code category could not be found.'
@@ -376,7 +376,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeNotFoundError') {
           return throwError(new CodeNotFoundError(this.i18n({
             id: '@@codes_service_the_code_could_not_be_found',
             value: 'The code could not be found.'
@@ -411,7 +411,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeCategoryNotFoundError') {
           return throwError(new CodeCategoryNotFoundError(this.i18n({
             id: '@@codes_service_the_code_category_could_not_be_found',
             value: 'The code category could not be found.'
