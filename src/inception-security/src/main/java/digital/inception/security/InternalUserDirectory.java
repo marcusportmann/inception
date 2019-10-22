@@ -28,10 +28,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
@@ -108,7 +105,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository
    */
-  public InternalUserDirectory(Long userDirectoryId, List<UserDirectoryParameter> parameters,
+  public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository, UserRepository userRepository)
     throws SecurityServiceException
   {
@@ -219,7 +216,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -227,7 +224,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(groupName);
       }
 
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -267,7 +264,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -552,7 +549,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -590,7 +587,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -695,7 +692,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -768,7 +765,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -817,7 +814,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -916,7 +913,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1026,7 +1023,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1062,7 +1059,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -1166,7 +1163,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1356,7 +1353,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1365,7 +1362,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -1426,7 +1423,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
       if (groupIdOptional.isEmpty())
@@ -1434,7 +1431,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(groupName);
       }
 
-      Optional<Long> userIdOptional =
+      Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
 
@@ -1492,7 +1489,7 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<Long> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), group.getName());
 
       if (groupIdOptional.isEmpty())
@@ -1609,7 +1606,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @return <code>true</code> if the password was previously used and cannot be reused for a
    *         period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(Long userId, String passwordHash)
+  private boolean isPasswordInHistory(UUID userId, String passwordHash)
   {
     LocalDateTime after = LocalDateTime.now();
     after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);

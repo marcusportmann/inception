@@ -54,6 +54,6 @@ public class SMSNotFoundException extends ServiceException
    */
   public SMSNotFoundException(UUID smsId)
   {
-    super("The SMS with ID (" + smsId + ") could not be found");
+    super("SMSNotFoundError", "The SMS with ID (" + smsId + ") could not be found");
   }
 }

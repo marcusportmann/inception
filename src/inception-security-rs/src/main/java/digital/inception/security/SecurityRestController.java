@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -78,6 +79,71 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Add the group member.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   */
+  @ApiOperation(value = "Add the group member", notes = "Add the group member")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The group member was successfully added to the group") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
+      method = RequestMethod.POST, produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+  public void addGroupMember(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
+      value = "The name identifying the group", required = true)
+  @PathVariable String groupName, @ApiParam(name = "groupMember", value = "The group member",
+      required = true)
+  @RequestBody GroupMember groupMember)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+        GroupNotFoundException, ExistingGroupMemberException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(groupName))
+    {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (groupMember == null)
+    {
+      throw new InvalidArgumentException("groupMember");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(groupMember);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("groupMember", ValidationError.toValidationErrors(
+          constraintViolations));
+    }
+
+    securityService.addGroupMember(userDirectoryId, groupName, groupMember.getMemberType(),
+        groupMember.getMemberName());
+  }
+
+  /**
    * Create the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -100,7 +166,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void createGroup(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "group", value = "The group",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "group", value = "The group",
       required = true)
   @RequestBody Group group)
     throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
@@ -204,7 +270,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void createUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "user", value = "The user", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "user", value = "The user", required = true)
   @RequestBody User user, @ApiParam(name = "expiredPassword",
       value = "Create the user with its password expired")
   @RequestParam(value = "expiredPassword", required = false) Boolean expiredPassword, @ApiParam(
@@ -309,7 +375,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void deleteGroup(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
     throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
@@ -326,10 +392,10 @@ public class SecurityRestController extends SecureRestController
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-      userDirectoryId))
+        userDirectoryId))
     {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-        + ")");
+          + ")");
     }
 
     securityService.deleteGroup(userDirectoryId, groupName);
@@ -356,7 +422,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void deleteOrganization(@ApiParam(name = "organizationId",
       value = "The ID used to uniquely identify the organization", required = true)
-  @PathVariable Long organizationId)
+  @PathVariable UUID organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     if (StringUtils.isEmpty(organizationId))
@@ -388,7 +454,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void deleteUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -405,10 +471,10 @@ public class SecurityRestController extends SecureRestController
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-      userDirectoryId))
+        userDirectoryId))
     {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-        + ")");
+          + ")");
     }
 
     securityService.deleteUser(userDirectoryId, username);
@@ -435,7 +501,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public void deleteUserDirectory(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId)
+  @PathVariable UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     if (StringUtils.isEmpty(userDirectoryId))
@@ -469,7 +535,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public Group getGroup(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
     throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
@@ -497,6 +563,77 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the group members.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the group members
+   * @param sortDirection   the optional sort direction to apply to the group members
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   */
+  @ApiOperation(value = "Retrieve the group members", notes = "Retrieve the group members")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory or group could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+  public ResponseEntity<List<GroupMember>> getGroupMembers(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
+      value = "The name identifying the group", required = true)
+  @PathVariable String groupName, @ApiParam(name = "filter",
+      value = "The optional filter to apply to the group members")
+  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
+      value = "The optional sort direction to apply to the group members")
+  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
+      name = "pageIndex",
+      value = "The optional page index", example = "0")
+  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
+      name = "pageSize",
+      value = "The optional page size", example = "0")
+  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+        SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(groupName))
+    {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    var groupMembers = securityService.getGroupMembers(userDirectoryId, groupName, filter,
+        sortDirection, pageIndex, pageSize);
+
+    var numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectoryId, groupName,
+        filter);
+
+    var httpHeaders = new HttpHeaders();
+    httpHeaders.add("x-total-count", String.valueOf(numberOfGroupMembers));
+
+    return new ResponseEntity<>(groupMembers, httpHeaders, HttpStatus.OK);
+  }
+
+  /**
    * Retrieve all the group names.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -518,7 +655,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<String> getGroupNames(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId)
+  @PathVariable UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -535,10 +672,10 @@ public class SecurityRestController extends SecureRestController
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-      userDirectoryId))
+        userDirectoryId))
     {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-        + ")");
+          + ")");
     }
 
     return securityService.getGroupNames(userDirectoryId);
@@ -568,7 +705,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public List<String> getGroupNamesForUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -621,7 +758,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public ResponseEntity<List<Group>> getGroups(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "filter",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
       value = "The optional filter to apply to the groups")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
       value = "The optional sort direction to apply to the groups")
@@ -680,7 +817,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public Organization getOrganization(@ApiParam(name = "organizationId",
       value = "The ID used to uniquely identify the organization", required = true)
-  @PathVariable Long organizationId)
+  @PathVariable UUID organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -756,7 +893,7 @@ public class SecurityRestController extends SecureRestController
   public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(@ApiParam(
       name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId)
+  @PathVariable UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -807,7 +944,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public User getUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -906,7 +1043,7 @@ public class SecurityRestController extends SecureRestController
   public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(@ApiParam(
       name = "organizationId",
       value = "The ID used to uniquely identify the organization", required = true)
-  @PathVariable Long organizationId)
+  @PathVariable UUID organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -954,7 +1091,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public UserDirectory getUserDirectory(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId)
+  @PathVariable UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -1035,7 +1172,7 @@ public class SecurityRestController extends SecureRestController
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
       @ApiParam(name = "organizationId",
           value = "The ID used to uniquely identify the organization", required = true)
-  @PathVariable Long organizationId)
+  @PathVariable UUID organizationId)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -1085,7 +1222,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId)
+  @PathVariable UUID userDirectoryId)
     throws InvalidArgumentException, UserDirectoryNotFoundException,
         UserDirectoryTypeNotFoundException, SecurityServiceException
   {
@@ -1154,7 +1291,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public ResponseEntity<List<User>> getUsers(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "filter",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
       value = "The optional filter to apply to the users")
   @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortBy",
       value = "The optional method used to sort the users e.g. by last name")
@@ -1195,6 +1332,72 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Remove the group member.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param memberType      the group member type
+   * @param memberName      the name identifying the group member
+   */
+  @ApiOperation(value = "Remove the group member", notes = "Remove the group member")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The group member was successfully removed from the group") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
+      method = RequestMethod.DELETE, produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+  public void removeGroupMember(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
+      value = "The name identifying the group", required = true)
+  @PathVariable String groupName, @ApiParam(name = "memberType", value = "The group member type",
+      required = true)
+  @PathVariable GroupMemberType memberType, @ApiParam(name = "memberName",
+      value = "The name identifying the group member", required = true)
+  @PathVariable String memberName)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupMemberNotFoundException,
+        GroupNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(groupName))
+    {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (memberType == null)
+    {
+      throw new InvalidArgumentException("memberType");
+    }
+
+    if (StringUtils.isEmpty(memberName))
+    {
+      throw new InvalidArgumentException("memberName");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    securityService.removeGroupMember(userDirectoryId, groupName, memberType, memberName);
+  }
+
+  /**
    * Update the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -1215,7 +1418,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void updateGroup(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName, @ApiParam(name = "group", value = "The group", required = true)
   @RequestBody Group group)
@@ -1283,7 +1486,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
   public void updateOrganization(@ApiParam(name = "organizationId",
       value = "The ID used to uniquely identify the organization", required = true)
-  @PathVariable Long organizationId, @ApiParam(name = "organization", value = "The organization",
+  @PathVariable UUID organizationId, @ApiParam(name = "organization", value = "The organization",
       required = true)
   @RequestBody Organization organization)
     throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
@@ -1340,7 +1543,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void updateUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "username",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username, @ApiParam(name = "user", value = "The user", required = true)
   @RequestBody User user, @ApiParam(name = "expirePassword", value = "Expire the user's password")
@@ -1413,7 +1616,7 @@ public class SecurityRestController extends SecureRestController
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public void updateUserDirectory(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "userDirectory",
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "userDirectory",
       value = "The user directory", required = true)
   @RequestBody UserDirectory userDirectory)
     throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
@@ -1457,7 +1660,7 @@ public class SecurityRestController extends SecureRestController
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *         the user directory or <code>false</code> otherwise
    */
-  protected boolean hasAccessToUserDirectory(Authentication authentication, Long userDirectoryId)
+  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
     throws AccessDeniedException
   {
     // If the user is not authenticated then they cannot have access
@@ -1473,202 +1676,9 @@ public class SecurityRestController extends SecureRestController
     }
 
     // If the user is associated with the user directory then they have access
-    List<Long> userDirectoryAuthorityValues = getLongValuesForAuthoritiesWithPrefix(authentication,
+    List<UUID> userDirectoryAuthorityValues = getUUIDValuesForAuthoritiesWithPrefix(authentication,
         "USER_DIRECTORY_");
 
     return userDirectoryAuthorityValues.stream().anyMatch(userDirectoryId::equals);
   }
-
-
-
-
-
-
-
-
-
-  /**
-   * Add the group member.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   */
-  @ApiOperation(value = "Add the group member", notes = "Add the group member")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The group member was successfully added to the group") ,
-    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-    @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
-      response = RestControllerError.class) ,
-    @ApiResponse(code = 500,
-      message = "An error has occurred and the service is unable to process the request at this time",
-      response = RestControllerError.class) })
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
-    method = RequestMethod.POST, produces = "application/json")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-//  @PreAuthorize(
-//    "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void addGroupMember(@ApiParam(name = "userDirectoryId",
-    value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
-    value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "groupMember",
-    value = "The group member", required = true) @RequestBody GroupMember groupMember)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-    ExistingGroupMemberException, SecurityServiceException
-  {
-    if (userDirectoryId == null)
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (StringUtils.isEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (groupMember == null)
-    {
-      throw new InvalidArgumentException("groupMember");
-    }
-
-    Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(
-      groupMember);
-
-    if (!constraintViolations.isEmpty())
-    {
-      throw new InvalidArgumentException("groupMember", ValidationError.toValidationErrors(
-        constraintViolations));
-    }
-
-    securityService.addGroupMember(userDirectoryId, groupName, groupMember.getMemberType(), groupMember.getMemberName());
-  }
-
-
-
-
-
-  /**
-   * Retrieve the group members.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the group members
-   * @param sortDirection   the optional sort direction to apply to the group members
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
-   */
-  @ApiOperation(value = "Retrieve the group members", notes = "Retrieve the group members")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-    @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
-      response = RestControllerError.class) ,
-    @ApiResponse(code = 500,
-      message = "An error has occurred and the service is unable to process the request at this time",
-      response = RestControllerError.class) })
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
-    method = RequestMethod.GET, produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-//  @PreAuthorize(
-//    "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<GroupMember>> getGroupMembers(@ApiParam(name = "userDirectoryId",
-    value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
-    value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "filter",
-    value = "The optional filter to apply to the group members")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-    value = "The optional sort direction to apply to the group members")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-    name = "pageIndex",
-    value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-    name = "pageSize",
-    value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-    SecurityServiceException
-  {
-    if (userDirectoryId == null)
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (StringUtils.isEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    var groupMembers = securityService.getGroupMembers(userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
-
-    var numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectoryId, groupName, filter);
-
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(numberOfGroupMembers));
-
-    return new ResponseEntity<>(groupMembers, httpHeaders, HttpStatus.OK);
-  }
-
-
-
-  /**
-   * Remove the group member.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   * @param memberType      the group member type
-   * @param memberName      the name identifying the group member
-   */
-  @ApiOperation(value = "Remove the group member", notes = "Remove the group member")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The group member was successfully removed from the group") ,
-    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-    @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
-      response = RestControllerError.class) ,
-    @ApiResponse(code = 500,
-      message = "An error has occurred and the service is unable to process the request at this time",
-      response = RestControllerError.class) })
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
-    method = RequestMethod.DELETE, produces = "application/json")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-//  @PreAuthorize(
-//    "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void removeGroupMember(@ApiParam(name = "userDirectoryId",
-    value = "The ID used to uniquely identify the user directory", required = true)
-  @PathVariable Long userDirectoryId, @ApiParam(name = "groupName",
-    value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "memberType",
-    value = "The group member type", required = true)
-  @PathVariable GroupMemberType memberType, @ApiParam(name = "memberName",
-    value = "The name identifying the group member", required = true)
-  @PathVariable String memberName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupMemberNotFoundException, GroupNotFoundException,
-    SecurityServiceException
-  {
-    if (userDirectoryId == null)
-    {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (StringUtils.isEmpty(groupName))
-    {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (memberType == null)
-    {
-      throw new InvalidArgumentException("memberType");
-    }
-
-    if (StringUtils.isEmpty(memberName))
-    {
-      throw new InvalidArgumentException("memberName");
-    }
-
-    org.springframework.core.convert.ConversionFailedException xxx;
-
-    securityService.removeGroupMember(userDirectoryId, groupName, memberType, memberName);
-  }
-
-
-
-
-
 }

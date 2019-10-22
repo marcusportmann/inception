@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import digital.inception.core.service.ServiceException;
+
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -48,13 +50,19 @@ import javax.servlet.http.HttpServletRequest;
  * @author Marcus Portmann
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "uri", "timestamp", "status", "statusText", "message", "detail", "exception",
-    "stackTrace", "name", "validationErrors" })
+@JsonPropertyOrder({ "uri", "timestamp", "status", "statusText", "code", "message", "detail",
+    "exception", "stackTrace", "name", "validationErrors" })
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class RestControllerError
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
+
+  /**
+   * The optional code identifying the error.
+   */
+  @JsonProperty
+  private String code;
 
   /**
    * The optional detail.
@@ -123,7 +131,6 @@ public class RestControllerError
    * @param request        the HTTP servlet request
    * @param responseStatus the HTTP response status
    */
-  @SuppressWarnings("unchecked")
   public RestControllerError(HttpServletRequest request, HttpStatus responseStatus)
   {
     this(request, responseStatus, null);
@@ -141,36 +148,41 @@ public class RestControllerError
   {
     this.timestamp = LocalDateTime.now();
 
-    ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
-        ResponseStatus.class);
-
-    if (annotation != null)
+    if (cause != null)
     {
-      // Use the HTTP response status specified through the @ResponseStatus annotation
-      responseStatus = annotation.value();
-
-      if (!StringUtils.isEmpty(annotation.reason()))
+      if (cause instanceof ServiceException)
       {
-        this.message = annotation.reason();
-        this.detail = cause.getMessage();
+        this.code = ((ServiceException) cause).getServiceError().getCode();
+      }
+
+      ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
+          ResponseStatus.class);
+
+      if (annotation != null)
+      {
+        // Use the HTTP response status specified through the @ResponseStatus annotation
+        responseStatus = annotation.value();
+
+        if (!StringUtils.isEmpty(annotation.reason()))
+        {
+          this.message = annotation.reason();
+          this.detail = cause.getMessage();
+        }
+        else
+        {
+          this.message = cause.getMessage();
+        }
       }
       else
       {
         this.message = cause.getMessage();
       }
-    }
-    else
-    {
-      this.message = cause.getMessage();
-    }
 
-    if (cause instanceof org.springframework.security.access.AccessDeniedException)
-    {
-      responseStatus = HttpStatus.FORBIDDEN;
-    }
-    else if ((annotation == null) || (annotation.value().is5xxServerError()))
-    {
-      if (cause != null)
+      if (cause instanceof org.springframework.security.access.AccessDeniedException)
+      {
+        responseStatus = HttpStatus.FORBIDDEN;
+      }
+      else if ((annotation == null) || (annotation.value().is5xxServerError()))
       {
         this.exception = cause.getClass().getName();
 
@@ -190,16 +202,7 @@ public class RestControllerError
         }
         catch (Throwable ignored) {}
       }
-    }
 
-    this.uri = request.getRequestURI();
-
-    this.status = responseStatus.value();
-
-    this.statusText = responseStatus.getReasonPhrase();
-
-    if (cause != null)
-    {
       try
       {
         if (cause.getClass().getName().equals(
@@ -222,6 +225,22 @@ public class RestControllerError
       }
       catch (Throwable ignored) {}
     }
+
+    this.uri = request.getRequestURI();
+
+    this.status = responseStatus.value();
+
+    this.statusText = responseStatus.getReasonPhrase();
+  }
+
+  /**
+   * Returns the optional code identifying the error.
+   *
+   * @return the optional code identifying the error
+   */
+  public String getCode()
+  {
+    return code;
   }
 
   /**
@@ -313,5 +332,15 @@ public class RestControllerError
   public String getURI()
   {
     return uri;
+  }
+
+  /**
+   * Returns the optional validation errors associated with the error.
+   *
+   * @return the optional validation errors associated with the error
+   */
+  public List<Object> getValidationErrors()
+  {
+    return validationErrors;
   }
 }

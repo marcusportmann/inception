@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -67,7 +68,7 @@ public class UserDirectorySummary
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the user directory.
@@ -144,7 +145,7 @@ public class UserDirectorySummary
    *
    * @return the ID used to uniquely identify the user directory
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -177,7 +178,9 @@ public class UserDirectorySummary
   @Override
   public int hashCode()
   {
-    return (int) (id ^ (id >>> 32));
+    return (id == null)
+      ? 0
+      : id.hashCode();
   }
 
   /**
@@ -185,7 +188,7 @@ public class UserDirectorySummary
    *
    * @param id the ID used to uniquely identify the user directory
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

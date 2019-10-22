@@ -31,6 +31,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
 import {Group} from "../../services/security/group";
+import {GroupMembers} from "../../services/security/group-members";
 
 /**
  * The EditGroupComponent class implements the edit group component.
@@ -66,7 +67,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
       id: '@@edit_group_component_back_title',
@@ -85,7 +86,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
     const name = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('name')!);
 
     // Retrieve the existing group and initialise the form fields
@@ -115,7 +116,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   onCancel(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'], {
@@ -133,7 +134,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       this.securityService.updateGroup(this.group)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+          const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../../..'], {

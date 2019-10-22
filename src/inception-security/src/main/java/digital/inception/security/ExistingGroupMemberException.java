@@ -55,7 +55,7 @@ public class ExistingGroupMemberException extends ServiceException
    */
   public ExistingGroupMemberException(GroupMemberType memberType, String memberName)
   {
-    super("The group member with type (" + memberType.description() + ") and name (" + memberName
+    super("ExistingGroupMemberError", "The group member with type (" + memberType.description() + ") and name (" + memberName
       + ") already exists");
   }
 }

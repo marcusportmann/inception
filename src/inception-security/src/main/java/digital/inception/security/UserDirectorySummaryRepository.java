@@ -26,6 +26,7 @@ import org.springframework.data.repository.query.Param;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>UserDirectorySummaryRepository</code> interface declares the repository for the
@@ -33,7 +34,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, Long>
+public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID>
 {
   List<UserDirectorySummary> findAllByOrderByNameAsc(Pageable pageable);
 
@@ -41,7 +42,7 @@ public interface UserDirectorySummaryRepository extends JpaRepository<UserDirect
 
   @Query(
       "select uds from UserDirectorySummary uds join uds.organizations as o where o.id = :organizationId")
-  List<UserDirectorySummary> findAllByOrganizationId(@Param("organizationId") Long organizationId);
+  List<UserDirectorySummary> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
 
   List<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameAsc(String name,
       Pageable pageable);

@@ -59,7 +59,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   selectedGroupName: string = '';
 
-  userDirectoryId: number;
+  userDirectoryId: string;
 
   username: string;
 
@@ -70,7 +70,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     super();
 
     // Retrieve parameters
-    this.userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    this.userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
     this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
   }
 
@@ -182,7 +182,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       //   this.editUserForm.contains('lockUser') ? this.editUserForm.get('lockUser')!.value : false)
       //   .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       //   .subscribe(() => {
-      //     const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+      //     const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
       //
       //     // noinspection JSIgnoredPromiseFromCall
       //     this.router.navigate(['../../..'], {

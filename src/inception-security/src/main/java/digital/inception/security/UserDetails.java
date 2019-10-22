@@ -26,6 +26,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>UserDetails</code> class stores the details for a user.
@@ -58,7 +59,7 @@ public class UserDetails
    *                         of being associated with one or more organizations
    */
   UserDetails(User user, List<String> roleCodes, List<String> functionCodes,
-      List<Long> organizationIds, List<Long> userDirectoryIds)
+      List<UUID> organizationIds, List<UUID> userDirectoryIds)
   {
     this.user = user;
 

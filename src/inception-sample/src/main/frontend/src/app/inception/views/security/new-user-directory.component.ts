@@ -33,6 +33,7 @@ import {UserDirectoryType} from '../../services/security/user-directory-type';
 import {Subscription} from 'rxjs';
 import {InternalUserDirectoryComponent} from './internal-user-directory.component';
 import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
+import {v4 as uuid} from 'uuid';
 
 /**
  * The NewUserDirectoryComponent class implements the new user directory component.
@@ -43,7 +44,8 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
   templateUrl: 'new-user-directory.component.html',
   styleUrls: ['new-user-directory.component.css'],
 })
-export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit,
+  OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -59,10 +61,9 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,
-              private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private securityService: SecurityService,
+  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
+              private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
+              private i18n: I18n, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
@@ -72,22 +73,18 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       userDirectoryType: new FormControl('', [Validators.required])
     });
 
-    this.subscriptions.add(
-      this.newUserDirectoryForm.get('userDirectoryType')!.valueChanges
-        .pipe(startWith(null), pairwise())
-        .subscribe(
-          ([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-            this.onUserDirectoryTypeSelected(previousUserDirectoryType,
-              currentUserDirectoryType);
-          }));
+    this.subscriptions.add(this.newUserDirectoryForm.get('userDirectoryType')!.valueChanges
+      .pipe(startWith(null), pairwise())
+      .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
+        this.onUserDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+      }));
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-        id: '@@new_user_directory_component_back_title',
-        value: 'User Directories'
-      }), ['../..'],
-      {relativeTo: this.activatedRoute});
+      id: '@@new_user_directory_component_back_title',
+      value: 'User Directories'
+    }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
@@ -104,7 +101,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((userDirectoryTypes: UserDirectoryType[]) => {
         this.userDirectoryTypes = userDirectoryTypes;
-        this.userDirectory = new UserDirectory(null, '', '', []);
+        this.userDirectory = new UserDirectory(uuid(), '', '', []);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -123,8 +120,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   onOK(): void {
@@ -142,8 +138,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'],
-            {relativeTo: this.activatedRoute});
+          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

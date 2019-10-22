@@ -35,6 +35,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -50,12 +51,20 @@ public class SecurityService
   /**
    * The ID used to uniquely identify the Administration user directory.
    */
-  public static final Long ADMINISTRATION_USER_DIRECTORY_ID = 0L;
+  public static final UUID ADMINISTRATION_USER_DIRECTORY_ID = UUID.fromString(
+      "00000000-0000-0000-0000-000000000000");
+
+  /**
+   * The ID used to uniquely identify the Administration organization.
+   */
+  public static final UUID ADMINISTRATION_ORGANIZATION_ID = UUID.fromString(
+      "00000000-0000-0000-0000-000000000000");
 
   /**
    * The ID used to uniquely identify the Administrators group.
    */
-  public static final Long ADMINISTRATORS_GROUP_ID = 0L;
+  public static final UUID ADMINISTRATORS_GROUP_ID = UUID.fromString(
+      "00000000-0000-0000-0000-000000000000");
 
   /**
    * The name of the Administrators group.
@@ -113,7 +122,7 @@ public class SecurityService
   /**
    * The user directories.
    */
-  private Map<Long, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
 
   /**
    * The User Directory Repository.
@@ -179,7 +188,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void addGroupMember(Long userDirectoryId, String groupName, GroupMemberType memberType,
+  public void addGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         ExistingGroupMemberException, SecurityServiceException
@@ -203,7 +212,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void addUserToGroup(Long userDirectoryId, String groupName, String username)
+  public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -230,7 +239,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void adminChangePassword(Long userDirectoryId, String username, String newPassword,
+  public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
@@ -276,14 +285,14 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public Long authenticate(String username, String password)
+  public UUID authenticate(String username, String password)
     throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
         UserNotFoundException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -307,7 +316,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can authenticate this
          * user.
          */
-        for (Long userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -350,14 +359,14 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public Long changePassword(String username, String password, String newPassword)
+  public UUID changePassword(String username, String password, String newPassword)
     throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
         ExistingPasswordException, SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -381,7 +390,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if one of them can change the
          * password for this user.
          */
-        for (Long userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -452,7 +461,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void createGroup(Long userDirectoryId, Group group)
+  public void createGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -534,7 +543,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void createUser(Long userDirectoryId, User user, boolean expiredPassword,
+  public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
     throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
   {
@@ -630,7 +639,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void deleteGroup(Long userDirectoryId, String groupName)
+  public void deleteGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
         SecurityServiceException
   {
@@ -651,7 +660,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void deleteOrganization(Long organizationId)
+  public void deleteOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -682,7 +691,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void deleteUser(Long userDirectoryId, String username)
+  public void deleteUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -702,7 +711,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void deleteUserDirectory(Long userDirectoryId)
+  public void deleteUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -743,7 +752,7 @@ public class SecurityService
    * @return the users whose attributes match the attribute criteria
    */
   @Override
-  public List<User> findUsers(Long userDirectoryId, List<Attribute> attributes)
+  public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
     throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -800,7 +809,7 @@ public class SecurityService
    * @return the authorised function codes for the user
    */
   @Override
-  public List<String> getFunctionCodesForUser(Long userDirectoryId, String username)
+  public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -841,7 +850,7 @@ public class SecurityService
    * @return the group
    */
   @Override
-  public Group getGroup(Long userDirectoryId, String groupName)
+  public Group getGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -863,7 +872,7 @@ public class SecurityService
    * @return the group members for the group
    */
   @Override
-  public List<GroupMember> getGroupMembers(Long userDirectoryId, String groupName)
+  public List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -890,7 +899,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public List<GroupMember> getGroupMembers(Long userDirectoryId, String groupName, String filter,
+  public List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName, String filter,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
@@ -912,7 +921,7 @@ public class SecurityService
    * @return the group names
    */
   @Override
-  public List<String> getGroupNames(Long userDirectoryId)
+  public List<String> getGroupNames(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -934,7 +943,7 @@ public class SecurityService
    * @return the names identifying the groups the user is a member of
    */
   @Override
-  public List<String> getGroupNamesForUser(Long userDirectoryId, String username)
+  public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -955,7 +964,7 @@ public class SecurityService
    * @return the groups
    */
   @Override
-  public List<Group> getGroups(Long userDirectoryId)
+  public List<Group> getGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -980,7 +989,7 @@ public class SecurityService
    * @return the groups
    */
   @Override
-  public List<Group> getGroups(Long userDirectoryId, String filter, SortDirection sortDirection,
+  public List<Group> getGroups(UUID userDirectoryId, String filter, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
@@ -1003,7 +1012,7 @@ public class SecurityService
    * @return the groups the user is a member of
    */
   @Override
-  public List<Group> getGroupsForUser(Long userDirectoryId, String username)
+  public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1025,7 +1034,7 @@ public class SecurityService
    * @return the number of group members for the group
    */
   @Override
-  public long getNumberOfGroupMembers(Long userDirectoryId, String groupName)
+  public long getNumberOfGroupMembers(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     return getNumberOfGroupMembers(userDirectoryId, groupName, null);
@@ -1041,7 +1050,7 @@ public class SecurityService
    * @return the number of group members for the group
    */
   @Override
-  public long getNumberOfGroupMembers(Long userDirectoryId, String groupName, String filter)
+  public long getNumberOfGroupMembers(UUID userDirectoryId, String groupName, String filter)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1063,7 +1072,7 @@ public class SecurityService
    * @return the number of groups
    */
   @Override
-  public long getNumberOfGroups(Long userDirectoryId)
+  public long getNumberOfGroups(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1085,7 +1094,7 @@ public class SecurityService
    * @return the number of groups
    */
   @Override
-  public long getNumberOfGroups(Long userDirectoryId, String filter)
+  public long getNumberOfGroups(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1188,7 +1197,7 @@ public class SecurityService
    * @return the number of users
    */
   @Override
-  public long getNumberOfUsers(Long userDirectoryId)
+  public long getNumberOfUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     return getNumberOfUsers(userDirectoryId, null);
@@ -1203,7 +1212,7 @@ public class SecurityService
    * @return the number of users
    */
   @Override
-  public long getNumberOfUsers(Long userDirectoryId, String filter)
+  public long getNumberOfUsers(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1224,7 +1233,7 @@ public class SecurityService
    * @return the organization
    */
   @Override
-  public Organization getOrganization(Long organizationId)
+  public Organization getOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1261,7 +1270,7 @@ public class SecurityService
    *         with
    */
   @Override
-  public List<Long> getOrganizationIdsForUserDirectory(Long userDirectoryId)
+  public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1387,7 +1396,7 @@ public class SecurityService
    * @return the organizations the user directory is associated with
    */
   @Override
-  public List<Organization> getOrganizationsForUserDirectory(Long userDirectoryId)
+  public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1420,7 +1429,7 @@ public class SecurityService
    * @return the codes for the roles that the user has been assigned
    */
   @Override
-  public List<String> getRoleCodesForUser(Long userDirectoryId, String username)
+  public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1442,7 +1451,7 @@ public class SecurityService
    * @return the user
    */
   @Override
-  public User getUser(Long userDirectoryId, String username)
+  public User getUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1541,7 +1550,7 @@ public class SecurityService
    * @return the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(Long organizationId)
+  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1573,7 +1582,7 @@ public class SecurityService
    * @return the user directory
    */
   @Override
-  public UserDirectory getUserDirectory(Long userDirectoryId)
+  public UserDirectory getUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     try
@@ -1611,13 +1620,13 @@ public class SecurityService
    *         username is associated with or <code>null</code> if the user cannot be found
    */
   @Override
-  public Long getUserDirectoryIdForUser(String username)
+  public UUID getUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
     try
     {
       // First check if this is an internal user and if so determine the user directory ID
-      Long internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
+      UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
       if (internalUserDirectoryId != null)
       {
@@ -1629,7 +1638,7 @@ public class SecurityService
          * Check all of the "external" user directories to see if the user is associated with one
          * of them.
          */
-        for (Long userDirectoryId : userDirectories.keySet())
+        for (UUID userDirectoryId : userDirectories.keySet())
         {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -1665,7 +1674,7 @@ public class SecurityService
    *         with
    */
   @Override
-  public List<Long> getUserDirectoryIdsForOrganization(Long organizationId)
+  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1757,7 +1766,7 @@ public class SecurityService
    * @return the summaries for the user directories the organization is associated with
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(Long organizationId)
+  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
     throws OrganizationNotFoundException, SecurityServiceException
   {
     try
@@ -1788,7 +1797,7 @@ public class SecurityService
    * @return the user directory type for the user directory
    */
   @Override
-  public UserDirectoryType getUserDirectoryTypeForUserDirectory(Long userDirectoryId)
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
         SecurityServiceException
   {
@@ -1853,7 +1862,7 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(Long userDirectoryId)
+  public List<User> getUsers(UUID userDirectoryId)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1879,7 +1888,7 @@ public class SecurityService
    * @return the users
    */
   @Override
-  public List<User> getUsers(Long userDirectoryId, String filter, UserSortBy sortBy,
+  public List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, SecurityServiceException
   {
@@ -1904,7 +1913,7 @@ public class SecurityService
    *         otherwise
    */
   @Override
-  public boolean isUserInGroup(Long userDirectoryId, String groupName, String username)
+  public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -1927,7 +1936,7 @@ public class SecurityService
   {
     try
     {
-      Map<Long, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
+      Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
 
@@ -1962,7 +1971,7 @@ public class SecurityService
               IUserDirectory.class);
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-              userDirectoryClass.getConstructor(Long.class, List.class, GroupRepository.class,
+              userDirectoryClass.getConstructor(UUID.class, List.class, GroupRepository.class,
               UserRepository.class);
 
           if (userDirectoryClassConstructor == null)
@@ -2005,7 +2014,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void removeGroupMember(Long userDirectoryId, String groupName, GroupMemberType memberType,
+  public void removeGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
         SecurityServiceException
@@ -2029,7 +2038,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void removeUserFromGroup(Long userDirectoryId, String groupName, String username)
+  public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException
   {
@@ -2052,7 +2061,7 @@ public class SecurityService
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsGroupAdministration(Long userDirectoryId)
+  public boolean supportsGroupAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2074,7 +2083,7 @@ public class SecurityService
    *         <code>false</code> otherwise
    */
   @Override
-  public boolean supportsUserAdministration(Long userDirectoryId)
+  public boolean supportsUserAdministration(UUID userDirectoryId)
     throws UserDirectoryNotFoundException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2125,7 +2134,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void updateGroup(Long userDirectoryId, Group group)
+  public void updateGroup(UUID userDirectoryId, Group group)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2178,7 +2187,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void updateUser(Long userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+  public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -2231,12 +2240,12 @@ public class SecurityService
    *         specified username is associated with or <code>null</code> if an internal user with the
    *         specified username could not be found
    */
-  private Long getInternalUserDirectoryIdForUser(String username)
+  private UUID getInternalUserDirectoryIdForUser(String username)
     throws SecurityServiceException
   {
     try
     {
-      Optional<Long> userDirectoryIdOptional =
+      Optional<UUID> userDirectoryIdOptional =
           userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
 
       return userDirectoryIdOptional.orElse(null);

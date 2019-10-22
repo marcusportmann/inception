@@ -30,6 +30,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
 import {Group} from "../../services/security/group";
+import {v4 as uuid} from 'uuid';
 
 /**
  * The NewGroupComponent class implements the new group component.
@@ -62,7 +63,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
       id: '@@new_group_component_back_title',
@@ -81,7 +82,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -91,7 +92,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       .subscribe((userDirectoryType: UserDirectoryType) => {
         this.userDirectoryType = userDirectoryType;
 
-        this.group = new Group(null, userDirectoryId, '', '');
+        this.group = new Group(uuid(), userDirectoryId, '', '');
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -105,7 +106,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   onCancel(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], {
@@ -125,8 +126,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       this.securityService.createGroup(this.group)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = Number(
-            this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+          const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../..'], {

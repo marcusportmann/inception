@@ -15,7 +15,7 @@
  */
 
 /**
- * The UserStatus enumeration defines the possible statuses for a User.
+ * The UserStatus enumeration defines the possible statuses for a user.
  *
  * @author Marcus Portmann
  */

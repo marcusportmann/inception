@@ -23,12 +23,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.persistence.Identifiable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -36,6 +32,7 @@ import java.io.Serializable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -60,7 +57,7 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "security", name = "organizations")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class Organization
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -72,12 +69,10 @@ public class Organization
   @ApiModelProperty(value = "The ID used to uniquely identify the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @GenericGenerator(name = "organization_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "organization_id", strategy = GenerationType.IDENTITY)
+  @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the organization.
@@ -97,6 +92,7 @@ public class Organization
       allowableValues = "0 = Inactive, 1 = Active", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
+  @NotNull
   @Column(name = "status", nullable = false)
   private OrganizationStatus status;
 
@@ -135,7 +131,7 @@ public class Organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(Long id, String name, OrganizationStatus status)
+  public Organization(UUID id, String name, OrganizationStatus status)
   {
     this.id = id;
     this.name = name;
@@ -178,7 +174,7 @@ public class Organization
    *
    * @return the ID used to uniquely identify the organization
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -242,7 +238,7 @@ public class Organization
    *
    * @param id the ID used to uniquely identify the organization
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

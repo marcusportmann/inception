@@ -94,7 +94,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     this.spinnerService.showSpinner();
 

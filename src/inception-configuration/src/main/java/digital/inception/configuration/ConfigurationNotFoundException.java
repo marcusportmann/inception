@@ -54,6 +54,6 @@ public class ConfigurationNotFoundException extends ServiceException
    */
   public ConfigurationNotFoundException(String key)
   {
-    super("The configuration (" + key + ") could not be found");
+    super("ConfigurationNotFoundError", "The configuration (" + key + ") could not be found");
   }
 }

@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>SecureRestController</code> class provides the base class from which all secure
@@ -56,6 +57,34 @@ public abstract class SecureRestController
         try
         {
           values.add(Long.parseLong(authority.getAuthority().substring(prefix.length())));
+        }
+        catch (Throwable ignored) {}
+      }
+    }
+
+    return values;
+  }
+
+  /**
+   * Returns the <code>UUID</code> value portion of the authorities with the specified prefix.
+   *
+   * @param authentication the authenticated principal associated with the authenticated request
+   * @param prefix         the authority prefix
+   *
+   * @return the <code>UUID</code> value portion of the authorities with the specified prefix
+   */
+  protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(Authentication authentication,
+      String prefix)
+  {
+    var values = new ArrayList<UUID>();
+
+    for (GrantedAuthority authority : authentication.getAuthorities())
+    {
+      if (authority.getAuthority().startsWith(prefix))
+      {
+        try
+        {
+          values.add(UUID.fromString(authority.getAuthority().substring(prefix.length())));
         }
         catch (Throwable ignored) {}
       }

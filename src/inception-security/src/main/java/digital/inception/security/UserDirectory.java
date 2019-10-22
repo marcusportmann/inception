@@ -26,12 +26,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
-import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 import org.springframework.util.StringUtils;
 
@@ -46,10 +43,7 @@ import org.xml.sax.InputSource;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -77,7 +71,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 @Table(schema = "security", name = "user_directories")
 @SuppressWarnings({ "unused" })
 public class UserDirectory
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -89,12 +83,10 @@ public class UserDirectory
   @ApiModelProperty(value = "The ID used to uniquely identify the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @GenericGenerator(name = "user_directory_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "user_directory_id", strategy = GenerationType.IDENTITY)
+  @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the user directory.
@@ -211,7 +203,7 @@ public class UserDirectory
    *
    * @return the ID used to uniquely identify the user directory
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -320,7 +312,7 @@ public class UserDirectory
    *
    * @param id the ID used to uniquely identify the user directory
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

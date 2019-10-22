@@ -27,6 +27,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
+import java.util.UUID;
+
 /**
  * The <code>OrganizationData</code> class holds the information for an organization.
  *
@@ -40,7 +42,7 @@ public class OrganizationData
   /**
    * The ID used to uniquely identify the organization.
    */
-  private Long id;
+  private UUID id;
 
   /**
    * The name of the organization.
@@ -56,7 +58,7 @@ public class OrganizationData
   {
     try
     {
-      this.id = Long.parseLong(element.getChildText("Id"));
+      this.id = UUID.fromString(element.getChildText("Id"));
       this.name = StringUtils.isEmpty(element.getChildText("Name"))
           ? ""
           : element.getChildText("Name");
@@ -83,7 +85,7 @@ public class OrganizationData
    *
    * @return the ID used to uniquely identify the organization
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -103,7 +105,7 @@ public class OrganizationData
    *
    * @param id the ID used to uniquely identify the organization
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }

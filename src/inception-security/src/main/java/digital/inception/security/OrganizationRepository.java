@@ -24,9 +24,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
+import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganizationRepository</code> interface declares the repository for the
@@ -34,13 +35,13 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public interface OrganizationRepository extends JpaRepository<Organization, Long>
+public interface OrganizationRepository extends JpaRepository<Organization, UUID>
 {
   long countByNameContainingIgnoreCase(String name);
 
   @Modifying
   @Query("delete from Organization u where u.id = :organizationId")
-  void deleteById(@Param("organizationId") Long organizationId);
+  void deleteById(@Param("organizationId") UUID organizationId);
 
   boolean existsByNameIgnoreCase(String name);
 
@@ -49,7 +50,7 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
   List<Organization> findAllByOrderByNameDesc(Pageable pageable);
 
   @Query("select o from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
-  List<Organization> findAllByUserDirectoryId(@Param("userDirectoryId") Long userDirectoryId);
+  List<Organization> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
   List<Organization> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
@@ -57,5 +58,5 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 
   @Query(
       "select ud.id from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
-  List<Long> getUserDirectoryIdsById(@Param("organizationId") Long organizationId);
+  List<UUID> getUserDirectoryIdsById(@Param("organizationId") UUID organizationId);
 }

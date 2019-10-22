@@ -53,6 +53,7 @@ public class FunctionNotFoundException extends ServiceException
    */
   public FunctionNotFoundException(String functionCode)
   {
-    super("A function with the code (" + functionCode + ") could not be found");
+    super("FunctionNotFoundError", "A function with the code (" + functionCode
+        + ") could not be found");
   }
 }

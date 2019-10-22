@@ -40,8 +40,9 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The message part could not be found")
-@WebFault(name = "MessagePartNotFoundException", targetNamespace = "http://messaging.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+@WebFault(name = "MessagePartNotFoundException",
+    targetNamespace = "http://messaging.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused" })
 public class MessagePartNotFoundException extends ServiceException
@@ -56,6 +57,7 @@ public class MessagePartNotFoundException extends ServiceException
    */
   public MessagePartNotFoundException(UUID messagePartId)
   {
-    super("The message part with ID (" + messagePartId + ") could not be found");
+    super("MessagePartNotFoundError", "The message part with ID (" + messagePartId
+        + ") could not be found");
   }
 }

@@ -31,6 +31,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserStatus} from '../../services/security/user-status';
 import {UserDirectoryType} from '../../services/security/user-directory-type';
+import {v4 as uuid} from 'uuid';
 
 /**
  * The NewUserComponent class implements the new user component.
@@ -69,7 +70,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
       id: '@@new_user_component_back_title',
@@ -88,7 +89,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -98,7 +99,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
       .subscribe((userDirectoryType: UserDirectoryType) => {
         this.userDirectoryType = userDirectoryType;
 
-        this.user = new User(null, userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
+        this.user = new User(uuid(), userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
 
         if (this.userDirectoryType!.code === 'InternalUserDirectory') {
           this.newUserForm.addControl('expiredPassword', new FormControl(false));
@@ -117,7 +118,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   onCancel(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], {
@@ -154,7 +155,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
         this.newUserForm.contains('userLocked') ? this.newUserForm.get('userLocked')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+          const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../..'], {

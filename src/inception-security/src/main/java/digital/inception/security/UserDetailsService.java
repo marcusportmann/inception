@@ -57,7 +57,7 @@ public class UserDetailsService
   {
     try
     {
-      Long userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+      UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
       if (userDirectoryId == null)
       {
@@ -75,14 +75,14 @@ public class UserDetailsService
             username);
 
         // Retrieve the list of IDs for the organizations the user is associated with
-        List<Long> organizationIds = securityService.getOrganizationIdsForUserDirectory(
+        List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
             userDirectoryId);
 
         /*
          * Retrieve the list of IDs for the user directories the user is associated with as a result
          * of being associated with one or more organizations.
          */
-        List<Long> userDirectoryIdsForOrganizations = new ArrayList<>();
+        List<UUID> userDirectoryIdsForOrganizations = new ArrayList<>();
 
         for (var organizationId : organizationIds)
         {

@@ -67,7 +67,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
 
-  userDirectoryId = 0;
+  userDirectoryId = '';
 
   userDirectories: UserDirectorySummary[] = [];
 
@@ -110,7 +110,9 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.deleteUser(this.userDirectoryId, username)
+          const userDirectoryId = '26b261cd-74a5-4b28-8d7d-a0a05a4bac2b';
+
+          this.securityService.deleteUser(userDirectoryId, username)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.loadUsers();

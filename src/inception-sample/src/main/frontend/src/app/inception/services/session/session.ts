@@ -33,7 +33,7 @@ export class Session {
   /**
    * The ID used to uniquely identify the user directory the user is associated with.
    */
-  userDirectoryId: number;
+  userDirectoryId: string;
 
   /**
    * The full name for the user.
@@ -84,7 +84,7 @@ export class Session {
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, userDirectoryId: number, userFullName: string, scopes: string[],
+  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
               authorities: string[], accessToken: string, accessTokenExpiry?: Date,
               refreshToken?: string) {
     this.username = username;

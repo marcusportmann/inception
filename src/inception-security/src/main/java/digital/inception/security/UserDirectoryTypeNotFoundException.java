@@ -54,6 +54,7 @@ public class UserDirectoryTypeNotFoundException extends ServiceException
    */
   public UserDirectoryTypeNotFoundException(String userDirectoryTypeCode)
   {
-    super("A user directory type with the code (" + userDirectoryTypeCode + ") could not be found");
+    super("UserDirectoryTypeNotFoundError", "A user directory type with the code ("
+        + userDirectoryTypeCode + ") could not be found");
   }
 }

@@ -54,6 +54,6 @@ public class JobNotFoundException extends ServiceException
    */
   public JobNotFoundException(UUID jobId)
   {
-    super("The job with ID (" + jobId + ") could not be found");
+    super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");
   }
 }

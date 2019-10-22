@@ -15,19 +15,19 @@
  */
 
 /**
- * The OrganizationStatus enumeration defines the possible statuses for an organization.
+ * The GroupMemberType enumeration defines the possible group member types.
  *
  * @author Marcus Portmann
  */
-export enum OrganizationStatus {
+export enum GroupMemberType {
 
   /**
-   * The organization is inactive.
+   * User.
    */
-  Inactive = 0,
+  User = 0,
 
   /**
-   * The organization is active.
+   * Group.
    */
-  Active = 1
+  Group = 1
 }

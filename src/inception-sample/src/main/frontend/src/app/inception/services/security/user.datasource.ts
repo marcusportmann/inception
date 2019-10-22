@@ -65,7 +65,7 @@ export class UserDatasource implements DataSource<User> {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId: number, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
+  load(userDirectoryId: string, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
        pageIndex?: number, pageSize?: number): void {
     this.loadingSubject.next(true);
 

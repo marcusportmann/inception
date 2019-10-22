@@ -55,7 +55,7 @@ public class GroupMemberNotFoundException extends ServiceException
    */
   public GroupMemberNotFoundException(GroupMemberType memberType, String memberName)
   {
-    super("The group member with type (" + memberType.description() + ") and name (" + memberName
-        + ") could not be found");
+    super("GroupMemberNotFoundError", "The group member with type (" + memberType.description()
+        + ") and name (" + memberName + ") could not be found");
   }
 }

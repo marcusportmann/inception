@@ -57,7 +57,7 @@ export class Groups {
   /**
    * The ID used to uniquely identify the user directory.
    */
-  userDirectoryId: number;
+  userDirectoryId: string;
 
   /**
    * Constructs a new Groups.
@@ -70,7 +70,7 @@ export class Groups {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  constructor(userDirectoryId: number, groups: Group[], total: number, filter?: string,
+  constructor(userDirectoryId: string, groups: Group[], total: number, filter?: string,
               sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
     this.userDirectoryId = userDirectoryId;
     this.groups = groups;

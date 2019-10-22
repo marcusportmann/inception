@@ -52,6 +52,6 @@ public class DuplicateGroupException extends ServiceException
    */
   public DuplicateGroupException(String groupName)
   {
-    super("A group with the name (" + groupName + ") already exists");
+    super("DuplicateGroupError", "A group with the name (" + groupName + ") already exists");
   }
 }

@@ -24,7 +24,7 @@ export class UserDirectorySummary {
   /**
    * The ID used to uniquely identify the user directory.
    */
-  id: number;
+  id: string;
 
   /**
    * The name of the user directory.
@@ -43,7 +43,7 @@ export class UserDirectorySummary {
    * @param name The name of the user directory.
    * @param type The code used to uniquely identify the user directory type.
    */
-  constructor(id: number, name: string, type: string) {
+  constructor(id: string, name: string, type: string) {
     this.id = id;
     this.name = name;
     this.type = type;

@@ -56,6 +56,6 @@ public class ErrorReportNotFoundException extends ServiceException
    */
   public ErrorReportNotFoundException(UUID errorReportId)
   {
-    super("The error report (" + errorReportId + ") could not be found");
+    super("ErrorReportNotFoundError", "The error report (" + errorReportId + ") could not be found");
   }
 }

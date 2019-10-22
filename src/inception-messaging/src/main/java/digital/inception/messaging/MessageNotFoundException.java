@@ -55,6 +55,6 @@ public class MessageNotFoundException extends ServiceException
    */
   public MessageNotFoundException(UUID messageId)
   {
-    super("The message with ID (" + messageId + ") could not be found");
+    super("MessageNotFoundError", "The message with ID (" + messageId + ") could not be found");
   }
 }

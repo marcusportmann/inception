@@ -21,10 +21,8 @@ package digital.inception.security;
 import digital.inception.core.util.BinaryBuffer;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -32,17 +30,16 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.math.BigDecimal;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -75,7 +72,7 @@ public class SecurityServiceTest
   public void addUserToGroupTest()
     throws Exception
   {
-    var roleCodes = securityService.getRoleCodesForUser(0L, "Administrator");
+    var roleCodes = securityService.getRoleCodesForUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
 
     Organization organization = getTestOrganizationDetails();
 
@@ -254,7 +251,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    Long userDirectoryId = securityService.changePassword(user.getUsername(), originalPassword,
+    UUID userDirectoryId = securityService.changePassword(user.getUsername(), originalPassword,
         "New Password");
 
     assertEquals("The correct user directory ID was not returned", userDirectory.getId(),
@@ -318,7 +315,7 @@ public class SecurityServiceTest
   {
     Organization organization = getTestOrganizationDetails();
 
-    securityService.deleteGroup(0L, "INVALID");
+    securityService.deleteGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "INVALID");
   }
 
   /**
@@ -849,12 +846,6 @@ public class SecurityServiceTest
           + "deleted");
     }
     catch (OrganizationNotFoundException ignored) {}
-
-    Organization organizationWithoutId = getTestOrganizationDetails();
-    organizationWithoutId.setId(null);
-
-    UserDirectory userDirectoryWithoutId = securityService.createOrganization(
-        organizationWithoutId, true);
   }
 
   /**
@@ -958,7 +949,7 @@ public class SecurityServiceTest
   public void roleTest()
     throws Exception
   {
-    List<String> roleCodes = securityService.getRoleCodesForUser(0L, "Administrator");
+    List<String> roleCodes = securityService.getRoleCodesForUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
 
     assertEquals("The correct number of role codes (1) was not retrieved", 1, roleCodes.size());
 
@@ -984,7 +975,7 @@ public class SecurityServiceTest
         "The correct number of organizations (1) was not retrieved for the user directory", 1,
         organizationsForUserDirectory.size());
 
-    List<Long> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
+    List<UUID> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
         userDirectory.getId());
 
     assertEquals(
@@ -1122,7 +1113,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    Long userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
+    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
 
     assertEquals("The correct user directory ID was not retrieved for the user",
         userDirectory.getId(), userDirectoryId);
@@ -1187,7 +1178,7 @@ public class SecurityServiceTest
   {
     User user = new User();
 
-    user.setId((long) number);
+    user.setId(UUID.randomUUID());
     user.setUsername("Numbered Test Username " + number);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Numbered Test E-Mail " + number);
@@ -1219,7 +1210,7 @@ public class SecurityServiceTest
 
     Group group = new Group();
 
-    group.setId((long) groupCount);
+    group.setId(UUID.randomUUID());
     group.setName("Test Group " + groupCount);
     group.setDescription("Test Group Description " + groupCount);
 
@@ -1232,7 +1223,7 @@ public class SecurityServiceTest
 
     Organization organization = new Organization();
 
-    organization.setId((long) organizationCount);
+    organization.setId(UUID.randomUUID());
     organization.setName("Test Organization Name " + organizationCount);
     organization.setStatus(OrganizationStatus.ACTIVE);
 
@@ -1245,7 +1236,7 @@ public class SecurityServiceTest
 
     User user = new User();
 
-    user.setId((long) userCount);
+    user.setId(UUID.randomUUID());
     user.setUsername("Test User Username " + userCount);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Test User E-Mail " + userCount);
@@ -1265,7 +1256,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId((long) userDirectoryCount);
+    userDirectory.setId(UUID.randomUUID());
     userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 

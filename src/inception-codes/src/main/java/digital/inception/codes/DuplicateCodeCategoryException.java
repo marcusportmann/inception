@@ -55,6 +55,7 @@ public class DuplicateCodeCategoryException extends ServiceException
    */
   public DuplicateCodeCategoryException(String codeCategoryId)
   {
-    super("The code category with ID (" + codeCategoryId + ") already exists");
+    super("DuplicateCodeCategoryError", "The code category with ID (" + codeCategoryId
+        + ") already exists");
   }
 }

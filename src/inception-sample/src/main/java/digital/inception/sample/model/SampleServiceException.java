@@ -48,35 +48,13 @@ public class SampleServiceException extends ServiceException
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>SampleServiceException</code> with <code>null</code> as its
-   * message.
-   */
-  public SampleServiceException()
-  {
-    super();
-  }
-
-  /**
    * Constructs a new <code>SampleServiceException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public SampleServiceException(String message)
   {
-    super(message);
-  }
-
-  /**
-   * Constructs a new <code>SampleServiceException</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
-   *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public SampleServiceException(Throwable cause)
-  {
-    super(cause);
+    super("SampleServiceError", message);
   }
 
   /**
@@ -88,6 +66,6 @@ public class SampleServiceException extends ServiceException
    */
   public SampleServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("SampleServiceError", message, cause);
   }
 }

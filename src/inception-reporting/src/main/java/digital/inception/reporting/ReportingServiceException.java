@@ -55,7 +55,7 @@ public class ReportingServiceException extends ServiceException
    */
   ReportingServiceException(String message)
   {
-    super(message);
+    super("ReportingServiceError", message);
   }
 
   /**
@@ -67,6 +67,6 @@ public class ReportingServiceException extends ServiceException
    */
   ReportingServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("ReportingServiceError", message, cause);
   }
 }

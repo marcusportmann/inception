@@ -53,6 +53,6 @@ public class InvalidAttributeException extends ServiceException
    */
   public InvalidAttributeException(String name)
   {
-    super("The attribute (" + name + ") is invalid");
+    super("InvalidAttributeError", "The attribute (" + name + ") is invalid");
   }
 }

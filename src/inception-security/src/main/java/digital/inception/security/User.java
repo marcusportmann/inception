@@ -24,12 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import digital.inception.persistence.Identifiable;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -39,6 +36,7 @@ import java.time.LocalDateTime;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -68,7 +66,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(schema = "security", name = "users")
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class User
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -104,18 +102,14 @@ public class User
 
   /**
    * The ID used to uniquely identify the user.
-   *
-   * The ID for a user that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @GenericGenerator(name = "user_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "user_id", strategy = GenerationType.IDENTITY)
+  @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The last name for the user.
@@ -216,7 +210,7 @@ public class User
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
   @Column(name = "user_directory_id", nullable = false)
-  private Long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * The username for the user.
@@ -300,7 +294,7 @@ public class User
    *
    * @return the ID used to uniquely identify the user
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -382,7 +376,7 @@ public class User
    *
    * @return the ID used to uniquely identify the user directory the user is associated with
    */
-  public Long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -512,7 +506,7 @@ public class User
    *
    * @param id the ID used to uniquely identify the user
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -603,7 +597,7 @@ public class User
    * @param userDirectoryId the ID used to uniquely identify the user directory the user is
    *                        associated with
    */
-  public void setUserDirectoryId(Long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }

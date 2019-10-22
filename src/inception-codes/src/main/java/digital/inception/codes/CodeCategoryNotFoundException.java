@@ -53,6 +53,7 @@ public class CodeCategoryNotFoundException extends ServiceException
    */
   public CodeCategoryNotFoundException(String codeCategoryId)
   {
-    super("The code category with ID (" + codeCategoryId + ") could not be found");
+    super("CodeCategoryNotFoundError", "The code category with ID (" + codeCategoryId
+        + ") could not be found");
   }
 }

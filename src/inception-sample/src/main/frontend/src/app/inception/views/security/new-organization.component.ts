@@ -30,6 +30,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {Organization} from '../../services/security/organization';
 import {OrganizationStatus} from '../../services/security/organization-status';
+import {v4 as uuid} from 'uuid';
 
 /**
  * The NewOrganizationComponent class implements the new organization component.
@@ -74,7 +75,7 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
   }
 
   ngAfterViewInit(): void {
-    this.organization = new Organization(null, '', OrganizationStatus.Active);
+    this.organization = new Organization(uuid(), '', OrganizationStatus.Active);
   }
 
   onCancel(): void {

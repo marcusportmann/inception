@@ -55,6 +55,6 @@ public class UserDirectoryParameterException extends ServiceException
    */
   public UserDirectoryParameterException(String message)
   {
-    super(message);
+    super("UserDirectoryParameterError", message);
   }
 }

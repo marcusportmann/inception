@@ -69,12 +69,12 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeCategoryNotFoundError') {
           return throwError(new CodeCategoryNotFoundError(this.i18n({
             id: '@@codes_service_the_code_category_could_not_be_found',
             value: 'The code category could not be found.'
           }), apiError));
-        } else if (apiError.status === 409) {
+        } else if (apiError.code === 'DuplicateCodeError') {
           return throwError(new DuplicateCodeError(this.i18n({
             id: '@@codes_service_the_code_already_exists',
             value: 'The code already exists.'
@@ -108,7 +108,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 409) {
+        if (apiError.code === 'DuplicateCodeCategoryError') {
           return throwError(new DuplicateCodeCategoryError(this.i18n({
             id: '@@codes_service_the_code_category_already_exists',
             value: 'The code category already exists.'
@@ -145,7 +145,7 @@ export class CodesService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.status === 404) {
+        if (apiError.code === 'CodeNotFoundError') {
           return throwError(new CodeNotFoundError(this.i18n({
             id: '@@codes_service_the_code_could_not_be_found',
             value: 'The code could not be found.'

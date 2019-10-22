@@ -55,11 +55,12 @@ public class ConfigurationServiceException extends ServiceException
    */
   public ConfigurationServiceException(String message)
   {
-    super(message);
+    super("ConfigurationServiceError", message);
   }
 
   /**
-   * Constructs a new <code>ConfigurationServiceException</code> with the specified message and cause.
+   * Constructs a new <code>ConfigurationServiceException</code> with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
@@ -67,6 +68,6 @@ public class ConfigurationServiceException extends ServiceException
    */
   public ConfigurationServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("ConfigurationServiceError", message, cause);
   }
 }

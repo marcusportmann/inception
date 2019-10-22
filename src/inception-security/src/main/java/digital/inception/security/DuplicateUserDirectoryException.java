@@ -57,7 +57,8 @@ public class DuplicateUserDirectoryException extends ServiceException
    */
   public DuplicateUserDirectoryException(String name)
   {
-    super("A user directory with the name (" + name + ") already exists");
+    super("DuplicateUserDirectoryError", "A user directory with the name (" + name
+        + ") already exists");
   }
 
   /**
@@ -65,8 +66,9 @@ public class DuplicateUserDirectoryException extends ServiceException
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    */
-  public DuplicateUserDirectoryException(Long userDirectoryId)
+  public DuplicateUserDirectoryException(UUID userDirectoryId)
   {
-    super("A user directory with the ID (" + userDirectoryId + ") already exists");
+    super("DuplicateUserDirectoryError", "A user directory with the ID (" + userDirectoryId
+        + ") already exists");
   }
 }

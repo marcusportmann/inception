@@ -23,6 +23,7 @@ import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
 import digital.inception.core.util.Base64Util;
 import digital.inception.messaging.messages.*;
+import digital.inception.security.SecurityService;
 import digital.inception.test.TestClassRunner;
 
 import org.junit.Test;
@@ -132,7 +133,7 @@ public class SystemMessageTest
 
     OrganizationData organization = organizations.get(0);
 
-    assertEquals(Long.valueOf(0L), organization.getId());
+    assertEquals(SecurityService.ADMINISTRATION_ORGANIZATION_ID, organization.getId());
     assertEquals("Administration", organization.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());

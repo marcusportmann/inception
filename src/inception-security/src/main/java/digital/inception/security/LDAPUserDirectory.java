@@ -634,7 +634,7 @@
 //        statement.setTimestamp(3, new Timestamp(calendar.getTimeInMillis()));
 //      }
 //
-//      statement.setLong(4, getUserDirectoryId());
+//      statement.setUUID(4, getUserDirectoryId());
 //      statement.setLong(5, user.getId());
 //
 //      if (statement.executeUpdate() != 1)

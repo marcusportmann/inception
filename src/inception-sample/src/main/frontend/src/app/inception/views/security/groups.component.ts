@@ -66,7 +66,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
 
-  userDirectoryId = 0;
+  userDirectoryId = '';
 
   userDirectories: UserDirectorySummary[] = [];
 

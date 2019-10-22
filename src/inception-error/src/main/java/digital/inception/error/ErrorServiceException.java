@@ -54,7 +54,7 @@ public class ErrorServiceException extends ServiceException
    */
   public ErrorServiceException(String message)
   {
-    super(message);
+    super("ErrorServiceError", message);
   }
 
   /**
@@ -66,6 +66,6 @@ public class ErrorServiceException extends ServiceException
    */
   public ErrorServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("ErrorServiceError", message, cause);
   }
 }

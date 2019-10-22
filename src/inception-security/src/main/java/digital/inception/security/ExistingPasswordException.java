@@ -55,7 +55,7 @@ public class ExistingPasswordException extends ServiceException
    */
   public ExistingPasswordException(String username)
   {
-    super("The new password for the user (" + username
+    super("ExistingPasswordError", "The new password for the user (" + username
         + ") has been used recently and is not valid");
   }
 }

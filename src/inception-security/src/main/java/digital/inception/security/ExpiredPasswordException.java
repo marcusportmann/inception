@@ -53,6 +53,6 @@ public class ExpiredPasswordException extends ServiceException
    */
   public ExpiredPasswordException(String username)
   {
-    super("The password for the user (" + username + ") has expired");
+    super("ExpiredPasswordError", "The password for the user (" + username + ") has expired");
   }
 }

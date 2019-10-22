@@ -54,7 +54,7 @@ public class CodesServiceException extends ServiceException
    */
   public CodesServiceException(String message)
   {
-    super(message);
+    super("CodesServiceError", message);
   }
 
   /**
@@ -66,6 +66,6 @@ public class CodesServiceException extends ServiceException
    */
   public CodesServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("CodesServiceError", message, cause);
   }
 }

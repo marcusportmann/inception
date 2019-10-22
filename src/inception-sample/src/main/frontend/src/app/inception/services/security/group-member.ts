@@ -14,20 +14,33 @@
  * limitations under the License.
  */
 
+import {GroupMemberType} from "./group-member-type";
+
 /**
- * The OrganizationStatus enumeration defines the possible statuses for an organization.
+ * The GroupMember class holds the information for a group member.
  *
  * @author Marcus Portmann
  */
-export enum OrganizationStatus {
+export class GroupMember {
 
   /**
-   * The organization is inactive.
+   * The name identifying the group member.
    */
-  Inactive = 0,
+  memberName: string;
 
   /**
-   * The organization is active.
+   * The group member type.
    */
-  Active = 1
+  memberType: GroupMemberType;
+
+  /**
+   * Constructs a new GroupMember.
+   *
+   * @param memberType The group member type.
+   * @param memberName The name identifying the group member.
+   */
+  constructor(memberType: GroupMemberType, memberName: string) {
+    this.memberType = memberType;
+    this.memberName = memberName;
+  }
 }

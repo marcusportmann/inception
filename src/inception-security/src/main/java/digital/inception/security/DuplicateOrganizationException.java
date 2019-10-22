@@ -57,7 +57,8 @@ public class DuplicateOrganizationException extends ServiceException
    */
   public DuplicateOrganizationException(String name)
   {
-    super("An organization with the name (" + name + ") already exists");
+    super("DuplicateOrganizationError", "An organization with the name (" + name
+        + ") already exists");
   }
 
   /**
@@ -65,8 +66,9 @@ public class DuplicateOrganizationException extends ServiceException
    *
    * @param organizationId the ID used to uniquely identify the organization
    */
-  public DuplicateOrganizationException(Long organizationId)
+  public DuplicateOrganizationException(UUID organizationId)
   {
-    super("An organization with the ID (" + organizationId + ") already exists");
+    super("DuplicateOrganizationError", "An organization with the ID (" + organizationId
+        + ") already exists");
   }
 }

@@ -33,25 +33,16 @@ public abstract class ServiceException extends Exception
   private ServiceError serviceError;
 
   /**
-   * Constructs a new <code>ServiceException</code> with <code>null</code> as its message.
-   */
-  public ServiceException()
-  {
-    super();
-
-    this.serviceError = new ServiceError(this);
-  }
-
-  /**
    * Constructs a new <code>ServiceException</code> with the specified message.
    *
+   * @param code    The code identifying the error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ServiceException(String message)
+  public ServiceException(String code, String message)
   {
     super(message);
 
-    this.serviceError = new ServiceError(this);
+    this.serviceError = new ServiceError(code, this);
   }
 
   /**
@@ -59,28 +50,30 @@ public abstract class ServiceException extends Exception
    * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
    * message of cause).
    *
+   * @param code  The code identifying the service error.
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
    *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ServiceException(Throwable cause)
+  public ServiceException(String code, Throwable cause)
   {
     super(cause);
 
-    this.serviceError = new ServiceError(this);
+    this.serviceError = new ServiceError(code, this);
   }
 
   /**
    * Constructs a new <code>ServiceException</code> with the specified message and cause.
    *
+   * @param code    The code identifying the service error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
    *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ServiceException(String message, Throwable cause)
+  public ServiceException(String code, String message, Throwable cause)
   {
     super(message, cause);
 
-    this.serviceError = new ServiceError(this);
+    this.serviceError = new ServiceError(code, this);
   }
 
   /**

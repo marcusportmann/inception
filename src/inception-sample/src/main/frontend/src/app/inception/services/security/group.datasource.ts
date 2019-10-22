@@ -63,7 +63,7 @@ export class GroupDatasource implements DataSource<Group> {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId: number, filter?: string, sortDirection?: SortDirection,
+  load(userDirectoryId: string, filter?: string, sortDirection?: SortDirection,
        pageIndex?: number, pageSize?: number): void {
     this.loadingSubject.next(true);
 

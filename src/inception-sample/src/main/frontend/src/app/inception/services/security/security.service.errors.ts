@@ -110,6 +110,24 @@ export class ExistingGroupMembersError extends Error {
 }
 
 /**
+ * The GroupNotFoundError class holds the information for a group not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class GroupNotFoundError extends Error {
+
+  /**
+   * Constructs a new UserNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The OrganizationNotFoundError class holds the information for an organization not found error.
  *
  * @author Marcus Portmann

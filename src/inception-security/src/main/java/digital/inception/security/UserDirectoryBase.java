@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
@@ -51,7 +52,7 @@ public abstract class UserDirectoryBase
   /**
    * The ID used to uniquely identify the user directory.
    */
-  private Long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * The User Repository.
@@ -66,7 +67,7 @@ public abstract class UserDirectoryBase
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository
    */
-  public UserDirectoryBase(Long userDirectoryId, List<UserDirectoryParameter> parameters,
+  public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository, UserRepository userRepository)
   {
     this.userDirectoryId = userDirectoryId;
@@ -100,7 +101,7 @@ public abstract class UserDirectoryBase
    *
    * @return the ID used to uniquely identify the user directory
    */
-  public Long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }

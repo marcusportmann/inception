@@ -91,7 +91,7 @@ public class SecurityServiceAuthenticationManager
     try
     {
       // Authenticate the user
-      Long authenticationUserDirectoryId = securityService.authenticate(
+      UUID authenticationUserDirectoryId = securityService.authenticate(
           authentication.getPrincipal().toString(), authentication.getCredentials().toString());
 
       // Retrieve the details for the user

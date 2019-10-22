@@ -36,7 +36,7 @@ export class User {
   /**
    * The ID used to uniquely identify the user.
    */
-  id: number | null;
+  id: string;
 
   /**
    * The last name for the user.
@@ -81,7 +81,7 @@ export class User {
   /**
    * The ID used to uniquely identify the user directory the user is associated with.
    */
-  userDirectoryId: number;
+  userDirectoryId: string;
 
   /**
    * The username for the user.
@@ -107,7 +107,7 @@ export class User {
    * @param passwordExpiry    The date and time the password for the user expires.
    * @param readOnly          Is the user read-only.
    */
-  constructor(id: number | null, userDirectoryId: number, username: string, firstName: string,
+  constructor(id: string, userDirectoryId: string, username: string, firstName: string,
               lastName: string, mobileNumber: string, phoneNumber: string, email: string,
               status: UserStatus, password: string, passwordAttempts?: number,
               passwordExpiry?: Date, readOnly?: boolean) {

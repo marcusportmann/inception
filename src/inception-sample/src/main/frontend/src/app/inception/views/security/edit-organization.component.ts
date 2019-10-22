@@ -72,7 +72,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    const organizationId = Number(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
+    const organizationId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();

@@ -54,7 +54,7 @@ public class AuthenticationFailedException extends ServiceException
    */
   public AuthenticationFailedException(String message)
   {
-    super(message);
+    super("AuthenticationFailedError", message);
   }
 
   /**
@@ -67,6 +67,6 @@ public class AuthenticationFailedException extends ServiceException
    */
   public AuthenticationFailedException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("AuthenticationFailedError", message, cause);
   }
 }

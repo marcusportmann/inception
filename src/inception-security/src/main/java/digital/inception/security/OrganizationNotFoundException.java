@@ -54,8 +54,9 @@ public class OrganizationNotFoundException extends ServiceException
    *
    * @param organizationId the ID used to uniquely identify the organization
    */
-  public OrganizationNotFoundException(Long organizationId)
+  public OrganizationNotFoundException(UUID organizationId)
   {
-    super("The organization (" + organizationId + ") could not be found");
+    super("OrganizationNotFoundError", "The organization (" + organizationId
+        + ") could not be found");
   }
 }

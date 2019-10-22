@@ -31,6 +31,7 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The <code>UserRepository</code> interface declares the repository for the
@@ -38,78 +39,78 @@ import java.util.Optional;
  *
  * @author Marcus Portmann
  */
-public interface UserRepository extends JpaRepository<User, Long>, QueryByExampleExecutor<User>
+public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User>
 {
   @Modifying
   @Query(
       "update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, u.passwordExpiry = :passwordExpiry where u.id = :userId")
-  void changePassword(@Param("userId") Long userId, @Param("password") String password, @Param(
+  void changePassword(@Param("userId") UUID userId, @Param("password") String password, @Param(
       "passwordAttempts") int passwordAttempts, @Param(
       "passwordExpiry") Optional<LocalDateTime> passwordExpiry);
 
-  long countByUserDirectoryId(Long userDirectoryId);
+  long countByUserDirectoryId(UUID userDirectoryId);
 
   @Query(
       "select count(u.id) from User u where ((upper(u.username) like upper(:filter)) or (upper(u.firstName) like upper(:filter)) or (upper(u.lastName) like upper(:filter))) and u.userDirectoryId = :userDirectoryId")
-  long countFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
+  long countFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter);
 
   @Query(
       value = "select count(uph.user_id) from security.users_password_history uph where uph.user_id = :userId and uph.changed > :after and uph.password = :password",
       nativeQuery = true)
-  long countPasswordHistory(@Param("userId") Long userId, @Param("after") LocalDateTime after,
+  long countPasswordHistory(@Param("userId") UUID userId, @Param("after") LocalDateTime after,
       @Param("password") String password);
 
   @Modifying
   @Query("delete from User u where u.id = :userId")
-  void deleteById(@Param("userId") Long userId);
+  void deleteById(@Param("userId") UUID userId);
 
-  boolean existsByUserDirectoryIdAndUsernameIgnoreCase(Long userDirectoryId, String username);
+  boolean existsByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
-  List<User> findByUserDirectoryId(Long userDirectoryId);
+  List<User> findByUserDirectoryId(UUID userDirectoryId);
 
-  List<User> findByUserDirectoryId(Long userDirectoryId, Pageable pageable);
+  List<User> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
 
-  Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(Long userDirectoryId, String username);
+  Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query(
       "select u from User u where ((upper(u.username) like upper(:filter)) or (upper(u.firstName) like upper(:filter)) or (upper(u.lastName) like upper(:filter))) and u.userDirectoryId = :userDirectoryId")
-  List<User> findFiltered(@Param("userDirectoryId") Long userDirectoryId, @Param(
+  List<User> findFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter, Pageable pageable);
 
   @Query(
       "select f.code from User u  join u.groups as g join g.roles as r join r.functions as f where u.id = :userId")
-  List<String> getFunctionCodesByUserId(@Param("userId") Long userId);
+  List<String> getFunctionCodesByUserId(@Param("userId") UUID userId);
 
   @Query("select g.name from User u join u.groups as g where u.id = :userId")
-  List<String> getGroupNamesByUserId(@Param("userId") Long userId);
+  List<String> getGroupNamesByUserId(@Param("userId") UUID userId);
 
   @Query("select g from User u join u.groups as g where u.id = :userId")
-  List<Group> getGroupsByUserId(@Param("userId") Long userId);
+  List<Group> getGroupsByUserId(@Param("userId") UUID userId);
 
   @Query(
       "select u.id from User u where u.userDirectoryId = :userDirectoryId and upper(u.username) like upper(:username)")
-  Optional<Long> getIdByUserDirectoryIdAndUsernameIgnoreCase(@Param(
-      "userDirectoryId") Long userDirectoryId, @Param("username") String username);
+  Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(@Param(
+      "userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   @Query("select r.code from User u join u.groups as g join g.roles as r where u.id = :userId")
-  List<String> getRoleCodesByUserId(@Param("userId") Long userId);
+  List<String> getRoleCodesByUserId(@Param("userId") UUID userId);
 
   @Query("select u.userDirectoryId from User u where upper(u.username) = upper(:username)")
-  Optional<Long> getUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);
+  Optional<UUID> getUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);
 
   @Modifying
   @Query("update User u set u.passwordAttempts = u.passwordAttempts + 1 where u.id = :userId")
-  void incrementPasswordAttempts(@Param("userId") Long userId);
+  void incrementPasswordAttempts(@Param("userId") UUID userId);
 
   @Query(
       "select case when (count(u.id) > 0) then true else false end from User u join u.groups as g where u.id = :userId and g.id = :groupId")
-  boolean isUserInGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
+  boolean isUserInGroup(@Param("userId") UUID userId, @Param("groupId") UUID groupId);
 
   @Modifying
   @Query(
       value = "insert into security.users_password_history(user_id, changed, password) values (:userId, current_timestamp, :password)",
       nativeQuery = true)
-  void savePasswordInPasswordHistory(@Param("userId") Long userId, @Param(
+  void savePasswordInPasswordHistory(@Param("userId") UUID userId, @Param(
       "password") String password);
 }

@@ -54,6 +54,6 @@ public class AttributeException extends ServiceException
    */
   public AttributeException(String message)
   {
-    super(message);
+    super("AttributeError", message);
   }
 }

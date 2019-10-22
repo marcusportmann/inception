@@ -54,7 +54,7 @@ public class SMSServiceException extends ServiceException
    */
   public SMSServiceException(String message)
   {
-    super(message);
+    super("SMSServiceError", message);
   }
 
   /**
@@ -66,6 +66,6 @@ public class SMSServiceException extends ServiceException
    */
   public SMSServiceException(String message, Throwable cause)
   {
-    super(message, cause);
+    super("SMSServiceError", message, cause);
   }
 }

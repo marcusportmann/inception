@@ -25,6 +25,11 @@ import {ValidationError} from './validation-error';
 export class ApiError {
 
   /**
+   * The optional code identifying the error.
+   */
+  code?: string;
+
+  /**
    * The optional error detail.
    */
   detail?: string;
@@ -87,6 +92,7 @@ export class ApiError {
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
     this.timestamp = new Date(httpErrorResponse.error.timestamp);
+    this.code = httpErrorResponse.error.code;
     this.message = httpErrorResponse.error.message;
     this.status = httpErrorResponse.error.status;
     this.statusText = httpErrorResponse.error.statusText;

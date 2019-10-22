@@ -70,7 +70,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     return new BackNavigation(this.i18n({
       id: '@@edit_user_component_back_title',
@@ -89,7 +90,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
     const username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
 
     // Retrieve the existing user and initialise the form fields
@@ -128,7 +130,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   onCancel(): void {
-    const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    const userDirectoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'], {
@@ -152,7 +155,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
         this.editUserForm.contains('lockUser') ? this.editUserForm.get('lockUser')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = Number(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+          const userDirectoryId = decodeURIComponent(
+            this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../../..'], {

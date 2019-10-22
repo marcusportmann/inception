@@ -54,6 +54,6 @@ public class DuplicateUserException extends ServiceException
    */
   public DuplicateUserException(String username)
   {
-    super("A user with the username (" + username + ") already exists");
+    super("DuplicateUserError", "A user with the username (" + username + ") already exists");
   }
 }

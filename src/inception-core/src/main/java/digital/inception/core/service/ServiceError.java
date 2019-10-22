@@ -38,10 +38,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "ServiceError", namespace = "http://core.inception.digital")
 @XmlType(name = "ServiceError", namespace = "http://core.inception.digital",
-    propOrder = { "when", "message", "detail" })
+    propOrder = { "when", "code", "message", "detail" })
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ServiceError
 {
+  /**
+   * The code identifying the service error.
+   */
+  @XmlElement(name = "Code", required = true)
+  private String code;
+
   /**
    * The detail for the service error
    */
@@ -70,10 +76,12 @@ public class ServiceError
   /**
    * Constructs a new <code>ServiceError</code>.
    *
+   * @param code  the code identifying the service error
    * @param cause the cause of the service error
    */
-  public ServiceError(Throwable cause)
+  public ServiceError(String code, Throwable cause)
   {
+    this.code = code;
     this.when = LocalDateTime.now();
     this.message = (cause.getMessage() != null)
         ? cause.getMessage()
@@ -94,6 +102,16 @@ public class ServiceError
     {
       this.detail = "Failed to dump the stack for the exception (" + cause + "): " + e.getMessage();
     }
+  }
+
+  /**
+   * Returns the code identifying the service error.
+   *
+   * @return the code identifying the service error
+   */
+  public String getCode()
+  {
+    return code;
   }
 
   /**

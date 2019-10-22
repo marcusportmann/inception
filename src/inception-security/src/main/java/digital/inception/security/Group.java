@@ -23,12 +23,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import digital.inception.persistence.Identifiable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.hibernate.annotations.GenericGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -36,6 +32,7 @@ import java.io.Serializable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -60,7 +57,7 @@ import javax.xml.bind.annotation.*;
 @Table(schema = "security", name = "groups")
 @SuppressWarnings({ "unused" })
 public class Group
-  implements Identifiable<Long>, Serializable
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -76,18 +73,14 @@ public class Group
 
   /**
    * The ID used to uniquely identify the group.
-   *
-   * The ID for a group that has not been persisted will be  <code>null</code>.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
-  @GenericGenerator(name = "group_id",
-      strategy = "digital.inception.persistence.AssignedIdentityGenerator")
-  @GeneratedValue(generator = "group_id", strategy = GenerationType.IDENTITY)
+  @NotNull
   @Id
   @Column(name = "id", nullable = false)
-  private Long id;
+  private UUID id;
 
   /**
    * The name identifying the group.
@@ -121,7 +114,7 @@ public class Group
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
   @Column(name = "user_directory_id", nullable = false)
-  private Long userDirectoryId;
+  private UUID userDirectoryId;
 
   /**
    * The users associated with the group.
@@ -158,7 +151,7 @@ public class Group
    * @param name            the name identifying the group
    * @param description     the description for the group
    */
-  public Group(Long id, Long userDirectoryId, String name, String description)
+  public Group(UUID id, UUID userDirectoryId, String name, String description)
   {
     this.id = id;
     this.userDirectoryId = userDirectoryId;
@@ -234,7 +227,7 @@ public class Group
    *
    * @return the ID used to uniquely identify the group
    */
-  public Long getId()
+  public UUID getId()
   {
     return id;
   }
@@ -264,7 +257,7 @@ public class Group
    *
    * @return the ID used to uniquely identify the user directory the group is associated with
    */
-  public Long getUserDirectoryId()
+  public UUID getUserDirectoryId()
   {
     return userDirectoryId;
   }
@@ -329,7 +322,7 @@ public class Group
    *
    * @param id the ID used to uniquely identify the group
    */
-  public void setId(Long id)
+  public void setId(UUID id)
   {
     this.id = id;
   }
@@ -360,7 +353,7 @@ public class Group
    * @param userDirectoryId the ID used to uniquely identify the user directory the group is
    *                        associated with
    */
-  public void setUserDirectoryId(Long userDirectoryId)
+  public void setUserDirectoryId(UUID userDirectoryId)
   {
     this.userDirectoryId = userDirectoryId;
   }
