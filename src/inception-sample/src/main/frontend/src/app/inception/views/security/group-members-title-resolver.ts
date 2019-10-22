@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The GroupTitleResolver class provides the route data resolver that resolves the
- * title for the "Group" route in the navigation hierarchy.
+ * The GroupMembersTitleResolver class provides the route data resolver that resolves the
+ * title for the "Group Members" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class GroupTitleResolver implements Resolve<string> {
+export class GroupMembersTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new GroupTitleResolver.
+   * Constructs a new GroupMembersTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -42,6 +42,9 @@ export class GroupTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('groupName')!));
+    return of(this.i18n({
+      id: '@@group_members_title_resolver_title',
+      value: 'Group Members'
+    }));
   }
 }

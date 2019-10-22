@@ -24,7 +24,7 @@
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@groups_component_table_header_actions">Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{name: row.name}">
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{groupName: row.name}">
         <button mat-icon-button>
           <i class="fas fa-ellipsis-v"></i>
         </button>
@@ -39,12 +39,16 @@
   <mat-paginator [length]="dataSource.total | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-name="name">
-      <button mat-menu-item (click)="editGroup(name)">
+    <ng-template matMenuContent let-groupName="groupName">
+      <button mat-menu-item (click)="editGroup(groupName)">
         <i class="fas fa-edit"></i>
         <span i18n="@@groups_component_menu_item_edit">Edit</span>
       </button>
-      <button mat-menu-item (click)="deleteGroup(name)">
+      <button mat-menu-item (click)="groupMembers(groupName)">
+        <i class="fas fa-users"></i>
+        <span i18n="@@groups_component_menu_item_group_members">Group Members</span>
+      </button>
+      <button mat-menu-item (click)="deleteGroup(groupName)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@groups_component_menu_item_delete">Delete</span>
       </button>

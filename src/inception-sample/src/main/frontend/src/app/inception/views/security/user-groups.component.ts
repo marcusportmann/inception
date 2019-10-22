@@ -84,15 +84,35 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     });
   }
 
-  get isGroupSelected(): boolean {
-    return false;
-  }
-
   get title(): string {
     return this.i18n({
       id: '@@user_groups_component_title',
       value: 'User Groups'
     })
+  }
+
+  addUserToGroup(): void {
+    if (!!this.selectedGroupName) {
+      this.spinnerService.showSpinner();
+
+      const groupMember = new GroupMember(GroupMemberType.User, this.username);
+
+      this.securityService.addGroupMember(this.userDirectoryId, this.selectedGroupName, groupMember)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadGroupNamesForUser();
+          this.selectedGroupName = '';
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+    }
   }
 
   loadGroupNamesForUser(): void {
@@ -143,31 +163,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     this.subscriptions.unsubscribe();
   }
 
-  onAdd(): void {
-    if (!!this.selectedGroupName) {
-      this.spinnerService.showSpinner();
-
-      const groupMember = new GroupMember(GroupMemberType.User, this.username);
-
-      this.securityService.addGroupMember(this.userDirectoryId, this.selectedGroupName, groupMember)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadGroupNamesForUser();
-          this.selectedGroupName = '';
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
-    }
-  }
-
-  onRemove(groupName: string) {
+  removeUserFromGroup(groupName: string) {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({

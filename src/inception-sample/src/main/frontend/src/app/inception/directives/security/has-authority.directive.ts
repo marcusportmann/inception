@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-import {
-  AfterContentInit,
-  Directive,
-  ElementRef, Input,
-  TemplateRef,
-  ViewContainerRef
-} from '@angular/core';
+import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import {SessionService} from "../../services/session/session.service";
+import {Subscription} from "rxjs";
+import {Session} from "../../services/session/session";
 
 /**
  * The HasAuthorityDirective class implements the has authority directive.
@@ -32,7 +28,11 @@ import {SessionService} from "../../services/session/session.service";
   // tslint:disable-next-line
   selector: '[hasAuthority]'
 })
-export class HasAuthorityDirective  {
+export class HasAuthorityDirective implements OnDestroy, OnInit {
+
+  private subscriptions: Subscription = new Subscription();
+
+  @Input("hasAuthority") requiredAuthorities: string[] | undefined;
 
   /**
    * Constructs a new HasAuthorityDirective.
@@ -42,21 +42,37 @@ export class HasAuthorityDirective  {
    * @param sessionService The session service.
    */
   // tslint:disable-next-line
-  constructor(private templateRef: TemplateRef<any>,
-        private viewContainer: ViewContainerRef,
-        private sessionService: SessionService) {
+  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef,
+              private sessionService: SessionService) {
   }
 
-  // tslint:disable-next-line
-  @Input() set hasAuthority(authority: any) {
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
-           // if (this.securityService.hasClaim(claimType)) {
-           //    // Add template to DOM
-           //    this.viewContainer.createEmbeddedView(this.templateRef);
-           //  } else {
-           //    // Remove template from DOM
-           //     this.viewContainer.clear();
-           //   }
+  ngOnInit(): void {
+    if (!!this.requiredAuthorities) {
+      this.subscriptions.add(this.sessionService.session.subscribe((session: (Session | null)) => {
+        if (session) {
+          let foundAuthority: boolean = false;
+
+          for (let requiredAuthority of this.requiredAuthorities!) {
+            if (session.hasAuthority(requiredAuthority)) {
+              foundAuthority = true;
+              break;
+            }
+          }
+
+          if (foundAuthority) {
+            this.viewContainer.createEmbeddedView(this.templateRef);
+          } else {
+            this.viewContainer.clear();
+          }
         }
+      }));
+    } else {
+      this.viewContainer.createEmbeddedView(this.templateRef);
+    }
+  }
 }

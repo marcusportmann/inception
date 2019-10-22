@@ -87,13 +87,13 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
   ngAfterViewInit(): void {
     const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    const name = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('name')!);
+    const groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
 
     // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
 
     combineLatest([this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId),
-      this.securityService.getGroup(userDirectoryId, name)
+      this.securityService.getGroup(userDirectoryId, groupName)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((results: [UserDirectoryType, Group]) => {

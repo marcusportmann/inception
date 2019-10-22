@@ -847,7 +847,7 @@ public class InternalUserDirectory extends UserDirectoryBase
       else
       {
         usernames = getGroupRepository().getFilteredUsernamesForGroup(getUserDirectoryId(),
-            groupIdOptional.get(), filter, pageable);
+            groupIdOptional.get(), "%" + filter + "%", pageable);
       }
 
       List<GroupMember> groupMembers = new ArrayList<>();

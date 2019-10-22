@@ -8,7 +8,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-flat-button color="primary" [disabled]="!selectedGroupName" (click)="onAdd()" i18n="@@user_groups_component_button_add">Add</button>
+    <button mat-flat-button color="primary" [disabled]="!selectedGroupName" (click)="addUserToGroup()" i18n="@@user_groups_component_button_add">Add</button>
   </div>
 
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;">
@@ -23,7 +23,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-cell-one-action" *matCellDef="let groupName">
-        <button mat-icon-button (click)="onRemove(groupName)">
+        <button mat-icon-button (click)="removeUserFromGroup(groupName)">
           <i class="far fa-trash-alt"></i>
         </button>
       </mat-cell>

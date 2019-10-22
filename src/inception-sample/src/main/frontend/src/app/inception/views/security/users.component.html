@@ -10,7 +10,8 @@
     </mat-form-field>
   </div>
   <div class="mat-table-header">
-    <button mat-flat-button color="primary" [disabled]="!isUserDirectorySelected" (click)="newUser()" i18n="@@users_component_button_new">New</button>
+    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="!isUserDirectorySelected" (click)="newUser()" i18n="@@users_component_button_new">New</button>
+    <div></div>
     <table-filter></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>

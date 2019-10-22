@@ -133,6 +133,13 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
       {relativeTo: this.activatedRoute});
   }
 
+  groupMembers(groupName: string): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(
+      [this.userDirectoryId + '/' + encodeURIComponent(groupName) + '/members'],
+      {relativeTo: this.activatedRoute});
+  }
+
   loadGroups(): void {
     let filter = '';
 
