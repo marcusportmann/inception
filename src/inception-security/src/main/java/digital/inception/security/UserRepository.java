@@ -108,6 +108,11 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   boolean isUserInGroup(@Param("userId") UUID userId, @Param("groupId") UUID groupId);
 
   @Modifying
+  @Query(value = "delete from security.users_password_history where user_id = :userId",
+      nativeQuery = true)
+  void resetPasswordHistory(@Param("userId") UUID userId);
+
+  @Modifying
   @Query(
       value = "insert into security.users_password_history(user_id, changed, password) values (:userId, current_timestamp, :password)",
       nativeQuery = true)

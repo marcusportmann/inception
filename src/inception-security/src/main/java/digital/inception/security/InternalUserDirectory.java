@@ -68,6 +68,12 @@ public class InternalUserDirectory extends UserDirectoryBase
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
   /**
+   * The user directory capabilities common to all internal user directory instances.
+   */
+  private static final UserDirectoryCapabilities INTERNAL_USER_DIRECTORY_CAPABILITIES =
+      new UserDirectoryCapabilities(true, true, true, true, true, true, true);
+
+  /**
    * The maximum number of filtered group members to return.
    */
   private int maxFilteredGroupMembers;
@@ -296,6 +302,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       getUserRepository().changePassword(userIdOptional.get(), newPasswordHash, passwordAttempts,
           Optional.of(passwordExpiry));
+
+      if (resetPasswordHistory)
+      {
+        getUserRepository().resetPasswordHistory(userIdOptional.get());
+      }
 
       getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), newPasswordHash);
     }
@@ -677,6 +688,18 @@ public class InternalUserDirectory extends UserDirectoryBase
       throw new SecurityServiceException(String.format(
           "Failed to find the users for the user directory (%s)", getUserDirectoryId()), e);
     }
+  }
+
+  /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @return the capabilities the user directory supports
+   */
+  @Override
+  public UserDirectoryCapabilities getCapabilities()
+    throws SecurityServiceException
+  {
+    return INTERNAL_USER_DIRECTORY_CAPABILITIES;
   }
 
   /**
@@ -1452,30 +1475,6 @@ public class InternalUserDirectory extends UserDirectoryBase
           + ") from the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
           + ")", e);
     }
-  }
-
-  /**
-   * Does the user directory support administering groups.
-   *
-   * @return <code>true</code> if the user directory supports administering groups or
-   * <code>false</code> otherwise
-   */
-  @Override
-  public boolean supportsGroupAdministration()
-  {
-    return true;
-  }
-
-  /**
-   * Does the user directory support administering users.
-   *
-   * @return <code>true</code> if the user directory supports administering users or
-   * <code>false</code> otherwise
-   */
-  @Override
-  public boolean supportsUserAdministration()
-  {
-    return true;
   }
 
   /**

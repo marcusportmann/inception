@@ -42,6 +42,14 @@ export class GroupMemberDatasource implements DataSource<GroupMember> {
   constructor(private securityService: SecurityService) {
   }
 
+  /**
+   * Clear the data source.
+   */
+  clear(): void {
+    this.totalSubject.next(0);
+    this.dataSubject.next([]);
+  }
+
   connect(collectionViewer: CollectionViewer): Observable<GroupMember[] | ReadonlyArray<GroupMember>> {
     return this.dataSubject.asObservable();
   }

@@ -128,6 +128,14 @@ interface IUserDirectory
     throws InvalidAttributeException, SecurityServiceException;
 
   /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @return the capabilities the user directory supports
+   */
+  UserDirectoryCapabilities getCapabilities()
+    throws SecurityServiceException;
+
+  /**
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
@@ -337,22 +345,6 @@ interface IUserDirectory
    */
   void removeUserFromGroup(String groupName, String username)
     throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
-
-  /**
-   * Does the user directory support administering groups.
-   *
-   * @return <code>true</code> if the user directory supports administering groups or
-   *         <code>false</code> otherwise
-   */
-  boolean supportsGroupAdministration();
-
-  /**
-   * Does the user directory support administering users.
-   *
-   * @return <code>true</code> if the user directory supports administering users or
-   *         <code>false</code> otherwise
-   */
-  boolean supportsUserAdministration();
 
   /**
    * Update the group.

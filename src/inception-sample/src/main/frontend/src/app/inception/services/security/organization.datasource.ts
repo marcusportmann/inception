@@ -42,6 +42,14 @@ export class OrganizationDatasource implements DataSource<Organization> {
   constructor(private securityService: SecurityService) {
   }
 
+  /**
+   * Clear the data source.
+   */
+  clear(): void {
+    this.totalSubject.next(0);
+    this.dataSubject.next([]);
+  }
+
   connect(collectionViewer: CollectionViewer): Observable<Organization[] | ReadonlyArray<Organization>> {
     return this.dataSubject.asObservable();
   }

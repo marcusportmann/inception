@@ -29,9 +29,8 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
-import {UserDirectoryType} from '../../services/security/user-directory-type';
 import {Group} from "../../services/security/group";
-import {GroupMembers} from "../../services/security/group-members";
+import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
 
 /**
  * The EditGroupComponent class implements the edit group component.
@@ -48,13 +47,22 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
   group?: Group;
 
-  userDirectoryType?: UserDirectoryType;
+  groupName: string;
+
+  userDirectoryCapabilities?: UserDirectoryCapabilities;
+
+  userDirectoryId: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
 
     // Initialise the form
     this.editGroupForm = new FormGroup({
@@ -67,14 +75,12 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     return new BackNavigation(this.i18n({
       id: '@@edit_group_component_back_title',
       value: 'Groups'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId}
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -86,18 +92,15 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    const groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
-
     // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
 
-    combineLatest([this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId),
-      this.securityService.getGroup(userDirectoryId, groupName)
+    combineLatest([this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
+      this.securityService.getGroup(this.userDirectoryId, this.groupName)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((results: [UserDirectoryType, Group]) => {
-        this.userDirectoryType = results[0];
+      .subscribe((results: [UserDirectoryCapabilities, Group]) => {
+        this.userDirectoryCapabilities = results[0];
 
         this.group = results[1];
 
@@ -116,12 +119,10 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   onCancel(): void {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId}
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -134,12 +135,10 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       this.securityService.updateGroup(this.group)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../../..'], {
             relativeTo: this.activatedRoute,
-            state: {userDirectoryId}
+            state: {userDirectoryId: this.userDirectoryId}
           });
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard

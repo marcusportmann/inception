@@ -21,8 +21,10 @@ package digital.inception.security;
 import digital.inception.core.util.BinaryBuffer;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -30,16 +32,18 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import java.math.BigDecimal;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
@@ -72,7 +76,8 @@ public class SecurityServiceTest
   public void addUserToGroupTest()
     throws Exception
   {
-    var roleCodes = securityService.getRoleCodesForUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
+    var roleCodes = securityService.getRoleCodesForUser(SecurityService
+        .ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
 
     Organization organization = getTestOrganizationDetails();
 
@@ -565,7 +570,7 @@ public class SecurityServiceTest
         false);
 
     securityService.addUserToGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID,
-         "Administrators", user.getUsername());
+        "Administrators", user.getUsername());
 
     List<String> groupNamesForUser = securityService.getGroupNamesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
@@ -586,7 +591,7 @@ public class SecurityServiceTest
    */
   @Test
   public void groupMembershipTest()
-  throws Exception
+    throws Exception
   {
     Organization organization = getTestOrganizationDetails();
 
@@ -596,13 +601,17 @@ public class SecurityServiceTest
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    long numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName());
+    long numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+        group.getName());
 
-    assertEquals("The correct number of group members (0) was not retrieved", 0, numberOfGroupMembers);
+    assertEquals("The correct number of group members (0) was not retrieved", 0,
+        numberOfGroupMembers);
 
-    List<GroupMember> retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName());
+    List<GroupMember> retrievedGroupMembers = securityService.getGroupMembers(
+        userDirectory.getId(), group.getName());
 
-    assertEquals("The correct number of group members (0) was not retrieved", 0, retrievedGroupMembers.size());
+    assertEquals("The correct number of group members (0) was not retrieved", 0,
+        retrievedGroupMembers.size());
 
     User firstUser = getTestUserDetails();
 
@@ -612,29 +621,36 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), secondUser, false, false);
 
-    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER, firstUser.getUsername());
+    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER,
+        firstUser.getUsername());
 
-    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER, secondUser.getUsername());
+    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER,
+        secondUser.getUsername());
 
-    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName());
+    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+        group.getName());
 
-    assertEquals("The correct number of group members (2) was not retrieved", 2, numberOfGroupMembers);
+    assertEquals("The correct number of group members (2) was not retrieved", 2,
+        numberOfGroupMembers);
 
     retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName());
 
-    assertEquals("The correct number of group members (2) was not retrieved", 2, retrievedGroupMembers.size());
+    assertEquals("The correct number of group members (2) was not retrieved", 2,
+        retrievedGroupMembers.size());
 
-    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(), group.getName(), firstUser.getUsername());
+    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+        group.getName(), firstUser.getUsername());
 
-    assertEquals("The correct number of group members (1) was not retrieved", 1, numberOfGroupMembers);
+    assertEquals("The correct number of group members (1) was not retrieved", 1,
+        numberOfGroupMembers);
 
-    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName(), secondUser.getUsername(), null, null, null);
+    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName(),
+        secondUser.getUsername(), null, null, null);
 
-    assertEquals("The correct number of group members (1) was not retrieved", 1, retrievedGroupMembers.size());
-
+    assertEquals("The correct number of group members (1) was not retrieved", 1,
+        retrievedGroupMembers.size());
 
   }
-
 
   /**
    * Test the group functionality.
@@ -648,7 +664,8 @@ public class SecurityServiceTest
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
     assertTrue("The user directory does not support group administration",
-        securityService.supportsGroupAdministration(userDirectory.getId()));
+        securityService.getUserDirectoryCapabilities(userDirectory.getId())
+        .getSupportsGroupAdministration());
 
     Group group = getTestGroupDetails();
 
@@ -675,7 +692,8 @@ public class SecurityServiceTest
 
     List<String> retrievedGroupNames = securityService.getGroupNames(userDirectory.getId());
 
-    assertEquals("The correct number of group names (1) was not retrieved", 1, retrievedGroups.size());
+    assertEquals("The correct number of group names (1) was not retrieved", 1,
+        retrievedGroups.size());
 
     assertEquals(group.getName(), retrievedGroupNames.get(0));
 
@@ -949,7 +967,8 @@ public class SecurityServiceTest
   public void roleTest()
     throws Exception
   {
-    List<String> roleCodes = securityService.getRoleCodesForUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
+    List<String> roleCodes = securityService.getRoleCodesForUser(SecurityService
+        .ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
 
     assertEquals("The correct number of role codes (1) was not retrieved", 1, roleCodes.size());
 
@@ -1004,7 +1023,8 @@ public class SecurityServiceTest
     securityService.createUserDirectory(userDirectory);
 
     assertTrue("The user directory does not support user administration",
-        securityService.supportsUserAdministration(userDirectory.getId()));
+        securityService.getUserDirectoryCapabilities(userDirectory.getId())
+        .getSupportsUserAdministration());
 
     UserDirectory retrievedUserDirectory = securityService.getUserDirectory(userDirectory.getId());
 

@@ -45,17 +45,24 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   editConfigurationForm: FormGroup;
 
+  key: string;
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private configurationService: ConfigurationService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
+    // Retrieve parameters
+    this.key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
+
     // Initialise the form
     this.editConfigurationForm = new FormGroup({
       description: new FormControl(''),
-      key: new FormControl({value: '', disabled: true},
-        [Validators.required, Validators.maxLength(4000)]),
+      key: new FormControl({
+        value: '',
+        disabled: true
+      }, [Validators.required, Validators.maxLength(4000)]),
       value: new FormControl('', [Validators.maxLength(4000)])
     });
   }
@@ -75,12 +82,10 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    const key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
-
     this.spinnerService.showSpinner();
 
     // Retrieve the existing configuration and initialise the form controls
-    this.configurationService.getConfiguration(key)
+    this.configurationService.getConfiguration(this.key)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((configuration: Configuration) => {
         this.configuration = configuration;
@@ -120,8 +125,8 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
           this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof ConfigurationServiceError) ||
+            (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

@@ -58,6 +58,8 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   userDirectory?: UserDirectory;
 
+  userDirectoryId: string;
+
   userDirectoryTypes: UserDirectoryType[] = [];
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
@@ -65,6 +67,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
               private i18n: I18n, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // Initialise the form
     this.editUserDirectoryForm = new FormGroup({
@@ -94,12 +100,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     this.spinnerService.showSpinner();
 
     combineLatest([this.securityService.getUserDirectoryTypes(),
-      this.securityService.getUserDirectory(userDirectoryId)
+      this.securityService.getUserDirectory(this.userDirectoryId)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((results: [UserDirectoryType[], UserDirectory]) => {

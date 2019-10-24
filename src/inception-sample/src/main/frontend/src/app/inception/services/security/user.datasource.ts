@@ -45,6 +45,14 @@ export class UserDatasource implements DataSource<User> {
   constructor(private sessionService: SessionService, private securityService: SecurityService) {
   }
 
+  /**
+   * Clear the data source.
+   */
+  clear(): void {
+    this.totalSubject.next(0);
+    this.dataSubject.next([]);
+  }
+
   connect(collectionViewer: CollectionViewer): Observable<User[] | ReadonlyArray<User>> {
     return this.dataSubject.asObservable();
   }

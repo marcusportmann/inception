@@ -942,7 +942,7 @@ public class SecurityRestController extends SecureRestController
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public User getUser(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
   @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
@@ -1103,6 +1103,48 @@ public class SecurityRestController extends SecureRestController
     }
 
     return securityService.getUserDirectory(userDirectoryId);
+  }
+
+  /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the capabilities the user directory supports
+   */
+  @ApiOperation(value = "Retrieve the capabilities the user directory supports",
+      notes = "Retrieve the capabilities the user directory supports")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/capabilities",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+  public UserDirectoryCapabilities getUserDirectoryCapabilities(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    return securityService.getUserDirectoryCapabilities(userDirectoryId);
   }
 
   /**
@@ -1289,7 +1331,7 @@ public class SecurityRestController extends SecureRestController
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public ResponseEntity<List<User>> getUsers(@ApiParam(name = "userDirectoryId",
       value = "The ID used to uniquely identify the user directory", required = true)
   @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
@@ -1344,7 +1386,8 @@ public class SecurityRestController extends SecureRestController
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The group member was successfully removed from the group") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-      @ApiResponse(code = 404, message = "The user directory or user or group could not be found",
+      @ApiResponse(code = 404,
+          message = "The user directory or group or group member could not be found",
           response = RestControllerError.class) ,
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
@@ -1682,4 +1725,72 @@ public class SecurityRestController extends SecureRestController
 
     return userDirectoryAuthorityValues.stream().anyMatch(userDirectoryId::equals);
   }
+
+
+
+
+  /**
+   * Administratively change the password for the user.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   * @param passwordChange  the password change
+   */
+  @ApiOperation(value = "Administratively change the password for the user", notes = "Administratively change the password for the user")
+  @ApiResponses(value = { @ApiResponse(code = 204, message = "The password for the user was changed successfully") ,
+    @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+    @ApiResponse(code = 404, message = "The user directory or user could not be found",
+      response = RestControllerError.class) ,
+    @ApiResponse(code = 500,
+      message = "An error has occurred and the service is unable to process the request at this time",
+      response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/password",
+    method = RequestMethod.PUT, produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+    "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+  public void adminChangePassword(@ApiParam(name = "userDirectoryId",
+    value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
+    value = "The username identifying the user", required = true)
+  @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change", required = true)
+  @RequestBody PasswordChange passwordChange)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+    SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (passwordChange == null)
+    {
+      throw new InvalidArgumentException("passwordChange");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+        + ")");
+    }
+
+    Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(passwordChange);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
+        constraintViolations));
+    }
+
+    securityService.adminChangePassword(userDirectoryId, username, passwordChange.getPassword(), passwordChange.getExpirePassword(),
+      passwordChange.getLockUser(), passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+  }
+
 }

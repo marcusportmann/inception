@@ -15,12 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -48,6 +43,8 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   code?: Code;
 
+  codeCategoryId: string;
+
   newCodeForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -55,6 +52,10 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve parameters
+    this.codeCategoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
     // Initialise the form
     this.newCodeForm = new FormGroup({
@@ -79,10 +80,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    const codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-
-    this.code = new Code('', codeCategoryId, '', '');
+    this.code = new Code('', this.codeCategoryId, '', '');
   }
 
   onCancel(): void {

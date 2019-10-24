@@ -31,27 +31,26 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
 import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
+import {PasswordChangeReason} from "../../services/security/password-change-reason";
 
 /**
- * The EditUserComponent class implements the edit user component.
+ * The ResetUserPasswordComponent class implements the reset user password component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'edit-user.component.html',
-  styleUrls: ['edit-user.component.css'],
+  templateUrl: 'reset-user-password.component.html',
+  styleUrls: ['reset-user-password.component.css'],
 })
-export class EditUserComponent extends AdminContainerView implements AfterViewInit {
+export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
 
-  editUserForm: FormGroup;
-
-  user?: User;
-
-  userDirectoryCapabilities?: UserDirectoryCapabilities;
+  resetUserPasswordForm: FormGroup;
 
   userDirectoryId: string;
 
   username: string;
+
+  userDirectoryCapabilities?: UserDirectoryCapabilities;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -65,12 +64,17 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
 
     // Initialise the form
-    this.editUserForm = new FormGroup({
-      email: new FormControl('', [Validators.maxLength(100)]),
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      mobileNumber: new FormControl('', [Validators.maxLength(100)]),
-      phoneNumber: new FormControl('', [Validators.maxLength(100)]),
+    this.resetUserPasswordForm = new FormGroup({
+      confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      firstName: new FormControl({
+        value: '',
+        disabled: true
+      }),
+      lastName: new FormControl({
+        value: '',
+        disabled: true
+      }),
+      password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       username: new FormControl({
         value: '',
         disabled: true
@@ -80,7 +84,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_user_component_back_title',
+      id: '@@reset_user_password_component_back_title',
       value: 'Users'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -90,8 +94,8 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_user_component_title',
-      value: 'Edit User'
+      id: '@@reset_user_password_component_title',
+      value: 'Reset User Password'
     })
   }
 
@@ -106,21 +110,20 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
       .subscribe((results: [UserDirectoryCapabilities, User]) => {
         this.userDirectoryCapabilities = results[0];
 
-        this.user = results[1];
-
-        this.editUserForm.get('email')!.setValue(results[1].email);
-        this.editUserForm.get('firstName')!.setValue(results[1].firstName);
-        this.editUserForm.get('lastName')!.setValue(results[1].lastName);
-        this.editUserForm.get('mobileNumber')!.setValue(results[1].mobileNumber);
-        this.editUserForm.get('phoneNumber')!.setValue(results[1].phoneNumber);
-        this.editUserForm.get('username')!.setValue(results[1].username);
+        this.resetUserPasswordForm.get('firstName')!.setValue(results[1].firstName);
+        this.resetUserPasswordForm.get('lastName')!.setValue(results[1].lastName);
+        this.resetUserPasswordForm.get('username')!.setValue(results[1].username);
 
         if (this.userDirectoryCapabilities!.supportsPasswordExpiry) {
-          this.editUserForm.addControl('expirePassword', new FormControl(false));
+          this.resetUserPasswordForm.addControl('expirePassword', new FormControl(false));
         }
 
         if (this.userDirectoryCapabilities!.supportsUserLocks) {
-          this.editUserForm.addControl('lockUser', new FormControl(false));
+          this.resetUserPasswordForm.addControl('lockUser', new FormControl(false));
+        }
+
+        if (this.userDirectoryCapabilities!.supportsPasswordHistory) {
+          this.resetUserPasswordForm.addControl('resetPasswordHistory', new FormControl(false));
         }
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
@@ -143,18 +146,30 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   onOK(): void {
-    if (this.user && this.editUserForm.valid) {
-      this.user.firstName = this.editUserForm.get('firstName')!.value;
-      this.user.lastName = this.editUserForm.get('lastName')!.value;
-      this.user.mobileNumber = this.editUserForm.get('mobileNumber')!.value;
-      this.user.phoneNumber = this.editUserForm.get('phoneNumber')!.value;
-      this.user.email = this.editUserForm.get('email')!.value;
+    if (this.resetUserPasswordForm.valid) {
+      // Check that the password and confirmation password match
+      if (this.resetUserPasswordForm.get('password')!.value !==
+        this.resetUserPasswordForm.get('confirmPassword')!.value) {
+        this.dialogService.showErrorDialog(new Error(this.i18n({
+          id: '@@reset_user_password_component_passwords_do_not_match',
+          value: 'The passwords do not match.'
+        })));
+
+        return;
+      }
+
+      const password = this.resetUserPasswordForm.get('password')!.value;
 
       this.spinnerService.showSpinner();
 
-      this.securityService.updateUser(this.user, this.editUserForm.contains('expirePassword') ?
-        this.editUserForm.get('expirePassword')!.value : false,
-        this.editUserForm.contains('lockUser') ? this.editUserForm.get('lockUser')!.value : false)
+      this.securityService.adminChangePassword(this.userDirectoryId, this.username, password,
+        this.resetUserPasswordForm.contains('expirePassword') ?
+          this.resetUserPasswordForm.get('expirePassword')!.value : false,
+        this.resetUserPasswordForm.contains('lockUser') ?
+          this.resetUserPasswordForm.get('lockUser')!.value : false,
+        this.resetUserPasswordForm.contains('resetPasswordHistory') ?
+          this.resetUserPasswordForm.get('resetPasswordHistory')!.value : false,
+        PasswordChangeReason.Administrative)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

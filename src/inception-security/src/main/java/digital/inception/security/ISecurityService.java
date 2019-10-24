@@ -540,6 +540,16 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the capabilities the user directory supports
+   */
+  UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the ID used to uniquely identify the user directory that the user with the specified
    * username is associated with.
    *
@@ -675,28 +685,6 @@ public interface ISecurityService
   void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
         SecurityServiceException;
-
-  /**
-   * Does the user directory support administering groups.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if the user directory supports administering groups or
-   *         <code>false</code> otherwise
-   */
-  boolean supportsGroupAdministration(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException;
-
-  /**
-   * Does the user directory support administering users.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if the user directory supports administering users or
-   *         <code>false</code> otherwise
-   */
-  boolean supportsUserAdministration(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException;
 
   /**
    * Update the authorised function.

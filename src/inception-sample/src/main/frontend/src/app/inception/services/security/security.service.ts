@@ -25,7 +25,8 @@ import {
   DuplicateUserDirectoryError,
   DuplicateUserError,
   ExistingGroupMemberError,
-  ExistingGroupMembersError, GroupMemberNotFoundError,
+  ExistingGroupMembersError,
+  GroupMemberNotFoundError,
   GroupNotFoundError,
   OrganizationNotFoundError,
   SecurityServiceError,
@@ -51,6 +52,9 @@ import {Groups} from "./groups";
 import {GroupMember} from "./group-member";
 import {GroupMembers} from "./group-members";
 import {GroupMemberType} from "./group-member-type";
+import {UserDirectoryCapabilities} from "./user-directory-capabilities";
+import {PasswordChangeReason} from "./password-change-reason";
+import {PasswordChange} from "./password-change";
 
 /**
  * The Security Service implementation.
@@ -120,6 +124,59 @@ export class SecurityService {
           return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
+  }
+
+  /**
+   * Administratively change the password for the user.
+   *
+   * @param userDirectoryId      The ID used to uniquely identify the user directory.
+   * @param username             The username identifying the user.
+   * @param newPassword          The new password.
+   * @param expirePassword       expire the user's password
+   * @param lockUser             lock the user
+   * @param resetPasswordHistory reset the user's password history
+   * @param reason               the reason for changing the password
+   *
+   * @return True if the user was updated successfully or false otherwise.
+   */
+  adminChangePassword(userDirectoryId: string, username: string, newPassword: string,
+                      expirePassword: boolean, lockUser: boolean, resetPasswordHistory: boolean,
+                      passwordChangeReason: PasswordChangeReason): Observable<boolean> {
+    let passwordChange = new PasswordChange(newPassword, expirePassword, lockUser,
+      resetPasswordHistory, passwordChangeReason);
+
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      encodeURIComponent(username) + '/password', passwordChange, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_administratively_change_the_password_for_the_user',
+            value: 'Failed to administratively change the password for the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -918,6 +975,42 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve the capabilities for the user directory.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   *
+   * @return The capabilities for the user directory.
+   */
+  getUserDirectoryCapabilities(userDirectoryId: string): Observable<UserDirectoryCapabilities> {
+    return this.httpClient.get<UserDirectoryCapabilities>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId +
+      '/capabilities', {reportProgress: true})
+      .pipe(map((capabilities: UserDirectoryCapabilities) => {
+        return capabilities;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_retrieve_the_capabilities_for_the_user_directory',
+              value: 'Failed to retrieve the capabilities for the user directory.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
    * @param organizationId The ID used to uniquely identify the organization.
@@ -1151,11 +1244,12 @@ export class SecurityService {
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
    */
-  removeGroupMember(userDirectoryId: string, groupName: string,
-                 memberType: GroupMemberType, memberName: string): Observable<boolean> {
+  removeGroupMember(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
+                    memberName: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
-      encodeURIComponent(groupName) + '/members/' + memberType + '/' + encodeURIComponent(memberName), {observe: 'response'})
+      encodeURIComponent(groupName) + '/members/' + memberType + '/' +
+      encodeURIComponent(memberName), {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {

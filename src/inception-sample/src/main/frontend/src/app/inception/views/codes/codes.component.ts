@@ -64,12 +64,13 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     super();
 
     // Retrieve parameters
-    this.codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    this.codeCategoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
-      filter) || data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate =
+      (data, filter): boolean => data.id.toLowerCase().includes(filter) ||
+        data.name.toLowerCase().includes(filter);
   }
 
   get backNavigation(): BackNavigation {

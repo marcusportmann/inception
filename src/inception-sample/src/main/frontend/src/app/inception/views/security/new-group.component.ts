@@ -28,9 +28,9 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
-import {UserDirectoryType} from '../../services/security/user-directory-type';
 import {Group} from "../../services/security/group";
 import {v4 as uuid} from 'uuid';
+import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
 
 /**
  * The NewGroupComponent class implements the new group component.
@@ -47,13 +47,19 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   group?: Group;
 
-  userDirectoryType?: UserDirectoryType;
+  userDirectoryCapabilities?: UserDirectoryCapabilities;
+
+  userDirectoryId: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
 
     // Initialise the form
     this.newGroupForm = new FormGroup({
@@ -63,14 +69,12 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     return new BackNavigation(this.i18n({
       id: '@@new_group_component_back_title',
       value: 'Groups'
     }), ['../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId}
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -82,17 +86,15 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId)
+    this.securityService.getUserDirectoryCapabilities(this.userDirectoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectoryType: UserDirectoryType) => {
-        this.userDirectoryType = userDirectoryType;
+      .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+        this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-        this.group = new Group(uuid(), userDirectoryId, '', '');
+        this.group = new Group(uuid(), this.userDirectoryId, '', '');
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -106,12 +108,10 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   onCancel(): void {
-    const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['../..'], {
       relativeTo: this.activatedRoute,
-      state: {userDirectoryId}
+      state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
@@ -126,12 +126,10 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       this.securityService.createGroup(this.group)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const userDirectoryId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['../..'], {
             relativeTo: this.activatedRoute,
-            state: {userDirectoryId}
+            state: {userDirectoryId: this.userDirectoryId}
           });
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard

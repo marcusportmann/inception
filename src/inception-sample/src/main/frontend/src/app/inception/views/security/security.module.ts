@@ -60,6 +60,8 @@ import {UserGroupsComponent} from "./user-groups.component";
 import {UserGroupsTitleResolver} from "./user-groups-title-resolver";
 import {GroupMembersComponent} from "./group-members.component";
 import {GroupMembersTitleResolver} from "./group-members-title-resolver";
+import {ResetUserPasswordTitleResolver} from "./reset-user-password-title-resolver";
+import {ResetUserPasswordComponent} from "./reset-user-password.component";
 
 const routes: Routes = [{
   path: '',
@@ -227,7 +229,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: UsersComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups', 'FUNCTION_Security.ResetUserPassword']
       }
     }, {
       path: ':userDirectoryId/new',
@@ -269,6 +271,16 @@ const routes: Routes = [{
         resolve: {
           title: UserGroupsTitleResolver
         }
+      }, {
+        path: 'reset-user-password',
+        canActivate: [CanActivateFunctionGuard],
+        component: ResetUserPasswordComponent,
+        data: {
+          authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.ResetUserPassword']
+        },
+        resolve: {
+          title: ResetUserPasswordTitleResolver
+        }
       }]
     }]
   }
@@ -280,8 +292,8 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
 
-  declarations: [EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupMembersComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, SecurityOverviewComponent, UserDirectoriesComponent, UserGroupsComponent, UsersComponent],
-  providers: [EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, GroupMembersTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UserGroupsTitleResolver, UsersTitleResolver, UserTitleResolver]
+  declarations: [EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupMembersComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent, ResetUserPasswordComponent, SecurityOverviewComponent, UserDirectoriesComponent, UserGroupsComponent, UsersComponent],
+  providers: [EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver, GroupMembersTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver, NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver, OrganizationTitleResolver, ResetUserPasswordTitleResolver, SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UserGroupsTitleResolver, UsersTitleResolver, UserTitleResolver]
 })
 export class SecurityModule {
 }

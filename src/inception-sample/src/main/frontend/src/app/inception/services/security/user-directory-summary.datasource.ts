@@ -42,6 +42,14 @@ export class UserDirectorySummaryDatasource implements DataSource<UserDirectoryS
   constructor(private securityService: SecurityService) {
   }
 
+  /**
+   * Clear the data source.
+   */
+  clear(): void {
+    this.totalSubject.next(0);
+    this.dataSubject.next([]);
+  }
+
   connect(collectionViewer: CollectionViewer): Observable<UserDirectorySummary[] | ReadonlyArray<UserDirectorySummary>> {
     return this.dataSubject.asObservable();
   }

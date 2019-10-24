@@ -140,11 +140,6 @@ public class SecurityService
   private UserDirectoryTypeRepository userDirectoryTypeRepository;
 
   /**
-   * The user directory types.
-   */
-  private Map<String, UserDirectoryType> userDirectoryTypes = new ConcurrentHashMap<>();
-
-  /**
    * The User Repository.
    */
   private UserRepository userRepository;
@@ -264,7 +259,7 @@ public class SecurityService
     try
     {
       // Load the user directory types
-      reloadUserDirectoryTypes();
+      //reloadUserDirectoryTypes();
 
       // Load the user directories
       reloadUserDirectories();
@@ -1611,6 +1606,27 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the capabilities the user directory supports.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the capabilities the user directory supports
+   */
+  @Override
+  public UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getCapabilities();
+  }
+
+  /**
    * Retrieve the ID used to uniquely identify the user directory that the user with the specified
    * username is associated with.
    *
@@ -2053,50 +2069,6 @@ public class SecurityService
   }
 
   /**
-   * Does the user directory support administering groups.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if the user directory supports administering groups or
-   *         <code>false</code> otherwise
-   */
-  @Override
-  public boolean supportsGroupAdministration(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.supportsGroupAdministration();
-  }
-
-  /**
-   * Does the user directory support administering users.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   *
-   * @return <code>true</code> if the user directory supports administering users or
-   *         <code>false</code> otherwise
-   */
-  @Override
-  public boolean supportsUserAdministration(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.supportsUserAdministration();
-  }
-
-  /**
    * Update the authorised function.
    *
    * @param function the function
@@ -2304,40 +2276,5 @@ public class SecurityService
     userDirectory.setConfiguration(buffer);
 
     return userDirectory;
-  }
-
-  /**
-   * Reload the user directory types.
-   */
-  private void reloadUserDirectoryTypes()
-    throws SecurityServiceException
-  {
-    try
-    {
-      Map<String, UserDirectoryType> reloadedUserDirectoryTypes = new ConcurrentHashMap<>();
-
-      for (UserDirectoryType userDirectoryType : getUserDirectoryTypes())
-      {
-        try
-        {
-          userDirectoryType.getUserDirectoryClass();
-        }
-        catch (Throwable e)
-        {
-          logger.error("Failed to load the user directory type (" + userDirectoryType.getCode()
-              + "): Failed to retrieve the user directory class for the user directory type", e);
-
-          continue;
-        }
-
-        reloadedUserDirectoryTypes.put(userDirectoryType.getCode(), userDirectoryType);
-      }
-
-      this.userDirectoryTypes = reloadedUserDirectoryTypes;
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException("Failed to reload the user directory types", e);
-    }
   }
 }

@@ -43,6 +43,8 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   codeCategory?: CodeCategory;
 
+  codeCategoryId: string;
+
   editCodeCategoryForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -51,10 +53,17 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
               private spinnerService: SpinnerService) {
     super();
 
+    // Retrieve parameters
+    this.codeCategoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+
     // Initialise the form
     this.editCodeCategoryForm = new FormGroup({
       data: new FormControl(''),
-      id: new FormControl({value: '', disabled: true},       [Validators.required, Validators.maxLength(100)]),
+      id: new FormControl({
+        value: '',
+        disabled: true
+      }, [Validators.required, Validators.maxLength(100)]),
       name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }
@@ -74,13 +83,10 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    const codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-
     this.spinnerService.showSpinner();
 
     // Retrieve the existing code category and initialise the form controls
-    this.codesService.getCodeCategory(codeCategoryId)
+    this.codesService.getCodeCategory(this.codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: CodeCategory) => {
         this.codeCategory = codeCategory;

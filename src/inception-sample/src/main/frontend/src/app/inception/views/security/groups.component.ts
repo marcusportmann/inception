@@ -30,7 +30,7 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SortDirection} from '../../services/security/sort-direction';
-import {merge, Subscription} from 'rxjs';
+import {BehaviorSubject, merge, Subject, Subscription} from 'rxjs';
 import {TableFilter} from '../../components/controls';
 import {SessionService} from '../../services/session/session.service';
 import {Session} from '../../services/session/session';
@@ -39,6 +39,7 @@ import {FormBuilder} from '@angular/forms';
 import {MatSelect, MatSelectChange} from '@angular/material';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {GroupDatasource} from "../../services/security/group.datasource";
+import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
 
 /**
  * The GroupsComponent class implements the groups component.
@@ -52,7 +53,7 @@ import {GroupDatasource} from "../../services/security/group.datasource";
     'class': 'flex flex-column flex-fill',
   }
 })
-export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy, OnInit {
+export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -66,7 +67,9 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
 
-  userDirectoryId = '';
+  userDirectoryCapabilities?: UserDirectoryCapabilities;
+
+  userDirectoryId: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   userDirectories: UserDirectorySummary[] = [];
 
@@ -89,7 +92,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   }
 
   get isUserDirectorySelected(): boolean {
-    return (!!this.userDirectoryId);
+    return (!!this.userDirectoryId.value);
   }
 
   // noinspection JSUnusedLocalSymbols
@@ -109,9 +112,16 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.deleteGroup(this.userDirectoryId, groupName)
+          this.securityService.deleteGroup(this.userDirectoryId.value, groupName)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
+              this.tableFilter!.reset(false);
+
+              this.paginator!.pageIndex = 0;
+
+              this.sort!.active = '';
+              this.sort!.direction = 'asc' as SortDirection;
+
               this.loadGroups();
             }, (error: Error) => {
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -129,14 +139,14 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   editGroup(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId + '/' + encodeURIComponent(groupName) + '/edit'],
+      [this.userDirectoryId.value + '/' + encodeURIComponent(groupName) + '/edit'],
       {relativeTo: this.activatedRoute});
   }
 
   groupMembers(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId + '/' + encodeURIComponent(groupName) + '/members'],
+      [this.userDirectoryId.value + '/' + encodeURIComponent(groupName) + '/members'],
       {relativeTo: this.activatedRoute});
   }
 
@@ -151,16 +161,50 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
     const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(this.userDirectoryId, filter, sortDirection,
-      this.paginator!.pageIndex, this.paginator!.pageSize);
+    if (!!this.userDirectoryId.value) {
+      this.dataSource.load(this.userDirectoryId.value, filter, sortDirection, this.paginator!.pageIndex,
+        this.paginator!.pageSize);
+    } else {
+      this.dataSource.clear();
+    }
   }
 
   newGroup(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([this.userDirectoryId + '/new'], {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId.value + '/new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
+    this.subscriptions.add(this.userDirectoryId.subscribe((userDirectoryId: string) => {
+      if (!!userDirectoryId) {
+        this.tableFilter!.reset(false);
+
+        this.paginator!.pageIndex = 0;
+
+        this.sort!.active = 'name';
+        this.sort!.direction = 'asc' as SortDirection;
+
+        this.spinnerService.showSpinner();
+
+        this.securityService.getUserDirectoryCapabilities(userDirectoryId)
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+            this.userDirectoryCapabilities = userDirectoryCapabilities;
+
+            this.loadGroups();
+          }, (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+              (error instanceof SystemUnavailableError)) {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
+      }
+    }));
+
     this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
@@ -180,15 +224,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
     this.subscriptions.add(this.userDirectorySelect!.selectionChange.subscribe(
       (matSelectChange: MatSelectChange) => {
-        this.userDirectoryId = matSelectChange.value;
-
-        this.tableFilter!.reset(false);
-
-        this.paginator!.pageIndex = 0;
-
-        this.sort!.active = '';
-        this.sort!.direction = 'asc' as SortDirection;
-        this.sort!.sortChange.emit();
+        this.userDirectoryId.next(matSelectChange.value);
       }));
 
     this.subscriptions.add(
@@ -205,18 +241,10 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         }
       }));
 
-    /*
-     * NOTE: Changing the selected user directory will generate a "sort change" event, which will
-     *       trigger the load of the groups. If we also merged the "selection change" event from the
-     *       userDirectorySelect MatSelect component instance we would trigger an unnecessary
-     *       duplicate reload of the groups.
-     */
     this.subscriptions.add(
       merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
         .pipe(tap(() => {
-          if (!!this.userDirectoryId) {
-            this.loadGroups();
-          }
+          this.loadGroups();
         })).subscribe());
 
     this.sessionService.session.pipe(first()).subscribe((session: Session | null) => {
@@ -228,20 +256,26 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
           .subscribe((userDirectories: UserDirectorySummary[]) => {
             this.userDirectories = userDirectories;
 
-            /*
-             * If we only have one user directory available then load its groups, otherwise if we
-             * have a pre-selected user directory and it is one of the available user directories
-             * then load its groups.
-             */
-            if (userDirectories.length === 1) {
-              this.userDirectoryId = userDirectories[0].id;
-              this.loadGroups();
-            } else if (!!this.userDirectoryId) {
-              userDirectories.forEach((userDirectory: UserDirectorySummary) => {
-                if (userDirectory.id === this.userDirectoryId) {
-                  this.loadGroups();
-                }
-              });
+            // If we only have one user directory then select it
+            if (this.userDirectories.length === 1) {
+              this.userDirectoryId.next(this.userDirectories[0].id);
+            } else {
+              /*
+               * If a user directory ID has been passed in then select the appropriate user
+               * directory if it exists.
+               */
+              this.activatedRoute.paramMap
+                .pipe(first(), map(() => window.history.state))
+                .subscribe((state) => {
+                  if (state.userDirectoryId) {
+                    for (let i = 0; i < userDirectories.length; i++ ) {
+                      if (userDirectories[i].id == state.userDirectoryId) {
+                        this.userDirectoryId.next(userDirectories[i].id);
+                        break;
+                      }
+                    }
+                  }
+                });
             }
           }, (error: Error) => {
             // noinspection SuspiciousTypeOfGuard
@@ -259,16 +293,5 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    // If a user directory ID has been passed in then select the appropriate user directory
-    this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.userDirectoryId) {
-          this.userDirectoryId = state.userDirectoryId;
-        }
-      });
   }
 }

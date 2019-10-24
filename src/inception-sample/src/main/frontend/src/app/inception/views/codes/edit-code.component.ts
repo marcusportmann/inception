@@ -43,6 +43,10 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   code?: Code;
 
+  codeCategoryId: string;
+
+  codeId: string;
+
   editCodeForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
@@ -50,6 +54,11 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
               private codesService: CodesService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve parameters
+    this.codeCategoryId = decodeURIComponent(
+      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    this.codeId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeId')!);
 
     // Initialise the form
     this.editCodeForm = new FormGroup({
@@ -75,14 +84,10 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    const codeCategoryId = decodeURIComponent(
-      this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
-    const codeId = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeId')!);
-
     this.spinnerService.showSpinner();
 
     // Retrieve the existing code and initialise the form controls
-    this.codesService.getCode(codeCategoryId, codeId)
+    this.codesService.getCode(this.codeCategoryId, this.codeId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((code: Code) => {
         this.code = code;
