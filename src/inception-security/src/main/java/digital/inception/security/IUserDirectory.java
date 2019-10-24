@@ -35,9 +35,18 @@ interface IUserDirectory
    * @param memberType the group member type
    * @param memberName the group member name
    */
-  void addGroupMember(String groupName, GroupMemberType memberType, String memberName)
+  void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
     throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
         SecurityServiceException;
+
+  /**
+   * Add the role to the group.
+   *
+   * @param groupName the name identifying the group
+   * @param roleCode  the code used to uniquely identify the role
+   */
+  void addRoleToGroup(String groupName, String roleCode)
+    throws GroupNotFoundException, RoleNotFoundException, SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -46,7 +55,7 @@ interface IUserDirectory
    * @param username  the username identifying the user
    */
   void addUserToGroup(String groupName, String username)
-    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
+    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Administratively change the password for the user.
@@ -156,31 +165,6 @@ interface IUserDirectory
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the group members for the group.
-   *
-   * @param groupName the name identifying the group
-   *
-   * @return the group members for the group
-   */
-  List<GroupMember> getGroupMembers(String groupName)
-    throws GroupNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the group members for the group.
-   *
-   * @param groupName     the name identifying the group
-   * @param filter        the optional filter to apply to the group members
-   * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
-   * @return the group members for the group
-   */
-  List<GroupMember> getGroupMembers(String groupName, String filter, SortDirection sortDirection,
-      Integer pageIndex, Integer pageSize)
-    throws GroupNotFoundException, SecurityServiceException;
-
-  /**
    * Retrieve all the group names.
    *
    * @return the group names
@@ -231,14 +215,28 @@ interface IUserDirectory
     throws UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the number of group members for the group.
+   * Retrieve the group members for the group.
    *
    * @param groupName the name identifying the group
-   * @param filter    the optional filter to apply to the members
    *
-   * @return the number of group members for the group
+   * @return the group members for the group
    */
-  long getNumberOfGroupMembers(String groupName, String filter)
+  List<GroupMember> getMembersForGroup(String groupName)
+    throws GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param groupName     the name identifying the group
+   * @param filter        the optional filter to apply to the group members
+   * @param sortDirection the optional sort direction to apply to the group members
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
+   * @return the group members for the group
+   */
+  List<GroupMember> getMembersForGroup(String groupName, String filter,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws GroupNotFoundException, SecurityServiceException;
 
   /**
@@ -252,6 +250,17 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param groupName the name identifying the group
+   * @param filter    the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfMembersForGroup(String groupName, String filter)
+    throws GroupNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the number of users.
    *
    * @param filter the optional filter to apply to the users
@@ -262,6 +271,16 @@ interface IUserDirectory
     throws SecurityServiceException;
 
   /**
+   * Retrieve the codes for the roles that have been assigned to the group.
+   *
+   * @param groupName the name identifying the group
+   *
+   * @return the codes for the roles that have been assigned to the group
+   */
+  List<String> getRoleCodesForGroup(String groupName)
+    throws GroupNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param username the username identifying the user
@@ -270,6 +289,16 @@ interface IUserDirectory
    */
   List<String> getRoleCodesForUser(String username)
     throws UserNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the roles that have been assigned to the group.
+   *
+   * @param groupName the name identifying the group
+   *
+   * @return the roles that have been assigned to the group
+   */
+  List<GroupRole> getRolesForGroup(String groupName)
+    throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user.
@@ -334,7 +363,7 @@ interface IUserDirectory
    * @param memberType the group member type
    * @param memberName the group member name
    */
-  void removeGroupMember(String groupName, GroupMemberType memberType, String memberName)
+  void removeMemberFromGroup(String groupName, GroupMemberType memberType, String memberName)
     throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException;
 
   /**

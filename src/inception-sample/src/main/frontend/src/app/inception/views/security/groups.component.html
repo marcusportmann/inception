@@ -48,6 +48,10 @@
         <i class="fas fa-users"></i>
         <span i18n="@@groups_component_menu_item_group_members">Group Members</span>
       </button>
+      <button mat-menu-item (click)="groupRoles(groupName)">
+        <i class="fas fa-user-tag"></i>
+        <span i18n="@@groups_component_menu_item_group_roles">Roles</span>
+      </button>
       <button mat-menu-item (click)="deleteGroup(groupName)">
         <i class="far fa-trash-alt"></i>
         <span i18n="@@groups_component_menu_item_delete">Delete</span>

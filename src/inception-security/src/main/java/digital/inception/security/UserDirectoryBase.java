@@ -50,6 +50,11 @@ public abstract class UserDirectoryBase
   private List<UserDirectoryParameter> parameters;
 
   /**
+   * The Role Repository.
+   */
+  private RoleRepository roleRepository;
+
+  /**
    * The ID used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
@@ -66,14 +71,16 @@ public abstract class UserDirectoryBase
    * @param parameters      the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository
+   * @param roleRepository  the Role Repository
    */
   public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
-      GroupRepository groupRepository, UserRepository userRepository)
+      GroupRepository groupRepository, UserRepository userRepository, RoleRepository roleRepository)
   {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
     this.groupRepository = groupRepository;
     this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
   }
 
   /**
@@ -94,6 +101,16 @@ public abstract class UserDirectoryBase
   public List<UserDirectoryParameter> getParameters()
   {
     return parameters;
+  }
+
+  /**
+   * Returns the Role Repository.
+   *
+   * @return the Role Repository
+   */
+  public RoleRepository getRoleRepository()
+  {
+    return roleRepository;
   }
 
   /**

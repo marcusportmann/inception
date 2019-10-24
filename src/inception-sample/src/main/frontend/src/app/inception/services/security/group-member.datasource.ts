@@ -74,7 +74,7 @@ export class GroupMemberDatasource implements DataSource<GroupMember> {
        pageIndex?: number, pageSize?: number): void {
     this.loadingSubject.next(true);
 
-    this.securityService.getGroupMembers(userDirectoryId, groupName, filter, sortDirection,
+    this.securityService.getMembersForGroup(userDirectoryId, groupName, filter, sortDirection,
       pageIndex, pageSize)
       .pipe(first())
       .subscribe((groupMembers: GroupMembers) => {

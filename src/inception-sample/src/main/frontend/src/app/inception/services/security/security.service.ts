@@ -55,6 +55,8 @@ import {GroupMemberType} from "./group-member-type";
 import {UserDirectoryCapabilities} from "./user-directory-capabilities";
 import {PasswordChangeReason} from "./password-change-reason";
 import {PasswordChange} from "./password-change";
+import {Role} from "./role";
+import {GroupRole} from "./group-role";
 
 /**
  * The Security Service implementation.
@@ -75,14 +77,19 @@ export class SecurityService {
   }
 
   /**
-   * Add the group member.
+   * Add the group member to the group.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param groupName       The name identifying the group.
-   * @param groupMember     The group member.
+   * @param memberType      The group member type.
+   * @param memberName      The name identifying the group member.
    */
-  addGroupMember(userDirectoryId: string, groupName: string,
-                 groupMember: GroupMember): Observable<boolean> {
+  addMemberToGroup(userDirectoryId: string, groupName: string,
+                   memberType: GroupMemberType, memberName: string): Observable<boolean> {
+    let groupMember = new GroupMember(userDirectoryId, groupName, memberType, memberName);
+
+    console.log('groupMember = ', groupMember);
+
     return this.httpClient.post<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', groupMember, {observe: 'response'})
@@ -114,8 +121,57 @@ export class SecurityService {
             }), apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_add_the_group_member',
-              value: 'Failed to add the group member.'
+              id: '@@security_service_failed_to_add_the_group_member_to_the_group',
+              value: 'Failed to add the group member to the group.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Add the role to the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   * @param roleCode        The code used to uniquely identify the role..
+   */
+  addRoleToGroup(userDirectoryId: string, groupName: string,
+                 roleCode: string): Observable<boolean> {
+    const groupRole = new GroupRole(userDirectoryId, groupName, roleCode);
+
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName) + '/roles', groupRole, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else if (apiError.code === 'RoleNotFoundError') {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_role_could_not_be_found',
+              value: 'The role could not be found.'
+            }), apiError));
+          } else if (apiError.code === 'GroupNotFoundError') {
+            return throwError(new GroupNotFoundError(this.i18n({
+              id: '@@security_service_the_group_could_not_be_found',
+              value: 'The group could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_add_the_role_to_the_group',
+              value: 'Failed to add the role to the group.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -135,7 +191,7 @@ export class SecurityService {
    * @param expirePassword       expire the user's password
    * @param lockUser             lock the user
    * @param resetPasswordHistory reset the user's password history
-   * @param reason               the reason for changing the password
+   * @param passwordChangeReason the reason for changing the password
    *
    * @return True if the user was updated successfully or false otherwise.
    */
@@ -553,79 +609,6 @@ export class SecurityService {
   }
 
   /**
-   * Retrieve the group members.
-   *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
-   * @param groupName       The name identifying the group.
-   * @param filter          The optional filter to apply to the groups.
-   * @param sortDirection   The optional sort direction to apply to the groups.
-   * @param pageIndex       The optional page index.
-   * @param pageSize        The optional page size.
-   *
-   * @return The groups.
-   */
-  getGroupMembers(userDirectoryId: string, groupName: string, filter?: string,
-                  sortDirection?: SortDirection, pageIndex?: number,
-                  pageSize?: number): Observable<GroupMembers> {
-
-    let params = new HttpParams();
-
-    if (filter != null) {
-      params = params.append('filter', filter);
-    }
-
-    if (sortDirection != null) {
-      params = params.append('sortDirection', sortDirection);
-    }
-
-    if (pageIndex != null) {
-      params = params.append('pageIndex', String(pageIndex));
-    }
-
-    if (pageSize != null) {
-      params = params.append('pageSize', String(pageSize));
-    }
-
-    return this.httpClient.get<GroupMember[]>(
-      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
-      encodeURIComponent(groupName) + '/members', {
-        observe: 'response',
-        params,
-        reportProgress: true,
-      }).pipe(map((response: HttpResponse<GroupMember[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new GroupMembers(userDirectoryId, groupName, response.body ? response.body : [],
-        totalCount, filter, sortDirection, pageIndex, pageSize);
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
-        } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
-        } else {
-          return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_group_members',
-            value: 'Failed to retrieve the group members.'
-          }), apiError));
-        }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
-  }
-
-  /**
    * Retrieve all the group names.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
@@ -805,6 +788,79 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve the members for the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   * @param filter          The optional filter to apply to the group members.
+   * @param sortDirection   The optional sort direction to apply to the group members.
+   * @param pageIndex       The optional page index.
+   * @param pageSize        The optional page size.
+   *
+   * @return The members for the group.
+   */
+  getMembersForGroup(userDirectoryId: string, groupName: string, filter?: string,
+                     sortDirection?: SortDirection, pageIndex?: number,
+                     pageSize?: number): Observable<GroupMembers> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<GroupMember[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName) + '/members', {
+        observe: 'response',
+        params,
+        reportProgress: true,
+      }).pipe(map((response: HttpResponse<GroupMember[]>) => {
+      const totalCount = Number(response.headers.get('X-Total-Count'));
+
+      return new GroupMembers(userDirectoryId, groupName, response.body ? response.body : [],
+        totalCount, filter, sortDirection, pageIndex, pageSize);
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(this.i18n({
+            id: '@@security_service_the_group_could_not_be_found',
+            value: 'The group could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_members_for_the_group',
+            value: 'Failed to retrieve the members for the group.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Retrieve the organizations.
    *
    * @param filter        The optional filter to apply to the organizations.
@@ -895,6 +951,118 @@ export class SecurityService {
           return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
+  }
+
+  /**
+   * Retrieve the codes for the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   *
+   * @return The codes for the roles that have been assigned to the group.
+   */
+  getRoleCodesForGroup(userDirectoryId: string, groupName: string): Observable<string[]> {
+    return this.httpClient.get<string[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName) + '/role-codes', {
+        reportProgress: true,
+      }).pipe(map((roleCodes: string[]) => {
+      return roleCodes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(this.i18n({
+            id: '@@security_service_the_group_could_not_be_found',
+            value: 'The group could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_role_codes_for_the_group',
+            value: 'Failed to retrieve the role codes for the group.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve all the roles.
+   *
+   * @return The roles.
+   */
+  getRoles(): Observable<Role[]> {
+    return this.httpClient.get<Role[]>(environment.securityServiceUrlPrefix + '/roles', {
+      reportProgress: true,
+    }).pipe(map((roles: Role[]) => {
+      return roles;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new SecurityServiceError(this.i18n({
+          id: '@@security_service_failed_to_retrieve_the_roles',
+          value: 'Failed to retrieve the roles.'
+        }), apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   *
+   * @return The roles that have been assigned to the group.
+   */
+  getRolesForGroup(userDirectoryId: string, groupName: string): Observable<GroupRole[]> {
+    return this.httpClient.get<GroupRole[]>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName) + '/roles', {
+        reportProgress: true,
+      }).pipe(map((groupRoles: GroupRole[]) => {
+      return groupRoles;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(this.i18n({
+            id: '@@security_service_the_group_could_not_be_found',
+            value: 'The group could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_roles_for_the_group',
+            value: 'Failed to retrieve the roles for the group.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**
@@ -1237,15 +1405,15 @@ export class SecurityService {
   }
 
   /**
-   * Remove the group member.
+   * Remove the group member from the group.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
    */
-  removeGroupMember(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
-                    memberName: string): Observable<boolean> {
+  removeMemberFromGroup(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
+                        memberName: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members/' + memberType + '/' +
@@ -1273,8 +1441,8 @@ export class SecurityService {
             }), apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_remove_the_group_member',
-              value: 'Failed to remove the group member.'
+              id: '@@security_service_failed_to_remove_the_group_member_from_the_group',
+              value: 'Failed to remove the group member from the group.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

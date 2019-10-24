@@ -47,6 +47,8 @@ import javax.xml.bind.annotation.*;
 @SuppressWarnings({ "unused" })
 public class PasswordChange
 {
+  private static final long serialVersionUID = 1000000;
+
   /**
    * Expire the user's password.
    */

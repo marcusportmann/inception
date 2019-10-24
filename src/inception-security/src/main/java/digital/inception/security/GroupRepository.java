@@ -40,6 +40,12 @@ import java.util.UUID;
 public interface GroupRepository extends JpaRepository<Group, UUID>
 {
   @Modifying
+  @Query(value = "insert into security.role_to_group_map(role_code, group_id) "
+      + "values (:roleCode, :groupId)",
+      nativeQuery = true)
+  void addRoleToGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
+
+  @Modifying
   @Query(value = "insert into security.user_to_group_map(user_id, group_id) "
       + "values (:userId, :groupId)",
       nativeQuery = true)
@@ -56,6 +62,11 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
       + ":userDirectoryId and g.id = :groupId and (upper(u.username) like upper(:filter))")
   long countFilteredUsernamesForGroup(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "groupId") UUID groupId, @Param("filter") String filter);
+
+  @Query(value = "select count(role_code) from security.role_to_group_map rtgm where "
+      + "rtgm.role_code = :roleCode and rtgm.group_id = :groupId",
+      nativeQuery = true)
+  long countGroupRole(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
 
   @Query("select count(u.id) from Group g join g.users as u "
       + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
@@ -95,6 +106,12 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   @Query("select g.name from Group g where g.userDirectoryId = :userDirectoryId")
   List<String> getNamesByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
+
+  @Query("select r.code from Group g join g.roles as r where g.id = :groupId")
+  List<String> getRoleCodesByGroupId(@Param("groupId") UUID groupId);
+
+  @Query("select r from Group g join g.roles as r where g.id = :groupId")
+  List<Role> getRolesByGroupId(@Param("groupId") UUID groupId);
 
   @Query("select u.username from Group g join g.users as u "
       + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")

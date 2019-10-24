@@ -120,6 +120,11 @@ public class SecurityService
   private OrganizationRepository organizationRepository;
 
   /**
+   * The Role Repository.
+   */
+  private RoleRepository roleRepository;
+
+  /**
    * The user directories.
    */
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
@@ -151,6 +156,7 @@ public class SecurityService
    * @param functionRepository             the Function Repository
    * @param groupRepository                the Group Repository
    * @param organizationRepository         the Organization Repository
+   * @param roleRepository                 the Role Repository
    * @param userDirectoryRepository        the User Directory Repository
    * @param userDirectorySummaryRepository the User Directory Summary Repository
    * @param userDirectoryTypeRepository    the User Directory Type Repository
@@ -158,7 +164,7 @@ public class SecurityService
    */
   public SecurityService(ApplicationContext applicationContext,
       FunctionRepository functionRepository, GroupRepository groupRepository,
-      OrganizationRepository organizationRepository,
+      OrganizationRepository organizationRepository, RoleRepository roleRepository,
       UserDirectoryRepository userDirectoryRepository,
       UserDirectorySummaryRepository userDirectorySummaryRepository,
       UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
@@ -167,6 +173,7 @@ public class SecurityService
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
     this.organizationRepository = organizationRepository;
+    this.roleRepository = roleRepository;
     this.userDirectoryRepository = userDirectoryRepository;
     this.userDirectorySummaryRepository = userDirectorySummaryRepository;
     this.userDirectoryTypeRepository = userDirectoryTypeRepository;
@@ -183,7 +190,7 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void addGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
+  public void addMemberToGroup(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         ExistingGroupMemberException, SecurityServiceException
@@ -195,7 +202,30 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.addGroupMember(groupName, memberType, memberName);
+    userDirectory.addMemberToGroup(groupName, memberType, memberName);
+  }
+
+  /**
+   * Add the role to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param roleCode        the code used to uniquely identify the role
+   */
+  @Override
+  @Transactional
+  public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
+    SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    userDirectory.addRoleToGroup(groupName, roleCode);
   }
 
   /**
@@ -208,7 +238,7 @@ public class SecurityService
   @Override
   @Transactional
   public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -259,7 +289,7 @@ public class SecurityService
     try
     {
       // Load the user directory types
-      //reloadUserDirectoryTypes();
+      // reloadUserDirectoryTypes();
 
       // Load the user directories
       reloadUserDirectories();
@@ -476,7 +506,7 @@ public class SecurityService
    * @param createUserDirectory should a new internal user directory be created for the organization
    *
    * @return the new internal user directory that was created for the organization or
-   *         <code>null</code> if no user directory was created
+   * <code>null</code> if no user directory was created
    */
   @Override
   @Transactional
@@ -859,56 +889,6 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the group members for the group.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   *
-   * @return the group members for the group
-   */
-  @Override
-  public List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroupMembers(groupName);
-  }
-
-  /**
-   * Retrieve the group members for the group.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the group members
-   * @param sortDirection   the optional sort direction to apply to the group members
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
-   *
-   * @return the group members for the group
-   */
-  @Override
-  @Transactional
-  public List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName, String filter,
-      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
-
-    if (userDirectory == null)
-    {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
-    }
-
-    return userDirectory.getGroupMembers(groupName, filter, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
    * Retrieve all the group names.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -1021,31 +1001,15 @@ public class SecurityService
   }
 
   /**
-   * Retrieve the number of group members for the group.
+   * Retrieve the group members for the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param groupName       the name identifying the group
    *
-   * @return the number of group members for the group
+   * @return the group members for the group
    */
   @Override
-  public long getNumberOfGroupMembers(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
-    return getNumberOfGroupMembers(userDirectoryId, groupName, null);
-  }
-
-  /**
-   * Retrieve the number of group members for the group.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the members
-   *
-   * @return the number of group members for the group
-   */
-  @Override
-  public long getNumberOfGroupMembers(UUID userDirectoryId, String groupName, String filter)
+  public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1055,8 +1019,35 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.getNumberOfGroupMembers(groupName, filter);
+    return userDirectory.getMembersForGroup(groupName);
+  }
 
+  /**
+   * Retrieve the group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the group members
+   * @param sortDirection   the optional sort direction to apply to the group members
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
+   *
+   * @return the group members for the group
+   */
+  @Override
+  @Transactional
+  public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName,
+      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getMembersForGroup(groupName, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -1100,6 +1091,44 @@ public class SecurityService
     }
 
     return userDirectory.getNumberOfGroups(filter);
+  }
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the number of group members for the group
+   */
+  @Override
+  public long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
+  {
+    return getNumberOfMembersForGroup(userDirectoryId, groupName, null);
+  }
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  @Override
+  public long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName, String filter)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getNumberOfMembersForGroup(groupName, filter);
   }
 
   /**
@@ -1262,7 +1291,7 @@ public class SecurityService
    * @param userDirectoryId the ID used to uniquely identify the user directory
    *
    * @return the IDs used to uniquely identify the organizations the user directory is associated
-   *         with
+   * with
    */
   @Override
   public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
@@ -1416,6 +1445,28 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the codes for the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the codes for the roles that have been assigned to the group
+   */
+  @Override
+  public List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getRoleCodesForGroup(groupName);
+  }
+
+  /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -1435,6 +1486,47 @@ public class SecurityService
     }
 
     return userDirectory.getRoleCodesForUser(username);
+  }
+
+  /**
+   * Retrieve all the roles.
+   *
+   * @return the roles
+   */
+  @Override
+  public List<Role> getRoles()
+    throws SecurityServiceException
+  {
+    try
+    {
+      return roleRepository.findAll();
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the roles", e);
+    }
+  }
+
+  /**
+   * Retrieve the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the roles that have been assigned to the group
+   */
+  @Override
+  public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getRolesForGroup(groupName);
   }
 
   /**
@@ -1988,7 +2080,7 @@ public class SecurityService
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
               userDirectoryClass.getConstructor(UUID.class, List.class, GroupRepository.class,
-              UserRepository.class);
+              UserRepository.class, RoleRepository.class);
 
           if (userDirectoryClassConstructor == null)
           {
@@ -1999,7 +2091,7 @@ public class SecurityService
 
           IUserDirectory userDirectoryInstance = userDirectoryClassConstructor.newInstance(
               userDirectory.getId(), userDirectory.getParameters(), groupRepository,
-              userRepository);
+              userRepository, roleRepository);
 
           applicationContext.getAutowireCapableBeanFactory().autowireBean(userDirectoryInstance);
 
@@ -2030,8 +2122,8 @@ public class SecurityService
    */
   @Override
   @Transactional
-  public void removeGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
-      String memberName)
+  public void removeMemberFromGroup(UUID userDirectoryId, String groupName,
+      GroupMemberType memberType, String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
         SecurityServiceException
   {
@@ -2042,7 +2134,7 @@ public class SecurityService
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    userDirectory.removeGroupMember(groupName, memberType, memberName);
+    userDirectory.removeMemberFromGroup(groupName, memberType, memberName);
   }
 
   /**

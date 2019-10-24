@@ -601,13 +601,13 @@ public class SecurityServiceTest
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    long numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+    long numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName());
 
     assertEquals("The correct number of group members (0) was not retrieved", 0,
         numberOfGroupMembers);
 
-    List<GroupMember> retrievedGroupMembers = securityService.getGroupMembers(
+    List<GroupMember> retrievedGroupMembers = securityService.getMembersForGroup(
         userDirectory.getId(), group.getName());
 
     assertEquals("The correct number of group members (0) was not retrieved", 0,
@@ -621,30 +621,30 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), secondUser, false, false);
 
-    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER,
+    securityService.addMemberToGroup(userDirectory.getId(), group.getName(), GroupMemberType.USER,
         firstUser.getUsername());
 
-    securityService.addGroupMember(userDirectory.getId(), group.getName(), GroupMemberType.USER,
+    securityService.addMemberToGroup(userDirectory.getId(), group.getName(), GroupMemberType.USER,
         secondUser.getUsername());
 
-    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+    numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName());
 
     assertEquals("The correct number of group members (2) was not retrieved", 2,
         numberOfGroupMembers);
 
-    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName());
+    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(), group.getName());
 
     assertEquals("The correct number of group members (2) was not retrieved", 2,
         retrievedGroupMembers.size());
 
-    numberOfGroupMembers = securityService.getNumberOfGroupMembers(userDirectory.getId(),
+    numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName(), firstUser.getUsername());
 
     assertEquals("The correct number of group members (1) was not retrieved", 1,
         numberOfGroupMembers);
 
-    retrievedGroupMembers = securityService.getGroupMembers(userDirectory.getId(), group.getName(),
+    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(), group.getName(),
         secondUser.getUsername(), null, null, null);
 
     assertEquals("The correct number of group members (1) was not retrieved", 1,

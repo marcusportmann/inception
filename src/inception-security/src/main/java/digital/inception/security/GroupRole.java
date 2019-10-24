@@ -35,19 +35,19 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>GroupMember</code> class holds the information for a group member.
+ * The <code>GroupRole</code> class holds the information for a group role.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "GroupMember")
+@ApiModel(value = "GroupRole")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userDirectoryId", "groupName", "memberName", "memberType" })
-@XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
-@XmlType(name = "GroupMember", namespace = "http://security.inception.digital",
-    propOrder = { "userDirectoryId", "groupName", "memberName", "memberType" })
+@JsonPropertyOrder({ "userDirectoryId", "groupName", "roleCode" })
+@XmlRootElement(name = "GroupRole", namespace = "http://security.inception.digital")
+@XmlType(name = "GroupRole", namespace = "http://security.inception.digital",
+    propOrder = { "userDirectoryId", "groupName", "roleCode" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
-public class GroupMember
+public class GroupRole
 {
   private static final long serialVersionUID = 1000000;
 
@@ -62,23 +62,14 @@ public class GroupMember
   private String groupName;
 
   /**
-   * The name identifying the group member.
+   * The code used to uniquely identify the role.
    */
-  @ApiModelProperty(value = "The name identifying the group member", required = true)
+  @ApiModelProperty(value = "The code used to uniquely identify the role", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "MemberName", required = true)
+  @XmlElement(name = "RoleCode", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  private String memberName;
-
-  /**
-   * The group member type.
-   */
-  @ApiModelProperty(value = "The group member type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "MemberType", required = true)
-  @NotNull
-  private GroupMemberType memberType;
+  private String roleCode;
 
   /**
    * The ID used to uniquely identify the user directory the group is associated with.
@@ -92,26 +83,23 @@ public class GroupMember
   private UUID userDirectoryId;
 
   /**
-   * Constructs a new <code>GroupMember</code>.
+   * Constructs a new <code>GroupRole</code>.
    */
-  public GroupMember() {}
+  public GroupRole() {}
 
   /**
-   * Constructs a new <code>GroupMember</code>.
+   * Constructs a new <code>GroupRole</code>.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory the group is
    *                        associated with
    * @param groupName       the name identifying the group
-   * @param memberType      the group member type
-   * @param memberName      the name identifying the group member
+   * @param roleCode        the code used to uniquely identify the role
    */
-  public GroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
-      String memberName)
+  public GroupRole(UUID userDirectoryId, String groupName, String roleCode)
   {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
-    this.memberType = memberType;
-    this.memberName = memberName;
+    this.roleCode = roleCode;
   }
 
   /**
@@ -125,23 +113,13 @@ public class GroupMember
   }
 
   /**
-   * Returns the name identifying the group member.
+   * Returns the code used to uniquely identify the role.
    *
-   * @return the name identifying the group member
+   * @return the code used to uniquely identify the role
    */
-  public String getMemberName()
+  public String getRoleCode()
   {
-    return memberName;
-  }
-
-  /**
-   * Returns the group member type.
-   *
-   * @return the group member type
-   */
-  public GroupMemberType getMemberType()
-  {
-    return memberType;
+    return roleCode;
   }
 
   /**
@@ -165,23 +143,13 @@ public class GroupMember
   }
 
   /**
-   * Set the name identifying the group member.
+   * Set the code used to uniquely identify the role.
    *
-   * @param memberName the name identifying the group member
+   * @param roleCode the code used to uniquely identify the role
    */
-  public void setMemberName(String memberName)
+  public void setRoleCode(String roleCode)
   {
-    this.memberName = memberName;
-  }
-
-  /**
-   * Set the group member type.
-   *
-   * @param memberType the group member type
-   */
-  public void setMemberType(GroupMemberType memberType)
-  {
-    this.memberType = memberType;
+    this.roleCode = roleCode;
   }
 
   /**

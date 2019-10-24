@@ -59,6 +59,28 @@ public class Role
   private static final long serialVersionUID = 1000000;
 
   /**
+   * The code used to uniquely identify the role.
+   */
+  @ApiModelProperty(value = "The code used to uniquely identify the role", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Id
+  @Column(name = "code", nullable = false, length = 100)
+  private String code;
+
+  /**
+   * The description for the role.
+   */
+  @ApiModelProperty(value = "The description for the role")
+  @JsonProperty
+  @XmlElement(name = "Description")
+  @Size(max = 100)
+  @Column(name = "description", length = 100)
+  private String description;
+
+  /**
    * The functions associated with the role.
    */
   @JsonIgnore
@@ -78,18 +100,6 @@ public class Role
   private Set<Group> groups = new HashSet<>();
 
   /**
-   * The code used to uniquely identify the role.
-   */
-  @ApiModelProperty(value = "The code used to uniquely identify the role", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Code", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Id
-  @Column(name = "code", nullable = false, length = 100)
-  private String code;
-
-  /**
    * The name of the role.
    */
   @ApiModelProperty(value = "The name of the role", required = true)
@@ -99,16 +109,6 @@ public class Role
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
-
-  /**
-   * The description for the role.
-   */
-  @ApiModelProperty(value = "The description for the role")
-  @JsonProperty
-  @XmlElement(name = "Description")
-  @Size(max = 100)
-  @Column(name = "description", length = 100)
-  private String description;
 
   /**
    * Constructs a new <code>Role</code>.

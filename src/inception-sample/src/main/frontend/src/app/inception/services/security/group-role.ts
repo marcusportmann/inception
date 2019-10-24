@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-import {GroupMemberType} from "./group-member-type";
-
 /**
- * The GroupMember class holds the information for a group member.
+ * The GroupRole class holds the information for a group role.
  *
  * @author Marcus Portmann
  */
-export class GroupMember {
+export class GroupRole {
 
   /**
    * The name identifying the group.
@@ -29,14 +27,9 @@ export class GroupMember {
   groupName: string;
 
   /**
-   * The name identifying the group member.
+   * The code used to uniquely identify the role.
    */
-  memberName: string;
-
-  /**
-   * The group member type.
-   */
-  memberType: GroupMemberType;
+  roleCode: string;
 
   /**
    * The ID used to uniquely identify the user directory the group is associated with.
@@ -44,19 +37,16 @@ export class GroupMember {
   userDirectoryId: string;
 
   /**
-   * Constructs a new GroupMember.
+   * Constructs a new GroupRole.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory the group is
    *                        associated with.
    * @param groupName       The name identifying the group.
-   * @param memberType      The group member type.
-   * @param memberName      The name identifying the group member.
+   * @param roleCode        The code used to uniquely identify the role.
    */
-  constructor(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
-              memberName: string) {
+  constructor(userDirectoryId: string, groupName: string, roleCode: string) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
-    this.memberType = memberType;
-    this.memberName = memberName;
+    this.roleCode = roleCode;
   }
 }

@@ -37,10 +37,21 @@ public interface ISecurityService
    * @param memberType      the group member type
    * @param memberName      the group member name
    */
-  void addGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
+  void addMemberToGroup(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         ExistingGroupMemberException, SecurityServiceException;
+
+  /**
+   * Add the role to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param roleCode        the code used to uniquely identify the role
+   */
+  void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
+        SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -50,7 +61,7 @@ public interface ISecurityService
    * @param username        the username identifying the user
    */
   void addUserToGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         SecurityServiceException;
 
   /**
@@ -237,33 +248,6 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the group members for the group.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   *
-   * @return the group members for the group
-   */
-  List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the group members for the group.
-   *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
-   * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the group members
-   * @param sortDirection   the optional sort direction to apply to the group members
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
-   *
-   * @return the group members for the group
-   */
-  List<GroupMember> getGroupMembers(UUID userDirectoryId, String groupName, String filter,
-      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
-
-  /**
    * Retrieve all the group names.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -321,26 +305,30 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the number of group members for the group.
+   * Retrieve the group members for the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param groupName       the name identifying the group
    *
-   * @return the number of group members for the group
+   * @return the group members for the group
    */
-  long getNumberOfGroupMembers(UUID userDirectoryId, String groupName)
+  List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the number of group members for the group.
+   * Retrieve the group members for the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
    * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the members
+   * @param filter          the optional filter to apply to the group members
+   * @param sortDirection   the optional sort direction to apply to the group members
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
    *
-   * @return the number of group members for the group
+   * @return the group members for the group
    */
-  long getNumberOfGroupMembers(UUID userDirectoryId, String groupName, String filter)
+  List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName, String filter,
+      SortDirection sortDirection, Integer pageIndex, Integer pageSize)
     throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
@@ -363,6 +351,29 @@ public interface ISecurityService
    */
   long getNumberOfGroups(UUID userDirectoryId, String filter)
     throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the number of group members for the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param filter          the optional filter to apply to the members
+   *
+   * @return the number of group members for the group
+   */
+  long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName, String filter)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of organizations
@@ -476,6 +487,17 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the codes for the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the codes for the roles that have been assigned to the group
+   */
+  List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -485,6 +507,25 @@ public interface ISecurityService
    */
   List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve all the roles.
+   *
+   * @return the roles
+   */
+  List<Role> getRoles()
+    throws SecurityServiceException;
+
+  /**
+   * Retrieve the roles that have been assigned to the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   *
+   * @return the roles that have been assigned to the group
+   */
+  List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user.
@@ -670,7 +711,7 @@ public interface ISecurityService
    * @param memberType      the group member type
    * @param memberName      the group member name
    */
-  void removeGroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
+  void removeMemberFromGroup(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
     throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
         SecurityServiceException;

@@ -98,7 +98,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     })
   }
 
-  addGroupMember(): void {
+  addMemberToGroup(): void {
     // // noinspection JSIgnoredPromiseFromCall
     // this.router.navigate(['new'], {relativeTo: this.activatedRoute});
   }
@@ -172,12 +172,12 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     this.subscriptions.unsubscribe();
   }
 
-  removeGroupMember(groupMember: GroupMember): void {
+  removeMemberFromGroup(groupMember: GroupMember): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@group_members_component_confirm_remove_group_member',
-          value: 'Are you sure you want to remove the group member?'
+          id: '@@group_members_component_confirm_remove_group_member_from_group',
+          value: 'Are you sure you want to remove the group member from the group?'
         })
       });
 
@@ -187,7 +187,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.removeGroupMember(this.userDirectoryId, this.groupName,
+          this.securityService.removeMemberFromGroup(this.userDirectoryId, this.groupName,
             groupMember.memberType, groupMember.memberName)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {

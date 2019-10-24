@@ -79,7 +79,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
       "filter") String filter, Pageable pageable);
 
   @Query(
-      "select f.code from User u  join u.groups as g join g.roles as r join r.functions as f where u.id = :userId")
+      "select f.code from User u join u.groups as g join g.roles as r join r.functions as f where u.id = :userId")
   List<String> getFunctionCodesByUserId(@Param("userId") UUID userId);
 
   @Query("select g.name from User u join u.groups as g where u.id = :userId")

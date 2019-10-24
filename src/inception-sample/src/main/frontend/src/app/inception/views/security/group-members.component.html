@@ -1,7 +1,7 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-table-header">
     <div></div>
-    <button mat-flat-button color="primary" [hidden]="true" (click)="addGroupMember()" i18n="@@group_members_component_button_add">Add</button>
+    <button mat-flat-button color="primary" [hidden]="true" (click)="addMemberToGroup()" i18n="@@group_members_component_button_add">Add</button>
     <table-filter></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
@@ -22,7 +22,7 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
       <mat-cell class="mat-cell-one-action" *matCellDef="let groupMember">
-        <button mat-icon-button (click)="removeGroupMember(groupMember)">
+        <button mat-icon-button (click)="removeMemberFromGroup(groupMember)">
           <i class="far fa-trash-alt"></i>
         </button>
       </mat-cell>
