@@ -26,8 +26,10 @@ import {
   DuplicateUserError,
   ExistingGroupMemberError,
   ExistingGroupMembersError,
+  ExistingGroupRoleError,
   GroupMemberNotFoundError,
   GroupNotFoundError,
+  GroupRoleNotFoundError,
   OrganizationNotFoundError,
   SecurityServiceError,
   UserDirectoryNotFoundError,
@@ -84,8 +86,8 @@ export class SecurityService {
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
    */
-  addMemberToGroup(userDirectoryId: string, groupName: string,
-                   memberType: GroupMemberType, memberName: string): Observable<boolean> {
+  addMemberToGroup(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
+                   memberName: string): Observable<boolean> {
     let groupMember = new GroupMember(userDirectoryId, groupName, memberType, memberName);
 
     console.log('groupMember = ', groupMember);
@@ -104,15 +106,15 @@ export class SecurityService {
               id: '@@security_service_the_user_directory_could_not_be_found',
               value: 'The user directory could not be found.'
             }), apiError));
-          } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
             return throwError(new GroupNotFoundError(this.i18n({
               id: '@@security_service_the_group_could_not_be_found',
               value: 'The group could not be found.'
+            }), apiError));
+          } else if (apiError.code === 'UserNotFoundError') {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_user_could_not_be_found',
+              value: 'The user could not be found.'
             }), apiError));
           } else if (apiError.code === 'ExistingGroupMemberError') {
             return throwError(new ExistingGroupMemberError(this.i18n({
@@ -158,15 +160,20 @@ export class SecurityService {
               id: '@@security_service_the_user_directory_could_not_be_found',
               value: 'The user directory could not be found.'
             }), apiError));
+          } else if (apiError.code === 'GroupNotFoundError') {
+            return throwError(new GroupNotFoundError(this.i18n({
+              id: '@@security_service_the_group_could_not_be_found',
+              value: 'The group could not be found.'
+            }), apiError));
           } else if (apiError.code === 'RoleNotFoundError') {
             return throwError(new UserNotFoundError(this.i18n({
               id: '@@security_service_the_role_could_not_be_found',
               value: 'The role could not be found.'
             }), apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
+          } else if (apiError.code === 'ExistingGroupRoleError') {
+            return throwError(new ExistingGroupRoleError(this.i18n({
+              id: '@@security_service_the_group_role_already_exists',
+              value: 'The group role already exists.'
             }), apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
@@ -1429,20 +1436,67 @@ export class SecurityService {
               id: '@@security_service_the_user_directory_could_not_be_found',
               value: 'The user directory could not be found.'
             }), apiError));
+          } else if (apiError.code === 'GroupNotFoundError') {
+            return throwError(new GroupNotFoundError(this.i18n({
+              id: '@@security_service_the_group_could_not_be_found',
+              value: 'The group could not be found.'
+            }), apiError));
           } else if (apiError.code === 'GroupMemberNotFoundError') {
             return throwError(new GroupMemberNotFoundError(this.i18n({
               id: '@@security_service_the_group_member_could_not_be_found',
               value: 'The group member could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_remove_the_group_member_from_the_group',
+              value: 'Failed to remove the group member from the group.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Remove the role from the group.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param groupName       The name identifying the group.
+   * @param roleCode        The code used to uniquely identify the role.
+   */
+  removeRoleFromGroup(userDirectoryId: string, groupName: string,
+                      roleCode: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
+      encodeURIComponent(groupName) + '/roles/' + roleCode, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
             }), apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
             return throwError(new GroupNotFoundError(this.i18n({
               id: '@@security_service_the_group_could_not_be_found',
               value: 'The group could not be found.'
             }), apiError));
+          } else if (apiError.code === 'GroupRoleNotFoundError') {
+            return throwError(new GroupRoleNotFoundError(this.i18n({
+              id: '@@security_service_the_group_role_could_not_be_found',
+              value: 'The group role could not be found.'
+            }), apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_remove_the_group_member_from_the_group',
-              value: 'Failed to remove the group member from the group.'
+              id: '@@security_service_failed_to_remove_the_role_from_the_group',
+              value: 'Failed to remove the role from the group.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

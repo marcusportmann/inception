@@ -128,12 +128,12 @@ public class ReportingServiceTest
 
     long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
 
-    assertEquals("The correct number of report definitions (1) was not retrieved", 1,
+    assertEquals("The correct number of report definitions was not retrieved", 1,
         numberOfReportDefinitions);
 
     List<ReportDefinition> reportDefinitions = reportingService.getReportDefinitions();
 
-    assertEquals("The correct number of report definitions (1) was not retrieved", 1,
+    assertEquals("The correct number of report definitions was not retrieved", 1,
         reportDefinitions.size());
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
@@ -147,7 +147,7 @@ public class ReportingServiceTest
     List<ReportDefinitionSummary> reportDefinitionSummaries =
         reportingService.getReportDefinitionSummaries();
 
-    assertEquals("The correct number of report definition summaries (1) was not retrieved", 1,
+    assertEquals("The correct number of report definition summaries was not retrieved", 1,
         reportDefinitionSummaries.size());
 
     compareReportDefinitionToReportDefinitionSummary(reportDefinition,

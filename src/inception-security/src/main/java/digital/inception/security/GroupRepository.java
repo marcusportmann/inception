@@ -39,6 +39,9 @@ import java.util.UUID;
  */
 public interface GroupRepository extends JpaRepository<Group, UUID>
 {
+
+
+
   @Modifying
   @Query(value = "insert into security.role_to_group_map(role_code, group_id) "
       + "values (:roleCode, :groupId)",
@@ -125,7 +128,18 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   @Modifying
   @Query(value = "delete from security.user_to_group_map "
-      + "where user_id = :userId and group_id=:groupId",
+      + "where group_id=:groupId and user_id = :userId",
       nativeQuery = true)
   void removeUserFromGroup(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
+
+
+
+  @Modifying
+  @Query(value = "delete from security.role_to_group_map "
+    + "where group_id=:groupId and role_code = :roleCode",
+    nativeQuery = true)
+  int removeRoleFromGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
+
+
+
 }

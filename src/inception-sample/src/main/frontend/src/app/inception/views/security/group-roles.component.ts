@@ -176,24 +176,23 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       .pipe(first())
       .subscribe((confirmation: boolean | undefined) => {
         if (confirmation === true) {
-          // this.spinnerService.showSpinner();
-          //
-          // this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName,
-          //   GroupMemberType.User, this.username)
-          //   .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-          //   .subscribe(() => {
-          //     this.loadGroupNamesForUser();
-          //     this.selectedGroupName = '';
-          //   }, (error: Error) => {
-          //     // noinspection SuspiciousTypeOfGuard
-          //     if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          //       (error instanceof SystemUnavailableError)) {
-          //       // noinspection JSIgnoredPromiseFromCall
-          //       this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          //     } else {
-          //       this.dialogService.showErrorDialog(error);
-          //     }
-          //   });
+          this.spinnerService.showSpinner();
+
+          this.securityService.removeRoleFromGroup(this.userDirectoryId, this.groupName, roleCode)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              this.loadRolesForGroup();
+              this.selectedRole = undefined;
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
         }
       });
   }

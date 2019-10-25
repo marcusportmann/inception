@@ -132,13 +132,13 @@ public class SchedulerServiceTest
 
     long numberOfJobs = schedulerService.getNumberOfJobs();
 
-    assertEquals(String.format("The correct number of jobs (%d) was not retrieved",
-        beforeRetrievedJobs.size() + 1), beforeRetrievedJobs.size() + 1, numberOfJobs);
+    assertEquals("The correct number of jobs was not retrieved",
+         beforeRetrievedJobs.size() + 1, numberOfJobs);
 
     List<Job> afterRetrievedJobs = schedulerService.getJobs();
 
-    assertEquals(String.format("The correct number of jobs (%d) was not retrieved",
-        beforeRetrievedJobs.size() + 1), beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
+    assertEquals("The correct number of jobs was not retrieved",
+         beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
 
     boolean foundJob = false;
 

@@ -260,7 +260,7 @@ public class ConfigurationServiceTest
     List<Configuration> filteredConfigurations = configurationService.getFilteredConfigurations(
         "testfiltered");
 
-    assertEquals("The required number of filtered configurations (1) was not retrieved", 1,
+    assertEquals("The required number of filtered configurations was not retrieved", 1,
         filteredConfigurations.size());
 
     assertEquals("The required filtered configurations (" + TEST_STRING_VALUE

@@ -17,6 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {CodesService} from "../../services/codes/codes.service";
 
 /**
  * The CodeCategoriesTitleResolver class provides the route data resolver that resolves the
@@ -29,7 +30,7 @@ export class CodeCategoriesTitleResolver implements Resolve<string> {
   /**
    * Constructs a new CodeCategoryTitleResolver.
    *
-   * @param i18n The internationalization service.
+   * @param i18n         The internationalization service.
    */
   constructor(private i18n: I18n) {
   }

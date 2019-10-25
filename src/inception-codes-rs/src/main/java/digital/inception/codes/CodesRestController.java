@@ -366,6 +366,39 @@ public class CodesRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the name of the code category
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the name of the code category
+   */
+  @ApiOperation(value = "Retrieve the name of the code category",
+      notes = "Retrieve the name of the code category")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code category could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/name", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
+  public String getCodeCategoryName(@ApiParam(name = "codeCategoryId",
+      value = "The ID used to uniquely identify the code category", required = true)
+  @PathVariable String codeCategoryId)
+    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
+  {
+    if (StringUtils.isEmpty(codeCategoryId))
+    {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    return codesService.getCodeCategoryName(codeCategoryId);
+  }
+
+  /**
    * Retrieve the code category summaries.
    *
    * @return the code category summaries
@@ -418,6 +451,48 @@ public class CodesRestController extends SecureRestController
     }
 
     return codesService.getCodeCategoryUpdated(codeCategoryId);
+  }
+
+  /**
+   * Retrieve the name of the code
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the code
+   */
+  @ApiOperation(value = "Retrieve the name of the code", notes = "Retrieve the name of the code")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The code could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}/name",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
+  public String getCodeName(@ApiParam(name = "codeCategoryId",
+      value = "The ID used to uniquely identify the code category the code is associated with",
+      required = true)
+  @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
+      value = "The ID uniquely identifying the code", required = true)
+  @PathVariable String codeId)
+    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
+  {
+    if (StringUtils.isEmpty(codeCategoryId))
+    {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (StringUtils.isEmpty(codeId))
+    {
+      throw new InvalidArgumentException("codeId");
+    }
+
+    return codesService.getCodeName(codeCategoryId, codeId);
   }
 
   /**

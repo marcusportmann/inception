@@ -364,7 +364,6 @@ public class CodesService
       throw new CodesServiceException("Failed to retrieve the code (" + codeId
           + ") for the code category (" + codeCategoryId + ")", e);
     }
-
   }
 
   /**
@@ -532,6 +531,48 @@ public class CodesService
   }
 
   /**
+   * Retrieve the name of the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the name of the code category
+   */
+  @Override
+  public String getCodeCategoryName(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodesServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = codeCategoryRepository.getNameById(codeCategoryId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+
+      // Check if one of the registered code providers supports the code category
+      for (ICodeProvider codeProvider : codeProviders)
+      {
+        if (codeProvider.codeCategoryExists(codeCategoryId))
+        {
+          return codeProvider.getCodeCategoryName(codeCategoryId);
+        }
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    }
+    catch (CodeCategoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new CodesServiceException("Failed to retrieve the name for the code category ("
+          + codeCategoryId + ")", e);
+    }
+  }
+
+  /**
    * Returns the summaries for all the code categories.
    *
    * @return the summaries for all the code categories
@@ -564,7 +605,8 @@ public class CodesService
   {
     try
     {
-      Optional<LocalDateTime> updatedOptional = codeCategoryRepository.getUpdatedById(codeCategoryId);
+      Optional<LocalDateTime> updatedOptional = codeCategoryRepository.getUpdatedById(
+          codeCategoryId);
 
       if (updatedOptional.isPresent())
       {
@@ -590,6 +632,52 @@ public class CodesService
     {
       throw new CodesServiceException("Failed to retrieve the date and time the code category ("
           + codeCategoryId + ") was last updated", e);
+    }
+  }
+
+  /**
+   * Retrieve the name of the code.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the name of the code
+   */
+  @Override
+  public String getCodeName(String codeCategoryId, String codeId)
+    throws CodeNotFoundException, CodesServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = codeRepository.getNameById(codeCategoryId, codeId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+      else
+      {
+        // Check if one of the registered code providers supports the code category
+        for (ICodeProvider codeProvider : codeProviders)
+        {
+          if (codeProvider.codeCategoryExists(codeCategoryId))
+          {
+            return codeProvider.getCodeName(codeCategoryId, codeId);
+          }
+        }
+      }
+
+      throw new CodeNotFoundException(codeCategoryId, codeId);
+    }
+    catch (CodeNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new CodesServiceException("Failed to retrieve the name of the code (" + codeId
+          + ") for the code category (" + codeCategoryId + ")", e);
     }
   }
 

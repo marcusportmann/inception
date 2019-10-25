@@ -99,7 +99,25 @@ export class DuplicateUserError extends Error {
 export class ExistingGroupMemberError extends Error {
 
   /**
-   * Constructs a new ExistingGroupMembersError.
+   * Constructs a new ExistingGroupMemberError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The ExistingGroupRoleError class holds the information for an existing group role error.
+ *
+ * @author Marcus Portmann
+ */
+export class ExistingGroupRoleError extends Error {
+
+  /**
+   * Constructs a new ExistingGroupRoleError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.
@@ -154,6 +172,24 @@ export class GroupNotFoundError extends Error {
 
   /**
    * Constructs a new UserNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The GroupRoleNotFoundError class holds the information for a group role not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class GroupRoleNotFoundError extends Error {
+
+  /**
+   * Constructs a new GroupRoleNotFoundError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

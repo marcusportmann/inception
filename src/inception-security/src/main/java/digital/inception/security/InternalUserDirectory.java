@@ -219,7 +219,8 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, RoleNotFoundException, SecurityServiceException
+    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
+        SecurityServiceException
   {
     try
     {
@@ -238,12 +239,12 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (getGroupRepository().countGroupRole(groupIdOptional.get(), roleCode) > 0)
       {
-        return;
+        throw new ExistingGroupRoleException(roleCode);
       }
 
       getGroupRepository().addRoleToGroup(groupIdOptional.get(), roleCode);
     }
-    catch (GroupNotFoundException | RoleNotFoundException e)
+    catch (GroupNotFoundException | RoleNotFoundException | ExistingGroupRoleException e)
     {
       throw e;
     }
@@ -1558,6 +1559,43 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Remove the role from the group.
+   *
+   * @param groupName the name identifying the group
+   * @param roleCode  the code used to uniquely identify the role
+   */
+  @Override
+  public void removeRoleFromGroup(String groupName, String roleCode)
+    throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
+          getUserDirectoryId(), groupName);
+
+      if (groupIdOptional.isEmpty())
+      {
+        throw new GroupNotFoundException(groupName);
+      }
+
+      if (getGroupRepository().removeRoleFromGroup(groupIdOptional.get(), roleCode) == 0)
+      {
+        throw new GroupRoleNotFoundException(roleCode);
+      }
+    }
+    catch (GroupNotFoundException | GroupRoleNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to remove the role (" + roleCode
+          + ") from the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
+          + ")", e);
+    }
+  }
+
+  /**
    * Remove the user from the group.
    *
    * @param groupName the name identifying the group
@@ -1565,7 +1603,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
-    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
+    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException
   {
     try
     {
@@ -1588,7 +1626,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       getGroupRepository().removeUserFromGroup(groupIdOptional.get(), userIdOptional.get());
     }
-    catch (UserNotFoundException | GroupNotFoundException e)
+    catch (GroupNotFoundException | UserNotFoundException e)
     {
       throw e;
     }

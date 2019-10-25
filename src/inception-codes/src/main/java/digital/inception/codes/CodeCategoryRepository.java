@@ -44,6 +44,9 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
   @Query("select cc.data from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<String> getDataById(@Param("codeCategoryId") String codeCategoryId);
 
+  @Query("select cc.name from CodeCategory cc where cc.id = :codeCategoryId")
+  Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId);
+
   @Query("select cc.updated from CodeCategory cc where cc.id = :codeCategoryId")
   Optional<LocalDateTime> getUpdatedById(@Param("codeCategoryId") String codeCategoryId);
 

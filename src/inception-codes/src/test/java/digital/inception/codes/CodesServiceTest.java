@@ -77,6 +77,11 @@ public class CodesServiceTest
 
     compareCodeCategories(codeCategory, retrievedCodeCategory);
 
+    String retrievedCodeCategoryName = codesService.getCodeCategoryName(codeCategory.getId());
+
+    assertEquals("The correct code category name was not retrieved", codeCategory.getName(),
+        retrievedCodeCategoryName);
+
     codeCategory.setName(codeCategory.getName() + " Updated");
 
     codesService.updateCodeCategory(codeCategory);
@@ -136,7 +141,6 @@ public class CodesServiceTest
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory("TestCodeCategory");
 
     assertNotNull("The code category is null", retrievedCodeCategory);
-
   }
 
   /**
@@ -164,6 +168,10 @@ public class CodesServiceTest
 
     compareCodes(code, retrievedCode);
 
+    String retrievedCodeName = codesService.getCodeName(codeCategory.getId(), code.getId());
+
+    assertEquals("The correct code name was not retrieved", code.getName(), retrievedCodeName);
+
     code.setName("Updated " + code.getName());
     code.setValue("Updated " + code.getValue());
 
@@ -173,8 +181,8 @@ public class CodesServiceTest
 
     compareCodes(code, retrievedCode);
 
-    assertEquals("The correct number of codes (1) was not retrieved", 1,
-        codesService.getNumberOfCodes(codeCategory.getId()));
+    assertEquals("The correct number of codes was not retrieved", 1, codesService.getNumberOfCodes(
+        codeCategory.getId()));
 
     codesService.deleteCode(codeCategory.getId(), code.getId());
 
@@ -214,15 +222,13 @@ public class CodesServiceTest
 
     long numberOfCodes = codesService.getNumberOfCodes(codeCategory.getId());
 
-    assertEquals("The correct number of codes (" + codes.size() + ") was not retrieved",
-        codes.size(), numberOfCodes);
+    assertEquals("The correct number of codes was not retrieved", codes.size(), numberOfCodes);
 
     List<Code> retrievedCodes = codesService.getCodes(codeCategory.getId());
 
     compareCodes(codes, retrievedCodes);
 
-    retrievedCodes = codesService.getCodesWithParameters(codeCategory.getId(),
-        new HashMap<>());
+    retrievedCodes = codesService.getCodesWithParameters(codeCategory.getId(), new HashMap<>());
 
     compareCodes(codes, retrievedCodes);
   }
@@ -249,7 +255,6 @@ public class CodesServiceTest
     Code code2 = new Code(code.getId(), code.getCodeCategoryId(), code.getName(), code.getValue());
 
     compareCodes(code, code2);
-
   }
 
   /**
@@ -265,19 +270,19 @@ public class CodesServiceTest
 
     List<CodeCategory> retrievedCodeCategories = codesService.getCodeCategories();
 
-    assertEquals("The correct number of code categories (1) was not retrieved", 1,
+    assertEquals("The correct number of code categories was not retrieved", 1,
         retrievedCodeCategories.size());
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
 
     retrievedCodeCategories = codesService.getCodeCategories();
 
-    assertEquals("The correct number of code categories (1) was not retrieved", 1,
+    assertEquals("The correct number of code categories was not retrieved", 1,
         retrievedCodeCategories.size());
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
 
-    assertEquals("The correct number of code categories (1) was not retrieved", 1,
+    assertEquals("The correct number of code categories was not retrieved", 1,
         codesService.getNumberOfCodeCategories());
   }
 

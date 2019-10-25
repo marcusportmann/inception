@@ -76,9 +76,6 @@ public class SecurityServiceTest
   public void addUserToGroupTest()
     throws Exception
   {
-    var roleCodes = securityService.getRoleCodesForUser(SecurityService
-        .ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
-
     Organization organization = getTestOrganizationDetails();
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
@@ -95,7 +92,7 @@ public class SecurityServiceTest
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
 
-    assertEquals("The correct number of group names (1) was not retrieved for the user ("
+    assertEquals("The correct number of group names was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getName() + ")", group.getName(), groupNames.get(0));
@@ -103,7 +100,7 @@ public class SecurityServiceTest
     List<Group> groups = securityService.getGroupsForUser(userDirectory.getId(),
         user.getUsername());
 
-    assertEquals("The correct number of groups (1) was not retrieved for the user ("
+    assertEquals("The correct number of groups was not retrieved for the user ("
         + user.getUsername() + ")", 1, groups.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getName() + ")", group.getName(), groups.get(0).getName());
@@ -291,7 +288,7 @@ public class SecurityServiceTest
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
 
-    assertEquals("The correct number of group names (1) was not retrieved for the user ("
+    assertEquals("The correct number of group names was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getName() + ")", group.getName(), groupNames.get(0));
@@ -442,7 +439,7 @@ public class SecurityServiceTest
 
     user = securityService.getUser(userDirectory.getId(), user.getUsername());
 
-    assertEquals("The correct number of password attempts (1) was not retrieved", 1,
+    assertEquals("The correct number of password attempts was not retrieved", 1,
         user.getPasswordAttempts().intValue());
   }
 
@@ -466,8 +463,7 @@ public class SecurityServiceTest
 
     List<User> retrievedUsersAll = securityService.getUsers(userDirectory.getId());
 
-    assertEquals("The correct number of users (19) was not retrieved", 19,
-        retrievedUsersAll.size());
+    assertEquals("The correct number of users was not retrieved", 19, retrievedUsersAll.size());
 
     List<Attribute> attributes = new ArrayList<>();
 
@@ -481,9 +477,8 @@ public class SecurityServiceTest
     {
       List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), attributes);
 
-      assertEquals(
-          "The correct number of users (11) was not retrieved matching the search criteria", 11,
-          retrievedUsers.size());
+      assertEquals("The correct number of users was not retrieved matching the search criteria",
+          11, retrievedUsers.size());
     }
     catch (InvalidAttributeException e)
     {
@@ -515,9 +510,8 @@ public class SecurityServiceTest
 
     List<Function> afterRetrievedFunctions = securityService.getFunctions();
 
-    assertEquals("The correct number of functions (" + (beforeRetrievedFunctions.size() + 1)
-        + ") was not retrieved", beforeRetrievedFunctions.size() + 1,
-        afterRetrievedFunctions.size());
+    assertEquals("The correct number of functions was not retrieved",
+        beforeRetrievedFunctions.size() + 1, afterRetrievedFunctions.size());
 
     boolean foundFunction = false;
 
@@ -575,15 +569,14 @@ public class SecurityServiceTest
     List<String> groupNamesForUser = securityService.getGroupNamesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
-    assertEquals("The correct number of group names (1) was not retrieved for the user ("
+    assertEquals("The correct number of group names was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNamesForUser.size());
 
     List<String> functionCodesForUser = securityService.getFunctionCodesForUser(SecurityService
         .ADMINISTRATION_USER_DIRECTORY_ID, user.getUsername());
 
-    assertEquals("The correct number of function codes (" + 0
-        + ") was not retrieved for the user (" + user.getUsername() + ")", 0,
-        functionCodesForUser.size());
+    assertEquals("The correct number of function codes was not retrieved for the user ("
+        + user.getUsername() + ")", 0, functionCodesForUser.size());
   }
 
   /**
@@ -604,13 +597,12 @@ public class SecurityServiceTest
     long numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName());
 
-    assertEquals("The correct number of group members (0) was not retrieved", 0,
-        numberOfGroupMembers);
+    assertEquals("The correct number of group members was not retrieved", 0, numberOfGroupMembers);
 
     List<GroupMember> retrievedGroupMembers = securityService.getMembersForGroup(
         userDirectory.getId(), group.getName());
 
-    assertEquals("The correct number of group members (0) was not retrieved", 0,
+    assertEquals("The correct number of group members was not retrieved", 0,
         retrievedGroupMembers.size());
 
     User firstUser = getTestUserDetails();
@@ -630,24 +622,23 @@ public class SecurityServiceTest
     numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName());
 
-    assertEquals("The correct number of group members (2) was not retrieved", 2,
-        numberOfGroupMembers);
+    assertEquals("The correct number of group members was not retrieved", 2, numberOfGroupMembers);
 
-    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(), group.getName());
+    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(),
+        group.getName());
 
-    assertEquals("The correct number of group members (2) was not retrieved", 2,
+    assertEquals("The correct number of group members was not retrieved", 2,
         retrievedGroupMembers.size());
 
     numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectory.getId(),
         group.getName(), firstUser.getUsername());
 
-    assertEquals("The correct number of group members (1) was not retrieved", 1,
-        numberOfGroupMembers);
+    assertEquals("The correct number of group members was not retrieved", 1, numberOfGroupMembers);
 
-    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(), group.getName(),
-        secondUser.getUsername(), null, null, null);
+    retrievedGroupMembers = securityService.getMembersForGroup(userDirectory.getId(),
+        group.getName(), secondUser.getUsername(), null, null, null);
 
-    assertEquals("The correct number of group members (1) was not retrieved", 1,
+    assertEquals("The correct number of group members was not retrieved", 1,
         retrievedGroupMembers.size());
 
   }
@@ -682,30 +673,29 @@ public class SecurityServiceTest
 
     long numberOfGroups = securityService.getNumberOfGroups(userDirectory.getId());
 
-    assertEquals("The correct number of groups (1) was not retrieved", 1, numberOfGroups);
+    assertEquals("The correct number of groups was not retrieved", 1, numberOfGroups);
 
     List<Group> retrievedGroups = securityService.getGroups(userDirectory.getId());
 
-    assertEquals("The correct number of groups (1) was not retrieved", 1, retrievedGroups.size());
+    assertEquals("The correct number of groups was not retrieved", 1, retrievedGroups.size());
 
     compareGroups(group, retrievedGroups.get(0));
 
     List<String> retrievedGroupNames = securityService.getGroupNames(userDirectory.getId());
 
-    assertEquals("The correct number of group names (1) was not retrieved", 1,
-        retrievedGroups.size());
+    assertEquals("The correct number of group names was not retrieved", 1, retrievedGroups.size());
 
     assertEquals(group.getName(), retrievedGroupNames.get(0));
 
     long numberOfFilteredGroups = securityService.getNumberOfGroups(userDirectory.getId(), "Test");
 
-    assertEquals("The correct number of filtered groups (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered groups was not retrieved", 1,
         numberOfFilteredGroups);
 
     List<Group> retrievedFilteredGroups = securityService.getGroups(userDirectory.getId(), "Test",
         SortDirection.ASCENDING, null, null);
 
-    assertEquals("The correct number of filtered groups (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered groups was not retrieved", 1,
         retrievedFilteredGroups.size());
 
     compareGroups(group, retrievedFilteredGroups.get(0));
@@ -790,15 +780,13 @@ public class SecurityServiceTest
 
     long numberOfOrganizations = securityService.getNumberOfOrganizations();
 
-    assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
-        + 1) + ") was not retrieved", beforeRetrievedOrganizations.size() + 1,
-        numberOfOrganizations);
+    assertEquals("The correct number of organizations was not retrieved",
+        beforeRetrievedOrganizations.size() + 1, numberOfOrganizations);
 
     List<Organization> afterRetrievedOrganizations = securityService.getOrganizations();
 
-    assertEquals("The correct number of organizations (" + (beforeRetrievedOrganizations.size()
-        + 1) + ") was not retrieved", beforeRetrievedOrganizations.size() + 1,
-        afterRetrievedOrganizations.size());
+    assertEquals("The correct number of organizations was not retrieved",
+        beforeRetrievedOrganizations.size() + 1, afterRetrievedOrganizations.size());
 
     boolean foundOrganization = false;
 
@@ -823,7 +811,7 @@ public class SecurityServiceTest
     List<Organization> filteredOrganizations = securityService.getOrganizations(
         organization.getName(), null, null, null);
 
-    assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered organizations was not retrieved", 1,
         filteredOrganizations.size());
 
     compareOrganizations(organization, filteredOrganizations.get(0));
@@ -831,7 +819,7 @@ public class SecurityServiceTest
     filteredOrganizations = securityService.getOrganizations(organization.getName(), SortDirection
         .ASCENDING, 0, 100);
 
-    assertEquals("The correct number of filtered organizations (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered organizations was not retrieved", 1,
         filteredOrganizations.size());
 
     compareOrganizations(organization, filteredOrganizations.get(0));
@@ -840,8 +828,8 @@ public class SecurityServiceTest
         securityService.getUserDirectorySummariesForOrganization(organization.getId());
 
     assertEquals(
-        "The correct number of user directory summaries (1) was not retrieved for the organization",
-        1, userDirectorySummaries.size());
+        "The correct number of user directory summaries was not retrieved for the organization", 1,
+        userDirectorySummaries.size());
 
     assertEquals("The correct user directory summary was not retrieved", userDirectory.getId(),
         userDirectorySummaries.get(0).getId());
@@ -899,7 +887,7 @@ public class SecurityServiceTest
     List<String> groupNames = securityService.getGroupNamesForUser(userDirectory.getId(),
         user.getUsername());
 
-    assertEquals("The correct number of group names (1) was not retrieved for the user ("
+    assertEquals("The correct number of group names was not retrieved for the user ("
         + user.getUsername() + ")", 1, groupNames.size());
     assertEquals("The user (" + user.getUsername() + ") was not added to the group ("
         + group.getName() + ")", group.getName(), groupNames.get(0));
@@ -907,7 +895,7 @@ public class SecurityServiceTest
 
     groupNames = securityService.getGroupNamesForUser(userDirectory.getId(), user.getUsername());
 
-    assertEquals("The correct number of group names (0) was not retrieved for the user ("
+    assertEquals("The correct number of group names was not retrieved for the user ("
         + user.getUsername() + ")", 0, groupNames.size());
   }
 
@@ -920,7 +908,7 @@ public class SecurityServiceTest
   {
     List<UserDirectoryType> userDirectoryTypes = securityService.getUserDirectoryTypes();
 
-    assertEquals("The correct number of user directory types () was not retrieved", 1,
+    assertEquals("The correct number of user directory types was not retrieved", 1,
         userDirectoryTypes.size());
 
     boolean foundInternalUserDirectoryType = false;
@@ -967,13 +955,72 @@ public class SecurityServiceTest
   public void roleTest()
     throws Exception
   {
-    List<String> roleCodes = securityService.getRoleCodesForUser(SecurityService
-        .ADMINISTRATION_USER_DIRECTORY_ID, "Administrator");
+    List<Role> retrievedRoles = securityService.getRoles();
 
-    assertEquals("The correct number of role codes (1) was not retrieved", 1, roleCodes.size());
+    assertEquals("The correct number of roles was not retrieved", 3, retrievedRoles.size());
 
-    assertEquals("The expected role code (Administrator) was not retrieved", "Administrator",
-        roleCodes.get(0));
+    List<String> retrievedRoleCodes = securityService.getRoleCodesForUser(SecurityService
+        .ADMINISTRATION_USER_DIRECTORY_ID, SecurityService.ADMINISTRATOR_USERNAME);
+
+    assertEquals("The correct number of role codes was not retrieved", 1,
+        retrievedRoleCodes.size());
+
+    assertEquals("The expected role code was not retrieved", SecurityService
+        .ADMINISTRATOR_ROLE_CODE, retrievedRoleCodes.get(0));
+
+    List<GroupRole> retrievedGroupRoles = securityService.getRolesForGroup(SecurityService
+        .ADMINISTRATION_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
+
+    assertEquals("The correct number of group roles was not retrieved", 1,
+        retrievedGroupRoles.size());
+
+    assertEquals("The expected role code was not retrieved", SecurityService
+        .ADMINISTRATOR_ROLE_CODE, retrievedGroupRoles.get(0).getRoleCode());
+
+    retrievedRoleCodes = securityService.getRoleCodesForGroup(SecurityService
+        .ADMINISTRATION_USER_DIRECTORY_ID, SecurityService.ADMINISTRATORS_GROUP_NAME);
+
+    assertEquals("The correct number of role codes was not retrieved", 1,
+        retrievedRoleCodes.size());
+
+    assertEquals("The expected role code was not retrieved", SecurityService
+        .ADMINISTRATOR_ROLE_CODE, retrievedRoleCodes.get(0));
+
+    Organization organization = getTestOrganizationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+
+    Group group = getTestGroupDetails();
+
+    securityService.createGroup(userDirectory.getId(), group);
+
+    securityService.addRoleToGroup(userDirectory.getId(), group.getName(), SecurityService
+        .ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+
+    retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group roles was not retrieved", 1,
+        retrievedGroupRoles.size());
+
+    assertEquals("The expected role code was not retrieved", SecurityService
+        .ORGANIZATION_ADMINISTRATOR_ROLE_CODE, retrievedGroupRoles.get(0).getRoleCode());
+
+    retrievedRoleCodes = securityService.getRoleCodesForGroup(userDirectory.getId(),
+        group.getName());
+
+    assertEquals("The correct number of role codes was not retrieved", 1,
+        retrievedRoleCodes.size());
+
+    assertEquals("The expected role code was not retrieved", SecurityService
+        .ORGANIZATION_ADMINISTRATOR_ROLE_CODE, retrievedRoleCodes.get(0));
+
+    securityService.removeRoleFromGroup(userDirectory.getId(), group.getName(), SecurityService
+        .ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+
+    retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
+
+    assertEquals("The correct number of group roles was not retrieved", 0,
+        retrievedGroupRoles.size());
   }
 
   /**
@@ -990,23 +1037,20 @@ public class SecurityServiceTest
     List<Organization> organizationsForUserDirectory =
         securityService.getOrganizationsForUserDirectory(userDirectory.getId());
 
-    assertEquals(
-        "The correct number of organizations (1) was not retrieved for the user directory", 1,
+    assertEquals("The correct number of organizations was not retrieved for the user directory", 1,
         organizationsForUserDirectory.size());
 
     List<UUID> organizationIdsForUserDirectory = securityService.getOrganizationIdsForUserDirectory(
         userDirectory.getId());
 
-    assertEquals(
-        "The correct number of organization IDs (1) was not retrieved for the user directory", 1,
-        organizationIdsForUserDirectory.size());
+    assertEquals("The correct number of organization IDs was not retrieved for the user directory",
+        1, organizationIdsForUserDirectory.size());
 
     List<UserDirectory> userDirectoriesForOrganization =
         securityService.getUserDirectoriesForOrganization(organization.getId());
 
-    assertEquals(
-        "The correct number of user directories (1) was not retrieved for the organization", 1,
-        userDirectoriesForOrganization.size());
+    assertEquals("The correct number of user directories was not retrieved for the organization",
+        1, userDirectoriesForOrganization.size());
   }
 
   /**
@@ -1032,14 +1076,12 @@ public class SecurityServiceTest
 
     long numberOfUserDirectories = securityService.getNumberOfUserDirectories();
 
-    assertEquals("The correct number of user directories ("
-        + (beforeRetrievedUserDirectories.size() + 1) + ") was not retrieved",
+    assertEquals("The correct number of user directories was not retrieved",
         beforeRetrievedUserDirectories.size() + 1, numberOfUserDirectories);
 
     List<UserDirectory> afterRetrievedUserDirectories = securityService.getUserDirectories();
 
-    assertEquals("The correct number of user directories ("
-        + (beforeRetrievedUserDirectories.size() + 1) + ") was not retrieved",
+    assertEquals("The correct number of user directories was not retrieved",
         beforeRetrievedUserDirectories.size() + 1, afterRetrievedUserDirectories.size());
 
     boolean foundUserDirectory = false;
@@ -1065,7 +1107,7 @@ public class SecurityServiceTest
     List<UserDirectory> filteredUserDirectories = securityService.getUserDirectories(
         userDirectory.getName(), SortDirection.ASCENDING, null, null);
 
-    assertEquals("The correct number of filtered user directories (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered user directories was not retrieved", 1,
         filteredUserDirectories.size());
 
     compareUserDirectories(userDirectory, filteredUserDirectories.get(0));
@@ -1074,8 +1116,8 @@ public class SecurityServiceTest
         securityService.getUserDirectorySummaries(userDirectory.getName(), SortDirection.ASCENDING,
         null, null);
 
-    assertEquals("The correct number of filtered user directory summaries (1) was not retrieved",
-        1, filteredUserDirectorySummaries.size());
+    assertEquals("The correct number of filtered user directory summaries was not retrieved", 1,
+        filteredUserDirectorySummaries.size());
 
     userDirectory.setName("Updated " + userDirectory.getName());
 
@@ -1144,23 +1186,23 @@ public class SecurityServiceTest
 
     long numberOfUsers = securityService.getNumberOfUsers(userDirectory.getId());
 
-    assertEquals("The correct number of users (1) was not retrieved", 1, numberOfUsers);
+    assertEquals("The correct number of users was not retrieved", 1, numberOfUsers);
 
     List<User> retrievedUsers = securityService.getUsers(userDirectory.getId());
 
-    assertEquals("The correct number of users (1) was not retrieved", 1, retrievedUsers.size());
+    assertEquals("The correct number of users was not retrieved", 1, retrievedUsers.size());
 
     compareUsers(user, retrievedUsers.get(0), true);
 
     long numberOfFilteredUsers = securityService.getNumberOfUsers(userDirectory.getId(), "Test");
 
-    assertEquals("The correct number of filtered users (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered users was not retrieved", 1,
         numberOfFilteredUsers);
 
     List<User> retrievedFilteredUsers = securityService.getUsers(userDirectory.getId(), "Test",
         UserSortBy.USERNAME, SortDirection.ASCENDING, null, null);
 
-    assertEquals("The correct number of filtered users (1) was not retrieved", 1,
+    assertEquals("The correct number of filtered users was not retrieved", 1,
         retrievedFilteredUsers.size());
 
     compareUsers(user, retrievedFilteredUsers.get(0), true);

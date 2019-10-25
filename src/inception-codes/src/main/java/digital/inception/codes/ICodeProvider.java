@@ -93,6 +93,27 @@ public interface ICodeProvider
     throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
+   * Retrieve the name of the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the name of the code category
+   */
+  String getCodeCategoryName(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodeProviderException;
+
+  /**
+   * Retrieve the name of the code.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the name of code
+   */
+  String getCodeName(String codeCategoryId, String codeId)
+    throws CodeNotFoundException, CodeProviderException;
+
+  /**
    * Retrieve the codes for the code category.
    * <p/>
    * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has

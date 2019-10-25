@@ -17,6 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {CodesService} from "../../services/codes/codes.service";
 
 /**
  * The CodeTitleResolver class provides the route data resolver that resolves the
@@ -29,9 +30,10 @@ export class CodeTitleResolver implements Resolve<string> {
   /**
    * Constructs a new CodeTitleResolver.
    *
-   * @param i18n The internationalization service.
+   * @param i18n         The internationalization service.
+   * @param codesService The codes service.
    */
-  constructor(private i18n: I18n) {
+  constructor(private i18n: I18n, private codesService: CodesService) {
   }
 
   /**
@@ -40,9 +42,10 @@ export class CodeTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
-    // TODO: Retrieve the actual name of the code and return here -- MARCUS
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
+          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    return this.codesService.getCodeName(
+      decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeCategoryId')!),
+      decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeId')!));
   }
 }

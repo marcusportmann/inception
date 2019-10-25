@@ -16,14 +16,13 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+//~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestCodeProvider</code> class.
@@ -44,17 +43,14 @@ public class TestCodeProvider
    */
   public TestCodeProvider(CodeProviderConfig codeProviderConfig)
   {
-    codeCategory = new CodeCategory("TestCodeCategory",
-        "Test Code Category Name", "Test Code Category Data", LocalDateTime.now());
+    codeCategory = new CodeCategory("TestCodeCategory", "Test Code Category Name",
+        "Test Code Category Data", LocalDateTime.now());
 
     codes = new ArrayList<>();
 
-    codes.add(new Code("TestCode1", codeCategory.getId(), "Test Code Name 1",
-        "Test Code Value 1"));
-    codes.add(new Code("TestCode2", codeCategory.getId(), "Test Code Name 2",
-        "Test Code Value 2"));
-    codes.add(new Code("TestCode3", codeCategory.getId(), "Test Code Name 3",
-        "Test Code Value 3"));
+    codes.add(new Code("TestCode1", codeCategory.getId(), "Test Code Name 1", "Test Code Value 1"));
+    codes.add(new Code("TestCode2", codeCategory.getId(), "Test Code Name 2", "Test Code Value 2"));
+    codes.add(new Code("TestCode3", codeCategory.getId(), "Test Code Name 3", "Test Code Value 3"));
   }
 
   /**
@@ -237,6 +233,72 @@ public class TestCodeProvider
           "Failed to retrieve the date and time the code category (%s) was last updated",
           codeCategoryId), e);
     }
+  }
+
+  /**
+   * Retrieve the name of the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the name of the code category
+   */
+  @Override
+  public String getCodeCategoryName(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodeProviderException
+  {
+    try
+    {
+      if (codeCategory.getId().equals(codeCategoryId))
+      {
+        return codeCategory.getName();
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    }
+    catch (CodeCategoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new CodeProviderException(String.format(
+          "Failed to retrieve the code category name (%s)", codeCategoryId), e);
+    }
+  }
+
+  /**
+   * Retrieve the name of the code.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the name of code
+   */
+  @Override
+  public String getCodeName(String codeCategoryId, String codeId)
+    throws CodeNotFoundException, CodeProviderException
+  {
+    try
+    {
+      if (codeCategory.getId().equals(codeCategoryId))
+      {
+        for (Code code : codes)
+        {
+          if (code.getId().equals(codeId))
+          {
+            return code.getName();
+          }
+        }
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new CodeProviderException(String.format(
+          "Failed to retrieve the code (%s) for the code category (%s)", codeId, codeCategoryId),
+          e);
+    }
+
+    throw new CodeNotFoundException(codeCategoryId, codeId);
   }
 
   /**

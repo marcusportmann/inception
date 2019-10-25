@@ -51,7 +51,7 @@ public interface ISecurityService
    */
   void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
     throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
-        SecurityServiceException;
+        ExistingGroupRoleException, SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -717,6 +717,17 @@ public interface ISecurityService
         SecurityServiceException;
 
   /**
+   * Remove the role from the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param roleCode        the code used to uniquely identify the role
+   */
+  void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
+        SecurityServiceException;
+
+  /**
    * Remove the user from the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -724,7 +735,7 @@ public interface ISecurityService
    * @param username        the username identifying the user
    */
   void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         SecurityServiceException;
 
   /**

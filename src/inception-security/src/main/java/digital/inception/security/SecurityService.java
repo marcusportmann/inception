@@ -72,9 +72,14 @@ public class SecurityService
   public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
 
   /**
-   * The name of the Administrator role.
+   * The code uniquely identifying the Administrator role.
    */
-  public static final String ADMINISTRATOR_ROLE_NAME = "Administrator";
+  public static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
+
+  /**
+   * The username for the Administrator user.
+   */
+  public static final String ADMINISTRATOR_USERNAME = "Administrator";
 
   /**
    * The ID used to uniquely identify the internal user directory type.
@@ -85,6 +90,16 @@ public class SecurityService
    * The ID used to uniquely identify the LDAP user directory type.
    */
   public static final String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
+
+  /**
+   * The code uniquely identifying the Organization Administrator role.
+   */
+  public static final String ORGANIZATION_ADMINISTRATOR_ROLE_CODE = "OrganizationAdministrator";
+
+  /**
+   * The code uniquely identifying the Password Resetter role.
+   */
+  public static final String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
 
   /**
    * The maximum number of filtered organizations.
@@ -216,7 +231,7 @@ public class SecurityService
   @Transactional
   public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
     throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
-    SecurityServiceException
+        ExistingGroupRoleException, SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
@@ -2138,6 +2153,29 @@ public class SecurityService
   }
 
   /**
+   * Remove the role from the group.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param groupName       the name identifying the group
+   * @param roleCode        the code used to uniquely identify the role
+   */
+  @Override
+  @Transactional
+  public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
+    throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
+        SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    userDirectory.removeRoleFromGroup(groupName, roleCode);
+  }
+
+  /**
    * Remove the user from the group.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -2147,7 +2185,7 @@ public class SecurityService
   @Override
   @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         SecurityServiceException
   {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);

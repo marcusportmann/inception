@@ -46,7 +46,7 @@ interface IUserDirectory
    * @param roleCode  the code used to uniquely identify the role
    */
   void addRoleToGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, RoleNotFoundException, SecurityServiceException;
+    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -367,13 +367,22 @@ interface IUserDirectory
     throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException;
 
   /**
+   * Remove the role from the group.
+   *
+   * @param groupName the name identifying the group
+   * @param roleCode  the code used to uniquely identify the role
+   */
+  void removeRoleFromGroup(String groupName, String roleCode)
+    throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException;
+
+  /**
    * Remove the user from the group.
    *
    * @param groupName the name identifying the group
    * @param username  the username identifying the user
    */
   void removeUserFromGroup(String groupName, String username)
-    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
+    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Update the group.

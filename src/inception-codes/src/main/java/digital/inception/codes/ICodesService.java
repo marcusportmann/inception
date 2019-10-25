@@ -148,6 +148,16 @@ public interface ICodesService
     throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
+   * Retrieve the name of the code category.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category
+   *
+   * @return the name of the code category
+   */
+  String getCodeCategoryName(String codeCategoryId)
+    throws CodeCategoryNotFoundException, CodesServiceException;
+
+  /**
    * Returns the summaries for all the code categories.
    *
    * @return the summaries for all the code categories
@@ -164,6 +174,18 @@ public interface ICodesService
    */
   LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
     throws CodeCategoryNotFoundException, CodesServiceException;
+
+  /**
+   * Retrieve the name of the code.
+   *
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
+   * @return the name of the code
+   */
+  String getCodeName(String codeCategoryId, String codeId)
+    throws CodeNotFoundException, CodesServiceException;
 
   /**
    * Retrieve the codes for the code category.

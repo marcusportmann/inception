@@ -26,6 +26,7 @@ import org.springframework.data.repository.query.Param;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The <code>CodeRepository</code> interface declares the repository for the
@@ -36,6 +37,9 @@ import java.util.List;
 public interface CodeRepository extends JpaRepository<Code, CodeId>
 {
   long countByCodeCategoryId(String codeCategoryId);
+
+  @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
+  Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :#{#id.codeCategoryId} and c.id = :#{#id.id}")
