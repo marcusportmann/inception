@@ -39,7 +39,13 @@ import java.util.UUID;
  */
 public interface GroupRepository extends JpaRepository<Group, UUID>
 {
+  @Query(
+    "select distinct f.code from Group g join g.roles as r join r.functions as f where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
+  List<String> getFunctionCodesByUserDirectoryIdAndGroupNames(@Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
+  @Query(
+    "select distinct r.code from Group g join g.roles as r where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
+  List<String> getRoleCodesByUserDirectoryIdAndGroupNames(@Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
 
   @Modifying
@@ -56,13 +62,13 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   long countByUserDirectoryId(UUID userDirectoryId);
 
-  @Query("select count(g.id) from Group g where (upper(g.name) like upper(:filter)) and "
+  @Query("select count(g.id) from Group g where (lower(g.name) like lower(:filter)) and "
       + "g.userDirectoryId = :userDirectoryId")
   long countFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter);
 
   @Query("select count(u.id) from Group g join g.users as u where g.userDirectoryId = "
-      + ":userDirectoryId and g.id = :groupId and (upper(u.username) like upper(:filter))")
+      + ":userDirectoryId and g.id = :groupId and (lower(u.username) like lower(:filter))")
   long countFilteredUsernamesForGroup(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "groupId") UUID groupId, @Param("filter") String filter);
 
@@ -92,18 +98,18 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
 
-  @Query("select g from Group g where (upper(g.name) like upper(:filter)) and "
+  @Query("select g from Group g where (lower(g.name) like lower(:filter)) and "
       + "g.userDirectoryId = :userDirectoryId")
   List<Group> findFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter, Pageable pageable);
 
   @Query("select u.username from Group g join g.users as u where g.userDirectoryId = "
-      + ":userDirectoryId and g.id = :groupId and (upper(u.username) like upper(:filter))")
+      + ":userDirectoryId and g.id = :groupId and (lower(u.username) like lower(:filter))")
   List<String> getFilteredUsernamesForGroup(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "groupId") UUID groupId, @Param("filter") String filter, Pageable pageable);
 
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
-      + "upper(g.name) like upper(:name)")
+      + "lower(g.name) like lower(:name)")
   Optional<UUID> getIdByUserDirectoryIdAndNameIgnoreCase(@Param(
       "userDirectoryId") UUID userDirectoryId, @Param("name") String name);
 

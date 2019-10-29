@@ -30,7 +30,6 @@ import {User} from '../../services/security/user';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {UserStatus} from '../../services/security/user-status';
-import {v4 as uuid} from 'uuid';
 import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
 
 /**
@@ -101,8 +100,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
       .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
         this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-        this.user =
-          new User(uuid(), this.userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
+        this.user = new User(this.userDirectoryId, '', '', '', '', '', '', UserStatus.Active, '');
 
         if (this.userDirectoryCapabilities!.supportsPasswordExpiry) {
           this.newUserForm.addControl('expiredPassword', new FormControl(false));

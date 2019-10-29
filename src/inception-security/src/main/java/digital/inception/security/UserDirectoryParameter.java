@@ -219,6 +219,42 @@ public class UserDirectoryParameter
   }
 
   /**
+   * Returns the <code>boolean</code> value for the <code>UserDirectoryParameter</code> instance
+   * with the specified name in the specified list.
+   *
+   * @param parameters the <code>UserDirectoryParameter</code> instances to search for the
+   *                   <code>UserDirectoryParameter</code> with the specified name
+   * @param name       the name for the user directory parameter
+   *
+   * @return the <code>boolean</code> value for the <code>UserDirectoryParameter</code> instance
+   *         with the specified name in the specified list
+   */
+  public static boolean getBooleanValue(List<UserDirectoryParameter> parameters, String name)
+    throws UserDirectoryParameterException
+  {
+    for (UserDirectoryParameter parameter : parameters)
+    {
+      if (parameter.name.equalsIgnoreCase(name))
+      {
+        try
+        {
+          return Boolean.parseBoolean(parameter.value);
+        }
+        catch (Throwable e)
+        {
+          throw new UserDirectoryParameterException(String.format(
+              "Failed to retrieve the boolean value for the user directory parameter (%s)",
+              parameter.name));
+        }
+      }
+    }
+
+    throw new UserDirectoryParameterException(String.format(
+        "Failed to retrieve the boolean value for the user directory parameter (%s): "
+        + "The user directory parameter could not be found", name));
+  }
+
+  /**
    * Returns the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
    * with the specified name in the specified list.
    *
@@ -723,6 +759,17 @@ public class UserDirectoryParameter
   public void setBinaryValue(byte[] value)
   {
     this.value = Base64Util.encodeBytes(value);
+  }
+
+  /**
+   * Set the <code>boolean</code> value for the user directory parameter.
+   *
+   * @param value the <code>boolean</code> value for the user directory parameter
+   */
+  @JsonIgnore
+  public void setBooleanValue(boolean value)
+  {
+    this.value = String.valueOf(value);
   }
 
   /**

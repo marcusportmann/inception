@@ -277,6 +277,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
                   if (state.userDirectoryId) {
                     for (let i = 0; i < userDirectories.length; i++ ) {
                       if (userDirectories[i].id == state.userDirectoryId) {
+                        this.userDirectorySelect!.value = userDirectories[i].id;
                         this.userDirectoryId.next(userDirectories[i].id);
                         break;
                       }

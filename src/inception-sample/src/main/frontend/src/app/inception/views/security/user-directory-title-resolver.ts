@@ -15,8 +15,9 @@
  */
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {SecurityService} from "../../services/security/security.service";
 
 /**
  * The UserDirectoryTitleResolver class provides the route data resolver that resolves the
@@ -29,9 +30,10 @@ export class UserDirectoryTitleResolver implements Resolve<string> {
   /**
    * Constructs a new UserDirectoryTitleResolver.
    *
-   * @param i18n The internationalization service.
+   * @param i18n            The internationalization service.
+   * @param securityService The security service.
    */
-  constructor(private i18n: I18n) {
+  constructor(private i18n: I18n, private securityService: SecurityService) {
   }
 
   /**
@@ -40,9 +42,9 @@ export class UserDirectoryTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
-    // TODO: Retrieve the name of the user directory and return here -- MARCUS
-    return of(activatedRouteSnapshot.paramMap.get('userDirectoryId')!);
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
+          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    return this.securityService.getUserDirectoryName(
+      activatedRouteSnapshot.paramMap.get('userDirectoryId')!);
   }
 }

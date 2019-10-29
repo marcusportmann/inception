@@ -67,6 +67,7 @@ security:
         zz3qKUvmXlEMBiv8J9T/MWX+d0Px+LxHo5gclU7/YYvvBmlVltfOLQ95goi3ydBm
         FwIDAQAB
         -----END PUBLIC KEY-----
+    userAuthenticationConverter: digital.inception.sample.SampleUserAuthenticationConverter
 
 application:
 

@@ -455,6 +455,16 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the name of the organization.
+   *
+   * @param organizationId the ID used to uniquely identify the organization
+   *
+   * @return the name of the organization
+   */
+  String getOrganizationName(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the organizations.
    *
    * @return the organizations
@@ -615,6 +625,16 @@ public interface ISecurityService
     throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the name of the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the name of the user directory
+   */
+  String getUserDirectoryName(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the summaries for the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
@@ -658,6 +678,17 @@ public interface ISecurityService
     throws SecurityServiceException;
 
   /**
+   * Retrieve the full name for the user.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   *
+   * @return the full name for the user
+   */
+  String getUserFullName(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve all the users.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -681,6 +712,18 @@ public interface ISecurityService
    */
   List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+    throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Does the user with the specified username exist?
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   *
+   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   *         otherwise
+   */
+  boolean isExistingUser(UUID userDirectoryId, String username)
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**

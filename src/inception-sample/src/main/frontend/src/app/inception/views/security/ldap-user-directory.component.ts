@@ -61,9 +61,15 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       groupNameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       groupObjectClass: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       host: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      maxFilteredGroupMembers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
       maxFilteredGroups: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
       maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
       port: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
+      supportsAdminChangePassword: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
+      supportsChangePassword: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
+      supportsGroupAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
+      supportsGroupMemberAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
+      supportsUserAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
       userBaseDN: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       userObjectClass: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       userEmailAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
@@ -101,12 +107,24 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       this.ldapUserDirectoryForm.get('groupObjectClass')!.value);
     UserDirectoryUtil.setParameter(parameters, 'Host',
       this.ldapUserDirectoryForm.get('host')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroupMembers',
+      this.ldapUserDirectoryForm.get('maxFilteredGroupMembers')!.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroups',
       this.ldapUserDirectoryForm.get('maxFilteredGroups')!.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredUsers',
       this.ldapUserDirectoryForm.get('maxFilteredUsers')!.value);
     UserDirectoryUtil.setParameter(parameters, 'Port',
       this.ldapUserDirectoryForm.get('port')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'SupportsAdminChangePassword',
+      this.ldapUserDirectoryForm.get('supportsAdminChangePassword')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'SupportsChangePassword',
+      this.ldapUserDirectoryForm.get('supportsChangePassword')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'SupportsGroupAdministration',
+      this.ldapUserDirectoryForm.get('supportsGroupAdministration')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'SupportsGroupMemberAdministration',
+      this.ldapUserDirectoryForm.get('supportsGroupMemberAdministration')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'SupportsUserAdministration',
+      this.ldapUserDirectoryForm.get('supportsUserAdministration')!.value);
     UserDirectoryUtil.setParameter(parameters, 'UserBaseDN',
       this.ldapUserDirectoryForm.get('userBaseDN')!.value);
     UserDirectoryUtil.setParameter(parameters, 'UserObjectClass',
@@ -176,6 +194,9 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     this.ldapUserDirectoryForm.get('host')!.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'Host') ?
         UserDirectoryUtil.getParameter(parameters, 'Host') : '');
+    this.ldapUserDirectoryForm.get('maxFilteredGroupMembers')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroupMembers') ?
+        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers') : '100');
     this.ldapUserDirectoryForm.get('maxFilteredGroups')!.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ?
         UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') : '100');
@@ -185,6 +206,21 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     this.ldapUserDirectoryForm.get('port')!.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'Port') ?
         UserDirectoryUtil.getParameter(parameters, 'Port') : '');
+    this.ldapUserDirectoryForm.get('supportsAdminChangePassword')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsAdminChangePassword') ?
+        UserDirectoryUtil.getParameter(parameters, 'SupportsAdminChangePassword') : '');
+    this.ldapUserDirectoryForm.get('supportsChangePassword')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsChangePassword') ?
+        UserDirectoryUtil.getParameter(parameters, 'SupportsChangePassword') : '');
+    this.ldapUserDirectoryForm.get('supportsGroupAdministration')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupAdministration') ?
+        UserDirectoryUtil.getParameter(parameters, 'SupportsGroupAdministration') : '');
+    this.ldapUserDirectoryForm.get('supportsGroupMemberAdministration')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupMemberAdministration') ?
+        UserDirectoryUtil.getParameter(parameters, 'SupportsGroupMemberAdministration') : '');
+    this.ldapUserDirectoryForm.get('supportsUserAdministration')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'SupportsUserAdministration') ?
+        UserDirectoryUtil.getParameter(parameters, 'SupportsUserAdministration') : '');
     this.ldapUserDirectoryForm.get('userBaseDN')!.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserBaseDN') ?
         UserDirectoryUtil.getParameter(parameters, 'UserBaseDN') : '');

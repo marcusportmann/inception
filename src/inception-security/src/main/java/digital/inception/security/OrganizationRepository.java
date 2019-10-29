@@ -24,10 +24,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-import java.util.UUID;
-
 //~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * The <code>OrganizationRepository</code> interface declares the repository for the
@@ -55,6 +56,9 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
   List<Organization> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
   List<Organization> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
+
+  @Query("select o.name from Organization o where o.id = :organizationId")
+  Optional<String> getNameById(@Param("organizationId") UUID organizationId);
 
   @Query(
       "select ud.id from UserDirectory ud join ud.organizations as o where o.id = :organizationId")

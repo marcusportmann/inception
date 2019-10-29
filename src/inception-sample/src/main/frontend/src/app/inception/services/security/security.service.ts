@@ -795,6 +795,41 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve the name of the organization.
+   *
+   * @param organizationId The ID used to uniquely identify the organization.
+   *
+   * @return The name of the organization.
+   */
+  getOrganizationName(organizationId: string): Observable<string> {
+    return this.httpClient.get<string>(
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/name',
+      {reportProgress: true}).pipe(map((organizationName: string) => {
+      return organizationName;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(this.i18n({
+            id: '@@security_service_the_organization_could_not_be_found',
+            value: 'The organization could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_retrieve_the_organization_name',
+            value: 'Failed to retrieve the organization name.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Retrieve the members for the group.
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
@@ -1186,6 +1221,42 @@ export class SecurityService {
   }
 
   /**
+   * Retrieve the name of the user directory.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   *
+   * @return The name of the user directory.
+   */
+  getUserDirectoryName(userDirectoryId: string): Observable<string> {
+    return this.httpClient.get<string>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/name',
+      {reportProgress: true})
+      .pipe(map((userDirectoryName: string) => {
+        return userDirectoryName;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_retrieve_the_user_directory_name',
+              value: 'Failed to retrieve the user directory name.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
    * @param organizationId The ID used to uniquely identify the organization.
@@ -1275,6 +1346,48 @@ export class SecurityService {
             id: '@@security_service_failed_to_retrieve_the_user_directory_types',
             value: 'Failed to retrieve the user directory types.'
           }), apiError));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Retrieve the full name for the user.
+   *
+   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param username        The username identifying the user.
+   *
+   * @return The full name for the user.
+   */
+  getUserFullName(userDirectoryId: string, username: string): Observable<string> {
+    return this.httpClient.get<string>(
+      environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
+      encodeURIComponent(username) + '/full-name', {reportProgress: true})
+      .pipe(map((userFullName: string) => {
+        return userFullName;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n({
+              id: '@@security_service_the_user_directory_could_not_be_found',
+              value: 'The user directory could not be found.'
+            }), apiError));
+          } else if (apiError.code === 'UserNotFoundError') {
+            return throwError(new UserNotFoundError(this.i18n({
+              id: '@@security_service_the_user_could_not_be_found',
+              value: 'The user could not be found.'
+            }), apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_service_failed_to_retrieve_the_user_full_name',
+              value: 'Failed to retrieve the full name for the user.'
+            }), apiError));
+          }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {

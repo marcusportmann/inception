@@ -34,11 +34,6 @@ export class User {
   firstName: string;
 
   /**
-   * The ID used to uniquely identify the user.
-   */
-  id: string;
-
-  /**
    * The last name for the user.
    */
   lastName: string;
@@ -69,11 +64,6 @@ export class User {
   phoneNumber: string;
 
   /**
-   * Is the user read-only.
-   */
-  readOnly?: boolean | undefined;
-
-  /**
    * The status for the user.
    */
   status: UserStatus;
@@ -91,7 +81,6 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param id                The ID used to uniquely identify the user.
    * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
    *                          associated with.
    * @param username          The username for the user.
@@ -105,13 +94,11 @@ export class User {
    * @param passwordAttempts  The number of failed authentication attempts as a result of an
    *                          incorrect password for the user.
    * @param passwordExpiry    The date and time the password for the user expires.
-   * @param readOnly          Is the user read-only.
    */
-  constructor(id: string, userDirectoryId: string, username: string, firstName: string,
+  constructor(userDirectoryId: string, username: string, firstName: string,
               lastName: string, mobileNumber: string, phoneNumber: string, email: string,
               status: UserStatus, password: string, passwordAttempts?: number,
-              passwordExpiry?: Date, readOnly?: boolean) {
-    this.id = id;
+              passwordExpiry?: Date) {
     this.userDirectoryId = userDirectoryId;
     this.username = username;
     this.firstName = firstName;
@@ -123,6 +110,5 @@ export class User {
     this.password = password;
     this.passwordAttempts = passwordAttempts;
     this.passwordExpiry = passwordExpiry;
-    this.readOnly = readOnly;
   }
 }

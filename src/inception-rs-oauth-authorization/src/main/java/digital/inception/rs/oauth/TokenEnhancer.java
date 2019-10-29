@@ -21,8 +21,8 @@ package digital.inception.rs.oauth;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.Organization;
 import digital.inception.security.User;
-
 import digital.inception.security.UserDetails;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,9 +82,7 @@ public class TokenEnhancer
 
     try
     {
-      UserDetails userDetails =
-
-        UserDetails.class.isInstance(authentication.getPrincipal())
+      UserDetails userDetails = UserDetails.class.isInstance(authentication.getPrincipal())
           ? UserDetails.class.cast(authentication.getPrincipal())
           : null;
 

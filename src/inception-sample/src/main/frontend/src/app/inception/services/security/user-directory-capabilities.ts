@@ -38,6 +38,11 @@ export class UserDirectoryCapabilities {
   supportsGroupAdministration: boolean;
 
   /**
+   * The user directory supports the group member administration capability.
+   */
+  supportsGroupMemberAdministration: boolean;
+
+  /**
    * The user directory supports the password expiry capability.
    */
   supportsPasswordExpiry: boolean;
@@ -60,24 +65,30 @@ export class UserDirectoryCapabilities {
   /**
    * Constructs a new UserDirectoryCapabilities.
    *
-   * @param supportsAdminChangePassword the user directory supports the admin change
-   *                                    password capability
-   * @param supportsChangePassword      the user directory supports the change password capability
-   * @param supportsGroupAdministration the user directory supports the group administration
-   *                                    capability
-   * @param supportsPasswordExpiry      the user directory supports the password expiry capability
-   * @param supportsPasswordHistory     the user directory supports the password history capability
-   * @param supportsUserAdministration  the user directory supports the user administration
-   *                                    capability
-   * * @param supportsUserLocks         the user directory supports the user locks capability
+   * @param supportsAdminChangePassword       The user directory supports the admin change
+   *                                          password capability.
+   * @param supportsChangePassword            The user directory supports the change password
+   *                                          capability.
+   * @param supportsGroupAdministration       The user directory supports the group administration
+   *                                          capability.
+   * @param supportsGroupMemberAdministration The user directory supports the group member
+   *                                          administration capability.
+   * @param supportsPasswordExpiry            The user directory supports the password expiry
+   *                                          capability.
+   * @param supportsPasswordHistory           The user directory supports the password history
+   *                                          capability.
+   * @param supportsUserAdministration        The user directory supports the user administration
+   *                                          capability.
+   * * @param supportsUserLocks               The user directory supports the user locks capability.
    */
   constructor(supportsAdminChangePassword: boolean, supportsChangePassword: boolean,
-              supportsGroupAdministration: boolean, supportsPasswordExpiry: boolean,
-              supportsPasswordHistory: boolean, supportsUserAdministration: boolean,
-              supportsUserLocks: boolean) {
+              supportsGroupAdministration: boolean, supportsGroupMemberAdministration: boolean,
+              supportsPasswordExpiry: boolean, supportsPasswordHistory: boolean,
+              supportsUserAdministration: boolean, supportsUserLocks: boolean) {
     this.supportsAdminChangePassword = supportsAdminChangePassword;
     this.supportsChangePassword = supportsChangePassword;
     this.supportsGroupAdministration = supportsGroupAdministration;
+    this.supportsGroupMemberAdministration = supportsGroupMemberAdministration;
     this.supportsPasswordExpiry = supportsPasswordExpiry;
     this.supportsPasswordHistory = supportsPasswordHistory;
     this.supportsUserAdministration = supportsUserAdministration;

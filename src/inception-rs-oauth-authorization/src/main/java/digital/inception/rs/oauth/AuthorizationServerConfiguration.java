@@ -21,16 +21,14 @@ package digital.inception.rs.oauth;
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityServiceAuthenticationManager;
-
 import digital.inception.security.UserDetailsService;
+
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration
-    .EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
@@ -77,7 +75,6 @@ import java.util.Arrays;
 @Configuration
 @EnableAuthorizationServer
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @SuppressWarnings("WeakerAccess")
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
 {

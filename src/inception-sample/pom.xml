@@ -79,6 +79,10 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-rs-oauth-resource</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-scheduler</artifactId>
     </dependency>
     <dependency>

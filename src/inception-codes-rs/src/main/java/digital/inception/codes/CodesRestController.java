@@ -18,7 +18,9 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.ISO8601Util;
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -31,8 +33,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Set;
@@ -344,8 +344,8 @@ public class CodesRestController extends SecureRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/code-categories/{codeCategoryId}/data", method = RequestMethod.GET)
-  @ResponseBody
+  @RequestMapping(value = "/code-categories/{codeCategoryId}/data", method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryData(@ApiParam(name = "codeCategoryId",
@@ -360,9 +360,9 @@ public class CodesRestController extends SecureRestController
 
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
-    return StringUtils.isEmpty(data)
+    return RestUtil.quote(StringUtils.isEmpty(data)
         ? ""
-        : data;
+        : data);
   }
 
   /**
@@ -395,7 +395,7 @@ public class CodesRestController extends SecureRestController
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return codesService.getCodeCategoryName(codeCategoryId);
+    return RestUtil.quote(codesService.getCodeCategoryName(codeCategoryId));
   }
 
   /**
@@ -437,10 +437,9 @@ public class CodesRestController extends SecureRestController
           response = RestControllerError.class) })
   @RequestMapping(value = "/code-categories/{codeCategoryId}/updated", method = RequestMethod.GET,
       produces = "application/json")
-  @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
-  public LocalDateTime getCodeCategoryUpdated(@ApiParam(name = "codeCategoryId",
+  public String getCodeCategoryUpdated(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
     throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
@@ -450,7 +449,8 @@ public class CodesRestController extends SecureRestController
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return codesService.getCodeCategoryUpdated(codeCategoryId);
+    return RestUtil.quote(ISO8601Util.fromLocalDateTime(codesService.getCodeCategoryUpdated(
+        codeCategoryId)));
   }
 
   /**
@@ -492,7 +492,7 @@ public class CodesRestController extends SecureRestController
       throw new InvalidArgumentException("codeId");
     }
 
-    return codesService.getCodeName(codeCategoryId, codeId);
+    return RestUtil.quote(codesService.getCodeName(codeCategoryId, codeId));
   }
 
   /**

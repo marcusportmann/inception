@@ -306,13 +306,12 @@ export class CodesService {
    * @return The name of the code category.
    */
   getCodeCategoryName(codeCategoryId: string): Observable<string> {
-    return this.httpClient.get(
+    return this.httpClient.get<string>(
       environment.codesServiceUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) +
       '/name', {
         reportProgress: true,
-        responseType: 'text'
-      }).pipe(tap(data => {
-      return data;
+      }).pipe(map((codeCategoryName: string) => {
+      return codeCategoryName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -346,13 +345,12 @@ export class CodesService {
    * @return The name of the code.
    */
   getCodeName(codeCategoryId: string, codeId: string): Observable<string> {
-    return this.httpClient.get(
+    return this.httpClient.get<string>(
       environment.codesServiceUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) +
       '/codes/' + encodeURIComponent(codeId) + '/name', {
-        reportProgress: true,
-        responseType: 'text'
-      }).pipe(tap(data => {
-      return data;
+        reportProgress: true
+      }).pipe(map((codeName: string) => {
+      return codeName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);

@@ -51,7 +51,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   long countByUserDirectoryId(UUID userDirectoryId);
 
   @Query(
-      "select count(u.id) from User u where ((upper(u.username) like upper(:filter)) or (upper(u.firstName) like upper(:filter)) or (upper(u.lastName) like upper(:filter))) and u.userDirectoryId = :userDirectoryId")
+      "select count(u.id) from User u where ((lower(u.username) like lower(:filter)) or (lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
   long countFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter);
 
@@ -74,9 +74,12 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query(
-      "select u from User u where ((upper(u.username) like upper(:filter)) or (upper(u.firstName) like upper(:filter)) or (upper(u.lastName) like upper(:filter))) and u.userDirectoryId = :userDirectoryId")
+      "select u from User u where ((lower(u.username) like lower(:filter)) or (lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
   List<User> findFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter, Pageable pageable);
+
+  Optional<FirstNameAndLastName> getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
+      UUID userDirectoryId, String username);
 
   @Query(
       "select f.code from User u join u.groups as g join g.roles as r join r.functions as f where u.id = :userId")
@@ -89,14 +92,14 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   List<Group> getGroupsByUserId(@Param("userId") UUID userId);
 
   @Query(
-      "select u.id from User u where u.userDirectoryId = :userDirectoryId and upper(u.username) like upper(:username)")
+      "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) like lower(:username)")
   Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(@Param(
       "userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
   @Query("select r.code from User u join u.groups as g join g.roles as r where u.id = :userId")
   List<String> getRoleCodesByUserId(@Param("userId") UUID userId);
 
-  @Query("select u.userDirectoryId from User u where upper(u.username) = upper(:username)")
+  @Query("select u.userDirectoryId from User u where lower(u.username) = lower(:username)")
   Optional<UUID> getUserDirectoryIdByUsernameIgnoreCase(@Param("username") String username);
 
   @Modifying

@@ -82,7 +82,7 @@ public class ClientDetails
   {
     List<GrantedAuthority> authorities = new ArrayList<>();
 
-    authorities.add(new SimpleGrantedAuthority("read:codeCategories"));
+    // authorities.add(new SimpleGrantedAuthority("read:codeCategories"));
 
     return authorities;
   }

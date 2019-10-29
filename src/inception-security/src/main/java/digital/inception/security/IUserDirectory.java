@@ -46,7 +46,8 @@ interface IUserDirectory
    * @param roleCode  the code used to uniquely identify the role
    */
   void addRoleToGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException;
+    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
+        SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -308,6 +309,16 @@ interface IUserDirectory
    * @return the user
    */
   User getUser(String username)
+    throws UserNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the full name for the user.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the full name for the user
+   */
+  String getUserFullName(String username)
     throws UserNotFoundException, SecurityServiceException;
 
   /**

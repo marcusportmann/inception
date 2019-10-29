@@ -56,7 +56,8 @@ export class ConfigurationService {
    */
   deleteConfiguration(key: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key), {observe: 'response'})
+      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key),
+      {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -91,7 +92,8 @@ export class ConfigurationService {
    */
   getConfiguration(key: string): Observable<Configuration> {
     return this.httpClient.get<Configuration>(
-      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key), {reportProgress: true})
+      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key),
+      {reportProgress: true})
       .pipe(map((configuration: Configuration) => {
         return configuration;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -126,8 +128,10 @@ export class ConfigurationService {
    */
   getConfigurationValue(key: string): Observable<string> {
     return this.httpClient.get<string>(
-      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key) + '/value',
-      {reportProgress: true}).pipe(map((value: string) => {
+      environment.configurationServiceUrlPrefix + '/configurations/' + encodeURIComponent(key) +
+      '/value', {
+        reportProgress: true
+      }).pipe(map((value: string) => {
       return value;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

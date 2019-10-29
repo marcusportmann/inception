@@ -18,8 +18,10 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.PasswordUtil;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
@@ -71,7 +73,14 @@ public class InternalUserDirectory extends UserDirectoryBase
    * The user directory capabilities common to all internal user directory instances.
    */
   private static final UserDirectoryCapabilities INTERNAL_USER_DIRECTORY_CAPABILITIES =
-      new UserDirectoryCapabilities(true, true, true, true, true, true, true);
+      new UserDirectoryCapabilities(true, true, true, true, true, true, true, true);
+
+  /**
+   * The ID generator.
+   */
+  @Autowired
+  private IDGenerator idGenerator;
+
 
   /**
    * The maximum number of filtered group members to return.
@@ -511,7 +520,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateGroupException(group.getName());
       }
 
-      group.setUserDirectoryId(getUserDirectoryId());
+      group.setId(idGenerator.nextUUID());
 
       getGroupRepository().saveAndFlush(group);
     }
@@ -546,7 +555,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateUserException(user.getUsername());
       }
 
-      user.setUserDirectoryId(getUserDirectoryId());
+      user.setId(idGenerator.nextUUID());
 
       if (!isNullOrEmpty(user.getPassword()))
       {
@@ -1250,7 +1259,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException(String.format(
-          "Failed to retrieve the codes for the roles for the group (%s) for the user directory (%s)",
+          "Failed to retrieve the role codes for the group (%s) for the user directory (%s)",
           groupName, getUserDirectoryId()), e);
     }
   }
@@ -1364,6 +1373,56 @@ public class InternalUserDirectory extends UserDirectoryBase
     catch (Throwable e)
     {
       throw new SecurityServiceException("Failed to retrieve the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the full name for the user.
+   *
+   * @param username the username identifying the user
+   *
+   * @return the full name for the user
+   */
+  @Override
+  public String getUserFullName(String username)
+    throws UserNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<FirstNameAndLastName> firstNameAndLastNameOptional =
+          getUserRepository().getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
+          getUserDirectoryId(), username);
+
+      if (firstNameAndLastNameOptional.isPresent())
+      {
+        StringBuilder buffer = new StringBuilder(firstNameAndLastNameOptional.get()
+            .getFirstName());
+
+        if (!StringUtils.isEmpty(firstNameAndLastNameOptional.get().getLastName()))
+        {
+          if (buffer.length() > 0)
+          {
+            buffer.append(" ");
+          }
+
+          buffer.append(firstNameAndLastNameOptional.get().getLastName());
+        }
+
+        return buffer.toString();
+      }
+      else
+      {
+        throw new UserNotFoundException(username);
+      }
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the full name for the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
@@ -1649,15 +1708,15 @@ public class InternalUserDirectory extends UserDirectoryBase
   {
     try
     {
-      Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
-          getUserDirectoryId(), group.getName());
+      Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
+        group.getUserDirectoryId(), group.getName());
 
-      if (groupIdOptional.isEmpty())
+      if (groupOptional.isEmpty())
       {
         throw new GroupNotFoundException(group.getName());
       }
 
-      group.setId(groupIdOptional.get());
+      groupOptional.get().setDescription(group.getDescription());
 
       getGroupRepository().saveAndFlush(group);
     }

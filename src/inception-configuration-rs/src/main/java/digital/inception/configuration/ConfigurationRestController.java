@@ -19,6 +19,7 @@ package digital.inception.configuration;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -152,8 +153,8 @@ public class ConfigurationRestController extends SecureRestController
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
           response = RestControllerError.class) })
-  @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET)
-  @ResponseBody
+  @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET,
+      produces = "application/json")
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public String getConfigurationValue(@ApiParam(name = "key",
@@ -166,7 +167,7 @@ public class ConfigurationRestController extends SecureRestController
       throw new InvalidArgumentException("key");
     }
 
-    return configurationService.getString(key);
+    return RestUtil.quote(configurationService.getString(key));
   }
 
   /**

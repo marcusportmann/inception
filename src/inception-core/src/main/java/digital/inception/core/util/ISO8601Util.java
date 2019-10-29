@@ -130,63 +130,63 @@ public final class ISO8601Util
     return zonedDateTime.format(localDateTimeFormatter.get());
   }
 
-  /**
-   * Main.
-   *
-   * @param args the command line arguments
-   */
-  public static void main(String[] args)
-  {
-    System.out.println("fromDate(new Date()) = " + fromDate(new Date()));
-
-    System.out.println("fromDateTime(new Date()) = " + fromDateTime(new Date()));
-
-    System.out.println("fromLocalDate(LocalDate.now()) = " + fromLocalDate(LocalDate.now()));
-
-    System.out.println("fromLocalDateTime(LocalDateTime.now()) = " + fromLocalDateTime(
-        LocalDateTime.now()));
-
-    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)) = "
-        + fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)));
-
-    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())) = "
-        + fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())));
-
-    System.out.println("Date 2017-08-14 = " + toDate("2017-08-14"));
-
-    System.out.println("Date 2017-08-14T19:14:53.120Z = " + toDate("2017-08-14T19:14:53.120Z"));
-
-    System.out.println("Date 2017-08-14T22:14:53.120+02:00 = " + toDate(
-        "2017-08-14T22:14:53.120+02:00"));
-
-    System.out.println("Date 2017-08-14T19:14:53.120 = " + toDate("2017-08-14T19:14:53.120"));
-
-    System.out.println("Date 2017-08-14T19:14:53 = " + toDate("2017-08-14T19:14:53"));
-
-    System.out.println("Local Date Time 2017-08-14T19:14:53.120Z = " + toLocalDateTime(
-        "2017-08-14T19:14:53.120Z"));
-
-    System.out.println("Local Date Time 2017-08-14T22:14:53.120+02:00 = " + toLocalDateTime(
-        "2017-08-14T22:14:53.120+02:00"));
-
-    System.out.println("Local Date Time 2017-08-14T19:14:53.120 = " + toLocalDateTime(
-        "2017-08-14T19:14:53.120"));
-
-    System.out.println("Local Date Time 2017-08-14T19:14:53 = " + toLocalDateTime(
-        "2017-08-14T19:14:53"));
-
-    System.out.println("Zoned Date Time 2017-08-14T19:14:53.120Z = " + toZonedDateTime(
-        "2017-08-14T19:14:53.120Z"));
-
-    System.out.println("Zoned Date Time 2017-08-14T22:14:53.120+02:00 = " + toZonedDateTime(
-        "2017-08-14T22:14:53.120+02:00"));
-
-    System.out.println("Zoned Date Time 2017-08-14T19:14:53.120 = " + toZonedDateTime(
-        "2017-08-14T19:14:53.120"));
-
-    System.out.println("Zoned Date Time 2017-08-14T19:14:53 = " + toZonedDateTime(
-        "2017-08-14T19:14:53"));
-  }
+//  /**
+//   * Main.
+//   *
+//   * @param args the command line arguments
+//   */
+//  public static void main(String[] args)
+//  {
+//    System.out.println("fromDate(new Date()) = " + fromDate(new Date()));
+//
+//    System.out.println("fromDateTime(new Date()) = " + fromDateTime(new Date()));
+//
+//    System.out.println("fromLocalDate(LocalDate.now()) = " + fromLocalDate(LocalDate.now()));
+//
+//    System.out.println("fromLocalDateTime(LocalDateTime.now()) = " + fromLocalDateTime(
+//        LocalDateTime.now()));
+//
+//    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)) = "
+//        + fromZonedDateTime(ZonedDateTime.now(ZoneOffset.UTC)));
+//
+//    System.out.println("fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())) = "
+//        + fromZonedDateTime(ZonedDateTime.now(ZoneId.systemDefault())));
+//
+//    System.out.println("Date 2017-08-14 = " + toDate("2017-08-14"));
+//
+//    System.out.println("Date 2017-08-14T19:14:53.120Z = " + toDate("2017-08-14T19:14:53.120Z"));
+//
+//    System.out.println("Date 2017-08-14T22:14:53.120+02:00 = " + toDate(
+//        "2017-08-14T22:14:53.120+02:00"));
+//
+//    System.out.println("Date 2017-08-14T19:14:53.120 = " + toDate("2017-08-14T19:14:53.120"));
+//
+//    System.out.println("Date 2017-08-14T19:14:53 = " + toDate("2017-08-14T19:14:53"));
+//
+//    System.out.println("Local Date Time 2017-08-14T19:14:53.120Z = " + toLocalDateTime(
+//        "2017-08-14T19:14:53.120Z"));
+//
+//    System.out.println("Local Date Time 2017-08-14T22:14:53.120+02:00 = " + toLocalDateTime(
+//        "2017-08-14T22:14:53.120+02:00"));
+//
+//    System.out.println("Local Date Time 2017-08-14T19:14:53.120 = " + toLocalDateTime(
+//        "2017-08-14T19:14:53.120"));
+//
+//    System.out.println("Local Date Time 2017-08-14T19:14:53 = " + toLocalDateTime(
+//        "2017-08-14T19:14:53"));
+//
+//    System.out.println("Zoned Date Time 2017-08-14T19:14:53.120Z = " + toZonedDateTime(
+//        "2017-08-14T19:14:53.120Z"));
+//
+//    System.out.println("Zoned Date Time 2017-08-14T22:14:53.120+02:00 = " + toZonedDateTime(
+//        "2017-08-14T22:14:53.120+02:00"));
+//
+//    System.out.println("Zoned Date Time 2017-08-14T19:14:53.120 = " + toZonedDateTime(
+//        "2017-08-14T19:14:53.120"));
+//
+//    System.out.println("Zoned Date Time 2017-08-14T19:14:53 = " + toZonedDateTime(
+//        "2017-08-14T19:14:53"));
+//  }
 
   /**
    * Get current date and time formatted as ISO 8601 string.

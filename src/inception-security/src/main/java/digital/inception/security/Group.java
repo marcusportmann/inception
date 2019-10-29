@@ -48,10 +48,10 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "userDirectoryId", "name", "description" })
+@JsonPropertyOrder({ "userDirectoryId", "name", "description" })
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
 @XmlType(name = "Group", namespace = "http://security.inception.digital",
-    propOrder = { "id", "userDirectoryId", "name", "description" })
+    propOrder = { "userDirectoryId", "name", "description" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "groups")
@@ -74,10 +74,8 @@ public class Group
   /**
    * The ID used to uniquely identify the group.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the group", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
+  @JsonIgnore
+  @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
@@ -145,15 +143,13 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param id              the ID used to uniquely identify the group
    * @param userDirectoryId the ID used to uniquely identify the user directory the group
    *                        is associated with
    * @param name            the name identifying the group
    * @param description     the description for the group
    */
-  public Group(UUID id, UUID userDirectoryId, String name, String description)
+  public Group(UUID userDirectoryId, String name, String description)
   {
-    this.id = id;
     this.userDirectoryId = userDirectoryId;
     this.name = name;
     this.description = description;

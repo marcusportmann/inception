@@ -45,6 +45,6 @@ public interface ConfigurationRepository extends JpaRepository<Configuration, St
 
   List<Configuration> findByKeyIgnoreCaseContaining(String filter);
 
-  @Query("select c.value from Configuration c where upper(c.key) = upper(:key)")
+  @Query("select c.value from Configuration c where lower(c.key) = lower(:key)")
   Optional<String> getValueByKeyIgnoreCase(@Param("key") String key);
 }

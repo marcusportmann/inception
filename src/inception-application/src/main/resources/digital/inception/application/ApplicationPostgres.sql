@@ -926,6 +926,8 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.UserAdministration', 'OrganizationAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.UserGroups', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.GroupAdministration', 'OrganizationAdministrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Application.SecureHome', 'PasswordResetter');

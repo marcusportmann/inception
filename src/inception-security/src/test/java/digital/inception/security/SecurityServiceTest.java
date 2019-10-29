@@ -80,11 +80,11 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
@@ -117,7 +117,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
@@ -247,7 +247,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     String originalPassword = user.getPassword();
 
@@ -276,11 +276,11 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
@@ -331,7 +331,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.deleteUser(userDirectory.getId(), "INVALID");
@@ -361,7 +361,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
     securityService.createGroup(userDirectory.getId(), group);
@@ -391,7 +391,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.createUser(userDirectory.getId(), user, false, false);
@@ -408,7 +408,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
@@ -427,7 +427,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
@@ -456,7 +456,7 @@ public class SecurityServiceTest
 
     for (int i = 1; i < 20; i++)
     {
-      User user = getNumberedTestUserDetails(i);
+      User user = getNumberedTestUserDetails(userDirectory.getId(), i);
 
       securityService.createUser(userDirectory.getId(), user, false, false);
     }
@@ -558,7 +558,7 @@ public class SecurityServiceTest
   public void getFunctionCodesForUserTest()
     throws Exception
   {
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID);
 
     securityService.createUser(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, user, false,
         false);
@@ -590,7 +590,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
@@ -605,11 +605,11 @@ public class SecurityServiceTest
     assertEquals("The correct number of group members was not retrieved", 0,
         retrievedGroupMembers.size());
 
-    User firstUser = getTestUserDetails();
+    User firstUser = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), firstUser, false, false);
 
-    User secondUser = getTestUserDetails();
+    User secondUser = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), secondUser, false, false);
 
@@ -658,12 +658,7 @@ public class SecurityServiceTest
         securityService.getUserDirectoryCapabilities(userDirectory.getId())
         .getSupportsGroupAdministration());
 
-    Group group = getTestGroupDetails();
-
-    Group copyGroup = new Group(group.getId(), group.getUserDirectoryId(), group.getName(),
-        group.getDescription());
-
-    compareGroups(group, copyGroup);
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
@@ -729,11 +724,11 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
@@ -753,7 +748,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.adminChangePassword(userDirectory.getId(), user.getUsername(), "Password2",
@@ -777,6 +772,11 @@ public class SecurityServiceTest
     Organization retrievedOrganization = securityService.getOrganization(organization.getId());
 
     compareOrganizations(organization, retrievedOrganization);
+
+    String retrievedOrganizationName = securityService.getOrganizationName(organization.getId());
+
+    assertEquals("The correct organization name was not retrieved", organization.getName(),
+        retrievedOrganizationName);
 
     long numberOfOrganizations = securityService.getNumberOfOrganizations();
 
@@ -875,11 +875,11 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
@@ -908,7 +908,7 @@ public class SecurityServiceTest
   {
     List<UserDirectoryType> userDirectoryTypes = securityService.getUserDirectoryTypes();
 
-    assertEquals("The correct number of user directory types was not retrieved", 1,
+    assertEquals("The correct number of user directory types was not retrieved", 2,
         userDirectoryTypes.size());
 
     boolean foundInternalUserDirectoryType = false;
@@ -941,11 +941,11 @@ public class SecurityServiceTest
       }
     }
 
-//  if (!foundLdapUserDirectoryType)
-//  {
-//    fail("Failed to find the internal user directory type (" + SecurityService
-//        .LDAP_USER_DIRECTORY_TYPE + ") in the list of user directory types");
-//  }
+    if (!foundLdapUserDirectoryType)
+    {
+      fail("Failed to find the internal user directory type (" + SecurityService
+          .LDAP_USER_DIRECTORY_TYPE + ") in the list of user directory types");
+    }
   }
 
   /**
@@ -990,7 +990,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    Group group = getTestGroupDetails();
+    Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(userDirectory.getId(), group);
 
@@ -1074,6 +1074,11 @@ public class SecurityServiceTest
 
     compareUserDirectories(userDirectory, retrievedUserDirectory);
 
+    String retrievedUserDirectoryName = securityService.getUserDirectoryName(userDirectory.getId());
+
+    assertEquals("The correct user directory name was not retrieved", retrievedUserDirectoryName,
+        userDirectory.getName());
+
     long numberOfUserDirectories = securityService.getNumberOfUserDirectories();
 
     assertEquals("The correct number of user directories was not retrieved",
@@ -1150,7 +1155,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     String originalPassword = user.getPassword();
 
@@ -1171,7 +1176,7 @@ public class SecurityServiceTest
 
     UserDirectory userDirectory = securityService.createOrganization(organization, true);
 
-    User user = getTestUserDetails();
+    User user = getTestUserDetails(userDirectory.getId());
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
@@ -1183,6 +1188,15 @@ public class SecurityServiceTest
     User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
     compareUsers(user, retrievedUser, false);
+
+    assertTrue("Failed to confirm that the user exists", securityService.isExistingUser(
+        userDirectory.getId(), user.getUsername()));
+
+    String retrievedUserFullName = securityService.getUserFullName(userDirectoryId,
+        user.getUsername());
+
+    assertEquals("The correct full name was not retrieved for the user", user.getFirstName() + " "
+        + user.getLastName(), retrievedUserFullName);
 
     long numberOfUsers = securityService.getNumberOfUsers(userDirectory.getId());
 
@@ -1236,11 +1250,11 @@ public class SecurityServiceTest
     catch (UserNotFoundException ignored) {}
   }
 
-  private static synchronized User getNumberedTestUserDetails(int number)
+  private static synchronized User getNumberedTestUserDetails(UUID userDirectoryId, int number)
   {
     User user = new User();
 
-    user.setId(UUID.randomUUID());
+    user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Numbered Test Username " + number);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Numbered Test E-Mail " + number);
@@ -1266,13 +1280,13 @@ public class SecurityServiceTest
     return function;
   }
 
-  private static synchronized Group getTestGroupDetails()
+  private static synchronized Group getTestGroupDetails(UUID userDirectoryId)
   {
     groupCount++;
 
     Group group = new Group();
 
-    group.setId(UUID.randomUUID());
+    group.setUserDirectoryId(userDirectoryId);
     group.setName("Test Group " + groupCount);
     group.setDescription("Test Group Description " + groupCount);
 
@@ -1292,13 +1306,13 @@ public class SecurityServiceTest
     return organization;
   }
 
-  private static synchronized User getTestUserDetails()
+  private static synchronized User getTestUserDetails(UUID userDirectoryId)
   {
     userCount++;
 
     User user = new User();
 
-    user.setId(UUID.randomUUID());
+    user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Test User Username " + userCount);
     user.setStatus(UserStatus.ACTIVE);
     user.setEmail("Test User E-Mail " + userCount);
@@ -1349,9 +1363,11 @@ public class SecurityServiceTest
   {
     assertEquals("The description values for the two groups do not match", group1.getDescription(),
         group2.getDescription());
+    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
     assertEquals("The group name values for the two groups do not match", group1.getName(),
         group2.getName());
-    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
+    assertEquals("The user directory ID values for the two groups do not match",
+        group1.getUserDirectoryId(), group2.getUserDirectoryId());
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2)

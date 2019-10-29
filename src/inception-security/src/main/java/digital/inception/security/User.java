@@ -53,14 +53,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry",
-        "readOnly" })
+@JsonPropertyOrder({ "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry" })
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(name = "User", namespace = "http://security.inception.digital",
-    propOrder = { "id", "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry",
-        "readOnly" })
+    propOrder = { "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "users")
@@ -103,10 +101,8 @@ public class User
   /**
    * The ID used to uniquely identify the user.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
+  @JsonIgnore
+  @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
@@ -179,15 +175,6 @@ public class User
   @Size(max = 100)
   @Column(name = "phone", nullable = false, length = 100)
   private String phoneNumber;
-
-  /**
-   * Is the user read-only.
-   */
-  @ApiModelProperty(value = "Is the user read-only")
-  @JsonProperty
-  @XmlElement(name = "ReadOnly")
-  @Transient
-  private Boolean readOnly;
 
   /**
    * The status for the user.
@@ -462,16 +449,6 @@ public class User
   }
 
   /**
-   * Returns <code>true</code> if the user is read-only or <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the user is read-only or <code>false</code> otherwise
-   */
-  public Boolean isReadOnly()
-  {
-    return readOnly;
-  }
-
-  /**
    * Set the e-mail address for the user.
    *
    * @param email the e-mail address for the user
@@ -569,16 +546,6 @@ public class User
   public void setPhoneNumber(String phoneNumber)
   {
     this.phoneNumber = phoneNumber;
-  }
-
-  /**
-   * Set whether the user is read-only.
-   *
-   * @param readOnly <code>true</code> if the user is read-only or <code>false</code> otherwise
-   */
-  public void setReadOnly(Boolean readOnly)
-  {
-    this.readOnly = readOnly;
   }
 
   /**

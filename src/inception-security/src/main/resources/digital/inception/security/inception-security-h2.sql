@@ -258,8 +258,8 @@ INSERT INTO security.organizations (id, name, status)
 
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
---INSERT INTO security.user_directory_types (code, name, user_directory_class)
---  VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
+INSERT INTO security.user_directory_types (code, name, user_directory_class)
+  VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
@@ -330,6 +330,8 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.UserAdministration', 'OrganizationAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.UserGroups', 'OrganizationAdministrator');
+INSERT INTO security.function_to_role_map (function_code, role_code)
+  VALUES ('Security.GroupAdministration', 'OrganizationAdministrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Application.SecureHome', 'PasswordResetter');
@@ -340,3 +342,17 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
 
 INSERT INTO security.role_to_group_map (role_code, group_id)
   VALUES ('Administrator', '00000000-0000-0000-0000-000000000000'); -- Assign the Administrator role to the Administrators group
+
+
+
+
+
+
+-- INSERT INTO security.organizations (id, name, status)
+--   VALUES ('11111111-1111-1111-1111-111111111111', 'Sample LDAP Organization', 1);
+--
+-- INSERT INTO security.user_directories (id, type, name, configuration)
+--   VALUES ('11111111-1111-1111-1111-111111111111', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserFullNameAttribute</name><value>cn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
+--
+-- INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+--   VALUES ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111');

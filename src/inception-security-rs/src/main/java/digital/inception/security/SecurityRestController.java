@@ -19,6 +19,7 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -343,6 +344,11 @@ public class SecurityRestController extends SecureRestController
     {
       throw new InvalidArgumentException("group", ValidationError.toValidationErrors(
           constraintViolations));
+    }
+
+    if (!group.getUserDirectoryId().equals(userDirectoryId))
+    {
+      throw new InvalidArgumentException("userDirectoryId");
     }
 
     securityService.createGroup(userDirectoryId, group);
@@ -979,6 +985,42 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the name of the organization.
+   *
+   * @param organizationId the ID used to uniquely identify the organization
+   *
+   * @return the name of the organization
+   */
+  @ApiOperation(value = "Retrieve the name of organization",
+      notes = "Retrieve the name of the organization")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The organization could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/organizations/{organizationId}/name", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
+  public String getOrganizationName(@ApiParam(name = "organizationId",
+      value = "The ID used to uniquely identify the organization", required = true)
+  @PathVariable UUID organizationId)
+    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (StringUtils.isEmpty(organizationId))
+    {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    return RestUtil.quote(securityService.getOrganizationName(organizationId));
+  }
+
+  /**
    * Retrieve the organizations.
    *
    * @param filter        the optional filter to apply to the organizations
@@ -1417,6 +1459,42 @@ public class SecurityRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the name of the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the name of user directory
+   */
+  @ApiOperation(value = "Retrieve the name of the user directory",
+      notes = "Retrieve the name of the user directory")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/name", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
+  public String getUserDirectoryName(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    return RestUtil.quote(securityService.getUserDirectoryName(userDirectoryId));
+  }
+
+  /**
    * Retrieve the summaries for the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
@@ -1574,6 +1652,57 @@ public class SecurityRestController extends SecureRestController
     throws SecurityServiceException
   {
     return securityService.getUserDirectoryTypes();
+  }
+
+  /**
+   * Retrieve the full name for the user.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   *
+   * @return the full name for the user
+   */
+  @ApiOperation(value = "Retrieve the full name for the user",
+      notes = "Retrieve the full name for the user")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory or user could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/full-name",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+  public String getUserFullName(@ApiParam(name = "userDirectoryId",
+      value = "The ID used to uniquely identify the user directory", required = true)
+  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
+      value = "The username identifying the user", required = true)
+  @PathVariable String username)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+        SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null)
+    {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (StringUtils.isEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+    {
+      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+          + ")");
+    }
+
+    return RestUtil.quote(securityService.getUserFullName(userDirectoryId, username));
   }
 
   /**

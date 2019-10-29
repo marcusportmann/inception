@@ -27,11 +27,6 @@ export class Group {
   description: string;
 
   /**
-   * The ID used to uniquely identify the group.
-   */
-  id: string;
-
-  /**
    * The name identifying the group.
    */
   name: string;
@@ -44,14 +39,12 @@ export class Group {
   /**
    * Constructs a new Group.
    *
-   * @param id              The ID used to uniquely identify the group.
    * @param userDirectoryId The ID used to uniquely identify the user directory the group is
    *                        associated with.
    * @param name            The name identifying the group.
    * @param description     The description for the group.
    */
-  constructor(id: string, userDirectoryId: string, name: string, description: string) {
-    this.id = id;
+  constructor(userDirectoryId: string, name: string, description: string) {
     this.userDirectoryId = userDirectoryId;
     this.name = name;
     this.description = description;

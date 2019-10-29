@@ -22,7 +22,7 @@ import digital.inception.core.configuration.ConfigurationException;
 
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration
     .EnableGlobalMethodSecurity;
@@ -34,8 +34,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration
     .ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers
     .ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.util.StringUtils;
@@ -53,10 +55,35 @@ import org.springframework.util.StringUtils;
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 {
   /**
+   * The Spring application context.
+   */
+  private ApplicationContext applicationContext;
+
+  /**
    * The public key used to verify OAuth2 tokens.
    */
   @Value("${security.oauth2.jwt.publicKey:#{null}}")
   private String jwtPublicKey;
+
+  /**
+   * The fully qualified class name for the custom <code>UserAuthenticationConverter</code>
+   * implementation that should be used to create Spring <code>Authentication</code> instances
+   * from OAuth2 access tokens. This allows additional security information, e.g. additional
+   * authorities, to be added to the <code>Authentication</code> context beyond what is included in
+   * the OAuth2 access tokens.
+   */
+  @Value("${security.userAuthenticationConverter:#{null}}")
+  private String userAuthenticationConverter;
+
+  /**
+   * Constructs a new <code>ResourceServerConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   */
+  public ResourceServerConfiguration(ApplicationContext applicationContext)
+  {
+    this.applicationContext = applicationContext;
+  }
 
   /**
    * Returns the OAuth2 access token converter for the resource server.
@@ -75,6 +102,41 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     try
     {
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+
+      if (!StringUtils.isEmpty(userAuthenticationConverter))
+      {
+        try
+        {
+          Class<?> userAuthenticationConverterClass = Thread.currentThread().getContextClassLoader()
+              .loadClass(userAuthenticationConverter);
+
+          if (!UserAuthenticationConverter.class.isAssignableFrom(userAuthenticationConverterClass))
+          {
+            throw new RuntimeException("The user authentication converter class ("
+                + userAuthenticationConverter
+                + ") does not implement the UserAuthenticationConverter interface");
+          }
+
+          UserAuthenticationConverter userAuthenticationConverter =
+              userAuthenticationConverterClass.asSubclass(UserAuthenticationConverter.class)
+              .getConstructor().newInstance();
+
+          applicationContext.getAutowireCapableBeanFactory().autowireBean(
+              userAuthenticationConverter);
+
+          DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+
+          accessTokenConverter.setUserTokenConverter(userAuthenticationConverter);
+
+          converter.setAccessTokenConverter(accessTokenConverter);
+        }
+        catch (Throwable e)
+        {
+          throw new RuntimeException(
+              "Failed to initialize the custom UserAuthenticationConverter implementation ("
+              + userAuthenticationConverter + ")", e);
+        }
+      }
 
       converter.setVerifier(new RsaVerifier(jwtPublicKey));
 

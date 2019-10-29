@@ -263,4 +263,89 @@
       </mat-form-field>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_max_filtered_groups">Max Filtered Groups</mat-label>
+        <input type="text" matInput formControlName="maxFilteredGroups" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('maxFilteredGroups').errors && !ldapUserDirectoryForm.get('maxFilteredGroups').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('maxFilteredGroups').errors?.required" i18n="@@ldap_user_directory_component_error_max_filtered_groups_required">The max filtered groups is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('maxFilteredGroups').errors?.pattern" i18n="@@ldap_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_max_filtered_group_members">Max Filtered Group Members</mat-label>
+        <input type="text" matInput formControlName="maxFilteredGroupMembers" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('maxFilteredGroupMembers').errors && !ldapUserDirectoryForm.get('maxFilteredGroupMembers').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('maxFilteredGroupMembers').errors?.required" i18n="@@ldap_user_directory_component_error_max_filtered_group_members_required">The max filtered group members is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('maxFilteredGroupMembers').errors?.pattern" i18n="@@ldap_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_supports_admin_change_password">Supports Admin Change Password</mat-label>
+        <input type="text" matInput formControlName="supportsAdminChangePassword" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('supportsAdminChangePassword').errors && !ldapUserDirectoryForm.get('supportsAdminChangePassword').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('supportsAdminChangePassword').errors?.required" i18n="@@ldap_user_directory_component_error_supports_admin_change_password_required">A true or false value is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('supportsAdminChangePassword').errors?.pattern" i18n="@@ldap_user_directory_component_error_supports_admin_change_password_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_supports_change_password">Supports Change Password</mat-label>
+        <input type="text" matInput formControlName="supportsChangePassword" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('supportsChangePassword').errors && !ldapUserDirectoryForm.get('supportsChangePassword').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('supportsChangePassword').errors?.required" i18n="@@ldap_user_directory_component_error_supports_change_password_required">A true or false value is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('supportsChangePassword').errors?.pattern" i18n="@@ldap_user_directory_component_error_supports_change_password_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_supports_group_administration">Supports Group Administration</mat-label>
+        <input type="text" matInput formControlName="supportsGroupAdministration" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('supportsGroupAdministration').errors && !ldapUserDirectoryForm.get('supportsGroupAdministration').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('supportsGroupAdministration').errors?.required" i18n="@@ldap_user_directory_component_error_supports_group_administration_required">The supports group administration is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('supportsGroupAdministration').errors?.pattern" i18n="@@ldap_user_directory_component_error_supports_group_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_support_group_member_administration">Supports Group Member Administration</mat-label>
+        <input type="text" matInput formControlName="supportsGroupMemberAdministration" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('supportsGroupMemberAdministration').errors && !ldapUserDirectoryForm.get('supportsGroupMemberAdministration').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('supportsGroupMemberAdministration').errors?.required" i18n="@@ldap_user_directory_component_error_support_group_member_administration_required">A true or false value is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('supportsGroupMemberAdministration').errors?.pattern" i18n="@@ldap_user_directory_component_error_support_group_member_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@ldap_user_directory_component_label_supports_user_administration">Supports User Administration</mat-label>
+        <input type="text" matInput formControlName="supportsUserAdministration" required="true">
+        <mat-error *ngIf="ldapUserDirectoryForm.get('supportsUserAdministration').errors && !ldapUserDirectoryForm.get('supportsUserAdministration').untouched">
+          <span *ngIf="ldapUserDirectoryForm.get('supportsUserAdministration').errors?.required" i18n="@@ldap_user_directory_component_error_supports_user_administration_required">A true or false value is required.</span>
+          <span *ngIf="ldapUserDirectoryForm.get('supportsUserAdministration').errors?.pattern" i18n="@@ldap_user_directory_component_error_supports_user_administration_pattern">A true or false value is required.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
 </ng-container>

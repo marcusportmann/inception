@@ -15,8 +15,9 @@
  */
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {SecurityService} from "../../services/security/security.service";
 
 /**
  * The UserTitleResolver class provides the route data resolver that resolves the
@@ -29,9 +30,10 @@ export class UserTitleResolver implements Resolve<string> {
   /**
    * Constructs a new UserTitleResolver.
    *
-   * @param i18n The internationalization service.
+   * @param i18n            The internationalization service.
+   * @param securityService The security service.
    */
-  constructor(private i18n: I18n) {
+  constructor(private i18n: I18n, private securityService: SecurityService) {
   }
 
   /**
@@ -40,9 +42,10 @@ export class UserTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
-    // TODO: Retrieve the full name of the user and return here -- MARCUS
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('username')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
+          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    return this.securityService.getUserFullName(
+      decodeURIComponent(activatedRouteSnapshot.paramMap.get('userDirectoryId')!),
+      decodeURIComponent(activatedRouteSnapshot.paramMap.get('username')!));
   }
 }

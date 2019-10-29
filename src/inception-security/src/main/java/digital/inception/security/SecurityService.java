@@ -1177,7 +1177,7 @@ public class SecurityService
       }
       else
       {
-        return organizationRepository.countByNameContainingIgnoreCase("%" + filter.toUpperCase()
+        return organizationRepository.countByNameContainingIgnoreCase("%" + filter.toLowerCase()
             + "%");
       }
     }
@@ -1218,7 +1218,7 @@ public class SecurityService
       }
       else
       {
-        return userDirectoryRepository.countByNameContainingIgnoreCase("%" + filter.toUpperCase()
+        return userDirectoryRepository.countByNameContainingIgnoreCase("%" + filter.toLowerCase()
             + "%");
       }
     }
@@ -1330,6 +1330,41 @@ public class SecurityService
       throw new SecurityServiceException(
           "Failed to retrieve the IDs for the organizations for the user directory ("
           + userDirectoryId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the name of the organization.
+   *
+   * @param organizationId the ID used to uniquely identify the organization
+   *
+   * @return the name of the organization
+   */
+  @Override
+  public String getOrganizationName(UUID organizationId)
+    throws OrganizationNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = organizationRepository.getNameById(organizationId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+      else
+      {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+    }
+    catch (OrganizationNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the name of the organization ("
+          + organizationId + ")", e);
     }
   }
 
@@ -1822,6 +1857,41 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the name of the user directory.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   *
+   * @return the name of the user directory
+   */
+  @Override
+  public String getUserDirectoryName(UUID userDirectoryId)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = userDirectoryRepository.getNameById(userDirectoryId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+      else
+      {
+        throw new UserDirectoryNotFoundException(userDirectoryId);
+      }
+    }
+    catch (UserDirectoryNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to retrieve the name of the user directory ("
+          + userDirectoryId + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the summaries for the user directories.
    *
    * @param filter        the optional filter to apply to the user directories
@@ -1978,6 +2048,28 @@ public class SecurityService
   }
 
   /**
+   * Retrieve the full name for the user.
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   *
+   * @return the full name for the user
+   */
+  @Override
+  public String getUserFullName(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.getUserFullName(username);
+  }
+
+  /**
    * Retrieve all the users.
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -2023,6 +2115,29 @@ public class SecurityService
     }
 
     return userDirectory.getUsers(filter, sortBy, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Does the user with the specified username exist?
+   *
+   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param username        the username identifying the user
+   *
+   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   *         otherwise
+   */
+  @Override
+  public boolean isExistingUser(UUID userDirectoryId, String username)
+    throws UserDirectoryNotFoundException, SecurityServiceException
+  {
+    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+    if (userDirectory == null)
+    {
+      throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    return userDirectory.isExistingUser(username);
   }
 
   /**
@@ -2320,6 +2435,8 @@ public class SecurityService
       }
 
       userDirectoryRepository.saveAndFlush(userDirectory);
+
+      reloadUserDirectories();
     }
     catch (UserDirectoryNotFoundException e)
     {

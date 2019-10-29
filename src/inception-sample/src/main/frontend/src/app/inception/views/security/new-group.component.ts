@@ -29,7 +29,6 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {Group} from "../../services/security/group";
-import {v4 as uuid} from 'uuid';
 import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
 
 /**
@@ -94,7 +93,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
         this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-        this.group = new Group(uuid(), this.userDirectoryId, '', '');
+        this.group = new Group(this.userDirectoryId, '', '');
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

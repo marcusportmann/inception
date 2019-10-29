@@ -83,6 +83,17 @@ public class UserDirectoryCapabilities
   private boolean supportsGroupAdministration;
 
   /**
+   * The user directory supports the group member administration capability.
+   */
+  @ApiModelProperty(
+      value = "The user directory supports the group member administration capability",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SupportsGroupMemberAdministration", required = true)
+  @NotNull
+  private boolean supportsGroupMemberAdministration;
+
+  /**
    * The user directory supports the password expiry capability.
    */
   @ApiModelProperty(value = "The user directory supports the password expiry capability",
@@ -130,25 +141,32 @@ public class UserDirectoryCapabilities
   /**
    * Constructs a new <code>UserDirectoryCapabilities</code>.
    *
-   * @param supportsAdminChangePassword the user directory supports the admin change
-   *                                    password capability
-   * @param supportsChangePassword      the user directory supports the change password capability
-   * @param supportsGroupAdministration the user directory supports the group administration
-   *                                    capability
-   * @param supportsPasswordExpiry      the user directory supports the password expiry capability
-   * @param supportsPasswordHistory     the user directory supports the password history capability
-   * @param supportsUserAdministration  the user directory supports the user administration
-   *                                    capability
-   * @param supportsUserLocks           the user directory supports the user locks capability
+   * @param supportsAdminChangePassword       the user directory supports the admin change
+   *                                          password capability
+   * @param supportsChangePassword            the user directory supports the change password
+   *                                          capability
+   * @param supportsGroupAdministration       the user directory supports the group administration
+   *                                          capability
+   * @param supportsGroupMemberAdministration the user directory supports the group member
+   *                                          administration capability
+   * @param supportsPasswordExpiry            the user directory supports the password expiry
+   *                                          capability
+   * @param supportsPasswordHistory           the user directory supports the password history
+   *                                          capability
+   * @param supportsUserAdministration        the user directory supports the user administration
+   *                                          capability
+   * @param supportsUserLocks                 the user directory supports the user locks capability
    */
   public UserDirectoryCapabilities(boolean supportsAdminChangePassword,
       boolean supportsChangePassword, boolean supportsGroupAdministration,
-      boolean supportsPasswordExpiry, boolean supportsPasswordHistory,
-      boolean supportsUserAdministration, boolean supportsUserLocks)
+      boolean supportsGroupMemberAdministration, boolean supportsPasswordExpiry,
+      boolean supportsPasswordHistory, boolean supportsUserAdministration,
+      boolean supportsUserLocks)
   {
     this.supportsAdminChangePassword = supportsAdminChangePassword;
     this.supportsChangePassword = supportsChangePassword;
     this.supportsGroupAdministration = supportsGroupAdministration;
+    this.supportsGroupMemberAdministration = supportsGroupMemberAdministration;
     this.supportsPasswordExpiry = supportsPasswordExpiry;
     this.supportsPasswordHistory = supportsPasswordHistory;
     this.supportsUserAdministration = supportsUserAdministration;
@@ -186,6 +204,17 @@ public class UserDirectoryCapabilities
   public boolean getSupportsGroupAdministration()
   {
     return supportsGroupAdministration;
+  }
+
+  /**
+   * Returns whether the user directory supports the group member administration capability.
+   *
+   * @return <code>true</code> if the user directory supports the group member administration
+   *         capability or <code>false</code> otherwise
+   */
+  public boolean getSupportsGroupMemberAdministration()
+  {
+    return supportsGroupMemberAdministration;
   }
 
   /**

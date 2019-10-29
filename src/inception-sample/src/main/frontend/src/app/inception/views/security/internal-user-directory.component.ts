@@ -51,13 +51,14 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
   constructor() {
     // Initialise the form
     this.internalUserDirectoryForm = new FormGroup({
+      maxFilteredGroupMembers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
+      maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
+      maxFilteredGroups: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
       maxPasswordAttempts: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
       passwordExpiryMonths: new FormControl('',
         [Validators.required, Validators.pattern('^\\d+$')]),
       passwordHistoryMonths: new FormControl('',
-        [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredGroups: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')])
+        [Validators.required, Validators.pattern('^\\d+$')])
     });
   }
 
@@ -74,6 +75,8 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
       this.internalUserDirectoryForm.get('maxFilteredUsers')!.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroups',
       this.internalUserDirectoryForm.get('maxFilteredGroups')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroupMembers',
+      this.internalUserDirectoryForm.get('maxFilteredGroupMembers')!.value);
 
     return parameters;
   }
@@ -111,7 +114,9 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
     this.internalUserDirectoryForm.get('maxFilteredGroups')!.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ?
         UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') : '100');
-
+    this.internalUserDirectoryForm.get('maxFilteredGroupMembers')!.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroupMembers') ?
+        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers') : '100');
   }
 
   validate(c: AbstractControl): ValidationErrors | null {

@@ -57,6 +57,9 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
 
   List<UserDirectory> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
 
+  @Query("select ud.name from UserDirectory ud where ud.id = :userDirectoryId")
+  Optional<String> getNameById(@Param("userDirectoryId") UUID userDirectoryId);
+
   @Query(
       "select o.id from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
   List<UUID> getOrganizationIdsById(@Param("userDirectoryId") UUID userDirectoryId);
