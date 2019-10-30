@@ -53,7 +53,7 @@ export class BreadcrumbsComponent implements OnInit {
    * @param breadcrumbsService The breadcrumbs service.
    */
   constructor(private elementRef: ElementRef, private breadcrumbsService: BreadcrumbsService) {
-    this.breadcrumbs = this.breadcrumbsService.breadcrumbs;
+    this.breadcrumbs = this.breadcrumbsService.breadcrumbs$;
   }
 
   ngOnInit(): void {

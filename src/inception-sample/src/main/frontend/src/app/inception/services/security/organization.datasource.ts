@@ -29,15 +29,15 @@ import {first} from 'rxjs/operators';
  */
 export class OrganizationDatasource implements DataSource<Organization> {
 
-  private totalSubject: Subject<number>  = new ReplaySubject<number>();
+  private totalSubject$: Subject<number>  = new ReplaySubject<number>();
 
-  private dataSubject: Subject<Organization[]> = new ReplaySubject<Organization[]>();
+  private dataSubject$: Subject<Organization[]> = new ReplaySubject<Organization[]>();
 
-  private loadingSubject: Subject<boolean> = new ReplaySubject<boolean>();
+  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
 
-  total = this.totalSubject.asObservable();
+  total$ = this.totalSubject$.asObservable();
 
-  loading = this.loadingSubject.asObservable();
+  loading$ = this.loadingSubject$.asObservable();
 
   constructor(private securityService: SecurityService) {
   }
@@ -46,17 +46,17 @@ export class OrganizationDatasource implements DataSource<Organization> {
    * Clear the data source.
    */
   clear(): void {
-    this.totalSubject.next(0);
-    this.dataSubject.next([]);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Organization[] | ReadonlyArray<Organization>> {
-    return this.dataSubject.asObservable();
+    return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-    this.dataSubject.complete();
-    this.loadingSubject.complete();
+    this.dataSubject$.complete();
+    this.loadingSubject$.complete();
   }
 
   /**
@@ -69,22 +69,22 @@ export class OrganizationDatasource implements DataSource<Organization> {
    */
   load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
        pageSize?: number): void {
-    this.loadingSubject.next(true);
+    this.loadingSubject$.next(true);
 
     this.securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize)
       .pipe(first())
       .subscribe((organizations: Organizations) => {
-        this.loadingSubject.next(false);
+        this.loadingSubject$.next(false);
 
-        this.totalSubject.next(organizations.total);
+        this.totalSubject$.next(organizations.total);
 
-        this.dataSubject.next(organizations.organizations);
+        this.dataSubject$.next(organizations.organizations);
       }, (error: Error) => {
-        this.loadingSubject.next(false);
+        this.loadingSubject$.next(false);
 
-        this.totalSubject.next(0);
+        this.totalSubject$.next(0);
 
-        this.loadingSubject.error(error);
+        this.loadingSubject$.error(error);
       });
   }
 }

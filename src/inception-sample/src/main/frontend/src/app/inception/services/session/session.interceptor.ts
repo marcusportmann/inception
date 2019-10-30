@@ -45,7 +45,7 @@ export class SessionInterceptor implements HttpInterceptor {
             // tslint:disable-next-line
             nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
-      return this.sessionService.session.pipe(first(), flatMap(session => {
+      return this.sessionService.session$.pipe(first(), flatMap(session => {
         if (session) {
           httpRequest = httpRequest.clone({
             setHeaders: {

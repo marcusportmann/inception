@@ -55,7 +55,7 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
 
   countryOptions = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland', 'Zimbabwe'];
 
-  filteredCountryOptions: Subject<string[]> = new ReplaySubject<string[]>();
+  filteredCountryOptions$: Subject<string[]> = new ReplaySubject<string[]>();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder) {
@@ -88,7 +88,7 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
     if (favoriteCountryControl) {
       this.subscriptions.add(favoriteCountryControl.valueChanges
         .pipe(startWith(''), map(value => {
-          this.filteredCountryOptions.next(this.filter(value))
+          this.filteredCountryOptions$.next(this.filter(value))
         })).subscribe());
     }
   }

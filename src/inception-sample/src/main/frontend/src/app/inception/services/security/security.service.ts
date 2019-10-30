@@ -90,8 +90,6 @@ export class SecurityService {
                    memberName: string): Observable<boolean> {
     let groupMember = new GroupMember(userDirectoryId, groupName, memberType, memberName);
 
-    console.log('groupMember = ', groupMember);
-
     return this.httpClient.post<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', groupMember, {observe: 'response'})

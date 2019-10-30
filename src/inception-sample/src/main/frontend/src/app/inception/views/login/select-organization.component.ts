@@ -40,7 +40,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   selectOrganizationForm: FormGroup;
 
-  filteredOrganizations: Subject<Organization[]> = new ReplaySubject<Organization[]>();
+  filteredOrganizations$: Subject<Organization[]> = new ReplaySubject<Organization[]>();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -83,7 +83,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
         if (state.organizations) {
           this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''),
             map((value) => {
-                this.filteredOrganizations.next(this.filterOrganizations(state.organizations, value));
+                this.filteredOrganizations$.next(this.filterOrganizations(state.organizations, value));
               }
             )).subscribe());
         } else {
@@ -100,7 +100,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   onOk(): void {
     if (this.selectOrganizationForm.valid) {
-      this.sessionService.session
+      this.sessionService.session$
         .pipe(first())
         .subscribe((session: Session | null) => {
           if (session) {

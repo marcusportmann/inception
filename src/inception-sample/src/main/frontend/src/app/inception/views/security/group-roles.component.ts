@@ -50,7 +50,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   allRoles: Role[] = [];
 
-  availableRoles: Subject<Role[]> = new ReplaySubject<Role[]>();
+  availableRoles$: Subject<Role[]> = new ReplaySubject<Role[]>();
 
   dataSource = new MatTableDataSource<GroupRole>([]);
 
@@ -122,7 +122,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       .subscribe((groupRoles: GroupRole[]) => {
         this.dataSource.data = groupRoles;
 
-        this.availableRoles.next(this.calculateAvailableRoles(this.allRoles, this.dataSource.data));
+        this.availableRoles$.next(this.calculateAvailableRoles(this.allRoles, this.dataSource.data));
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

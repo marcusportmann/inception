@@ -30,7 +30,7 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SortDirection} from '../../services/security/sort-direction';
-import {BehaviorSubject, merge, Subject, Subscription} from 'rxjs';
+import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {TableFilter} from '../../components/controls';
 import {SessionService} from '../../services/session/session.service';
 import {Session} from '../../services/session/session';
@@ -67,9 +67,9 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
 
-  userDirectoryCapabilities?: UserDirectoryCapabilities;
+  userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
 
-  userDirectoryId: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  userDirectoryId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   userDirectories: UserDirectorySummary[] = [];
 
@@ -84,15 +84,23 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     this.dataSource = new GroupDatasource(this.sessionService, this.securityService);
   }
 
+  get enableActionsMenu$(): Observable<boolean> {
+    return this.userDirectoryCapabilities$.pipe(map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+      return userDirectoryCapabilities.supportsGroupAdministration;
+    }));
+  }
+
+  get enableNewButton$(): Observable<boolean> {
+    return this.userDirectoryCapabilities$.pipe(map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+      return userDirectoryCapabilities.supportsGroupAdministration;
+    }));
+  }
+
   get title(): string {
     return this.i18n({
       id: '@@groups_component_title',
       value: 'Groups'
     })
-  }
-
-  get isUserDirectorySelected(): boolean {
-    return (!!this.userDirectoryId.value);
   }
 
   // noinspection JSUnusedLocalSymbols
@@ -112,7 +120,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.deleteGroup(this.userDirectoryId.value, groupName)
+          this.securityService.deleteGroup(this.userDirectoryId$.value, groupName)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.tableFilter!.reset(false);
@@ -139,21 +147,21 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   editGroup(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId.value + '/' + encodeURIComponent(groupName) + '/edit'],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(groupName) + '/edit'],
       {relativeTo: this.activatedRoute});
   }
 
   groupMembers(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId.value + '/' + encodeURIComponent(groupName) + '/members'],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(groupName) + '/members'],
       {relativeTo: this.activatedRoute});
   }
 
   groupRoles(groupName: string): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(
-      [this.userDirectoryId.value + '/' + encodeURIComponent(groupName) + '/roles'],
+      [this.userDirectoryId$.value + '/' + encodeURIComponent(groupName) + '/roles'],
       {relativeTo: this.activatedRoute});
   }
 
@@ -168,8 +176,8 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
     const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    if (!!this.userDirectoryId.value) {
-      this.dataSource.load(this.userDirectoryId.value, filter, sortDirection, this.paginator!.pageIndex,
+    if (!!this.userDirectoryId$.value) {
+      this.dataSource.load(this.userDirectoryId$.value, filter, sortDirection, this.paginator!.pageIndex,
         this.paginator!.pageSize);
     } else {
       this.dataSource.clear();
@@ -178,11 +186,11 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   newGroup(): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([this.userDirectoryId.value + '/new'], {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId$.value + '/new'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions.add(this.userDirectoryId.subscribe((userDirectoryId: string) => {
+    this.subscriptions.add(this.userDirectoryId$.subscribe((userDirectoryId: string) => {
       if (!!userDirectoryId) {
         this.tableFilter!.reset(false);
 
@@ -196,7 +204,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         this.securityService.getUserDirectoryCapabilities(userDirectoryId)
           .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
           .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-            this.userDirectoryCapabilities = userDirectoryCapabilities;
+            this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
 
             this.loadGroups();
           }, (error: Error) => {
@@ -212,7 +220,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
       }
     }));
 
-    this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
+    this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
       } else {
@@ -231,7 +239,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
     this.subscriptions.add(this.userDirectorySelect!.selectionChange.subscribe(
       (matSelectChange: MatSelectChange) => {
-        this.userDirectoryId.next(matSelectChange.value);
+        this.userDirectoryId$.next(matSelectChange.value);
       }));
 
     this.subscriptions.add(
@@ -254,7 +262,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
           this.loadGroups();
         })).subscribe());
 
-    this.sessionService.session.pipe(first()).subscribe((session: Session | null) => {
+    this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
       if (session && session.organization) {
         this.spinnerService.showSpinner();
 
@@ -265,7 +273,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
             // If we only have one user directory then select it
             if (this.userDirectories.length === 1) {
-              this.userDirectoryId.next(this.userDirectories[0].id);
+              this.userDirectoryId$.next(this.userDirectories[0].id);
             } else {
               /*
                * If a user directory ID has been passed in then select the appropriate user
@@ -278,7 +286,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
                     for (let i = 0; i < userDirectories.length; i++ ) {
                       if (userDirectories[i].id == state.userDirectoryId) {
                         this.userDirectorySelect!.value = userDirectories[i].id;
-                        this.userDirectoryId.next(userDirectories[i].id);
+                        this.userDirectoryId$.next(userDirectories[i].id);
                         break;
                       }
                     }

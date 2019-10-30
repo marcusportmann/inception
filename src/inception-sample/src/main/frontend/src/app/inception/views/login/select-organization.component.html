@@ -13,7 +13,7 @@
                 <mat-form-field floatLabel="never">
                   <input type="text" matInput [formControl]="organizationFormControl" [matAutocomplete]="auto" i18n-placeholder="@@select_organization_component_placeholder_select_an_organization" placeholder="Select an organization">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayOrganization">
-                    <mat-option *ngFor="let filteredOrganization of filteredOrganizations | async" [value]="filteredOrganization">
+                    <mat-option *ngFor="let filteredOrganization of filteredOrganizations$ | async" [value]="filteredOrganization">
                       {{filteredOrganization.name}}
                     </mat-option>
                   </mat-autocomplete>

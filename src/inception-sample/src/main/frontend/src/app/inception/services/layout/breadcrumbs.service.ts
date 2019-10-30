@@ -29,7 +29,7 @@ import {Breadcrumb} from './breadcrumb';
 @Injectable()
 export class BreadcrumbsService {
 
-  breadcrumbs: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>();
+  breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>();
 
   /**
    * Constructs a new BreadcrumbsService.
@@ -66,7 +66,7 @@ export class BreadcrumbsService {
           });
         } while (currentRoute);
 
-        this.breadcrumbs.next(breadcrumbs);
+        this.breadcrumbs$.next(breadcrumbs);
 
         return breadcrumbs;
       });

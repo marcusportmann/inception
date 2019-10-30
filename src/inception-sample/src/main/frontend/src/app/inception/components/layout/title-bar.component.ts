@@ -62,14 +62,14 @@ export class TitleBarComponent implements OnInit {
    * The back navigation.
    */
   get backNavigation(): Observable<BackNavigation | null> {
-    return this.titleBarService.backNavigation;
+    return this.titleBarService.backNavigation$;
   }
 
   /**
    * The title.
    */
   get title(): Observable<string | null> {
-    return this.titleBarService.title;
+    return this.titleBarService.title$;
   }
 
   /**

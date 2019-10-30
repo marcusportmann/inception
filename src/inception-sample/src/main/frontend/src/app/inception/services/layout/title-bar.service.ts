@@ -29,12 +29,12 @@ export class TitleBarService {
   /**
    * The back navigation.
    */
-  backNavigation: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>();
+  backNavigation$: Subject<BackNavigation | null> = new ReplaySubject<BackNavigation | null>();
 
   /**
    * The title.
    */
-  title: Subject<string | null> = new ReplaySubject<string | null>();
+  title$: Subject<string | null> = new ReplaySubject<string | null>();
 
   /**
    * Constructs a new TitleBarService.
@@ -49,7 +49,7 @@ export class TitleBarService {
    * @param backNavigation the back navigation
    */
   setBackNavigation(backNavigation: BackNavigation | null): void {
-    this.backNavigation.next(backNavigation);
+    this.backNavigation$.next(backNavigation);
   }
 
   /**
@@ -58,6 +58,6 @@ export class TitleBarService {
    * @param title the title
    */
   setTitle(title: string | null): void {
-    this.title.next(title);
+    this.title$.next(title);
   }
 }

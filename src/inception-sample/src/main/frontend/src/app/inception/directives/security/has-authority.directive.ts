@@ -53,7 +53,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     if (!!this.requiredAuthorities) {
-      this.subscriptions.add(this.sessionService.session.subscribe((session: (Session | null)) => {
+      this.subscriptions.add(this.sessionService.session$.subscribe((session: (Session | null)) => {
         if (session) {
           let foundAuthority: boolean = false;
 

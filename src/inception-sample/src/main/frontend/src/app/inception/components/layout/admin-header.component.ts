@@ -160,7 +160,7 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session.pipe(map((session: Session | null) => {
+    return this.sessionService.session$.pipe(map((session: Session | null) => {
       return (!!session);
     }));
   }
@@ -178,7 +178,7 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   userFullName(): Observable<string> {
-    return this.sessionService.session.pipe(map((session: Session | null) => {
+    return this.sessionService.session$.pipe(map((session: Session | null) => {
       if (!!session) {
         return session.userFullName;
       } else {

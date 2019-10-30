@@ -10,7 +10,7 @@
     </mat-form-field>
   </div>
   <div class="mat-table-header">
-    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="!isUserDirectorySelected" (click)="newUser()" i18n="@@users_component_button_new">New</button>
+    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']" mat-flat-button color="primary" [disabled]="!(enableNewButton$ | async)" (click)="newUser()" i18n="@@users_component_button_new">New</button>
     <div></div>
     <table-filter></table-filter>
   </div>
@@ -36,11 +36,13 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@users_component_table_header_actions">Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{username: row.username}">
-        <button mat-icon-button>
-          <i class="fas fa-ellipsis-v"></i>
-        </button>
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@users_component_table_header_actions" [hidden]="!(enableActionsMenu$ | async)">Actions</mat-header-cell>
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [hidden]="!(enableActionsMenu$ | async)">
+        <ng-container>
+          <button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{username: row.username}" mat-icon-button>
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+        </ng-container>
       </mat-cell>
     </ng-container>
 
@@ -49,10 +51,10 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="dataSource.total | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
-    <ng-template matMenuContent let-username="username">
+    <ng-template matMenuContent let-username="username" *ngIf="(userDirectoryCapabilities$ | async) as userDirectoryCapabilities">
       <ng-container *ngIf="userDirectoryCapabilities.supportsUserAdministration">
         <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.UserAdministration']" mat-menu-item (click)="editUser(username)">
           <i class="fas fa-edit"></i>

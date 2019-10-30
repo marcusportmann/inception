@@ -10,7 +10,7 @@
     </mat-form-field>
   </div>
   <div class="mat-table-header">
-    <button mat-flat-button color="primary" [disabled]="!isUserDirectorySelected" (click)="newGroup()" i18n="@@groups_component_button_new">New</button>
+    <button *hasAuthority="['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']" mat-flat-button color="primary" [disabled]="!(enableNewButton$ | async)" (click)="newGroup()" i18n="@@groups_component_button_new">New</button>
     <table-filter></table-filter>
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
@@ -23,9 +23,9 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@groups_component_table_header_actions">Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{groupName: row.name}">
-        <button mat-icon-button>
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@groups_component_table_header_actions" [hidden]="!(enableActionsMenu$ | async)">Actions</mat-header-cell>
+      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [hidden]="!(enableActionsMenu$ | async)">
+        <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{groupName: row.name}">
           <i class="fas fa-ellipsis-v"></i>
         </button>
       </mat-cell>
@@ -36,7 +36,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="dataSource.total | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
+  <mat-paginator [length]="dataSource.total$ | async" [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
   <mat-menu class="mat-action-menu" #actionsMenu="matMenu" >
     <ng-template matMenuContent let-groupName="groupName">

@@ -3,7 +3,7 @@
     <span class="mat-header-label" i18n="@@group_roles_component_new_role">New Role :</span>
     <mat-form-field class="mat-form-field-slim">
       <mat-select [(ngModel)]="selectedRole" i18n-placeholder="@@group_roles_component_placeholder_select_a_role" placeholder="Select a role">
-        <mat-option *ngFor="let availableRole of availableRoles | async" [value]="availableRole">
+        <mat-option *ngFor="let availableRole of availableRoles$ | async" [value]="availableRole">
           {{availableRole.name}}
         </mat-option>
       </mat-select>

@@ -49,7 +49,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   allGroupNames: string[] = [];
 
-  availableGroupNames: Subject<string[]> = new ReplaySubject<string[]>();
+  availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>();
 
   dataSource = new MatTableDataSource<string>([]);
 
@@ -121,7 +121,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       .subscribe((groupNamesForUser: string[]) => {
         this.dataSource.data = groupNamesForUser;
 
-        this.availableGroupNames.next(
+        this.availableGroupNames$.next(
           this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard

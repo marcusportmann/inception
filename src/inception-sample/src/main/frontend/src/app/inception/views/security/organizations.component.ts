@@ -135,7 +135,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
+    this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
       } else {

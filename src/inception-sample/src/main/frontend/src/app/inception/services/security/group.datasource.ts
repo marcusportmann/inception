@@ -31,15 +31,15 @@ import {Groups} from "./groups";
  */
 export class GroupDatasource implements DataSource<Group> {
 
-  private totalSubject: Subject<number> = new ReplaySubject<number>();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>();
 
-  private dataSubject: Subject<Group[]> = new ReplaySubject<Group[]>();
+  private dataSubject$: Subject<Group[]> = new ReplaySubject<Group[]>();
 
-  private loadingSubject: Subject<boolean> = new ReplaySubject<boolean>();
+  private loadingSubject$: Subject<boolean> = new ReplaySubject<boolean>();
 
-  total = this.totalSubject.asObservable();
+  total$ = this.totalSubject$.asObservable();
 
-  loading = this.loadingSubject.asObservable();
+  loading$ = this.loadingSubject$.asObservable();
 
   constructor(private sessionService: SessionService, private securityService: SecurityService) {
   }
@@ -48,17 +48,17 @@ export class GroupDatasource implements DataSource<Group> {
    * Clear the data source.
    */
   clear(): void {
-    this.totalSubject.next(0);
-    this.dataSubject.next([]);
+    this.totalSubject$.next(0);
+    this.dataSubject$.next([]);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<Group[] | ReadonlyArray<Group>> {
-    return this.dataSubject.asObservable();
+    return this.dataSubject$.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-    this.dataSubject.complete();
-    this.loadingSubject.complete();
+    this.dataSubject$.complete();
+    this.loadingSubject$.complete();
   }
 
   /**
@@ -73,23 +73,23 @@ export class GroupDatasource implements DataSource<Group> {
    */
   load(userDirectoryId: string, filter?: string, sortDirection?: SortDirection,
        pageIndex?: number, pageSize?: number): void {
-    this.loadingSubject.next(true);
+    this.loadingSubject$.next(true);
 
     this.securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex,
       pageSize)
       .pipe(first())
       .subscribe((groups: Groups) => {
-        this.loadingSubject.next(false);
+        this.loadingSubject$.next(false);
 
-        this.totalSubject.next(groups.total);
+        this.totalSubject$.next(groups.total);
 
-        this.dataSubject.next(groups.groups);
+        this.dataSubject$.next(groups.groups);
       }, (error: Error) => {
-        this.loadingSubject.next(false);
+        this.loadingSubject$.next(false);
 
-        this.totalSubject.next(0);
+        this.totalSubject$.next(0);
 
-        this.loadingSubject.error(error);
+        this.loadingSubject$.error(error);
       });
   }
 }

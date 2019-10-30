@@ -61,7 +61,7 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userNavigationSubscription =
-      this.navigationService.userNavigation.pipe(map((navigation: NavigationItem[]) => {
+      this.navigationService.userNavigation$.pipe(map((navigation: NavigationItem[]) => {
         this.navItems = navigation;
       })).subscribe();
   }

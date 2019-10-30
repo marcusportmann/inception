@@ -38,7 +38,7 @@ export class SessionService {
   /**
    * The current active session.
    */
-  session: Subject<Session | null> = new BehaviorSubject<Session | null>(null);
+  session$: Subject<Session | null> = new BehaviorSubject<Session | null>(null);
 
   /**
    * Constructs a new SessionService.
@@ -81,10 +81,10 @@ export class SessionService {
 
     return this.httpClient.post<TokenResponse>(environment.oauthTokenUrl, body.toString(), options)
       .pipe(flatMap((tokenResponse: TokenResponse) => {
-        this.session.next(this.createSessionFromAccessToken(tokenResponse.access_token,
+        this.session$.next(this.createSessionFromAccessToken(tokenResponse.access_token,
           tokenResponse.refresh_token));
 
-        return this.session;
+        return this.session$;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
         if (httpErrorResponse.status === 400) {
           if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
@@ -123,7 +123,7 @@ export class SessionService {
    * Logout the current active session if one exists.
    */
   logout(): void {
-    this.session.next(null);
+    this.session$.next(null);
   }
 
   private createSessionFromAccessToken(accessToken: string,
@@ -148,7 +148,7 @@ export class SessionService {
   }
 
   private refreshSession(): Observable<Session | null> {
-    return this.session.pipe(mergeMap((currentSession: Session | null) => {
+    return this.session$.pipe(mergeMap((currentSession: Session | null) => {
       if (currentSession) {
         const selectedOrganization = currentSession.organization;
 
@@ -173,7 +173,7 @@ export class SessionService {
 
               refreshedSession.organization = selectedOrganization;
 
-              this.session.next(refreshedSession);
+              this.session$.next(refreshedSession);
 
               return refreshedSession;
             }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -183,7 +183,7 @@ export class SessionService {
               }), httpErrorResponse);
 
               if (httpErrorResponse.status === 401) {
-                this.session.next(null);
+                this.session$.next(null);
               }
 
               return of(null);

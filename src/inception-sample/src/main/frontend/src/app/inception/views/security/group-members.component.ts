@@ -130,7 +130,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   ngAfterViewInit(): void {
-    this.subscriptions.add(this.dataSource.loading.subscribe((next: boolean) => {
+    this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
         this.spinnerService.showSpinner()
       } else {
