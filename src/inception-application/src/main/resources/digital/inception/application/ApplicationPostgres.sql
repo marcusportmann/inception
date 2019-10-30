@@ -730,6 +730,33 @@ COMMENT ON COLUMN security.role_to_group_map.role_code IS 'The code used to uniq
 COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquely identify the group';
 
 
+CREATE TABLE security.password_resets (
+  username      TEXT      NOT NULL,
+  requested     TIMESTAMP NOT NULL,
+  status        INTEGER   NOT NULL,
+  security_code TEXT      NOT NULL,
+  completed     TIMESTAMP,
+  expired       TIMESTAMP,
+
+  PRIMARY KEY (username, requested),
+  CONSTRAINT password_resets_user_fk FOREIGN KEY (username) REFERENCES security.users(username) ON DELETE CASCADE
+);
+
+CREATE INDEX password_resets_username_ix ON security.password_resets(username);
+
+COMMENT ON COLUMN security.password_resets.username IS 'The username for the user associated with the password reset';
+
+COMMENT ON COLUMN security.password_resets.requested IS 'The date and time the password reset was requested';
+
+COMMENT ON COLUMN security.password_resets.status IS 'The status of the password reset';
+
+COMMENT ON COLUMN security.password_resets.security_code IS 'The security code';
+
+COMMENT ON COLUMN security.password_resets.completed IS 'The date and time the password reset was completed';
+
+COMMENT ON COLUMN security.password_resets.expired IS 'The date and time the password reset expired';
+
+
 CREATE TABLE service_registry.service_registry (
   name                 TEXT    NOT NULL,
   security_type        INTEGER NOT NULL,

@@ -135,6 +135,11 @@ public class SecurityService
   private OrganizationRepository organizationRepository;
 
   /**
+   * The Password Reset Repository.
+   */
+  private PasswordResetRepository passwordResetRepository;
+
+  /**
    * The Role Repository.
    */
   private RoleRepository roleRepository;
@@ -171,6 +176,7 @@ public class SecurityService
    * @param functionRepository             the Function Repository
    * @param groupRepository                the Group Repository
    * @param organizationRepository         the Organization Repository
+   * @param passwordResetRepository        the Password Reset Repository
    * @param roleRepository                 the Role Repository
    * @param userDirectoryRepository        the User Directory Repository
    * @param userDirectorySummaryRepository the User Directory Summary Repository
@@ -179,7 +185,8 @@ public class SecurityService
    */
   public SecurityService(ApplicationContext applicationContext,
       FunctionRepository functionRepository, GroupRepository groupRepository,
-      OrganizationRepository organizationRepository, RoleRepository roleRepository,
+      OrganizationRepository organizationRepository,
+      PasswordResetRepository passwordResetRepository, RoleRepository roleRepository,
       UserDirectoryRepository userDirectoryRepository,
       UserDirectorySummaryRepository userDirectorySummaryRepository,
       UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
@@ -188,6 +195,7 @@ public class SecurityService
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
     this.organizationRepository = organizationRepository;
+    this.passwordResetRepository = passwordResetRepository;
     this.roleRepository = roleRepository;
     this.userDirectoryRepository = userDirectoryRepository;
     this.userDirectorySummaryRepository = userDirectorySummaryRepository;
@@ -592,6 +600,11 @@ public class SecurityService
     if (userDirectory == null)
     {
       throw new UserDirectoryNotFoundException(userDirectoryId);
+    }
+
+    if (getUserDirectoryIdForUser(user.getUsername()) != null)
+    {
+      throw new DuplicateUserException(user.getUsername());
     }
 
     userDirectory.createUser(user, expiredPassword, userLocked);

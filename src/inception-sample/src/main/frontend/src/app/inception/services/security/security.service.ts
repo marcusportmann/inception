@@ -85,6 +85,8 @@ export class SecurityService {
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
+   *
+   * @return True if the group member was successfully added to the group or false otherwise.
    */
   addMemberToGroup(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
                    memberName: string): Observable<boolean> {
@@ -138,7 +140,9 @@ export class SecurityService {
    *
    * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param groupName       The name identifying the group.
-   * @param roleCode        The code used to uniquely identify the role..
+   * @param roleCode        The code used to uniquely identify the role.
+   *
+   * @return True if the role was successfully added to the group or false otherwise.
    */
   addRoleToGroup(userDirectoryId: string, groupName: string,
                  roleCode: string): Observable<boolean> {
@@ -193,18 +197,17 @@ export class SecurityService {
    * @param userDirectoryId      The ID used to uniquely identify the user directory.
    * @param username             The username identifying the user.
    * @param newPassword          The new password.
-   * @param expirePassword       expire the user's password
-   * @param lockUser             lock the user
-   * @param resetPasswordHistory reset the user's password history
-   * @param passwordChangeReason the reason for changing the password
+   * @param expirePassword       Expire the user's password?
+   * @param lockUser             Lock the user?
+   * @param resetPasswordHistory Reset the user's password history?
    *
-   * @return True if the user was updated successfully or false otherwise.
+   * @return True if the user's password was changed successfully or false otherwise.
    */
   adminChangePassword(userDirectoryId: string, username: string, newPassword: string,
-                      expirePassword: boolean, lockUser: boolean, resetPasswordHistory: boolean,
-                      passwordChangeReason: PasswordChangeReason): Observable<boolean> {
-    let passwordChange = new PasswordChange(newPassword, expirePassword, lockUser,
-      resetPasswordHistory, passwordChangeReason);
+                      expirePassword: boolean, lockUser: boolean,
+                      resetPasswordHistory: boolean): Observable<boolean> {
+    let passwordChange = new PasswordChange(PasswordChangeReason.Administrative, newPassword,
+      undefined, undefined, expirePassword, lockUser, resetPasswordHistory);
 
     return this.httpClient.put<boolean>(
       environment.securityServiceUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
@@ -230,6 +233,52 @@ export class SecurityService {
           return throwError(new SecurityServiceError(this.i18n({
             id: '@@security_service_failed_to_administratively_change_the_password_for_the_user',
             value: 'Failed to administratively change the password for the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
+   * Change the password for the user.
+   *
+   * @param username    The username identifying the user.
+   * @param password    The password for the user that is used to authorise the operation.
+   * @param newPassword The new password.
+   *
+   * @return True if the user's password was changed successfully or false otherwise.
+   */
+  changePassword(username: string, password: string, newPassword: string): Observable<boolean> {
+    let passwordChange = new PasswordChange(PasswordChangeReason.User, newPassword, password);
+
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/users/' + encodeURIComponent(username) + '/password',
+      passwordChange, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_change_the_password_for_the_user',
+            value: 'Failed to change the password for the user.'
           }), apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1529,6 +1578,8 @@ export class SecurityService {
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
+   *
+   * @return True if the group member was successfully removed from the group or false otherwise.
    */
   removeMemberFromGroup(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
                         memberName: string): Observable<boolean> {
@@ -1577,6 +1628,8 @@ export class SecurityService {
    * @param userDirectoryId The ID used to uniquely identify the user directory.
    * @param groupName       The name identifying the group.
    * @param roleCode        The code used to uniquely identify the role.
+   *
+   * @return True if the role was successfully removed from the group or false otherwise.
    */
   removeRoleFromGroup(userDirectoryId: string, groupName: string,
                       roleCode: string): Observable<boolean> {
@@ -1616,6 +1669,54 @@ export class SecurityService {
           return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
+  }
+
+  /**
+   * Reset the forgotten password for the user.
+   *
+   * @param username     The username identifying the user.
+   * @param newPassword  The new password.
+   * @param securityCode The security code.
+   *
+   * @return True if the user's password was reset successfully or false otherwise.
+   */
+  resetForgottenPassword(username: string, newPassword: string,
+                         securityCode: string): Observable<boolean> {
+    let passwordChange = new PasswordChange(PasswordChangeReason.Forgotten, newPassword, undefined,
+      securityCode);
+
+    return this.httpClient.put<boolean>(
+      environment.securityServiceUrlPrefix + '/users/' + encodeURIComponent(username) + '/password',
+      passwordChange, {
+        observe: 'response'
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(this.i18n({
+            id: '@@security_service_the_user_directory_could_not_be_found',
+            value: 'The user directory could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(this.i18n({
+            id: '@@security_service_the_user_could_not_be_found',
+            value: 'The user could not be found.'
+          }), apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_service_failed_to_reset_the_forgotten_password_for_the_user',
+            value: 'Failed to reset the forgotten password for the user.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
   }
 
   /**

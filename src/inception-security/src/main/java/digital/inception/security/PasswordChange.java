@@ -39,10 +39,12 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "PasswordChange")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "expirePassword", "lockUser", "password", "reason", "resetPasswordHistory" })
-@XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
+@JsonPropertyOrder({ "expirePassword", "lockUser", "newPassword", "oldPassword", "reason",
+    "resetPasswordHistory", "securityCode" })
+@XmlRootElement(name = "PasswordChange", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordChange", namespace = "http://security.inception.digital",
-    propOrder = { "expirePassword", "lockUser", "password", "reason", "resetPasswordHistory" })
+    propOrder = { "expirePassword", "lockUser", "newPassword", "oldPassword", "reason",
+        "resetPasswordHistory", "securityCode" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
 public class PasswordChange
@@ -50,32 +52,40 @@ public class PasswordChange
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Expire the user's password.
+   * Expire the user's password when performing an administrative password change.
    */
-  @ApiModelProperty(value = "Expire the user's password", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ExpirePassword", required = true)
-  @NotNull
-  private boolean expirePassword;
+  @ApiModelProperty(
+      value = "Expire the user's password when performing an administrative password change")
+  @JsonProperty
+  @XmlElement(name = "ExpirePassword")
+  private Boolean expirePassword;
 
   /**
-   * Lock the user.
+   * Lock the user when performing an administrative password change.
    */
-  @ApiModelProperty(value = "Lock the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "LockUser", required = true)
-  @NotNull
-  private boolean lockUser;
+  @ApiModelProperty(value = "Lock the user when performing an administrative password change")
+  @JsonProperty
+  @XmlElement(name = "LockUser")
+  private Boolean lockUser;
 
   /**
-   * The password.
+   * The new password.
    */
-  @ApiModelProperty(value = "The password", required = true)
+  @ApiModelProperty(value = "The new password", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Password", required = true)
+  @XmlElement(name = "NewPassword", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  private String password;
+  private String newPassword;
+
+  /**
+   * The old password when performing a user password change.
+   */
+  @ApiModelProperty(value = "The old password when performing a user password change")
+  @JsonProperty
+  @XmlElement(name = "OldPassword")
+  @Size(min = 1, max = 100)
+  private String oldPassword;
 
   /**
    * The reason for changing the password.
@@ -87,13 +97,21 @@ public class PasswordChange
   private PasswordChangeReason reason;
 
   /**
-   * Reset the user's password history.
+   * Reset the user's password history when performing an administrative password change.
    */
-  @ApiModelProperty(value = "Reset the user's password history", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ResetPasswordHistory", required = true)
-  @NotNull
-  private boolean resetPasswordHistory;
+  @ApiModelProperty(
+      value = "Reset the user's password history when performing an administrative password change")
+  @JsonProperty
+  @XmlElement(name = "ResetPasswordHistory")
+  private Boolean resetPasswordHistory;
+
+  /**
+   * The security code when performing a forgotten password change.
+   */
+  @ApiModelProperty(value = "The security code when performing a forgotten password change.")
+  @JsonProperty
+  @XmlElement(name = "SecurityCode")
+  private String securityCode;
 
   /**
    * Constructs a new <code>PasswordChange</code>.
@@ -101,53 +119,79 @@ public class PasswordChange
   public PasswordChange() {}
 
   /**
-   * Constructs a new <code>PasswordChange</code>.
+   * Constructs a new <code>PasswordChange</code> for a USER password change.
    *
-   * @param password             the password
-   * @param expirePassword       expire the user's password
-   * @param lockUser             lock the user
-   * @param resetPasswordHistory reset the user's password history
-   * @param reason               the reason for changing the password
+   * @param newPassword the new password
+   * @param oldPassword the old password when performing the user password change
    */
-  public PasswordChange(String password, boolean expirePassword, boolean lockUser,
-      boolean resetPasswordHistory, PasswordChangeReason reason)
+  public PasswordChange(String newPassword, String oldPassword)
   {
-    this.password = password;
-    this.expirePassword = expirePassword;
-    this.lockUser = lockUser;
-    this.resetPasswordHistory = resetPasswordHistory;
-    this.reason = reason;
+    this.newPassword = newPassword;
+    this.oldPassword = oldPassword;
+    this.reason = PasswordChangeReason.USER;
   }
 
   /**
-   * Returns whether the user's password should be expired.
+   * Constructs a new <code>PasswordChange</code> for an ADMINISTRATIVE password change.
    *
-   * @return <code>true</code> if the user's password should be expired or <code>false</code>
-   *         otherwise
+   * @param newPassword          the new password
+   * @param expirePassword       expire the user's password when performing the administrative
+   *                             password change
+   * @param lockUser             lock the user when performing the administrative password change
+   * @param resetPasswordHistory reset the user's password history when performing the
+   *                            administrative password change
    */
-  public boolean getExpirePassword()
+  public PasswordChange(String newPassword, Boolean expirePassword, Boolean lockUser,
+      Boolean resetPasswordHistory)
+  {
+    this.newPassword = newPassword;
+    this.expirePassword = expirePassword;
+    this.lockUser = lockUser;
+    this.resetPasswordHistory = resetPasswordHistory;
+    this.reason = PasswordChangeReason.ADMINISTRATIVE;
+  }
+
+  /**
+   * Returns whether the user's password should be expired when performing an administrative
+   * password change.
+   *
+   * @return <code>true</code> if the user's password should be expired when performing an
+   *         administrative password changeor <code>false</code> otherwise
+   */
+  public Boolean getExpirePassword()
   {
     return expirePassword;
   }
 
   /**
-   * Returns whether the user should be locked.
+   * Returns whether the user should be locked when performing an administrative password change.
    *
-   * @return <code>true</code> if the user should be locked or <code>false</code> otherwise
+   * @return <code>true</code> if the user should be locked when performing an administrative
+   *         password change or <code>false</code> otherwise
    */
-  public boolean getLockUser()
+  public Boolean getLockUser()
   {
     return lockUser;
   }
 
   /**
-   * Returns the password.
+   * Returns the new password.
    *
-   * @return the password
+   * @return the new password
    */
-  public String getPassword()
+  public String getNewPassword()
   {
-    return password;
+    return newPassword;
+  }
+
+  /**
+   * Returns the old password when performing a user password change.
+   *
+   * @return the old password when performing a user password change
+   */
+  public String getOldPassword()
+  {
+    return oldPassword;
   }
 
   /**
@@ -161,44 +205,67 @@ public class PasswordChange
   }
 
   /**
-   * Returns whether the user's password history should be reset.
+   * Returns whether the user's password history should be reset when performing an administrative
+   * password change.
    *
-   * @return <code>true</code> if the user's password history should be reset or <code>false</code>
-   *         otherwise
+   * @return <code>true</code> if the user's password history should be reset when performing an
+   *         administrative password changeor <code>false</code> otherwise
    */
-  public boolean getResetPasswordHistory()
+  public Boolean getResetPasswordHistory()
   {
     return resetPasswordHistory;
   }
 
   /**
-   * Set whether the user's password should be expired.
+   * Returns the security code when performing a forgotten password change.
    *
-   * @param expirePassword expire the user's password
+   * @return the security code when performing a forgotten password change
    */
-  public void setExpirePassword(boolean expirePassword)
+  public String getSecurityCode()
+  {
+    return securityCode;
+  }
+
+  /**
+   * Set whether the user's password should be expired when performing an administrative password
+   * change.
+   *
+   * @param expirePassword expire the user's password when performing an administrative password
+   *                       change
+   */
+  public void setExpirePassword(Boolean expirePassword)
   {
     this.expirePassword = expirePassword;
   }
 
   /**
-   * Set whether the user should be locked.
+   * Set whether the user should be locked when performing an administrative password change.
    *
-   * @param lockUser lock the user
+   * @param lockUser lock the user when performing an administrative password change
    */
-  public void setLockUser(boolean lockUser)
+  public void setLockUser(Boolean lockUser)
   {
     this.lockUser = lockUser;
   }
 
   /**
-   * Set the password.
+   * Set the new password when performing a user password change.
    *
-   * @param password the password
+   * @param newPassword the new password when performing a new password change
    */
-  public void setPassword(String password)
+  public void setNewPassword(String newPassword)
   {
-    this.password = password;
+    this.newPassword = newPassword;
+  }
+
+  /**
+   * Set the old password when performing a user password change.
+   *
+   * @param oldPassword the old password when performing a user password change
+   */
+  public void setOldPassword(String oldPassword)
+  {
+    this.oldPassword = oldPassword;
   }
 
   /**
@@ -212,12 +279,24 @@ public class PasswordChange
   }
 
   /**
-   * Set whether the user's password history should be reset.
+   * Set whether the user's password history should be reset when performing an administrative
+   * password change.
    *
-   * @param resetPasswordHistory reset the user's password history
+   * @param resetPasswordHistory reset the user's password history when performing an administrative
+   *                             password change
    */
-  public void setResetPasswordHistory(boolean resetPasswordHistory)
+  public void setResetPasswordHistory(Boolean resetPasswordHistory)
   {
     this.resetPasswordHistory = resetPasswordHistory;
+  }
+
+  /**
+   * Set the security code when performing a forgotten password change.
+   *
+   * @param securityCode the security code when performing a forgotten password change
+   */
+  public void setSecurityCode(String securityCode)
+  {
+    this.securityCode = securityCode;
   }
 }

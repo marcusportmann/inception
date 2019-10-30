@@ -25,12 +25,19 @@ import {InceptionModule} from '../../inception.module';
 // Import Inception components
 import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
+import {ExpiredPasswordComponent} from "./expired-password.component";
 
 const routes: Routes = [{
   path: '',
   component: LoginComponent,
   data: {
     title: 'Login'
+  }
+}, {
+  path: 'expired-password',
+  component: ExpiredPasswordComponent,
+  data: {
+    title: 'Expired Password'
   }
 }, {
   path: 'select-organization',
@@ -50,7 +57,7 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
   exports: [CommonModule, FormsModule, ReactiveFormsModule],
-  declarations: [LoginComponent, SelectOrganizationComponent]
+  declarations: [ExpiredPasswordComponent, LoginComponent, SelectOrganizationComponent]
 })
 export class LoginModule {
 }

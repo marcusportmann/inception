@@ -23,7 +23,10 @@ import {SessionService} from '../../services/session/session.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
-import {SessionServiceError} from '../../services/session/session.service.errors';
+import {
+  PasswordExpiredError,
+  SessionServiceError
+} from '../../services/session/session.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -46,10 +49,6 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  passwordFormControl: FormControl;
-
-  usernameFormControl: FormControl;
-
   /**
    * Constructs a new LoginComponent.
    *
@@ -66,15 +65,10 @@ export class LoginComponent {
               private formBuilder: FormBuilder, private i18n: I18n,
               private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private spinnerService: SpinnerService) {
-    // Initialise the form controls
-    this.passwordFormControl = new FormControl('Password1', Validators.required);
-
-    this.usernameFormControl = new FormControl('Administrator', Validators.required);
-
     // Initialise the form
     this.loginForm = new FormGroup({
-      username: this.usernameFormControl,
-      password: this.passwordFormControl
+      username: new FormControl('Administrator', Validators.required),
+      password: new FormControl('Password1', Validators.required)
     });
   }
 
@@ -122,9 +116,12 @@ export class LoginComponent {
 
   onLogin(): void {
     if (this.loginForm.valid) {
+      let username = this.loginForm.get('username')!.value;
+      let password = this.loginForm.get('password')!.value;
+
       this.spinnerService.showSpinner();
 
-      this.sessionService.login(this.usernameFormControl.value, this.passwordFormControl.value)
+      this.sessionService.login(username, password)
         .pipe(first())
         .subscribe((session: Session | null) => {
           if (session) {
@@ -191,6 +188,12 @@ export class LoginComponent {
             (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else if (error instanceof PasswordExpiredError) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['expired-password'], {
+              relativeTo: this.activatedRoute,
+              state: {username: username}
+            });
           } else {
             this.dialogService.showErrorDialog(error);
           }

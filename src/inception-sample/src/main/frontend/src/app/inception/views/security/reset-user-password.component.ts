@@ -168,8 +168,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
         this.resetUserPasswordForm.contains('lockUser') ?
           this.resetUserPasswordForm.get('lockUser')!.value : false,
         this.resetUserPasswordForm.contains('resetPasswordHistory') ?
-          this.resetUserPasswordForm.get('resetPasswordHistory')!.value : false,
-        PasswordChangeReason.Administrative)
+          this.resetUserPasswordForm.get('resetPasswordHistory')!.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

@@ -24,19 +24,24 @@ import {PasswordChangeReason} from "./password-change-reason";
 export class PasswordChange {
 
   /**
-   * Expire the user's password.
+   * Expire the user's password when performing an administrative password change.
    */
-  expirePassword: boolean;
+  expirePassword?: boolean;
 
   /**
-   * Lock the user.
+   * Lock the user when performing an administrative password change.
    */
-  lockUser: boolean
+  lockUser?: boolean
 
   /**
-   * The password.
+   * The new password.
    */
-  password: string;
+  newPassword: string;
+
+  /**
+   * The old password when performing a user password change.
+   */
+  oldPassword?: string;
 
   /**
    * The reason for changing the password.
@@ -44,25 +49,35 @@ export class PasswordChange {
   reason: PasswordChangeReason
 
   /**
-   * Reset the user's password history.
+   * Reset the user's password history when performing an administrative password change.
    */
-  resetPasswordHistory: boolean;
+  resetPasswordHistory?: boolean;
+
+  /**
+   * The security code when performing a forgotten password change.
+   */
+  securityCode?: string;
 
   /**
    * Constructs a new PasswordChange.
    *
-   * @param password             The password.
-   * @param expirePassword       Expire the user's password.
-   * @param lockUser             Lock the user.
-   * @param resetPasswordHistory Reset the user's password history.
    * @param reason               The reason for changing the password.
+   * @param newPassword          The new password.
+   * @param oldPassword          The old password when performing a user password change.
+   * @param securityCode         The security code when performing a forgotten password change.
+   * @param expirePassword       Expire the user's password when performing an administrative password change.
+   * @param lockUser             Lock the user when performing an administrative password change.
+   * @param resetPasswordHistory Reset the user's password history when performing an administrative password change.
    */
-  constructor(password: string, expirePassword: boolean, lockUser: boolean,
-              resetPasswordHistory: boolean, reason: PasswordChangeReason) {
-    this.password = password;
+  constructor(reason: PasswordChangeReason, newPassword: string, oldPassword?: string,
+              securityCode?: string, expirePassword?: boolean, lockUser?: boolean,
+              resetPasswordHistory?: boolean) {
+    this.reason = reason;
+    this.newPassword = newPassword;
+    this.oldPassword = oldPassword;
+    this.securityCode = securityCode;
     this.expirePassword = expirePassword;
     this.lockUser = lockUser;
     this.resetPasswordHistory = resetPasswordHistory;
-    this.reason = reason;
   }
 }

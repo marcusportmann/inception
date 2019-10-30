@@ -272,6 +272,11 @@ public class SecurityRestController extends SecureRestController
       throw new InvalidArgumentException("passwordChange");
     }
 
+    if (StringUtils.isEmpty(passwordChange.getNewPassword()))
+    {
+      throw new InvalidArgumentException("passwordChange");
+    }
+
     if (!hasAccessToUserDirectory(authentication, userDirectoryId))
     {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
@@ -287,9 +292,112 @@ public class SecurityRestController extends SecureRestController
           constraintViolations));
     }
 
-    securityService.adminChangePassword(userDirectoryId, username, passwordChange.getPassword(),
-        passwordChange.getExpirePassword(), passwordChange.getLockUser(),
-        passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+    securityService.adminChangePassword(userDirectoryId, username,
+      passwordChange.getNewPassword(), (passwordChange.getExpirePassword() == null)
+        ? false
+        : passwordChange.getExpirePassword(), (passwordChange.getLockUser() == null)
+        ? false
+        : passwordChange.getLockUser(), (passwordChange.getResetPasswordHistory() == null)
+        ? false
+        : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+  }
+
+  /**
+   * Change the password for the user.
+   *
+   * @param username        the username identifying the user
+   * @param passwordChange  the password change
+   */
+  @ApiOperation(value = "Change the password for the user",
+      notes = "Change the password for the user")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The password for the user was changed successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user directory or user could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/users/{username}/password", method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void changePassword(@ApiParam(name = "username",
+      value = "The username identifying the user", required = true)
+  @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change",
+      required = true)
+  @RequestBody PasswordChange passwordChange)
+    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+        SecurityServiceException
+  {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (StringUtils.isEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (passwordChange == null)
+    {
+      throw new InvalidArgumentException("passwordChange");
+    }
+
+    UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
+
+    if (userDirectoryId == null)
+    {
+      throw new UserNotFoundException(username);
+    }
+
+    Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(
+        passwordChange);
+
+    if (!constraintViolations.isEmpty())
+    {
+      throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
+          constraintViolations));
+    }
+
+    if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE)
+    {
+      if (!hasAccessToUserDirectory(authentication, userDirectoryId))
+      {
+        throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
+            + ")");
+      }
+
+      if (hasRole(authentication, "Administrator")
+          || hasAuthority(authentication, "FUNCTION_Security.OrganizationAdministration")
+          || hasAuthority(authentication, "FUNCTION_Security.UserAdministration")
+          || hasAuthority(authentication, "FUNCTION_Security.ResetUserPassword"))
+      {
+        securityService.adminChangePassword(userDirectoryId, username,
+            passwordChange.getNewPassword(), (passwordChange.getExpirePassword() == null)
+            ? false
+            : passwordChange.getExpirePassword(), (passwordChange.getLockUser() == null)
+            ? false
+            : passwordChange.getLockUser(), (passwordChange.getResetPasswordHistory() == null)
+            ? false
+            : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+      }
+      else
+      {
+        throw new AccessDeniedException("Insufficient access to change the password for the user ("
+            + username + ")");
+      }
+    }
+    else if (passwordChange.getReason() == PasswordChangeReason.USER)
+    {
+      // TODO: PERFORM A CHANGE PASSWORD
+
+      int xxx = 0;
+      xxx++;
+
+    }
+    else if (passwordChange.getReason() == PasswordChangeReason.FORGOTTEN)
+    {
+      // TODO: PERFORM A FORGOTTEN PASSWORD RESET
+
+    }
   }
 
   /**

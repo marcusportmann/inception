@@ -1759,7 +1759,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         if (attribute != null)
         {
-          for (int i = 0; i < attribute.size(); i++)
+          for (int i = 0; ((i < attribute.size()) && (i < maxFilteredGroupMembers)); i++)
           {
             LdapName groupMemberDn = new LdapName(String.valueOf(attribute.get(i)));
 
@@ -1895,6 +1895,8 @@ public class LDAPUserDirectory extends UserDirectoryBase
 
         if ((pageIndex != null) && (pageSize != null))
         {
+          pageSize = Math.min(pageSize, maxFilteredGroupMembers);
+
           int toIndex = (pageIndex * pageSize) + pageSize;
 
           groupMembers = groupMembers.subList(pageIndex * pageSize, Math.min(toIndex,
@@ -2063,7 +2065,7 @@ public class LDAPUserDirectory extends UserDirectoryBase
           }
         }
 
-        return numberOfMembersForGroup;
+        return Math.min(numberOfMembersForGroup, maxFilteredGroupMembers);
       }
       else
       {
