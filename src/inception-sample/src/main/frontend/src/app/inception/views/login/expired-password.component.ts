@@ -27,7 +27,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {SecurityServiceError} from "../../services/security/security.service.errors";
 import {MatDialogRef} from "@angular/material/dialog";
-import {ConfirmationDialogComponent, InformationDialogComponent} from "../../components/dialogs";
+import {InformationDialogComponent} from "../../components/dialogs";
 
 /**
  * The ExpiredPasswordComponent class implements the expired password component.
@@ -122,7 +122,7 @@ export class ExpiredPasswordComponent implements OnInit {
 
           dialogRef.afterClosed()
             .pipe(first())
-            .subscribe((confirmation: boolean | undefined) => {
+            .subscribe(() => {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigate(['..'], {
                 relativeTo: this.activatedRoute,
