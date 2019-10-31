@@ -39,11 +39,11 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "PasswordChange")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "expirePassword", "lockUser", "newPassword", "oldPassword", "reason",
+@JsonPropertyOrder({ "expirePassword", "lockUser", "newPassword", "password", "reason",
     "resetPasswordHistory", "securityCode" })
 @XmlRootElement(name = "PasswordChange", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordChange", namespace = "http://security.inception.digital",
-    propOrder = { "expirePassword", "lockUser", "newPassword", "oldPassword", "reason",
+    propOrder = { "expirePassword", "lockUser", "newPassword", "password", "reason",
         "resetPasswordHistory", "securityCode" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
@@ -79,13 +79,13 @@ public class PasswordChange
   private String newPassword;
 
   /**
-   * The old password when performing a user password change.
+   * The password for the user that is used to authorise the operation when performing a user password change.
    */
-  @ApiModelProperty(value = "The old password when performing a user password change")
+  @ApiModelProperty(value = "The password for the user that is used to authorise the operation when performing a user password change")
   @JsonProperty
-  @XmlElement(name = "OldPassword")
+  @XmlElement(name = "Password")
   @Size(min = 1, max = 100)
-  private String oldPassword;
+  private String password;
 
   /**
    * The reason for changing the password.
@@ -122,12 +122,13 @@ public class PasswordChange
    * Constructs a new <code>PasswordChange</code> for a USER password change.
    *
    * @param newPassword the new password
-   * @param oldPassword the old password when performing the user password change
+   * @param password    the password for the user that is used to authorise the operation when
+   *                    performing a user password change
    */
-  public PasswordChange(String newPassword, String oldPassword)
+  public PasswordChange(String newPassword, String password)
   {
     this.newPassword = newPassword;
-    this.oldPassword = oldPassword;
+    this.password = password;
     this.reason = PasswordChangeReason.USER;
   }
 
@@ -139,7 +140,7 @@ public class PasswordChange
    *                             password change
    * @param lockUser             lock the user when performing the administrative password change
    * @param resetPasswordHistory reset the user's password history when performing the
-   *                            administrative password change
+   *                             administrative password change
    */
   public PasswordChange(String newPassword, Boolean expirePassword, Boolean lockUser,
       Boolean resetPasswordHistory)
@@ -185,13 +186,15 @@ public class PasswordChange
   }
 
   /**
-   * Returns the old password when performing a user password change.
+   * Returns the password for the user that is used to authorise the operation when performing a
+   * user password change.
    *
-   * @return the old password when performing a user password change
+   * @return the password for the user that is used to authorise the operation when performing a
+   *         user password change
    */
-  public String getOldPassword()
+  public String getPassword()
   {
-    return oldPassword;
+    return password;
   }
 
   /**
@@ -259,13 +262,15 @@ public class PasswordChange
   }
 
   /**
-   * Set the old password when performing a user password change.
+   * Set the password for the user that is used to authorise the operation when performing a user
+   * password change.
    *
-   * @param oldPassword the old password when performing a user password change
+   * @param password the password for the user that is used to authorise the operation when
+   *                 performing a user password change
    */
-  public void setOldPassword(String oldPassword)
+  public void setPassword(String password)
   {
-    this.oldPassword = oldPassword;
+    this.password = password;
   }
 
   /**

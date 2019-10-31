@@ -39,9 +39,10 @@ export class PasswordChange {
   newPassword: string;
 
   /**
-   * The old password when performing a user password change.
+   * The password for the user that is used to authorise the operation when performing a user
+   * password change.
    */
-  oldPassword?: string;
+  password?: string;
 
   /**
    * The reason for changing the password.
@@ -63,18 +64,19 @@ export class PasswordChange {
    *
    * @param reason               The reason for changing the password.
    * @param newPassword          The new password.
-   * @param oldPassword          The old password when performing a user password change.
+   * @param password             The password for the user that is used to authorise the operation
+   *                             when performing a user password change.
    * @param securityCode         The security code when performing a forgotten password change.
    * @param expirePassword       Expire the user's password when performing an administrative password change.
    * @param lockUser             Lock the user when performing an administrative password change.
    * @param resetPasswordHistory Reset the user's password history when performing an administrative password change.
    */
-  constructor(reason: PasswordChangeReason, newPassword: string, oldPassword?: string,
+  constructor(reason: PasswordChangeReason, newPassword: string, password?: string,
               securityCode?: string, expirePassword?: boolean, lockUser?: boolean,
               resetPasswordHistory?: boolean) {
     this.reason = reason;
     this.newPassword = newPassword;
-    this.oldPassword = oldPassword;
+    this.password = password;
     this.securityCode = securityCode;
     this.expirePassword = expirePassword;
     this.lockUser = lockUser;

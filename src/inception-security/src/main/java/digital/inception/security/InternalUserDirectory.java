@@ -406,12 +406,9 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserLockedException(username);
       }
 
-      if (user.hasPasswordExpired())
-      {
-        throw new ExpiredPasswordException(username);
-      }
+      String passwordHash = createPasswordHash(password);
 
-      if (!user.getPassword().equals(createPasswordHash(password)))
+      if (!user.getPassword().equals(passwordHash))
       {
         if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
         {
@@ -420,6 +417,11 @@ public class InternalUserDirectory extends UserDirectoryBase
 
         throw new AuthenticationFailedException(String.format(
             "Authentication failed for the user (%s)", username));
+      }
+
+      if (user.hasPasswordExpired())
+      {
+        throw new ExpiredPasswordException(username);
       }
     }
     catch (AuthenticationFailedException | UserNotFoundException | UserLockedException

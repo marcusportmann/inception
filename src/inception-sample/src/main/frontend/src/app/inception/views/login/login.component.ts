@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {InceptionModule} from '../../inception.module';
 import {SecurityService} from '../../services/security/security.service';
-import {finalize, first} from 'rxjs/operators';
+import {finalize, first, map} from 'rxjs/operators';
 import {SessionService} from '../../services/session/session.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
@@ -45,7 +45,7 @@ import {Organizations} from '../../services/security/organizations';
 @Component({
   templateUrl: 'login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
@@ -112,6 +112,16 @@ export class LoginComponent {
     // console.log('Cancel clicked!');
     // let control = this.loginForm.get('username')
     // control.disabled ? control.enable() : control.disable()
+  }
+
+  ngOnInit(): void {
+    this.activatedRoute.paramMap
+      .pipe(first(), map(() => window.history.state))
+      .subscribe((state) => {
+        if (state.username) {
+          this.loginForm.get('username')!.setValue(state.username);
+        }
+      });
   }
 
   onLogin(): void {

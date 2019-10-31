@@ -292,12 +292,14 @@ public class SecurityRestController extends SecureRestController
           constraintViolations));
     }
 
-    securityService.adminChangePassword(userDirectoryId, username,
-      passwordChange.getNewPassword(), (passwordChange.getExpirePassword() == null)
+    securityService.adminChangePassword(userDirectoryId, username, passwordChange.getNewPassword(),
+        (passwordChange.getExpirePassword() == null)
         ? false
-        : passwordChange.getExpirePassword(), (passwordChange.getLockUser() == null)
+        : passwordChange.getExpirePassword(),
+        (passwordChange.getLockUser() == null)
         ? false
-        : passwordChange.getLockUser(), (passwordChange.getResetPasswordHistory() == null)
+        : passwordChange.getLockUser(),
+        (passwordChange.getResetPasswordHistory() == null)
         ? false
         : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
   }
@@ -313,7 +315,15 @@ public class SecurityRestController extends SecureRestController
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The password for the user was changed successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 401, message = "Authentication failed",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 403,
+          message = "The user has exceeded the maximum number of failed password attempts and has been locked",
+          response = RestControllerError.class) ,
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 409,
+          message = "The new password for the user has been used recently and is not valid",
           response = RestControllerError.class) ,
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
@@ -327,6 +337,7 @@ public class SecurityRestController extends SecureRestController
       required = true)
   @RequestBody PasswordChange passwordChange)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+        AuthenticationFailedException, ExistingPasswordException, UserLockedException,
         SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -387,11 +398,8 @@ public class SecurityRestController extends SecureRestController
     }
     else if (passwordChange.getReason() == PasswordChangeReason.USER)
     {
-      // TODO: PERFORM A CHANGE PASSWORD
-
-      int xxx = 0;
-      xxx++;
-
+      securityService.changePassword(username, passwordChange.getPassword(),
+          passwordChange.getNewPassword());
     }
     else if (passwordChange.getReason() == PasswordChangeReason.FORGOTTEN)
     {

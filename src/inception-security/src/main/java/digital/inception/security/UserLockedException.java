@@ -37,7 +37,7 @@ import javax.xml.ws.WebFault;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND,
+@ResponseStatus(value = HttpStatus.FORBIDDEN,
     reason = "The user has exceeded the maximum number of failed password attempts and has been locked")
 @WebFault(name = "UserLockedException", targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")

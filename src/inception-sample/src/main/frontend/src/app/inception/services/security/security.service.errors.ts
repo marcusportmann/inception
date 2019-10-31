@@ -20,6 +20,24 @@ import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
 
 /**
+ * The AuthenticationFailedError class holds the information for an authentication failed error.
+ *
+ * @author Marcus Portmann
+ */
+export class AuthenticationFailedError extends Error {
+
+  /**
+   * Constructs a new AuthenticationFailedError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The DuplicateGroupError class holds the information for a duplicate group error.
  *
  * @author Marcus Portmann
@@ -146,6 +164,24 @@ export class ExistingGroupMembersError extends Error {
 }
 
 /**
+ * The ExistingPasswordError class holds the information for an existing password error.
+ *
+ * @author Marcus Portmann
+ */
+export class ExistingPasswordError extends Error {
+
+  /**
+   * Constructs a new ExistingPasswordError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The GroupMemberNotFoundError class holds the information for a group member not found error.
  *
  * @author Marcus Portmann
@@ -244,6 +280,24 @@ export class UserDirectoryNotFoundError extends Error {
 
   /**
    * Constructs a new UserDirectoryNotFoundError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The UserLockedError class holds the information for a user locked error.
+ *
+ * @author Marcus Portmann
+ */
+export class UserLockedError extends Error {
+
+  /**
+   * Constructs a new UserLockedError.
    *
    * @param message The error message.
    * @param cause   The optional cause of the error.

@@ -26,6 +26,8 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {SecurityServiceError} from "../../services/security/security.service.errors";
+import {MatDialogRef} from "@angular/material/dialog";
+import {ConfirmationDialogComponent, InformationDialogComponent} from "../../components/dialogs";
 
 /**
  * The ExpiredPasswordComponent class implements the expired password component.
@@ -111,11 +113,22 @@ export class ExpiredPasswordComponent implements OnInit {
       this.securityService.changePassword(username, password, newPassword)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          // // noinspection JSIgnoredPromiseFromCall
-          // this.router.navigate(['../../..'], {
-          //   relativeTo: this.activatedRoute,
-          //   state: {userDirectoryId: this.userDirectoryId}
-          // });
+
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+            {message: this.i18n({
+                id: '@@expired_password_component_your_password_was_successfully_changed',
+                value: 'Your password was successfully changed.'
+              })});
+
+          dialogRef.afterClosed()
+            .pipe(first())
+            .subscribe((confirmation: boolean | undefined) => {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['..'], {
+                relativeTo: this.activatedRoute,
+                state: {username: username}
+              });
+            });
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||

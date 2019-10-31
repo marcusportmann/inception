@@ -20,6 +20,7 @@ import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
+  AuthenticationFailedError,
   DuplicateGroupError,
   DuplicateOrganizationError,
   DuplicateUserDirectoryError,
@@ -27,12 +28,13 @@ import {
   ExistingGroupMemberError,
   ExistingGroupMembersError,
   ExistingGroupRoleError,
+  ExistingPasswordError,
   GroupMemberNotFoundError,
   GroupNotFoundError,
   GroupRoleNotFoundError,
   OrganizationNotFoundError,
   SecurityServiceError,
-  UserDirectoryNotFoundError,
+  UserDirectoryNotFoundError, UserLockedError,
   UserNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
@@ -274,6 +276,21 @@ export class SecurityService {
           return throwError(new UserNotFoundError(this.i18n({
             id: '@@security_service_the_user_could_not_be_found',
             value: 'The user could not be found.'
+          }), apiError));
+        } else if (apiError.code === 'AuthenticationFailedError') {
+          return throwError(new AuthenticationFailedError(this.i18n({
+            id: '@@security_service_authentication_failed',
+            value: 'Authentication failed.'
+          }), apiError));
+        } else if (apiError.code === 'ExistingPasswordError') {
+          return throwError(new ExistingPasswordError(this.i18n({
+            id: '@@security_service_existing_password',
+            value: 'The new password has been used recently and is not valid.'
+          }), apiError));
+        } else if (apiError.code === 'UserLockedError') {
+          return throwError(new UserLockedError(this.i18n({
+            id: '@@security_service_user_locked',
+            value: 'The user has exceeded the maximum number of failed password attempts and has been locked.'
           }), apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
