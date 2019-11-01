@@ -75,27 +75,26 @@
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
-    <agroal-pool.version>1.6</agroal-pool.version>
+    <agroal-pool.version>1.7</agroal-pool.version>
     <apache-avro.version>1.9.1</apache-avro.version>
+    <apache-cxf.version>3.3.3</apache-cxf.version>
+    <apache-freemarker.version>2.3.29</apache-freemarker.version>
     <cglib.version>3.3.0</cglib.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.3.3</cxf.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
-    <hibernate-annotations.version>5.0.4-Final</hibernate-annotations.version>
-    <hibernate-validator.version>6.0.17.Final</hibernate-validator.version>
+    <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
     <jasperreports.version>6.10.0</jasperreports.version>
-    <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
-    <metrics-core.version>4.1.0</metrics-core.version>
+    <metrics-core.version>4.1.1</metrics-core.version>
     <mssql-jdbc.version>7.4.1.jre12</mssql-jdbc.version>
-    <narayana.version>5.9.8.Final</narayana.version>
-    <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
-    <spring-security-oauth2.version>2.3.6.RELEASE</spring-security-oauth2.version>
+    <narayana.version>5.10.0.Final</narayana.version>
+    <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
+    <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger.version>1.5.22</swagger.version>
+    <swagger.version>1.5.24</swagger.version>
     <wss4j-ws-security-common.version>2.2.4</wss4j-ws-security-common.version>
   </properties>
 
@@ -169,27 +168,27 @@
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        <version>${cxf.version}</version>
+        <version>${apache-cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-transports-http</artifactId>
-        <version>${cxf.version}</version>
+        <version>${apache-cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-ws-security</artifactId>
-        <version>${cxf.version}</version>
+        <version>${apache-cxf.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>${apache-freemarker.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.wss4j</groupId>
         <artifactId>wss4j-ws-security-common</artifactId>
         <version>${wss4j-ws-security-common.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-annotations</artifactId>
-        <version>${hibernate-annotations.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>

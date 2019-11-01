@@ -18,6 +18,7 @@ package digital.inception.mail;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -46,9 +47,9 @@ public class MailService
   implements IMailService
 {
   /**
-   * The Java mail sender.
+   * The Spring application context.
    */
-  private JavaMailSender javaMailSender;
+  private ApplicationContext applicationContext;
 
   /**
    * The Mail Template Repository.
@@ -63,14 +64,14 @@ public class MailService
   /**
    * Constructs a new <code>MailService</code>.
    *
-   * @param javaMailSender                the Java mail sender
+   * @param applicationContext            the Spring application context
    * @param mailTemplateRepository        the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */
-  public MailService(JavaMailSender javaMailSender, MailTemplateRepository mailTemplateRepository,
+  public MailService(ApplicationContext applicationContext, MailTemplateRepository mailTemplateRepository,
       MailTemplateSummaryRepository mailTemplateSummaryRepository)
   {
-    this.javaMailSender = javaMailSender;
+    this.applicationContext = applicationContext;
     this.mailTemplateRepository = mailTemplateRepository;
     this.mailTemplateSummaryRepository = mailTemplateSummaryRepository;
   }
@@ -315,21 +316,30 @@ public class MailService
 
       MailTemplate mailTemplate = mailTemplateOptional.get();
 
-      // Send the e-mail message
-      MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+      JavaMailSender javaMailSender = applicationContext.getBean(JavaMailSender.class);
 
-      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+      if (javaMailSender != null)
+      {
+        // Send the e-mail message
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
-      helper.setFrom(new InternetAddress(from, fromName));
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-      helper.setTo(to.toArray(new String[to.size()]));
+        helper.setFrom(new InternetAddress(from, fromName));
 
-      helper.setSubject(subject);
+        helper.setTo(to.toArray(new String[to.size()]));
 
-      helper.setText(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8),
+        helper.setSubject(subject);
+
+        helper.setText(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8),
           mailTemplate.getContentType() == MailTemplateContentType.HTML);
 
-      javaMailSender.send(helper.getMimeMessage());
+        javaMailSender.send(helper.getMimeMessage());
+      }
+      else
+      {
+        throw new MailServiceException("No JavaMailSender bean has been configured");
+      }
     }
     catch (MailTemplateNotFoundException e)
     {
