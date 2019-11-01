@@ -46,10 +46,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "PasswordReset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "username", "requested", "completed", "expired", "status", "securityCode" })
+@JsonPropertyOrder({ "username", "requested", "completed", "expired", "status", "securityCodeHash" })
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordReset", namespace = "http://security.inception.digital",
-    propOrder = { "username", "requested", "completed", "expired", "status", "securityCode" })
+    propOrder = { "username", "requested", "completed", "expired", "status", "securityCodeHash" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
 @Entity
@@ -94,15 +94,15 @@ public class PasswordReset
   private LocalDateTime requested;
 
   /**
-   * The security code.
+   * The security code hash.
    */
-  @ApiModelProperty(value = "The security code", required = true)
+  @ApiModelProperty(value = "The security code hash", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "SecurityCode", required = true)
+  @XmlElement(name = "SecurityCodeHash", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "securityCode", nullable = false, length = 100)
-  private String securityCode;
+  @Column(name = "security_code_hash", nullable = false, length = 100)
+  private String securityCodeHash;
 
   /**
    * The status of the password reset.
@@ -135,13 +135,13 @@ public class PasswordReset
   /**
    * Constructs a new <code>PasswordReset</code>.
    *
-   * @param username     the username for the user associated with the password reset
-   * @param securityCode the security code
+   * @param username         the username for the user associated with the password reset
+   * @param securityCodeHash the security code hash
    */
-  public PasswordReset(String username, String securityCode)
+  public PasswordReset(String username, String securityCodeHash)
   {
     this.username = username;
-    this.securityCode = securityCode;
+    this.securityCodeHash = securityCodeHash;
     this.requested = LocalDateTime.now();
     this.status = PasswordResetStatus.REQUESTED;
   }
@@ -177,13 +177,13 @@ public class PasswordReset
   }
 
   /**
-   * Returns the security code.
+   * Returns the security code hash.
    *
-   * @return the security code
+   * @return the security code hash
    */
-  public String getSecurityCode()
+  public String getSecurityCodeHash()
   {
-    return securityCode;
+    return securityCodeHash;
   }
 
   /**
@@ -237,13 +237,13 @@ public class PasswordReset
   }
 
   /**
-   * Set the security code.
+   * Set the security code hash.
    *
-   * @param securityCode the security code
+   * @param securityCodeHash the security code hash
    */
-  public void setSecurityCode(String securityCode)
+  public void setSecurityCodeHash(String securityCodeHash)
   {
-    this.securityCode = securityCode;
+    this.securityCodeHash = securityCodeHash;
   }
 
   /**

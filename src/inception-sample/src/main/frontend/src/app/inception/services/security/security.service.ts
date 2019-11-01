@@ -1689,7 +1689,7 @@ export class SecurityService {
   }
 
   /**
-   * Reset the forgotten password for the user.
+   * Reset the password for the user.
    *
    * @param username     The username identifying the user.
    * @param newPassword  The new password.
@@ -1697,9 +1697,9 @@ export class SecurityService {
    *
    * @return True if the user's password was reset successfully or false otherwise.
    */
-  resetForgottenPassword(username: string, newPassword: string,
+  resetPassword(username: string, newPassword: string,
                          securityCode: string): Observable<boolean> {
-    let passwordChange = new PasswordChange(PasswordChangeReason.Forgotten, newPassword, undefined,
+    let passwordChange = new PasswordChange(PasswordChangeReason.Reset, newPassword, undefined,
       securityCode);
 
     return this.httpClient.put<boolean>(
@@ -1724,8 +1724,8 @@ export class SecurityService {
           }), apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_reset_the_forgotten_password_for_the_user',
-            value: 'Failed to reset the forgotten password for the user.'
+            id: '@@security_service_failed_to_reset_the_password_for_the_user',
+            value: 'Failed to reset the password for the user.'
           }), apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

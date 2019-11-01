@@ -56,6 +56,7 @@ public class ReportDefinitionNotFoundException extends ServiceException
    */
   public ReportDefinitionNotFoundException(UUID reportDefinitionId)
   {
-    super("ReportDefinitionNotFoundError", "The report definition with ID (" + reportDefinitionId + ") could not be found");
+    super("ReportDefinitionNotFoundError", "The report definition with ID (" + reportDefinitionId
+        + ") could not be found");
   }
 }

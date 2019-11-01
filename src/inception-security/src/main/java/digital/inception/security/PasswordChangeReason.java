@@ -44,8 +44,8 @@ public enum PasswordChangeReason
   USER(0, "User"),
   @XmlEnumValue("Administrative")
   ADMINISTRATIVE(1, "Administrative"),
-  @XmlEnumValue("Forgotten")
-  FORGOTTEN(2, "Forgotten");
+  @XmlEnumValue("Reset")
+  RESET(2, "Reset");
 
   private int code;
   private String description;
@@ -75,7 +75,7 @@ public enum PasswordChangeReason
         return PasswordChangeReason.ADMINISTRATIVE;
 
       default:
-        return PasswordChangeReason.FORGOTTEN;
+        return PasswordChangeReason.RESET;
     }
   }
 

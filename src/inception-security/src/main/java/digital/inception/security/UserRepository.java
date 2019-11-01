@@ -42,21 +42,22 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User>
 {
   @Modifying
-  @Query(
-      "update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, u.passwordExpiry = :passwordExpiry where u.id = :userId")
+  @Query("update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, "
+      + "u.passwordExpiry = :passwordExpiry where u.id = :userId")
   void changePassword(@Param("userId") UUID userId, @Param("password") String password, @Param(
       "passwordAttempts") int passwordAttempts, @Param(
       "passwordExpiry") Optional<LocalDateTime> passwordExpiry);
 
   long countByUserDirectoryId(UUID userDirectoryId);
 
-  @Query(
-      "select count(u.id) from User u where ((lower(u.username) like lower(:filter)) or (lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
+  @Query("select count(u.id) from User u where ((lower(u.username) like lower(:filter)) or "
+      + "(lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and "
+      + "u.userDirectoryId = :userDirectoryId")
   long countFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter);
 
-  @Query(
-      value = "select count(uph.user_id) from security.users_password_history uph where uph.user_id = :userId and uph.changed > :after and uph.password = :password",
+  @Query(value = "select count(uph.user_id) from security.users_password_history uph "
+      + "where uph.user_id = :userId and uph.changed > :after and uph.password = :password",
       nativeQuery = true)
   long countPasswordHistory(@Param("userId") UUID userId, @Param("after") LocalDateTime after,
       @Param("password") String password);
@@ -73,16 +74,17 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
-  @Query(
-      "select u from User u where ((lower(u.username) like lower(:filter)) or (lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
+  @Query("select u from User u where ((lower(u.username) like lower(:filter)) or "
+      + "(lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) "
+      + "and u.userDirectoryId = :userDirectoryId")
   List<User> findFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter, Pageable pageable);
 
   Optional<FirstNameAndLastName> getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
       UUID userDirectoryId, String username);
 
-  @Query(
-      "select f.code from User u join u.groups as g join g.roles as r join r.functions as f where u.id = :userId")
+  @Query("select f.code from User u join u.groups as g join g.roles as r join r.functions as f "
+      + "where u.id = :userId")
   List<String> getFunctionCodesByUserId(@Param("userId") UUID userId);
 
   @Query("select g.name from User u join u.groups as g where u.id = :userId")
@@ -92,7 +94,8 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   List<Group> getGroupsByUserId(@Param("userId") UUID userId);
 
   @Query(
-      "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) like lower(:username)")
+      "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) "
+      + "like lower(:username)")
   Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(@Param(
       "userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 
@@ -106,9 +109,15 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   @Query("update User u set u.passwordAttempts = u.passwordAttempts + 1 where u.id = :userId")
   void incrementPasswordAttempts(@Param("userId") UUID userId);
 
-  @Query(
-      "select case when (count(u.id) > 0) then true else false end from User u join u.groups as g where u.id = :userId and g.id = :groupId")
+  @Query("select case when (count(u.id) > 0) then true else false end from User u join u.groups "
+      + "as g where u.id = :userId and g.id = :groupId")
   boolean isUserInGroup(@Param("userId") UUID userId, @Param("groupId") UUID groupId);
+
+  @Modifying
+  @Query("update User u set u.password = :password, u.passwordAttempts = 0, "
+      + "u.passwordExpiry = :passwordExpiry where u.id = :userId")
+  void resetPassword(@Param("userId") UUID userId, @Param("password") String password, @Param(
+      "passwordExpiry") LocalDateTime passwordExpiry);
 
   @Modifying
   @Query(value = "delete from security.users_password_history where user_id = :userId",
@@ -116,8 +125,8 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   void resetPasswordHistory(@Param("userId") UUID userId);
 
   @Modifying
-  @Query(
-      value = "insert into security.users_password_history(user_id, changed, password) values (:userId, current_timestamp, :password)",
+  @Query(value = "insert into security.users_password_history(user_id, changed, password) "
+      + "values (:userId, current_timestamp, :password)",
       nativeQuery = true)
   void savePasswordInPasswordHistory(@Param("userId") UUID userId, @Param(
       "password") String password);

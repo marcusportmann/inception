@@ -54,7 +54,7 @@ public interface SMSRepository extends JpaRepository<SMS, UUID>
 
   @Modifying
   @Query("update SMS s set s.lockName = :lockName, s.status = 2, "
-      + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when " + "where s.id = :smsId")
+      + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when where s.id = :smsId")
   void lockSMSForSending(@Param("smsId") UUID smsId, @Param("lockName") String lockName, @Param(
       "when") LocalDateTime when);
 

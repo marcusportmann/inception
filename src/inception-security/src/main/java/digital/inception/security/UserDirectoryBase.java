@@ -133,30 +133,7 @@ public abstract class UserDirectoryBase
     return userRepository;
   }
 
-  /**
-   * Create the SHA-256 hash of the specified password.
-   *
-   * @param password the password to hash
-   *
-   * @return the SHA-256 hash of the password
-   */
-  protected String createPasswordHash(String password)
-    throws SecurityServiceException
-  {
-    try
-    {
-      MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-      md.update(password.getBytes(StandardCharsets.ISO_8859_1), 0, password.length());
-
-      return Base64Util.encodeBytes(md.digest());
-    }
-    catch (Throwable e)
-    {
-      throw new SecurityServiceException(String.format(
-          "Failed to generate a SHA-256 hash of the password (%s)", password), e);
-    }
-  }
 
   /**
    * Checks whether the specified value is <code>null</code> or blank.

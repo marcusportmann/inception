@@ -43,6 +43,7 @@ import java.time.temporal.ChronoUnit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -68,6 +69,33 @@ public class SecurityServiceTest
    */
   @Autowired
   private ISecurityService securityService;
+
+  /**
+   * Test the password reset functionality.
+   */
+  @Test
+  public void passwordResetTest()
+  throws Exception
+  {
+    Organization organization = getTestOrganizationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+
+    Group group = getTestGroupDetails(userDirectory.getId());
+
+    securityService.createGroup(userDirectory.getId(), group);
+
+    User user = getTestUserDetails(userDirectory.getId());
+
+    securityService.createUser(userDirectory.getId(), user, false, false);
+
+    securityService.initiatePasswordReset(user.getUsername(), false, Optional.of("Testing123"));
+
+    securityService.resetPassword(user.getUsername(), "New Password", "Testing123" );
+
+    securityService.authenticate(user.getUsername(), "New Password");
+
+  }
 
   /**
    * Test the functionality to add a user to a group.

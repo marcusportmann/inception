@@ -238,6 +238,11 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-audit</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-cache</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -299,6 +304,21 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-kafka</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-mail</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-mail-rs</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-mail-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -426,6 +446,7 @@
 
   <modules>
     <module>inception-application</module>
+    <module>inception-audit</module>
     <module>inception-cache</module>
     <module>inception-codes</module>
     <module>inception-codes-rs</module>
@@ -439,6 +460,9 @@
     <module>inception-core</module>
     <module>inception-json</module>
     <module>inception-kafka</module>
+    <module>inception-mail</module>
+    <module>inception-mail-rs</module>
+    <module>inception-mail-ws</module>
     <module>inception-messaging</module>
     <module>inception-messaging-rs</module>
     <module>inception-messaging-ws</module>

@@ -18,10 +18,8 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.persistence.IDGenerator;
 import digital.inception.core.util.PasswordUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.util.StringUtils;
 
@@ -74,13 +72,6 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   private static final UserDirectoryCapabilities INTERNAL_USER_DIRECTORY_CAPABILITIES =
       new UserDirectoryCapabilities(true, true, true, true, true, true, true, true);
-
-  /**
-   * The ID generator.
-   */
-  @Autowired
-  private IDGenerator idGenerator;
-
 
   /**
    * The maximum number of filtered group members to return.
@@ -189,8 +180,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to initialize the user directory (%s)", userDirectoryId), e);
+      throw new SecurityServiceException("Failed to initialize the user directory ("
+          + userDirectoryId + ")", e);
     }
   }
 
@@ -259,9 +250,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to add the role (%s) to the group (%s) for the user directory (%s)", roleCode,
-          groupName, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to add the role (" + roleCode + ") to the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -302,9 +292,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to add the user (%s) to the group (%s) for the user directory (%s)", username,
-          groupName, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to add the user (" + username + ") to the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -334,7 +323,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserNotFoundException(username);
       }
 
-      String newPasswordHash = createPasswordHash(newPassword);
+      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
 
       int passwordAttempts = 0;
 
@@ -371,9 +360,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to change the password for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -406,7 +394,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserLockedException(username);
       }
 
-      String passwordHash = createPasswordHash(password);
+      String passwordHash = PasswordUtil.createPasswordHash(password);
 
       if (!user.getPassword().equals(passwordHash))
       {
@@ -415,8 +403,8 @@ public class InternalUserDirectory extends UserDirectoryBase
           getUserRepository().incrementPasswordAttempts(user.getId());
         }
 
-        throw new AuthenticationFailedException(String.format(
-            "Authentication failed for the user (%s)", username));
+        throw new AuthenticationFailedException("Authentication failed for the user (" + username
+            + ")");
       }
 
       if (user.hasPasswordExpired())
@@ -431,9 +419,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to authenticate the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to authenticate the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -467,14 +454,14 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new UserLockedException(username);
       }
 
-      String passwordHash = createPasswordHash(password);
-      String newPasswordHash = createPasswordHash(newPassword);
+      String passwordHash = PasswordUtil.createPasswordHash(password);
+      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
 
       if (!user.getPassword().equals(passwordHash))
       {
-        throw new AuthenticationFailedException(String.format(
-            "Authentication failed while attempting to change the password for the user (%s)",
-            username));
+        throw new AuthenticationFailedException(
+            "Authentication failed while attempting to change the password for the user ("
+            + username + ")");
       }
 
       if (isPasswordInHistory(user.getId(), newPasswordHash))
@@ -484,8 +471,6 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       LocalDateTime passwordExpiry = LocalDateTime.now();
       passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
-
-      user.setPasswordExpiry(passwordExpiry);
 
       getUserRepository().changePassword(user.getId(), newPasswordHash, 0, Optional.of(
           passwordExpiry));
@@ -499,9 +484,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to change the password for the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to change the password for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -522,7 +506,7 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateGroupException(group.getName());
       }
 
-      group.setId(idGenerator.nextUUID());
+      group.setId(UUID.randomUUID());
 
       getGroupRepository().saveAndFlush(group);
     }
@@ -532,9 +516,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to create the group (%s) for the user directory (%s)", group.getName(),
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to create the group (" + group.getName()
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -557,15 +540,15 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new DuplicateUserException(user.getUsername());
       }
 
-      user.setId(idGenerator.nextUUID());
+      user.setId(UUID.randomUUID());
 
       if (!isNullOrEmpty(user.getPassword()))
       {
-        user.setPassword(createPasswordHash(user.getPassword()));
+        user.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
       }
       else
       {
-        user.setPassword(createPasswordHash(PasswordUtil.generateRandomPassword()));
+        user.setPassword(PasswordUtil.createPasswordHash(PasswordUtil.generateRandomPassword()));
       }
 
       if (userLocked)
@@ -600,9 +583,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to create the user (%s) for the user directory (%s)", user.getUsername(),
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to create the user (" + user.getUsername()
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -638,9 +620,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to delete the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to delete the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -672,9 +653,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to delete the user (%s) for the user directory (%s)", username,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to delete the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -742,8 +722,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to find the users for the user directory (%s)", getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to find the users for the user directory ("
+          + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -788,9 +768,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the function codes for the user (%s) for the user directory (%s)",
-          username, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the function codes for the user ("
+          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -825,9 +804,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -882,9 +860,9 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the names identifying the groups the user is a member of (%s) for the user directory (%s)",
-          username, getUserDirectoryId()), e);
+      throw new SecurityServiceException(
+          "Failed to retrieve the names identifying the groups the user (" + username
+          + ") is a member of for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1260,9 +1238,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the role codes for the group (%s) for the user directory (%s)",
-          groupName, getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the role codes for the group ("
+          + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1337,9 +1314,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException(String.format(
-          "Failed to retrieve the roles for the group (%s) for the user directory (%s)", groupName,
-          getUserDirectoryId()), e);
+      throw new SecurityServiceException("Failed to retrieve the roles for the group (" + groupName
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1398,8 +1374,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (firstNameAndLastNameOptional.isPresent())
       {
-        StringBuilder buffer = new StringBuilder(firstNameAndLastNameOptional.get()
-            .getFirstName());
+        StringBuilder buffer = new StringBuilder(firstNameAndLastNameOptional.get().getFirstName());
 
         if (!StringUtils.isEmpty(firstNameAndLastNameOptional.get().getLastName()))
         {
@@ -1424,8 +1399,8 @@ public class InternalUserDirectory extends UserDirectoryBase
     }
     catch (Throwable e)
     {
-      throw new SecurityServiceException("Failed to retrieve the full name for the user (" + username
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+      throw new SecurityServiceException("Failed to retrieve the full name for the user ("
+          + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1700,6 +1675,60 @@ public class InternalUserDirectory extends UserDirectoryBase
   }
 
   /**
+   * Reset the password for the user.
+   *
+   * @param username    the username identifying the user
+   * @param newPassword the new password
+   */
+  @Override
+  public void resetPassword(String username, String newPassword)
+    throws UserNotFoundException, UserLockedException, ExistingPasswordException,
+        SecurityServiceException
+  {
+    try
+    {
+      Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
+          getUserDirectoryId(), username);
+
+      if (userOptional.isEmpty())
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      User user = userOptional.get();
+
+      if ((user.getPasswordAttempts() != null)
+          && (user.getPasswordAttempts() > maxPasswordAttempts))
+      {
+        throw new UserLockedException(username);
+      }
+
+      String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
+
+      if (isPasswordInHistory(user.getId(), newPasswordHash))
+      {
+        throw new ExistingPasswordException(username);
+      }
+
+      LocalDateTime passwordExpiry = LocalDateTime.now();
+      passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
+
+      getUserRepository().resetPassword(user.getId(), newPasswordHash, passwordExpiry);
+
+      getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
+    }
+    catch (UserNotFoundException | UserLockedException | ExistingPasswordException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to reset the password for the user (" + username
+          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+    }
+  }
+
+  /**
    * Update the group.
    *
    * @param group the group
@@ -1711,7 +1740,7 @@ public class InternalUserDirectory extends UserDirectoryBase
     try
     {
       Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
-        group.getUserDirectoryId(), group.getName());
+          group.getUserDirectoryId(), group.getName());
 
       if (groupOptional.isEmpty())
       {
@@ -1783,7 +1812,7 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       if (!StringUtils.isEmpty(user.getPassword()))
       {
-        existingUser.setPassword(createPasswordHash(user.getPassword()));
+        existingUser.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
       }
 
       if (lockUser)

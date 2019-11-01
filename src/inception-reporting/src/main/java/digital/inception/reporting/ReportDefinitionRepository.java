@@ -28,7 +28,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.UUID;
 
 /**
- * The <code>v</code> interface declares the repository for the
+ * The <code>ReportDefinitionRepository</code> interface declares the repository for the
  * <code>ReportDefinition</code> domain type.
  *
  * @author Marcus Portmann

@@ -26,6 +26,8 @@ import digital.inception.configuration.IConfigurationService;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.error.ErrorWebService;
 import digital.inception.error.IErrorService;
+import digital.inception.mail.IMailService;
+import digital.inception.mail.MailWebService;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
 import digital.inception.reporting.ReportingWebService;
@@ -45,9 +47,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -76,7 +77,7 @@ import javax.xml.ws.Endpoint;
 @SpringBootApplication
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = false)
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-  basePackages = { "digital.inception.sample" })
+    basePackages = { "digital.inception.sample" })
 @EnableSwagger2
 public class SampleApplication extends Application
   implements InitializingBean
@@ -103,6 +104,11 @@ public class SampleApplication extends Application
    * The Error Service.
    */
   private IErrorService errorService;
+
+  /**
+   * The Mail Service.
+   */
+  private IMailService mailService;
 
   /**
    * The Reporting Service.
@@ -138,6 +144,7 @@ public class SampleApplication extends Application
    * @param codesService            the Codes Service
    * @param configurationService    the Configuration Service
    * @param errorService            the Error Service
+   * @param mailService             the Mail Service
    * @param reportingService        the Reporting Service
    * @param sampleService           the Sample Service
    * @param schedulerService        the Scheduler Service
@@ -147,7 +154,7 @@ public class SampleApplication extends Application
   public SampleApplication(ApplicationContext applicationContext, @Qualifier(
       "applicationDataSource") DataSource dataSource, ICodesService codesService,
       IConfigurationService configurationService, IErrorService errorService,
-      IReportingService reportingService, ISampleService sampleService,
+      IMailService mailService, IReportingService reportingService, ISampleService sampleService,
       ISchedulerService schedulerService, ISecurityService securityService, Validator validator)
   {
     super(applicationContext);
@@ -156,6 +163,7 @@ public class SampleApplication extends Application
     this.codesService = codesService;
     this.configurationService = configurationService;
     this.errorService = errorService;
+    this.mailService = mailService;
     this.reportingService = reportingService;
     this.sampleService = sampleService;
     this.schedulerService = schedulerService;
@@ -184,8 +192,8 @@ public class SampleApplication extends Application
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
           "digital/inception/sample/SampleReport.jasper");
 
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString("11111111-1111-1111-1111-111111111111"), "Sample Report",
-          sampleReportDefinitionData);
+      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
+          "11111111-1111-1111-1111-111111111111"), "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {
@@ -249,6 +257,17 @@ public class SampleApplication extends Application
   protected Endpoint errorWebService()
   {
     return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
+  }
+
+  /**
+   * Returns the Spring bean for the Mail Service web service.
+   *
+   * @return the Spring bean for the Mail Service web service
+   */
+  @Bean
+  protected Endpoint mailWebService()
+  {
+    return createWebServiceEndpoint("MailService", new MailWebService(mailService, validator));
   }
 
   /**

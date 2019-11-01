@@ -19,7 +19,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 import {SessionService} from '../services/session/session.service';
 import {Session} from '../services/session/session';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route
@@ -40,7 +40,7 @@ export class CanActivateFunctionGuard implements CanActivate {
   }
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
+    return this.sessionService.session$.pipe(first(), map((session: Session | null) => {
       if (activatedRouteSnapshot) {
         if (activatedRouteSnapshot.data) {
           if (activatedRouteSnapshot.data.authorities) {

@@ -19,6 +19,7 @@ package digital.inception.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -715,6 +716,17 @@ public interface ISecurityService
     throws UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username           the username identifying the user
+   * @param sendEmail          should the password reset e-mail be sent to the user
+   * @param secureCodeOptional the optional pregenerated secure code to use
+   */
+  void initiatePasswordReset(String username, boolean sendEmail,
+      Optional<String> secureCodeOptional)
+    throws UserNotFoundException, SecurityServiceException;
+
+  /**
    * Does the user with the specified username exist?
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -780,6 +792,17 @@ public interface ISecurityService
   void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
     throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
         SecurityServiceException;
+
+  /**
+   * Reset the password for the user.
+   *
+   * @param username     the username identifying the user
+   * @param newPassword  the new password
+   * @param securityCode the security code
+   */
+  void resetPassword(String username, String newPassword, String securityCode)
+    throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
+        ExistingPasswordException, SecurityServiceException;
 
   /**
    * Update the authorised function.

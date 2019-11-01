@@ -33,7 +33,7 @@ export enum PasswordChangeReason {
   Administrative = 1,
 
   /**
-   * Forgotten
+   * Reset.
    */
-  Forgotten = 2
+  Reset = 2
 }

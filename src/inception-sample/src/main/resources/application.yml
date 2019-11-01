@@ -129,6 +129,22 @@ application:
     maximumSendAttempts: 100
     sendRetryDelay: 600000
 
+spring:
+  mail:
+    default-encoding: UTF-8
+    protocol: smtp
+    host: localhost
+    port: 2500
+    username: inception
+    password: inception
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#    test-connection: false
+
 ---
 spring:
     profiles: development

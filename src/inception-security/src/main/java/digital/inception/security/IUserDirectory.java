@@ -396,6 +396,16 @@ interface IUserDirectory
     throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
+   * Reset the password for the user.
+   *
+   * @param username    the username identifying the user
+   * @param newPassword the new password
+   */
+  void resetPassword(String username, String newPassword)
+    throws UserNotFoundException, UserLockedException, ExistingPasswordException,
+        SecurityServiceException;
+
+  /**
    * Update the group.
    *
    * @param group the group

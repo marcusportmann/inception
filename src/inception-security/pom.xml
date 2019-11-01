@@ -16,6 +16,10 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-persistence</artifactId>
     </dependency>
 
@@ -32,8 +36,6 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
     </dependency>
-
-    <!-- Dependencies -->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>

@@ -18,6 +18,7 @@ import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from
 import {SessionService} from "../../services/session/session.service";
 import {Subscription} from "rxjs";
 import {Session} from "../../services/session/session";
+import {first} from "rxjs/operators";
 
 /**
  * The HasAuthorityDirective class implements the has authority directive.
@@ -53,7 +54,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     if (!!this.requiredAuthorities) {
-      this.subscriptions.add(this.sessionService.session$.subscribe((session: (Session | null)) => {
+      this.subscriptions.add(this.sessionService.session$.pipe(first()).subscribe((session: (Session | null)) => {
         if (session) {
           let foundAuthority: boolean = false;
 

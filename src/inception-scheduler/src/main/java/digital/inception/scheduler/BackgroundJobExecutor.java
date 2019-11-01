@@ -64,7 +64,7 @@ public class BackgroundJobExecutor
   private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
 
   /* Logger */
-  private static Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
+  private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
   /**
    * The executor responsible for processing jobs.

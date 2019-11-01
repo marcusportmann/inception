@@ -182,9 +182,9 @@ public class ReportingServiceTest
   private void compareReportDefinitionToReportDefinitionSummary(ReportDefinition reportDefinition,
       ReportDefinitionSummary reportDefinitionSummary)
   {
-    assertEquals("The ID values for the two report definitions do not match",
+    assertEquals("The ID values for the two report definition summaries do not match",
         reportDefinition.getId(), reportDefinitionSummary.getId());
-    assertEquals("The name values for the two report definitions do not match",
+    assertEquals("The name values for the two report definition summaries do not match",
         reportDefinition.getName(), reportDefinitionSummary.getName());
   }
 

@@ -18,10 +18,15 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.PasswordUtil;
+import digital.inception.core.util.RandomStringGenerator;
+import digital.inception.mail.IMailService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +36,8 @@ import org.springframework.util.StringUtils;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.lang.reflect.Constructor;
+
+import java.security.SecureRandom;
 
 import java.util.List;
 import java.util.Map;
@@ -130,6 +137,11 @@ public class SecurityService
   private GroupRepository groupRepository;
 
   /**
+   * The Mail Service.
+   */
+  private IMailService mailService;
+
+  /**
    * The Organization Repository.
    */
   private OrganizationRepository organizationRepository;
@@ -148,6 +160,13 @@ public class SecurityService
    * The user directories.
    */
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
+
+  /**
+   * The random alphanumeric string generator that will be used to generate security codes for
+   * password resets.
+   */
+  private RandomStringGenerator secureCodeGenerator = new RandomStringGenerator(15,
+      new SecureRandom(), "1234567890ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx");
 
   /**
    * The User Directory Repository.
@@ -173,6 +192,7 @@ public class SecurityService
    * Constructs a new <code>SecurityService</code>.
    *
    * @param applicationContext             the Spring application context
+   * @param mailService                    the Mail Service
    * @param functionRepository             the Function Repository
    * @param groupRepository                the Group Repository
    * @param organizationRepository         the Organization Repository
@@ -183,7 +203,7 @@ public class SecurityService
    * @param userDirectoryTypeRepository    the User Directory Type Repository
    * @param userRepository                 the User Repository
    */
-  public SecurityService(ApplicationContext applicationContext,
+  public SecurityService(ApplicationContext applicationContext, IMailService mailService,
       FunctionRepository functionRepository, GroupRepository groupRepository,
       OrganizationRepository organizationRepository,
       PasswordResetRepository passwordResetRepository, RoleRepository roleRepository,
@@ -192,6 +212,7 @@ public class SecurityService
       UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
   {
     this.applicationContext = applicationContext;
+    this.mailService = mailService;
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
     this.organizationRepository = organizationRepository;
@@ -2131,6 +2152,66 @@ public class SecurityService
   }
 
   /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username           the username identifying the user
+   * @param sendEmail          should the password reset e-mail be sent to the user
+   * @param secureCodeOptional the optional pregenerated secure code to use
+   */
+  @Override
+  @Transactional
+  public void initiatePasswordReset(String username, boolean sendEmail,
+      Optional<String> secureCodeOptional)
+    throws UserNotFoundException, SecurityServiceException
+  {
+    try
+    {
+      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+
+      if (userDirectoryId == null)
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+      User user = userDirectory.getUser(username);
+
+      if (!StringUtils.isEmpty(user.getEmail()))
+      {
+        String secureCode = secureCodeOptional.isPresent()
+            ? secureCodeOptional.get()
+            : secureCodeGenerator.nextString();
+
+        String secureCodeHash = PasswordUtil.createPasswordHash(secureCode);
+
+        PasswordReset passwordReset = new PasswordReset(username, secureCodeHash);
+
+        if (sendEmail)
+        {
+          sendPasswordResetEmail(user, secureCode);
+        }
+
+        passwordResetRepository.saveAndFlush(passwordReset);
+      }
+      else
+      {
+        logger.warn("Failed to send the password reset communication to the user (" + username
+            + ") who does not have a valid e-mail address");
+      }
+    }
+    catch (UserNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException(
+          "Failed to initiate the password reset process for the user (" + username + ")", e);
+    }
+  }
+
+  /**
    * Does the user with the specified username exist?
    *
    * @param userDirectoryId the ID used to uniquely identify the user directory
@@ -2324,6 +2405,59 @@ public class SecurityService
     }
 
     userDirectory.removeUserFromGroup(groupName, username);
+  }
+
+  /**
+   * Reset the password for the user.
+   *
+   * @param username     the username identifying the user
+   * @param newPassword  the new password
+   * @param securityCode the security code
+   */
+  @Override
+  @Transactional
+  public void resetPassword(String username, String newPassword, String securityCode)
+    throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
+        ExistingPasswordException, SecurityServiceException
+  {
+    try
+    {
+      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+
+      if (userDirectoryId == null)
+      {
+        throw new UserNotFoundException(username);
+      }
+
+      List<PasswordReset> passwordResets = passwordResetRepository.findAllByUsernameAndStatus(
+          username, PasswordResetStatus.REQUESTED);
+
+      String securityCodeHash = PasswordUtil.createPasswordHash(securityCode);
+
+      for (PasswordReset passwordReset : passwordResets)
+      {
+        if (passwordReset.getSecurityCodeHash().equals(securityCodeHash))
+        {
+          IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+
+          userDirectory.resetPassword(username, newPassword);
+
+          return;
+        }
+      }
+
+      throw new InvalidSecurityCodeException();
+    }
+    catch (UserNotFoundException | UserLockedException | InvalidSecurityCodeException
+        | ExistingPasswordException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to reset the password for the user (" + username
+          + ")", e);
+    }
   }
 
   /**
@@ -2536,5 +2670,15 @@ public class SecurityService
     userDirectory.setConfiguration(buffer);
 
     return userDirectory;
+  }
+
+  private void sendPasswordResetEmail(User user, String secureCode)
+    throws SecurityServiceException
+  {
+    try {}
+    catch (Throwable e)
+    {
+      throw new SecurityServiceException("Failed to send the password reset e-mail", e);
+    }
   }
 }

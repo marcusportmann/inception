@@ -30,6 +30,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -101,6 +102,7 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void createReportDefinition(@ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
@@ -140,6 +142,7 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The ID used to uniquely identify the report definition", required = true)
   @PathVariable UUID reportDefinitionId)
@@ -241,6 +244,7 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definition-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
   {
@@ -261,6 +265,7 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
   {
@@ -285,6 +290,7 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
       value = "The ID used to uniquely identify the reportDefinition", required = true)
   @PathVariable UUID reportDefinitionId, @ApiParam(name = "reportDefinition",

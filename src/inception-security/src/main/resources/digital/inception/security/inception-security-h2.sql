@@ -252,12 +252,12 @@ COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquel
 
 
 CREATE TABLE security.password_resets (
-  username      VARCHAR(100) NOT NULL,
-  requested     TIMESTAMP    NOT NULL,
-  status        INTEGER      NOT NULL,
-  security_code VARCHAR(100) NOT NULL,
-  completed     TIMESTAMP,
-  expired       TIMESTAMP,
+  username           VARCHAR(100) NOT NULL,
+  requested          TIMESTAMP    NOT NULL,
+  status             INTEGER      NOT NULL,
+  security_code_hash VARCHAR(100) NOT NULL,
+  completed          TIMESTAMP,
+  expired            TIMESTAMP,
 
   PRIMARY KEY (username, requested),
   CONSTRAINT password_resets_user_fk FOREIGN KEY (username) REFERENCES security.users(username) ON DELETE CASCADE
@@ -271,7 +271,7 @@ COMMENT ON COLUMN security.password_resets.requested IS 'The date and time the p
 
 COMMENT ON COLUMN security.password_resets.status IS 'The status of the password reset';
 
-COMMENT ON COLUMN security.password_resets.security_code IS 'The security code';
+COMMENT ON COLUMN security.password_resets.security_code_hash IS 'The security code hash';
 
 COMMENT ON COLUMN security.password_resets.completed IS 'The date and time the password reset was completed';
 
@@ -314,6 +314,8 @@ INSERT INTO security.functions (code, name, description)
   VALUES ('Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
+INSERT INTO security.functions (code, name, description)
+  VALUES ('Mail.MailTemplateAdministration', 'Mail Template Administration', 'Mail Template Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (code, name, description)

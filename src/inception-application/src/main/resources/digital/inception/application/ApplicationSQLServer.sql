@@ -1,150 +1,39 @@
 -- -------------------------------------------------------------------------------------------------
--- DROP TABLES
+--                     _  _  _
+--    __ _  _   _   __| |(_)| |_
+--   / _` || | | | / _` || || __|
+--  | (_| || |_| || (_| || || |_
+--   \__,_| \__,_| \__,_||_| \__|
+--
 -- -------------------------------------------------------------------------------------------------
-IF OBJECT_ID('"ERROR"."ERROR_REPORTS"', 'U') IS NOT NULL
-DROP TABLE "ERROR"."ERROR_REPORTS";
-IF OBJECT_ID('"SMS"."SMS"', 'U') IS NOT NULL
-DROP TABLE "SMS"."SMS";
-IF OBJECT_ID('"REPORTING"."REPORT_DEFINITIONS"', 'U') IS NOT NULL
-DROP TABLE "REPORTING"."REPORT_DEFINITIONS";
-IF OBJECT_ID('"MESSAGING"."ARCHIVED_MESSAGES"', 'U') IS NOT NULL
-DROP TABLE "MESSAGING"."ARCHIVED_MESSAGES";
-IF OBJECT_ID('"MESSAGING"."MESSAGE_PARTS"', 'U') IS NOT NULL
-DROP TABLE "MESSAGING"."MESSAGE_PARTS";
-IF OBJECT_ID('"MESSAGING"."MESSAGES"', 'U') IS NOT NULL
-DROP TABLE "MESSAGING"."MESSAGES";
-IF OBJECT_ID('"MESSAGING"."MESSAGE_STATUSES"', 'U') IS NOT NULL
-DROP TABLE "MESSAGING"."MESSAGE_STATUSES";
-IF OBJECT_ID('"MESSAGING"."MESSAGE_TYPES"', 'U') IS NOT NULL
-DROP TABLE "MESSAGING"."MESSAGE_TYPES";
+
+
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                   _
+--    ___  ___    __| |  ___  ___
+--   / __|/ _ \  / _` | / _ \/ __|
+--  | (__| (_) || (_| ||  __/\__ \
+--   \___|\___/  \__,_| \___||___/
+--
+-- -------------------------------------------------------------------------------------------------
 IF OBJECT_ID('"CODES"."CODES"', 'U') IS NOT NULL
 DROP TABLE "CODES"."CODES";
 IF OBJECT_ID('"CODES"."CODE_CATEGORIES"', 'U') IS NOT NULL
 DROP TABLE "CODES"."CODE_CATEGORIES";
-IF OBJECT_ID('"SCHEDULER"."JOB_PARAMETERS"', 'U') IS NOT NULL
-DROP TABLE "SCHEDULER"."JOB_PARAMETERS";
-IF OBJECT_ID('"SCHEDULER"."JOBS"', 'U') IS NOT NULL
-DROP TABLE "SCHEDULER"."JOBS";
-IF OBJECT_ID('"SECURITY"."PASSWORD_RESETS"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."PASSWORD_RESETS";
-IF OBJECT_ID('"SECURITY"."ROLE_TO_GROUP_MAP"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."ROLE_TO_GROUP_MAP";
-IF OBJECT_ID('"SECURITY"."FUNCTION_TO_ROLE_MAP"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."FUNCTION_TO_ROLE_MAP";
-IF OBJECT_ID('"SECURITY"."ROLES"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."ROLES";
-IF OBJECT_ID('"SECURITY"."FUNCTIONS"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."FUNCTIONS";
-IF OBJECT_ID('"SECURITY"."USER_TO_GROUP_MAP"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USER_TO_GROUP_MAP";
-IF OBJECT_ID('"SECURITY"."GROUPS"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."GROUPS";
-IF OBJECT_ID('"SECURITY"."USERS_PASSWORD_HISTORY"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USERS_PASSWORD_HISTORY";
-IF OBJECT_ID('"SECURITY"."USERS"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USERS";
-IF OBJECT_ID('"SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP";
-IF OBJECT_ID('"SECURITY"."USER_DIRECTORIES"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USER_DIRECTORIES";
-IF OBJECT_ID('"SECURITY"."USER_DIRECTORY_TYPES"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."USER_DIRECTORY_TYPES";
-IF OBJECT_ID('"SECURITY"."ORGANIZATIONS"', 'U') IS NOT NULL
-DROP TABLE "SECURITY"."ORGANIZATIONS";
-IF OBJECT_ID('"SERVICE_REGISTRY"."SERVICE_REGISTRY"', 'U') IS NOT NULL
-DROP TABLE "SERVICE_REGISTRY"."SERVICE_REGISTRY";
-IF OBJECT_ID('"CONFIG"."CONFIG"', 'U') IS NOT NULL
-DROP TABLE "CONFIG"."CONFIG";
-IF OBJECT_ID('"IDGENERATOR"."IDGENERATOR"', 'U') IS NOT NULL
-DROP TABLE "IDGENERATOR"."IDGENERATOR";
-IF OBJECT_ID('"TEST"."TEST_DATA"', 'U') IS NOT NULL
-DROP TABLE "TEST"."TEST_DATA";
 GO
 
 
-
--- -------------------------------------------------------------------------------------------------
--- DROP SEQUENCES
--- -------------------------------------------------------------------------------------------------
-IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'GROUP_ID_SEQ')
-DROP SEQUENCE "SECURITY"."GROUP_ID_SEQ"
-GO
-IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'ORGANIZATION_ID_SEQ')
-DROP SEQUENCE "SECURITY"."ORGANIZATION_ID_SEQ"
-GO
-IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'USER_DIRECTORY_ID_SEQ')
-DROP SEQUENCE "SECURITY"."USER_DIRECTORY_ID_SEQ"
-GO
-IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'USER_ID_SEQ')
-DROP SEQUENCE "SECURITY"."USER_ID_SEQ"
-GO
-IF EXISTS (SELECT name FROM sys.sequences WHERE name = N'SMS_ID_SEQ')
-DROP SEQUENCE "SMS"."SMS_ID_SEQ"
-GO
-
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE SCHEMAS
--- -------------------------------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'CODES')
 BEGIN
     EXEC('CREATE SCHEMA CODES')
 END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'CONFIG')
-BEGIN
-    EXEC('CREATE SCHEMA CONFIG')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'IDGENERATOR')
-BEGIN
-    EXEC('CREATE SCHEMA IDGENERATOR')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'MESSAGING')
-BEGIN
-    EXEC('CREATE SCHEMA MESSAGING')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'REPORTING')
-BEGIN
-    EXEC('CREATE SCHEMA REPORTING')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SCHEDULER')
-BEGIN
-    EXEC('CREATE SCHEMA SCHEDULER')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SECURITY')
-BEGIN
-    EXEC('CREATE SCHEMA SECURITY')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SERVICE_REGISTRY')
-BEGIN
-    EXEC('CREATE SCHEMA SERVICE_REGISTRY')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SMS')
-BEGIN
-    EXEC('CREATE SCHEMA SMS')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SMS')
-BEGIN
-    EXEC('CREATE SCHEMA ERROR')
-END;
-IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'TEST')
-BEGIN
-    EXEC('CREATE SCHEMA TEST')
-END;
 GO
 
 
-
--- -------------------------------------------------------------------------------------------------
--- CREATE SEQUENCES
--- -------------------------------------------------------------------------------------------------
---CREATE SEQUENCE "SECURITY"."GROUP_ID_SEQ" AS BIGINT START WITH 1000000 INCREMENT BY 1;
-
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE TABLES
--- -------------------------------------------------------------------------------------------------
 CREATE TABLE "CODES"."CODE_CATEGORIES" (
   id      NVARCHAR(100) NOT NULL,
   name    NVARCHAR(100) NOT NULL,
@@ -170,7 +59,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the code category was last updated' ,
 @level0type=N'SCHEMA', @level0name=N'CODES', @level1type=N'TABLE', @level1name=N'CODE_CATEGORIES', @level2type=N'COLUMN', @level2name=N'UPDATED';
 GO
-
 
 
 CREATE TABLE "CODES"."CODES" (
@@ -204,7 +92,29 @@ GO
 
 
 
-CREATE TABLE "CONFIG"."CONFIG" (
+
+-- -------------------------------------------------------------------------------------------------
+--                       __  _                            _    _
+--    ___  ___   _ __   / _|(_)  __ _  _   _  _ __  __ _ | |_ (_)  ___   _ __
+--   / __|/ _ \ | '_ \ | |_ | | / _` || | | || '__|/ _` || __|| | / _ \ | '_ \
+--  | (__| (_) || | | ||  _|| || (_| || |_| || |  | (_| || |_ | || (_) || | | |
+--   \___|\___/ |_| |_||_|  |_| \__, | \__,_||_|   \__,_| \__||_| \___/ |_| |_|
+--                              |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"CONFIGURATION"."CONFIGURATION"', 'U') IS NOT NULL
+DROP TABLE "CONFIGURATION"."CONFIGURATION";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'CONFIGURATION')
+BEGIN
+    EXEC('CREATE SCHEMA CONFIGURATION')
+END;
+GO
+
+
+CREATE TABLE "CONFIGURATION"."CONFIGURATION" (
   [KEY]        NVARCHAR(256) NOT NULL,
   [VALUE]      NVARCHAR(MAX) NOT NULL,
   DESCRIPTION  NVARCHAR(MAX) NOT NULL,
@@ -214,17 +124,123 @@ CREATE TABLE "CONFIG"."CONFIG" (
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The key used to uniquely identify the configuration value' ,
-@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIG', @level2type=N'COLUMN', @level2name=N'KEY';
+@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIGURATION', @level2type=N'COLUMN', @level2name=N'KEY';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The value for the configuration value' ,
-@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIG', @level2type=N'COLUMN', @level2name=N'VALUE';
+@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIGURATION', @level2type=N'COLUMN', @level2name=N'VALUE';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The description for the configuration value' ,
-@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIG', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
+@level0type=N'SCHEMA', @level0name=N'CONFIG', @level1type=N'TABLE', @level1name=N'CONFIGURATION', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
 GO
 
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--    ___  _ __  _ __  ___   _ __
+--   / _ \| '__|| '__|/ _ \ | '__|
+--  |  __/| |   | |  | (_) || |
+--   \___||_|   |_|   \___/ |_|
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"ERROR"."ERROR_REPORTS"', 'U') IS NOT NULL
+DROP TABLE "ERROR"."ERROR_REPORTS";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'ERROR')
+BEGIN
+    EXEC('CREATE SCHEMA ERROR')
+END;
+GO
+
+
+CREATE TABLE "ERROR"."ERROR_REPORTS" (
+  id                  UNIQUEIDENTIFIER NOT NULL,
+  application_id      NVARCHAR(200)    NOT NULL,
+  application_version NVARCHAR(50)     NOT NULL,
+  description         NVARCHAR(4000)   NOT NULL,
+  detail              NVARCHAR(MAX)    NOT NULL,
+  created             DATETIME         NOT NULL,
+  who                 NVARCHAR(100),
+  device_id           UNIQUEIDENTIFIER,
+  feedback            NVARCHAR(4000),
+  data                NVARCHAR(MAX),
+
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX error_reports_application_id_ix ON "ERROR"."ERROR_REPORTS"(application_id);
+
+CREATE INDEX error_reports_created_ix ON "ERROR"."ERROR_REPORTS"(created);
+
+CREATE INDEX error_reports_who_ix ON "ERROR"."ERROR_REPORTS"(who);
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the application that generated the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The version of the application that generated the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_VERSION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The description of the error' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The error detail e.g. a stack trace' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DETAIL';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The date and time the error report was created' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'CREATED';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional username identifying the user associated with the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'WHO';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional ID used to uniquely identify the device the error report originated from' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional feedback provided by the user for the error' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'FEEDBACK';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The optional base-64 encoded data associated with the error report' ,
+@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DATA';
+GO
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   _      _                                        _
+--  (_)  __| |  __ _   ___  _ __    ___  _ __  __ _ | |_  ___   _ __
+--  | | / _` | / _` | / _ \| '_ \  / _ \| '__|/ _` || __|/ _ \ | '__|
+--  | || (_| || (_| ||  __/| | | ||  __/| |  | (_| || |_| (_) || |
+--  |_| \__,_| \__, | \___||_| |_| \___||_|   \__,_| \__|\___/ |_|
+--             |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"IDGENERATOR"."IDGENERATOR"', 'U') IS NOT NULL
+DROP TABLE "IDGENERATOR"."IDGENERATOR";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'IDGENERATOR')
+BEGIN
+    EXEC('CREATE SCHEMA IDGENERATOR')
+END;
+GO
 
 
 CREATE TABLE "IDGENERATOR"."IDGENERATOR" (
@@ -248,6 +264,58 @@ GO
 
 
 
+
+-- -------------------------------------------------------------------------------------------------
+--                     _  _
+--   _ __ ___    __ _ (_)| |
+--  | '_ ` _ \  / _` || || |
+--  | | | | | || (_| || || |
+--  |_| |_| |_| \__,_||_||_|
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"MAIL"."MAIL_TEMPLATES"', 'U') IS NOT NULL
+DROP TABLE "MAIL"."MAIL_TEMPLATES";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'MAIL')
+BEGIN
+    EXEC('CREATE SCHEMA MAIL')
+END;
+GO
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                                            _
+--   _ __ ___    ___  ___  ___   __ _   __ _ (_) _ __    __ _
+--  | '_ ` _ \  / _ \/ __|/ __| / _` | / _` || || '_ \  / _` |
+--  | | | | | ||  __/\__ \\__ \| (_| || (_| || || | | || (_| |
+--  |_| |_| |_| \___||___/|___/ \__,_| \__, ||_||_| |_| \__, |
+--                                     |___/            |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"MESSAGING"."ARCHIVED_MESSAGES"', 'U') IS NOT NULL
+DROP TABLE "MESSAGING"."ARCHIVED_MESSAGES";
+IF OBJECT_ID('"MESSAGING"."MESSAGE_PARTS"', 'U') IS NOT NULL
+DROP TABLE "MESSAGING"."MESSAGE_PARTS";
+IF OBJECT_ID('"MESSAGING"."MESSAGES"', 'U') IS NOT NULL
+DROP TABLE "MESSAGING"."MESSAGES";
+IF OBJECT_ID('"MESSAGING"."MESSAGE_STATUSES"', 'U') IS NOT NULL
+DROP TABLE "MESSAGING"."MESSAGE_STATUSES";
+IF OBJECT_ID('"MESSAGING"."MESSAGE_TYPES"', 'U') IS NOT NULL
+DROP TABLE "MESSAGING"."MESSAGE_TYPES";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'MESSAGING')
+BEGIN
+    EXEC('CREATE SCHEMA MESSAGING')
+END;
+GO
+
+
 CREATE TABLE "MESSAGING"."MESSAGE_TYPES" (
   id   UNIQUEIDENTIFIER NOT NULL,
   name NVARCHAR(256)    NOT NULL,
@@ -265,7 +333,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "MESSAGING"."MESSAGE_STATUSES" (
   code INTEGER       NOT NULL,
   name NVARCHAR(100) NOT NULL,
@@ -281,7 +348,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The name of the message status' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGE_STATUSES', @level2type=N'COLUMN', @level2name=N'NAME';
 GO
-
 
 
 CREATE TABLE "MESSAGING"."MESSAGES" (
@@ -383,7 +449,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The data for the message' ,
 @level0type=N'SCHEMA', @level0name=N'MESSAGING', @level1type=N'TABLE', @level1name=N'MESSAGES', @level2type=N'COLUMN', @level2name=N'DATA';
 GO
-
 
 
 CREATE TABLE "MESSAGING"."MESSAGE_PARTS" (
@@ -494,7 +559,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "MESSAGING"."ARCHIVED_MESSAGES" (
   id             UNIQUEIDENTIFIER NOT NULL,
   username       NVARCHAR(100)   NOT NULL,
@@ -549,6 +613,79 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
+INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
+  VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
+
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (0, 'Initialised');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (1, 'QueuedForSending');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (2, 'QueuedForProcessing');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (3, 'Aborted');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (4, 'Failed');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (5, 'Processing');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (6, 'Sending');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (7, 'QueuedForDownload');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (8, 'Downloading');
+INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
+  VALUES (10, 'Processed');
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                                  _    _
+--   _ __  ___  _ __    ___   _ __ | |_ (_) _ __    __ _
+--  | '__|/ _ \| '_ \  / _ \ | '__|| __|| || '_ \  / _` |
+--  | |  |  __/| |_) || (_) || |   | |_ | || | | || (_| |
+--  |_|   \___|| .__/  \___/ |_|    \__||_||_| |_| \__, |
+--             |_|                                 |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"REPORTING"."REPORT_DEFINITIONS"', 'U') IS NOT NULL
+DROP TABLE "REPORTING"."REPORT_DEFINITIONS";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'REPORTING')
+BEGIN
+    EXEC('CREATE SCHEMA REPORTING')
+END;
+GO
+
 
 CREATE TABLE "REPORTING"."REPORT_DEFINITIONS" (
   id       UNIQUEIDENTIFIER NOT NULL,
@@ -571,6 +708,29 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'REPORTING', @level1type=N'TABLE', @level1name=N'REPORT_DEFINITIONS', @level2type=N'COLUMN', @level2name=N'TEMPLATE';
 GO
 
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--              _                _         _
+--   ___   ___ | |__    ___   __| | _   _ | |  ___  _ __
+--  / __| / __|| '_ \  / _ \ / _` || | | || | / _ \| '__|
+--  \__ \| (__ | | | ||  __/| (_| || |_| || ||  __/| |
+--  |___/ \___||_| |_| \___| \__,_| \__,_||_| \___||_|
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"SCHEDULER"."JOB_PARAMETERS"', 'U') IS NOT NULL
+DROP TABLE "SCHEDULER"."JOB_PARAMETERS";
+IF OBJECT_ID('"SCHEDULER"."JOBS"', 'U') IS NOT NULL
+DROP TABLE "SCHEDULER"."JOBS";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SCHEDULER')
+BEGIN
+    EXEC('CREATE SCHEMA SCHEDULER')
+END;
+GO
 
 
 CREATE TABLE "SCHEDULER"."JOBS" (
@@ -630,7 +790,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "SCHEDULER"."JOB_PARAMETERS" (
   job_id UNIQUEIDENTIFIER NOT NULL,
   name   NVARCHAR(100)    NOT NULL,
@@ -659,6 +818,52 @@ GO
 
 
 
+
+-- -------------------------------------------------------------------------------------------------
+--                                 _  _
+--   ___   ___   ___  _   _  _ __ (_)| |_  _   _
+--  / __| / _ \ / __|| | | || '__|| || __|| | | |
+--  \__ \|  __/| (__ | |_| || |   | || |_ | |_| |
+--  |___/ \___| \___| \__,_||_|   |_| \__| \__, |
+--                                         |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"SECURITY"."PASSWORD_RESETS"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."PASSWORD_RESETS";
+IF OBJECT_ID('"SECURITY"."ROLE_TO_GROUP_MAP"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."ROLE_TO_GROUP_MAP";
+IF OBJECT_ID('"SECURITY"."FUNCTION_TO_ROLE_MAP"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."FUNCTION_TO_ROLE_MAP";
+IF OBJECT_ID('"SECURITY"."ROLES"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."ROLES";
+IF OBJECT_ID('"SECURITY"."FUNCTIONS"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."FUNCTIONS";
+IF OBJECT_ID('"SECURITY"."USER_TO_GROUP_MAP"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USER_TO_GROUP_MAP";
+IF OBJECT_ID('"SECURITY"."GROUPS"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."GROUPS";
+IF OBJECT_ID('"SECURITY"."USERS_PASSWORD_HISTORY"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USERS_PASSWORD_HISTORY";
+IF OBJECT_ID('"SECURITY"."USERS"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USERS";
+IF OBJECT_ID('"SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP";
+IF OBJECT_ID('"SECURITY"."USER_DIRECTORIES"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USER_DIRECTORIES";
+IF OBJECT_ID('"SECURITY"."USER_DIRECTORY_TYPES"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."USER_DIRECTORY_TYPES";
+IF OBJECT_ID('"SECURITY"."ORGANIZATIONS"', 'U') IS NOT NULL
+DROP TABLE "SECURITY"."ORGANIZATIONS";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SECURITY')
+BEGIN
+    EXEC('CREATE SCHEMA SECURITY')
+END;
+GO
+
+
 CREATE TABLE "SECURITY"."ORGANIZATIONS" (
   id     UNIQUEIDENTIFIER NOT NULL,
   name   NVARCHAR(100)    NOT NULL,
@@ -683,7 +888,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "SECURITY"."USER_DIRECTORY_TYPES" (
   code                 NVARCHAR(100)   NOT NULL,
   name                 NVARCHAR(100)   NOT NULL,
@@ -703,7 +907,6 @@ EXEC sys.sp_addextendedproperty
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The fully qualified name of the Java class that implements the user directory type' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TYPES', @level2type=N'COLUMN', @level2name=N'USER_DIRECTORY_CLASS';
-
 
 
 CREATE TABLE "SECURITY"."USER_DIRECTORIES" (
@@ -736,7 +939,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "SECURITY"."USER_DIRECTORY_TO_ORGANIZATION_MAP" (
   user_directory_id UNIQUEIDENTIFIER NOT NULL,
   organization_id   UNIQUEIDENTIFIER NOT NULL,
@@ -758,7 +960,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The ID used to uniquely identify the organization' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USER_DIRECTORY_TO_ORGANIZATION_MAP', @level2type=N'COLUMN', @level2name=N'ORGANIZATION_ID';
 GO
-
 
 
 CREATE TABLE "SECURITY"."USERS" (
@@ -833,7 +1034,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "SECURITY"."USERS_PASSWORD_HISTORY" (
   user_id  UNIQUEIDENTIFIER NOT NULL,
   changed  DATETIME         NOT NULL,
@@ -859,7 +1059,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The password for the user' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'USERS_PASSWORD_HISTORY', @level2type=N'COLUMN', @level2name=N'PASSWORD';
 GO
-
 
 
 CREATE TABLE "SECURITY"."GROUPS" (
@@ -892,7 +1091,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'A description for the group' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'GROUPS', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
 GO
-
 
 
 CREATE TABLE "SECURITY"."USER_TO_GROUP_MAP" (
@@ -942,7 +1140,6 @@ DELETE
   INTO @ID END CLOSE C DEALLOCATE C END GO
 
 
-
 CREATE TABLE "SECURITY"."FUNCTIONS" (
   code        NVARCHAR(100)    NOT NULL,
   name        NVARCHAR(100)    NOT NULL,
@@ -965,7 +1162,6 @@ EXEC sys.sp_addextendedproperty
 GO
 
 
-
 CREATE TABLE "SECURITY"."ROLES" (
   code        NVARCHAR(100) NOT NULL,
   name        NVARCHAR(100) NOT NULL,
@@ -986,7 +1182,6 @@ EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The description for the role' ,
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'ROLES', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
 GO
-
 
 
 CREATE TABLE "SECURITY"."FUNCTION_TO_ROLE_MAP" (
@@ -1036,7 +1231,6 @@ DELETE
   INTO @CODE END CLOSE C DEALLOCATE C END GO
 
 
-
 CREATE TABLE "SECURITY"."ROLE_TO_GROUP_MAP" (
   role_code NVARCHAR(100)    NOT NULL,
   group_id  UNIQUEIDENTIFIER NOT NULL,
@@ -1084,14 +1278,13 @@ DELETE
   INTO @ID END CLOSE C DEALLOCATE C END GO
 
 
-
 CREATE TABLE "SECURITY"."PASSWORD_RESETS" (
-  username      NVARCHAR(100) NOT NULL,
-  requested     DATETIME      NOT NULL,
-  status        INTEGER       NOT NULL,
-  security_code NVARCHAR(100) NOT NULL,
-  completed     DATETIME,
-  expired       DATETIME,
+  username           NVARCHAR(100) NOT NULL,
+  requested          DATETIME      NOT NULL,
+  status             INTEGER       NOT NULL,
+  security_code_hash NVARCHAR(100) NOT NULL,
+  completed          DATETIME,
+  expired            DATETIME,
 
   PRIMARY KEY (username, requested)
 );
@@ -1111,8 +1304,8 @@ EXEC sys.sp_addextendedproperty
 @level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'PASSWORD_RESETS', @level2type=N'COLUMN', @level2name=N'STATUS';
 
 EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The security code' ,
-@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'PASSWORD_RESETS', @level2type=N'COLUMN', @level2name=N'SECURITY_CODE';
+@name=N'MS_Description', @value=N'The security code hash' ,
+@level0type=N'SCHEMA', @level0name=N'SECURITY', @level1type=N'TABLE', @level1name=N'PASSWORD_RESETS', @level2type=N'COLUMN', @level2name=N'SECURITY_CODE_HASH';
 
 EXEC sys.sp_addextendedproperty
 @name=N'MS_Description', @value=N'The date and time the password reset was completed' ,
@@ -1137,190 +1330,6 @@ DELETE
   INTO @USERNAME END CLOSE C DEALLOCATE C END GO
 
 
-
-CREATE TABLE "SERVICE_REGISTRY"."SERVICE_REGISTRY" (
-  name                 NVARCHAR(256)  NOT NULL,
-  security_type        INTEGER        NOT NULL,
-  supports_compression CHAR(1)        NOT NULL,
-  endpoint             NVARCHAR(1024) NOT NULL,
-  service_class        NVARCHAR(1024) NOT NULL,
-  wsdl_location        NVARCHAR(1024) NOT NULL,
-  username             NVARCHAR(100),
-  password             NVARCHAR(100),
-
-  PRIMARY KEY (name)
-);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The name used to uniquely identify the web service' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'NAME';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SECURITY_TYPE';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'Does the web service support compression' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SUPPORTS_COMPRESSION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The endpoint for the web service' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'ENDPOINT';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The fully qualified name of the Java service class' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SERVICE_CLASS';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The location of the WSDL defining the web service on the classpath' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'WSDL_LOCATION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The username to use created accessing a web service with username-password security enabled' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'USERNAME';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The password to use created accessing a web service with username-password security enabled' ,
-@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'PASSWORD';
-GO
-
-
-
-CREATE TABLE "SMS"."SMS" (
-  id             UNIQUEIDENTIFIER NOT NULL,
-  mobile_number  NVARCHAR(100)    NOT NULL,
-  message        NVARCHAR(1000)   NOT NULL,
-  status         INTEGER          NOT NULL,
-  send_attempts  INTEGER,
-  lock_name      NVARCHAR(100),
-  last_processed DATETIME,
-
-  PRIMARY KEY (id)
-);
-
-CREATE INDEX sms_mobile_number_ix ON "SMS"."SMS"(mobile_number);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the SMS' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The mobile number to send the SMS to' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'MOBILE_NUMBER';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The message to send' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'MESSAGE';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The status of the SMS' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'STATUS';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The number of times that the sending of the SMS was attempted' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'SEND_ATTEMPTS';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The name of the entity that has locked the SMS for sending' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'LOCK_NAME';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the last attempt was made to send the SMS' ,
-@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'LAST_PROCESSED';
-GO
-
-
-
-CREATE TABLE "ERROR"."ERROR_REPORTS" (
-  id                  UNIQUEIDENTIFIER NOT NULL,
-  application_id      NVARCHAR(200)    NOT NULL,
-  application_version NVARCHAR(50)     NOT NULL,
-  description         NVARCHAR(4000)   NOT NULL,
-  detail              NVARCHAR(MAX)    NOT NULL,
-  created             DATETIME         NOT NULL,
-  who                 NVARCHAR(100),
-  device_id           UNIQUEIDENTIFIER,
-  feedback            NVARCHAR(4000),
-  data                NVARCHAR(MAX),
-
-  PRIMARY KEY (id)
-);
-
-CREATE INDEX error_reports_application_id_ix ON "ERROR"."ERROR_REPORTS"(application_id);
-
-CREATE INDEX error_reports_created_ix ON "ERROR"."ERROR_REPORTS"(created);
-
-CREATE INDEX error_reports_who_ix ON "ERROR"."ERROR_REPORTS"(who);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the error report' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the application that generated the error report' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The version of the application that generated the error report' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'APPLICATION_VERSION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The description of the error' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DESCRIPTION';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The error detail e.g. a stack trace' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DETAIL';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The date and time the error report was created' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'CREATED';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The optional username identifying the user associated with the error report' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'WHO';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The optional ID used to uniquely identify the device the error report originated from' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DEVICE_ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The optional feedback provided by the user for the error' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'FEEDBACK';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The optional base-64 encoded data associated with the error report' ,
-@level0type=N'SCHEMA', @level0name=N'ERROR', @level1type=N'TABLE', @level1name=N'ERROR_REPORTS', @level2type=N'COLUMN', @level2name=N'DATA';
-GO
-
-
-
-CREATE TABLE "TEST"."TEST_DATA" (
-  id    INTEGER        NOT NULL,
-  name  NVARCHAR(100) NOT NULL,
-  value NVARCHAR(4000) NOT NULL,
-
-  PRIMARY KEY (id)
-);
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The ID used to uniquely identify the test data' ,
-@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'ID';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The name for the test data' ,
-@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'NAME';
-
-EXEC sys.sp_addextendedproperty
-@name=N'MS_Description', @value=N'The value for the test data' ,
-@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'VALUE';
-GO
-
-
-
--- -------------------------------------------------------------------------------------------------
--- POPULATE TABLES
--- -------------------------------------------------------------------------------------------------
 INSERT INTO "SECURITY"."ORGANIZATIONS" (id, name, status)
   VALUES (0, 'Administration', 1);
 
@@ -1354,6 +1363,8 @@ INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
   VALUES ('Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
 INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
   VALUES ('Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
+INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
+  VALUES ('Mail.MailTemplateAdministration', 'Mail Template Administration', 'Mail Template Administration');
 INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
   VALUES ('Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO "SECURITY"."FUNCTIONS" (code, name, description)
@@ -1410,55 +1421,185 @@ INSERT INTO "SECURITY"."FUNCTION_TO_ROLE_MAP" (function_code, role_code)
 INSERT INTO "SECURITY"."ROLE_TO_GROUP_MAP" (role_code, group_id)
   VALUES ('Administrator', 0); -- Assign the Administrator role to the Administrators group
 
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
-INSERT INTO "MESSAGING"."MESSAGE_TYPES" (id, name)
-  VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
 
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (0, 'Initialised');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (1, 'QueuedForSending');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (2, 'QueuedForProcessing');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (3, 'Aborted');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (4, 'Failed');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (5, 'Processing');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (6, 'Sending');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (7, 'QueuedForDownload');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (8, 'Downloading');
-INSERT INTO "MESSAGING"."MESSAGE_STATUSES" (code, name)
-  VALUES (10, 'Processed');
+
+
+-- -------------------------------------------------------------------------------------------------
+--                           _                                _       _
+--   ___   ___  _ __ __   __(_)  ___  ___   _ __  ___   __ _ (_) ___ | |_  _ __  _   _
+--  / __| / _ \| '__|\ \ / /| | / __|/ _ \ | '__|/ _ \ / _` || |/ __|| __|| '__|| | | |
+--  \__ \|  __/| |    \ V / | || (__|  __/ | |  |  __/| (_| || |\__ \| |_ | |   | |_| |
+--  |___/ \___||_|     \_/  |_| \___|\___| |_|   \___| \__, ||_||___/ \__||_|    \__, |
+--                                                     |___/                     |___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"SERVICE_REGISTRY"."SERVICE_REGISTRY"', 'U') IS NOT NULL
+DROP TABLE "SERVICE_REGISTRY"."SERVICE_REGISTRY";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SERVICE_REGISTRY')
+BEGIN
+    EXEC('CREATE SCHEMA SERVICE_REGISTRY')
+END;
+GO
+
+
+CREATE TABLE "SERVICE_REGISTRY"."SERVICE_REGISTRY" (
+  name                 NVARCHAR(256)  NOT NULL,
+  security_type        INTEGER        NOT NULL,
+  supports_compression CHAR(1)        NOT NULL,
+  endpoint             NVARCHAR(1024) NOT NULL,
+  service_class        NVARCHAR(1024) NOT NULL,
+  wsdl_location        NVARCHAR(1024) NOT NULL,
+  username             NVARCHAR(100),
+  password             NVARCHAR(100),
+
+  PRIMARY KEY (name)
+);
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The name used to uniquely identify the web service' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'NAME';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SECURITY_TYPE';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'Does the web service support compression' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SUPPORTS_COMPRESSION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The endpoint for the web service' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'ENDPOINT';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The fully qualified name of the Java service class' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'SERVICE_CLASS';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The location of the WSDL defining the web service on the classpath' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'WSDL_LOCATION';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The username to use created accessing a web service with username-password security enabled' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'USERNAME';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The password to use created accessing a web service with username-password security enabled' ,
+@level0type=N'SCHEMA', @level0name=N'SERVICE_REGISTRY', @level1type=N'TABLE', @level1name=N'SERVICE_REGISTRY', @level2type=N'COLUMN', @level2name=N'PASSWORD';
+GO
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   ___  _ __ ___   ___
+--  / __|| '_ ` _ \ / __|
+--  \__ \| | | | | |\__ \
+--  |___/|_| |_| |_||___/
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"SMS"."SMS"', 'U') IS NOT NULL
+DROP TABLE "SMS"."SMS";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'SMS')
+BEGIN
+    EXEC('CREATE SCHEMA SMS')
+END;
+GO
+
+
+CREATE TABLE "SMS"."SMS" (
+  id             UNIQUEIDENTIFIER NOT NULL,
+  mobile_number  NVARCHAR(100)    NOT NULL,
+  message        NVARCHAR(1000)   NOT NULL,
+  status         INTEGER          NOT NULL,
+  send_attempts  INTEGER,
+  lock_name      NVARCHAR(100),
+  last_processed DATETIME,
+
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX sms_mobile_number_ix ON "SMS"."SMS"(mobile_number);
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the SMS' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The mobile number to send the SMS to' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'MOBILE_NUMBER';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The message to send' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'MESSAGE';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The status of the SMS' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'STATUS';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The number of times that the sending of the SMS was attempted' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'SEND_ATTEMPTS';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The name of the entity that has locked the SMS for sending' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'LOCK_NAME';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The date and time the last attempt was made to send the SMS' ,
+@level0type=N'SCHEMA', @level0name=N'SMS', @level1type=N'TABLE', @level1name=N'SMS', @level2type=N'COLUMN', @level2name=N'LAST_PROCESSED';
+GO
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   _              _
+--  | |_  ___  ___ | |_
+--  | __|/ _ \/ __|| __|
+--  | |_|  __/\__ \| |_
+--   \__|\___||___/ \__|
+--
+-- -------------------------------------------------------------------------------------------------
+IF OBJECT_ID('"TEST"."TEST_DATA"', 'U') IS NOT NULL
+DROP TABLE "TEST"."TEST_DATA";
+GO
+
+
+IF NOT EXISTS (SELECT 1 FROM SYS.SCHEMAS WHERE name = 'TEST')
+BEGIN
+    EXEC('CREATE SCHEMA TEST')
+END;
+GO
+
+
+CREATE TABLE "TEST"."TEST_DATA" (
+  id    INTEGER        NOT NULL,
+  name  NVARCHAR(100) NOT NULL,
+  value NVARCHAR(4000) NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The ID used to uniquely identify the test data' ,
+@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'ID';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The name for the test data' ,
+@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'NAME';
+
+EXEC sys.sp_addextendedproperty
+@name=N'MS_Description', @value=N'The value for the test data' ,
+@level0type=N'SCHEMA', @level0name=N'TEST', @level1type=N'TABLE', @level1name=N'TEST_DATA', @level2type=N'COLUMN', @level2name=N'VALUE';
+GO
+
 
 INSERT INTO "TEST"."TEST_DATA" (id, name, value)
   VALUES (1, 'Sample Name 1', 'Sample Value 1');
@@ -1478,6 +1619,33 @@ INSERT INTO "TEST"."TEST_DATA" (id, name, value)
   VALUES (8, 'Sample Name 8', 'Sample Value 8');
 INSERT INTO "TEST"."TEST_DATA" (id, name, value)
   VALUES (9, 'Sample Name 9', 'Sample Value 9');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

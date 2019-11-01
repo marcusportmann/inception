@@ -30,7 +30,7 @@ public class JobExecutor
   implements Runnable
 {
   /* Logger */
-  private static Logger logger = LoggerFactory.getLogger(JobExecutor.class);
+  private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
   private Job job;
   private ISchedulerService schedulerService;
 

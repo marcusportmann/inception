@@ -30,123 +30,51 @@ SET client_min_messages = 'warning';
 
 
 -- -------------------------------------------------------------------------------------------------
--- DROP TABLES
+--               _
+--   _ __  ___  | |  ___  ___
+--  | '__|/ _ \ | | / _ \/ __|
+--  | |  | (_) || ||  __/\__ \
+--  |_|   \___/ |_| \___||___/
+--
 -- -------------------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS error.error_reports CASCADE;
-DROP TABLE IF EXISTS sms.sms CASCADE;
-DROP TABLE IF EXISTS reporting.report_definitions CASCADE;
-DROP TABLE IF EXISTS messaging.archived_messages CASCADE;
-DROP TABLE IF EXISTS messaging.message_parts CASCADE;
-DROP TABLE IF EXISTS messaging.messages CASCADE;
-DROP TABLE IF EXISTS messaging.message_statuses CASCADE;
-DROP TABLE IF EXISTS messaging.message_types CASCADE;
+DROP OWNED BY dbuser CASCADE;
+DROP ROLE IF EXISTS dbuser;
+
+CREATE ROLE dbuser WITH LOGIN PASSWORD 'Password1';
+ALTER ROLE dbuser WITH login;
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                     _  _  _
+--    __ _  _   _   __| |(_)| |_
+--   / _` || | | | / _` || || __|
+--  | (_| || |_| || (_| || || |_
+--   \__,_| \__,_| \__,_||_| \__|
+--
+-- -------------------------------------------------------------------------------------------------
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                   _
+--    ___  ___    __| |  ___  ___
+--   / __|/ _ \  / _` | / _ \/ __|
+--  | (__| (_) || (_| ||  __/\__ \
+--   \___|\___/  \__,_| \___||___/
+--
+-- -------------------------------------------------------------------------------------------------
 DROP TABLE IF EXISTS codes.codes CASCADE;
 DROP TABLE IF EXISTS codes.code_categories CASCADE;
-DROP TABLE IF EXISTS scheduler.job_parameters CASCADE;
-DROP TABLE IF EXISTS scheduler.jobs CASCADE;
-DROP TABLE IF EXISTS security.role_to_group_map CASCADE;
-DROP TABLE IF EXISTS security.function_to_role_map CASCADE;
-DROP TABLE IF EXISTS security.roles CASCADE;
-DROP TABLE IF EXISTS security.functions CASCADE;
-DROP TABLE IF EXISTS security.user_to_group_map CASCADE;
-DROP TABLE IF EXISTS security.groups CASCADE;
-DROP TABLE IF EXISTS security.users_password_history CASCADE;
-DROP TABLE IF EXISTS security.users CASCADE;
-DROP TABLE IF EXISTS security.user_directory_to_organization_map CASCADE;
-DROP TABLE IF EXISTS security.user_directories CASCADE;
-DROP TABLE IF EXISTS security.user_directory_types CASCADE;
-DROP TABLE IF EXISTS security.organizations CASCADE;
-DROP TABLE IF EXISTS service_registry.service_registry CASCADE;
-DROP TABLE IF EXISTS configuration.configuration CASCADE;
-DROP TABLE IF EXISTS idgenerator.idgenerator CASCADE;
-DROP TABLE IF EXISTS test.test_data CASCADE;
 
 
--- -------------------------------------------------------------------------------------------------
--- DROP SEQUENCES
--- -------------------------------------------------------------------------------------------------
-
-
--- -------------------------------------------------------------------------------------------------
--- DROP SCHEMAS
--- -------------------------------------------------------------------------------------------------
-DROP SCHEMA IF EXISTS test CASCADE;
-DROP SCHEMA IF EXISTS error CASCADE;
-DROP SCHEMA IF EXISTS sms CASCADE;
-DROP SCHEMA IF EXISTS service_registry CASCADE;
-DROP SCHEMA IF EXISTS security CASCADE;
-DROP SCHEMA IF EXISTS scheduler CASCADE;
-DROP SCHEMA IF EXISTS reporting CASCADE;
-DROP SCHEMA IF EXISTS messaging CASCADE;
-DROP SCHEMA IF EXISTS idgenerator CASCADE;
-DROP SCHEMA IF EXISTS configuration CASCADE;
 DROP SCHEMA IF EXISTS codes CASCADE;
 
 
--- -------------------------------------------------------------------------------------------------
--- DROP ROLES
--- -------------------------------------------------------------------------------------------------
-DROP
-OWNED BY dbuser CASCADE;
-DROP ROLE IF EXISTS dbuser;
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE ROLES
--- -------------------------------------------------------------------------------------------------
-CREATE ROLE dbuser WITH LOGIN
-  PASSWORD 'Password1';
-ALTER
-ROLE dbuser
-WITH login;
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE PROCEDURES
--- -------------------------------------------------------------------------------------------------
---
--- CREATE OR REPLACE FUNCTION bytea_import(p_path text, p_result out bytea)
---                    language plpgsql as $$
--- declare
---   l_oid oid;
---   r record;
--- begin
---   p_result := '';
---   select lo_import(p_path) into l_oid;
---   for r in ( select data
---              from pg_largeobject
---              where loid = l_oid
---              order by pageno ) loop
---     p_result = p_result || r.data;
---   end loop;
---   perform lo_unlink(l_oid);
--- end;$$;
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE SCHEMAS
--- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA codes;
-CREATE SCHEMA configuration;
-CREATE SCHEMA idgenerator;
-CREATE SCHEMA messaging;
-CREATE SCHEMA reporting;
-CREATE SCHEMA scheduler;
-CREATE SCHEMA security;
-CREATE SCHEMA service_registry;
-CREATE SCHEMA sms;
-CREATE SCHEMA error;
-CREATE SCHEMA test;
 
 
-----------------------------------------------------------------------------------------------------
--- CREATE SEQUENCES
--- -------------------------------------------------------------------------------------------------
-
-
--- -------------------------------------------------------------------------------------------------
--- CREATE TABLES
--- -------------------------------------------------------------------------------------------------
 CREATE TABLE codes.code_categories (
   id      TEXT NOT NULL,
   name    TEXT NOT NULL,
@@ -186,6 +114,33 @@ COMMENT ON COLUMN codes.codes.name IS 'The name of the code';
 COMMENT ON COLUMN codes.codes.value IS 'The value for the code';
 
 
+GRANT ALL ON SCHEMA codes TO dbuser;
+
+
+GRANT ALL ON table codes.code_categories TO dbuser;
+GRANT ALL ON table codes.codes TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                       __  _                            _    _
+--    ___  ___   _ __   / _|(_)  __ _  _   _  _ __  __ _ | |_ (_)  ___   _ __
+--   / __|/ _ \ | '_ \ | |_ | | / _` || | | || '__|/ _` || __|| | / _ \ | '_ \
+--  | (__| (_) || | | ||  _|| || (_| || |_| || |  | (_| || |_ | || (_) || | | |
+--   \___|\___/ |_| |_||_|  |_| \__, | \__,_||_|   \__,_| \__||_| \___/ |_| |_|
+--                              |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS configuration.configuration CASCADE;
+
+
+DROP SCHEMA IF EXISTS configuration CASCADE;
+
+
+CREATE SCHEMA configuration;
+
+
 CREATE TABLE configuration.configuration (
   key         TEXT NOT NULL,
   value       TEXT NOT NULL,
@@ -201,6 +156,98 @@ COMMENT ON COLUMN configuration.configuration.value IS 'The value for the config
 COMMENT ON COLUMN configuration.configuration.description IS 'The description for the configuration value';
 
 
+GRANT ALL ON SCHEMA configuration TO dbuser;
+
+
+GRANT ALL ON table configuration.configuration TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--    ___  _ __  _ __  ___   _ __
+--   / _ \| '__|| '__|/ _ \ | '__|
+--  |  __/| |   | |  | (_) || |
+--   \___||_|   |_|   \___/ |_|
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS error.error_reports CASCADE;
+
+
+DROP SCHEMA IF EXISTS error CASCADE;
+
+
+CREATE SCHEMA error;
+
+
+CREATE TABLE error.error_reports (
+  id                  UUID      NOT NULL,
+  application_id      TEXT      NOT NULL,
+  application_version TEXT      NOT NULL,
+  description         TEXT      NOT NULL,
+  detail              TEXT      NOT NULL,
+  created             TIMESTAMP NOT NULL,
+  who                 TEXT,
+  device_id           UUID,
+  feedback            TEXT,
+  data                TEXT,
+
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX error_reports_application_id_ix ON error.error_reports(application_id);
+
+CREATE INDEX error_reports_created_ix ON error.error_reports(created);
+
+CREATE INDEX error_reports_who_ix ON error.error_reports(who);
+
+COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
+
+COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
+
+COMMENT ON COLUMN error.error_reports.application_version IS 'The version of the application that generated the error report';
+
+COMMENT ON COLUMN error.error_reports.description IS 'The description of the error';
+
+COMMENT ON COLUMN error.error_reports.detail IS 'The error detail e.g. a stack trace';
+
+COMMENT ON COLUMN error.error_reports.created IS 'The date and time the error report was created';
+
+COMMENT ON COLUMN error.error_reports.who IS 'The optional username identifying the user associated with the error report';
+
+COMMENT ON COLUMN error.error_reports.device_id IS 'The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
+
+COMMENT ON COLUMN error.error_reports.feedback IS 'The optional feedback provided by the user for the error';
+
+COMMENT ON COLUMN error.error_reports.data IS 'The optional base-64 encoded data associated with the error report';
+
+
+GRANT ALL ON SCHEMA error TO dbuser;
+
+
+GRANT ALL ON table error.error_reports TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   _      _                                        _
+--  (_)  __| |  __ _   ___  _ __    ___  _ __  __ _ | |_  ___   _ __
+--  | | / _` | / _` | / _ \| '_ \  / _ \| '__|/ _` || __|/ _ \ | '__|
+--  | || (_| || (_| ||  __/| | | ||  __/| |  | (_| || |_| (_) || |
+--  |_| \__,_| \__, | \___||_| |_| \___||_|   \__,_| \__|\___/ |_|
+--             |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS idgenerator.idgenerator CASCADE;
+
+
+DROP SCHEMA IF EXISTS idgenerator CASCADE;
+
+
+CREATE SCHEMA idgenerator;
+
+
 CREATE TABLE idgenerator.idgenerator (
   name    TEXT NOT NULL,
   current BIGINT DEFAULT 0,
@@ -211,6 +258,79 @@ CREATE TABLE idgenerator.idgenerator (
 COMMENT ON COLUMN idgenerator.idgenerator.name IS 'The name giving the type of entity associated with the generated ID';
 
 COMMENT ON COLUMN idgenerator.idgenerator.current IS 'The current ID for the type';
+
+
+GRANT ALL ON SCHEMA idgenerator TO dbuser;
+
+
+GRANT ALL ON table idgenerator.idgenerator TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                     _  _
+--   _ __ ___    __ _ (_)| |
+--  | '_ ` _ \  / _` || || |
+--  | | | | | || (_| || || |
+--  |_| |_| |_| \__,_||_||_|
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS mail.mail_templates CASCADE;
+
+
+DROP SCHEMA IF EXISTS mail CASCADE;
+
+
+CREATE SCHEMA mail;
+
+
+CREATE TABLE mail.mail_templates (
+  id           UUID    NOT NULL,
+  name         TEXT    NOT NULL,
+  content_type INTEGER NOT NULL,
+  template     BYTEA   NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+COMMENT ON COLUMN mail.mail_templates.id IS 'The ID used to uniquely identify the mail template';
+
+COMMENT ON COLUMN mail.mail_templates.name IS 'The name of the mail template';
+
+COMMENT ON COLUMN mail.mail_templates.content_type IS 'The content type for the mail template';
+
+COMMENT ON COLUMN mail.mail_templates.template IS 'The Apache FreeMarker template for the mail template';
+
+
+GRANT ALL ON SCHEMA mail TO dbuser;
+
+
+GRANT ALL ON table mail.mail_templates TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                                            _
+--   _ __ ___    ___  ___  ___   __ _   __ _ (_) _ __    __ _
+--  | '_ ` _ \  / _ \/ __|/ __| / _` | / _` || || '_ \  / _` |
+--  | | | | | ||  __/\__ \\__ \| (_| || (_| || || | | || (_| |
+--  |_| |_| |_| \___||___/|___/ \__,_| \__, ||_||_| |_| \__, |
+--                                     |___/            |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS messaging.archived_messages CASCADE;
+DROP TABLE IF EXISTS messaging.message_parts CASCADE;
+DROP TABLE IF EXISTS messaging.messages CASCADE;
+DROP TABLE IF EXISTS messaging.message_statuses CASCADE;
+DROP TABLE IF EXISTS messaging.message_types CASCADE;
+
+
+DROP SCHEMA IF EXISTS messaging CASCADE;
+
+
+CREATE SCHEMA messaging;
 
 
 CREATE TABLE messaging.message_types (
@@ -413,6 +533,86 @@ COMMENT ON COLUMN messaging.archived_messages.archived IS 'The date and time the
 COMMENT ON COLUMN messaging.archived_messages.data IS 'The data for the message';
 
 
+GRANT ALL ON SCHEMA messaging TO dbuser;
+
+
+GRANT ALL ON table messaging.message_types TO dbuser;
+GRANT ALL ON table messaging.message_statuses TO dbuser;
+GRANT ALL ON table messaging.messages TO dbuser;
+GRANT ALL ON table messaging.message_parts TO dbuser;
+GRANT ALL ON table messaging.archived_messages TO dbuser;
+
+
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
+INSERT INTO messaging.message_types (id, name)
+  VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
+
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (0, 'Initialised');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (1, 'QueuedForSending');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (2, 'QueuedForProcessing');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (3, 'Aborted');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (4, 'Failed');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (5, 'Processing');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (6, 'Sending');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (7, 'QueuedForDownload');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (8, 'Downloading');
+INSERT INTO messaging.message_statuses (code, name)
+  VALUES (10, 'Processed');
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                                  _    _
+--   _ __  ___  _ __    ___   _ __ | |_ (_) _ __    __ _
+--  | '__|/ _ \| '_ \  / _ \ | '__|| __|| || '_ \  / _` |
+--  | |  |  __/| |_) || (_) || |   | |_ | || | | || (_| |
+--  |_|   \___|| .__/  \___/ |_|    \__||_||_| |_| \__, |
+--             |_|                                 |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS reporting.report_definitions CASCADE;
+
+
+DROP SCHEMA IF EXISTS reporting CASCADE;
+
+
+CREATE SCHEMA reporting;
+
 
 CREATE TABLE reporting.report_definitions (
   id       UUID  NOT NULL,
@@ -427,6 +627,32 @@ COMMENT ON COLUMN reporting.report_definitions.id IS 'The Universally Unique Ide
 COMMENT ON COLUMN reporting.report_definitions.name IS 'The name of the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.template IS 'The JasperReports template for the report definition';
+
+
+GRANT ALL ON SCHEMA reporting TO dbuser;
+
+
+GRANT ALL ON table reporting.report_definitions TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--              _                _         _
+--   ___   ___ | |__    ___   __| | _   _ | |  ___  _ __
+--  / __| / __|| '_ \  / _ \ / _` || | | || | / _ \| '__|
+--  \__ \| (__ | | | ||  __/| (_| || |_| || ||  __/| |
+--  |___/ \___||_| |_| \___| \__,_| \__,_||_| \___||_|
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS scheduler.job_parameters CASCADE;
+DROP TABLE IF EXISTS scheduler.jobs CASCADE;
+
+
+DROP SCHEMA IF EXISTS scheduler CASCADE;
+
+
+CREATE SCHEMA scheduler;
 
 
 CREATE TABLE scheduler.jobs (
@@ -483,6 +709,44 @@ COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID used to uniquely id
 COMMENT ON COLUMN scheduler.job_parameters.name IS 'The name of the job parameter';
 
 COMMENT ON COLUMN scheduler.job_parameters.value IS 'The value of the job parameter';
+
+
+GRANT ALL ON SCHEMA scheduler TO dbuser;
+
+
+GRANT ALL ON table scheduler.jobs TO dbuser;
+GRANT ALL ON table scheduler.job_parameters TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--                                 _  _
+--   ___   ___   ___  _   _  _ __ (_)| |_  _   _
+--  / __| / _ \ / __|| | | || '__|| || __|| | | |
+--  \__ \|  __/| (__ | |_| || |   | || |_ | |_| |
+--  |___/ \___| \___| \__,_||_|   |_| \__| \__, |
+--                                         |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS security.role_to_group_map CASCADE;
+DROP TABLE IF EXISTS security.function_to_role_map CASCADE;
+DROP TABLE IF EXISTS security.roles CASCADE;
+DROP TABLE IF EXISTS security.functions CASCADE;
+DROP TABLE IF EXISTS security.user_to_group_map CASCADE;
+DROP TABLE IF EXISTS security.groups CASCADE;
+DROP TABLE IF EXISTS security.users_password_history CASCADE;
+DROP TABLE IF EXISTS security.users CASCADE;
+DROP TABLE IF EXISTS security.user_directory_to_organization_map CASCADE;
+DROP TABLE IF EXISTS security.user_directories CASCADE;
+DROP TABLE IF EXISTS security.user_directory_types CASCADE;
+DROP TABLE IF EXISTS security.organizations CASCADE;
+
+
+DROP SCHEMA IF EXISTS security CASCADE;
+
+
+CREATE SCHEMA security;
 
 
 CREATE TABLE security.organizations (
@@ -731,12 +995,12 @@ COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquel
 
 
 CREATE TABLE security.password_resets (
-  username      TEXT      NOT NULL,
-  requested     TIMESTAMP NOT NULL,
-  status        INTEGER   NOT NULL,
-  security_code TEXT      NOT NULL,
-  completed     TIMESTAMP,
-  expired       TIMESTAMP,
+  username           TEXT      NOT NULL,
+  requested          TIMESTAMP NOT NULL,
+  status             INTEGER   NOT NULL,
+  security_code_hash TEXT      NOT NULL,
+  completed          TIMESTAMP,
+  expired            TIMESTAMP,
 
   PRIMARY KEY (username, requested),
   CONSTRAINT password_resets_user_fk FOREIGN KEY (username) REFERENCES security.users(username) ON DELETE CASCADE
@@ -750,132 +1014,30 @@ COMMENT ON COLUMN security.password_resets.requested IS 'The date and time the p
 
 COMMENT ON COLUMN security.password_resets.status IS 'The status of the password reset';
 
-COMMENT ON COLUMN security.password_resets.security_code IS 'The security code';
+COMMENT ON COLUMN security.password_resets.security_code_hash IS 'The security code hash';
 
 COMMENT ON COLUMN security.password_resets.completed IS 'The date and time the password reset was completed';
 
 COMMENT ON COLUMN security.password_resets.expired IS 'The date and time the password reset expired';
 
 
-CREATE TABLE service_registry.service_registry (
-  name                 TEXT    NOT NULL,
-  security_type        INTEGER NOT NULL,
-  supports_compression CHAR(1) NOT NULL,
-  endpoint             TEXT    NOT NULL,
-  service_class        TEXT    NOT NULL,
-  wsdl_location        TEXT    NOT NULL,
-  username             TEXT,
-  password             TEXT,
-
-  PRIMARY KEY (name)
-);
-
-COMMENT ON COLUMN service_registry.service_registry.name IS 'The name used to uniquely identify the web service';
-
-COMMENT ON COLUMN service_registry.service_registry.security_type IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
-
-COMMENT ON COLUMN service_registry.service_registry.supports_compression IS 'Does the web service support compression';
-
-COMMENT ON COLUMN service_registry.service_registry.endpoint IS 'The endpoint for the web service';
-
-COMMENT ON COLUMN service_registry.service_registry.service_class IS 'The fully qualified name of the Java service class';
-
-COMMENT ON COLUMN service_registry.service_registry.wsdl_location IS 'The location of the WSDL defining the web service on the classpath';
-
-COMMENT ON COLUMN service_registry.service_registry.username IS 'The username to use created accessing a web service with username-password security enabled';
-
-COMMENT ON COLUMN service_registry.service_registry.password IS 'The password to use created accessing a web service with username-password security enabled';
+GRANT ALL ON SCHEMA security TO dbuser;
 
 
-CREATE TABLE sms.sms (
-  id             UUID    NOT NULL,
-  mobile_number  TEXT    NOT NULL,
-  message        TEXT    NOT NULL,
-  status         INTEGER NOT NULL,
-  send_attempts  INTEGER,
-  lock_name      TEXT,
-  last_processed TIMESTAMP,
-
-  PRIMARY KEY (id)
-);
-
-CREATE INDEX sms_mobile_number_ix ON sms.sms(mobile_number);
-
-COMMENT ON COLUMN sms.sms.id IS 'The ID used to uniquely identify the SMS';
-
-COMMENT ON COLUMN sms.sms.mobile_number IS 'The mobile number to send the SMS to';
-
-COMMENT ON COLUMN sms.sms.message IS 'The message to send';
-
-COMMENT ON COLUMN sms.sms.status IS 'The status of the SMS';
-
-COMMENT ON COLUMN sms.sms.send_attempts IS 'The number of times that the sending of the SMS was attempted';
-
-COMMENT ON COLUMN sms.sms.lock_name IS 'The name of the entity that has locked the SMS for sending';
-
-COMMENT ON COLUMN sms.sms.last_processed IS 'The date and time the last attempt was made to send the SMS';
+GRANT ALL ON table security.organizations TO dbuser;
+GRANT ALL ON table security.user_directory_types TO dbuser;
+GRANT ALL ON table security.user_directories TO dbuser;
+GRANT ALL ON table security.user_directory_to_organization_map TO dbuser;
+GRANT ALL ON table security.users TO dbuser;
+GRANT ALL ON table security.users_password_history TO dbuser;
+GRANT ALL ON table security.groups TO dbuser;
+GRANT ALL ON table security.user_to_group_map TO dbuser;
+GRANT ALL ON table security.functions TO dbuser;
+GRANT ALL ON table security.roles TO dbuser;
+GRANT ALL ON table security.function_to_role_map TO dbuser;
+GRANT ALL ON table security.role_to_group_map TO dbuser;
 
 
-CREATE TABLE error.error_reports (
-  id                  UUID      NOT NULL,
-  application_id      TEXT      NOT NULL,
-  application_version TEXT      NOT NULL,
-  description         TEXT      NOT NULL,
-  detail              TEXT      NOT NULL,
-  created             TIMESTAMP NOT NULL,
-  who                 TEXT,
-  device_id           UUID,
-  feedback            TEXT,
-  data                TEXT,
-
-  PRIMARY KEY (id)
-);
-
-CREATE INDEX error_reports_application_id_ix ON error.error_reports(application_id);
-
-CREATE INDEX error_reports_created_ix ON error.error_reports(created);
-
-CREATE INDEX error_reports_who_ix ON error.error_reports(who);
-
-COMMENT ON COLUMN error.error_reports.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the error report';
-
-COMMENT ON COLUMN error.error_reports.application_id IS 'The ID used to uniquely identify the application that generated the error report';
-
-COMMENT ON COLUMN error.error_reports.application_version IS 'The version of the application that generated the error report';
-
-COMMENT ON COLUMN error.error_reports.description IS 'The description of the error';
-
-COMMENT ON COLUMN error.error_reports.detail IS 'The error detail e.g. a stack trace';
-
-COMMENT ON COLUMN error.error_reports.created IS 'The date and time the error report was created';
-
-COMMENT ON COLUMN error.error_reports.who IS 'The optional username identifying the user associated with the error report';
-
-COMMENT ON COLUMN error.error_reports.device_id IS 'The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from';
-
-COMMENT ON COLUMN error.error_reports.feedback IS 'The optional feedback provided by the user for the error';
-
-COMMENT ON COLUMN error.error_reports.data IS 'The optional base-64 encoded data associated with the error report';
-
-
-CREATE TABLE test.test_data (
-  id    TEXT NOT NULL,
-  name  TEXT NOT NULL,
-  value TEXT NOT NULL,
-
-  PRIMARY KEY (id)
-);
-
-COMMENT ON COLUMN test.test_data.id IS 'The ID used to uniquely identify the test data';
-
-COMMENT ON COLUMN test.test_data.name IS 'The name for the test data';
-
-COMMENT ON COLUMN test.test_data.value IS 'The value for the test data';
-
-
--- -------------------------------------------------------------------------------------------------
--- POPULATE TABLES
--- -------------------------------------------------------------------------------------------------
 INSERT INTO security.organizations (id, name, status)
   VALUES ('00000000-0000-0000-0000-000000000000', 'Administration', 1);
 
@@ -909,6 +1071,8 @@ INSERT INTO security.functions (code, name, description)
   VALUES ('Configuration.ConfigurationAdministration', 'Configuration Administration', 'Configuration Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Error.ErrorReportAdministration', 'Error Report Administration', 'Error Report Administration');
+INSERT INTO security.functions (code, name, description)
+  VALUES ('Mail.MailTemplateAdministration', 'Mail Template Administration', 'Mail Template Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Process.ProcessDefinitionAdministration', 'Process Definition Administration', 'Process Definition Administration');
 INSERT INTO security.functions (code, name, description)
@@ -966,55 +1130,155 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
 INSERT INTO security.role_to_group_map (role_code, group_id)
   VALUES ('Administrator', '00000000-0000-0000-0000-000000000000'); -- Assign the Administrator role to the Administrators group
 
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('d21fb54e-5c5b-49e8-881f-ce00c6ced1a3', 'AuthenticateRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('82223035-1726-407f-8703-3977708e792c', 'AuthenticateResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('cc005e6a-b01b-48eb-98a0-026297be69f3', 'CheckUserExistsRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a38bd55e-3470-46f1-a96a-a6b08a9adc63', 'CheckUserExistsResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('94d60eb6-a062-492d-b5e7-9fb1f05cf088', 'GetCodeCategoryRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('0336b544-91e5-4eb9-81db-3dd94e116c92', 'GetCodeCategoryResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('3500a28a-6a2c-482b-b81f-a849c9c3ef79', 'GetCodeCategoryWithParametersRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('12757310-9eee-4a3a-970c-9b4ee0e1108e', 'GetCodeCategoryWithParametersResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a589dc87-2328-4a9b-bdb6-970e55ca2323', 'TestRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a3bad7ba-f9d4-4403-b54a-cb1f335ebbad', 'TestResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('e9918051-8ebc-48f1-bad7-13c59b550e1a', 'AnotherTestRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('a714a9c6-2914-4498-ab59-64be9991bf37', 'AnotherTestResponse');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('ff638c33-b4f1-4e79-804c-9560da2543d6', 'SubmitErrorReportRequest');
-INSERT INTO messaging.message_types (id, name)
-  VALUES ('8be50cfa-2fb1-4634-9bfa-d01e77eaf766', 'SubmitErrorReportResponse');
 
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (0, 'Initialised');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (1, 'QueuedForSending');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (2, 'QueuedForProcessing');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (3, 'Aborted');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (4, 'Failed');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (5, 'Processing');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (6, 'Sending');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (7, 'QueuedForDownload');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (8, 'Downloading');
-INSERT INTO messaging.message_statuses (code, name)
-  VALUES (10, 'Processed');
+
+
+-- -------------------------------------------------------------------------------------------------
+--                           _                                _       _
+--   ___   ___  _ __ __   __(_)  ___  ___   _ __  ___   __ _ (_) ___ | |_  _ __  _   _
+--  / __| / _ \| '__|\ \ / /| | / __|/ _ \ | '__|/ _ \ / _` || |/ __|| __|| '__|| | | |
+--  \__ \|  __/| |    \ V / | || (__|  __/ | |  |  __/| (_| || |\__ \| |_ | |   | |_| |
+--  |___/ \___||_|     \_/  |_| \___|\___| |_|   \___| \__, ||_||___/ \__||_|    \__, |
+--                                                     |___/                     |___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS service_registry.service_registry CASCADE;
+
+
+DROP SCHEMA IF EXISTS service_registry CASCADE;
+
+
+CREATE SCHEMA service_registry;
+
+
+CREATE TABLE service_registry.service_registry (
+  name                 TEXT    NOT NULL,
+  security_type        INTEGER NOT NULL,
+  supports_compression CHAR(1) NOT NULL,
+  endpoint             TEXT    NOT NULL,
+  service_class        TEXT    NOT NULL,
+  wsdl_location        TEXT    NOT NULL,
+  username             TEXT,
+  password             TEXT,
+
+  PRIMARY KEY (name)
+);
+
+COMMENT ON COLUMN service_registry.service_registry.name IS 'The name used to uniquely identify the web service';
+
+COMMENT ON COLUMN service_registry.service_registry.security_type IS 'The type of security model implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
+
+COMMENT ON COLUMN service_registry.service_registry.supports_compression IS 'Does the web service support compression';
+
+COMMENT ON COLUMN service_registry.service_registry.endpoint IS 'The endpoint for the web service';
+
+COMMENT ON COLUMN service_registry.service_registry.service_class IS 'The fully qualified name of the Java service class';
+
+COMMENT ON COLUMN service_registry.service_registry.wsdl_location IS 'The location of the WSDL defining the web service on the classpath';
+
+COMMENT ON COLUMN service_registry.service_registry.username IS 'The username to use created accessing a web service with username-password security enabled';
+
+COMMENT ON COLUMN service_registry.service_registry.password IS 'The password to use created accessing a web service with username-password security enabled';
+
+
+GRANT ALL ON SCHEMA service_registry TO dbuser;
+
+
+GRANT ALL ON table service_registry.service_registry TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   ___  _ __ ___   ___
+--  / __|| '_ ` _ \ / __|
+--  \__ \| | | | | |\__ \
+--  |___/|_| |_| |_||___/
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS sms.sms CASCADE;
+
+
+DROP SCHEMA IF EXISTS sms CASCADE;
+
+
+CREATE SCHEMA sms;
+
+
+CREATE TABLE sms.sms (
+  id             UUID    NOT NULL,
+  mobile_number  TEXT    NOT NULL,
+  message        TEXT    NOT NULL,
+  status         INTEGER NOT NULL,
+  send_attempts  INTEGER,
+  lock_name      TEXT,
+  last_processed TIMESTAMP,
+
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX sms_mobile_number_ix ON sms.sms(mobile_number);
+
+COMMENT ON COLUMN sms.sms.id IS 'The ID used to uniquely identify the SMS';
+
+COMMENT ON COLUMN sms.sms.mobile_number IS 'The mobile number to send the SMS to';
+
+COMMENT ON COLUMN sms.sms.message IS 'The message to send';
+
+COMMENT ON COLUMN sms.sms.status IS 'The status of the SMS';
+
+COMMENT ON COLUMN sms.sms.send_attempts IS 'The number of times that the sending of the SMS was attempted';
+
+COMMENT ON COLUMN sms.sms.lock_name IS 'The name of the entity that has locked the SMS for sending';
+
+COMMENT ON COLUMN sms.sms.last_processed IS 'The date and time the last attempt was made to send the SMS';
+
+
+GRANT ALL ON SCHEMA sms TO dbuser;
+
+
+GRANT ALL ON table sms.sms TO dbuser;
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+--   _              _
+--  | |_  ___  ___ | |_
+--  | __|/ _ \/ __|| __|
+--  | |_|  __/\__ \| |_
+--   \__|\___||___/ \__|
+--
+-- -------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS test.test_data CASCADE;
+
+
+DROP SCHEMA IF EXISTS test CASCADE;
+
+
+CREATE SCHEMA test;
+
+
+CREATE TABLE test.test_data (
+  id    TEXT NOT NULL,
+  name  TEXT NOT NULL,
+  value TEXT NOT NULL,
+
+  PRIMARY KEY (id)
+);
+
+COMMENT ON COLUMN test.test_data.id IS 'The ID used to uniquely identify the test data';
+
+COMMENT ON COLUMN test.test_data.name IS 'The name for the test data';
+
+COMMENT ON COLUMN test.test_data.value IS 'The value for the test data';
+
+
+GRANT ALL ON SCHEMA test TO dbuser;
+
+
+GRANT ALL ON table test.test_data TO dbuser;
+
 
 INSERT INTO test.test_data (id, name, value)
   VALUES (1, 'Sample Name 1', 'Sample Value 1');
@@ -1035,46 +1299,50 @@ INSERT INTO test.test_data (id, name, value)
 INSERT INTO test.test_data (id, name, value)
   VALUES (9, 'Sample Name 9', 'Sample Value 9');
 
--- -------------------------------------------------------------------------------------------------
--- SET PERMISSIONS
--- -------------------------------------------------------------------------------------------------
-GRANT ALL ON SCHEMA codes TO dbuser;
-GRANT ALL ON SCHEMA configuration TO dbuser;
-GRANT ALL ON SCHEMA idgenerator TO dbuser;
-GRANT ALL ON SCHEMA messaging TO dbuser;
-GRANT ALL ON SCHEMA reporting TO dbuser;
-GRANT ALL ON SCHEMA scheduler TO dbuser;
-GRANT ALL ON SCHEMA security TO dbuser;
-GRANT ALL ON SCHEMA service_registry TO dbuser;
-GRANT ALL ON SCHEMA sms TO dbuser;
-GRANT ALL ON SCHEMA error TO dbuser;
-GRANT ALL ON SCHEMA test TO dbuser;
 
-GRANT ALL ON table codes.code_categories TO dbuser;
-GRANT ALL ON table codes.codes TO dbuser;
-GRANT ALL ON table configuration.configuration TO dbuser;
-GRANT ALL ON table idgenerator.idgenerator TO dbuser;
-GRANT ALL ON table messaging.message_types TO dbuser;
-GRANT ALL ON table messaging.message_statuses TO dbuser;
-GRANT ALL ON table messaging.messages TO dbuser;
-GRANT ALL ON table messaging.message_parts TO dbuser;
-GRANT ALL ON table messaging.archived_messages TO dbuser;
-GRANT ALL ON table reporting.report_definitions TO dbuser;
-GRANT ALL ON table scheduler.jobs TO dbuser;
-GRANT ALL ON table scheduler.job_parameters TO dbuser;
-GRANT ALL ON table security.organizations TO dbuser;
-GRANT ALL ON table security.user_directory_types TO dbuser;
-GRANT ALL ON table security.user_directories TO dbuser;
-GRANT ALL ON table security.user_directory_to_organization_map TO dbuser;
-GRANT ALL ON table security.users TO dbuser;
-GRANT ALL ON table security.users_password_history TO dbuser;
-GRANT ALL ON table security.groups TO dbuser;
-GRANT ALL ON table security.user_to_group_map TO dbuser;
-GRANT ALL ON table security.functions TO dbuser;
-GRANT ALL ON table security.roles TO dbuser;
-GRANT ALL ON table security.function_to_role_map TO dbuser;
-GRANT ALL ON table security.role_to_group_map TO dbuser;
-GRANT ALL ON table service_registry.service_registry TO dbuser;
-GRANT ALL ON table sms.sms TO dbuser;
-GRANT ALL ON table error.error_reports TO dbuser;
-GRANT ALL ON table test.test_data TO dbuser;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- -------------------------------------------------------------------------------------------------
+-- CREATE PROCEDURES
+-- -------------------------------------------------------------------------------------------------
+--
+-- CREATE OR REPLACE FUNCTION bytea_import(p_path text, p_result out bytea)
+--                    language plpgsql as $$
+-- declare
+--   l_oid oid;
+--   r record;
+-- begin
+--   p_result := '';
+--   select lo_import(p_path) into l_oid;
+--   for r in ( select data
+--              from pg_largeobject
+--              where loid = l_oid
+--              order by pageno ) loop
+--     p_result = p_result || r.data;
+--   end loop;
+--   perform lo_unlink(l_oid);
+-- end;$$;
+
+
+
+
+
+
+
+
+
+

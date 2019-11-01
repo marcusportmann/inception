@@ -37,7 +37,7 @@ public class BackgroundSMSSender
   implements InitializingBean
 {
   /* Logger */
-  private static Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
+  private static final Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
   /* SMS Service */
   private final ISMSService smsService;

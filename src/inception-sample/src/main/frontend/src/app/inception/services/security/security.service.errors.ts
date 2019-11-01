@@ -236,6 +236,24 @@ export class GroupRoleNotFoundError extends Error {
 }
 
 /**
+ * The InvalidSecurityCodeError class holds the information for an invalid security code error.
+ *
+ * @author Marcus Portmann
+ */
+export class InvalidSecurityCodeError extends Error {
+
+  /**
+   * Constructs a new InvalidSecurityCodeError.
+   *
+   * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
  * The OrganizationNotFoundError class holds the information for an organization not found error.
  *
  * @author Marcus Portmann

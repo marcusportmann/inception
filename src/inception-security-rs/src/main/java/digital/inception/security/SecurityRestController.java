@@ -38,10 +38,7 @@ import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -315,7 +312,7 @@ public class SecurityRestController extends SecureRestController
   @ApiResponses(value = { @ApiResponse(code = 204,
       message = "The password for the user was changed successfully") ,
       @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
-      @ApiResponse(code = 401, message = "Authentication failed",
+      @ApiResponse(code = 401, message = "Authentication failed or invalid security code",
           response = RestControllerError.class) ,
       @ApiResponse(code = 403,
           message = "The user has exceeded the maximum number of failed password attempts and has been locked",
@@ -337,8 +334,8 @@ public class SecurityRestController extends SecureRestController
       required = true)
   @RequestBody PasswordChange passwordChange)
     throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        AuthenticationFailedException, ExistingPasswordException, UserLockedException,
-        SecurityServiceException
+        AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
+        UserLockedException, SecurityServiceException
   {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -398,13 +395,23 @@ public class SecurityRestController extends SecureRestController
     }
     else if (passwordChange.getReason() == PasswordChangeReason.USER)
     {
+      if (StringUtils.isEmpty(passwordChange.getPassword()))
+      {
+        throw new InvalidArgumentException("passwordChange");
+      }
+
       securityService.changePassword(username, passwordChange.getPassword(),
           passwordChange.getNewPassword());
     }
-    else if (passwordChange.getReason() == PasswordChangeReason.FORGOTTEN)
+    else if (passwordChange.getReason() == PasswordChangeReason.RESET)
     {
-      // TODO: PERFORM A FORGOTTEN PASSWORD RESET
+      if (StringUtils.isEmpty(passwordChange.getSecurityCode()))
+      {
+        throw new InvalidArgumentException("passwordChange");
+      }
 
+      securityService.resetPassword(username, passwordChange.getNewPassword(),
+          passwordChange.getSecurityCode());
     }
   }
 
@@ -2020,6 +2027,37 @@ public class SecurityRestController extends SecureRestController
     }
 
     securityService.removeRoleFromGroup(userDirectoryId, groupName, roleCode);
+  }
+
+  /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username the username identifying the user
+   */
+  @ApiOperation(value = "Initiate the password reset process for the user",
+      notes = "Initiate the password reset process for the user")
+  @ApiResponses(value = { @ApiResponse(code = 204,
+      message = "The password reset process was initiated successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The user could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/users/{username}/reset-password", method = RequestMethod.POST,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void resetPassword(@ApiParam(name = "username",
+      value = "The username identifying the user", required = true)
+  @PathVariable String username)
+    throws InvalidArgumentException, UserNotFoundException, SecurityServiceException
+  {
+    if (StringUtils.isEmpty(username))
+    {
+      throw new InvalidArgumentException("username");
+    }
+
+    securityService.initiatePasswordReset(username, true, Optional.empty());
   }
 
   /**

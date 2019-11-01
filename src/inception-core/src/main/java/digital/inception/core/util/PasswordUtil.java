@@ -18,6 +18,9 @@ package digital.inception.core.util;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.nio.charset.StandardCharsets;
+
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 import java.util.Collections;
@@ -39,7 +42,35 @@ public class PasswordUtil
    *  Special characters allowed in password.
    */
   private static final String ALLOWED_SPL_CHARACTERS = "!@#$%^&*()_+";
-  private static Random random = new SecureRandom();
+
+  /**
+   * The secure random number generator.
+   */
+  private static final Random random = new SecureRandom();
+
+  /**
+   * Create the SHA-256 hash of the specified password.
+   *
+   * @param password the password to hash
+   *
+   * @return the SHA-256 hash of the password
+   */
+  public static final String createPasswordHash(String password)
+  {
+    try
+    {
+      MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+      md.update(password.getBytes(StandardCharsets.ISO_8859_1), 0, password.length());
+
+      return Base64Util.encodeBytes(md.digest());
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException(String.format(
+          "Failed to generate a SHA-256 hash of the password (%s)", password), e);
+    }
+  }
 
   /**
    * Generate a random password.
