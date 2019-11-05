@@ -39,15 +39,16 @@ export class GroupMember {
   memberType: GroupMemberType;
 
   /**
-   * The ID used to uniquely identify the user directory the group is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
+   * is associated with.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new GroupMember.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory the group is
-   *                        associated with.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with.
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.

@@ -25,6 +25,9 @@ import digital.inception.validation.ValidationError;
 
 import io.swagger.annotations.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +52,9 @@ import javax.validation.Validator;
 @SuppressWarnings({ "unused" })
 public class MailRestController extends SecureRestController
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(MailRestController.class);
+
   /**
    * The Mail Service.
    */
@@ -144,6 +150,37 @@ public class MailRestController extends SecureRestController
   }
 
   /**
+   * Retrieve the mail template.
+   *
+   * @param mailTemplateId the ID used to uniquely identify the mail template
+   */
+  @ApiOperation(value = "Delete the mail template", notes = "Delete the mail template")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The mail template could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/mail-templates/{mailTemplateId}", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+  public MailTemplate getMailTemplate(@ApiParam(name = "mailTemplateId",
+      value = "The ID used to uniquely identify the mail template", required = true)
+  @PathVariable UUID mailTemplateId)
+    throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException
+  {
+    if (mailTemplateId == null)
+    {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
+    return mailService.getMailTemplate(mailTemplateId);
+  }
+
+  /**
    * Retrieve the mail template summaries.
    *
    * @return the mail template summaries
@@ -184,6 +221,42 @@ public class MailRestController extends SecureRestController
     throws MailServiceException
   {
     return mailService.getMailTemplates();
+  }
+
+  /**
+   * Send a test mail.
+   */
+  @ApiOperation(value = "Send a test mail", notes = "Send a test mail")
+  @ApiResponses(value = { @ApiResponse(code = 204, message = "The mail was sent successfully") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The mail template could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 409, message = "A mail template with the specified ID already exists",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/send-test-mail", method = RequestMethod.POST,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
+  public void sendMailTest()
+    throws InvalidArgumentException, DuplicateMailTemplateException, MailTemplateNotFoundException,
+        MailServiceException
+  {
+    MailTemplate mailTemplate = new MailTemplate();
+    mailTemplate.setId(UUID.randomUUID());
+    mailTemplate.setName("Test Mail Template");
+    mailTemplate.setContentType(MailTemplateContentType.HTML);
+    mailTemplate.setTemplate("Hello World!".getBytes());
+
+    mailService.createMailTemplate(mailTemplate);
+
+    MailTemplate retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
+
+    logger.info("Retrieved mail template (" + retrievedMailTemplate.getName() + ") with ID ("
+        + retrievedMailTemplate.getId() + ")");
   }
 
   /**

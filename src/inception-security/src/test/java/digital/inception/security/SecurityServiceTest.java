@@ -71,33 +71,6 @@ public class SecurityServiceTest
   private ISecurityService securityService;
 
   /**
-   * Test the password reset functionality.
-   */
-  @Test
-  public void passwordResetTest()
-  throws Exception
-  {
-    Organization organization = getTestOrganizationDetails();
-
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
-
-    Group group = getTestGroupDetails(userDirectory.getId());
-
-    securityService.createGroup(userDirectory.getId(), group);
-
-    User user = getTestUserDetails(userDirectory.getId());
-
-    securityService.createUser(userDirectory.getId(), user, false, false);
-
-    securityService.initiatePasswordReset(user.getUsername(), false, Optional.of("Testing123"));
-
-    securityService.resetPassword(user.getUsername(), "New Password", "Testing123" );
-
-    securityService.authenticate(user.getUsername(), "New Password");
-
-  }
-
-  /**
    * Test the functionality to add a user to a group.
    */
   @Test
@@ -870,6 +843,34 @@ public class SecurityServiceTest
 
     compareOrganizations(organization, retrievedOrganization);
 
+    UserDirectory additionalUserDirectory = getTestUserDirectoryDetails();
+
+    securityService.createUserDirectory(additionalUserDirectory);
+
+    List<UserDirectorySummary> retrievedUserDirectorySummaries =
+        securityService.getUserDirectorySummariesForOrganization(organization.getId());
+
+    assertEquals("The correct number of user directory summaries was not retrieved", 1,
+        retrievedUserDirectorySummaries.size());
+
+    securityService.addUserDirectoryToOrganization(organization.getId(),
+        additionalUserDirectory.getId());
+
+    retrievedUserDirectorySummaries = securityService.getUserDirectorySummariesForOrganization(
+        organization.getId());
+
+    assertEquals("The correct number of user directory summaries was not retrieved", 2,
+        retrievedUserDirectorySummaries.size());
+
+    securityService.removeUserDirectoryFromOrganization(organization.getId(),
+        additionalUserDirectory.getId());
+
+    retrievedUserDirectorySummaries = securityService.getUserDirectorySummariesForOrganization(
+        organization.getId());
+
+    assertEquals("The correct number of user directory summaries was not retrieved", 1,
+        retrievedUserDirectorySummaries.size());
+
     securityService.deleteOrganization(organization.getId());
 
     try
@@ -880,6 +881,33 @@ public class SecurityServiceTest
           + "deleted");
     }
     catch (OrganizationNotFoundException ignored) {}
+  }
+
+  /**
+   * Test the password reset functionality.
+   */
+  @Test
+  public void passwordResetTest()
+    throws Exception
+  {
+    Organization organization = getTestOrganizationDetails();
+
+    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+
+    Group group = getTestGroupDetails(userDirectory.getId());
+
+    securityService.createGroup(userDirectory.getId(), group);
+
+    User user = getTestUserDetails(userDirectory.getId());
+
+    securityService.createUser(userDirectory.getId(), user, false, false);
+
+    securityService.initiatePasswordReset(user.getUsername(), false, "Testing123");
+
+    securityService.resetPassword(user.getUsername(), "New Password", "Testing123");
+
+    securityService.authenticate(user.getUsername(), "New Password");
+
   }
 
   /**

@@ -83,7 +83,8 @@ export class SecurityService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
@@ -140,7 +141,8 @@ export class SecurityService {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    * @param roleCode        The code used to uniquely identify the role.
    *
@@ -196,7 +198,8 @@ export class SecurityService {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId      The ID used to uniquely identify the user directory.
+   * @param userDirectoryId      The Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the user directory.
    * @param username             The username identifying the user.
    * @param newPassword          The new password.
    * @param expirePassword       Expire the user's password?
@@ -480,7 +483,8 @@ export class SecurityService {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    *
    * @return True if the group was deleted or false otherwise.
@@ -527,7 +531,8 @@ export class SecurityService {
   /**
    * Delete the organization.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
    *
    * @return True if the organization was deleted or false otherwise.
    */
@@ -563,7 +568,8 @@ export class SecurityService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param username        The username identifying the user.
    *
    * @return True if the user was deleted or false otherwise.
@@ -605,7 +611,8 @@ export class SecurityService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return True if the user directory was deleted or false otherwise.
    */
@@ -641,7 +648,8 @@ export class SecurityService {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    *
    * @return The group.
@@ -682,7 +690,8 @@ export class SecurityService {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The group names.
    */
@@ -719,7 +728,8 @@ export class SecurityService {
   /**
    * Retrieve the names identifying the groups the user is a member of.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param username        The username identifying the user.
    *
    * @return The names identifying the groups the user is a member of.
@@ -761,7 +771,8 @@ export class SecurityService {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param filter          The optional filter to apply to the groups.
    * @param sortDirection   The optional sort direction to apply to the groups.
    * @param pageIndex       The optional page index.
@@ -826,7 +837,8 @@ export class SecurityService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
    *
    * @return The organization.
    */
@@ -861,7 +873,8 @@ export class SecurityService {
   /**
    * Retrieve the name of the organization.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
    *
    * @return The name of the organization.
    */
@@ -896,7 +909,8 @@ export class SecurityService {
   /**
    * Retrieve the members for the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    * @param filter          The optional filter to apply to the group members.
    * @param sortDirection   The optional sort direction to apply to the group members.
@@ -1026,7 +1040,8 @@ export class SecurityService {
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The organizations the user directory is associated with.
    */
@@ -1062,7 +1077,8 @@ export class SecurityService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    *
    * @return The codes for the roles that have been assigned to the group.
@@ -1131,7 +1147,8 @@ export class SecurityService {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    *
    * @return The roles that have been assigned to the group.
@@ -1174,7 +1191,8 @@ export class SecurityService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param username        The username identifying the user.
    *
    * @return The user.
@@ -1215,7 +1233,8 @@ export class SecurityService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The user directory.
    */
@@ -1251,7 +1270,8 @@ export class SecurityService {
   /**
    * Retrieve the capabilities for the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The capabilities for the user directory.
    */
@@ -1287,7 +1307,8 @@ export class SecurityService {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The name of the user directory.
    */
@@ -1323,7 +1344,8 @@ export class SecurityService {
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId The ID used to uniquely identify the organization.
+   * @param organizationId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       organization.
    *
    * @return The summaries for the user directories the organization is associated with.
    */
@@ -1359,7 +1381,8 @@ export class SecurityService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    *
    * @return The user directory type for the user directory.
    */
@@ -1421,7 +1444,8 @@ export class SecurityService {
   /**
    * Retrieve the full name for the user.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param username        The username identifying the user.
    *
    * @return The full name for the user.
@@ -1463,7 +1487,8 @@ export class SecurityService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by last name.
    * @param sortDirection   The optional sort direction to apply to the users.
@@ -1591,7 +1616,8 @@ export class SecurityService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
@@ -1642,7 +1668,8 @@ export class SecurityService {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groupName       The name identifying the group.
    * @param roleCode        The code used to uniquely identify the role.
    *

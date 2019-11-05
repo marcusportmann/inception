@@ -20,7 +20,7 @@ CREATE TABLE sms.sms (
 
 CREATE INDEX sms_mobile_number_ix ON sms.sms(mobile_number);
 
-COMMENT ON COLUMN sms.sms.id IS 'The ID used to uniquely identify the SMS';
+COMMENT ON COLUMN sms.sms.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the SMS';
 
 COMMENT ON COLUMN sms.sms.mobile_number IS 'The mobile number to send the SMS to';
 

@@ -39,15 +39,6 @@ import java.util.UUID;
  */
 public interface GroupRepository extends JpaRepository<Group, UUID>
 {
-  @Query(
-    "select distinct f.code from Group g join g.roles as r join r.functions as f where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
-  List<String> getFunctionCodesByUserDirectoryIdAndGroupNames(@Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
-
-  @Query(
-    "select distinct r.code from Group g join g.roles as r where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
-  List<String> getRoleCodesByUserDirectoryIdAndGroupNames(@Param("userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
-
-
   @Modifying
   @Query(value = "insert into security.role_to_group_map(role_code, group_id) "
       + "values (:roleCode, :groupId)",
@@ -72,8 +63,8 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
   long countFilteredUsernamesForGroup(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "groupId") UUID groupId, @Param("filter") String filter);
 
-  @Query(value = "select count(role_code) from security.role_to_group_map rtgm where "
-      + "rtgm.role_code = :roleCode and rtgm.group_id = :groupId",
+  @Query(value = "select count(role_code) from security.role_to_group_map where "
+      + "role_code = :roleCode and group_id = :groupId",
       nativeQuery = true)
   long countGroupRole(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
 
@@ -108,6 +99,11 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
   List<String> getFilteredUsernamesForGroup(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "groupId") UUID groupId, @Param("filter") String filter, Pageable pageable);
 
+  @Query(
+      "select distinct f.code from Group g join g.roles as r join r.functions as f where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
+  List<String> getFunctionCodesByUserDirectoryIdAndGroupNames(@Param(
+      "userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
+
   @Query("select g.id from Group g where g.userDirectoryId = :userDirectoryId and "
       + "lower(g.name) like lower(:name)")
   Optional<UUID> getIdByUserDirectoryIdAndNameIgnoreCase(@Param(
@@ -118,6 +114,11 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
 
   @Query("select r.code from Group g join g.roles as r where g.id = :groupId")
   List<String> getRoleCodesByGroupId(@Param("groupId") UUID groupId);
+
+  @Query(
+      "select distinct r.code from Group g join g.roles as r where g.userDirectoryId = :userDirectoryId and lower(g.name) in :groupNames")
+  List<String> getRoleCodesByUserDirectoryIdAndGroupNames(@Param(
+      "userDirectoryId") UUID userDirectoryId, @Param("groupNames") List<String> groupNames);
 
   @Query("select r from Group g join g.roles as r where g.id = :groupId")
   List<Role> getRolesByGroupId(@Param("groupId") UUID groupId);
@@ -133,19 +134,14 @@ public interface GroupRepository extends JpaRepository<Group, UUID>
       "groupId") UUID groupId, Pageable pageable);
 
   @Modifying
+  @Query(value = "delete from security.role_to_group_map "
+      + "where group_id=:groupId and role_code = :roleCode",
+      nativeQuery = true)
+  int removeRoleFromGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
+
+  @Modifying
   @Query(value = "delete from security.user_to_group_map "
       + "where group_id=:groupId and user_id = :userId",
       nativeQuery = true)
   void removeUserFromGroup(@Param("groupId") UUID groupId, @Param("userId") UUID userId);
-
-
-
-  @Modifying
-  @Query(value = "delete from security.role_to_group_map "
-    + "where group_id=:groupId and role_code = :roleCode",
-    nativeQuery = true)
-  int removeRoleFromGroup(@Param("groupId") UUID groupId, @Param("roleCode") String roleCode);
-
-
-
 }

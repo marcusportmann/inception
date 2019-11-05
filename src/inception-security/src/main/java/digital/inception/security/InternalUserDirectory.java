@@ -106,7 +106,8 @@ public class InternalUserDirectory extends UserDirectoryBase
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository

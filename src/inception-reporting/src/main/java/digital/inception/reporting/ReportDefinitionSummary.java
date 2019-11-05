@@ -63,9 +63,10 @@ public class ReportDefinitionSummary
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -94,7 +95,8 @@ public class ReportDefinitionSummary
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id   the ID used to uniquely identify the report definition
+   * @param id   the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *             definition
    * @param name the name of the report definition
    */
   ReportDefinitionSummary(UUID id, String name)
@@ -135,9 +137,11 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *         definition
    */
   public UUID getId()
   {

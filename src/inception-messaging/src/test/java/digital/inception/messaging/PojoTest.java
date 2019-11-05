@@ -40,33 +40,33 @@ import java.util.UUID;
  */
 public class PojoTest
 {
-  private static final UUID MESSAGE_ID = UUID.randomUUID();
-  private static final String USERNAME = "Administrator";
-  private static final UUID DEVICE_ID = UUID.randomUUID();
-  private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
-  private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
-  private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
-  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
-  private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
-  private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
-  private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
-  private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
-  private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
-  private static final Integer SEND_ATTEMPTS = 1;
-  private static final Integer PROCESS_ATTEMPTS = 2;
   private static final Integer DOWNLOAD_ATTEMPTS = 3;
   private static final String LOCK_NAME = "Lock Name";
-  private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
+  private static final String MESSAGE_CHECKSUM = "MessageChecksum";
   private static final String MESSAGE_DATA_HASH = "DataHash";
-  private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
+  private static final UUID MESSAGE_ID = UUID.randomUUID();
+  private static final int PART_NO = 7;
+  private static final Integer PROCESS_ATTEMPTS = 2;
+  private static final Integer SEND_ATTEMPTS = 1;
+  private static final int TOTAL_PARTS = 8;
+  private static final String USERNAME = "Administrator";
+  private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
+  private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
+  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
+  private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
+  private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
+  private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
+  private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;
+  private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
+  private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
   private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
   private static final String MESSAGE_ENCRYPTION_IV = Base64Util.encodeBytes(
       CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
-  private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
-  private static final int PART_NO = 7;
-  private static final int TOTAL_PARTS = 8;
-  private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;
-  private static final String MESSAGE_CHECKSUM = "MessageChecksum";
+  private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
+  private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
+  private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
+  private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
+  private static final UUID DEVICE_ID = UUID.randomUUID();
 
   /**
    * Test the <code>MessagePart</code> POJO.
@@ -75,9 +75,9 @@ public class PojoTest
   public void messagePartTest()
   {
     MessagePart messagePart = new MessagePart(MESSAGE_PART_ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS,
-        DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_ID, USERNAME,
-        DEVICE_ID, MESSAGE_TYPE_ID, MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED,
-        MESSAGE_DATA_HASH, MESSAGE_ENCRYPTION_IV, MESSAGE_CHECKSUM, LOCK_NAME, MESSAGE_PART_DATA);
+        DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
+        MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA_HASH,
+        MESSAGE_ENCRYPTION_IV, MESSAGE_CHECKSUM, LOCK_NAME, MESSAGE_PART_DATA);
 
     assertEquals(MESSAGE_PART_ID, messagePart.getId());
     assertEquals(PART_NO, messagePart.getPartNo());

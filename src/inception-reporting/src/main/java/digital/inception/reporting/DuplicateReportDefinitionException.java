@@ -53,7 +53,8 @@ public class DuplicateReportDefinitionException extends ServiceException
   /**
    * Constructs a new <code>DuplicateReportDefinitionException</code>.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   public DuplicateReportDefinitionException(UUID reportDefinitionId)
   {

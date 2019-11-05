@@ -27,6 +27,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.Serializable;
+
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -48,6 +50,7 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
 public class GroupRole
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -72,10 +75,11 @@ public class GroupRole
   private String roleCode;
 
   /**
-   * The ID used to uniquely identify the user directory the group is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
+   * is associated with.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory the group is associated with",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -90,8 +94,8 @@ public class GroupRole
   /**
    * Constructs a new <code>GroupRole</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the group is
-   *                        associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
    * @param groupName       the name identifying the group
    * @param roleCode        the code used to uniquely identify the role
    */
@@ -123,9 +127,11 @@ public class GroupRole
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory the group is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
    *
-   * @return the ID used to uniquely identify the user directory the group is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the group is associated with
    */
   public UUID getUserDirectoryId()
   {
@@ -153,10 +159,11 @@ public class GroupRole
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory the group is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * group is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the group is
-   *                        associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {

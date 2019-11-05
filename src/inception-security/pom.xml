@@ -16,6 +16,10 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-cache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-mail</artifactId>
     </dependency>
     <dependency>

@@ -23,6 +23,7 @@ import digital.inception.scheduler.Job;
 import digital.inception.scheduler.JobParameter;
 import digital.inception.scheduler.JobStatus;
 import digital.inception.test.TestClassRunner;
+import digital.inception.test.TestConfiguration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +50,7 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { SchedulerTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 public class SchedulerServiceTest
@@ -132,13 +133,13 @@ public class SchedulerServiceTest
 
     long numberOfJobs = schedulerService.getNumberOfJobs();
 
-    assertEquals("The correct number of jobs was not retrieved",
-         beforeRetrievedJobs.size() + 1, numberOfJobs);
+    assertEquals("The correct number of jobs was not retrieved", beforeRetrievedJobs.size() + 1,
+        numberOfJobs);
 
     List<Job> afterRetrievedJobs = schedulerService.getJobs();
 
-    assertEquals("The correct number of jobs was not retrieved",
-         beforeRetrievedJobs.size() + 1, afterRetrievedJobs.size());
+    assertEquals("The correct number of jobs was not retrieved", beforeRetrievedJobs.size() + 1,
+        afterRetrievedJobs.size());
 
     boolean foundJob = false;
 

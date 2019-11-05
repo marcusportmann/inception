@@ -54,7 +54,8 @@ public interface IReportingService
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    *
    * @return the PDF data for the report
@@ -65,7 +66,8 @@ public interface IReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param connection         the database connection used to retrieve the report data
    *
@@ -78,7 +80,8 @@ public interface IReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param document           the XML document containing the report data
    *
@@ -90,7 +93,8 @@ public interface IReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   void deleteReportDefinition(UUID reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException;
@@ -113,7 +117,8 @@ public interface IReportingService
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the report definition
    */
@@ -131,7 +136,8 @@ public interface IReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the summary for the report definition
    */
@@ -149,7 +155,8 @@ public interface IReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */

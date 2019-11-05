@@ -19,6 +19,7 @@ package digital.inception.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestClassRunner;
+import digital.inception.test.TestConfiguration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { MessagingTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)

@@ -24,7 +24,7 @@ import {OrganizationStatus} from './organization-status';
 export class Organization {
 
   /**
-   * The ID used to uniquely identify the organization.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
   id: string;
 
@@ -41,7 +41,8 @@ export class Organization {
   /**
    * Constructs a new Organization.
    *
-   * @param id     The ID used to uniquely identify the organization.
+   * @param id     The Universally Unique Identifier (UUID) used to uniquely identify the
+   *               organization.
    * @param name   The name of the organization.
    * @param status The status for the organization.
    */

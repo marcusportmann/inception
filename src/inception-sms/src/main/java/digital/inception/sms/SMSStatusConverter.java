@@ -16,6 +16,8 @@
 
 package digital.inception.sms;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 

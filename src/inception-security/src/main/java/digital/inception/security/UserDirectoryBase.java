@@ -55,7 +55,7 @@ public abstract class UserDirectoryBase
   private RoleRepository roleRepository;
 
   /**
-   * The ID used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   private UUID userDirectoryId;
 
@@ -67,7 +67,8 @@ public abstract class UserDirectoryBase
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    * @param parameters      the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository  the User Repository
@@ -114,9 +115,9 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @return the ID used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
   public UUID getUserDirectoryId()
   {

@@ -20,6 +20,7 @@ package digital.inception.cache;
 
 import com.hazelcast.config.*;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
@@ -31,15 +32,17 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 /**
- * The <code>CacheConfiguration</code> class provides access to the Hazelcast cache configuration.
+ * The <code>HazelcastServerCacheConfiguration</code> class provides the Hazelcast server
+ * cache configuration.
  *
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(value = "application.cache.enabled", havingValue = "true")
+@ConditionalOnClass(name = "com.hazelcast.config.Config")
+@ConditionalOnProperty(value = "application.hazelcast.server.enabled", havingValue = "true")
 @EnableCaching
-@ConfigurationProperties("application.cache")
-public class CacheConfiguration
+@ConfigurationProperties("application.hazelcast.server")
+public class HazelcastServerCacheConfiguration
 {
   /**
    * The distributed in-memory caches.
@@ -77,8 +80,8 @@ public class CacheConfiguration
    * @return the Hazelcast configuration
    */
   @SuppressWarnings("deprecation")
-  @Bean
-  public Config hazelCastConfig()
+  @Bean(name = "hazelcastConfig")
+  public Config hazelcastConfig()
   {
     Config config = new Config();
 
@@ -154,6 +157,8 @@ public class CacheConfiguration
 
       mapConfig.setReadBackupData(cacheConfig.getReadBackupData());
     }
+
+    // HazelcastInstanceFactory
 
     return config;
   }

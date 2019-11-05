@@ -16,7 +16,7 @@ CREATE TABLE security.organizations (
 
 CREATE INDEX organizations_name_ix ON security.organizations(name);
 
-COMMENT ON COLUMN security.organizations.id IS 'The ID used to uniquely identify the organization';
+COMMENT ON COLUMN security.organizations.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 COMMENT ON COLUMN security.organizations.name IS 'The name of the organization';
 
@@ -50,7 +50,7 @@ CREATE TABLE security.user_directories (
 
 CREATE INDEX user_directories_name_ix ON security.user_directories(name);
 
-COMMENT ON COLUMN security.user_directories.id IS 'The ID used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directories.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
 COMMENT ON COLUMN security.user_directories.type IS 'The code used to uniquely identify the user directory type';
 
@@ -72,9 +72,9 @@ CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON security
 
 CREATE INDEX user_directory_to_organization_map_organization_id_ix ON security.user_directory_to_organization_map(organization_id);
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The ID used to uniquely identify the user directory';
+COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory';
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The ID used to uniquely identify the organization';
+COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the organization';
 
 
 CREATE TABLE security.users (
@@ -99,9 +99,9 @@ CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
 CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-COMMENT ON COLUMN security.users.id IS 'The ID used to uniquely identify the user';
+COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.users.user_directory_id IS 'The ID used to uniquely identify the user directory the user is associated with';
+COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with';
 
 COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
@@ -137,7 +137,7 @@ CREATE INDEX users_password_history_user_id_ix ON security.users_password_histor
 
 CREATE INDEX users_password_history_changed_ix ON security.users_password_history(changed);
 
-COMMENT ON COLUMN security.users_password_history.user_id IS 'The ID used to uniquely identify the user';
+COMMENT ON COLUMN security.users_password_history.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
 COMMENT ON COLUMN security.users_password_history.changed IS 'When the password change took place for the user';
 
@@ -158,9 +158,9 @@ CREATE INDEX groups_user_directory_id_ix ON security.groups(user_directory_id);
 
 CREATE UNIQUE INDEX groups_user_directory_id_name_ix ON security.groups(user_directory_id, name);
 
-COMMENT ON COLUMN security.groups.id IS 'The ID used to uniquely identify the group';
+COMMENT ON COLUMN security.groups.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
-COMMENT ON COLUMN security.groups.user_directory_id IS 'The ID used to uniquely identify the user directory the group is associated with';
+COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with';
 
 COMMENT ON COLUMN security.groups.name IS 'The name for the group';
 
@@ -180,9 +180,9 @@ CREATE INDEX user_to_group_map_user_id_ix ON security.user_to_group_map(user_id)
 
 CREATE INDEX user_to_group_map_group_id_ix ON security.user_to_group_map(group_id);
 
-COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The ID used to uniquely identify the user';
+COMMENT ON COLUMN security.user_to_group_map.user_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the user';
 
-COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The ID used to uniquely identify the group';
+COMMENT ON COLUMN security.user_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 CREATE TABLE security.functions (
@@ -248,7 +248,7 @@ CREATE INDEX role_to_group_map_group_id_ix ON security.role_to_group_map(group_i
 
 COMMENT ON COLUMN security.role_to_group_map.role_code IS 'The code used to uniquely identify the role';
 
-COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The ID used to uniquely identify the group';
+COMMENT ON COLUMN security.role_to_group_map.group_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the group';
 
 
 CREATE TABLE security.password_resets (
@@ -259,8 +259,7 @@ CREATE TABLE security.password_resets (
   completed          TIMESTAMP,
   expired            TIMESTAMP,
 
-  PRIMARY KEY (username, requested),
-  CONSTRAINT password_resets_user_fk FOREIGN KEY (username) REFERENCES security.users(username) ON DELETE CASCADE
+  PRIMARY KEY (username, requested)
 );
 
 CREATE INDEX password_resets_username_ix ON security.password_resets(username);

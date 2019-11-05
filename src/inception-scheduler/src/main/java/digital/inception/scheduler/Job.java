@@ -89,9 +89,11 @@ public class Job
   private Integer executionAttempts;
 
   /**
-   * The ID used to uniquely identify the job.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the job.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the job", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -195,7 +197,8 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the ID used to uniquely identify the job
+   * @param id                the Universally Unique Identifier (UUID) used to uniquely identify
+   *                          the job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
@@ -277,9 +280,9 @@ public class Job
   }
 
   /**
-   * Returns the ID used to uniquely identify the job.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
    *
-   * @return the ID used to uniquely identify the job
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   public UUID getId()
   {
@@ -427,9 +430,9 @@ public class Job
   }
 
   /**
-   * Set the ID used to uniquely identify the job.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job.
    *
-   * @param id the ID used to uniquely identify the scheduled job
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the scheduled job
    */
   public void setId(UUID id)
   {

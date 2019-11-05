@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+
+  <changeSet id="inception-codes-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Codes - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema codes
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema codes
+    </sql>
+
+    <createTable schemaName="codes" tableName="code_categories" remarks="Code Categories">
+      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code category"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the code category"/>
+      <column name="data" type="clob" remarks="The code data for the code category"/>
+      <column name="updated" type="timestamp" remarks="The date and time the code category was last updated"/>
+    </createTable>
+    <addPrimaryKey schemaName="codes" tableName="code_categories" columnNames="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="name"/>
+
+    <createTable schemaName="codes" tableName="codes" remarks="Codes">
+      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code"/>
+      <column name="code_category_id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code category the code is associated with"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the code"/>
+      <column name="value" type="nvarchar(4000)" remarks="The value for the code"/>
+    </createTable>
+    <addPrimaryKey schemaName="codes" tableName="codes" columnNames="id,code_category_id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="code_category_id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="name"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="value"/>
+    <addForeignKeyConstraint constraintName="codes_code_category_fk" baseTableSchemaName="codes" baseTableName="codes" baseColumnNames="code_category_id" referencedTableSchemaName="codes" referencedTableName="code_categories" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="codes_code_category_id_ix" schemaName="codes" tableName="codes">
+      <column name="code_category_id"/>
+    </createIndex>
+  </changeSet>
+
+
+  <changeSet id="inception-configuration-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Configuration - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema configuration
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema configuration
+    </sql>
+
+    <createTable schemaName="configuration" tableName="configuration" remarks="Configuration">
+      <column name="key" type="nvarchar(100)" remarks="The key used to uniquely identify the configuration value"/>
+      <column name="value" type="nvarchar(4000)" remarks="The value for the configuration value"/>
+      <column name="description" type="nvarchar(100)" remarks="The description for the configuration value"/>
+    </createTable>
+    <addPrimaryKey schemaName="configuration" tableName="configuration" columnNames="key"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration" columnName="key"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration" columnName="value"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration" columnName="description"/>
+  </changeSet>
+
+
+  <changeSet id="inception-error-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Error - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema error
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema error
+    </sql>
+
+    <createTable schemaName="error" tableName="error_reports" remarks="Error Reports">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the error report"/>
+      <column name="application_id" type="nvarchar(200)" remarks="The ID used to uniquely identify the application that generated the error report"/>
+      <column name="application_version" type="nvarchar(50)" remarks="The version of the application that generated the error report"/>
+      <column name="description" type="nvarchar(4000)" remarks="The description of the error"/>
+      <column name="detail" type="clob" remarks="The error detail e.g. a stack trace"/>
+      <column name="created" type="timestamp" remarks="The date and time the error report was created"/>
+      <column name="who" type="nvarchar(100)" remarks="The optional username identifying the user associated with the error report"/>
+      <column name="device_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from"/>
+      <column name="feedback" type="nvarchar(4000)" remarks="The optional feedback provided by the user for the error"/>
+      <column name="data" type="clob" remarks="The optional base-64 encoded data associated with the error report"/>
+    </createTable>
+    <addPrimaryKey schemaName="error" tableName="error_reports" columnNames="id"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="id"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="application_id"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="application_version"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="description"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="detail"/>
+    <addNotNullConstraint schemaName="error" tableName="error_reports" columnName="created"/>
+    <createIndex indexName="error_reports_application_id_ix" schemaName="error" tableName="error_reports">
+      <column name="application_id"/>
+    </createIndex>
+    <createIndex indexName="error_reports_created_ix" schemaName="error" tableName="error_reports">
+      <column name="created"/>
+    </createIndex>
+    <createIndex indexName="error_reports_who_ix" schemaName="error" tableName="error_reports">
+      <column name="who"/>
+    </createIndex>
+  </changeSet>
+
+
+  <changeSet id="inception-mail-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Mail - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema mail
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema mail
+    </sql>
+
+    <createTable schemaName="mail" tableName="mail_templates" remarks="Mail Templates">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the mail template"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the mail template"/>
+      <column name="content_type" type="int" remarks="The content type for the mail template"/>
+      <column name="template" type="${blob_type}" remarks="The Apache FreeMarker template for the mail template"/>
+    </createTable>
+    <addPrimaryKey schemaName="mail" tableName="mail_templates" columnNames="id"/>
+    <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="id"/>
+    <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="name"/>
+    <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="content_type"/>
+  </changeSet>
+
+
+  <changeSet id="inception-messaging-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Messaging - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema messaging
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema messaging
+    </sql>
+
+    <createTable schemaName="messaging" tableName="message_types" remarks="Message Types">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the message type"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_types" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_types" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_types" columnName="name"/>
+
+    <createTable schemaName="messaging" tableName="message_statuses" remarks="Message Statuses">
+      <column name="code" type="int" remarks="The code identifying the message status"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the message status"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_statuses" columnNames="code"/>
+
+    <createTable schemaName="messaging" tableName="messages" remarks="Messages">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message"/>
+      <column name="username" type="nvarchar(100)" remarks="The username identifying the user associated with the message"/>
+      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from"/>
+      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of message"/>
+      <column name="correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
+      <column name="priority" type="int" remarks="The message priority"/>
+      <column name="status" type="int" remarks="The message status e.g. Initialised, QueuedForSending, etc"/>
+      <column name="created" type="timestamp" remarks="The date and time the message was created"/>
+      <column name="data_hash" type="nvarchar(100)" remarks="The hash of the unencrypted data for the message if the message is encrypted"/>
+      <column name="encryption_iv" type="nvarchar(100)" remarks="The base-64 encoded initialisation vector for the encryption scheme for the message"/>
+      <column name="send_attempts" type="int" remarks="The number of times that the sending of the message was attempted"/>
+      <column name="process_attempts" type="int" remarks="The number of times that the processing of the message was attempted"/>
+      <column name="download_attempts" type="int" remarks="The number of times that an attempt was made to download the message"/>
+      <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the message for processing"/>
+      <column name="last_processed" type="timestamp" remarks="The date and time the last attempt was made to process the message"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="messages" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="priority"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="status"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="created"/>
+    <addForeignKeyConstraint constraintName="messages_message_type_fk" baseTableSchemaName="messaging" baseTableName="messages" baseColumnNames="type_id" referencedTableSchemaName="messaging" referencedTableName="message_types" referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="messages_message_status_fk" baseTableSchemaName="messaging" baseTableName="messages" baseColumnNames="status" referencedTableSchemaName="messaging" referencedTableName="message_statuses" referencedColumnNames="code"/>
+    <createIndex indexName="messages_username_ix" schemaName="messaging" tableName="messages">
+      <column name="username"/>
+    </createIndex>
+    <createIndex indexName="messages_device_id_ix" schemaName="messaging" tableName="messages">
+      <column name="device_id"/>
+    </createIndex>
+    <createIndex indexName="messages_type_id_ix" schemaName="messaging" tableName="messages">
+      <column name="type_id"/>
+    </createIndex>
+    <createIndex indexName="messages_priority_ix" schemaName="messaging" tableName="messages">
+      <column name="priority"/>
+    </createIndex>
+    <createIndex indexName="messages_status_ix" schemaName="messaging" tableName="messages">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="messages_lock_name_ix" schemaName="messaging" tableName="messages">
+      <column name="lock_name"/>
+    </createIndex>
+
+    <createTable schemaName="messaging" tableName="message_parts" remarks="Message Parts">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message part"/>
+      <column name="part_no" type="int" remarks="The number of the message part in the set of message parts for the original message"/>
+      <column name="total_parts" type="int" remarks="The total number of parts in the set of message parts for the original message"/>
+      <column name="send_attempts" type="int" remarks="The number of times that the sending of the message part was attempted"/>
+      <column name="download_attempts" type="int" remarks="The number of times that an attempt was made to download the message part"/>
+      <column name="status" type="int" remarks="The message part status e.g. Initialised, QueuedForSending, etc"/>
+      <column name="message_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the original message"/>
+      <column name="message_username" type="nvarchar(100)" remarks="The username identifying the user associated with the original message"/>
+      <column name="message_device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from"/>
+      <column name="message_type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message"/>
+      <column name="message_correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the original message"/>
+      <column name="message_priority" type="int" remarks="The priority for the original message"/>
+      <column name="message_created" type="timestamp" remarks="The date and time the original message was created"/>
+      <column name="message_data_hash" type="nvarchar(100)" remarks="The hash of the unencrypted data for the original message if the message was encrypted"/>
+      <column name="message_encryption_iv" type="nvarchar(100)" remarks="The base-64 encoded initialisation vector for the encryption scheme for the original message"/>
+      <column name="message_checksum" type="nvarchar(100)" remarks="The checksum for the original message"/>
+      <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the message part for processing"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message part"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_parts" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="part_no"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="total_parts"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="status"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_priority"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_created"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_checksum"/>
+    <addForeignKeyConstraint constraintName="message_parts_message_type_fk" baseTableSchemaName="messaging" baseTableName="message_parts" baseColumnNames="message_type_id" referencedTableSchemaName="messaging" referencedTableName="message_types" referencedColumnNames="id"/>
+    <createIndex indexName="message_parts_status_ix" schemaName="messaging" tableName="message_parts">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_id_ix" schemaName="messaging" tableName="message_parts">
+      <column name="message_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_device_id_ix" schemaName="messaging" tableName="message_parts">
+      <column name="message_device_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_type_id_ix" schemaName="messaging" tableName="message_parts">
+      <column name="message_type_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_lock_name_ix" schemaName="messaging" tableName="message_parts">
+      <column name="lock_name"/>
+    </createIndex>
+    
+    <createTable schemaName="messaging" tableName="archived_messages" remarks="Archived Messages">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message"/>
+      <column name="username" type="nvarchar(100)" remarks="The username identifying the user associated with the message"/>
+      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from"/>
+      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of message"/>
+      <column name="correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
+      <column name="created" type="timestamp" remarks="The date and time the message was created"/>
+      <column name="archived" type="timestamp" remarks="The date and time the message was archived"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="archived_messages" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="created"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="archived"/>
+
+    <addForeignKeyConstraint constraintName="archived_messages_message_type_fk" baseTableSchemaName="messaging" baseTableName="archived_messages" baseColumnNames="type_id" referencedTableSchemaName="messaging" referencedTableName="message_types" referencedColumnNames="id"/>
+    <createIndex indexName="archived_messages_username_ix" schemaName="messaging" tableName="archived_messages">
+      <column name="username"/>
+    </createIndex>
+    <createIndex indexName="archived_messages_device_id_ix" schemaName="messaging" tableName="archived_messages">
+      <column name="device_id"/>
+    </createIndex>
+    <createIndex indexName="archived_messages_type_id_ix" schemaName="messaging" tableName="archived_messages">
+      <column name="type_id"/>
+    </createIndex>
+
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="d21fb54e-5c5b-49e8-881f-ce00c6ced1a3"/>
+      <column name="name" value="AuthenticateRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="82223035-1726-407f-8703-3977708e792c"/>
+      <column name="name" value="AuthenticateResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="cc005e6a-b01b-48eb-98a0-026297be69f3"/>
+      <column name="name" value="CheckUserExistsRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a38bd55e-3470-46f1-a96a-a6b08a9adc63"/>
+      <column name="name" value="CheckUserExistsResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="94d60eb6-a062-492d-b5e7-9fb1f05cf088"/>
+      <column name="name" value="GetCodeCategoryRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="0336b544-91e5-4eb9-81db-3dd94e116c92"/>
+      <column name="name" value="GetCodeCategoryResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a589dc87-2328-4a9b-bdb6-970e55ca2323"/>
+      <column name="name" value="TestRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a3bad7ba-f9d4-4403-b54a-cb1f335ebbad"/>
+      <column name="name" value="TestResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="e9918051-8ebc-48f1-bad7-13c59b550e1a"/>
+      <column name="name" value="AnotherTestRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a714a9c6-2914-4498-ab59-64be9991bf37"/>
+      <column name="name" value="AnotherTestResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="ff638c33-b4f1-4e79-804c-9560da2543d6"/>
+      <column name="name" value="SubmitErrorReportRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="8be50cfa-2fb1-4634-9bfa-d01e77eaf766"/>
+      <column name="name" value="SubmitErrorReportResponse"/>
+    </insert>
+
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="0"/>
+      <column name="name" value="Initialised"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="1"/>
+      <column name="name" value="QueuedForSending"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="2"/>
+      <column name="name" value="QueuedForProcessing"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="3"/>
+      <column name="name" value="Aborted"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="4"/>
+      <column name="name" value="Failed"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="5"/>
+      <column name="name" value="Processing"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="6"/>
+      <column name="name" value="Sending"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="7"/>
+      <column name="name" value="QueuedForDownload"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="8"/>
+      <column name="name" value="Downloading"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="9"/>
+      <column name="name" value="Processed"/>
+    </insert>
+  </changeSet>
+
+
+  <changeSet id="inception-reporting-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Reporting - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema reporting
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema reporting
+    </sql>
+
+    <createTable schemaName="reporting" tableName="report_definitions" remarks="Report Definitions">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the report definition"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the report definition"/>
+      <column name="template" type="${blob_type}" remarks="The JasperReports template for the report definition"/>
+    </createTable>
+    <addPrimaryKey schemaName="reporting" tableName="report_definitions" columnNames="id"/>
+    <addNotNullConstraint schemaName="reporting" tableName="report_definitions" columnName="id"/>
+    <addNotNullConstraint schemaName="reporting" tableName="report_definitions" columnName="name"/>
+    <addNotNullConstraint schemaName="reporting" tableName="report_definitions" columnName="template"/>
+  </changeSet>
+
+
+  <changeSet id="inception-scheduler-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Scheduler - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema scheduler
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema scheduler
+    </sql>
+
+    <createTable schemaName="scheduler" tableName="jobs" remarks="Jobs">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the job"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the job"/>
+      <column name="scheduling_pattern" type="nvarchar(100)" remarks="The cron-style scheduling pattern for the job"/>
+      <column name="job_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the job"/>
+      <column name="enabled" type="boolean" remarks="Is the job enabled for execution"/>
+      <column name="status" type="int" remarks="The status of the job"/>
+      <column name="execution_attempts" type="int" remarks="The number of times the current execution of the job has been attempted"/>
+      <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the job for execution"/>
+      <column name="last_executed" type="timestamp" remarks="The date and time the job was last executed"/>
+      <column name="next_execution" type="timestamp" remarks="The date and time created the job will next be executed"/>
+    </createTable>
+    <addPrimaryKey schemaName="scheduler" tableName="jobs" columnNames="id"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="id"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="name"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="scheduling_pattern"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="job_class"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="enabled"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="status"/>
+
+    <createTable schemaName="scheduler" tableName="job_parameters" remarks="Job Parameters">
+      <column name="job_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the job"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the job parameter"/>
+      <column name="value" type="nvarchar(4000)" remarks="The value of the job parameter"/>
+    </createTable>
+    <addPrimaryKey schemaName="scheduler" tableName="job_parameters" columnNames="job_id, name"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="job_id"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="name"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="value"/>
+    <addForeignKeyConstraint constraintName="job_parameters_job_fk" baseTableSchemaName="scheduler" baseTableName="job_parameters" baseColumnNames="job_id" referencedTableSchemaName="scheduler" referencedTableName="jobs" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="job_parameters_job_id_ix" schemaName="scheduler" tableName="job_parameters">
+      <column name="job_id"/>
+    </createIndex>
+    <createIndex indexName="job_parameters_name_ix" schemaName="scheduler" tableName="job_parameters">
+      <column name="name"/>
+    </createIndex>
+  </changeSet>
+
+
+  <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Security - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema security
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema security
+    </sql>
+
+    <createTable schemaName="security" tableName="organizations" remarks="Organizations">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the organization"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the organization"/>
+      <column name="status" type="int" remarks="The status for the organization"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="organizations" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="status"/>
+    <createIndex indexName="organizations_name_ix" schemaName="security" tableName="organizations">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_directory_types" remarks="User Directory Types">
+      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the user directory type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory type"/>
+      <column name="user_directory_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the user directory type"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directory_types" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="user_directory_class"/>
+
+    <createTable schemaName="security" tableName="user_directories" remarks="User Directories">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory"/>
+      <column name="type" type="nvarchar(100)" remarks="The code used to uniquely identify the user directory type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
+      <column name="configuration" type="nvarchar(4000)" remarks="The XML configuration data for the user directory"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directories" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="type"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="configuration"/>
+    <addForeignKeyConstraint constraintName="user_directories_user_directory_type_fk" baseTableSchemaName="security" baseTableName="user_directories" baseColumnNames="type" referencedTableSchemaName="security" referencedTableName="user_directory_types" referencedColumnNames="code" deleteCascade="true"/>
+    <createIndex indexName="user_directories_name_ix" schemaName="security" tableName="user_directories">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_directory_to_organization_map" remarks="User Directory To Organization Mappings">
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory"/>
+      <column name="organization_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the organization"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directory_to_organization_map" columnNames="user_directory_id, organization_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_organization_map" columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_organization_map" columnName="organization_id"/>
+    <addForeignKeyConstraint constraintName="user_directory_to_organization_map_user_directory_fk" baseTableSchemaName="security" baseTableName="user_directory_to_organization_map" baseColumnNames="user_directory_id" referencedTableSchemaName="security" referencedTableName="user_directories" referencedColumnNames="id" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="user_directory_to_organization_map_organization_fk" baseTableSchemaName="security" baseTableName="user_directory_to_organization_map" baseColumnNames="organization_id" referencedTableSchemaName="security" referencedTableName="organizations" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="user_directory_to_organization_map_user_directory_id_ix" schemaName="security" tableName="user_directory_to_organization_map">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="user_directory_to_organization_map_organization_id_ix" schemaName="security" tableName="user_directory_to_organization_map">
+      <column name="organization_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="users" remarks="Users">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with"/>
+      <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
+      <column name="status" type="int" remarks="The status for the user"/>
+      <column name="first_name" type="nvarchar(100)" remarks="The first name for the user"/>
+      <column name="last_name" type="nvarchar(100)" remarks="The last name for the user'"/>
+      <column name="phone" type="nvarchar(100)" remarks="The phone number for the user"/>
+      <column name="mobile" type="nvarchar(100)" remarks="The mobile number for the user"/>
+      <column name="email" type="nvarchar(100)" remarks="The e-mail address for the user"/>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
+      <column name="password_attempts" type="int" remarks="The number of failed attempts to authenticate the user"/>
+      <column name="password_expiry" type="timestamp" remarks="The date and time that the user''s password expires"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="users" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="username"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="status"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="first_name" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="last_name" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="phone" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="mobile" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="email" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_attempts" defaultNullValue="0"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_expiry"/>
+    <addForeignKeyConstraint constraintName="users_user_directory_fk" baseTableSchemaName="security" baseTableName="users" baseColumnNames="user_directory_id" referencedTableSchemaName="security" referencedTableName="user_directories" referencedColumnNames="id"/>
+    <createIndex indexName="users_user_directory_id_ix" schemaName="security" tableName="users">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="" schemaName="security" tableName="users" unique="true">
+      <column name="username"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="users_password_history" remarks="User Password History">
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
+      <column name="changed" type="timestamp" remarks="When the password change took place for the user"/>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="users_password_history" columnNames="user_id, changed"/>
+    <addNotNullConstraint schemaName="security" tableName="users_password_history" columnName="user_id"/>
+    <addNotNullConstraint schemaName="security" tableName="users_password_history" columnName="changed"/>
+    <addForeignKeyConstraint constraintName="users_password_history_user_id_fk" baseTableSchemaName="security" baseTableName="users_password_history" baseColumnNames="user_id" referencedTableSchemaName="security" referencedTableName="users" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="users_password_history_user_id_ix" schemaName="security" tableName="users_password_history">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="users_password_history_changed_ix" schemaName="security" tableName="users_password_history">
+      <column name="changed"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="groups" remarks="Groups">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with"/>
+      <column name="name" type="nvarchar(100)" remarks="The name for the group"/>
+      <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="groups" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="name"/>
+    <addForeignKeyConstraint constraintName="groups_user_directory_fk" baseTableSchemaName="security" baseTableName="groups" baseColumnNames="user_directory_id" referencedTableSchemaName="security" referencedTableName="user_directories" referencedColumnNames="id"/>
+    <createIndex indexName="groups_user_directory_id_ix" schemaName="security" tableName="groups">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="groups_user_directory_id_name_ix" schemaName="security" tableName="groups" unique="true">
+      <column name="user_directory_id"/>
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_to_group_map" remarks="User To Group Mappings">
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_to_group_map" columnNames="user_id, group_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_to_group_map" columnName="user_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_to_group_map" columnName="group_id"/>
+    <addForeignKeyConstraint constraintName="user_to_group_map_user_fk" baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="user_id" referencedTableSchemaName="security" referencedTableName="users" referencedColumnNames="id" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="user_to_group_map_group_fk" baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="group_id" referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="user_to_group_map_user_id_ix" schemaName="security" tableName="user_to_group_map">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="user_to_group_map_group_id_ix" schemaName="security" tableName="user_to_group_map">
+      <column name="group_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="functions" remarks="Functions">
+      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the function"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the function"/>
+      <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="functions" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="functions" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="functions" columnName="name"/>
+
+    <createTable schemaName="security" tableName="roles" remarks="Roles">
+      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the role"/>
+      <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="roles" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="roles" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="roles" columnName="name"/>
+
+    <createTable schemaName="security" tableName="function_to_role_map" remarks="Function To Role Mappings">
+      <column name="function_code" type="nvarchar(100)" remarks="The code used to uniquely identify the function"/>
+      <column name="role_code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="function_to_role_map" columnNames="function_code, role_code"/>
+    <addNotNullConstraint schemaName="security" tableName="function_to_role_map" columnName="function_code"/>
+    <addNotNullConstraint schemaName="security" tableName="function_to_role_map" columnName="role_code"/>
+    <addForeignKeyConstraint constraintName="function_to_role_map_function_fk" baseTableSchemaName="security" baseTableName="function_to_role_map" baseColumnNames="function_code" referencedTableSchemaName="security" referencedTableName="functions" referencedColumnNames="code" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="function_to_role_map_role_fk" baseTableSchemaName="security" baseTableName="function_to_role_map" baseColumnNames="role_code" referencedTableSchemaName="security" referencedTableName="roles" referencedColumnNames="code" deleteCascade="true"/>
+    <createIndex indexName="function_to_role_map_function_code_ix" schemaName="security" tableName="function_to_role_map">
+      <column name="function_code"/>
+    </createIndex>
+    <createIndex indexName="function_to_role_map_role_code_ix" schemaName="security" tableName="function_to_role_map">
+      <column name="role_code"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="role_to_group_map" remarks="Role To Group Mappings">
+      <column name="role_code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="role_to_group_map" columnNames="role_code, group_id"/>
+    <addNotNullConstraint schemaName="security" tableName="role_to_group_map" columnName="role_code"/>
+    <addNotNullConstraint schemaName="security" tableName="role_to_group_map" columnName="group_id"/>
+    <addForeignKeyConstraint constraintName="role_to_group_map_role_fk" baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="role_code" referencedTableSchemaName="security" referencedTableName="roles" referencedColumnNames="code" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="role_to_group_map_group_fk" baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="group_id" referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="role_to_group_map_role_code_ix" schemaName="security" tableName="role_to_group_map">
+      <column name="role_code"/>
+    </createIndex>
+    <createIndex indexName="role_to_group_map_group_id_ix" schemaName="security" tableName="role_to_group_map">
+      <column name="group_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="password_resets" remarks="Password Resets">
+      <column name="username" type="nvarchar(100)" remarks="The username for the user associated with the password reset"/>
+      <column name="requested" type="timestamp" remarks="The date and time the password reset was requested"/>
+      <column name="status" type="int" remarks="The status of the password reset"/>
+      <column name="security_code_hash" type="nvarchar(100)" remarks="The security code hash"/>
+      <column name="completed" type="timestamp" remarks="The date and time the password reset was completed"/>
+      <column name="expired" type="timestamp" remarks="The date and time the password reset expired"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="password_resets" columnNames="username, requested"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="username"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="requested"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="status"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="security_code_hash"/>
+    <createIndex indexName="password_resets_username_ix" schemaName="security" tableName="password_resets">
+      <column name="username"/>
+    </createIndex>
+
+    <insert schemaName="security" tableName="organizations">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Administration"/>
+      <column name="status" value="1"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directory_types">
+      <column name="code" value="InternalUserDirectory"/>
+      <column name="name" value="Internal User Directory"/>
+      <column name="user_directory_class" value="digital.inception.security.InternalUserDirectory"/>
+    </insert>
+    <insert schemaName="security" tableName="user_directory_types">
+      <column name="code" value="LDAPUserDirectory"/>
+      <column name="name" value="LDAP User Directory"/>
+      <column name="user_directory_class" value="digital.inception.security.LDAPUserDirectory"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directories">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="InternalUserDirectory"/>
+      <column name="name" value="Administration Internal User Directory"/>
+      <column name="configuration"><![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directory_to_organization_map">
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="organization_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+
+    <insert schemaName="security" tableName="users">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="username" value="administrator"/>
+      <column name="status" value="1"/>
+      <column name="first_name" value="Administrator"/>
+      <column name="last_name" value=""/>
+      <column name="phone" value=""/>
+      <column name="mobile" value=""/>
+      <column name="email" value=""/>
+      <column name="password" value="GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0="/>
+      <column name="password_attempts" value="0"/>
+      <column name="password_expiry" value="2050-12-31 00:00:00 GMT"/>
+    </insert>
+
+    <insert schemaName="security" tableName="groups">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Administrators"/>
+      <column name="description" value="Administrators"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_to_group_map">
+      <column name="user_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Application.Dashboard"/>
+      <column name="name" value="Dashboard"/>
+      <column name="description" value="Dashboard"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Application.SecureHome"/>
+      <column name="name" value="Secure Home"/>
+      <column name="description" value="Secure Home"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Codes.CodeAdministration"/>
+      <column name="name" value="Code Administration"/>
+      <column name="description" value="Code Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Configuration.ConfigurationAdministration"/>
+      <column name="name" value="Configuration Administration"/>
+      <column name="description" value="Configuration Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Error.ErrorReportAdministration"/>
+      <column name="name" value="Error Report Administration"/>
+      <column name="description" value="Error Report Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Mail.MailTemplateAdministration"/>
+      <column name="name" value="Mail Template Administration"/>
+      <column name="description" value="Mail Template Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Process.ProcessDefinitionAdministration"/>
+      <column name="name" value="Process Definition Administration"/>
+      <column name="description" value="Process Definition Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Process.ViewProcess"/>
+      <column name="name" value="View Process"/>
+      <column name="description" value="View Process"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ReportDefinitionAdministration"/>
+      <column name="name" value="Report Definition Administration"/>
+      <column name="description" value="Report Definition Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ViewReport"/>
+      <column name="name" value="View Report"/>
+      <column name="description" value="View Report"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Scheduler.SchedulerAdministration"/>
+      <column name="name" value="Scheduler Administration"/>
+      <column name="description" value="Scheduler Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.GroupAdministration"/>
+      <column name="name" value="Group Administration"/>
+      <column name="description" value="Group Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.OrganizationAdministration"/>
+      <column name="name" value="Organization Administration"/>
+      <column name="description" value="Organization Administration'"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.ResetUserPassword"/>
+      <column name="name" value="Reset User Password"/>
+      <column name="description" value="Reset User Password"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.SecurityAdministration"/>
+      <column name="name" value="Security Administration"/>
+      <column name="description" value="Security Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserAdministration"/>
+      <column name="name" value="User Administration"/>
+      <column name="description" value="User Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserDirectoryAdministration"/>
+      <column name="name" value="User Directory Administration"/>
+      <column name="description" value="User Directory Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserGroups"/>
+      <column name="name" value="User Groups"/>
+      <column name="description" value="User Groups"/>
+    </insert>
+
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="Administrator"/>
+      <column name="name" value="Administrator"/>
+      <column name="description" value="Administrator"/>
+    </insert>
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="OrganizationAdministrator"/>
+      <column name="name" value="Organization Administrator"/>
+      <column name="description" value="Organization Administrator"/>
+    </insert>
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="PasswordResetter"/>
+      <column name="name" value="Password Resetter"/>
+      <column name="description" value="Password Resetter"/>
+    </insert>
+
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.SecureHome"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.Dashboard"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Reporting.ViewReport"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.ResetUserPassword"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.UserAdministration"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.UserGroups"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.GroupAdministration"/>
+      <column name="role_code" value="OrganizationAdministrator"/>
+    </insert>
+
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.SecureHome"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.Dashboard"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.ResetUserPassword"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+
+    <insert schemaName="security" tableName="role_to_group_map">
+      <column name="role_code" value="Administrator"/>
+      <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+  </changeSet>
+
+
+  <changeSet id="inception-sms-1.0.0" author="Marcus Portmann">
+    <comment>Inception - SMS - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema sms
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema sms
+    </sql>
+
+    <createTable schemaName="sms" tableName="sms" remarks="SMSs">
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the SMS"/>
+      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number to send the SMS to"/>
+      <column name="message" type="nvarchar(1000)" remarks="The message to send"/>
+      <column name="status" type="int" remarks="The status of the SMS"/>
+      <column name="send_attempts" type="int" remarks="The number of times that the sending of the SMS was attempted"/>
+      <column name="lock_name" type="nvarchar(100)" remarks="The name of the entity that has locked the SMS for sending"/>
+      <column name="last_processed" type="timestamp" remarks="The date and time the last attempt was made to send the SMS"/>
+    </createTable>
+    <addPrimaryKey schemaName="sms" tableName="sms" columnNames="id"/>
+    <addNotNullConstraint schemaName="sms" tableName="sms" columnName="id"/>
+    <addNotNullConstraint schemaName="sms" tableName="sms" columnName="mobile_number"/>
+    <addNotNullConstraint schemaName="sms" tableName="sms" columnName="message"/>
+    <addNotNullConstraint schemaName="sms" tableName="sms" columnName="status"/>
+    <createIndex indexName="sms_mobile_number_ix" schemaName="sms" tableName="sms">
+      <column name="mobile_number"/>
+    </createIndex>
+  </changeSet>
+
+
+</databaseChangeLog>

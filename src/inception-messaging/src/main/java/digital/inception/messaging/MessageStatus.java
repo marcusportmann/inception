@@ -56,7 +56,7 @@ public enum MessageStatus
   @XmlEnumValue("Downloading")
   DOWNLOADING(8, "Downloading"),
   @XmlEnumValue("Processed")
-  PROCESSED(10, "Processed"),
+  PROCESSED(9, "Processed"),
   @XmlEnumValue("Unknown")
   UNKNOWN(-1, "Unknown");
 
@@ -108,7 +108,7 @@ public enum MessageStatus
       case 8:
         return MessageStatus.DOWNLOADING;
 
-      case 10:
+      case 9:
         return MessageStatus.PROCESSED;
 
       default:

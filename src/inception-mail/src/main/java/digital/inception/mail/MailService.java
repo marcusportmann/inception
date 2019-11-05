@@ -18,6 +18,17 @@ package digital.inception.mail;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import freemarker.template.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -44,8 +55,16 @@ import javax.mail.internet.MimeMessage;
 @Service
 @SuppressWarnings({ "unused" })
 public class MailService
-  implements IMailService
+  implements IMailService, InitializingBean
 {
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(MailService.class);
+
+  /**
+   * The Java mail sender.
+   */
+  JavaMailSender javaMailSender;
+
   /**
    * The Spring application context.
    */
@@ -62,18 +81,40 @@ public class MailService
   private MailTemplateSummaryRepository mailTemplateSummaryRepository;
 
   /**
+   * The Apache FreeMarker configuration.,
+   */
+  private Configuration freeMarkerConfiguration;
+
+  /**
    * Constructs a new <code>MailService</code>.
    *
    * @param applicationContext            the Spring application context
    * @param mailTemplateRepository        the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */
-  public MailService(ApplicationContext applicationContext, MailTemplateRepository mailTemplateRepository,
+  public MailService(ApplicationContext applicationContext,
+      MailTemplateRepository mailTemplateRepository,
       MailTemplateSummaryRepository mailTemplateSummaryRepository)
   {
     this.applicationContext = applicationContext;
     this.mailTemplateRepository = mailTemplateRepository;
     this.mailTemplateSummaryRepository = mailTemplateSummaryRepository;
+
+    this.freeMarkerConfiguration = new Configuration(Configuration.VERSION_2_3_29);
+  }
+
+  @Override
+  public void afterPropertiesSet()
+    throws Exception
+  {
+    try
+    {
+      javaMailSender = applicationContext.getBean(JavaMailSender.class);
+    }
+    catch (NoSuchBeanDefinitionException ignored)
+    {
+      logger.warn("No JavaMailSender implementation found");
+    }
   }
 
   /**
@@ -114,6 +155,7 @@ public class MailService
    */
   @Override
   @Transactional
+  @CacheEvict(value="mailTemplates", key="#mailTemplateId")
   public void deleteMailTemplate(UUID mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
@@ -145,6 +187,7 @@ public class MailService
    * @return the mail template
    */
   @Override
+  @Cacheable("mailTemplates")
   public MailTemplate getMailTemplate(UUID mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
@@ -316,8 +359,6 @@ public class MailService
 
       MailTemplate mailTemplate = mailTemplateOptional.get();
 
-      JavaMailSender javaMailSender = applicationContext.getBean(JavaMailSender.class);
-
       if (javaMailSender != null)
       {
         // Send the e-mail message
@@ -332,7 +373,7 @@ public class MailService
         helper.setSubject(subject);
 
         helper.setText(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8),
-          mailTemplate.getContentType() == MailTemplateContentType.HTML);
+            mailTemplate.getContentType() == MailTemplateContentType.HTML);
 
         javaMailSender.send(helper.getMimeMessage());
       }
@@ -359,6 +400,7 @@ public class MailService
    */
   @Override
   @Transactional
+  @CacheEvict(value="mailTemplates", key="#mailTemplate.id")
   public void updateMailTemplate(MailTemplate mailTemplate)
     throws MailTemplateNotFoundException, MailServiceException
   {

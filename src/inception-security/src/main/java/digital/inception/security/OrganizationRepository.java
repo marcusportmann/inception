@@ -38,7 +38,22 @@ import java.util.UUID;
  */
 public interface OrganizationRepository extends JpaRepository<Organization, UUID>
 {
+  @Modifying
+  @Query(
+      value = "insert into security.user_directory_to_organization_map(organization_id, user_directory_id) "
+      + "values (:organizationId, :userDirectoryId)",
+      nativeQuery = true)
+  void addUserDirectoryToOrganization(@Param("organizationId") UUID organizationId, @Param(
+      "userDirectoryId") UUID userDirectoryId);
+
   long countByNameContainingIgnoreCase(String name);
+
+  @Query(
+      value = "select count(user_directory_id) from security.user_directory_to_organization_map where "
+      + "organization_id = :organizationId and user_directory_id = :userDirectoryId",
+      nativeQuery = true)
+  long countOrganizationUserDirectory(@Param("organizationId") UUID organizationId, @Param(
+      "userDirectoryId") UUID userDirectoryId);
 
   @Modifying
   @Query("delete from Organization u where u.id = :organizationId")
@@ -63,4 +78,11 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
   @Query(
       "select ud.id from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
   List<UUID> getUserDirectoryIdsById(@Param("organizationId") UUID organizationId);
+
+  @Modifying
+  @Query(value = "delete from security.user_directory_to_organization_map "
+      + "where organization_id=:organizationId and user_directory_id = :userDirectoryId",
+      nativeQuery = true)
+  int removeUserDirectoryFromOrganization(@Param("organizationId") UUID organizationId, @Param(
+      "userDirectoryId") UUID userDirectoryId);
 }

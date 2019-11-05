@@ -41,7 +41,7 @@ public interface ISchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   void deleteJob(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException;
@@ -67,7 +67,7 @@ public interface ISchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the job
    */
@@ -119,7 +119,8 @@ public interface ISchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the ID used to uniquely identify the job
+   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
+   *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
@@ -147,7 +148,7 @@ public interface ISchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the job
    */
   void setJobStatus(UUID jobId, JobStatus status)
@@ -156,7 +157,7 @@ public interface ISchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   void unlockJob(UUID jobId, JobStatus status)

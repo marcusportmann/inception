@@ -20,6 +20,7 @@ package digital.inception.messaging;
 
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.messaging.MessageTranslator;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;

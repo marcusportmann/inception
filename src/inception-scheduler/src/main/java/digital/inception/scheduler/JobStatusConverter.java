@@ -16,6 +16,8 @@
 
 package digital.inception.scheduler;
 
+//~--- JDK imports ------------------------------------------------------------
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 

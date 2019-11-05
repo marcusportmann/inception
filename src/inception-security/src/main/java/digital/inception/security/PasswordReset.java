@@ -29,6 +29,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.Serializable;
+
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -46,7 +48,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "PasswordReset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "username", "requested", "completed", "expired", "status", "securityCodeHash" })
+@JsonPropertyOrder({ "username", "requested", "completed", "expired", "status",
+    "securityCodeHash" })
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordReset", namespace = "http://security.inception.digital",
     propOrder = { "username", "requested", "completed", "expired", "status", "securityCodeHash" })
@@ -56,6 +59,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(schema = "security", name = "password_resets")
 @IdClass(PasswordResetId.class)
 public class PasswordReset
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 

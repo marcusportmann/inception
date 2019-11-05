@@ -69,7 +69,8 @@ export class User {
   status: UserStatus;
 
   /**
-   * The ID used to uniquely identify the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
    */
   userDirectoryId: string;
 
@@ -81,8 +82,8 @@ export class User {
   /**
    * Constructs a new User.
    *
-   * @param userDirectoryId   The ID used to uniquely identify the user directory the user is
-   *                          associated with.
+   * @param userDirectoryId   The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                          user directory the user is associated with.
    * @param username          The username for the user.
    * @param firstName         The first name for the user.
    * @param lastName          The last name for the user.

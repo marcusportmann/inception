@@ -19,6 +19,7 @@ package digital.inception.sms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestClassRunner;
+import digital.inception.test.TestConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ import static org.junit.Assert.*;
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { SMSTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)

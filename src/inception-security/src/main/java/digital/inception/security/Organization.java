@@ -62,11 +62,9 @@ public class Organization
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the organization.
-   *
-   * The ID for an organization that has not been persisted will be  <code>null</code>.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the organization", required = true)
+  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -127,7 +125,8 @@ public class Organization
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param id     the ID used to uniquely identify the organization
+   * @param id     the Universally Unique Identifier (UUID) used to uniquely identify the
+   *               organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
@@ -170,9 +169,9 @@ public class Organization
   }
 
   /**
-   * Returns the ID used to uniquely identify the organization.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @return the ID used to uniquely identify the organization
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   public UUID getId()
   {
@@ -234,9 +233,9 @@ public class Organization
   }
 
   /**
-   * Set the ID used to uniquely identify the organization.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @param id the ID used to uniquely identify the organization
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   public void setId(UUID id)
   {

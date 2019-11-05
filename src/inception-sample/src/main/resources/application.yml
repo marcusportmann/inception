@@ -79,6 +79,15 @@ application:
     packagesToScanForEntities: digital.inception.sample
     inMemoryDatabaseInitResources: digital/inception/sample/inception-sample-h2.sql
 
+  database-postgresql:
+    dataSource: org.postgresql.jdbc3.Jdbc3SimpleDataSource
+    url: jdbc:postgresql://localhost:5432/sample
+    username: sample
+    password: Password1
+    minPoolSize: 5
+    maxPoolSize: 10
+    packagesToScanForEntities: digital.inception.sample
+
   database-sql-server:
     dataSource: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
     url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
@@ -97,25 +106,26 @@ application:
       path: classpath:META-INF/Sample.jks
       password: Sample
 
-  cache:
-    enabled: true
-    cluster:
-      port: 15000
-      name: sample-cluster
-      password: YROTLEYO6Z05WAXbCuK4
-      members:
-    caches:
-      - cache:
-        name: sample-cache
-        maxSizePolicy: PER_NODE
-        maxSize: 10000
-        inMemoryFormat: OBJECT
-        evictionPolicy: LRU
-        statisticsEnabled: true
-        maxIdleSeconds: 300
-        backupCount: 0
-        asyncBackupCount: 0
-        readBackupData: false
+  hazelcast:
+    server:
+      enabled: true
+      cluster:
+        port: 15000
+        name: sample-cluster
+        password: YROTLEYO6Z05WAXbCuK4
+        members:
+      caches:
+        - cache:
+          name: sample-cache
+          maxSizePolicy: PER_NODE
+          maxSize: 10000
+          inMemoryFormat: OBJECT
+          evictionPolicy: LRU
+          statisticsEnabled: true
+          maxIdleSeconds: 300
+          backupCount: 0
+          asyncBackupCount: 0
+          readBackupData: false
 
   messaging:
     encryptionKey: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=

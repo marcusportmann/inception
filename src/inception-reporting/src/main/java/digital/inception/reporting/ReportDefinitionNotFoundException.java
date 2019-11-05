@@ -52,7 +52,8 @@ public class ReportDefinitionNotFoundException extends ServiceException
    * w
    * Constructs a new <code>ReportDefinitionNotFoundException</code>.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   public ReportDefinitionNotFoundException(UUID reportDefinitionId)
   {

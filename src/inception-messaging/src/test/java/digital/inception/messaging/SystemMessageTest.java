@@ -25,6 +25,7 @@ import digital.inception.core.util.Base64Util;
 import digital.inception.messaging.messages.*;
 import digital.inception.security.SecurityService;
 import digital.inception.test.TestClassRunner;
+import digital.inception.test.TestConfiguration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +56,7 @@ import java.util.*;
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { MessagingTestConfiguration.class })
+@ContextConfiguration(classes = { TestConfiguration.class })
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)

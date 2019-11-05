@@ -99,7 +99,7 @@ public class User
   private Set<Group> groups = new HashSet<>();
 
   /**
-   * The ID used to uniquely identify the user.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
    */
   @JsonIgnore
   @XmlTransient
@@ -188,10 +188,11 @@ public class User
   private UserStatus status;
 
   /**
-   * The ID used to uniquely identify the user directory the user is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
+   * is associated with.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory the user is associated with",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -277,9 +278,9 @@ public class User
   }
 
   /**
-   * Returns the ID used to uniquely identify the user.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @return the ID used to uniquely identify the user
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
   public UUID getId()
   {
@@ -359,9 +360,11 @@ public class User
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory the user is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the user is associated with.
    *
-   * @return the ID used to uniquely identify the user directory the user is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the user is associated with
    */
   public UUID getUserDirectoryId()
   {
@@ -479,9 +482,9 @@ public class User
   }
 
   /**
-   * Set the ID used to uniquely identify the user.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
    *
-   * @param id the ID used to uniquely identify the user
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
   public void setId(UUID id)
   {
@@ -559,10 +562,11 @@ public class User
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory the user is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * user is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the user is
-   *                        associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the user is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {

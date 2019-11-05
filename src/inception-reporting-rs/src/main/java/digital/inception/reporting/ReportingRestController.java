@@ -102,7 +102,8 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void createReportDefinition(@ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
@@ -128,7 +129,8 @@ public class ReportingRestController extends SecureRestController
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -142,9 +144,11 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The ID used to uniquely identify the report definition", required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+      required = true)
   @PathVariable UUID reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -244,7 +248,8 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definition-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
     throws ReportingServiceException
   {
@@ -265,7 +270,8 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public List<ReportDefinition> getReportDefinitions()
     throws ReportingServiceException
   {
@@ -275,7 +281,8 @@ public class ReportingRestController extends SecureRestController
   /**
    * Update the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param reportDefinition   the report definition
    */
   @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
@@ -290,9 +297,11 @@ public class ReportingRestController extends SecureRestController
   @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The ID used to uniquely identify the reportDefinition", required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the reportDefinition",
+      required = true)
   @PathVariable UUID reportDefinitionId, @ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)

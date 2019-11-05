@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 import java.time.LocalDateTime;
+
 import java.util.UUID;
 
 import javax.persistence.*;
@@ -65,9 +66,11 @@ public class SMS
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the SMS.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the SMS.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the SMS", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the SMS",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "id", required = true)
   @NotNull
@@ -170,7 +173,7 @@ public class SMS
   /**
    * Constructs a new <code>SMS</code>.
    *
-   * @param id            the ID used to uniquely identify the SMS
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the SMS
    * @param mobileNumber  the mobile number to send the SMS to
    * @param message       the message to send
    * @param status        the status of the SMS
@@ -222,9 +225,9 @@ public class SMS
   }
 
   /**
-   * Returns the ID used to uniquely identify the SMS.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the SMS.
    *
-   * @return the ID used to uniquely identify the SMS
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the SMS
    */
   public UUID getId()
   {
@@ -300,8 +303,9 @@ public class SMS
   public int hashCode()
   {
     return (id == null)
-      ? 0
-      : id.hashCode();  }
+        ? 0
+        : id.hashCode();
+  }
 
   /**
    * Increment the number of times that the sending of the SMS was attempted.
@@ -319,9 +323,9 @@ public class SMS
   }
 
   /**
-   * Set the ID used to uniquely identify the SMS.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the SMS.
    *
-   * @param id the ID used to uniquely identify the SMS
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the SMS
    */
   public void setId(UUID id)
   {

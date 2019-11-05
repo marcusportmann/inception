@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.scheduler;
+package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -32,28 +32,36 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>JobNotFoundException</code> exception is thrown to indicate an error
- * condition as a result of a job that could not be found.
+ * A <code>OrganizationUserDirectoryNotFoundException</code> is thrown to indicate that a security
+ * operation failed as a result of an organization user directory that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The job could not be found")
-@WebFault(name = "JobNotFoundException", targetNamespace = "http://scheduler.inception.digital",
+@ResponseStatus(value = HttpStatus.NOT_FOUND,
+    reason = "The organization user directory could not be found")
+@WebFault(name = "OrganizationUserDirectoryNotFoundException",
+    targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class JobNotFoundException extends ServiceException
+@SuppressWarnings({ "unused" })
+public class OrganizationUserDirectoryNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>JobNotFoundException</code>.
+   * Constructs a new <code>OrganizationUserDirectoryNotFoundException</code>.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param organizationId  the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory
    */
-  public JobNotFoundException(UUID jobId)
+  public OrganizationUserDirectoryNotFoundException(UUID organizationId, UUID userDirectoryId)
   {
-    super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");
+    super("OrganizationUserDirectoryNotFoundError",
+        "The organization user directory for the organization (" + organizationId
+        + ") and user directory (" + userDirectoryId + ") could not be found");
   }
 }

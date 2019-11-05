@@ -29,6 +29,7 @@ import io.agroal.narayana.NarayanaTransactionIntegration;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
@@ -74,6 +75,7 @@ import javax.transaction.TransactionSynchronizationRegistry;
  */
 @Configuration
 @EnableAsync
+@EnableAutoConfiguration
 @EnableScheduling
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "digital.inception" }, lazyInit = true,

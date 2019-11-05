@@ -55,14 +55,15 @@ export class Groups {
   total: number;
 
   /**
-   * The ID used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new Groups.
    *
-   * @param userDirectoryId The ID used to uniquely identify the user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
    * @param groups          The groups.
    * @param total           The total number of groups.
    * @param filter          The optional filter that was applied to the groups.

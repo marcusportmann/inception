@@ -72,7 +72,7 @@ public class Group
   private String description;
 
   /**
-   * The ID used to uniquely identify the group.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the group.
    */
   @JsonIgnore
   @XmlTransient
@@ -103,10 +103,11 @@ public class Group
   private Set<Role> roles = new HashSet<>();
 
   /**
-   * The ID used to uniquely identify the user directory the group is associated with.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
+   * is associated with.
    */
   @ApiModelProperty(
-      value = "The ID used to uniquely identify the user directory the group is associated with",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -143,8 +144,8 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the group
-   *                        is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
    * @param name            the name identifying the group
    * @param description     the description for the group
    */
@@ -219,9 +220,9 @@ public class Group
   }
 
   /**
-   * Returns the ID used to uniquely identify the group.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
    *
-   * @return the ID used to uniquely identify the group
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
    */
   public UUID getId()
   {
@@ -249,9 +250,11 @@ public class Group
   }
 
   /**
-   * Returns the ID used to uniquely identify the user directory the group is associated with.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
    *
-   * @return the ID used to uniquely identify the user directory the group is associated with
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   *         the group is associated with
    */
   public UUID getUserDirectoryId()
   {
@@ -314,9 +317,9 @@ public class Group
   }
 
   /**
-   * Set the ID used to uniquely identify the group.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
    *
-   * @param id the ID used to uniquely identify the group
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
    */
   public void setId(UUID id)
   {
@@ -344,10 +347,11 @@ public class Group
   }
 
   /**
-   * Set the ID used to uniquely identify the user directory the group is associated with.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * group is associated with.
    *
-   * @param userDirectoryId the ID used to uniquely identify the user directory the group is
-   *                        associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId)
   {

@@ -48,9 +48,10 @@ public class GenerateReportRequest
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the report definition.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
       required = true)
   @JsonProperty(required = true)
   private UUID reportDefinitionId;
@@ -70,7 +71,8 @@ public class GenerateReportRequest
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param reportParameters   the report parameters
    */
   public GenerateReportRequest(UUID reportDefinitionId, List<ReportParameter> reportParameters)
@@ -80,9 +82,11 @@ public class GenerateReportRequest
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the report
+   * definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the report
+   *         definition
    */
   public UUID getReportDefinitionId()
   {
@@ -100,9 +104,10 @@ public class GenerateReportRequest
   }
 
   /**
-   * Set the ID used to uniquely identify the report definition.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   public void setReportDefinitionId(UUID reportDefinitionId)
   {

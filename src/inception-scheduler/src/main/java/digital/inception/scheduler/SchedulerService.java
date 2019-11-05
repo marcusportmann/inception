@@ -127,7 +127,7 @@ public class SchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    */
   @Override
   @Transactional
@@ -258,7 +258,7 @@ public class SchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
    * @return the job
    */
@@ -413,7 +413,8 @@ public class SchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the ID used to uniquely identify the job
+   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
+   *                          the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
@@ -522,7 +523,7 @@ public class SchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the job
    */
   @Override
@@ -553,7 +554,7 @@ public class SchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the ID used to uniquely identify the job
+   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   @Override

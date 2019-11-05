@@ -252,5 +252,5 @@ INSERT INTO messaging.message_statuses (code, name)
 INSERT INTO messaging.message_statuses (code, name)
   VALUES (8, 'Downloading');
 INSERT INTO messaging.message_statuses (code, name)
-  VALUES (10, 'Processed');
+  VALUES (9, 'Processed');
 

@@ -56,8 +56,8 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
   long countFiltered(@Param("userDirectoryId") UUID userDirectoryId, @Param(
       "filter") String filter);
 
-  @Query(value = "select count(uph.user_id) from security.users_password_history uph "
-      + "where uph.user_id = :userId and uph.changed > :after and uph.password = :password",
+  @Query(value = "select count(user_id) from security.users_password_history "
+      + "where user_id = :userId and changed > :after and password = :password",
       nativeQuery = true)
   long countPasswordHistory(@Param("userId") UUID userId, @Param("after") LocalDateTime after,
       @Param("password") String password);

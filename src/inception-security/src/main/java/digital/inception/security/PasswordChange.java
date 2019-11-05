@@ -27,6 +27,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -48,6 +50,7 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({ "unused" })
 public class PasswordChange
+  implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
@@ -81,7 +84,8 @@ public class PasswordChange
   /**
    * The password for the user that is used to authorise the operation when performing a user password change.
    */
-  @ApiModelProperty(value = "The password for the user that is used to authorise the operation when performing a user password change")
+  @ApiModelProperty(
+      value = "The password for the user that is used to authorise the operation when performing a user password change")
   @JsonProperty
   @XmlElement(name = "Password")
   @Size(min = 1, max = 100)

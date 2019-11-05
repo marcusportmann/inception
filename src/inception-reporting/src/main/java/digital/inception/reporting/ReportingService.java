@@ -124,7 +124,8 @@ public class ReportingService
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    *
    * @return the PDF data for the report
@@ -152,7 +153,8 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param connection         the database connection used to retrieve the report data
    *
@@ -205,7 +207,8 @@ public class ReportingService
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    * @param parameters         the parameters for the report
    * @param document           the XML document containing the report data
    *
@@ -258,7 +261,8 @@ public class ReportingService
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    */
   @Override
   public void deleteReportDefinition(UUID reportDefinitionId)
@@ -316,7 +320,8 @@ public class ReportingService
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the report definition
    */
@@ -372,7 +377,8 @@ public class ReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return the summary for the report definition
    */
@@ -428,7 +434,8 @@ public class ReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
    *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
