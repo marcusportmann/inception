@@ -126,7 +126,7 @@ public class MailServiceTest
   /**
    * Test the send mail functionality.
    */
-  @Test
+  //@Test
   public void sendMailTest()
     throws Exception
   {
