@@ -18,6 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../errors/http-error';
 import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
@@ -29,11 +30,14 @@ export class CodeCategoryNotFoundError extends Error {
   /**
    * Constructs a new CodeCategoryNotFoundError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@codes_code_category_not_found_error',
+      value: 'The code category could not be found.'
+    }), cause);
   }
 }
 
@@ -47,29 +51,14 @@ export class CodeNotFoundError extends Error {
   /**
    * Constructs a new CodeNotFoundError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}
-
-/**
- * The CodeProviderError class holds the information for a code provider error.
- *
- * @author Marcus Portmann
- */
-export class CodeProviderError extends Error {
-
-  /**
-   * Constructs a new CodeProviderError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@codes_code_not_found_error',
+      value: 'The code could not be found.'
+    }), cause);
   }
 }
 
@@ -101,11 +90,14 @@ export class DuplicateCodeCategoryError extends Error {
   /**
    * Constructs a new DuplicateCodeCategoryError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@codes_duplicate_code_error',
+      value: 'The code category already exists.'
+    }), cause);
   }
 }
 
@@ -119,10 +111,13 @@ export class DuplicateCodeError extends Error {
   /**
    * Constructs a new DuplicateCodeError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@codes_duplicate_code_error',
+      value: 'The code already exists.'
+    }), cause);
   }
 }

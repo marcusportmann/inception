@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {Observable, throwError} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Code} from './code';
 import {CodeCategory} from './code-category';
@@ -70,18 +70,12 @@ export class CodesService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'CodeCategoryNotFoundError') {
-            return throwError(new CodeCategoryNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_category_could_not_be_found',
-              value: 'The code category could not be found.'
-            }), apiError));
+            return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'DuplicateCodeError') {
-            return throwError(new DuplicateCodeError(this.i18n({
-              id: '@@codes_service_the_code_already_exists',
-              value: 'The code already exists.'
-            }), apiError));
+            return throwError(new DuplicateCodeError(this.i18n, apiError));
           } else {
             return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_create_the_code',
+              id: '@@codes_create_code_error',
               value: 'Failed to create the code.'
             }), apiError));
           }
@@ -109,13 +103,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'DuplicateCodeCategoryError') {
-          return throwError(new DuplicateCodeCategoryError(this.i18n({
-            id: '@@codes_service_the_code_category_already_exists',
-            value: 'The code category already exists.'
-          }), apiError));
+          return throwError(new DuplicateCodeCategoryError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_create_the_code_category',
+            id: '@@codes_create_code_category_error',
             value: 'Failed to create the code category.'
           }), apiError));
         }
@@ -147,13 +138,10 @@ export class CodesService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'CodeNotFoundError') {
-            return throwError(new CodeNotFoundError(this.i18n({
-              id: '@@codes_service_the_code_could_not_be_found',
-              value: 'The code could not be found.'
-            }), apiError));
+            return throwError(new CodeNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new CodesServiceError(this.i18n({
-              id: '@@codes_service_failed_to_delete_the_code',
+              id: '@@codes_delete_code_error',
               value: 'Failed to delete the code.'
             }), apiError));
           }
@@ -182,13 +170,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_category_could_not_be_found',
-            value: 'The code category could not be found.'
-          }), apiError));
+          return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_delete_the_code_category',
+            id: '@@codes_delete_code_category_error',
             value: 'Failed to delete the code category.'
           }), apiError));
         }
@@ -219,13 +204,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_could_not_be_found',
-            value: 'The code could not be found.'
-          }), apiError));
+          return throwError(new CodeNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code',
+            id: '@@codes_get_code_error',
             value: 'Failed to retrieve the code.'
           }), apiError));
         }
@@ -252,7 +234,7 @@ export class CodesService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code_categories',
+            id: '@@codes_get_code_categories_error',
             value: 'Failed to retrieve the code categories.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -280,13 +262,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_category_could_not_be_found',
-            value: 'The code category could not be found.'
-          }), apiError));
+          return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code_category',
+            id: '@@codes_get_code_category_error',
             value: 'Failed to retrieve the code category.'
           }), apiError));
         }
@@ -317,13 +296,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_category_could_not_be_found',
-            value: 'The code category could not be found.'
-          }), apiError));
+          return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code_category_name',
+            id: '@@codes_get_code_category_name_error',
             value: 'Failed to retrieve the code category name.'
           }), apiError));
         }
@@ -356,13 +332,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_could_not_be_found',
-            value: 'The code could not be found.'
-          }), apiError));
+          return throwError(new CodeNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code_name',
+            id: '@@codes_get_code_name_error',
             value: 'Failed to retrieve the code name.'
           }), apiError));
         }
@@ -391,13 +364,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_category_could_not_be_found',
-            value: 'The code category could not be found.'
-          }), apiError));
+          return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_codes',
+            id: '@@codes_get_codes_error',
             value: 'Failed to retrieve the codes.'
           }), apiError));
         }
@@ -426,7 +396,7 @@ export class CodesService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_retrieve_the_code_categories',
+            id: '@@codes_get_code_category_summaries_error',
             value: 'Failed to retrieve the code categories.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -454,13 +424,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeNotFoundError') {
-          return throwError(new CodeNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_could_not_be_found',
-            value: 'The code could not be found.'
-          }), apiError));
+          return throwError(new CodeNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_update_the_code',
+            id: '@@codes_update_code_error',
             value: 'Failed to update the code.'
           }), apiError));
         }
@@ -489,13 +456,10 @@ export class CodesService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'CodeCategoryNotFoundError') {
-          return throwError(new CodeCategoryNotFoundError(this.i18n({
-            id: '@@codes_service_the_code_category_could_not_be_found',
-            value: 'The code category could not be found.'
-          }), apiError));
+          return throwError(new CodeCategoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@codes_service_failed_to_update_the_code_category',
+            id: '@@codes_update_code_category_error',
             value: 'Failed to update the code category.'
           }), apiError));
         }

@@ -65,13 +65,10 @@ export class ConfigurationService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'ConfigurationNotFoundError') {
-            return throwError(new ConfigurationNotFoundError(this.i18n({
-              id: '@@configuration_service_the_configuration_could_not_be_found',
-              value: 'The configuration could not be found.'
-            }), apiError));
+            return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new ConfigurationServiceError(this.i18n({
-              id: '@@configuration_service_failed_to_delete_the_configuration',
+              id: '@@configuration_delete_configuration_error',
               value: 'Failed to delete the configuration.'
             }), apiError));
           }
@@ -101,13 +98,10 @@ export class ConfigurationService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'ConfigurationNotFoundError') {
-            return throwError(new ConfigurationNotFoundError(this.i18n({
-              id: '@@configuration_service_the_configuration_could_not_be_found',
-              value: 'The configuration could not be found.'
-            }), apiError));
+            return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new ConfigurationServiceError(this.i18n({
-              id: '@@configuration_service_failed_to_retrieve_the_configuration',
+              id: '@@configuration_get_configuration_error',
               value: 'Failed to retrieve the configuration.'
             }), apiError));
           }
@@ -138,13 +132,10 @@ export class ConfigurationService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'ConfigurationNotFoundError') {
-          return throwError(new ConfigurationNotFoundError(this.i18n({
-            id: '@@configuration_service_the_configuration_could_not_be_found',
-            value: 'The configuration could not be found.'
-          }), apiError));
+          return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new ConfigurationServiceError(this.i18n({
-            id: '@@configuration_service_failed_to_retrieve_the_configuration_value',
+            id: '@@configuration_get_configuration_value_error',
             value: 'Failed to retrieve the configuration value.'
           }), apiError));
         }
@@ -171,7 +162,7 @@ export class ConfigurationService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new CodesServiceError(this.i18n({
-            id: '@@configuration_service_failed_to_retrieve_the_configurations',
+            id: '@@configuration_get_configurations',
             value: 'Failed to retrieve the configurations.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -199,7 +190,7 @@ export class ConfigurationService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new CodesServiceError(this.i18n({
-          id: '@@configuration_service_failed_to_save_the_configuration',
+          id: '@@configuration_save_configuration_error',
           value: 'Failed to save the configuration.'
         }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

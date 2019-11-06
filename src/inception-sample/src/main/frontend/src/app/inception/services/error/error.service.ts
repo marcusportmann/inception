@@ -68,7 +68,7 @@ export class ErrorService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new ErrorServiceError(this.i18n({
-          id: '@@error_service_failed_to_send_the_error_report',
+          id: '@@error_send_error_report_error',
           value: 'Failed to send the error report.'
         }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {

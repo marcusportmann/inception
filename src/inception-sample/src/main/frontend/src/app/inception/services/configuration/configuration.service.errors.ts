@@ -18,6 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../errors/http-error';
 import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 /**
  * The ConfigurationNotFoundError class holds the information for a configuration not found error.
@@ -29,11 +30,14 @@ export class ConfigurationNotFoundError extends Error {
   /**
    * Constructs a new ConfigurationNotFoundError.
    *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
    */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@configuration_configuration_not_found_error',
+      value: 'The configuration could not be found.'
+    }), cause);
   }
 }
 

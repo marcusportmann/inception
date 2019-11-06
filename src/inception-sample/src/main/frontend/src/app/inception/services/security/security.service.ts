@@ -28,13 +28,16 @@ import {
   ExistingGroupMemberError,
   ExistingGroupMembersError,
   ExistingGroupRoleError,
+  ExistingOrganizationUserDirectoryError,
   ExistingPasswordError,
   GroupMemberNotFoundError,
   GroupNotFoundError,
   GroupRoleNotFoundError,
-  OrganizationNotFoundError,
+  InvalidSecurityCodeError,
+  OrganizationNotFoundError, OrganizationUserDirectoryNotFound,
   SecurityServiceError,
-  UserDirectoryNotFoundError, UserLockedError,
+  UserDirectoryNotFoundError,
+  UserLockedError,
   UserNotFoundError
 } from './security.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
@@ -61,6 +64,7 @@ import {PasswordChangeReason} from "./password-change-reason";
 import {PasswordChange} from "./password-change";
 import {Role} from "./role";
 import {GroupRole} from "./group-role";
+import {OrganizationUserDirectory} from "./organization-user-directory";
 
 /**
  * The Security Service implementation.
@@ -105,28 +109,16 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
-            }), apiError));
+            return throwError(new GroupNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
+            return throwError(new UserNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'ExistingGroupMemberError') {
-            return throwError(new ExistingGroupMemberError(this.i18n({
-              id: '@@security_service_the_group_member_already_exists',
-              value: 'The group member already exists.'
-            }), apiError));
+            return throwError(new ExistingGroupMemberError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_add_the_group_member_to_the_group',
+              id: '@@security_add_member_to_group_error',
               value: 'Failed to add the group member to the group.'
             }), apiError));
           }
@@ -162,29 +154,59 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
-            }), apiError));
+            return throwError(new GroupNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'RoleNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_role_could_not_be_found',
-              value: 'The role could not be found.'
-            }), apiError));
+            return throwError(new UserNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'ExistingGroupRoleError') {
-            return throwError(new ExistingGroupRoleError(this.i18n({
-              id: '@@security_service_the_group_role_already_exists',
-              value: 'The group role already exists.'
-            }), apiError));
+            return throwError(new ExistingGroupRoleError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_add_the_role_to_the_group',
+              id: '@@security_add_role_to_group_error',
               value: 'Failed to add the role to the group.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Add the user directory to the organization.
+   *
+   * @param organizationId  The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   *
+   * @return True if the user directory was successfully added to the organization or false
+   *         otherwise.
+   */
+  addUserDirectoryToOrganization(organizationId: string, userDirectoryId: string): Observable<boolean> {
+    const organizationUserDirectory = new OrganizationUserDirectory(organizationId, userDirectoryId);
+
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/organizations/' + userDirectoryId + '/user-directories', organizationUserDirectory, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'OrganizationNotFoundError') {
+            return throwError(new OrganizationNotFoundError(this.i18n, apiError));
+          } else if (apiError.code === 'UserDirectoryNotFoundError') {
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
+          } else if (apiError.code === 'ExistingOrganizationUserDirectoryError') {
+            return throwError(new ExistingOrganizationUserDirectoryError(this.i18n, apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_add_user_directory_to_organization_error',
+              value: 'Failed to add the user directory to the organization.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -225,18 +247,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          return throwError(new UserNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_administratively_change_the_password_for_the_user',
+            id: '@@security_admin_change_password_error',
             value: 'Failed to administratively change the password for the user.'
           }), apiError));
         }
@@ -271,33 +287,18 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          return throwError(new UserNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'AuthenticationFailedError') {
-          return throwError(new AuthenticationFailedError(this.i18n({
-            id: '@@security_service_authentication_failed',
-            value: 'Authentication failed.'
-          }), apiError));
+          return throwError(new AuthenticationFailedError(this.i18n, apiError));
         } else if (apiError.code === 'ExistingPasswordError') {
-          return throwError(new ExistingPasswordError(this.i18n({
-            id: '@@security_service_existing_password',
-            value: 'The new password has been used recently and is not valid.'
-          }), apiError));
+          return throwError(new ExistingPasswordError(this.i18n, apiError));
         } else if (apiError.code === 'UserLockedError') {
-          return throwError(new UserLockedError(this.i18n({
-            id: '@@security_service_user_locked',
-            value: 'The user has exceeded the maximum number of failed password attempts and has been locked.'
-          }), apiError));
+          return throwError(new UserLockedError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_change_the_password_for_the_user',
+            id: '@@security_change_password_error',
             value: 'Failed to change the password for the user.'
           }), apiError));
         }
@@ -328,18 +329,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'DuplicateGroupError') {
-          return throwError(new DuplicateGroupError(this.i18n({
-            id: '@@security_service_the_group_already_exists',
-            value: 'A group with the specified name already exists.'
-          }), apiError));
+          return throwError(new DuplicateGroupError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_create_the_group',
+            id: '@@security_create_group_error',
             value: 'Failed to create the group.'
           }), apiError));
         }
@@ -377,13 +372,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'DuplicateOrganizationError') {
-          return throwError(new DuplicateOrganizationError(this.i18n({
-            id: '@@security_service_the_organization_already_exists',
-            value: 'An organization with the specified ID or name already exists.'
-          }), apiError));
+          return throwError(new DuplicateOrganizationError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_create_the_organization',
+            id: '@@security_create_organization_error',
             value: 'Failed to create the organization.'
           }), apiError));
         }
@@ -423,18 +415,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'DuplicateUserError') {
-          return throwError(new DuplicateUserError(this.i18n({
-            id: '@@security_service_the_user_already_exists',
-            value: 'A user with the specified username already exists.'
-          }), apiError));
+          return throwError(new DuplicateUserError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_create_the_user',
+            id: '@@security_create_user_error',
             value: 'Failed to create the user.'
           }), apiError));
         }
@@ -462,13 +448,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'DuplicateUserDirectoryError') {
-          return throwError(new DuplicateUserDirectoryError(this.i18n({
-            id: '@@security_service_the_user_directory_already_exists',
-            value: 'A user directory with the specified ID or name already exists.'
-          }), apiError));
+          return throwError(new DuplicateUserDirectoryError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_create_the_user_directory',
+            id: '@@security_create_user_directory_error',
             value: 'Failed to create the user directory.'
           }), apiError));
         }
@@ -500,23 +483,14 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
-            }), apiError));
+            return throwError(new GroupNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'ExistingGroupMembersError') {
-            return throwError(new ExistingGroupMembersError(this.i18n({
-              id: '@@security_service_the_group_has_existing_members',
-              value: 'The group has existing members.'
-            }), apiError));
+            return throwError(new ExistingGroupMembersError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_delete_the_group',
+              id: '@@security_delete_group_error',
               value: 'Failed to delete the group.'
             }), apiError));
           }
@@ -547,13 +521,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(this.i18n({
-              id: '@@security_service_the_organization_could_not_be_found',
-              value: 'The organization could not be found.'
-            }), apiError));
+            return throwError(new OrganizationNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_delete_the_organization',
+              id: '@@security_delete_organization_error',
               value: 'Failed to delete the organization.'
             }), apiError));
           }
@@ -585,18 +556,12 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
+            return throwError(new UserNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_delete_the_user',
+              id: '@@security_delete_user_error',
               value: 'Failed to delete the user.'
             }), apiError));
           }
@@ -627,13 +592,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_delete_the_user_directory',
+              id: '@@security_delete_user_directory_error',
               value: 'Failed to delete the user directory.'
             }), apiError));
           }
@@ -664,18 +626,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
+          return throwError(new GroupNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_group',
+            id: '@@security_get_group_error',
             value: 'Failed to retrieve the group.'
           }), apiError));
         }
@@ -707,13 +663,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_group_names',
+            id: '@@security_get_group_names_error',
             value: 'Failed to retrieve the group names.'
           }), apiError));
         }
@@ -745,18 +698,12 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
+            return throwError(new UserNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_group_names_for_the_user',
+              id: '@@security_get_group_names_for_user_error',
               value: 'Failed to retrieve the group names for the user.'
             }), apiError));
           }
@@ -816,13 +763,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_groups',
+            id: '@@security_get_groups_error',
             value: 'Failed to retrieve the groups.'
           }), apiError));
         }
@@ -852,13 +796,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(this.i18n({
-            id: '@@security_service_the_organization_could_not_be_found',
-            value: 'The organization could not be found.'
-          }), apiError));
+          return throwError(new OrganizationNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_organization',
+            id: '@@security_get_organization_error',
             value: 'Failed to retrieve the organization.'
           }), apiError));
         }
@@ -888,13 +829,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(this.i18n({
-            id: '@@security_service_the_organization_could_not_be_found',
-            value: 'The organization could not be found.'
-          }), apiError));
+          return throwError(new OrganizationNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_organization_name',
+            id: '@@security_get_organization_name_error',
             value: 'Failed to retrieve the organization name.'
           }), apiError));
         }
@@ -957,18 +895,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
+          return throwError(new GroupNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_members_for_the_group',
+            id: '@@security_get_members_for_group_error',
             value: 'Failed to retrieve the members for the group.'
           }), apiError));
         }
@@ -1026,7 +958,7 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new SecurityServiceError(this.i18n({
-          id: '@@security_service_failed_to_retrieve_the_organizations',
+          id: '@@security_get_organizations_error',
           value: 'Failed to retrieve the organizations.'
         }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1056,13 +988,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@codes_service_failed_to_retrieve_the_organizations_associated_with_the_user_directory',
+              id: '@@security_get_organizations_for_user_directory_error',
               value: 'Failed to retrieve the organizations associated with the user directory.'
             }), apiError));
           }
@@ -1095,18 +1024,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
+          return throwError(new GroupNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_role_codes_for_the_group',
+            id: '@@security_get_role_codes_for_group_error',
             value: 'Failed to retrieve the role codes for the group.'
           }), apiError));
         }
@@ -1133,7 +1056,7 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new SecurityServiceError(this.i18n({
-          id: '@@security_service_failed_to_retrieve_the_roles',
+          id: '@@security_get_roles_error',
           value: 'Failed to retrieve the roles.'
         }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1165,18 +1088,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
+          return throwError(new GroupNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_roles_for_the_group',
+            id: '@@security_get_roles_for_group_error',
             value: 'Failed to retrieve the roles for the group.'
           }), apiError));
         }
@@ -1207,18 +1124,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          return throwError(new UserNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_user',
+            id: '@@security_get_user_error',
             value: 'Failed to retrieve the user.'
           }), apiError));
         }
@@ -1249,13 +1160,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_user_directory',
+              id: '@@security_get_user_directory_error',
               value: 'Failed to retrieve the user directory.'
             }), apiError));
           }
@@ -1286,13 +1194,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_capabilities_for_the_user_directory',
+              id: '@@security_get_user_directory_capabilities_error',
               value: 'Failed to retrieve the capabilities for the user directory.'
             }), apiError));
           }
@@ -1323,13 +1228,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_user_directory_name',
+              id: '@@security_get_user_directory_name_error',
               value: 'Failed to retrieve the user directory name.'
             }), apiError));
           }
@@ -1360,13 +1262,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(this.i18n({
-              id: '@@security_service_the_organization_could_not_be_found',
-              value: 'The organization could not be found.'
-            }), apiError));
+            return throwError(new OrganizationNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@codes_service_failed_to_retrieve_the_summaries_for_the_user_directories_associated_with_the_organization',
+              id: '@@security_get_user_directory_summaries_for_organization_error',
               value: 'Failed to retrieve the summaries for the user directories associated with the organization.'
             }), apiError));
           }
@@ -1397,13 +1296,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_user_directory_type_for_the_user_directory',
+              id: '@@security_get_user_directory_type_for_user_directory_error',
               value: 'Failed to retrieve the user directory type for the user directory.'
             }), apiError));
           }
@@ -1430,7 +1326,7 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_user_directory_types',
+            id: '@@security_get_user_directory_types_error',
             value: 'Failed to retrieve the user directory types.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1461,18 +1357,12 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(this.i18n({
-              id: '@@security_service_the_user_could_not_be_found',
-              value: 'The user could not be found.'
-            }), apiError));
+            return throwError(new UserNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_retrieve_the_user_full_name',
+              id: '@@security_get_user_full_name_error',
               value: 'Failed to retrieve the full name for the user.'
             }), apiError));
           }
@@ -1538,13 +1428,10 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_retrieve_the_users',
+            id: '@@security_get_users_error',
             value: 'Failed to retrieve the users.'
           }), apiError));
         }
@@ -1602,7 +1489,7 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new SecurityServiceError(this.i18n({
-          id: '@@security_service_failed_to_retrieve_the_user_directory_summaries',
+          id: '@@security_get_user_directory_summaries_error',
           value: 'Failed to retrieve the user directory summaries.'
         }), apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1637,23 +1524,14 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
-            }), apiError));
+            return throwError(new GroupNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupMemberNotFoundError') {
-            return throwError(new GroupMemberNotFoundError(this.i18n({
-              id: '@@security_service_the_group_member_could_not_be_found',
-              value: 'The group member could not be found.'
-            }), apiError));
+            return throwError(new GroupMemberNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_remove_the_group_member_from_the_group',
+              id: '@@security_remove_member_from_group_error',
               value: 'Failed to remove the group member from the group.'
             }), apiError));
           }
@@ -1687,24 +1565,54 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(this.i18n({
-              id: '@@security_service_the_group_could_not_be_found',
-              value: 'The group could not be found.'
-            }), apiError));
+            return throwError(new GroupNotFoundError(this.i18n, apiError));
           } else if (apiError.code === 'GroupRoleNotFoundError') {
-            return throwError(new GroupRoleNotFoundError(this.i18n({
-              id: '@@security_service_the_group_role_could_not_be_found',
-              value: 'The group role could not be found.'
-            }), apiError));
+            return throwError(new GroupRoleNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_remove_the_role_from_the_group',
+              id: '@@security_remove_role_from_group_error',
               value: 'Failed to remove the role from the group.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Remove the user directory from the organization.
+   *
+   * @param organizationId  The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        organization.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory.
+   *
+   * @return True if the user directory was successfully removed from the organization or false
+   *         otherwise.
+   */
+  removeUserDirectoryFromOrganization(organizationId: string, userDirectoryId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directories/' +
+      userDirectoryId, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
+
+          if (apiError.code === 'OrganizationNotFoundError') {
+            return throwError(new OrganizationNotFoundError(this.i18n, apiError));
+          } else if (apiError.code === 'OrganizationUserDirectoryNotFoundError') {
+            return throwError(new OrganizationUserDirectoryNotFound(this.i18n, apiError));
+          } else {
+            return throwError(new SecurityServiceError(this.i18n({
+              id: '@@security_remove_user_directory_from_organization_error',
+              value: 'Failed to remove the user directory from the organization.'
             }), apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
@@ -1740,18 +1648,14 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          return throwError(new UserNotFoundError(this.i18n, apiError));
+        } else if (apiError.code === 'InvalidSecurityCodeError') {
+          return throwError(new InvalidSecurityCodeError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_reset_the_password_for_the_user',
+            id: '@@security_reset_password_error',
             value: 'Failed to reset the password for the user.'
           }), apiError));
         }
@@ -1782,18 +1686,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'GroupNotFoundError') {
-          return throwError(new GroupNotFoundError(this.i18n({
-            id: '@@security_service_the_group_could_not_be_found',
-            value: 'The group could not be found.'
-          }), apiError));
+          return throwError(new GroupNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_update_the_group',
+            id: '@@security_update_group_error',
             value: 'Failed to update the group.'
           }), apiError));
         }
@@ -1823,13 +1721,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(this.i18n({
-              id: '@@security_service_the_organization_could_not_be_found',
-              value: 'The organization could not be found.'
-            }), apiError));
+            return throwError(new OrganizationNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_update_the_organization',
+              id: '@@security_update_organization_error',
               value: 'Failed to update the organization.'
             }), apiError));
           }
@@ -1869,18 +1764,12 @@ export class SecurityService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(this.i18n({
-            id: '@@security_service_the_user_directory_could_not_be_found',
-            value: 'The user directory could not be found.'
-          }), apiError));
+          return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
         } else if (apiError.code === 'UserNotFoundError') {
-          return throwError(new UserNotFoundError(this.i18n({
-            id: '@@security_service_the_user_could_not_be_found',
-            value: 'The user could not be found.'
-          }), apiError));
+          return throwError(new UserNotFoundError(this.i18n, apiError));
         } else {
           return throwError(new SecurityServiceError(this.i18n({
-            id: '@@security_service_failed_to_update_the_user',
+            id: '@@security_update_user_error',
             value: 'Failed to update the user.'
           }), apiError));
         }
@@ -1910,13 +1799,10 @@ export class SecurityService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(this.i18n({
-              id: '@@security_service_the_user_directory_could_not_be_found',
-              value: 'The user directory could not be found.'
-            }), apiError));
+            return throwError(new UserDirectoryNotFoundError(this.i18n, apiError));
           } else {
             return throwError(new SecurityServiceError(this.i18n({
-              id: '@@security_service_failed_to_update_the_user_directory',
+              id: '@@security_update_user_directory_error',
               value: 'Failed to update the user directory.'
             }), apiError));
           }
