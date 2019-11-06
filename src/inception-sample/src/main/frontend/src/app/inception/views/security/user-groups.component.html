@@ -13,7 +13,7 @@
 
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;">
 
-    <!-- Existing Group Name -->
+    <!-- Existing Group Name Column -->
     <ng-container matColumnDef="existingGroupName">
       <mat-header-cell *matHeaderCellDef i18n="@@user_groups_component_table_header_existing_group">Existing Group</mat-header-cell>
       <mat-cell *matCellDef="let existingGroupName">{{existingGroupName}}</mat-cell>
@@ -33,6 +33,8 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
 </mat-card>
 

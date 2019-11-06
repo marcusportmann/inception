@@ -30,40 +30,40 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {SecurityService} from '../../services/security/security.service';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {MatTableDataSource} from "@angular/material/table";
-import {GroupMemberType} from "../../services/security/group-member-type";
 import {MatDialogRef} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../components/dialogs";
-import {MatSort} from "@angular/material/sort";
+import {UserDirectorySummary} from "../../services/security/user-directory-summary";
+import {UserDirectorySummaries} from "../../services/security/user-directory-summaries";
 import {MatPaginator} from "@angular/material/paginator";
 
 /**
- * The UserGroupsComponent class implements the user groups component.
+ * The OrganizationUserDirectoriesComponent class implements the organization user directories
+ * component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'user-groups.component.html',
-  styleUrls: ['user-groups.component.css']
+  templateUrl: 'organization-user-directories.component.html',
+  styleUrls: ['organization-user-directories.component.css']
 })
-export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+export class OrganizationUserDirectoriesComponent extends AdminContainerView
+  implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  allGroupNames: string[] = [];
+  allUserDirectories: UserDirectorySummary[] = [];
 
-  availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>();
+  availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
 
-  dataSource = new MatTableDataSource<string>([]);
+  dataSource = new MatTableDataSource<UserDirectorySummary>([]);
 
-  displayedColumns = ['existingGroupName', 'actions'];
+  displayedColumns = ['existingUserDirectoryName', 'actions'];
+
+  organizationId: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
-  selectedGroupName: string = '';
-
-  userDirectoryId: string;
-
-  username: string;
+  selectedUserDirectory?: UserDirectorySummary;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -72,38 +72,36 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     super();
 
     // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+    this.organizationId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@user_groups_component_back_title',
+      id: '@@organization_user_directories_component_back_title',
       value: 'Back'
-    }), ['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
+    }), ['../..'], {
+      relativeTo: this.activatedRoute
     });
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@user_groups_component_title',
-      value: 'User Groups'
+      id: '@@organization_user_directories_component_title',
+      value: 'Organization User Directories'
     })
   }
 
-  addUserToGroup(): void {
-    if (!!this.selectedGroupName) {
+  addUserDirectoryToOrganization(): void {
+    if (this.selectedUserDirectory) {
       this.spinnerService.showSpinner();
 
-      this.securityService.addMemberToGroup(this.userDirectoryId, this.selectedGroupName,
-        GroupMemberType.User, this.username)
+      this.securityService.addUserDirectoryToOrganization(this.organizationId,
+        this.selectedUserDirectory.id)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          this.loadGroupNamesForUser();
-          this.selectedGroupName = '';
+          this.loadUserDirectoriesForOrganization();
+          this.selectedUserDirectory = undefined;
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -117,16 +115,22 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     }
   }
 
-  loadGroupNamesForUser(): void {
+  applyFilter(filterValue: string): void {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
+
+  loadUserDirectoriesForOrganization(): void {
     this.spinnerService.showSpinner();
 
-    this.securityService.getGroupNamesForUser(this.userDirectoryId, this.username)
+    this.securityService.getUserDirectorySummariesForOrganization(this.organizationId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((groupNamesForUser: string[]) => {
-        this.dataSource.data = groupNamesForUser;
+      .subscribe((userDirectorySummaries: UserDirectorySummary[]) => {
+        this.dataSource.data = userDirectorySummaries;
 
-        this.availableGroupNames$.next(
-          this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
+        this.availableUserDirectories$.next(
+          this.calculateAvailableUserDirectories(this.allUserDirectories, this.dataSource.data));
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -145,12 +149,12 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
-    this.securityService.getGroupNames(this.userDirectoryId)
+    this.securityService.getUserDirectorySummaries()
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((groupNames: string[]) => {
-        this.allGroupNames = groupNames;
+      .subscribe((userDirectorySummaries: UserDirectorySummaries) => {
+        this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
 
-        this.loadGroupNamesForUser();
+        this.loadUserDirectoriesForOrganization();
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -167,12 +171,12 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     this.subscriptions.unsubscribe();
   }
 
-  removeUserFromGroup(groupName: string) {
+  removeUserDirectoryFromOrganization(userDirectoryId: string) {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@user_groups_component_confirm_remove_user_from_group',
-          value: 'Are you sure you want to remove the user from the group?'
+          id: '@@organization_user_directories_component_confirm_remove_user_directory_from_organization',
+          value: 'Are you sure you want to remove the user directory from the organization?'
         })
       });
 
@@ -182,12 +186,12 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName,
-            GroupMemberType.User, this.username)
+          this.securityService.removeUserDirectoryFromOrganization(this.organizationId,
+            userDirectoryId)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.loadGroupNamesForUser();
-              this.selectedGroupName = '';
+              this.loadUserDirectoriesForOrganization();
+              this.selectedUserDirectory = undefined;
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -202,26 +206,26 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       });
   }
 
-  private calculateAvailableGroupNames(allGroupNames: string[],
-                                       existingGroupNames: string[]): string[] {
+  private calculateAvailableUserDirectories(allUserDirectories: UserDirectorySummary[],
+                                            existingOrganizationUserDirectories: UserDirectorySummary[]): UserDirectorySummary[] {
 
-    let availableGroupNames: string[] = [];
+    let availableUserDirectories: UserDirectorySummary[] = [];
 
-    for (let i = 0; i < allGroupNames.length; i++) {
-      let foundExistingGroup: boolean = false;
+    for (let i = 0; i < allUserDirectories.length; i++) {
+      let foundExistingUserDirectory: boolean = false;
 
-      for (let j = 0; j < existingGroupNames.length; j++) {
-        if (allGroupNames[i] == existingGroupNames[j]) {
-          foundExistingGroup = true;
+      for (let j = 0; j < existingOrganizationUserDirectories.length; j++) {
+        if (allUserDirectories[i].id === existingOrganizationUserDirectories[j].id) {
+          foundExistingUserDirectory = true;
           break;
         }
       }
 
-      if (!foundExistingGroup) {
-        availableGroupNames.push(allGroupNames[i]);
+      if (!foundExistingUserDirectory) {
+        availableUserDirectories.push(allUserDirectories[i]);
       }
     }
 
-    return availableGroupNames;
+    return availableUserDirectories;
   }
 }

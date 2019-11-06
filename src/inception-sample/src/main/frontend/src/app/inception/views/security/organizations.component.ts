@@ -111,7 +111,8 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   editOrganization(organizationId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(organizationId) + '/edit'], {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(organizationId) + '/edit'],
+      {relativeTo: this.activatedRoute});
   }
 
   loadOrganizations(): void {
@@ -123,7 +124,8 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
       filter = filter.toLowerCase();
     }
 
-    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending :
+      SortDirection.Descending;
 
     this.dataSource.load(filter, sortDirection, this.paginator!.pageIndex,
       this.paginator!.pageSize);
@@ -152,19 +154,17 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
       }
     }));
 
-    this.subscriptions.add(
-      this.sort!.sortChange.subscribe(() => {
-        if (this.paginator) {
-          this.paginator.pageIndex = 0
-        }
-      }));
+    this.subscriptions.add(this.sort!.sortChange.subscribe(() => {
+      if (this.paginator) {
+        this.paginator.pageIndex = 0
+      }
+    }));
 
-    this.subscriptions.add(
-      this.tableFilter!.changed.subscribe(() => {
-        if (this.paginator) {
-          this.paginator.pageIndex = 0
-        }
-      }));
+    this.subscriptions.add(this.tableFilter!.changed.subscribe(() => {
+      if (this.paginator) {
+        this.paginator.pageIndex = 0
+      }
+    }));
 
     this.subscriptions.add(
       merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
@@ -177,6 +177,12 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+
+  organizationUserDirectories(organizationId: string) {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate([encodeURIComponent(organizationId) + '/user-directories'],
+      {relativeTo: this.activatedRoute});
   }
 }
 

@@ -15,7 +15,7 @@
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
 
-    <!-- Name -->
+    <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell mat-sort-header *matHeaderCellDef i18n="@@groups_component_table_header_name">Name</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>

@@ -4,11 +4,11 @@
     <button mat-flat-button color="primary" [hidden]="true" (click)="addMemberToGroup()" i18n="@@group_members_component_button_add">Add</button>
     <table-filter></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="memberName" matSortDirection="asc" matSortDisableClear>
 
     <!-- Member Name Column -->
     <ng-container matColumnDef="memberName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@group_members_component_table_header__member_name">Member Name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@group_members_component_table_header_member_name">Member Name</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.memberName}}</mat-cell>
     </ng-container>
 

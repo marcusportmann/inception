@@ -13,7 +13,7 @@
 
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;">
 
-    <!-- Existing Role Name -->
+    <!-- Existing Role Name Column -->
     <ng-container matColumnDef="existingRoleName">
       <mat-header-cell *matHeaderCellDef i18n="@@group_roles_component_table_header_existing_role">Existing Role</mat-header-cell>
       <mat-cell *matCellDef="let existingGroupRole">{{roleCodeToName(existingGroupRole.roleCode)}}</mat-cell>
@@ -33,6 +33,8 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
+
+  <mat-paginator [pageSize]="10" [hidePageSize]="true" [showFirstLastButtons]="true" ></mat-paginator>
 
 </mat-card>
 

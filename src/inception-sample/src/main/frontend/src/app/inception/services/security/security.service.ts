@@ -190,7 +190,7 @@ export class SecurityService {
     const organizationUserDirectory = new OrganizationUserDirectory(organizationId, userDirectoryId);
 
     return this.httpClient.post<boolean>(
-      environment.securityServiceUrlPrefix + '/organizations/' + userDirectoryId + '/user-directories', organizationUserDirectory, {observe: 'response'})
+      environment.securityServiceUrlPrefix + '/organizations/' + organizationId + '/user-directories', organizationUserDirectory, {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {

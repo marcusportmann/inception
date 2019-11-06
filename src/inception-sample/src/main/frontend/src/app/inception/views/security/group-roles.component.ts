@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
@@ -34,6 +34,8 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {ConfirmationDialogComponent} from "../../components/dialogs";
 import {Role} from "../../services/security/role";
 import {GroupRole} from "../../services/security/group-role";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort} from "@angular/material/sort";
 
 /**
  * The GroupRolesComponent class implements the group roles component.
@@ -55,6 +57,8 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   dataSource = new MatTableDataSource<GroupRole>([]);
 
   displayedColumns = ['existingRoleName', 'actions'];
+
+  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
 
   selectedRole?: Role;
 
@@ -136,6 +140,8 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   }
 
   ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator!;
+
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
@@ -162,8 +168,6 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   }
 
   removeRoleFromGroup(roleCode: string) {
-    console.log('Removing role: ', roleCode);
-
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
