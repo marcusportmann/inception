@@ -15,13 +15,13 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormControl} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Error} from '../../errors/error';
-import {finalize, first} from 'rxjs/operators';
+import {finalize, first, map, startWith} from 'rxjs/operators';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
@@ -59,17 +59,22 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   displayedColumns = ['existingUserDirectoryName', 'actions'];
 
+  filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
+
+  newUserDirectoryFormControl: FormControl;
+
   organizationId: string;
 
   @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
-
-  selectedUserDirectory?: UserDirectorySummary;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.newUserDirectoryFormControl = new FormControl('');
 
     // Retrieve parameters
     this.organizationId =
@@ -93,15 +98,15 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
   }
 
   addUserDirectoryToOrganization(): void {
-    if (this.selectedUserDirectory) {
+    if (this.isUserDirectorySelected()) {
       this.spinnerService.showSpinner();
 
       this.securityService.addUserDirectoryToOrganization(this.organizationId,
-        this.selectedUserDirectory.id)
+        this.newUserDirectoryFormControl.value.id)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           this.loadUserDirectoriesForOrganization();
-          this.selectedUserDirectory = undefined;
+          this.newUserDirectoryFormControl.setValue('');
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
           if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -121,6 +126,21 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
     this.dataSource.filter = filterValue;
   }
 
+  displayUserDirectory(userDirectorySummary: UserDirectorySummary): string {
+    return userDirectorySummary.name;
+  }
+
+  isUserDirectorySelected(): boolean {
+    if (this.newUserDirectoryFormControl.value as UserDirectorySummary) {
+      if (typeof (this.newUserDirectoryFormControl.value.id) !== 'undefined' &&
+        this.newUserDirectoryFormControl.value.id !== null) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   loadUserDirectoriesForOrganization(): void {
     this.spinnerService.showSpinner();
 
@@ -129,8 +149,16 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
       .subscribe((userDirectorySummaries: UserDirectorySummary[]) => {
         this.dataSource.data = userDirectorySummaries;
 
-        this.availableUserDirectories$.next(
-          this.calculateAvailableUserDirectories(this.allUserDirectories, this.dataSource.data));
+        let availableUserDirectories = this.calculateAvailableUserDirectories(
+          this.allUserDirectories, this.dataSource.data);
+
+        this.subscriptions.add(
+          this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
+            this.filteredUserDirectories$.next(
+              this.filterUserDirectories(availableUserDirectories, value));
+          })).subscribe());
+
+        this.availableUserDirectories$.next(availableUserDirectories);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -191,7 +219,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.loadUserDirectoriesForOrganization();
-              this.selectedUserDirectory = undefined;
+              this.newUserDirectoryFormControl.setValue('');
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
               if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -227,5 +255,19 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
     }
 
     return availableUserDirectories;
+  }
+
+  private filterUserDirectories(userDirectories: UserDirectorySummary[],
+                                value: string | UserDirectorySummary): UserDirectorySummary[] {
+    let filterValue = '';
+
+    if (typeof value === 'string') {
+      filterValue = (value as string).toLowerCase();
+    } else if (typeof value === 'object') {
+      filterValue = (value as UserDirectorySummary).name.toLowerCase();
+    }
+
+    return userDirectories.filter(
+      userDirecory => userDirecory.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }
