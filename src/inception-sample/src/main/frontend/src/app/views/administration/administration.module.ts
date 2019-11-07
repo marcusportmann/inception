@@ -26,6 +26,7 @@ import {SystemTitleResolver} from './system-title-resolver';
 import {CodeCategoriesTitleResolver} from '../../inception/views/codes/code-categories-title-resolver';
 import {ConfigurationsTitleResolver} from '../../inception/views/configuration/configurations-title-resolver';
 import {SecurityTitleResolver} from './security-title-resolver';
+import {JobsTitleResolver} from "../../inception/views/scheduler/jobs-title-resolver";
 
 const routes: Routes = [{
   path: '',
@@ -52,7 +53,15 @@ const routes: Routes = [{
     },
     loadChildren: () => import('../../inception/views/configuration/configuration.module').then(
       m => m.ConfigurationModule)
-  }]
+  }, {
+    path: 'jobs',
+    resolve: {
+      title: JobsTitleResolver
+    },
+    loadChildren: () => import('../../inception/views/scheduler/scheduler.module').then(
+      m => m.SchedulerModule)
+  }
+  ]
 }, {
   path: 'security',
   resolve: {
@@ -60,14 +69,16 @@ const routes: Routes = [{
   },
   loadChildren: () => import('../../inception/views/security/security.module').then(
     m => m.SecurityModule)
-}];
+}
+];
 
 @NgModule({
-  imports: [CommonModule,
-    RouterModule.forChild(routes)
+  imports: [CommonModule, RouterModule.forChild(routes)
   ],
   declarations: [AdministrationComponent],
-  providers: [AdministrationTitleResolver, CodeCategoriesTitleResolver, ConfigurationsTitleResolver, SecurityTitleResolver, SystemTitleResolver]
+  providers: [AdministrationTitleResolver, CodeCategoriesTitleResolver, ConfigurationsTitleResolver,
+    JobsTitleResolver, SecurityTitleResolver, SystemTitleResolver
+  ]
 })
 export class AdministrationModule {
 }

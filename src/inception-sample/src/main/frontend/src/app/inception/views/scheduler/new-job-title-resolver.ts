@@ -19,15 +19,15 @@ import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
- * The CodeCategoriesTitleResolver class provides the route data resolver that resolves the
- * title for the "Code Categories" route in the navigation hierarchy.
+ * The NewJobTitleResolver class provides the route data resolver that resolves the
+ * title for the "New Job" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class CodeCategoriesTitleResolver implements Resolve<string> {
+export class NewJobTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new CodeCategoryTitleResolver.
+   * Constructs a new NewJobTitleResolver.
    *
    * @param i18n The internationalization service.
    */
@@ -43,8 +43,8 @@ export class CodeCategoriesTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@code_categories_title_resolver_title',
-      value: 'Code Categories'
+      id: '@@new_job_title_resolver_title',
+      value: 'New Job'
     }));
   }
 }

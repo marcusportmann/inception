@@ -112,11 +112,20 @@ public class SchedulerService
   @Override
   @Transactional
   public void createJob(Job job)
-    throws SchedulerServiceException
+    throws DuplicateJobException, SchedulerServiceException
   {
     try
     {
+      if (jobRepository.existsById(job.getId()))
+      {
+        throw new DuplicateJobException(job.getId());
+      }
+
       jobRepository.saveAndFlush(job);
+    }
+    catch (DuplicateJobException e)
+    {
+      throw e;
     }
     catch (Throwable e)
     {
@@ -286,6 +295,39 @@ public class SchedulerService
     catch (Throwable e)
     {
       throw new SchedulerServiceException("Failed to retrieve the job (" + jobId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the name of the job.
+   *
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @return the name of the job
+   */
+  @Override
+  public String getJobName(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = jobRepository.getNameById(jobId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+
+      throw new JobNotFoundException(jobId);
+    }
+    catch (JobNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new SchedulerServiceException("Failed to retrieve the name for the job (" + jobId
+          + ")", e);
     }
   }
 

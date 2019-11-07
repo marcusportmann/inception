@@ -92,7 +92,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-scheduler</artifactId>
+      <artifactId>inception-scheduler-rs</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>

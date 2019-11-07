@@ -769,6 +769,11 @@
       <column name="description" value="Scheduler Administration"/>
     </insert>
     <insert schemaName="security" tableName="functions">
+      <column name="code" value="Scheduler.JobAdministration"/>
+      <column name="name" value="Job Administration"/>
+      <column name="description" value="Job Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
       <column name="code" value="Security.GroupAdministration"/>
       <column name="name" value="Group Administration"/>
       <column name="description" value="Group Administration"/>

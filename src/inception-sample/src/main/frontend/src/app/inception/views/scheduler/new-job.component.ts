@@ -20,61 +20,60 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {CodesService} from '../../services/codes/codes.service';
 import {Error} from '../../errors/error';
-import {CodeCategory} from '../../services/codes/code-category';
 import {finalize, first} from 'rxjs/operators';
-import {CodesServiceError} from '../../services/codes/codes.service.errors';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
+import {Job} from "../../services/scheduler/job";
+import {SchedulerService} from "../../services/scheduler/scheduler.service";
+import {SchedulerServiceError} from "../../services/scheduler/scheduler.service.errors";
 
 /**
- * The NewCodeCategoryComponent class implements the new code category component.
+ * The NewJobComponent class implements the new job component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'new-code-category.component.html',
-  styleUrls: ['new-code-category.component.css'],
+  templateUrl: 'new-job.component.html',
+  styleUrls: ['new-job.component.css'],
 })
-export class NewCodeCategoryComponent extends AdminContainerView implements AfterViewInit {
+export class NewJobComponent extends AdminContainerView implements AfterViewInit {
 
-  codeCategory?: CodeCategory;
+  job?: Job;
 
-  newCodeCategoryForm: FormGroup;
+  newJobForm: FormGroup;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
+              private schedulerService: SchedulerService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
 
     // Initialise the form
-    this.newCodeCategoryForm = new FormGroup({
-      data: new FormControl(''),
-      id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+    this.newJobForm = new FormGroup({
+      id: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required, Validators.maxLength(100)])
     })
   }
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_code_category_component_back_title',
-      value: 'Code Categories'
+      id: '@@new_job_component_back_title',
+      value: 'Jobs'
     }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@new_code_category_component_title',
-      value: 'New Code Category'
+      id: '@@new_job_component_title',
+      value: 'New Job'
     })
   }
 
   ngAfterViewInit(): void {
-    this.codeCategory = new CodeCategory('', '');
+    this.job = new Job('', '', '', '', true, []);
   }
 
   onCancel(): void {
@@ -83,23 +82,22 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   }
 
   onOK(): void {
-    if (this.codeCategory && this.newCodeCategoryForm.valid) {
-      const data = this.newCodeCategoryForm.get('data')!.value;
+    if (this.job && this.newJobForm.valid) {
+      const data = this.newJobForm.get('data')!.value;
 
-      this.codeCategory.id = this.newCodeCategoryForm.get('id')!.value;
-      this.codeCategory.name = this.newCodeCategoryForm.get('name')!.value;
-      this.codeCategory.data = (!!data) ? data : null;
+      this.job.id = this.newJobForm.get('id')!.value;
+      this.job.name = this.newJobForm.get('name')!.value;
 
       this.spinnerService.showSpinner();
 
-      this.codesService.createCodeCategory(this.codeCategory)
+      this.schedulerService.createJob(this.job)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+          if ((error instanceof SchedulerServiceError) || (error instanceof AccessDeniedError) ||
             (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});

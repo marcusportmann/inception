@@ -36,8 +36,6 @@ export class SystemUnavailableError extends Error {
     super(i18n({
       id: '@@system_unavailable_error',
       value: 'An error has occurred and the system is unable to process your request at this time.'
-    }));
-
-    // TODO: Retrieve error details from HttpErrorResponse and save
+    }), httpErrorResponse);
   }
 }

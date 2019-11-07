@@ -17,21 +17,26 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {CodesService} from "../../services/codes/codes.service";
+import {first, map} from "rxjs/operators";
+import {CodeCategory} from "../../services/codes/code-category";
+import {SchedulerService} from "../../services/scheduler/scheduler.service";
 
 /**
- * The CodeCategoriesTitleResolver class provides the route data resolver that resolves the
- * title for the "Code Categories" route in the navigation hierarchy.
+ * The JobTitleResolver class provides the route data resolver that resolves the
+ * title for the "Job" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class CodeCategoriesTitleResolver implements Resolve<string> {
+export class JobTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new CodeCategoryTitleResolver.
+   * Constructs a new JobTitleResolver.
    *
-   * @param i18n The internationalization service.
+   * @param i18n             The internationalization service.
+   * @param schedulerService The scheduler service.
    */
-  constructor(private i18n: I18n) {
+  constructor(private i18n: I18n, private schedulerService: SchedulerService) {
   }
 
   /**
@@ -40,11 +45,9 @@ export class CodeCategoriesTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
-    return of(this.i18n({
-      id: '@@code_categories_title_resolver_title',
-      value: 'Code Categories'
-    }));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
+          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    return this.schedulerService.getJobName(
+      decodeURIComponent(activatedRouteSnapshot.paramMap.get('jobId')!));
   }
 }

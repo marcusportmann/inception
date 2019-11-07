@@ -36,7 +36,7 @@ public interface ISchedulerService
    * @param job the <code>Job</code> instance containing the information for the job
    */
   void createJob(Job job)
-    throws SchedulerServiceException;
+    throws DuplicateJobException, SchedulerServiceException;
 
   /**
    * Delete the job
@@ -72,6 +72,16 @@ public interface ISchedulerService
    * @return the job
    */
   Job getJob(UUID jobId)
+    throws JobNotFoundException, SchedulerServiceException;
+
+  /**
+   * Retrieve the name of the job.
+   *
+   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   *
+   * @return the name of the job
+   */
+  String getJobName(UUID jobId)
     throws JobNotFoundException, SchedulerServiceException;
 
   /**

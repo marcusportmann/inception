@@ -131,6 +131,10 @@ public class SchedulerServiceTest
 
     compareJobs(job, retrievedJob);
 
+    String retrievedJobName = schedulerService.getJobName(job.getId());
+
+    assertEquals("The correct job name was not retrieved", retrievedJobName, job.getName());
+
     long numberOfJobs = schedulerService.getNumberOfJobs();
 
     assertEquals("The correct number of jobs was not retrieved", beforeRetrievedJobs.size() + 1,

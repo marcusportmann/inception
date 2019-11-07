@@ -326,6 +326,8 @@ INSERT INTO security.functions (code, name, description)
 INSERT INTO security.functions (code, name, description)
   VALUES ('Scheduler.SchedulerAdministration', 'Scheduler Administration', 'Scheduler Administration');
 INSERT INTO security.functions (code, name, description)
+  VALUES ('Scheduler.JobAdministration', 'Job Administration', 'Job Administration');
+INSERT INTO security.functions (code, name, description)
   VALUES ('Security.GroupAdministration', 'Group Administration', 'Group Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Security.OrganizationAdministration', 'Organization Administration', 'Organization Administration');

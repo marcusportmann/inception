@@ -30,6 +30,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.persistence.LockModeType;
@@ -62,6 +63,9 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select j from Job j where j.enabled = true and j.status = 0")
   List<Job> findUnscheduledJobsForWrite(Pageable pageable);
+
+  @Query("select j.name from Job j where j.id = :jobId")
+  Optional<String> getNameById(@Param("jobId") UUID jobId);
 
   @Modifying
   @Query("update Job j set j.lockName = :lockName, j.status = 2, "

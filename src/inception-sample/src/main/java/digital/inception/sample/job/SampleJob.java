@@ -40,6 +40,15 @@ public class SampleJob
   public void execute(JobExecutionContext context)
     throws JobExecutionFailedException
   {
-    logger.info("Sample job executing...");
+    logger.info("Sample job execution started");
+
+    try
+    {
+      Thread.sleep(20000L);
+    }
+    catch(Throwable e)
+    {}
+
+    logger.info("Sample job execution finished");
   }
 }
