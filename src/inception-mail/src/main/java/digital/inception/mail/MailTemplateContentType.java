@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlType;
 @SuppressWarnings("unused")
 public enum MailTemplateContentType
 {
+  @XmlEnumValue("Unknown")
+  UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Text")
   TEXT(1, "Text"),
   @XmlEnumValue("HTML")
@@ -67,6 +69,9 @@ public enum MailTemplateContentType
   {
     switch (code)
     {
+      case 0:
+        return MailTemplateContentType.UNKNOWN;
+
       case 1:
         return MailTemplateContentType.TEXT;
 

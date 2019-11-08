@@ -51,7 +51,8 @@ public class MailTemplateNotFoundException extends ServiceException
    * w
    * Constructs a new <code>MailTemplateNotFoundException</code>.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    */
   public MailTemplateNotFoundException(UUID mailTemplateId)
   {

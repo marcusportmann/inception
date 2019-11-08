@@ -126,6 +126,17 @@ public interface IReportingService
     throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
+   *
+   * @return the name of the report definition
+   */
+  String getReportDefinitionName(UUID reportDefinitionId)
+    throws ReportDefinitionNotFoundException, ReportingServiceException;
+
+  /**
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions

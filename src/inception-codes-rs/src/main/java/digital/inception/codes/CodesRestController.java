@@ -366,7 +366,7 @@ public class CodesRestController extends SecureRestController
   }
 
   /**
-   * Retrieve the name of the code category
+   * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category
    *
@@ -454,7 +454,7 @@ public class CodesRestController extends SecureRestController
   }
 
   /**
-   * Retrieve the name of the code
+   * Retrieve the name of the code.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
    *                       with

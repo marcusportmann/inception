@@ -72,9 +72,11 @@ public class MailTemplate
   private MailTemplateContentType contentType;
 
   /**
-   * The ID used to uniquely identify the mail template.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the mail template.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the mail template", required = true)
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -112,7 +114,8 @@ public class MailTemplate
   /**
    * Constructs a new <code>MailTemplate</code>.
    *
-   * @param id          the ID used to uniquely identify the mail template
+   * @param id          the Universally Unique Identifier (UUID) used to uniquely identify the mail
+   *                    template
    * @param name        the name of the mail template
    * @param contentType the content type for the mail template
    * @param template    the Apache FreeMarker template for the mail template
@@ -167,9 +170,9 @@ public class MailTemplate
   }
 
   /**
-   * Returns the ID used to uniquely identify the mail template.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
    *
-   * @return the ID used to uniquely identify the mail template
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the mail template
    */
   public UUID getId()
   {
@@ -220,9 +223,9 @@ public class MailTemplate
   }
 
   /**
-   * Set the ID used to uniquely identify the mail template.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
    *
-   * @param id the ID used to uniquely identify the mail template
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the mail template
    */
   public void setId(UUID id)
   {
@@ -257,6 +260,7 @@ public class MailTemplate
   @Override
   public String toString()
   {
-    return "MailTemplate {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return "MailTemplate {id=\"" + getId() + "\", name=\"" + getName() + "\", contentType=\""
+        + getContentType() + "\"}";
   }
 }

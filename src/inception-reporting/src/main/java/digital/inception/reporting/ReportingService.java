@@ -355,6 +355,41 @@ public class ReportingService
   }
 
   /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
+   *
+   * @return the name of the report definition
+   */
+  @Override
+  public String getReportDefinitionName(UUID reportDefinitionId)
+    throws ReportDefinitionNotFoundException, ReportingServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = reportDefinitionRepository.getNameById(reportDefinitionId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+
+      throw new ReportDefinitionNotFoundException(reportDefinitionId);
+    }
+    catch (ReportDefinitionNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new ReportingServiceException("Failed to retrieve the name for the report definition ("
+          + reportDefinitionId + ")", e);
+    }
+
+  }
+
+  /**
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions

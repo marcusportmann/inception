@@ -129,7 +129,7 @@ public class SchedulerRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void deleteJob(@ApiParam(name = "jobId",
-      value = "The ID used to uniquely identify the job", required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job", required = true)
   @PathVariable UUID jobId)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {
@@ -159,7 +159,8 @@ public class SchedulerRestController extends SecureRestController
   @RequestMapping(value = "/jobs/{jobId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public Job getJob(@ApiParam(name = "job",
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
       required = true)
@@ -175,7 +176,7 @@ public class SchedulerRestController extends SecureRestController
   }
 
   /**
-   * Retrieve the name of the job
+   * Retrieve the name of the job.
    *
    * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
    *
@@ -195,7 +196,7 @@ public class SchedulerRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public String getJobName(@ApiParam(name = "jobId",
-      value = "The ID used to uniquely identify the job", required = true)
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job", required = true)
   @PathVariable UUID jobId)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {

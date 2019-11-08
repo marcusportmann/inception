@@ -16,6 +16,8 @@ export const environment = {
   codesServiceUrlPrefix: 'http://localhost:8080/api/codes',
   configurationServiceUrlPrefix: 'http://localhost:8080/api/configuration',
   errorServiceUrlPrefix: 'http://localhost:8080/api/error',
+  mailServiceUrlPrefix: 'http://localhost:8080/api/mail',
+  reportingServiceUrlPrefix: 'http://localhost:8080/api/reporting',
   schedulerServiceUrlPrefix: 'http://localhost:8080/api/scheduler',
   securityServiceUrlPrefix: 'http://localhost:8080/api/security'
 };

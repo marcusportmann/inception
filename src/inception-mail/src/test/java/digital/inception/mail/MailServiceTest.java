@@ -59,10 +59,10 @@ public class MailServiceTest
   private IMailService mailService;
 
   /**
-   * Test the message template functionality.
+   * Test the mail template functionality.
    */
   @Test
-  public void messageTemplateTest()
+  public void mailTemplateTest()
     throws Exception
   {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
@@ -75,7 +75,12 @@ public class MailServiceTest
 
     boolean mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
-    assertTrue("The mail template that was saved does not exist", mailTemplateExists);
+    assertTrue("The mail template does not exist", mailTemplateExists);
+
+    String retrievedMailTemplateName = mailService.getMailTemplateName(mailTemplate.getId());
+
+    assertEquals("The correct mail template name was not retrieved", mailTemplate.getName(),
+        retrievedMailTemplateName);
 
     mailTemplate.setName("Updated " + mailTemplate.getName());
 
@@ -87,7 +92,7 @@ public class MailServiceTest
 
     mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
-    assertTrue("The updated mail template that was saved does not exist", mailTemplateExists);
+    assertTrue("The updated mail template does not exist", mailTemplateExists);
 
     long numberOfMailTemplates = mailService.getNumberOfMailTemplates();
 
@@ -126,7 +131,8 @@ public class MailServiceTest
   /**
    * Test the send mail functionality.
    */
-  //@Test
+
+  // @Test
   public void sendMailTest()
     throws Exception
   {

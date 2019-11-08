@@ -48,10 +48,10 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "MailTemplateSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name" })
+@JsonPropertyOrder({ "id", "name", "contentType" })
 @XmlRootElement(name = "MailTemplateSummary", namespace = "http://mail.inception.digital")
 @XmlType(name = "MailTemplateSummary", namespace = "http://mail.inception.digital",
-  propOrder = { "id", "name" })
+    propOrder = { "id", "name", "contentType" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
@@ -62,9 +62,21 @@ public class MailTemplateSummary
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the mail template.
+   * The content type for the mail template.
    */
-  @ApiModelProperty(value = "The ID used to uniquely identify the mail template", required = true)
+  @ApiModelProperty(value = "The content type for the mail template", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ContentType", required = true)
+  @NotNull
+  @Column(name = "content_type", nullable = false)
+  private MailTemplateContentType contentType;
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   */
+  @ApiModelProperty(
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -91,13 +103,16 @@ public class MailTemplateSummary
   /**
    * Constructs a new <code>MailTemplateSummary</code>.
    *
-   * @param id       the ID used to uniquely identify the mail template
-   * @param name     the name of the mail template
+   * @param id          the Universally Unique Identifier (UUID) used to uniquely identify the mail
+   *                    template
+   * @param name        the name of the mail template
+   * @param contentType the content type for the mail template
    */
-  public MailTemplateSummary(UUID id, String name)
+  public MailTemplateSummary(UUID id, String name, MailTemplateContentType contentType)
   {
     this.id = id;
     this.name = name;
+    this.contentType = contentType;
   }
 
   /**
@@ -132,9 +147,19 @@ public class MailTemplateSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the mail template.
+   * Returns the content type for the mail template.
    *
-   * @return the ID used to uniquely identify the mail template
+   * @return the content type for the mail template
+   */
+  public MailTemplateContentType getContentType()
+  {
+    return contentType;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the mail template
    */
   public UUID getId()
   {
@@ -160,14 +185,24 @@ public class MailTemplateSummary
   public int hashCode()
   {
     return (id == null)
-      ? 0
-      : id.hashCode();
+        ? 0
+        : id.hashCode();
   }
 
   /**
-   * Set the ID used to uniquely identify the mail template.
+   * Set the content type for the mail template.
    *
-   * @param id the ID used to uniquely identify the mail template
+   * @param contentType the content type for the mail template
+   */
+  public void setContentType(MailTemplateContentType contentType)
+  {
+    this.contentType = contentType;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the mail template
    */
   public void setId(UUID id)
   {
@@ -192,6 +227,7 @@ public class MailTemplateSummary
   @Override
   public String toString()
   {
-    return "MailTemplateSummary {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return "MailTemplateSummary {id=\"" + getId() + "\", name=\"" + getName()
+        + "\", contentType=\"" + getContentType() + "\"}";
   }
 }

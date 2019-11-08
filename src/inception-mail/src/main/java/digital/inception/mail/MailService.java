@@ -19,16 +19,14 @@ package digital.inception.mail;
 //~--- non-JDK imports --------------------------------------------------------
 
 import freemarker.template.Configuration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -71,6 +69,11 @@ public class MailService
   private ApplicationContext applicationContext;
 
   /**
+   * The Apache FreeMarker configuration.,
+   */
+  private Configuration freeMarkerConfiguration;
+
+  /**
    * The Mail Template Repository.
    */
   private MailTemplateRepository mailTemplateRepository;
@@ -79,11 +82,6 @@ public class MailService
    * The Mail Template Summary Repository.
    */
   private MailTemplateSummaryRepository mailTemplateSummaryRepository;
-
-  /**
-   * The Apache FreeMarker configuration.,
-   */
-  private Configuration freeMarkerConfiguration;
 
   /**
    * Constructs a new <code>MailService</code>.
@@ -151,11 +149,12 @@ public class MailService
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    */
   @Override
   @Transactional
-  @CacheEvict(value="mailTemplates", key="#mailTemplateId")
+  @CacheEvict(value = "mailTemplates", key = "#mailTemplateId")
   public void deleteMailTemplate(UUID mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
@@ -182,7 +181,8 @@ public class MailService
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return the mail template
    */
@@ -216,6 +216,41 @@ public class MailService
   }
 
   /**
+   * Retrieve the name of the mail template.
+   *
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
+   *
+   * @return the name of the mail template
+   */
+  @Override
+  public String getMailTemplateName(UUID mailTemplateId)
+    throws MailTemplateNotFoundException, MailServiceException
+  {
+    try
+    {
+      Optional<String> nameOptional = mailTemplateRepository.getNameById(mailTemplateId);
+
+      if (nameOptional.isPresent())
+      {
+        return nameOptional.get();
+      }
+
+      throw new MailTemplateNotFoundException(mailTemplateId);
+    }
+    catch (MailTemplateNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new MailServiceException("Failed to retrieve the name for the mail template ("
+          + mailTemplateId + ")", e);
+    }
+
+  }
+
+  /**
    * Returns the summaries for all the mail templates.
    *
    * @return the summaries for all the mail templates
@@ -238,7 +273,8 @@ public class MailService
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return the summary for the mail template
    */
@@ -314,7 +350,8 @@ public class MailService
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
@@ -340,7 +377,8 @@ public class MailService
    * @param subject                the subject for the mail
    * @param from                   the from e-mail address
    * @param fromName               the from e-mail name
-   * @param mailTemplateId         the ID used to uniquely identify the mail template
+   * @param mailTemplateId         the Universally Unique Identifier (UUID) used to uniquely
+   *                               identify the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
   public void sendMail(List<String> to, String subject, String from, String fromName,
@@ -400,7 +438,7 @@ public class MailService
    */
   @Override
   @Transactional
-  @CacheEvict(value="mailTemplates", key="#mailTemplate.id")
+  @CacheEvict(value = "mailTemplates", key = "#mailTemplate.id")
   public void updateMailTemplate(MailTemplate mailTemplate)
     throws MailTemplateNotFoundException, MailServiceException
   {

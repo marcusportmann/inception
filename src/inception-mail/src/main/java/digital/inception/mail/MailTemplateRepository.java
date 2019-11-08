@@ -25,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -38,4 +39,7 @@ public interface MailTemplateRepository extends JpaRepository<MailTemplate, UUID
   @Modifying
   @Query("delete from MailTemplate mt where mt.id = :mailTemplateId")
   void deleteById(@Param("mailTemplateId") UUID mailTemplateId);
+
+  @Query("select mt.name from MailTemplate mt where mt.id = :mailTemplateId")
+  Optional<String> getNameById(@Param("mailTemplateId") UUID mailTemplateId);
 }

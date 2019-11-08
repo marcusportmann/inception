@@ -397,7 +397,7 @@ export class CodesService {
 
           return throwError(new CodesServiceError(this.i18n({
             id: '@@codes_get_code_category_summaries_error',
-            value: 'Failed to retrieve the code categories.'
+            value: 'Failed to retrieve the summaries for the code categories.'
           }), apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse, this.i18n));

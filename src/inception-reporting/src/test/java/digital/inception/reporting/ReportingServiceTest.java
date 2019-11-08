@@ -111,7 +111,13 @@ public class ReportingServiceTest
     boolean reportDefinitionExists = reportingService.reportDefinitionExists(
         reportDefinition.getId());
 
-    assertTrue("The report definition that was saved does not exist", reportDefinitionExists);
+    assertTrue("The report definition does not exist", reportDefinitionExists);
+
+    String retrievedReportDefinitionName = reportingService.getReportDefinitionName(
+        reportDefinition.getId());
+
+    assertEquals("The correct report definition name was not retrieved",
+        reportDefinition.getName(), retrievedReportDefinitionName);
 
     reportDefinition.setName("Updated " + reportDefinition.getName());
 
@@ -123,8 +129,7 @@ public class ReportingServiceTest
 
     reportDefinitionExists = reportingService.reportDefinitionExists(reportDefinition.getId());
 
-    assertTrue("The updated report definition that was saved does not exist",
-        reportDefinitionExists);
+    assertTrue("The updated report definition does not exist", reportDefinitionExists);
 
     long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
 

@@ -43,7 +43,8 @@ public interface IMailService
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    */
   void deleteMailTemplate(UUID mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
@@ -51,11 +52,23 @@ public interface IMailService
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return the mail template
    */
   MailTemplate getMailTemplate(UUID mailTemplateId)
+    throws MailTemplateNotFoundException, MailServiceException;
+
+  /**
+   * Retrieve the name of the mail template.
+   *
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
+   *
+   * @return the name of the mail template
+   */
+  String getMailTemplateName(UUID mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
@@ -69,7 +82,8 @@ public interface IMailService
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return the summary for the mail template
    */
@@ -95,7 +109,8 @@ public interface IMailService
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
    *
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
@@ -109,7 +124,8 @@ public interface IMailService
    * @param subject                the subject for the mail
    * @param from                   the from e-mail address
    * @param fromName               the from e-mail name
-   * @param mailTemplateId         the ID used to uniquely identify the mail template
+   * @param mailTemplateId         the Universally Unique Identifier (UUID) used to uniquely
+   *                               identify the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
   void sendMail(List<String> to, String subject, String from, String fromName, UUID mailTemplateId,

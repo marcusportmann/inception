@@ -148,7 +148,7 @@ export class SchedulerService {
   /**
    * Retrieve the name of the job.
    *
-   * @param job The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * @param jobId The Universally Unique Identifier (UUID) used to uniquely identify the job.
    *
    * @return The name of the job.
    */

@@ -40,7 +40,7 @@ public class OrganizationData
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the organization.
+   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
   private UUID id;
 
@@ -81,9 +81,9 @@ public class OrganizationData
   }
 
   /**
-   * Returns the ID used to uniquely identify the organization.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @return the ID used to uniquely identify the organization
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   public UUID getId()
   {
@@ -101,9 +101,9 @@ public class OrganizationData
   }
 
   /**
-   * Set the ID used to uniquely identify the organization.
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
    *
-   * @param id the ID used to uniquely identify the organization
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
   public void setId(UUID id)
   {

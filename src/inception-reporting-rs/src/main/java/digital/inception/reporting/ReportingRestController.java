@@ -19,6 +19,7 @@ package digital.inception.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
+import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -31,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 //~--- JDK imports ------------------------------------------------------------
@@ -232,6 +234,75 @@ public class ReportingRestController extends SecureRestController
     {
       throw new ReportingServiceException("Failed to generate the PDF report", e);
     }
+  }
+
+  /**
+   * Retrieve the report definition.
+   *
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
+   *
+   * @return the report definition
+   */
+  @ApiOperation(value = "Retrieve the report definition", notes = "Retrieve the report definition")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The report definition could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
+  public ReportDefinition getReportDefinition(@ApiParam(name = "reportDefinition",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+      required = true)
+  @PathVariable UUID reportDefinitionId)
+    throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
+  {
+    if (StringUtils.isEmpty(reportDefinitionId))
+    {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    return reportingService.getReportDefinition(reportDefinitionId);
+  }
+
+  /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the report definition
+   *
+   * @return the name of the report definition
+   */
+  @ApiOperation(value = "Retrieve the name of the report definition",
+      notes = "Retrieve the name of the report definition")
+  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+      @ApiResponse(code = 404, message = "The report definition could not be found",
+          response = RestControllerError.class) ,
+      @ApiResponse(code = 500,
+          message = "An error has occurred and the service is unable to process the request at this time",
+          response = RestControllerError.class) })
+  @RequestMapping(value = "/report-definitions/{reportDefinitionId}/name",
+      method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  public String getReportDefinitionName(@ApiParam(name = "reportDefinitionId",
+      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
+      required = true)
+  @PathVariable UUID reportDefinitionId)
+    throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
+  {
+    if (StringUtils.isEmpty(reportDefinitionId))
+    {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    return RestUtil.quote(reportingService.getReportDefinitionName(reportDefinitionId));
   }
 
   /**
