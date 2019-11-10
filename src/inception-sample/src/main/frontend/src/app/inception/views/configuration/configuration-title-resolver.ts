@@ -42,7 +42,6 @@ export class ConfigurationTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    // TODO: Retrieve the actual name of the configuration and return here -- MARCUS
     return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('key')!));
   }
 }

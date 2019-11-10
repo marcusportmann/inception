@@ -103,6 +103,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from "@angular/material-moment-adapter";
 import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {SchedulerService} from "./services/scheduler/scheduler.service";
+import {ReportingService} from "./services/reporting/reporting.service";
+import {MailService} from "./services/mail/mail.service";
 
 // Import 3rd party components
 
@@ -243,8 +245,8 @@ export class InceptionModule {
         CanActivateFunctionGuard, DisabledFunctionGuard,
 
         BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService,
-        SchedulerService, SpinnerService, TitleBarService, NavigationService, SecurityService,
-        SessionService
+        MailService, NavigationService, ReportingService, SchedulerService, SecurityService,
+        ReportingService, SessionService, SpinnerService, TitleBarService
       ]
     }
   }

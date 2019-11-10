@@ -67,7 +67,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   get title(): string {
     return this.i18n({
-      id: '@@code_categories_component_title',
+      id: '@@codes_code_categories_component_title',
       value: 'Code Categories'
     })
   }
@@ -87,7 +87,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@code_categories_component_confirm_delete_code_category',
+          id: '@@codes_code_categories_component_confirm_delete_code_category',
           value: 'Are you sure you want to delete the code category?'
         })
       });

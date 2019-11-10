@@ -1,21 +1,21 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="add-user-to-group-container">
-    <span class="mat-header-label" i18n="@@user_groups_component_new_group">New Group :</span>
+    <span class="mat-header-label" i18n="@@security_user_groups_component_new_group">New Group :</span>
     <mat-form-field class="mat-form-field-slim">
-      <mat-select [(ngModel)]="selectedGroupName" i18n-placeholder="@@user_groups_component_placeholder_select_a_group" placeholder="Select a group">
+      <mat-select [(ngModel)]="selectedGroupName" i18n-placeholder="@@security_user_groups_component_placeholder_select_a_group" placeholder="Select a group">
         <mat-option *ngFor="let availableGroupName of availableGroupNames$ | async" [value]="availableGroupName">
           {{availableGroupName}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-flat-button color="primary" [disabled]="!selectedGroupName" (click)="addUserToGroup()" i18n="@@user_groups_component_button_add">Add</button>
+    <button mat-flat-button color="primary" [disabled]="!selectedGroupName" (click)="addUserToGroup()" i18n="@@security_user_groups_component_button_add">Add</button>
   </div>
 
   <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;">
 
     <!-- Existing Group Name Column -->
     <ng-container matColumnDef="existingGroupName">
-      <mat-header-cell *matHeaderCellDef i18n="@@user_groups_component_table_header_existing_group">Existing Group</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef i18n="@@security_user_groups_component_table_header_existing_group">Existing Group</mat-header-cell>
       <mat-cell *matCellDef="let existingGroupName">{{existingGroupName}}</mat-cell>
     </ng-container>
 

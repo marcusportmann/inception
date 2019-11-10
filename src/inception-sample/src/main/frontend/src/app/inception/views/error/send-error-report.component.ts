@@ -102,7 +102,7 @@ export class SendErrorReportComponent implements OnInit {
           const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
             {
               message: this.i18n({
-                id: '@@send_error_component_error_report_submitted',
+                id: '@@error_send_error_component_error_report_submitted',
                 value: 'Your error report was submitted.'
               }, {})
             });

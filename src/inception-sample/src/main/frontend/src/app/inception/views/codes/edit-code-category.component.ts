@@ -70,14 +70,14 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_code_category_component_back_title',
+      id: '@@codes_edit_code_category_component_back_title',
       value: 'Code Categories'
     }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_code_category_component_title',
+      id: '@@codes_edit_code_category_component_title',
       value: 'Edit Code Category'
     })
   }

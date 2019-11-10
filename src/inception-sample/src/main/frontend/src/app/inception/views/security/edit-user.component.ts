@@ -80,7 +80,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_user_component_back_title',
+      id: '@@security_edit_user_component_back_title',
       value: 'Users'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -90,7 +90,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_user_component_title',
+      id: '@@security_edit_user_component_title',
       value: 'Edit User'
     })
   }

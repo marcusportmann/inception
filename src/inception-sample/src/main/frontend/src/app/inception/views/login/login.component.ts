@@ -105,7 +105,7 @@ export class LoginComponent implements OnInit {
         }
       });
 
-    // this.dialogService.showInformationDialog({message: this.i18n({id: '@@xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
+    // this.dialogService.showInformationDialog({message: this.i18n({id: '@@login_xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 
     // this.errorService.showConfirm('This is a title', 'This is a message');
 

@@ -1,0 +1,30 @@
+<form [formGroup]="editMailTemplateForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field class="static">
+            <mat-label i18n="@@mail_edit_mail_template_component_label_id">ID</mat-label>
+            <input type="text" matInput formControlName="id">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@mail_edit_mail_template_component_label_name">Name</mat-label>
+            <input type="text" matInput formControlName="name" required="true">
+            <mat-error *ngIf="editMailTemplateForm.get('name').errors && !editMailTemplateForm.get('name').untouched">
+              <span *ngIf="editMailTemplateForm.get('name').errors?.required" i18n="@@mail_edit_mail_template_component_error_name_required">A name is required.</span>
+              <span *ngIf="editMailTemplateForm.get('name').errors?.maxlength" i18n="@@mail_edit_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@mail_edit_mail_template_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!editMailTemplateForm.valid" (click)="onOK()" i18n="@@mail_edit_mail_template_component_button_ok">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

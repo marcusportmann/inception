@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_code_component_label_id">ID</mat-label>
+            <mat-label i18n="@@codes_new_code_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id" required="true" autofocus>
             <mat-error *ngIf="newCodeForm.get('id').errors && !newCodeForm.get('id').untouched">
-              <span *ngIf="newCodeForm.get('id').errors?.required" i18n="@@new_code_component_error_id_required">An ID is required.</span>
-              <span *ngIf="newCodeForm.get('id').errors?.maxlength" i18n="@@new_code_component_error_id_maxlength">ID must not exceed 100 characters.</span>
+              <span *ngIf="newCodeForm.get('id').errors?.required" i18n="@@codes_new_code_component_error_id_required">An ID is required.</span>
+              <span *ngIf="newCodeForm.get('id').errors?.maxlength" i18n="@@codes_new_code_component_error_id_maxlength">ID must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -16,11 +16,11 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_code_component_label_name">Name</mat-label>
+            <mat-label i18n="@@codes_new_code_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
             <mat-error *ngIf="newCodeForm.get('name').errors && !newCodeForm.get('name').untouched">
-              <span *ngIf="newCodeForm.get('name').errors?.required" i18n="@@new_code_component_error_name_required">A name is required.</span>
-              <span *ngIf="newCodeForm.get('name').errors?.maxlength" i18n="@@new_code_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+              <span *ngIf="newCodeForm.get('name').errors?.required" i18n="@@codes_new_code_component_error_name_required">A name is required.</span>
+              <span *ngIf="newCodeForm.get('name').errors?.maxlength" i18n="@@codes_new_code_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -28,15 +28,15 @@
       <div class="row">
         <div class="col">
           <mat-form-field>
-            <mat-label i18n="@@new_code_component_label_value">Value</mat-label>
+            <mat-label i18n="@@codes_new_code_component_label_value">Value</mat-label>
             <textarea matInput formControlName="value" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
           </mat-form-field>
         </div>
       </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_code_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newCodeForm.valid" (click)="onOK()" i18n="@@new_code_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@codes_new_code_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!newCodeForm.valid" (click)="onOK()" i18n="@@codes_new_code_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

@@ -71,7 +71,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
 
   get title(): string {
     return this.i18n({
-      id: '@@user_directories_component_title',
+      id: '@@security_user_directories_component_title',
       value: 'User Directories'
     })
   }
@@ -80,7 +80,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@user_directories_component_confirm_delete_organization',
+          id: '@@security_user_directories_component_confirm_delete_organization',
           value: 'Are you sure you want to delete the user directory?'
         })
       });

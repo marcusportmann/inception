@@ -101,7 +101,7 @@ export class ExpiredPasswordComponent implements OnInit {
       // Check that the password and confirmation password match
       if (newPassword !== confirmNewPassword) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
-          id: '@@expired_password_component_passwords_do_not_match',
+          id: '@@login_expired_password_component_passwords_do_not_match',
           value: 'The passwords do not match.'
         })));
 
@@ -116,7 +116,7 @@ export class ExpiredPasswordComponent implements OnInit {
 
           const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
             {message: this.i18n({
-                id: '@@expired_password_component_your_password_was_successfully_changed',
+                id: '@@login_expired_password_component_your_password_was_successfully_changed',
                 value: 'Your password was successfully changed.'
               })});
 

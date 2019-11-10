@@ -1,25 +1,25 @@
 <mat-card class="flex flex-column flex-auto">
   <div class="mat-table-header">
-    <button mat-flat-button color="primary" (click)="newJob()" i18n="@@jobs_component_button_new">New</button>
+    <button mat-flat-button color="primary" (click)="newJob()" i18n="@@scheduler_jobs_component_button_new">New</button>
     <table-filter (changed)="applyFilter($event)"></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="id" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@jobs_component_table_header_name">Name</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@scheduler_jobs_component_table_header_name">Name</mat-header-cell>
       <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
     </ng-container>
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@jobs_component_table_header_status">Status</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@scheduler_jobs_component_table_header_status">Status</mat-header-cell>
       <mat-cell *matCellDef="let row">{{JobStatus[row.status]}}</mat-cell>
     </ng-container>
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@jobs_component_table_header_actions">Actions</mat-header-cell>
+      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@scheduler_jobs_component_table_header_actions">Actions</mat-header-cell>
       <mat-cell class="mat-cell-one-action" *matCellDef="let row">
         <button mat-icon-button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{jobId: row.id}">
           <i class="fas fa-ellipsis-v"></i>
@@ -38,11 +38,11 @@
     <ng-template matMenuContent let-jobId="jobId">
       <button mat-menu-item (click)="editJob(jobId)">
         <i class="fas fa-edit"></i>
-        <span i18n="@@jobs_component_menu_item_edit">Edit</span>
+        <span i18n="@@scheduler_jobs_component_menu_item_edit">Edit</span>
       </button>
       <button mat-menu-item (click)="deleteJob(jobId)">
         <i class="far fa-trash-alt"></i>
-        <span i18n="@@jobs_component_menu_item_delete">Delete</span>
+        <span i18n="@@scheduler_jobs_component_menu_item_delete">Delete</span>
       </button>
     </ng-template>
   </mat-menu>

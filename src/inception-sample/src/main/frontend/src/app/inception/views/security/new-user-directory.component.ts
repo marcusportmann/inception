@@ -82,14 +82,14 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_user_directory_component_back_title',
+      id: '@@security_new_user_directory_component_back_title',
       value: 'User Directories'
     }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@new_user_directory_component_title',
+      id: '@@security_new_user_directory_component_title',
       value: 'New User Directory'
     })
   }

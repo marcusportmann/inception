@@ -26,7 +26,9 @@ import {SystemTitleResolver} from './system-title-resolver';
 import {CodeCategoriesTitleResolver} from '../../inception/views/codes/code-categories-title-resolver';
 import {ConfigurationsTitleResolver} from '../../inception/views/configuration/configurations-title-resolver';
 import {SecurityTitleResolver} from './security-title-resolver';
-import {JobsTitleResolver} from "../../inception/views/scheduler/jobs-title-resolver";
+import {MailTitleResolver} from "./mail-title-resolver";
+import {SchedulerTitleResolver} from "./scheduler-title-resolver";
+import {ReportingTitleResolver} from "./reporting-title-resolver";
 
 const routes: Routes = [{
   path: '',
@@ -35,6 +37,13 @@ const routes: Routes = [{
   resolve: {
     title: AdministrationTitleResolver
   }
+}, {
+  path: 'security',
+  resolve: {
+    title: SecurityTitleResolver
+  },
+  loadChildren: () => import('../../inception/views/security/security.module').then(
+    m => m.SecurityModule)
 }, {
   path: 'system',
   resolve: {
@@ -53,22 +62,30 @@ const routes: Routes = [{
     },
     loadChildren: () => import('../../inception/views/configuration/configuration.module').then(
       m => m.ConfigurationModule)
-  }, {
-    path: 'jobs',
-    resolve: {
-      title: JobsTitleResolver
-    },
-    loadChildren: () => import('../../inception/views/scheduler/scheduler.module').then(
-      m => m.SchedulerModule)
-  }
-  ]
-}, {
-  path: 'security',
-  resolve: {
-    title: SecurityTitleResolver
   },
-  loadChildren: () => import('../../inception/views/security/security.module').then(
-    m => m.SecurityModule)
+
+    {
+      path: 'mail',
+      resolve: {
+        title: MailTitleResolver
+      },
+      loadChildren: () => import('../../inception/views/mail/mail.module').then(m => m.MailModule)
+    }, {
+      path: 'scheduler',
+      resolve: {
+        title: SchedulerTitleResolver
+      },
+      loadChildren: () => import('../../inception/views/scheduler/scheduler.module').then(
+        m => m.SchedulerModule)
+    }, {
+      path: 'reporting',
+      resolve: {
+        title: ReportingTitleResolver
+      },
+      loadChildren: () => import('../../inception/views/reporting/reporting.module').then(
+        m => m.ReportingModule)
+    }
+  ]
 }
 ];
 
@@ -77,7 +94,8 @@ const routes: Routes = [{
   ],
   declarations: [AdministrationComponent],
   providers: [AdministrationTitleResolver, CodeCategoriesTitleResolver, ConfigurationsTitleResolver,
-    JobsTitleResolver, SecurityTitleResolver, SystemTitleResolver
+    MailTitleResolver, ReportingTitleResolver, SchedulerTitleResolver, SecurityTitleResolver,
+    SystemTitleResolver
   ]
 })
 export class AdministrationModule {

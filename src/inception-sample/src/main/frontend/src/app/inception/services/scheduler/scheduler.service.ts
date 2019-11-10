@@ -27,8 +27,6 @@ import {
 import {CommunicationError} from "../../errors/communication-error";
 import {SystemUnavailableError} from "../../errors/system-unavailable-error";
 import {I18n} from "@ngx-translate/i18n-polyfill";
-import {CodeCategory} from "../codes/code-category";
-import {CodeCategoryNotFoundError, CodesServiceError} from "../codes/codes.service.errors";
 
 /**
  * The Scheduler Service implementation.
@@ -56,7 +54,8 @@ export class SchedulerService {
    * @return True if the job was created successfully or false otherwise.
    */
   createJob(job: Job): Observable<boolean> {
-    return this.httpClient.post<boolean>(environment.schedulerServiceUrlPrefix + '/jobs', job, {observe: 'response'})
+    return this.httpClient.post<boolean>(environment.schedulerServiceUrlPrefix + '/jobs', job,
+      {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -154,8 +153,7 @@ export class SchedulerService {
    */
   getJobName(jobId: string): Observable<string> {
     return this.httpClient.get<string>(
-      environment.schedulerServiceUrlPrefix + '/jobs/' + encodeURIComponent(jobId) +
-      '/name', {
+      environment.schedulerServiceUrlPrefix + '/jobs/' + encodeURIComponent(jobId) + '/name', {
         reportProgress: true,
       }).pipe(map((jobName: string) => {
       return jobName;
@@ -185,8 +183,8 @@ export class SchedulerService {
    * @return The jobs.
    */
   getJobs(): Observable<Job[]> {
-    return this.httpClient.get<Job[]>(
-      environment.schedulerServiceUrlPrefix + '/jobs', {reportProgress: true})
+    return this.httpClient.get<Job[]>(environment.schedulerServiceUrlPrefix + '/jobs',
+      {reportProgress: true})
       .pipe(map((jobs: Job[]) => {
         return jobs;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -214,8 +212,8 @@ export class SchedulerService {
    */
   updateJob(job: Job): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      environment.schedulerServiceUrlPrefix + '/jobs/' + encodeURIComponent(job.id),
-      job, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      environment.schedulerServiceUrlPrefix + '/jobs/' + encodeURIComponent(job.id), job,
+      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {

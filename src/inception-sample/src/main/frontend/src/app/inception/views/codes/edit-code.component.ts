@@ -71,14 +71,14 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_code_component_back_title',
+      id: '@@codes_edit_code_component_back_title',
       value: 'Codes'
     }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_code_component_title',
+      id: '@@codes_edit_code_component_title',
       value: 'Edit Code'
     })
   }

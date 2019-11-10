@@ -71,7 +71,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   get title(): string {
     return this.i18n({
-      id: '@@organizations_component_title',
+      id: '@@security_organizations_component_title',
       value: 'Organizations'
     })
   }
@@ -80,7 +80,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@organizations_component_confirm_delete_organization',
+          id: '@@security_organizations_component_confirm_delete_organization',
           value: 'Are you sure you want to delete the organization?'
         })
       });

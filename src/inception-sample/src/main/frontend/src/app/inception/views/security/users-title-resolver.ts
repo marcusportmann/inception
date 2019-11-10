@@ -48,7 +48,7 @@ export class UsersTitleResolver implements Resolve<string> {
       return of (userDirectoryId);
     } else {
       return of(this.i18n({
-        id: '@@users_title_resolver_title',
+        id: '@@security_users_title_resolver_title',
         value: 'Users'
       }));
     }

@@ -43,7 +43,7 @@ export class NewCodeCategoryTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@new_code_category_title_resolver_title',
+      id: '@@codes_new_code_category_title_resolver_title',
       value: 'New Code Category'
     }));
   }

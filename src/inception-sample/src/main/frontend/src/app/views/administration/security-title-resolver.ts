@@ -43,7 +43,7 @@ export class SecurityTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@security_title_resolver_title',
+      id: '@@administration_security_title_resolver_title',
       value: 'Security'
     }));
   }

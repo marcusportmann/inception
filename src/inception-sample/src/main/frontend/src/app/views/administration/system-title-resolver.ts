@@ -43,7 +43,7 @@ export class SystemTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@system_title_resolver_title',
+      id: '@@administration_system_title_resolver_title',
       value: 'System'
     }));
   }

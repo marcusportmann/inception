@@ -43,7 +43,7 @@ export class NewJobTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@new_job_title_resolver_title',
+      id: '@@scheduler_new_job_title_resolver_title',
       value: 'New Job'
     }));
   }

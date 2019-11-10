@@ -9,23 +9,23 @@
           <mat-card-content>
             <div class="row">
               <div class="col">
-                <span i18n="@@select_organization_component_explanation">Your user account is associated with multiple organizations. To proceed, please select the organization you wish to login with.</span>
+                <span i18n="@@login_select_organization_component_explanation">Your user account is associated with multiple organizations. To proceed, please select the organization you wish to login with.</span>
                 <mat-form-field floatLabel="never">
-                  <input type="text" matInput [formControl]="organizationFormControl" [matAutocomplete]="auto" i18n-placeholder="@@select_organization_component_placeholder_select_an_organization" placeholder="Select an organization">
+                  <input type="text" matInput [formControl]="organizationFormControl" [matAutocomplete]="auto" i18n-placeholder="@@login_select_organization_component_placeholder_select_an_organization" placeholder="Select an organization">
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayOrganization">
                     <mat-option *ngFor="let filteredOrganization of filteredOrganizations$ | async" [value]="filteredOrganization">
                       {{filteredOrganization.name}}
                     </mat-option>
                   </mat-autocomplete>
                   <mat-error *ngIf="organizationFormControl.errors && !organizationFormControl.untouched">
-                    <span *ngIf="organizationFormControl.errors?.required" i18n="@@select_organization_component_error_please_select_an_organization">Please select an organization.</span>
+                    <span *ngIf="organizationFormControl.errors?.required" i18n="@@login_select_organization_component_error_please_select_an_organization">Please select an organization.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
             </div>
           </mat-card-content>
           <mat-card-actions align="right">
-            <button type="button" [disabled]="!isOrganizationSelected()" (click)="onOk()" mat-flat-button color="primary" i18n="@@select_organization_component_button_ok">Ok</button>
+            <button type="button" [disabled]="!isOrganizationSelected()" (click)="onOk()" mat-flat-button color="primary" i18n="@@login_select_organization_component_button_ok">Ok</button>
           </mat-card-actions>
         </mat-card>
       </form>

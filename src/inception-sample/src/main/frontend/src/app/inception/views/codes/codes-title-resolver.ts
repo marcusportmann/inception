@@ -33,7 +33,7 @@ export class CodesTitleResolver implements Resolve<string> {
    */
   constructor(private i18n: I18n) {
   }
-  
+
   /**
    * Resolve the title.
    *
@@ -43,7 +43,7 @@ export class CodesTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@codes_title_resolver_title',
+      id: '@@codes_codes_title_resolver_title',
       value: 'Codes'
     }));
   }

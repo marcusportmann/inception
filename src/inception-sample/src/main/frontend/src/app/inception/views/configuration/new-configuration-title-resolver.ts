@@ -43,7 +43,7 @@ export class NewConfigurationTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@new_configuration_title_resolver_title',
+      id: '@@configuration_new_configuration_title_resolver_title',
       value: 'New Configuration'
     }));
   }

@@ -60,14 +60,14 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_job_component_back_title',
+      id: '@@scheduler_new_job_component_back_title',
       value: 'Jobs'
     }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@new_job_component_title',
+      id: '@@scheduler_new_job_component_title',
       value: 'New Job'
     })
   }

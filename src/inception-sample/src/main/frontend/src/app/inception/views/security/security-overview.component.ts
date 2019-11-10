@@ -38,7 +38,7 @@ export class SecurityOverviewComponent extends AdminContainerView {
 
   get title(): string {
     return this.i18n({
-      id: '@@security_overview_component_title',
+      id: '@@security_security_overview_component_title',
       value: 'Security Overview'
     })
   }

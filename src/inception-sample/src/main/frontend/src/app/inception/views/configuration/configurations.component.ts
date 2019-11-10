@@ -67,7 +67,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   get title(): string {
     return this.i18n({
-      id: '@@configurations_component_title',
+      id: '@@configuration_configurations_component_title',
       value: 'Configuration'
     })
   }
@@ -82,7 +82,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@configurations_component_confirm_delete_configuration',
+          id: '@@configuration_configurations_component_confirm_delete_configuration',
           value: 'Are you sure you want to delete the configuration?'
         })
       });

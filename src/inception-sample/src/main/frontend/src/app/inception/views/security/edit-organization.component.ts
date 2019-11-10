@@ -65,14 +65,14 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_organization_component_back_title',
+      id: '@@security_edit_organization_component_back_title',
       value: 'Organizations'
     }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_organization_component_title',
+      id: '@@security_edit_organization_component_title',
       value: 'Edit Organization'
     })
   }

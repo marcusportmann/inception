@@ -43,7 +43,7 @@ export class UserDirectoriesTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@user_directories_title_resolver_title',
+      id: '@@security_user_directories_title_resolver_title',
       value: 'User Directories'
     }));
   }

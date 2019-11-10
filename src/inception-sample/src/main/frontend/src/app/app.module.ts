@@ -64,8 +64,7 @@ export {translations};
   }, {
     provide: TRANSLATIONS_FORMAT,
     useValue: 'xlf2'
-  }, I18n,
-    AdministrationTitleResolver
+  }, I18n, AdministrationTitleResolver
   ],
 
   bootstrap: [AppComponent]
@@ -87,7 +86,8 @@ export class AppModule extends InceptionAppModule {
     const navigation: NavigationItem[] = [];
 
     navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard',
-      ['Application.Dashboard'], undefined, undefined, undefined, new NavigationBadge('info', 'NEW')));
+      ['Application.Dashboard'], undefined, undefined, undefined,
+      new NavigationBadge('info', 'NEW')));
 
     navigation.push(new NavigationItem('fa fa-layer-group', 'Inception', '/inception', [], [
 
@@ -98,8 +98,7 @@ export class AppModule extends InceptionAppModule {
           new NavigationItem('fa fa-puzzle-piece', 'Expansion Panels',
             '/inception/components/expansion-panels'),
           new NavigationItem('fa fa-puzzle-piece', 'Grid List', '/inception/components/grid-list',
-            []),
-          new NavigationItem('fa fa-puzzle-piece', 'Lists', '/inception/components/lists'),
+            []), new NavigationItem('fa fa-puzzle-piece', 'Lists', '/inception/components/lists'),
           new NavigationItem('fa fa-puzzle-piece', 'Progress', '/inception/components/progress',
             []),
           new NavigationItem('fa fa-puzzle-piece', 'Switches', '/inception/components/switches',
@@ -132,14 +131,23 @@ export class AppModule extends InceptionAppModule {
     ]));
 
     navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration',
-      ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration', 'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups'],
-      [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security',
-        ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups'],
-        [
-          new NavigationItem('fas fa-user', 'Users', '/administration/security/users',
-            ['ROLE_Administrator', 'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups']),
-          new NavigationItem('fas fa-users', 'Groups', '/administration/security/groups',
-            ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']),
+      ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration',
+        'FUNCTION_Configuration.ConfigurationAdministration',
+        'FUNCTION_Security.GroupAdministration', 'FUNCTION_Security.OrganizationAdministration',
+        'FUNCTION_Security.ResetUserPassword', 'FUNCTION_Security.UserAdministration',
+        'FUNCTION_Security.UserDirectoryAdministration', 'FUNCTION_Security.UserGroups',
+        'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration',
+        'FUNCTION_Mail.MailAdministration', 'FUNCTION_Mail.MailTemplateAdministration'
+      ], [new NavigationItem('fa fa-shield-alt', 'Security', '/administration/security',
+        ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration',
+          'FUNCTION_Security.OrganizationAdministration', 'FUNCTION_Security.ResetUserPassword',
+          'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserDirectoryAdministration',
+          'FUNCTION_Security.UserGroups'
+        ], [new NavigationItem('fas fa-user', 'Users', '/administration/security/users',
+          ['ROLE_Administrator', 'FUNCTION_Security.ResetUserPassword',
+            'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups'
+          ]), new NavigationItem('fas fa-users', 'Groups', '/administration/security/groups',
+          ['ROLE_Administrator', 'FUNCTION_Security.GroupAdministration']),
           new NavigationItem('far fa-building', 'Organizations',
             '/administration/security/organizations',
             ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']),
@@ -147,13 +155,39 @@ export class AppModule extends InceptionAppModule {
             '/administration/security/user-directories',
             ['ROLE_Administrator', 'FUNCTION_Security.UserDirectoryAdministration'])
         ]), new NavigationItem('fa fa-cog', 'System', '/administration/system',
-        ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration'],
-        [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
+        ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration',
+          'FUNCTION_Configuration.ConfigurationAdministration', 'FUNCTION_Mail.MailAdministration',
+          'FUNCTION_Mail.MailTemplateAdministration', 'FUNCTION_Scheduler.SchedulerAdministration',
+          'FUNCTION_Scheduler.JobAdministration'
+        ], [new NavigationItem('fa fa-list', 'Codes', '/administration/system/code-categories',
           ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration']),
           new NavigationItem('fa fa-list', 'Configuration', '/administration/system/configuration',
             ['ROLE_Administrator', 'FUNCTION_Configuration.ConfigurationAdministration']),
-          new NavigationItem('fas fa-cogs', 'Jobs', '/administration/system/jobs',
-            ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'])
+          new NavigationItem('fas fa-envelope', 'Mail', '/administration/system/mail',
+            ['ROLE_Administrator', 'FUNCTION_Mail.MailAdministration',
+              'FUNCTION_Mail.MailTemplateAdministration'
+            ], [new NavigationItem('fas fa-envelope-open-text', 'Mail Templates',
+              '/administration/system/mail/mail-templates',
+              ['ROLE_Administrator', 'FUNCTION_Mail.MailAdministration',
+                'FUNCTION_Mail.MailTemplateAdministration'
+              ])
+            ]),
+          new NavigationItem('fas fa-clock', 'Scheduler', '/administration/system/scheduler',
+            ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+              'FUNCTION_Scheduler.JobAdministration'
+            ], [new NavigationItem('fas fa-cogs', 'Jobs', '/administration/system/scheduler/jobs',
+              ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+                'FUNCTION_Scheduler.JobAdministration'
+              ])
+            ]),
+          new NavigationItem('fas fa-file-invoice', 'Reporting', '/administration/system/reporting',
+            ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
+              'FUNCTION_Reporting.ReportDefinitionAdministration'
+            ], [new NavigationItem('far fa-copy', 'Report Definitions', '/administration/system/reporting/report-definitions',
+              ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
+                'FUNCTION_Reporting.ReportDefinitionAdministration'
+              ])
+            ])
         ])
       ]));
 

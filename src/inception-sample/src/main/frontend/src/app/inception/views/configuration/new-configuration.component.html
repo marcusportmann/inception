@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_configuration_component_label_key">Key</mat-label>
+            <mat-label i18n="@@configuration_new_configuration_component_label_key">Key</mat-label>
             <input type="text" matInput formControlName="key" required="true" autofocus>
             <mat-error *ngIf="newConfigurationForm.get('key').errors && !newConfigurationForm.get('key').untouched">
-              <span *ngIf="newConfigurationForm.get('key').errors?.required" i18n="@@new_configuration_component_error_id_required">A key is required.</span>
-              <span *ngIf="newConfigurationForm.get('key').errors?.maxlength" i18n="@@new_configuration_component_error_id_maxlength">Key must not exceed 4000 characters.</span>
+              <span *ngIf="newConfigurationForm.get('key').errors?.required" i18n="@@configuration_new_configuration_component_error_id_required">A key is required.</span>
+              <span *ngIf="newConfigurationForm.get('key').errors?.maxlength" i18n="@@configuration_new_configuration_component_error_id_maxlength">Key must not exceed 4000 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -16,10 +16,10 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_configuration_component_label_value">Value</mat-label>
+            <mat-label i18n="@@configuration_new_configuration_component_label_value">Value</mat-label>
             <input type="text" matInput formControlName="value">
             <mat-error *ngIf="newConfigurationForm.get('value').errors && !newConfigurationForm.get('value').untouched">
-              <span *ngIf="newConfigurationForm.get('value').errors?.maxlength" i18n="@@new_configuration_component_error_value_maxlength">Value must not exceed 4000 characters.</span>
+              <span *ngIf="newConfigurationForm.get('value').errors?.maxlength" i18n="@@configuration_new_configuration_component_error_value_maxlength">Value must not exceed 4000 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -27,15 +27,15 @@
       <div class="row">
         <div class="col">
           <mat-form-field>
-            <mat-label i18n="@@new_configuration_component_label_description">Description</mat-label>
+            <mat-label i18n="@@configuration_new_configuration_component_label_description">Description</mat-label>
             <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
           </mat-form-field>
         </div>
       </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_configuration_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newConfigurationForm.valid" (click)="onOK()" i18n="@@new_configuration_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@configuration_new_configuration_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!newConfigurationForm.valid" (click)="onOK()" i18n="@@configuration_new_configuration_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

@@ -43,7 +43,7 @@ export class EditOrganizationTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@edit_organization_title_resolver_title',
+      id: '@@security_edit_organization_title_resolver_title',
       value: 'Edit Organization'
     }));
   }

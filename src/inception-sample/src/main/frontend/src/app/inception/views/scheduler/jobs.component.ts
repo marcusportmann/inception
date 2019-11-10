@@ -70,7 +70,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
   get title(): string {
     return this.i18n({
-      id: '@@jobs_component_title',
+      id: '@@scheduler_jobs_component_title',
       value: 'Jobs'
     })
   }
@@ -85,7 +85,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@jobs_component_confirm_delete_job',
+          id: '@@scheduler_jobs_component_confirm_delete_job',
           value: 'Are you sure you want to delete the job?'
         })
       });

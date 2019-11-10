@@ -43,7 +43,7 @@ export class ConfigurationsTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@configurations_title_resolver_title',
+      id: '@@configuration_configurations_title_resolver_title',
       value: 'Configuration'
     }));
   }

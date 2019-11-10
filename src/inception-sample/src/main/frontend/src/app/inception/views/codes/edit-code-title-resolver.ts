@@ -43,7 +43,7 @@ export class EditCodeTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@edit_code_title_resolver_title',
+      id: '@@codes_edit_code_title_resolver_title',
       value: 'Edit Code'
     }));
   }

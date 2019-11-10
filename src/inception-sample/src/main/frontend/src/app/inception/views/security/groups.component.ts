@@ -98,7 +98,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   get title(): string {
     return this.i18n({
-      id: '@@groups_component_title',
+      id: '@@security_groups_component_title',
       value: 'Groups'
     })
   }
@@ -109,7 +109,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@groups_component_confirm_delete_group',
+          id: '@@security_groups_component_confirm_delete_group',
           value: 'Are you sure you want to delete the group?'
         })
       });

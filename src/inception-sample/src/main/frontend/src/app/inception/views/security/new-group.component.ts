@@ -69,7 +69,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_group_component_back_title',
+      id: '@@security_new_group_component_back_title',
       value: 'Groups'
     }), ['../..'], {
       relativeTo: this.activatedRoute,
@@ -79,7 +79,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
 
   get title(): string {
     return this.i18n({
-      id: '@@new_group_component_title',
+      id: '@@security_new_group_component_title',
       value: 'New Group'
     })
   }

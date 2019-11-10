@@ -320,6 +320,8 @@ INSERT INTO security.functions (code, name, description)
 INSERT INTO security.functions (code, name, description)
   VALUES ('Process.ViewProcess', 'View Process', 'View Process');
 INSERT INTO security.functions (code, name, description)
+  VALUES ('Reporting.ReportingAdministration', 'Reporting Administration', 'Reporting Administration');
+INSERT INTO security.functions (code, name, description)
   VALUES ('Reporting.ReportDefinitionAdministration', 'Report Definition Administration', 'Report Definition Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Reporting.ViewReport', 'View Report', 'View Report');

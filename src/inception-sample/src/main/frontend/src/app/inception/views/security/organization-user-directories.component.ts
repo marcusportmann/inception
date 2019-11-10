@@ -83,7 +83,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@organization_user_directories_component_back_title',
+      id: '@@security_organization_user_directories_component_back_title',
       value: 'Back'
     }), ['../..'], {
       relativeTo: this.activatedRoute
@@ -92,7 +92,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   get title(): string {
     return this.i18n({
-      id: '@@organization_user_directories_component_title',
+      id: '@@security_organization_user_directories_component_title',
       value: 'Organization User Directories'
     })
   }
@@ -203,7 +203,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@organization_user_directories_component_confirm_remove_user_directory_from_organization',
+          id: '@@security_organization_user_directories_component_confirm_remove_user_directory_from_organization',
           value: 'Are you sure you want to remove the user directory from the organization?'
         })
       });

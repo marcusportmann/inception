@@ -43,7 +43,7 @@ export class NewUserDirectoryTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@new_user_directory_title_resolver_title',
+      id: '@@security_new_user_directory_title_resolver_title',
       value: 'New User Directory'
     }));
   }

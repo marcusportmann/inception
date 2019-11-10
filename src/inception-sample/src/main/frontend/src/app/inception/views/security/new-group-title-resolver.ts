@@ -43,7 +43,7 @@ export class NewGroupTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@new_group_title_resolver_title',
+      id: '@@security_new_group_title_resolver_title',
       value: 'New Group'
     }));
   }

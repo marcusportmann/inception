@@ -43,7 +43,7 @@ export class GroupRolesTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
     return of(this.i18n({
-      id: '@@group_roles_title_resolver_title',
+      id: '@@security_group_roles_title_resolver_title',
       value: 'Group Roles'
     }));
   }

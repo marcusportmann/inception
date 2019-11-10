@@ -754,6 +754,11 @@
       <column name="description" value="View Process"/>
     </insert>
     <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ReportingAdministration"/>
+      <column name="name" value="Reporting Administration"/>
+      <column name="description" value="Reporting Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
       <column name="code" value="Reporting.ReportDefinitionAdministration"/>
       <column name="name" value="Report Definition Administration"/>
       <column name="description" value="Report Definition Administration"/>

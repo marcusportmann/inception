@@ -78,8 +78,7 @@ export class NavigationService {
     for (let i = 0; i < navigationItems.length; i++) {
       const navigationItem: NavigationItem = navigationItems[i];
 
-      const authorities = (navigationItem.authorities == null) ? [] :
-        navigationItem.authorities;
+      const authorities = (navigationItem.authorities == null) ? [] : navigationItem.authorities;
 
       if (authorities.length > 0) {
         if (session) {

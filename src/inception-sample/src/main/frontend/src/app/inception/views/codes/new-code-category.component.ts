@@ -61,14 +61,14 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@new_code_category_component_back_title',
+      id: '@@codes_new_code_category_component_back_title',
       value: 'Code Categories'
     }), ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@new_code_category_component_title',
+      id: '@@codes_new_code_category_component_title',
       value: 'New Code Category'
     })
   }

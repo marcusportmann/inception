@@ -43,7 +43,7 @@ export class UserGroupsTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@user_groups_title_resolver_title',
+      id: '@@security_user_groups_title_resolver_title',
       value: 'User Groups'
     }));
   }

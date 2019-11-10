@@ -43,7 +43,7 @@ export class EditConfigurationTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@edit_configuration_title_resolver_title',
+      id: '@@configuration_edit_configuration_title_resolver_title',
       value: 'Edit Configuration'
     }));
   }

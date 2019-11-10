@@ -103,7 +103,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   get title(): string {
     return this.i18n({
-      id: '@@users_component_title',
+      id: '@@security_users_component_title',
       value: 'Users'
     })
   }
@@ -114,7 +114,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@users_component_confirm_delete_user',
+          id: '@@security_users_component_confirm_delete_user',
           value: 'Are you sure you want to delete the user?'
         })
       });

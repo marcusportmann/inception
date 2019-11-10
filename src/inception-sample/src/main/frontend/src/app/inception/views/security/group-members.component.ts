@@ -83,7 +83,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@group_members_component_back_title',
+      id: '@@security_group_members_component_back_title',
       value: 'Back'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -93,7 +93,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   get title(): string {
     return this.i18n({
-      id: '@@group_members_component_title',
+      id: '@@security_group_members_component_title',
       value: 'Group Members'
     })
   }
@@ -176,7 +176,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@group_members_component_confirm_remove_group_member_from_group',
+          id: '@@security_group_members_component_confirm_remove_group_member_from_group',
           value: 'Are you sure you want to remove the group member from the group?'
         })
       });

@@ -31,49 +31,74 @@ import {EditJobTitleResolver} from "./edit-job-title-resolver";
 import {NewJobTitleResolver} from "./new-job-title-resolver";
 import {EditJobComponent} from "./edit-job.component";
 import {NewJobComponent} from "./new-job.component";
-
+import {MailTemplatesTitleResolver} from "../mail/mail-templates-title-resolver";
+import {MailTemplatesComponent} from "../mail/mail-templates.component";
+import {NewMailTemplateComponent} from "../mail/new-mail-template.component";
+import {NewMailTemplateTitleResolver} from "../mail/new-mail-template-title-resolver";
+import {MailTemplateTitleResolver} from "../mail/mail-template-title-resolver";
+import {EditMailTemplateComponent} from "../mail/edit-mail-template.component";
+import {EditMailTemplateTitleResolver} from "../mail/edit-mail-template-title-resolver";
 
 const routes: Routes = [{
-  path: '',
-  pathMatch: 'full',
-  canActivate: [CanActivateFunctionGuard],
-  component: JobsComponent,
-  data: {
-    authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration']
-  }
-}, {
-  path: 'new',
-  pathMatch: 'full',
-  canActivate: [CanActivateFunctionGuard],
-  component: NewJobComponent,
-  data: {
-    authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration']
-  },
+  path: 'jobs',
   resolve: {
-    title: NewJobTitleResolver
-  }
-}, {
-  path: ':jobId',
-  pathMatch: 'full',
-  redirectTo: ':jobId/edit'
-}, {
-  path: ':jobId',
-  resolve: {
-    title: JobTitleResolver
+    title: JobsTitleResolver
   },
   children: [{
-    path: 'edit',
+    path: '',
     canActivate: [CanActivateFunctionGuard],
-    component: EditJobComponent,
+    component: JobsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration']
-    },
-    resolve: {
-      title: EditJobTitleResolver
+      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+        'FUNCTION_Scheduler.JobAdministration'
+      ]
     }
   },
+
+
+
+    {
+    path: 'new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewJobComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+        'FUNCTION_Scheduler.JobAdministration'
+      ]
+    },
+    resolve: {
+      title: NewJobTitleResolver
+    }
+  }, {
+    path: ':jobId',
+    pathMatch: 'full',
+    redirectTo: ':jobId/edit'
+  }, {
+    path: ':jobId',
+    resolve: {
+      title: JobTitleResolver
+    },
+    children: [{
+      path: 'edit',
+      canActivate: [CanActivateFunctionGuard],
+      component: EditJobComponent,
+      data: {
+        authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+          'FUNCTION_Scheduler.JobAdministration'
+        ]
+      },
+      resolve: {
+        title: EditJobTitleResolver
+      }
+    }
+    ]
+  }
+
+
   ]
-}];
+}
+];
 
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,

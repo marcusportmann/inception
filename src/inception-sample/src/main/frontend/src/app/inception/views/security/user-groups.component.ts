@@ -79,7 +79,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@user_groups_component_back_title',
+      id: '@@security_user_groups_component_back_title',
       value: 'Back'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -89,7 +89,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   get title(): string {
     return this.i18n({
-      id: '@@user_groups_component_title',
+      id: '@@security_user_groups_component_title',
       value: 'User Groups'
     })
   }
@@ -171,7 +171,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@user_groups_component_confirm_remove_user_from_group',
+          id: '@@security_user_groups_component_confirm_remove_user_from_group',
           value: 'Are you sure you want to remove the user from the group?'
         })
       });

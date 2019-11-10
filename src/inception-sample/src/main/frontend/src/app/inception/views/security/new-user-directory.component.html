@@ -4,11 +4,11 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_user_directory_component_label_name">Name</mat-label>
+            <mat-label i18n="@@security_new_user_directory_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true" autofocus>
             <mat-error *ngIf="newUserDirectoryForm.get('name').errors && !newUserDirectoryForm.get('name').untouched">
-              <span *ngIf="newUserDirectoryForm.get('name').errors?.required" i18n="@@new_user_directory_component_error_name_required">A name is required.</span>
-              <span *ngIf="newUserDirectoryForm.get('name').errors?.maxlength" i18n="@@new_user_directory_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+              <span *ngIf="newUserDirectoryForm.get('name').errors?.required" i18n="@@security_new_user_directory_component_error_name_required">A name is required.</span>
+              <span *ngIf="newUserDirectoryForm.get('name').errors?.maxlength" i18n="@@security_new_user_directory_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -16,8 +16,8 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@new_user_directory_component_label_type">Type</mat-label>
-            <mat-select formControlName="userDirectoryType"  required="true" i18n-placeholder="@@edit_user_component_placeholder_select_a_user_directory_type" placeholder="Select a user directory type">
+            <mat-label i18n="@@security_new_user_directory_component_label_type">Type</mat-label>
+            <mat-select formControlName="userDirectoryType"  required="true" i18n-placeholder="@@security_edit_user_component_placeholder_select_a_user_directory_type" placeholder="Select a user directory type">
               <mat-option *ngFor="let userDirectoryType of userDirectoryTypes" [value]="userDirectoryType.code">
                 {{userDirectoryType.name}}
               </mat-option>
@@ -29,8 +29,8 @@
       <ldap-user-directory *ngIf="newUserDirectoryForm.contains('ldapUserDirectory')" formControlName="ldapUserDirectory"></ldap-user-directory>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@new_user_directory_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newUserDirectoryForm.valid" (click)="onOK()" i18n="@@new_user_directory_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@security_new_user_directory_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button [disabled]="!newUserDirectoryForm.valid" (click)="onOK()" i18n="@@security_new_user_directory_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

@@ -48,7 +48,7 @@ export class GroupsTitleResolver implements Resolve<string> {
       return of (userDirectoryId);
     } else {
       return of(this.i18n({
-        id: '@@groups_title_resolver_title',
+        id: '@@security_groups_title_resolver_title',
         value: 'Groups'
       }));
     }

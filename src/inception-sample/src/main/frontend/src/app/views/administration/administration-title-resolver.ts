@@ -43,7 +43,7 @@ export class AdministrationTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@administration_title_resolver_title',
+      id: '@@administration_administration_title_resolver_title',
       value: 'Administration'
     }));
   }

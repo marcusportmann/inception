@@ -43,7 +43,7 @@ export class ResetUserPasswordTitleResolver implements Resolve<string> {
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
     return of(this.i18n({
-      id: '@@reset_user_password_title_resolver_title',
+      id: '@@security_reset_user_password_title_resolver_title',
       value: 'Reset User Password'
     }));
   }

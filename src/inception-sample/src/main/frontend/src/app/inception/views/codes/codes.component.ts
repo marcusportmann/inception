@@ -75,14 +75,14 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@codes_component_back_title',
+      id: '@@codes_codes_component_back_title',
       value: 'Code Categories'
     }), ['../../../../../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@codes_component_title',
+      id: '@@codes_codes_component_title',
       value: 'Codes'
     })
   }
@@ -97,7 +97,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@codes_component_confirm_delete_code',
+          id: '@@codes_codes_component_confirm_delete_code',
           value: 'Are you sure you want to delete the code?'
         })
       });

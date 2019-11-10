@@ -84,7 +84,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@reset_user_password_component_back_title',
+      id: '@@security_reset_user_password_component_back_title',
       value: 'Users'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -94,7 +94,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
 
   get title(): string {
     return this.i18n({
-      id: '@@reset_user_password_component_title',
+      id: '@@security_reset_user_password_component_title',
       value: 'Reset User Password'
     })
   }
@@ -151,7 +151,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
       if (this.resetUserPasswordForm.get('password')!.value !==
         this.resetUserPasswordForm.get('confirmPassword')!.value) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
-          id: '@@reset_user_password_component_passwords_do_not_match',
+          id: '@@security_reset_user_password_component_passwords_do_not_match',
           value: 'The passwords do not match.'
         })));
 

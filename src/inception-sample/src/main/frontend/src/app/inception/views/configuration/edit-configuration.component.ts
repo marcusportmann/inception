@@ -69,14 +69,14 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@edit_configuration_component_back_title',
+      id: '@@configuration_edit_configuration_component_back_title',
       value: 'Configuration'
     }), ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
     return this.i18n({
-      id: '@@edit_configuration_component_title',
+      id: '@@configuration_edit_configuration_component_title',
       value: 'Edit Configuration'
     })
   }

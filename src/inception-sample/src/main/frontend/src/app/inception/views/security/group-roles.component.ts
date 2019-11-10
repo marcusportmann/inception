@@ -80,7 +80,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   get backNavigation(): BackNavigation {
     return new BackNavigation(this.i18n({
-      id: '@@group_roles_component_back_title',
+      id: '@@security_group_roles_component_back_title',
       value: 'Back'
     }), ['../../..'], {
       relativeTo: this.activatedRoute,
@@ -90,7 +90,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   get title(): string {
     return this.i18n({
-      id: '@@group_roles_component_title',
+      id: '@@security_group_roles_component_title',
       value: 'Group Roles'
     })
   }
@@ -171,7 +171,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {
         message: this.i18n({
-          id: '@@group_roles_component_confirm_remove_role_from_group',
+          id: '@@security_group_roles_component_confirm_remove_role_from_group',
           value: 'Are you sure you want to remove the role from the group?'
         })
       });
