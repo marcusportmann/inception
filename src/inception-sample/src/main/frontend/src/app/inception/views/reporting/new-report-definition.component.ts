@@ -90,10 +90,10 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
   onOK(): void {
     if (this.reportDefinition && this.newReportDefinitionForm.valid) {
 
-      var fileReader: FileReader = new FileReader();
+      let fileReader: FileReader = new FileReader();
 
       fileReader.onloadend = (ev: ProgressEvent) => {
-        var template = fileReader.result;
+        let template = fileReader.result;
 
         if (template instanceof ArrayBuffer) {
 
@@ -102,7 +102,6 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
           this.reportDefinition!.id = this.newReportDefinitionForm.get('id')!.value;
           this.reportDefinition!.name = this.newReportDefinitionForm.get('name')!.value;
           this.reportDefinition!.template = base64;
-
 
           this.spinnerService.showSpinner();
 
@@ -113,8 +112,8 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
               this.router.navigate(['..'], {relativeTo: this.activatedRoute});
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
+              if ((error instanceof ReportingServiceError) ||
+                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -122,7 +121,9 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
               }
             });
         } else {
-          console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
+          console.log(
+            'Failed to read the template file for the report definition (' + fileReader.result +
+            ')');
         }
       };
 

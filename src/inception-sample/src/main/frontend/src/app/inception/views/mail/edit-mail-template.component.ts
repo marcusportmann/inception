@@ -29,6 +29,10 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {MailTemplate} from "../../services/mail/mail-template";
 import {MailService} from "../../services/mail/mail.service";
 import {MailServiceError} from "../../services/mail/mail.service.errors";
+import {MailTemplateContentType} from '../../services/mail/mail-template-content-type';
+import {FileValidator} from "../../validators/file-validator";
+import {ReportingService} from "../../services/reporting/reporting.service";
+import {Base64} from "../../util";
 
 /**
  * The EditMailTemplateComponent class implements the edit mail template component.
@@ -40,6 +44,12 @@ import {MailServiceError} from "../../services/mail/mail.service.errors";
   styleUrls: ['edit-mail-template.component.css'],
 })
 export class EditMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+
+  MailTemplateContentType = MailTemplateContentType;
+
+  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
+    MailTemplateContentType.HTML, MailTemplateContentType.Unknown
+  ];
 
   mailTemplate?: MailTemplate;
 
@@ -59,11 +69,15 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
     // Initialise the form
     this.editMailTemplateForm = new FormGroup({
+      contentType: new FormControl('', [Validators.required]),
       id: new FormControl({
         value: '',
         disabled: true
       }, [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      template: new FormControl('', [Validators.required, FileValidator.minSize(1),
+        FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
+      ])
     });
   }
 
@@ -91,6 +105,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
         this.mailTemplate = mailTemplate;
         this.editMailTemplateForm.get('id')!.setValue(mailTemplate.id);
         this.editMailTemplateForm.get('name')!.setValue(mailTemplate.name);
+        this.editMailTemplateForm.get('contentType')!.setValue(mailTemplate.contentType);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
@@ -111,25 +126,46 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
   onOK(): void {
     if (this.mailTemplate && this.editMailTemplateForm.valid) {
 
-      this.mailTemplate.name = this.editMailTemplateForm.get('name')!.value;
+      let fileReader: FileReader = new FileReader();
 
-      this.spinnerService.showSpinner();
+      fileReader.onloadend = (ev: ProgressEvent) => {
+        let template = fileReader.result;
 
-      this.mailService.updateMailTemplate(this.mailTemplate)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        if (template instanceof ArrayBuffer) {
+
+          let base64: string = Base64.encode(template as ArrayBuffer);
+
+          this.mailTemplate!.name = this.editMailTemplateForm.get('name')!.value;
+          this.mailTemplate!.contentType = this.editMailTemplateForm.get('contentType')!.value;
+          this.mailTemplate!.template = base64;
+
+          console.log(this.mailTemplate!);
+
+          this.spinnerService.showSpinner();
+
+          this.mailService.updateMailTemplate(this.mailTemplate!)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
+        } else {
+          console.log(
+            'Failed to read the template file for the report definition (' + fileReader.result +
+            ')');
+        }
+      };
+
+      fileReader.readAsArrayBuffer(this.editMailTemplateForm.get('template')!.value[0]);
     }
   }
 }

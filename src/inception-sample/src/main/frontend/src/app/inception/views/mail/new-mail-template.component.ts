@@ -30,6 +30,10 @@ import {MailTemplate} from "../../services/mail/mail-template";
 import {MailService} from "../../services/mail/mail.service";
 import {MailTemplateContentType} from "../../services/mail/mail-template-content-type";
 import {MailServiceError} from "../../services/mail/mail.service.errors";
+import {v4 as uuid} from "uuid";
+import {FileValidator} from "../../validators/file-validator";
+import {Base64} from "../../util";
+import {ReportingService} from "../../services/reporting/reporting.service";
 
 /**
  * The NewMailTemplateComponent class implements the new mail template component.
@@ -41,6 +45,12 @@ import {MailServiceError} from "../../services/mail/mail.service.errors";
   styleUrls: ['new-mail-template.component.css'],
 })
 export class NewMailTemplateComponent extends AdminContainerView implements AfterViewInit {
+
+  MailTemplateContentType = MailTemplateContentType;
+
+  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
+    MailTemplateContentType.HTML, MailTemplateContentType.Unknown
+  ];
 
   mailTemplate?: MailTemplate;
 
@@ -54,8 +64,11 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
 
     // Initialise the form
     this.newMailTemplateForm = new FormGroup({
-      id: new FormControl('', [Validators.required]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      contentType: new FormControl('', [Validators.required]),
+      id: new FormControl(uuid(), [Validators.required]),
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      template: new FormControl('', [Validators.required, FileValidator.minSize(1),
+        FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)])
     })
   }
 
@@ -85,26 +98,45 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
   onOK(): void {
     if (this.mailTemplate && this.newMailTemplateForm.valid) {
 
-      this.mailTemplate.id = this.newMailTemplateForm.get('id')!.value;
-      this.mailTemplate.name = this.newMailTemplateForm.get('name')!.value;
+      let fileReader: FileReader = new FileReader();
 
-      this.spinnerService.showSpinner();
+      fileReader.onloadend = (ev: ProgressEvent) => {
+        let template = fileReader.result;
 
-      this.mailService.createMailTemplate(this.mailTemplate)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        if (template instanceof ArrayBuffer) {
+
+          let base64: string = Base64.encode(template as ArrayBuffer);
+
+          this.mailTemplate!.id = this.newMailTemplateForm.get('id')!.value;
+          this.mailTemplate!.name = this.newMailTemplateForm.get('name')!.value;
+          this.mailTemplate!.contentType = this.newMailTemplateForm.get('contentType')!.value;
+          this.mailTemplate!.template = base64;
+
+          console.log(this.mailTemplate!);
+
+          this.spinnerService.showSpinner();
+
+          this.mailService.createMailTemplate(this.mailTemplate!)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
+        } else {
+          console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
+        }
+      };
+
+      fileReader.readAsArrayBuffer(this.newMailTemplateForm.get('template')!.value[0]);
     }
   }
 }

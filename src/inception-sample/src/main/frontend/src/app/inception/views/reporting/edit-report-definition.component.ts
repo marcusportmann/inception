@@ -116,10 +116,10 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   onOK(): void {
     if (this.reportDefinition && this.editReportDefinitionForm.valid) {
 
-      var fileReader: FileReader = new FileReader();
+      let fileReader: FileReader = new FileReader();
 
       fileReader.onloadend = (ev: ProgressEvent) => {
-        var template = fileReader.result;
+        let template = fileReader.result;
 
         if (template instanceof ArrayBuffer) {
 
