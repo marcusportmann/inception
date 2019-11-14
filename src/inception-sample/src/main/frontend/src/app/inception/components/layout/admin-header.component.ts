@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../shared';
+import {Replace} from '../../util';
 import {SessionService} from '../../services/session/session.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';

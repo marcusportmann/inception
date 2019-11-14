@@ -15,8 +15,8 @@
  */
 
 import {Directive, HostListener, Input, OnInit} from '@angular/core';
-import {sidebarCssClasses} from '../../shared';
-import {toggleClasses} from '../../shared/toggle-classes';
+import {toggleClasses} from '../../util/toggle-classes';
+import {SIDEBAR_CSS_CLASSES} from "../../components/layout/sidebar-css-classes";
 
 
 /**
@@ -48,7 +48,7 @@ export class SidebarTogglerDirective implements OnInit {
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
     let cssClass;
-    (!!this.bp) ? cssClass = `sidebar-${this.bp}-show` : cssClass = sidebarCssClasses[0];
-    toggleClasses(cssClass, sidebarCssClasses);
+    (!!this.bp) ? cssClass = `sidebar-${this.bp}-show` : cssClass = SIDEBAR_CSS_CLASSES[0];
+    toggleClasses(cssClass, SIDEBAR_CSS_CLASSES);
   }
 }

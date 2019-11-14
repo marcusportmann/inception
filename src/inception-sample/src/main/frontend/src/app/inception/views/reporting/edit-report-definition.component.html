@@ -21,6 +21,19 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@reporting_edit_report_definition_component_label_template">Template</mat-label>
+            <file-upload formControlName="template" i18n-placeholder="@@reporting_edit_report_definition_component_placeholder_no_file_selected" placeholder="No file selected" required></file-upload>
+            <mat-error *ngIf="editReportDefinitionForm.get('template').errors && !editReportDefinitionForm.get('template').untouched">
+              <span *ngIf="editReportDefinitionForm.get('template').errors?.required" i18n="@@reporting_edit_report_definition_component_error_template_required">A template is required.</span>
+              <span *ngIf="editReportDefinitionForm.get('template').errors?.minSize" i18n="@@reporting_edit_report_definition_component_error_template_min_size">The template is empty.</span>
+              <span *ngIf="editReportDefinitionForm.get('template').errors?.maxSize" i18n="@@reporting_edit_report_definition_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@reporting_edit_report_definition_component_button_cancel">Cancel</button>

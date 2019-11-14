@@ -83,7 +83,7 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
   `
   ]
 }) // tslint:disable-next-line
-export class TableFilter implements OnInit, OnDestroy {
+export class TableFilterComponent implements OnInit, OnDestroy {
 
   private tableFilterInputSubscription?: Subscription;
 

@@ -32,7 +32,7 @@ import {SecurityServiceError} from '../../services/security/security.service.err
 import {OrganizationDatasource} from '../../services/security/organization.datasource';
 import {SortDirection} from '../../services/security/sort-direction';
 import {merge, Subscription} from 'rxjs';
-import {TableFilter} from '../../components/controls';
+import {TableFilterComponent} from '../../components/controls';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 
 /**
@@ -59,7 +59,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
-  @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,

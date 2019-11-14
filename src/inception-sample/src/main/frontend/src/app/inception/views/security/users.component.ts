@@ -31,7 +31,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SortDirection} from '../../services/security/sort-direction';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {TableFilter} from '../../components/controls';
+import {TableFilterComponent} from '../../components/controls';
 import {UserDatasource} from '../../services/security/user.datasource';
 import {SessionService} from '../../services/session/session.service';
 import {Session} from '../../services/session/session';
@@ -66,7 +66,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
-  @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
   userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
 

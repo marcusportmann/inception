@@ -25,7 +25,11 @@ import {RouterModule} from '@angular/router';
 // Import Inception modules
 import {DirectivesModule} from "./directives/directives.module";
 // Import Inception controls
-import {CheckboxFormField, RadioGroupFormField, TableFilter} from "./components/controls";
+import {
+  CheckboxFormFieldComponent, FileUploadComponent,
+  RadioGroupFormFieldComponent,
+  TableFilterComponent
+} from "./components/controls";
 // Import Inception dialogs
 import {
   ConfirmationDialogComponent,
@@ -167,13 +171,13 @@ export const INCEPTION_DATE_FORMATS = {
     DirectivesModule,
 
     // Inception control components
-    CheckboxFormField, RadioGroupFormField, TableFilter,
+    CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,
 
     // Inception layout components
     AdminContainerComponent, NotFoundComponent, SimpleContainerComponent, SpinnerComponent
   ],
   declarations: [// Inception control components
-    CheckboxFormField, RadioGroupFormField, TableFilter,
+    CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,
 
     // Inception layout components
     BreadcrumbsComponent, AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent,

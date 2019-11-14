@@ -15,7 +15,7 @@
  */
 
 import {Component, HostBinding, Input, OnInit} from '@angular/core';
-import {sidebarCssClasses} from '../../shared';
+import {SIDEBAR_CSS_CLASSES} from "./sidebar-css-classes";
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -56,7 +56,7 @@ export class SidebarComponent implements OnInit {
 
       if (!!this.display) {
         let cssClass;
-        this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = sidebarCssClasses[0];
+        this.display ? cssClass = `sidebar-${this.display}-show` : cssClass = SIDEBAR_CSS_CLASSES[0];
         bodySelector.classList.add(cssClass);
       }
 

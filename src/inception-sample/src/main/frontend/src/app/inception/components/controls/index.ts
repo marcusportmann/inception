@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export * from './checkbox-form-field';
-export * from './radio-group-form-field';
-export * from './table-filter';
+export * from './checkbox-form-field.component';
+export * from './file-upload.component';
+export * from './radio-group-form-field.component';
+export * from './table-filter.component';

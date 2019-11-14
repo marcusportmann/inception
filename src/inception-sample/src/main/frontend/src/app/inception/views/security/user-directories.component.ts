@@ -31,7 +31,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SortDirection} from '../../services/security/sort-direction';
 import {merge, Subscription} from 'rxjs';
-import {TableFilter} from '../../components/controls';
+import {TableFilterComponent} from '../../components/controls';
 import {UserDirectorySummaryDatasource} from '../../services/security/user-directory-summary.datasource';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 
@@ -59,7 +59,7 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
 
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
-  @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,

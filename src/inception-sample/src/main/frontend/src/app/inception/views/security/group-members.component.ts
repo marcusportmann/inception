@@ -31,7 +31,7 @@ import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SortDirection} from '../../services/security/sort-direction';
 import {merge, Subscription} from 'rxjs';
-import {TableFilter} from '../../components/controls';
+import {TableFilterComponent} from '../../components/controls';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {GroupMemberDatasource} from "../../services/security/group-member.datasource";
 import {GroupMember} from "../../services/security/group-member";
@@ -62,7 +62,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   @ViewChild(MatSort, {static: true}) sort?: MatSort;
 
-  @ViewChild(TableFilter, {static: true}) tableFilter?: TableFilter;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
   userDirectoryId: string;
 

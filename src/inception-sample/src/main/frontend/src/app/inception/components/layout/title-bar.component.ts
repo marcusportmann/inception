@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../shared';
+import {Replace} from '../../util';
 import {Router} from '@angular/router';
 import {BackNavigation} from './back-navigation';
 import {TitleBarService} from '../../services/layout/title-bar.service';

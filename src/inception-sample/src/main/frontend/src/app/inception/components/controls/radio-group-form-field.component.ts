@@ -21,29 +21,28 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChildren,
+  ContentChild,
   ElementRef,
   Inject,
   NgZone,
   Optional,
-  QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions } from '@angular/material/form-field';
+import { MatRadioGroup } from '@angular/material/radio';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {startWith} from 'rxjs/operators';
 import {Directionality} from '@angular/cdk/bidi';
 import {Platform} from '@angular/cdk/platform';
 
-export function getMatCheckboxMissingControlError(): Error {
-  return Error('checkbox-form-field must contain a MatCheckbox.');
+export function getMatRadioGroupMissingControlError(): Error {
+  return Error('radio-group-form-field must contain a MatRadioGroup.');
 }
 
 @Component({
   // tslint:disable-next-line
-  selector: 'checkbox-form-field',
+  selector: 'radio-group-form-field',
   template: `
     <div class="mat-form-field-wrapper">
       <div class="mat-form-field-flex">
@@ -55,13 +54,21 @@ export function getMatCheckboxMissingControlError(): Error {
                    [class.mat-warn]="color == 'warn'"
                    #label *ngIf="_hasLabel">
               <ng-content select="mat-label"></ng-content>
+              <span class="mat-placeholder-required mat-form-field-required-marker"
+                    aria-hidden="true"
+                    *ngIf="!hideRequiredMarker && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
+              <!-- @deletion-target 8.0.0 remove \`mat-placeholder-required\` class -->
             </label>
           </span>
         </div>
       </div>
 
       <div class="mat-form-field-subscript-wrapper">
-        <div class="mat-form-field-hint-wrapper" *ngIf="hasHint"
+        <div *ngIf="hasError" [@transitionMessages]="_subscriptAnimationState">
+          <ng-content select="mat-error"></ng-content>
+        </div>
+
+        <div class="mat-form-field-hint-wrapper" *ngIf="!hasError"
              [@transitionMessages]="_subscriptAnimationState">
           <ng-content select="mat-hint:not([align='end'])"></ng-content>
           <div class="mat-form-field-hint-spacer"></div>
@@ -72,28 +79,30 @@ export function getMatCheckboxMissingControlError(): Error {
   `,
   styles: [`
 
-    .mat-form-field.checkbox-form-field .mat-checkbox {
-      margin-right: 0.875em !important;
+    .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-outer-circle {
+      border-color: #f44336;
     }
 
-    .mat-form-field.checkbox-form-field .mat-checkbox:last-child {
-      margin-right: 0 !important;
+    .mat-form-field.radio-group-form-field.mat-form-field-invalid .mat-radio-label-content {
+      color: #f44336;
     }
 
-    .mat-form-field.checkbox-form-field .mat-form-field-infix {
+    .mat-form-field.radio-group-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
     }
   `
   ],
   animations: [matFormFieldAnimations.transitionMessages], // tslint:disable-next-line
   host: {
-    'class': 'mat-form-field checkbox-form-field',
+    'class': 'mat-form-field radio-group-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
     '[class.mat-form-field-appearance-fill]': 'appearance == "fill"',
     '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
     '[class.mat-form-field-appearance-legacy]': 'appearance == "legacy"',
+    '[class.mat-form-field-invalid]': 'hasError',
     '[class.mat-form-field-can-float]': '_canLabelFloat',
     '[class.mat-form-field-should-float]': 'shouldLabelFloat',
+    '[class.mat-form-field-disabled]': 'radioGroup.disabled',
     '[class.mat-accent]': 'color == "accent"',
     '[class.mat-warn]': 'color == "warn"',
     '[class._mat-animation-noopable]': '!_animationsEnabled'
@@ -102,35 +111,13 @@ export function getMatCheckboxMissingControlError(): Error {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 }) // tslint:disable-next-line
-export class CheckboxFormField extends MatFormField implements AfterContentInit,
+export class RadioGroupFormFieldComponent extends MatFormField implements AfterContentInit,
   AfterContentChecked, AfterViewInit, CanColor {
 
   /**
-   * The checkboxes associated with the checkbox form field.
+   * The radio group associated with the radio group form field.
    */
-  @ContentChildren(MatCheckbox) checkboxChildren?: QueryList<MatCheckbox>;
-
-  // constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-  //             labelOptions: LabelOptions, dir: Directionality, defaults: MatFormFieldDefaultOptions,
-  //             platform: Platform, ngZone: NgZone, animationMode: string) {
-
-
-
-  // constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-  //             @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
-  //             @Optional() directionality: Directionality, @Optional() @Inject(
-  //     MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-  //             platform?: Platform, zone?: NgZone,
-  //             @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
-  //   super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
-  //     platform, zone, animationMode);
-  //
-  //   if (labelOptions) {
-  //     this.floatLabel = labelOptions.float;
-  //   } else {
-  //     this.floatLabel = 'always';
-  //   }
-  // }
+  @ContentChild(MatRadioGroup, {static: false}) radioGroup?: MatRadioGroup;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
@@ -141,6 +128,8 @@ export class CheckboxFormField extends MatFormField implements AfterContentInit,
     super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
       platform, zone, animationMode);
 
+    this.changeDetectorRef = changeDetectorRef;
+
     if (labelOptions && labelOptions.float) {
       this.floatLabel = labelOptions.float;
     } else {
@@ -148,11 +137,10 @@ export class CheckboxFormField extends MatFormField implements AfterContentInit,
     }
   }
 
-
-  /** Whether there are one or more hints associated with the checkbox form field. */
-  get hasHint(): boolean {
-    if (this._hintChildren) {
-      if (this._hintChildren.length > 0) {
+  /** Whether there are one or more errors associated with the radio group form field. */
+  get hasError(): boolean {
+    if (this._errorChildren) {
+      if (this._errorChildren.length > 0) {
         return true;
       }
     }
@@ -166,14 +154,19 @@ export class CheckboxFormField extends MatFormField implements AfterContentInit,
   }
 
   ngAfterContentChecked(): void {
-    this.validateCheckboxChildren();
+    this.validateRadioGroupChild();
   }
 
   ngAfterContentInit(): void {
-    this.validateCheckboxChildren();
+    this.validateRadioGroupChild();
 
     // Re-validate when the number of hints changes.
     this._hintChildren.changes.pipe(startWith(null)).subscribe(() => {
+      this.changeDetectorRef.markForCheck();
+    });
+
+    // Re-validate when the number of errors changes.
+    this._errorChildren.changes.pipe(startWith(null)).subscribe(() => {
       this.changeDetectorRef.markForCheck();
     });
   }
@@ -184,13 +177,9 @@ export class CheckboxFormField extends MatFormField implements AfterContentInit,
     this.changeDetectorRef.detectChanges();
   }
 
-  protected validateCheckboxChildren(): void {
-    if (this.checkboxChildren) {
-      if (this.checkboxChildren.length > 0) {
-        return;
-      }
+  protected validateRadioGroupChild(): void {
+    if (!this.radioGroup) {
+      throw getMatRadioGroupMissingControlError();
     }
-
-    throw getMatCheckboxMissingControlError();
   }
 }

@@ -29,6 +29,8 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {ReportDefinition} from "../../services/reporting/report-definition";
 import {ReportingService} from "../../services/reporting/reporting.service";
 import {ReportingServiceError} from "../../services/reporting/reporting.service.errors";
+import {Base64} from "../../util";
+import {FileValidator} from "../../validators/file-validator";
 
 /**
  * The EditReportDefinitionComponent class implements the edit report definition component.
@@ -63,7 +65,10 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
         value: '',
         disabled: true
       }, [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      template: new FormControl('', [Validators.required, FileValidator.minSize(1),
+        FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
+      ])
     });
   }
 
@@ -111,25 +116,44 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   onOK(): void {
     if (this.reportDefinition && this.editReportDefinitionForm.valid) {
 
-      this.reportDefinition.name = this.editReportDefinitionForm.get('name')!.value;
+      var fileReader: FileReader = new FileReader();
 
-      this.spinnerService.showSpinner();
+      fileReader.onloadend = (ev: ProgressEvent) => {
+        var template = fileReader.result;
 
-      this.reportingService.updateReportDefinition(this.reportDefinition)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+        if (template instanceof ArrayBuffer) {
+
+          let base64: string = Base64.encode(template as ArrayBuffer);
+
+          this.reportDefinition!.name = this.editReportDefinitionForm.get('name')!.value;
+          this.reportDefinition!.template = base64;
+
+
+          this.spinnerService.showSpinner();
+
+          this.reportingService.updateReportDefinition(this.reportDefinition!)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe(() => {
+              // noinspection JSIgnoredPromiseFromCall
+              this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof ReportingServiceError) ||
+                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
+        } else {
+          console.log(
+            'Failed to read the template file for the report definition (' + fileReader.result +
+            ')');
+        }
+      };
+
+      fileReader.readAsArrayBuffer(this.editReportDefinitionForm.get('template')!.value[0]);
     }
   }
 }

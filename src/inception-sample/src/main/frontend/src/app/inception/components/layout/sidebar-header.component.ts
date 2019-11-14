@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {Replace} from '../../shared';
+import {Replace} from '../../util';
 
 /**
  * The SidebarHeaderComponent class implements the sidebar header component.

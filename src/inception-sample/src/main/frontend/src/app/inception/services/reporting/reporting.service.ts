@@ -37,6 +37,8 @@ import {ReportDefinitionSummary} from "./report-definition-summary";
 @Injectable()
 export class ReportingService {
 
+  static readonly MAX_TEMPLATE_SIZE: number = 10485760;
+
   /**
    * Constructs a new ReportingService.
    *
