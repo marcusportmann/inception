@@ -83,6 +83,10 @@ export function getMatCheckboxMissingControlError(): Error {
     .mat-form-field.checkbox-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
     }
+    
+    .mat-form-field.checkbox-form-field.mat-form-field-slim {
+      border: 1px solid red !important;
+    }
   `
   ],
   animations: [matFormFieldAnimations.transitionMessages], // tslint:disable-next-line

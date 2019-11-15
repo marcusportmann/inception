@@ -36,8 +36,8 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef i18n="@@security_users_component_table_header_actions" [hidden]="!(enableActionsMenu$ | async)">Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let row" [hidden]="!(enableActionsMenu$ | async)">
+      <mat-header-cell class="mat-one-action" *matHeaderCellDef i18n="@@security_users_component_table_header_actions" [hidden]="!(enableActionsMenu$ | async)">Actions</mat-header-cell>
+      <mat-cell class="mat-one-action" *matCellDef="let row" [hidden]="!(enableActionsMenu$ | async)">
         <ng-container>
           <button [matMenuTriggerFor]="actionsMenu" [matMenuTriggerData]="{username: row.username}" mat-icon-button>
             <i class="fas fa-ellipsis-v"></i>

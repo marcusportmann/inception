@@ -435,61 +435,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   display: inline-flex !important;
 }
 
-.mat-cell-one-action {
-  min-width: 82px;
-  max-width: 82px;
-  text-align: center;
-}
-
-.mat-cell-two-actions {
-  min-width: 82px;
-  max-width: 82px;
-  text-align: center;
-}
-
-.mat-cell-three-actions {
-  min-width: 102px;
-  max-width: 102px;
-  text-align: center;
-}
-
-.mat-cell-four-actions {
-  min-width: 128px;
-  max-width: 128px;
-  text-align: center;
-}
-
-.mat-cell-five-actions {
-  min-width: 154px;
-  max-width: 154px;
-  text-align: center;
-}
-
-.mat-cell-one-action, .mat-cell-two-actions, .mat-cell-three-actions, .mat-cell-four-actions, .mat-cell-five-actions {
-  .mat-icon-button {
-    width: 24px !important;
-    height: 24px !important;
-    line-height: 24px !important;
-    vertical-align: middle;
-
-    .mat-icon {
-      color: rgba(0, 0, 0, 0.68);
-      width: 20px !important;
-      height: 20px !important;
-      line-height: 20px !important;
-      font-size: 20px !important;
-    }
-
-    i.fa {
-      color: rgba(0, 0, 0, 0.68);
-      width: 20px !important;
-      height: 20px !important;
-      line-height: 18px !important;
-      font-size: 14px !important;
-    }
-  }
-}
-
 .mat-menu-panel.mat-action-menu {
   .mat-menu-content:not(:empty) {
     padding: 0 !important;
@@ -499,7 +444,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
     }
   }
 }
-
 
 .mat-table-header {
   display: flex;
@@ -520,6 +464,146 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
     .table-filter-input {
       width: 10em;
     }
+  }
+}
+
+.mat-table-header, .mat-table {
+  .mat-one-action {
+    min-width: 82px;
+    max-width: 82px;
+    text-align: center;
+  }
+
+  .mat-two-actions {
+    min-width: 102px;
+    max-width: 102px;
+    text-align: center;
+  }
+
+  .mat-three-actions {
+    min-width: 138px;
+    max-width: 138px;
+    text-align: center;
+  }
+
+  .mat-four-actions {
+    min-width: 174px;
+    max-width: 174px;
+    text-align: center;
+  }
+
+  .mat-five-actions {
+    min-width: 210px;
+    max-width: 210px;
+    text-align: center;
+  }
+}
+
+.mat-nested-table-header {
+  $foreground: map-get($inception-theme, foreground);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $gray-200;
+  color: mat-color($foreground, secondary-text);
+  font-weight: bold;
+  min-height: 48px;
+  padding-right: 6px;
+}
+
+.mat-nested-table {
+  $background: map-get($inception-theme, background);
+  $foreground: map-get($inception-theme, foreground);
+
+  display: block;
+  background: mat-color($background, 'card');
+  margin-left: 6px;
+  margin-right: 6px;
+
+  .mat-nested-header-row, .mat-nested-footer-row, .mat-nested-row {
+    min-height: 48px;
+  }
+
+  .mat-nested-row, .mat-nested-header-row, .mat-nested-footer-row {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    background: inherit;
+
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-style: solid;
+    border-bottom-color: mat-color($foreground, divider);
+  }
+
+  .mat-nested-header-cell, .mat-nested-cell {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mat-nested-header-cell {
+    color: mat-color($foreground, secondary-text);
+  }
+
+  .mat-nested-cell, .mat-nested-footer-cell {
+    color: mat-color($foreground, text);
+  }
+
+  .mat-nested-header-cell, .mat-nested-cell, .mat-nested-footer-cell {
+    flex: 1;
+    padding-left: 6px;
+  }
+}
+
+.mat-nested-table-header, .mat-nested-table {
+  .mat-one-action {
+    min-width: 82px;
+    max-width: 82px;
+    text-align: center;
+  }
+
+  .mat-two-actions {
+    min-width: 96px;
+    max-width: 96px;
+    text-align: center;
+  }
+
+  .mat-three-actions {
+    min-width: 132px;
+    max-width: 132px;
+    text-align: center;
+  }
+
+  .mat-four-actions {
+    min-width: 168px;
+    max-width: 168px;
+    text-align: center;
+  }
+
+  .mat-five-actions {
+    min-width: 204px;
+    max-width: 204px;
+    text-align: center;
+  }
+}
+
+.mat-table-header, .mat-table, .mat-nested-table-header, .mat-nested-table {
+  .mat-icon-button {
+    font-size: 0.8rem;
+    color: $gray-600;
+    background-color: $gray-100;
+    width: 30px !important;
+    height: 30px !important;
+    line-height: 24px !important;
+    vertical-align: middle;
+    border: 1px solid $gray-300;
+    margin-right: 6px;
+  }
+
+  .mat-icon-button:last-child {
+    margin-right: 0;
   }
 }
 

@@ -22,8 +22,8 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let userDirectorySummary">
+      <mat-header-cell class="mat-one-action" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-one-action" *matCellDef="let userDirectorySummary">
         <button mat-icon-button (click)="removeUserDirectoryFromOrganization(userDirectorySummary.id)">
           <i class="far fa-trash-alt"></i>
         </button>

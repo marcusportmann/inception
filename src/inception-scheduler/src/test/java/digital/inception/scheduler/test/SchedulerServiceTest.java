@@ -204,15 +204,13 @@ public class SchedulerServiceTest
     assertEquals("The status for the job (" + job.getId() + ") is incorrect", JobStatus.SCHEDULED,
         retrievedJob.getStatus());
 
-    job = (Job) BeanUtils.cloneBean(retrievedJob);
-
     job.removeParameter(job.getParameters().iterator().next().getName());
 
     schedulerService.updateJob(job);
 
     Job updatedJob = schedulerService.getJob(job.getId());
 
-    compareJobs(retrievedJob, updatedJob);
+    compareJobs(job, updatedJob);
 
     schedulerService.deleteJob(job.getId());
 

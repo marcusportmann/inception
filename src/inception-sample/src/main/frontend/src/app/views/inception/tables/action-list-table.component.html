@@ -7,26 +7,27 @@
 
     <!-- First Name(s) Column -->
     <ng-container matColumnDef="firstNames">
-      <mat-header-cell class="first-names-column" *matHeaderCellDef mat-sort-header>First&nbsp;Name</mat-header-cell>
-      <mat-cell class="first-names-column" *matCellDef="let row">{{row.firstNames}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>First&nbsp;Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.firstNames}}</mat-cell>
     </ng-container>
 
     <!-- Last Name Column -->
     <ng-container matColumnDef="lastName">
-      <mat-header-cell class="last-name-column" *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
-      <mat-cell class="last-name-column" *matCellDef="let row">{{row.lastName}}</mat-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.lastName}}</mat-cell>
     </ng-container>
 
     <!-- E-Mail Column -->
     <ng-container matColumnDef="email">
-      <mat-header-cell class="email-column d-none d-sm-inline-block" *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>
-      <mat-cell class="email-column d-none d-sm-inline-block" *matCellDef="let row">{{row.email}}</mat-cell>
+      <mat-header-cell class="d-none d-sm-inline-block" *matHeaderCellDef mat-sort-header>E-mail</mat-header-cell>
+      <mat-cell class="d-none d-sm-inline-block" *matCellDef="let row">{{row.email}}</mat-cell>
     </ng-container>
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-three-actions" *matHeaderCellDef>Actions</mat-header-cell>
-      <mat-cell class="mat-cell-three-actions" *matCellDef="let row">
+      <mat-header-cell class="mat-three-actions" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-three-actions" *matCellDef="let row">
+        <span>
         <button mat-icon-button>
           <i class="fas fa-user-edit"></i>
         </button>
@@ -36,6 +37,7 @@
         <button mat-icon-button>
           <i class="fas fa-user-times"></i>
         </button>
+        </span>
       </mat-cell>
     </ng-container>
 

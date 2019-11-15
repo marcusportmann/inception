@@ -63,9 +63,12 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: NewJobComponent,
     data: {
+      /*
       authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
         'FUNCTION_Scheduler.JobAdministration'
       ]
+      *
+       */
     },
     resolve: {
       title: NewJobTitleResolver

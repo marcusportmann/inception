@@ -21,8 +21,8 @@
 
     <!-- Actions Column -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell class="mat-cell-one-action" *matHeaderCellDef>Actions</mat-header-cell>
-      <mat-cell class="mat-cell-one-action" *matCellDef="let existingGroupName">
+      <mat-header-cell class="mat-one-action" *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell class="mat-one-action" *matCellDef="let existingGroupName">
         <button mat-icon-button (click)="removeUserFromGroup(existingGroupName)">
           <i class="far fa-trash-alt"></i>
         </button>

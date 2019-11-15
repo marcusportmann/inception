@@ -31,6 +31,7 @@ import {SchedulerService} from "../../services/scheduler/scheduler.service";
 import {SchedulerServiceError} from "../../services/scheduler/scheduler.service.errors";
 import {JobStatus} from "../../services/scheduler/job-status";
 import {v4 as uuid} from "uuid";
+import {JobParameter} from "../../services/scheduler/job-parameter";
 
 /**
  * The NewJobComponent class implements the new job component.
@@ -44,6 +45,10 @@ import {v4 as uuid} from "uuid";
 export class NewJobComponent extends AdminContainerView implements AfterViewInit {
 
   JobStatus = JobStatus;
+
+  jobParameters: JobParameter[] = [{name: 'Name 1', value: 'Value 1'}, {name: 'Name 2', value: 'A Very Very Very Very Long Long Long Value 2'}, {name: 'Long Name 3', value: 'Value 3'}];
+
+  jobParametersDisplayedColumns = [ 'name', 'value', 'actions'];
 
   jobStatuses: JobStatus[] = [JobStatus.Unscheduled, JobStatus.Scheduled, JobStatus.Executing, JobStatus.Executed, JobStatus.Aborted, JobStatus.Failed, JobStatus.OnceOff, JobStatus.Unknown];
 
@@ -59,11 +64,11 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
     // Initialise the form
     this.newJobForm = new FormGroup({
-      enabled: new FormControl(true),
+      enabled: new FormControl(true, [Validators.required]),
       id: new FormControl(uuid(), [Validators.required]),
       name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       schedulingPattern: new FormControl('', [Validators.required, Validators.maxLength(100)])
-    })
+    });
   }
 
   get backNavigation(): BackNavigation {
