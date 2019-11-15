@@ -24,6 +24,30 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@scheduler_new_job_component_label_scheduling_pattern">Scheduling Pattern</mat-label>
+            <input type="text" matInput formControlName="schedulingPattern" required="true">
+            <mat-error *ngIf="newJobForm.get('schedulingPattern').errors && !newJobForm.get('schedulingPattern').untouched">
+              <span *ngIf="newJobForm.get('schedulingPattern').errors?.required" i18n="@@scheduler_new_job_component_error_scheduling_pattern_required">A scheduling pattern is required.</span>
+              <span *ngIf="newJobForm.get('schedulingPattern').errors?.maxlength" i18n="@@scheduler_new_job_component_error_scheduling_pattern_maxlength">Scheduling pattern must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <checkbox-form-field>
+            <mat-checkbox class="mat-form-field-slim" formControlName="enabled" i18n="@@scheduler_new_job_component_label_enabled">Enabled</mat-checkbox>
+          </checkbox-form-field>
+        </div>
+      </div>
+
+
+
+
+
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@scheduler_new_job_component_button_cancel">Cancel</button>

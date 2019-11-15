@@ -18,12 +18,11 @@ package digital.inception.scheduler.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.scheduler.ISchedulerService;
-import digital.inception.scheduler.Job;
-import digital.inception.scheduler.JobParameter;
-import digital.inception.scheduler.JobStatus;
+import digital.inception.scheduler.*;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -205,8 +204,25 @@ public class SchedulerServiceTest
     assertEquals("The status for the job (" + job.getId() + ") is incorrect", JobStatus.SCHEDULED,
         retrievedJob.getStatus());
 
-    // ADD UPDATE AND DELETE TEST CALLS
+    job = (Job) BeanUtils.cloneBean(retrievedJob);
 
+    job.removeParameter(job.getParameters().iterator().next().getName());
+
+    schedulerService.updateJob(job);
+
+    Job updatedJob = schedulerService.getJob(job.getId());
+
+    compareJobs(retrievedJob, updatedJob);
+
+    schedulerService.deleteJob(job.getId());
+
+    try
+    {
+      schedulerService.getJob(job.getId());
+
+      fail("Retrieved the job (" + job.getId() + ") that should have been deleted");
+    }
+    catch (JobNotFoundException ignore) {}
   }
 
   private static synchronized Job getTestJobDetails()
@@ -220,6 +236,14 @@ public class SchedulerServiceTest
     job.setJobClass("digital.inception.scheduler.TestJob");
     job.setEnabled(true);
     job.setStatus(JobStatus.UNSCHEDULED);
+
+    for (int i = 1; i <= 10; i++)
+    {
+      JobParameter parameter = new JobParameter("Job Parameter Name " + i, "Job Parameter Value "
+          + i);
+
+      job.addParameter(parameter);
+    }
 
     return job;
   }

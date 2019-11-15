@@ -635,10 +635,21 @@ public class SchedulerService
   {
     try
     {
-      if (!jobRepository.existsById(job.getId()))
+      Optional<Job> jobOptional = jobRepository.findById(job.getId());
+
+      if (jobOptional.isEmpty())
       {
         throw new JobNotFoundException(job.getId());
       }
+
+      Job existingJob = jobOptional.get();
+
+      existingJob.setEnabled(job.isEnabled());
+      existingJob.setJobClass(job.getJobClass());
+      existingJob.setName(job.getName());
+      existingJob.setParameters(job.getParameters());
+      existingJob.setSchedulingPattern(job.getSchedulingPattern());
+      existingJob.setStatus(job.getStatus());
 
       jobRepository.saveAndFlush(job);
     }

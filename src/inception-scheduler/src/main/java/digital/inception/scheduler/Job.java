@@ -408,6 +408,24 @@ public class Job
   }
 
   /**
+   * Remove the parameter for the job.
+   *
+   * @param parameterName the name of the parameter
+   */
+  public void removeParameter(String parameterName)
+  {
+    for (JobParameter parameter : parameters)
+    {
+      if (parameterName.equalsIgnoreCase(parameter.getName()))
+      {
+        this.parameters.remove(parameter);
+
+        return;
+      }
+    }
+  }
+
+  /**
    * Set whether the job is enabled for execution.
    *
    * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>

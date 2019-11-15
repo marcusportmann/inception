@@ -76,11 +76,12 @@
     <inception.version>1.0.0-SNAPSHOT</inception.version>
 
     <agroal-pool.version>1.7</agroal-pool.version>
-    <apache-avro.version>1.9.1</apache-avro.version>
-    <apache-cxf.version>3.3.3</apache-cxf.version>
-    <apache-freemarker.version>2.3.29</apache-freemarker.version>
+    <avro.version>1.9.1</avro.version>
     <cglib.version>3.3.0</cglib.version>
+    <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.6</commons-io.version>
+    <cxf.version>3.3.3</cxf.version>
+    <freemarker.version>2.3.29</freemarker.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
     <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
     <jasperreports.version>6.10.0</jasperreports.version>
@@ -114,6 +115,11 @@
         <groupId>com.sun.activation</groupId>
         <artifactId>javax.activation</artifactId>
         <version>${sun-activation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons-beanutils.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -163,27 +169,27 @@
       <dependency>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro</artifactId>
-        <version>${apache-avro.version}</version>
+        <version>${avro.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-frontend-jaxws</artifactId>
-        <version>${apache-cxf.version}</version>
+        <version>${cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-transports-http</artifactId>
-        <version>${apache-cxf.version}</version>
+        <version>${cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.cxf</groupId>
         <artifactId>cxf-rt-ws-security</artifactId>
-        <version>${apache-cxf.version}</version>
+        <version>${cxf.version}</version>
       </dependency>
       <dependency>
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
-        <version>${apache-freemarker.version}</version>
+        <version>${freemarker.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.wss4j</groupId>
