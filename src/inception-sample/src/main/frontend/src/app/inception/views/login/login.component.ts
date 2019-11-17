@@ -85,11 +85,11 @@ export class LoginComponent implements OnInit {
 
     // let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
 
-    // this.dialogService.showInformationDialog({message: 'This is an information message.'});
+    //this.dialogService.showInformationDialog({message: 'This is an information message.'});
 
-    // this.dialogService.showWarningDialog({message: 'This is a warning message.'});
+    //this.dialogService.showWarningDialog({message: 'This is a warning message.'});
 
-    // this.dialogService.showErrorDialog(new Error('This is an error message.'));
+    //this.dialogService.showErrorDialog(new Error('This is an error message.'));
 
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
       {message: 'Are you sure you want to delete the code category \'XXX\'?'});

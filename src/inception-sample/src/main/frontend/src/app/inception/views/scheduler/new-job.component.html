@@ -55,7 +55,7 @@
           <div class="mat-nested-table-header mt-2">
             Parameters
             <div class="mat-two-actions">
-              <button mat-icon-button>
+              <button mat-icon-button (click)="onNewJobParameter()">
                 <i class="fas fa-plus"></i>
               </button>
             </div>
@@ -99,7 +99,7 @@
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@scheduler_new_job_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newJobForm.valid" (click)="onOK()" i18n="@@scheduler_new_job_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!newJobForm.valid" (click)="onOK()" i18n="@@scheduler_new_job_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

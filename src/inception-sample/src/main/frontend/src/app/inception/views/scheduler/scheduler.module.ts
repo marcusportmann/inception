@@ -38,6 +38,8 @@ import {NewMailTemplateTitleResolver} from "../mail/new-mail-template-title-reso
 import {MailTemplateTitleResolver} from "../mail/mail-template-title-resolver";
 import {EditMailTemplateComponent} from "../mail/edit-mail-template.component";
 import {EditMailTemplateTitleResolver} from "../mail/edit-mail-template-title-resolver";
+import {JobParameterDialogComponent} from "./job-parameter-dialog.component";
+import {AdminContainerComponent} from "../../components/layout";
 
 const routes: Routes = [{
   path: 'jobs',
@@ -108,7 +110,8 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [EditJobComponent, JobsComponent, NewJobComponent
+  entryComponents: [JobParameterDialogComponent],
+  declarations: [EditJobComponent, JobParameterDialogComponent, JobsComponent, NewJobComponent
   ],
   providers: [JobsTitleResolver, JobTitleResolver, EditJobTitleResolver, NewJobTitleResolver]
 })

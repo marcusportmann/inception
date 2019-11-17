@@ -36,10 +36,10 @@ import {DialogData} from './dialog-data';
       </span>
     </div>
     <div class="button">
-      <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onButtonClick()"
+      <button *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="onOk()"
               tabindex="-1">{{ data.buttonText }}</button>
       <ng-template #defaultButton>
-        <button mat-flat-button (click)="onButtonClick()" tabindex="-1" i18n="@@information_dialog_button_ok">Ok</button>
+        <button mat-flat-button (click)="onOk()" tabindex="-1" i18n="@@information_dialog_button_ok">OK</button>
       </ng-template>
     </div>
   `, // tslint:disable-next-line
@@ -59,7 +59,7 @@ export class InformationDialogComponent {
               @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
-  onButtonClick(): void {
+  onOk(): void {
     this.dialogRef.close();
   }
 }

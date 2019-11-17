@@ -109,6 +109,7 @@ import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {SchedulerService} from "./services/scheduler/scheduler.service";
 import {ReportingService} from "./services/reporting/reporting.service";
 import {MailService} from "./services/mail/mail.service";
+import {SchedulerModule} from "./views/scheduler/scheduler.module";
 
 // Import 3rd party components
 
@@ -190,9 +191,8 @@ export const INCEPTION_DATE_FORMATS = {
     ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
     WarningDialogComponent
   ],
-  entryComponents: [SpinnerComponent],
-  bootstrap: [AdminContainerComponent, ConfirmationDialogComponent, ErrorDialogComponent,
-    InformationDialogComponent, SimpleContainerComponent, WarningDialogComponent
+  entryComponents: [SpinnerComponent, ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent],
+  bootstrap: [AdminContainerComponent, SimpleContainerComponent
   ]
 })
 export class InceptionModule {

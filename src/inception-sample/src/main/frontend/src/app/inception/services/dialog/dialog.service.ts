@@ -39,9 +39,9 @@ export class DialogService {
   /**
    * Constructs a new DialogService.
    *
-   * @param dialog The material dialog.
+   * @param matDialog The material dialog.
    */
-  constructor(public dialog: MatDialog) {
+  constructor(private matDialog: MatDialog) {
     console.log('Initializing the Dialog Service');
   }
 
@@ -51,8 +51,8 @@ export class DialogService {
    * @param data The data.
    */
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
-    return this.dialog.open(ConfirmationDialogComponent, {
-      panelClass: 'confirmation-dialog-panel',
+    return this.matDialog.open(ConfirmationDialogComponent, {
+      panelClass: 'confirmation-dialog',
       data
     });
   }
@@ -65,8 +65,12 @@ export class DialogService {
   showErrorDialog(error: Error): MatDialogRef<ErrorDialogComponent> {
     console.log('Error: ', error);
 
-    return this.dialog.open(ErrorDialogComponent, {
-      panelClass: 'error-dialog-panel',
+    if (error.cause) {
+      console.log('Cause: ', error.cause)
+    }
+
+    return this.matDialog.open(ErrorDialogComponent, {
+      panelClass: 'error-dialog',
       data: {error}
     });
   }
@@ -77,8 +81,8 @@ export class DialogService {
    * @param data The data.
    */
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
-    return this.dialog.open(InformationDialogComponent, {
-      panelClass: 'information-dialog-panel',
+    return this.matDialog.open(InformationDialogComponent, {
+      panelClass: 'information-dialog',
       data
     });
   }
@@ -89,8 +93,8 @@ export class DialogService {
    * @param data The data.
    */
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialogComponent> {
-    return this.dialog.open(WarningDialogComponent, {
-      panelClass: 'warning-dialog-panel',
+    return this.matDialog.open(WarningDialogComponent, {
+      panelClass: 'warning-dialog',
       data
     });
   }

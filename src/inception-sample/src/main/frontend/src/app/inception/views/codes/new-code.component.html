@@ -36,7 +36,7 @@
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@codes_new_code_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button [disabled]="!newCodeForm.valid" (click)="onOK()" i18n="@@codes_new_code_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!newCodeForm.valid" (click)="onOK()" i18n="@@codes_new_code_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

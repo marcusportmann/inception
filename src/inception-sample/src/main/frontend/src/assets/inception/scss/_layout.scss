@@ -597,6 +597,13 @@ admin-root {
 }
 
 //
+// Dialogs
+//
+.form-dialog-panel {
+
+}
+
+//
 // Mobile layout
 //
 
@@ -662,33 +669,6 @@ admin-root {
   }
 }
 
-@include media-breakpoint-down(xs) {
-  .confirmation-dialog-panel, .error-dialog-panel, .information-dialog-panel, .warning-dialog-panel {
-    min-width: 300px !important;
-    max-width: 300px !important;
-  }
-
-  simple-container .container .mat-card {
-    min-width: 300px !important;
-    max-width: 300px !important;
-    margin-bottom: 0 !important;
-  }
-}
-
-@include media-breakpoint-up(sm) {
-  .confirmation-dialog-panel, .error-dialog-panel, .information-dialog-panel, .warning-dialog-panel {
-    min-width: 360px !important;
-    max-width: 360px !important;
-  }
-
-  simple-container .container .mat-card {
-    min-width: 400px !important;
-    max-width: 400px !important;
-    margin-bottom: 0 !important;
-  }
-}
-
-
 // Sidebar needs to be bigger on mobile devices
 @include media-breakpoint-down(sm) {
   .sidebar {
@@ -730,6 +710,22 @@ simple-container {
 
   ng-component {
     display: flex;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  simple-container .container .mat-card {
+    min-width: 300px !important;
+    max-width: 300px !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  simple-container .container .mat-card {
+    min-width: 400px !important;
+    max-width: 400px !important;
+    margin-bottom: 0 !important;
   }
 }
 

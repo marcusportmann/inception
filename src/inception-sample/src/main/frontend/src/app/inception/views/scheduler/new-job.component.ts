@@ -32,6 +32,11 @@ import {SchedulerServiceError} from "../../services/scheduler/scheduler.service.
 import {JobStatus} from "../../services/scheduler/job-status";
 import {v4 as uuid} from "uuid";
 import {JobParameter} from "../../services/scheduler/job-parameter";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {ConfirmationDialogComponent} from "../../components/dialogs";
+import {
+  JobParameterDialogComponent, JobParameterDialogData
+} from "./job-parameter-dialog.component";
 
 /**
  * The NewJobComponent class implements the new job component.
@@ -59,7 +64,8 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
               private schedulerService: SchedulerService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+              private spinnerService: SpinnerService,
+              private matDialog: MatDialog) {
     super();
 
     // Initialise the form
@@ -92,6 +98,41 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   onCancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+  }
+
+  onNewJobParameter(): void {
+
+    let data: JobParameterDialogData = {name: 'name', value: 'value'};
+
+    let dialogRef: MatDialogRef<JobParameterDialogComponent, boolean> = this.matDialog.open(JobParameterDialogComponent, {
+      panelClass: 'application-dialog',
+      data
+    });
+
+    dialogRef.afterClosed()
+      .pipe(first())
+      .subscribe((confirmation: boolean | undefined) => {
+        if (confirmation === true) {
+          // this.spinnerService.showSpinner();
+          //
+          // this.schedulerService.deleteJob(jobId)
+          //   .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          //   .subscribe(() => {
+          //     this.loadJobs();
+          //   }, (error: Error) => {
+          //     // noinspection SuspiciousTypeOfGuard
+          //     if ((error instanceof SchedulerServiceError) || (error instanceof AccessDeniedError) ||
+          //       (error instanceof SystemUnavailableError)) {
+          //       // noinspection JSIgnoredPromiseFromCall
+          //       this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          //     } else {
+          //       this.dialogService.showErrorDialog(error);
+          //     }
+          //   });
+        }
+      });
+
+
   }
 
   onOK(): void {

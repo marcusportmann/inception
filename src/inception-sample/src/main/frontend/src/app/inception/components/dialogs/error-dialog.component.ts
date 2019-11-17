@@ -49,7 +49,7 @@ export interface ErrorDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="onOkButtonClick()" tabindex="-1" i18n="@@error_dialog_button_ok">Ok</button>
+      <button mat-flat-button (click)="onOk()" tabindex="-1" i18n="@@error_dialog_button_ok">OK</button>
     </div>
   `, // tslint:disable-next-line
   host: {
@@ -72,7 +72,7 @@ export class ErrorDialogComponent {
     return this.data.error.message;
   }
 
-  onOkButtonClick(): void {
+  onOk(): void {
     this.dialogRef.close();
   }
 }
