@@ -78,17 +78,16 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
       value: 'New Code'
     })
   }
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+  }
 
   ngAfterViewInit(): void {
     this.code = new Code('', this.codeCategoryId, '', '');
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.code && this.newCodeForm.valid) {
       this.code.id = this.newCodeForm.get('id')!.value;
       this.code.name = this.newCodeForm.get('name')!.value;

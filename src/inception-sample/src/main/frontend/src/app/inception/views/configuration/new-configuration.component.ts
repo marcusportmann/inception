@@ -73,16 +73,16 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
     })
   }
 
-  ngAfterViewInit(): void {
-    this.configuration = new Configuration('', '', '');
-  }
-
-  onCancel(): void {
+  cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
-  onOK(): void {
+  ngAfterViewInit(): void {
+    this.configuration = new Configuration('', '', '');
+  }
+
+  ok(): void {
     if (this.configuration && this.newConfigurationForm.valid) {
       this.configuration.description = this.newConfigurationForm.get('description')!.value;
       this.configuration.key = this.newConfigurationForm.get('key')!.value;

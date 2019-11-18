@@ -69,6 +69,13 @@ export class ExpiredPasswordComponent implements OnInit {
     });
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['..'], {
+      relativeTo: this.activatedRoute
+    });
+  }
+
   ngOnInit(): void {
     this.activatedRoute.paramMap
       .pipe(first(), map(() => window.history.state))
@@ -84,12 +91,6 @@ export class ExpiredPasswordComponent implements OnInit {
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {
-      relativeTo: this.activatedRoute
-    });
-  }
 
   onChangePassword(): void {
     if (this.expiredPasswordForm.valid) {

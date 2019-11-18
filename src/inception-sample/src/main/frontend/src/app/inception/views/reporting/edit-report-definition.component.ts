@@ -86,6 +86,11 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -108,12 +113,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.reportDefinition && this.editReportDefinitionForm.valid) {
 
       let fileReader: FileReader = new FileReader();

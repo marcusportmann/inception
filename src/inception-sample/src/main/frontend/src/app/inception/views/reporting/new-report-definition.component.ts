@@ -78,16 +78,16 @@ export class NewReportDefinitionComponent extends AdminContainerView implements 
     })
   }
 
-  ngAfterViewInit(): void {
-    this.reportDefinition = new ReportDefinition('', '', '');
-  }
-
-  onCancel(): void {
+  cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
-  onOK(): void {
+  ngAfterViewInit(): void {
+    this.reportDefinition = new ReportDefinition('', '', '');
+  }
+
+  ok(): void {
     if (this.reportDefinition && this.newReportDefinitionForm.valid) {
 
       let fileReader: FileReader = new FileReader();

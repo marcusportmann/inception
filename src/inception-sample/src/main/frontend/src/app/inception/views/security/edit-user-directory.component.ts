@@ -81,7 +81,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.subscriptions.add(this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
       .pipe(startWith(null), pairwise())
       .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-        this.onUserDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+        this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
       }));
   }
 
@@ -97,6 +97,11 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
       id: '@@security_edit_user_directory_component_title',
       value: 'Edit User Directory'
     })
+  }
+
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -127,12 +132,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.subscriptions.unsubscribe();
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.userDirectory && this.editUserDirectoryForm.valid) {
       this.userDirectory.name = this.editUserDirectoryForm.get('name')!.value;
       this.userDirectory.type = this.editUserDirectoryForm.get('userDirectoryType')!.value;
@@ -163,7 +163,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     }
   }
 
-  onUserDirectoryTypeSelected(previousUserDirectoryType: string,
+  userDirectoryTypeSelected(previousUserDirectoryType: string,
                               currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
     if (!!previousUserDirectoryType) {

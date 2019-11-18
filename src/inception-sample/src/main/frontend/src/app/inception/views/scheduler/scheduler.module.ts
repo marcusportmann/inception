@@ -31,15 +31,7 @@ import {EditJobTitleResolver} from "./edit-job-title-resolver";
 import {NewJobTitleResolver} from "./new-job-title-resolver";
 import {EditJobComponent} from "./edit-job.component";
 import {NewJobComponent} from "./new-job.component";
-import {MailTemplatesTitleResolver} from "../mail/mail-templates-title-resolver";
-import {MailTemplatesComponent} from "../mail/mail-templates.component";
-import {NewMailTemplateComponent} from "../mail/new-mail-template.component";
-import {NewMailTemplateTitleResolver} from "../mail/new-mail-template-title-resolver";
-import {MailTemplateTitleResolver} from "../mail/mail-template-title-resolver";
-import {EditMailTemplateComponent} from "../mail/edit-mail-template.component";
-import {EditMailTemplateTitleResolver} from "../mail/edit-mail-template-title-resolver";
 import {JobParameterDialogComponent} from "./job-parameter-dialog.component";
-import {AdminContainerComponent} from "../../components/layout";
 
 const routes: Routes = [{
   path: 'jobs',
@@ -58,47 +50,43 @@ const routes: Routes = [{
   },
 
 
-
     {
-    path: 'new',
-    pathMatch: 'full',
-    canActivate: [CanActivateFunctionGuard],
-    component: NewJobComponent,
-    data: {
-      /*
-      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
-        'FUNCTION_Scheduler.JobAdministration'
-      ]
-      *
-       */
-    },
-    resolve: {
-      title: NewJobTitleResolver
-    }
-  }, {
-    path: ':jobId',
-    pathMatch: 'full',
-    redirectTo: ':jobId/edit'
-  }, {
-    path: ':jobId',
-    resolve: {
-      title: JobTitleResolver
-    },
-    children: [{
-      path: 'edit',
+      path: 'new',
+      pathMatch: 'full',
       canActivate: [CanActivateFunctionGuard],
-      component: EditJobComponent,
+      component: NewJobComponent,
       data: {
         authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
           'FUNCTION_Scheduler.JobAdministration'
         ]
       },
       resolve: {
-        title: EditJobTitleResolver
+        title: NewJobTitleResolver
       }
+    }, {
+      path: ':jobId',
+      pathMatch: 'full',
+      redirectTo: ':jobId/edit'
+    }, {
+      path: ':jobId',
+      resolve: {
+        title: JobTitleResolver
+      },
+      children: [{
+        path: 'edit',
+        canActivate: [CanActivateFunctionGuard],
+        component: EditJobComponent,
+        data: {
+          authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
+            'FUNCTION_Scheduler.JobAdministration'
+          ]
+        },
+        resolve: {
+          title: EditJobTitleResolver
+        }
+      }
+      ]
     }
-    ]
-  }
 
 
   ]

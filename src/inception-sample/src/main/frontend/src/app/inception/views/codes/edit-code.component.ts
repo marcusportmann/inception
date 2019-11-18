@@ -83,6 +83,11 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -106,12 +111,7 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.code && this.editCodeForm.valid) {
       this.code.name = this.editCodeForm.get('name')!.value;
       this.code.value = this.editCodeForm.get('value')!.value;

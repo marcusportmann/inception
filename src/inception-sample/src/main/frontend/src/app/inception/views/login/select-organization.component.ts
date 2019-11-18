@@ -98,7 +98,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
       });
   }
 
-  onOk(): void {
+  ok(): void {
     if (this.selectOrganizationForm.valid) {
       this.sessionService.session$
         .pipe(first())

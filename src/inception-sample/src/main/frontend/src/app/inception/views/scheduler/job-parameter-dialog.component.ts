@@ -15,9 +15,9 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {v4 as uuid} from "uuid/interfaces";
+import {JobParameter} from "../../services/scheduler/job-parameter";
 
 /**
  * The JobParameterDialogData interface defines the data that is displayed by a job parameter
@@ -31,6 +31,11 @@ export interface JobParameterDialogData {
    * The name of the job parameter.
    */
   name: string;
+
+  /**
+   * Is the name of the job parameter reaonly?
+   */
+  readonlyName?: boolean;
 
   /**
    * The value of the job parameter.
@@ -47,8 +52,8 @@ export interface JobParameterDialogData {
   // tslint:disable-next-line
   selector: 'job-parameter-dialog',
   template: `
-    <div class="header"><span>Job Parameter</span></div>
-    <div class="content">
+    <div class="mat-dialog-title"><span>Job Parameter</span></div>
+    <div class="mat-dialog-content">
       <form [formGroup]="jobParameterForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
         <div class="row">
           <div class="col-sm">
@@ -75,14 +80,11 @@ export interface JobParameterDialogData {
         </div>
       </form>
     </div>
-    <div class="button">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()" tabindex="-1" i18n="@@scheduler_job_parameter_dialog_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button color="primary" [disabled]="!jobParameterForm.valid"  (click)="onOk()" tabindex="-1" i18n="@@scheduler_job_parameter_dialog_component_button_ok">OK</button>
+    <div class="mat-dialog-actions">
+      <button type="button" mat-flat-button color="link" (click)="cancel()" tabindex="-1" i18n="@@scheduler_job_parameter_dialog_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!jobParameterForm.valid" (click)="ok()" tabindex="-1" i18n="@@scheduler_job_parameter_dialog_component_button_ok">OK</button>
     </div>
-  `, // tslint:disable-next-line
-  host: {
-    'class': 'application-dialog'
-  }
+  `
 })
 export class JobParameterDialogComponent {
 
@@ -99,17 +101,23 @@ export class JobParameterDialogComponent {
 
     // Initialise the form
     this.jobParameterForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      value: new FormControl('', [Validators.maxLength(100)])
+      name: new FormControl({
+        value: data.name,
+        disabled: data.readonlyName
+      }, [Validators.required, Validators.maxLength(100)]),
+      value: new FormControl(data.value, [Validators.maxLength(100)])
     });
   }
 
-  onCancel(): void {
-    this.dialogRef.close(false);
+  cancel(): void {
+    this.dialogRef.close(undefined);
   }
 
-  onOk(): void {
-    this.dialogRef.close(true);
+  ok(): void {
+    let jobParameter: JobParameter = new JobParameter(this.jobParameterForm.get('name')!.value,
+      this.jobParameterForm.get('value')!.value);
+
+    this.dialogRef.close(jobParameter);
   }
 }
 

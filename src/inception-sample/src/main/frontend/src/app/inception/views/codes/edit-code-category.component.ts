@@ -82,6 +82,11 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -105,12 +110,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
       const data = this.editCodeCategoryForm.get('data')!.value;
 

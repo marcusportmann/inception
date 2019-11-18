@@ -91,6 +91,14 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../../..'], {
+      relativeTo: this.activatedRoute,
+      state: {userDirectoryId: this.userDirectoryId}
+    });
+  }
+
   ngAfterViewInit(): void {
     // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
@@ -118,15 +126,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.group && this.editGroupForm.valid) {
       this.group.description = this.editGroupForm.get('description')!.value;
 

@@ -86,16 +86,16 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
     })
   }
 
-  ngAfterViewInit(): void {
-    this.mailTemplate = new MailTemplate('', '', MailTemplateContentType.Text, '');
-  }
-
-  onCancel(): void {
+  cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
-  onOK(): void {
+  ngAfterViewInit(): void {
+    this.mailTemplate = new MailTemplate('', '', MailTemplateContentType.Text, '');
+  }
+
+  ok(): void {
     if (this.mailTemplate && this.newMailTemplateForm.valid) {
 
       let fileReader: FileReader = new FileReader();

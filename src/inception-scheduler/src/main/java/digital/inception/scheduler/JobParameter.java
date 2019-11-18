@@ -18,10 +18,7 @@ package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -61,7 +58,7 @@ public class JobParameter
   /**
    * The job the job parameter is associated with.
    */
-  @JsonIgnore
+  @JsonBackReference
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
   private Job job;

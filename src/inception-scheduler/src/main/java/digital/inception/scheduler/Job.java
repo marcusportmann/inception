@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -160,6 +161,7 @@ public class Job
    */
   @ApiModelProperty(value = "The parameters for the job")
   @JsonProperty
+  @JsonManagedReference
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
   @Valid
@@ -514,7 +516,8 @@ public class Job
    */
   public void setParameters(Set<JobParameter> parameters)
   {
-    this.parameters = parameters;
+    this.parameters.clear();
+    this.parameters.addAll(parameters);
   }
 
   /**

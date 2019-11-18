@@ -77,6 +77,9 @@ $inception-typography: mat-typography-config(
   $input:         mat-typography-level(1rem, 1.125, 400)
 );
 
+$foreground: map-get($inception-theme, foreground);
+$background: map-get($inception-theme, background);
+
 @include angular-material-typography($inception-typography);
 
 * {
@@ -417,14 +420,10 @@ mat-cell, mat-footer-cell, mat-header-cell {
 }
 
 .mat-header-label {
-  $foreground: map-get($inception-theme, foreground);
-
   color: mat-color($foreground, secondary-text);
 }
 
 .mat-checkbox-label {
-  $foreground: map-get($inception-theme, foreground);
-
   color: mat-color($foreground, secondary-text);
 }
 
@@ -501,8 +500,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 }
 
 .mat-nested-table-header {
-  $foreground: map-get($inception-theme, foreground);
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -514,9 +511,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 }
 
 .mat-nested-table {
-  $background: map-get($inception-theme, background);
-  $foreground: map-get($inception-theme, foreground);
-
   display: block;
   background: mat-color($background, 'card');
   margin-left: 6px;
@@ -593,13 +587,12 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 .mat-table-header, .mat-table, .mat-nested-table-header, .mat-nested-table {
   .mat-icon-button {
     font-size: 0.8rem;
-    color: $gray-600;
-    background-color: $gray-100;
+    color: mat-color($foreground, secondary-text);
     width: 30px !important;
     height: 30px !important;
     line-height: 24px !important;
     vertical-align: middle;
-    border: 1px solid $gray-300;
+    border: 1px solid mat-color($foreground, secondary-text);
     margin-right: 6px;
   }
 
@@ -612,60 +605,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   font-weight: 500;
 }
 
-.mat-dialog-container {
-  .mat-dialog-title {
-    margin: 0 0 10px;
-  }
-
-  /*
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
-
-    .mat-form-field-flex
-    {
-      padding-top: 2em;
-
-      .mat-form-field-infix
-      {
-        border-top: 0;
-        min-height: 0 !important;
-        padding: 0;
-
-        .mat-input-element {
-          margin-top: 0.5em;
-        }
-
-        input.mat-input-element {
-          line-height: unset;
-          height: 25px;
-        }
-
-        textarea.mat-input-element {
-          padding: 0;
-          margin-bottom: 4px;
-        }
-      }
-    }
-
-    .mat-form-field-underline {
-      bottom: 0 !important;
-    }
-
-    .mat-form-field-subscript-wrapper {
-      display: none;
-    }
-  }
-  */
-
-  .mat-dialog-actions {
-    float: right;
-    padding-top: 20px;
-
-    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
-}
 
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }
@@ -682,39 +621,39 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
 
 .mat-dialog-container {
-  .application-dialog {
-    display: block;
-    padding: 15px;
-    margin: -24px;
 
-    .header {
+  padding: 0 !important;
 
-
-    }
-
-    .content {
-      display: flex;
-
-    }
-
-    .button {
-      text-align: right;
-      padding-top: 0.5rem;
-
-      button {
-        margin-left: 0.3rem;
-        margin-right: 0.3rem;
-      }
-    }
-
-
-
+  .mat-dialog-title {
+    font-size: 1rem;
+    color: $white;
+    background-color: $primary;
+    margin: 0;
+    padding: 16px;
   }
+
+  .mat-dialog-content {
+    display: block;
+    margin: 0;
+    padding: 16px;
+  }
+
+  .mat-dialog-actions {
+    float: right;
+    padding: 8px 16px 16px;
+    margin: 0;
+
+    .mat-button:not(:last-child), .mat-flat-button:not(:last-child), .mat-raised-button:not(:last-child), .mat-icon-button:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+
+
 
   .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
     display: block;
     padding: 0;
-    margin: -24px;
 
     .header {
       text-align: center;
@@ -801,9 +740,9 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
 @include media-breakpoint-down(xs) {
   .mat-dialog-container {
-    .application-dialog {
-      min-width: 400px !important;
-      max-width: 400px !important;
+    .mat-dialog-content {
+      min-width: 80vw !important;
+      max-width: 80vw !important;
     }
 
     .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
@@ -815,9 +754,9 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 
 @include media-breakpoint-up(sm) {
   .mat-dialog-container {
-    .application-dialog {
+    .mat-dialog-content {
       min-width: 400px !important;
-      max-width: 400px !important;
+      max-width: 80vw !important;
     }
 
     .confirmation-dialog, .error-dialog, .information-dialog, .warning-dialog {
@@ -892,4 +831,10 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
       }
     }
   }
+}
+
+
+.cdk-global-scrollblock {
+  position: static;
+  overflow: hidden !important;
 }

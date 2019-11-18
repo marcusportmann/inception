@@ -30,6 +30,7 @@ import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import { MatDialogRef } from '@angular/material/dialog';
 import {InformationDialogComponent} from '../../components/dialogs';
+import {ApiError} from "../../errors/api-error";
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -79,7 +80,17 @@ export class SendErrorReportComponent implements OnInit {
 
           this.messageFormControl.setValue(state.error.message);
 
-          console.log('Error: ', this.error);
+          if (this.error) {
+            console.log('Error: ', this.error);
+
+            if (this.error.cause) {
+              console.log('Cause: ', this.error.cause);
+
+              if ((<ApiError>this.error.cause).stackTrace) {
+                console.log('StackTrace: ', (<ApiError>this.error.cause).stackTrace);
+              }
+            }
+          }
         } else {
           console.log('No error found, redirecting to the application root');
 

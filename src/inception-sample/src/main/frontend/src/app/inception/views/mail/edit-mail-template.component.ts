@@ -95,6 +95,11 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -118,12 +123,7 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.mailTemplate && this.editMailTemplateForm.valid) {
 
       let fileReader: FileReader = new FileReader();

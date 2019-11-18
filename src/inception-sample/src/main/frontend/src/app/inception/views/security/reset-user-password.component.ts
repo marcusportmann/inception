@@ -99,6 +99,14 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../../..'], {
+      relativeTo: this.activatedRoute,
+      state: {userDirectoryId: this.userDirectoryId}
+    });
+  }
+
   ngAfterViewInit(): void {
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -137,15 +145,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.resetUserPasswordForm.valid) {
       // Check that the password and confirmation password match
       if (this.resetUserPasswordForm.get('password')!.value !==

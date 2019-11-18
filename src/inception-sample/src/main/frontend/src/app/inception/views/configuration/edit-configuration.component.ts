@@ -81,6 +81,11 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     this.spinnerService.showSpinner();
 
@@ -106,12 +111,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.configuration && this.editConfigurationForm.valid) {
       this.configuration.description = this.editConfigurationForm.get('description')!.value;
       this.configuration.value = this.editConfigurationForm.get('value')!.value;

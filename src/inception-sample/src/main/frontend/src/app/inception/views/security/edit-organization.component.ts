@@ -77,6 +77,11 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+  }
+
   ngAfterViewInit(): void {
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -99,12 +104,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.organization && this.editOrganizationForm.valid) {
       this.organization.name = this.editOrganizationForm.get('name')!.value;
 

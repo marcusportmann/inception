@@ -84,6 +84,14 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
     })
   }
 
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['../..'], {
+      relativeTo: this.activatedRoute,
+      state: {userDirectoryId: this.userDirectoryId}
+    });
+  }
+
   ngAfterViewInit(): void {
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
@@ -106,15 +114,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       });
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['../..'], {
-      relativeTo: this.activatedRoute,
-      state: {userDirectoryId: this.userDirectoryId}
-    });
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.group && this.newGroupForm.valid) {
 
       this.group.name = this.newGroupForm.get('name')!.value;

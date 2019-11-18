@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-
-
 /* tslint:disable */
-
-
 export const removeClasses = (classNames: string[]): boolean => {
   const bodySelector = document.querySelector('body');
 
@@ -45,7 +41,6 @@ export const toggleClasses = (toggle: string, classNames: string[]): void => {
     }
   }
 }
-
 
 
 /*

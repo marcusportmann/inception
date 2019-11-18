@@ -76,7 +76,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     this.subscriptions.add(this.newUserDirectoryForm.get('userDirectoryType')!.valueChanges
       .pipe(startWith(null), pairwise())
       .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-        this.onUserDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+        this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
       }));
   }
 
@@ -92,6 +92,11 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       id: '@@security_new_user_directory_component_title',
       value: 'New User Directory'
     })
+  }
+
+  cancel(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
@@ -118,12 +123,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     this.subscriptions.unsubscribe();
   }
 
-  onCancel(): void {
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-  }
-
-  onOK(): void {
+  ok(): void {
     if (this.userDirectory && this.newUserDirectoryForm.valid) {
       this.userDirectory.name = this.newUserDirectoryForm.get('name')!.value;
       this.userDirectory.type = this.newUserDirectoryForm.get('userDirectoryType')!.value;
@@ -152,7 +152,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     }
   }
 
-  onUserDirectoryTypeSelected(previousUserDirectoryType: string,
+  userDirectoryTypeSelected(previousUserDirectoryType: string,
                               currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
     if (!!previousUserDirectoryType) {

@@ -42,6 +42,7 @@
             <input type="text" matInput formControlName="email">
             <mat-error *ngIf="newUserForm.get('email').errors && !newUserForm.get('email').untouched">
               <span *ngIf="newUserForm.get('email').errors?.maxlength" i18n="@@security_new_user_component_error_email_maxlength">E-mail must not exceed 100 characters.</span>
+              <span *ngIf="newUserForm.get('email').errors?.pattern" i18n="@@security_new_user_component_error_email_pattern">A valid e-mail is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -62,6 +63,7 @@
             <input type="text" matInput formControlName="mobileNumber">
             <mat-error *ngIf="newUserForm.get('mobileNumber').errors && !newUserForm.get('mobileNumber').untouched">
               <span *ngIf="newUserForm.get('mobileNumber').errors?.maxlength" i18n="@@security_new_user_component_error_mobile_number_maxlength">Mobile number must not exceed 100 characters.</span>
+              <span *ngIf="newUserForm.get('mobileNumber').errors?.pattern" i18n="@@security_new_user_component_error_mobile_number_pattern">A valid international format mobile number is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -99,8 +101,8 @@
       </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
-      <button type="button" mat-flat-button color="link" (click)="onCancel()" i18n="@@security_new_user_component_button_cancel">Cancel</button>
-      <button type="button" mat-flat-button color="primary" [disabled]="!newUserForm.valid" (click)="onOK()" i18n="@@security_new_user_component_button_ok">OK</button>
+      <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@security_new_user_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!newUserForm.valid" (click)="ok()" i18n="@@security_new_user_component_button_ok">OK</button>
     </mat-card-actions>
   </mat-card>
 </form>

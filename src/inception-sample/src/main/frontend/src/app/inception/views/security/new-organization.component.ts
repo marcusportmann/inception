@@ -74,16 +74,16 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
     })
   }
 
-  ngAfterViewInit(): void {
-    this.organization = new Organization(uuid(), '', OrganizationStatus.Active);
-  }
-
-  onCancel(): void {
+  cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
-  onOK(): void {
+  ngAfterViewInit(): void {
+    this.organization = new Organization(uuid(), '', OrganizationStatus.Active);
+  }
+
+  ok(): void {
     if (this.organization && this.newOrganizationForm.valid) {
       this.organization.name = this.newOrganizationForm.get('name')!.value;
 

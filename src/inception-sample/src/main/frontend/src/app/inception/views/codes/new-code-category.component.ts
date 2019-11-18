@@ -73,16 +73,16 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
     })
   }
 
-  ngAfterViewInit(): void {
-    this.codeCategory = new CodeCategory('', '');
-  }
-
-  onCancel(): void {
+  cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
-  onOK(): void {
+  ngAfterViewInit(): void {
+    this.codeCategory = new CodeCategory('', '');
+  }
+
+  ok(): void {
     if (this.codeCategory && this.newCodeCategoryForm.valid) {
       const data = this.newCodeCategoryForm.get('data')!.value;
 
