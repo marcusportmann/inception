@@ -36,6 +36,8 @@ import static org.junit.Assert.*;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.time.LocalDateTime;
+
 import java.util.*;
 
 /**
@@ -73,6 +75,9 @@ public class MailServiceTest
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
 
+    assertEquals("The correct updated time was not retrieved for the mail template",
+        mailTemplate.getUpdated(), mailService.getMailTemplateUpdated(mailTemplate.getId()));
+
     boolean mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
     assertTrue("The mail template does not exist", mailTemplateExists);
@@ -85,10 +90,15 @@ public class MailServiceTest
     mailTemplate.setName("Updated " + mailTemplate.getName());
 
     mailService.updateMailTemplate(mailTemplate);
+    assertEquals("The correct updated time was not retrieved for the mail template",
+        mailTemplate.getUpdated(), mailService.getMailTemplateUpdated(mailTemplate.getId()));
 
     retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
+
+    assertEquals("The correct updated time was not retrieved for the mail template",
+        mailTemplate.getUpdated(), mailService.getMailTemplateUpdated(mailTemplate.getId()));
 
     mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
@@ -117,6 +127,13 @@ public class MailServiceTest
 
     compareMailTemplateToMailTemplateSummary(mailTemplate, mailTemplateSummaries.get(0));
 
+
+    Map<String, String> mapTemplateParameters = new HashMap<>();
+    mapTemplateParameters.put("name", "Joe Bloggs");
+
+    System.out.println(mailService.processMailTemplate(mailTemplate.getId(), mapTemplateParameters));
+
+
     mailService.deleteMailTemplate(mailTemplate.getId());
 
     try
@@ -131,7 +148,6 @@ public class MailServiceTest
   /**
    * Test the send mail functionality.
    */
-
   // @Test
   public void sendMailTest()
     throws Exception
@@ -141,6 +157,7 @@ public class MailServiceTest
     mailService.createMailTemplate(mailTemplate);
 
     Map<String, String> mapTemplateParameters = new HashMap<>();
+    mapTemplateParameters.put("name", "Joe Bloggs");
 
     mailService.sendMail(Collections.singletonList("test@test.com"), "Test Subject",
         "no-reply@inception.digital", "Inception", mailTemplate.getId(), mapTemplateParameters);
@@ -158,6 +175,7 @@ public class MailServiceTest
     mailTemplate.setName("Test Mail Template " + mailTemplateCount);
     mailTemplate.setContentType(MailTemplateContentType.HTML);
     mailTemplate.setTemplate(testMailTemplate);
+    mailTemplate.setUpdated(LocalDateTime.now());
 
     return mailTemplate;
   }
@@ -177,7 +195,11 @@ public class MailServiceTest
         mailTemplate2.getId());
     assertEquals("The name values for the two mail templates do not match",
         mailTemplate1.getName(), mailTemplate2.getName());
+    assertEquals("The content type values for the two mail templates do not match",
+        mailTemplate1.getContentType(), mailTemplate2.getContentType());
     assertArrayEquals("The template values for the two mail templates do not match",
         mailTemplate1.getTemplate(), mailTemplate2.getTemplate());
+    assertEquals("The updated values for the two mail templates do not match",
+        mailTemplate1.getUpdated(), mailTemplate2.getUpdated());
   }
 }

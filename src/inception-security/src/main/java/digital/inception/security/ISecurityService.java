@@ -774,20 +774,23 @@ public interface ISecurityService
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username   the username identifying the user
-   * @param sendEmail  should the password reset e-mail be sent to the user
+   * @param username         the username identifying the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail        should the password reset e-mail be sent to the user
    */
-  void initiatePasswordReset(String username, boolean sendEmail)
+  void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
     throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username   the username identifying the user
-   * @param sendEmail  should the password reset e-mail be sent to the user
-   * @param secureCode the pre-generated secure code to use
+   * @param username         the username identifying the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail        should the password reset e-mail be sent to the user
+   * @param secureCode       the pre-generated secure code to use
    */
-  void initiatePasswordReset(String username, boolean sendEmail, String secureCode)
+  void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail,
+      String secureCode)
     throws UserNotFoundException, SecurityServiceException;
 
   /**

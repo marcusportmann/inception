@@ -902,7 +902,7 @@ public class SecurityServiceTest
 
     securityService.createUser(userDirectory.getId(), user, false, false);
 
-    securityService.initiatePasswordReset(user.getUsername(), false, "Testing123");
+    securityService.initiatePasswordReset(user.getUsername(), "", false, "Testing123");
 
     securityService.resetPassword(user.getUsername(), "New Password", "Testing123");
 

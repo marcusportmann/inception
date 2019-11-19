@@ -14,6 +14,7 @@
                   <input type="text" matInput formControlName="username" autofocus>
                   <mat-error *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched">
                     <span *ngIf="loginForm.controls['username'].errors?.required" i18n="@@login_login_component_error_username_required">A username is required.</span>
+                    <span *ngIf="loginForm.controls['username'].errors?.maxlength" i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -25,6 +26,7 @@
                   <input type="password" matInput formControlName="password">
                   <mat-error *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched">
                     <span *ngIf="loginForm.controls['password'].errors?.required" i18n="@@login_login_component_error_password_required">A password is required.</span>
+                    <span *ngIf="loginForm.controls['password'].errors?.maxlength" i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
                   </mat-error>
                 </mat-form-field>
               </div>

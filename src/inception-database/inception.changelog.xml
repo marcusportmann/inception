@@ -123,6 +123,7 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the mail template"/>
       <column name="content_type" type="int" remarks="The content type for the mail template"/>
       <column name="template" type="${blob_type}" remarks="The Apache FreeMarker template for the mail template"/>
+      <column name="updated" type="timestamp" remarks="The date and time the mail template was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="mail" tableName="mail_templates" columnNames="id"/>
     <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="id"/>

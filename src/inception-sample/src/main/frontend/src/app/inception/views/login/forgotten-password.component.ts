@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {SecurityService} from '../../services/security/security.service';
-import {finalize, first, map} from 'rxjs/operators';
+import {finalize, first} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -30,19 +30,19 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {InformationDialogComponent} from "../../components/dialogs";
 
 /**
- * The ExpiredPasswordComponent class implements the expired password component.
+ * The ForgottenPasswordComponent class implements the forgotten password component.
  *
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'expired-password.component.html'
+  templateUrl: 'forgotten-password.component.html'
 })
-export class ExpiredPasswordComponent implements OnInit {
+export class ForgottenPasswordComponent {
 
-  expiredPasswordForm: FormGroup;
+  forgottenPasswordForm: FormGroup;
 
   /**
-   * Constructs a new LoginComponent.
+   * Constructs a new ForgottenPasswordComponent.
    *
    * @param router          The router.
    * @param activatedRoute  The activated route.
@@ -58,14 +58,8 @@ export class ExpiredPasswordComponent implements OnInit {
               private spinnerService: SpinnerService) {
 
     // Initialise the form
-    this.expiredPasswordForm = new FormGroup({
-      confirmNewPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      newPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      username: new FormControl({
-        value: '',
-        disabled: true
-      })
+    this.forgottenPasswordForm = new FormGroup({
+      username: new FormControl('', [Validators.required, Validators.maxLength(100)]),
     });
   }
 
@@ -76,42 +70,32 @@ export class ExpiredPasswordComponent implements OnInit {
     });
   }
 
-  changePassword(): void {
-    if (this.expiredPasswordForm.valid) {
-      const username = this.expiredPasswordForm.get('username')!.value;
-      const password = this.expiredPasswordForm.get('password')!.value;
-      const newPassword = this.expiredPasswordForm.get('newPassword')!.value;
-      const confirmNewPassword = this.expiredPasswordForm.get('confirmNewPassword')!.value;
+  resetPassword(): void {
+    if (this.forgottenPasswordForm.valid) {
+      const username = this.forgottenPasswordForm.get('username')!.value;
 
-      // Check that the password and confirmation password match
-      if (newPassword !== confirmNewPassword) {
-        this.dialogService.showErrorDialog(new Error(this.i18n({
-          id: '@@login_expired_password_component_passwords_do_not_match',
-          value: 'The passwords do not match.'
-        })));
-
-        return;
-      }
+      let resetPasswordUrl = window.location.href.substr(0,
+        window.location.href.length - this.router.url.length) + '/login/reset-password';
 
       this.spinnerService.showSpinner();
 
-      this.securityService.changePassword(username, password, newPassword)
+      this.securityService.initiatePasswordReset(username, resetPasswordUrl)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-
           const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {message: this.i18n({
-                id: '@@login_expired_password_component_your_password_was_successfully_changed',
-                value: 'Your password was successfully changed.'
-              })});
+            {
+              message: this.i18n({
+                id: '@@login_forgotten_password_component_password_reset_initiated',
+                value: 'The password reset process was initiated. Please check your e-mail to proceed.'
+              })
+            });
 
           dialogRef.afterClosed()
             .pipe(first())
-            .subscribe(() => {
+            .subscribe((confirmation: boolean | undefined) => {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigate(['..'], {
-                relativeTo: this.activatedRoute,
-                state: {username: username}
+                relativeTo: this.activatedRoute
               });
             });
         }, (error: Error) => {
@@ -125,20 +109,5 @@ export class ExpiredPasswordComponent implements OnInit {
           }
         });
     }
-  }
-
-  ngOnInit(): void {
-    this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.username) {
-          this.expiredPasswordForm.get('username')!.setValue(state.username);
-        } else {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {
-            relativeTo: this.activatedRoute
-          });
-        }
-      });
   }
 }

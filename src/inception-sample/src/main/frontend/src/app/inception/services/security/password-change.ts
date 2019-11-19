@@ -54,6 +54,8 @@ export class PasswordChange {
    */
   resetPasswordHistory?: boolean;
 
+
+
   /**
    * The security code when performing a forgotten password change.
    */

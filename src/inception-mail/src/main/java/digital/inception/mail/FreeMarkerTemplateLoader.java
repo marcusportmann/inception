@@ -16,17 +16,29 @@
 
 package digital.inception.mail;
 
+//~--- non-JDK imports --------------------------------------------------------
+
 import freemarker.cache.TemplateLoader;
+
+//~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
+
+import java.nio.charset.StandardCharsets;
+
+import java.time.ZoneOffset;
+
+import java.util.UUID;
 
 /**
  * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template loader.
  *
  * @author Marcus Portmann
  */
-public class FreeMarkerTemplateLoader implements TemplateLoader
+public class FreeMarkerTemplateLoader
+  implements TemplateLoader
 {
   /**
    * The Mail Service.
@@ -44,6 +56,19 @@ public class FreeMarkerTemplateLoader implements TemplateLoader
   }
 
   /**
+   * Closes the template source, releasing any resources held that are only required for reading the
+   * template and/or its metadata. This is the last method that is called by the
+   * {@link TemplateCache} for a template source, except that {@link Object#equals(Object)} is might
+   * called later too. {@link TemplateCache} ensures that this method will be called on every object
+   * that is returned from {@link #findTemplateSource(String)}.
+   *
+   * @param templateSource the template source that should be closed.
+   */
+  @Override
+  public void closeTemplateSource(Object templateSource)
+    throws IOException {}
+
+  /**
    * Finds the template in the backing storage and returns an object that identifies the storage
    * location where the template can be loaded from. See the return value for more information.
    *
@@ -59,7 +84,20 @@ public class FreeMarkerTemplateLoader implements TemplateLoader
   public Object findTemplateSource(String name)
     throws IOException
   {
-    return null;
+    try
+    {
+      MailTemplate mailTemplate = mailService.getMailTemplate(UUID.fromString(name));
+
+      return mailTemplate.getId();
+    }
+    catch (MailTemplateNotFoundException e)
+    {
+      return null;
+    }
+    catch (Throwable e)
+    {
+      throw new IOException("Failed to find the template source (" + name + ")", e);
+    }
   }
 
   /**
@@ -75,7 +113,18 @@ public class FreeMarkerTemplateLoader implements TemplateLoader
   @Override
   public long getLastModified(Object templateSource)
   {
-    return 0;
+    try
+    {
+      if (templateSource instanceof UUID)
+      {
+        MailTemplate mailTemplate = mailService.getMailTemplate((UUID) templateSource);
+
+        return mailTemplate.getUpdated().toInstant(ZoneOffset.UTC).toEpochMilli();
+      }
+    }
+    catch (Throwable e) {}
+
+    return -1;
   }
 
   /**
@@ -111,22 +160,23 @@ public class FreeMarkerTemplateLoader implements TemplateLoader
   public Reader getReader(Object templateSource, String encoding)
     throws IOException
   {
-    return null;
-  }
+    try
+    {
+      if (templateSource instanceof UUID)
+      {
+        MailTemplate mailTemplate = mailService.getMailTemplate((UUID) templateSource);
 
-  /**
-   * Closes the template source, releasing any resources held that are only required for reading the
-   * template and/or its metadata. This is the last method that is called by the
-   * {@link TemplateCache} for a template source, except that {@link Object#equals(Object)} is might
-   * called later too. {@link TemplateCache} ensures that this method will be called on every object
-   * that is returned from {@link #findTemplateSource(String)}.
-   *
-   * @param templateSource the template source that should be closed.
-   */
-  @Override
-  public void closeTemplateSource(Object templateSource)
-    throws IOException
-  {
-
+        return new StringReader(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8));
+      }
+      else
+      {
+        throw new RuntimeException("Invalid template source (" + templateSource + ")");
+      }
+    }
+    catch (Throwable e)
+    {
+      throw new IOException("Failed to retrieve the character stream for the template ("
+          + templateSource + ")", e);
+    }
   }
 }

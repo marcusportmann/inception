@@ -18,7 +18,12 @@ package digital.inception.mail;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import freemarker.cache.TemplateLookupContext;
+import freemarker.cache.TemplateLookupResult;
+import freemarker.cache.TemplateLookupStrategy;
+
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +40,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import java.nio.charset.StandardCharsets;
+
+import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Map;
@@ -99,6 +109,23 @@ public class MailService
     this.mailTemplateSummaryRepository = mailTemplateSummaryRepository;
 
     this.freeMarkerConfiguration = new Configuration(Configuration.VERSION_2_3_29);
+    this.freeMarkerConfiguration.setTemplateLoader(new FreeMarkerTemplateLoader(this));
+    this.freeMarkerConfiguration.setTemplateLookupStrategy(new TemplateLookupStrategy()
+        {
+          @Override
+          public TemplateLookupResult lookup(TemplateLookupContext templateLookupContext)
+              throws IOException
+          {
+            return templateLookupContext.lookupWithAcquisitionStrategy(
+                templateLookupContext.getTemplateName());
+          }
+
+          @Override
+          public String toString()
+          {
+            return "MailServiceLookupStrategy";
+          }
+        });
   }
 
   @Override
@@ -131,6 +158,11 @@ public class MailService
       if (mailTemplateRepository.existsById(mailTemplate.getId()))
       {
         throw new DuplicateMailTemplateException(mailTemplate.getId());
+      }
+
+      if (mailTemplate.getUpdated() == null)
+      {
+        mailTemplate.setUpdated(LocalDateTime.now());
       }
 
       mailTemplateRepository.saveAndFlush(mailTemplate);
@@ -166,6 +198,13 @@ public class MailService
       }
 
       mailTemplateRepository.deleteById(mailTemplateId);
+
+      /*
+       * Clear the FreeMarker template cache. This could be optimized in future but given that
+       * message templates are not updated on a continuous or even regular basis this is probably
+       * sufficient for now.
+       */
+      freeMarkerConfiguration.clearTemplateCache();
     }
     catch (MailTemplateNotFoundException e)
     {
@@ -308,6 +347,41 @@ public class MailService
   }
 
   /**
+   * Returns the date and time the mail template was last updated.
+   *
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
+   *
+   * @return the date and time the mail template was last updated
+   */
+  @Override
+  public LocalDateTime getMailTemplateUpdated(UUID mailTemplateId)
+    throws MailTemplateNotFoundException, MailServiceException
+  {
+    try
+    {
+      Optional<LocalDateTime> updatedOptional = mailTemplateRepository.getUpdatedById(
+          mailTemplateId);
+
+      if (updatedOptional.isPresent())
+      {
+        return updatedOptional.get();
+      }
+
+      throw new MailTemplateNotFoundException(mailTemplateId);
+    }
+    catch (MailTemplateNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new MailServiceException("Failed to retrieve the date and time the mail template ("
+          + mailTemplateId + ") was last updated", e);
+    }
+  }
+
+  /**
    * Returns all the mail templates.
    *
    * @return all the mail templates
@@ -371,6 +445,36 @@ public class MailService
   }
 
   /**
+   * Process the mail template.
+   *
+   * @param mailTemplateId     the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the mail template
+   * @param templateParameters the template parameters
+   *
+   * @return the output of processing the template
+   */
+  @Override
+  public String processMailTemplate(UUID mailTemplateId, Map<String, String> templateParameters)
+    throws MailServiceException
+  {
+    try
+    {
+      Template template = freeMarkerConfiguration.getTemplate(mailTemplateId.toString());
+
+      StringWriter sw = new StringWriter();
+      template.process(templateParameters, sw);
+
+      return sw.toString();
+    }
+    catch (Throwable e)
+    {
+      throw new MailServiceException("Failed to process the mail template (" + mailTemplateId
+          + ")", e);
+
+    }
+  }
+
+  /**
    * Send a mail.
    *
    * @param to                     the list of e-mail addresses to send the mail to
@@ -410,7 +514,7 @@ public class MailService
 
         helper.setSubject(subject);
 
-        helper.setText(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8),
+        helper.setText(processMailTemplate(mailTemplate.getId(), mailTemplateParameters),
             mailTemplate.getContentType() == MailTemplateContentType.HTML);
 
         javaMailSender.send(helper.getMimeMessage());
@@ -449,7 +553,16 @@ public class MailService
         throw new MailTemplateNotFoundException(mailTemplate.getId());
       }
 
+      mailTemplate.setUpdated(LocalDateTime.now());
+
       mailTemplateRepository.saveAndFlush(mailTemplate);
+
+      /*
+       * Clear the FreeMarker template cache. This could be optimized in future but given that
+       * message templates are not updated on a continuous or even regular basis this is probably
+       * sufficient for now.
+       */
+      freeMarkerConfiguration.clearTemplateCache();
     }
     catch (MailTemplateNotFoundException e)
     {

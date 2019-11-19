@@ -2241,7 +2241,10 @@ public class SecurityRestController extends SecureRestController
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void resetPassword(@ApiParam(name = "username",
       value = "The username identifying the user", required = true)
-  @PathVariable String username)
+  @PathVariable String username, @ApiParam(
+    name = "resetPasswordUrl",
+    value = "The reset password URL")
+  @RequestParam(value = "resetPasswordUrl") String resetPasswordUrl)
     throws InvalidArgumentException, UserNotFoundException, SecurityServiceException
   {
     if (StringUtils.isEmpty(username))
@@ -2249,7 +2252,7 @@ public class SecurityRestController extends SecureRestController
       throw new InvalidArgumentException("username");
     }
 
-    securityService.initiatePasswordReset(username, true);
+    securityService.initiatePasswordReset(username, resetPasswordUrl, true);
   }
 
   /**

@@ -1501,6 +1501,45 @@ export class SecurityService {
   }
 
   /**
+   * Initiate the password reset process for the user.
+   *
+   * @param username         The username identifying the user.
+   * @param resetPasswordUrl The reset password URL.
+   *
+   * @return True if the password reset process was initiated successfully or false otherwise.
+   */
+  initiatePasswordReset(username: string, resetPasswordUrl: string): Observable<boolean> {
+    let params = new HttpParams();
+    params = params.append('resetPasswordUrl', resetPasswordUrl);
+
+    return this.httpClient.post<boolean>(
+      environment.securityServiceUrlPrefix + '/users/' + encodeURIComponent(username) + '/reset-password',
+      null, {
+        observe: 'response',
+        params,
+      }).pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(this.i18n, apiError));
+        } else {
+          return throwError(new SecurityServiceError(this.i18n({
+            id: '@@security_initiate_password_reset_error',
+            value: 'Failed to initiate the password reset.'
+          }), apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+      }
+    }));
+  }
+
+  /**
    * Remove the group member from the group.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the

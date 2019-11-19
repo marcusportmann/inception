@@ -22,12 +22,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import digital.inception.core.xml.LocalDateTimeAdapter;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+
+import java.time.LocalDateTime;
 
 import java.util.UUID;
 
@@ -40,6 +44,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>MailTemplate</code> class holds the information for a mail template.
@@ -48,10 +53,10 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "MailTemplate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "contentType", "template" })
+@JsonPropertyOrder({ "id", "name", "contentType", "template", "updated" })
 @XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")
 @XmlType(name = "MailTemplate", namespace = "http://mail.inception.digital",
-    propOrder = { "id", "name", "contentType", "template" })
+    propOrder = { "id", "name", "contentType", "template", "updated" })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
@@ -105,6 +110,17 @@ public class MailTemplate
   @Size(min = 1)
   @Column(name = "template", nullable = false)
   private byte[] template;
+
+  /**
+   * The date and time the mail template was last updated.
+   */
+  @ApiModelProperty(value = "The date and time the mail template was last updated")
+  @JsonProperty
+  @XmlElement(name = "Updated")
+  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+  @XmlSchemaType(name = "dateTime")
+  @Column(name = "updated")
+  private LocalDateTime updated;
 
   /**
    * Constructs a new <code>MailTemplate</code>.
@@ -200,6 +216,16 @@ public class MailTemplate
   }
 
   /**
+   * Returns the date and time the mail template was last updated.
+   *
+   * @return the date and time the mail template was last updated
+   */
+  public LocalDateTime getUpdated()
+  {
+    return updated;
+  }
+
+  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -250,6 +276,16 @@ public class MailTemplate
   public void setTemplate(byte[] template)
   {
     this.template = template;
+  }
+
+  /**
+   * Set the date and time the mail template was last updated.
+   *
+   * @param updated the date and time the mail template was last updated
+   */
+  public void setUpdated(LocalDateTime updated)
+  {
+    this.updated = updated;
   }
 
   /**

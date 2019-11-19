@@ -18,6 +18,8 @@ package digital.inception.mail;
 
 //~--- JDK imports ------------------------------------------------------------
 
+import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -91,6 +93,17 @@ public interface IMailService
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
+   * Returns the date and time the mail template was last updated.
+   *
+   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                       mail template
+   *
+   * @return the date and time the mail template was last updated
+   */
+  LocalDateTime getMailTemplateUpdated(UUID mailTemplateId)
+    throws MailTemplateNotFoundException, MailServiceException;
+
+  /**
    * Returns all the mail templates.
    *
    * @return all the mail templates
@@ -115,6 +128,18 @@ public interface IMailService
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   boolean mailTemplateExists(UUID mailTemplateId)
+    throws MailServiceException;
+
+  /**
+   * Process the mail template.
+   *
+   * @param mailTemplateId     the Universally Unique Identifier (UUID) used to uniquely identify
+   *                           the mail template
+   * @param templateParameters the template parameters
+   *
+   * @return the output of processing the template
+   */
+  String processMailTemplate(UUID mailTemplateId, Map<String, String> templateParameters)
     throws MailServiceException;
 
   /**

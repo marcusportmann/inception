@@ -67,8 +67,8 @@ export class LoginComponent implements OnInit {
               private sessionService: SessionService, private spinnerService: SpinnerService) {
     // Initialise the form
     this.loginForm = new FormGroup({
-      username: new FormControl('Administrator', Validators.required),
-      password: new FormControl('Password1', Validators.required)
+      username: new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]),
+      password: new FormControl('Password1', [Validators.required, Validators.maxLength(100)])
     });
   }
 
@@ -81,6 +81,10 @@ export class LoginComponent implements OnInit {
   }
 
   onForgotPassword(): void {
+    this.router.navigate(['forgotten-password'], {
+      relativeTo: this.activatedRoute
+    });
+
     // this.router.navigate(['/']);
 
     // let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
@@ -91,19 +95,19 @@ export class LoginComponent implements OnInit {
 
     //this.dialogService.showErrorDialog(new Error('This is an error message.'));
 
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {message: 'Are you sure you want to delete the code category \'XXX\'?'});
-
-    dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-
-        console.log('confirmation = ', confirmation);
-
-        if (confirmation === true) {
-          console.log('Confirmed deletion');
-        }
-      });
+    // const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
+    //   {message: 'Are you sure you want to delete the code category \'XXX\'?'});
+    //
+    // dialogRef.afterClosed()
+    //   .pipe(first())
+    //   .subscribe((confirmation: boolean | undefined) => {
+    //
+    //     console.log('confirmation = ', confirmation);
+    //
+    //     if (confirmation === true) {
+    //       console.log('Confirmed deletion');
+    //     }
+    //   });
 
     // this.dialogService.showInformationDialog({message: this.i18n({id: '@@login_xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
 

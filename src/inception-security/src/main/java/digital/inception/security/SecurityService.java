@@ -20,7 +20,10 @@ package digital.inception.security;
 
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
+import digital.inception.core.util.ResourceUtil;
 import digital.inception.mail.IMailService;
+import digital.inception.mail.MailTemplate;
+import digital.inception.mail.MailTemplateContentType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +41,7 @@ import java.lang.reflect.Constructor;
 
 import java.security.SecureRandom;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -121,6 +121,13 @@ public class SecurityService
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the password reset mail
+   * template.
+   */
+  private static final UUID PASSWORD_RESET_MAIL_TEMPLATE_ID = UUID.fromString(
+      "38f386e1-e61a-4d95-b4d3-febf2f0b8287");
 
   /**
    * The Spring application context.
@@ -383,8 +390,17 @@ public class SecurityService
   {
     try
     {
-      // Load the user directory types
-      // reloadUserDirectoryTypes();
+      // Load the default password reset mail template
+      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID))
+      {
+        byte[] passwordResetMailTemplate = ResourceUtil.getClasspathResource(
+            "digital/inception/security/PasswordReset.ftl");
+
+        MailTemplate mailTemplate = new MailTemplate(PASSWORD_RESET_MAIL_TEMPLATE_ID,
+            "Password Reset", MailTemplateContentType.HTML, passwordResetMailTemplate);
+
+        mailService.createMailTemplate(mailTemplate);
+      }
 
       // Load the user directories
       reloadUserDirectories();
@@ -2246,27 +2262,30 @@ public class SecurityService
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username   the username identifying the user
-   * @param sendEmail  should the password reset e-mail be sent to the user
+   * @param username         the username identifying the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail        should the password reset e-mail be sent to the user
    */
   @Override
   @Transactional
-  public void initiatePasswordReset(String username, boolean sendEmail)
+  public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
     throws UserNotFoundException, SecurityServiceException
   {
-    initiatePasswordReset(username, sendEmail, null);
+    initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
   }
 
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username   the username identifying the user
-   * @param sendEmail  should the password reset e-mail be sent to the user
-   * @param secureCode the pre-generated secure code to use
+   * @param username         the username identifying the user
+   * @param resetPasswordUrl the reset password URL
+   * @param sendEmail        should the password reset e-mail be sent to the user
+   * @param secureCode       the pre-generated secure code to use
    */
   @Override
   @Transactional
-  public void initiatePasswordReset(String username, boolean sendEmail, String secureCode)
+  public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail,
+      String secureCode)
     throws UserNotFoundException, SecurityServiceException
   {
     try
@@ -2295,7 +2314,7 @@ public class SecurityService
 
         if (sendEmail)
         {
-          sendPasswordResetEmail(user, secureCode);
+          sendPasswordResetEmail(user, resetPasswordUrl, secureCode);
         }
 
         passwordResetRepository.saveAndFlush(passwordReset);
@@ -2825,10 +2844,23 @@ public class SecurityService
     return userDirectory;
   }
 
-  private void sendPasswordResetEmail(User user, String secureCode)
+  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String secureCode)
     throws SecurityServiceException
   {
-    try {}
+    try
+    {
+      if (!StringUtils.isEmpty(user.getEmail()))
+      {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("name", user.getFirstName() + ((user.getFirstName().length() > 0)
+            ? " "
+            : "") + user.getLastName());
+        parameters.put("resetPasswordUrl", resetPasswordUrl + "?secureCode=" + secureCode);
+
+        mailService.sendMail(Collections.singletonList(user.getEmail()), "Password Reset Request",
+            "no-reply@inception.digital", "Inception", PASSWORD_RESET_MAIL_TEMPLATE_ID, parameters);
+      }
+    }
     catch (Throwable e)
     {
       throw new SecurityServiceException("Failed to send the password reset e-mail", e);
