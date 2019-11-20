@@ -42,6 +42,7 @@ import {SwitchesComponent} from './switches.component';
 import {TabsComponent} from './tabs.component';
 // Tooltips Component
 import {TooltipsComponent} from './tooltips.component';
+import {DialogsComponent} from "./dialogs.component";
 
 
 const routes: Routes = [{
@@ -64,6 +65,12 @@ const routes: Routes = [{
   component: ChartsComponent,
   data: {
     title: 'Charts',
+  }
+}, {
+  path: 'dialogs',
+  component: DialogsComponent,
+  data: {
+    title: 'Dialogs',
   }
 }, {
   path: 'expansion-panels',
@@ -124,9 +131,9 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, ExpansionPanelsComponent,
-    GridListComponent, ListsComponent, ProgressComponent, SwitchesComponent, TabsComponent,
-    TooltipsComponent
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, DialogsComponent,
+    ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent,
+    SwitchesComponent, TabsComponent, TooltipsComponent
   ]
 })
 export class ComponentsModule {

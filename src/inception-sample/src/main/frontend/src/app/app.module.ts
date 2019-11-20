@@ -95,6 +95,7 @@ export class AppModule extends InceptionAppModule {
         [new NavigationItem('fa fa-puzzle-piece', 'Buttons', '/inception/components/buttons'),
           new NavigationItem('fa fa-puzzle-piece', 'Cards', '/inception/components/cards'),
           new NavigationItem('fa fa-puzzle-piece', 'Charts', '/inception/components/charts'),
+          new NavigationItem('fa fa-puzzle-piece', 'Dialogs', '/inception/components/dialogs'),
           new NavigationItem('fa fa-puzzle-piece', 'Expansion Panels',
             '/inception/components/expansion-panels'),
           new NavigationItem('fa fa-puzzle-piece', 'Grid List', '/inception/components/grid-list',

@@ -28,36 +28,41 @@ import {SelectOrganizationComponent} from './select-organization.component';
 import {ExpiredPasswordComponent} from "./expired-password.component";
 import {ForgottenPasswordComponent} from "./forgotten-password.component";
 import {ResetPasswordComponent} from "./reset-password.component";
+import {ExpiredPasswordTitleResolver} from "./expired-password-title-resolver";
+import {ForgottenPasswordTitleResolver} from "./forgotten-password-title-resolver";
+import {LoginTitleResolver} from "./login-title-resolver";
+import {ResetPasswordTitleResolver} from "./reset-password-title-resolver";
+import {SelectOrganizationTitleResolver} from "./select-organization-title-resolver";
 
 const routes: Routes = [{
   path: '',
   component: LoginComponent,
-  data: {
-    title: 'Login'
+  resolve: {
+    title: LoginTitleResolver
   }
 }, {
   path: 'expired-password',
   component: ExpiredPasswordComponent,
-  data: {
-    title: 'Expired Password'
+  resolve: {
+    title: ExpiredPasswordTitleResolver
   }
 }, {
   path: 'forgotten-password',
   component: ForgottenPasswordComponent,
-  data: {
-    title: 'Forgotten Password'
+  resolve: {
+    title: ForgottenPasswordTitleResolver
   }
 }, {
   path: 'reset-password',
   component: ResetPasswordComponent,
-  data: {
-    title: 'Reset Password'
+  resolve: {
+    title: ResetPasswordTitleResolver
   }
 }, {
   path: 'select-organization',
   component: SelectOrganizationComponent,
-  data: {
-    title: 'Select Organization'
+  resolve: {
+    title: SelectOrganizationTitleResolver
   }
 }
 
@@ -73,6 +78,9 @@ const routes: Routes = [{
   exports: [CommonModule, FormsModule, ReactiveFormsModule],
   declarations: [ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent,
     ResetPasswordComponent, SelectOrganizationComponent
+  ],
+  providers: [ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver,
+    ResetPasswordTitleResolver, SelectOrganizationTitleResolver
   ]
 })
 export class LoginModule {

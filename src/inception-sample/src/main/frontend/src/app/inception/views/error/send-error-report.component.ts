@@ -100,7 +100,7 @@ export class SendErrorReportComponent implements OnInit {
       });
   }
 
-  onSendErrorReport(): void {
+  sendErrorReport(): void {
     if (this.sendErrorReportForm.valid && this.error) {
       this.spinnerService.showSpinner();
 

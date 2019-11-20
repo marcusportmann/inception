@@ -46,7 +46,7 @@ public class BackgroundPasswordResetExpiry
   /**
    * The password reset expiry in seconds
    */
-  @Value("${application.security.passwordResetExpiry:30}")
+  @Value("${application.security.passwordResetExpiry:900}")
   private int passwordResetExpiry;
 
   /**

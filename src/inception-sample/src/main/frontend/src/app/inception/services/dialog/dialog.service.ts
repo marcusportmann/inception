@@ -53,6 +53,7 @@ export class DialogService {
   showConfirmationDialog(data: DialogData): MatDialogRef<ConfirmationDialogComponent> {
     return this.matDialog.open(ConfirmationDialogComponent, {
       panelClass: 'confirmation-dialog',
+      restoreFocus: false,
       data
     });
   }
@@ -71,6 +72,7 @@ export class DialogService {
 
     return this.matDialog.open(ErrorDialogComponent, {
       panelClass: 'error-dialog',
+      restoreFocus: false,
       data: {error}
     });
   }
@@ -83,6 +85,7 @@ export class DialogService {
   showInformationDialog(data: DialogData): MatDialogRef<InformationDialogComponent> {
     return this.matDialog.open(InformationDialogComponent, {
       panelClass: 'information-dialog',
+      restoreFocus: false,
       data
     });
   }
@@ -95,6 +98,7 @@ export class DialogService {
   showWarningDialog(data: DialogData): MatDialogRef<WarningDialogComponent> {
     return this.matDialog.open(WarningDialogComponent, {
       panelClass: 'warning-dialog',
+      restoreFocus: false,
       data
     });
   }

@@ -48,8 +48,8 @@ export interface ConfirmationDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="onNo()" tabindex="-1" i18n="@@confirmation_dialog_button_no">No</button>
-      <button mat-flat-button (click)="onYes()" tabindex="-1" i18n="@@confirmation_dialog_button_yes">Yes</button>
+      <button mat-flat-button (click)="no()" tabindex="-1" i18n="@@confirmation_dialog_button_no">No</button>
+      <button mat-flat-button (click)="yes()" tabindex="-1" i18n="@@confirmation_dialog_button_yes">Yes</button>
     </div>
   `, // tslint:disable-next-line
   host: {
@@ -72,11 +72,11 @@ export class ConfirmationDialogComponent {
     return this.data.message;
   }
 
-  onNo(): void {
+  no(): void {
     this.dialogRef.close(false);
   }
 
-  onYes(): void {
+  yes(): void {
     this.dialogRef.close(true);
   }
 }

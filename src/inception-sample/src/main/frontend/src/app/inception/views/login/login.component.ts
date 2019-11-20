@@ -80,55 +80,13 @@ export class LoginComponent implements OnInit {
     return InceptionModule.registrationEnabled;
   }
 
-  onForgotPassword(): void {
+  forgotPassword(): void {
     this.router.navigate(['forgotten-password'], {
       relativeTo: this.activatedRoute
     });
-
-    // this.router.navigate(['/']);
-
-    // let error: Error = new Error(new Date(), 'This is the error message', 'This is the error detail', 'This is the error stack trace');
-
-    //this.dialogService.showInformationDialog({message: 'This is an information message.'});
-
-    //this.dialogService.showWarningDialog({message: 'This is a warning message.'});
-
-    //this.dialogService.showErrorDialog(new Error('This is an error message.'));
-
-    // const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-    //   {message: 'Are you sure you want to delete the code category \'XXX\'?'});
-    //
-    // dialogRef.afterClosed()
-    //   .pipe(first())
-    //   .subscribe((confirmation: boolean | undefined) => {
-    //
-    //     console.log('confirmation = ', confirmation);
-    //
-    //     if (confirmation === true) {
-    //       console.log('Confirmed deletion');
-    //     }
-    //   });
-
-    // this.dialogService.showInformationDialog({message: this.i18n({id: '@@login_xxx', value: 'This is a test {{myVar}} !'}, {myVar: '^_^'})});
-
-    // this.errorService.showConfirm('This is a title', 'This is a message');
-
-    // console.log('Cancel clicked!');
-    // let control = this.loginForm.get('username')
-    // control.disabled ? control.enable() : control.disable()
   }
 
-  ngOnInit(): void {
-    this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.username) {
-          this.loginForm.get('username')!.setValue(state.username);
-        }
-      });
-  }
-
-  onLogin(): void {
+  login(): void {
     if (this.loginForm.valid) {
       let username = this.loginForm.get('username')!.value;
       let password = this.loginForm.get('password')!.value;
@@ -213,5 +171,15 @@ export class LoginComponent implements OnInit {
           }
         });
     }
+  }
+
+  ngOnInit(): void {
+    this.activatedRoute.paramMap
+      .pipe(first(), map(() => window.history.state))
+      .subscribe((state) => {
+        if (state.username) {
+          this.loginForm.get('username')!.setValue(state.username);
+        }
+      });
   }
 }
