@@ -34,10 +34,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.util.UriUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
 import java.lang.reflect.Constructor;
+
+import java.nio.charset.StandardCharsets;
 
 import java.security.SecureRandom;
 
@@ -173,7 +176,7 @@ public class SecurityService
    * The random alphanumeric string generator that will be used to generate security codes for
    * password resets.
    */
-  private RandomStringGenerator secureCodeGenerator = new RandomStringGenerator(15,
+  private RandomStringGenerator securityCodeGenerator = new RandomStringGenerator(20,
       new SecureRandom(), "1234567890ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx");
 
   /**
@@ -2280,12 +2283,12 @@ public class SecurityService
    * @param username         the username identifying the user
    * @param resetPasswordUrl the reset password URL
    * @param sendEmail        should the password reset e-mail be sent to the user
-   * @param secureCode       the pre-generated secure code to use
+   * @param securityCode     the pre-generated security code to use
    */
   @Override
   @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail,
-      String secureCode)
+      String securityCode)
     throws UserNotFoundException, SecurityServiceException
   {
     try
@@ -2303,18 +2306,18 @@ public class SecurityService
 
       if (!StringUtils.isEmpty(user.getEmail()))
       {
-        if (StringUtils.isEmpty(secureCode))
+        if (StringUtils.isEmpty(securityCode))
         {
-          secureCode = secureCodeGenerator.nextString();
+          securityCode = securityCodeGenerator.nextString();
         }
 
-        String secureCodeHash = PasswordUtil.createPasswordHash(secureCode);
+        String securityCodeHash = PasswordUtil.createPasswordHash(securityCode);
 
-        PasswordReset passwordReset = new PasswordReset(username, secureCodeHash);
+        PasswordReset passwordReset = new PasswordReset(username, securityCodeHash);
 
         if (sendEmail)
         {
-          sendPasswordResetEmail(user, resetPasswordUrl, secureCode);
+          sendPasswordResetEmail(user, resetPasswordUrl, securityCode);
         }
 
         passwordResetRepository.saveAndFlush(passwordReset);
@@ -2844,7 +2847,7 @@ public class SecurityService
     return userDirectory;
   }
 
-  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String secureCode)
+  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
     throws SecurityServiceException
   {
     try
@@ -2852,12 +2855,17 @@ public class SecurityService
       if (!StringUtils.isEmpty(user.getEmail()))
       {
         Map<String, String> parameters = new HashMap<>();
-        parameters.put("name", user.getFirstName() + ((user.getFirstName().length() > 0)
+        parameters.put("name", (user.getFirstName() + ((user.getFirstName().length() > 0)
             ? " "
-            : "") + user.getLastName());
-        parameters.put("resetPasswordUrl", resetPasswordUrl + "?secureCode=" + secureCode);
+            : "") + user.getLastName()).toUpperCase());
+        parameters.put("firstName", user.getFirstName());
+        parameters.put("lastName", user.getLastName());
+        parameters.put("securityCode", securityCode);
+        parameters.put("resetPasswordUrl", resetPasswordUrl + "?username="
+            + UriUtils.encodeQueryParam(user.getUsername(), StandardCharsets.UTF_8)
+            + "&securityCode=" + UriUtils.encodeQueryParam(securityCode, StandardCharsets.UTF_8));
 
-        mailService.sendMail(Collections.singletonList(user.getEmail()), "Password Reset Request",
+        mailService.sendMail(Collections.singletonList(user.getEmail()), "Password Reset",
             "no-reply@inception.digital", "Inception", PASSWORD_RESET_MAIL_TEMPLATE_ID, parameters);
       }
     }

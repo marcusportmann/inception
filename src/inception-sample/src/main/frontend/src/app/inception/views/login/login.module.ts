@@ -27,6 +27,7 @@ import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
 import {ExpiredPasswordComponent} from "./expired-password.component";
 import {ForgottenPasswordComponent} from "./forgotten-password.component";
+import {ResetPasswordComponent} from "./reset-password.component";
 
 const routes: Routes = [{
   path: '',
@@ -47,6 +48,12 @@ const routes: Routes = [{
     title: 'Forgotten Password'
   }
 }, {
+  path: 'reset-password',
+  component: ResetPasswordComponent,
+  data: {
+    title: 'Reset Password'
+  }
+}, {
   path: 'select-organization',
   component: SelectOrganizationComponent,
   data: {
@@ -64,7 +71,9 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
   exports: [CommonModule, FormsModule, ReactiveFormsModule],
-  declarations: [ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent, SelectOrganizationComponent]
+  declarations: [ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent,
+    ResetPasswordComponent, SelectOrganizationComponent
+  ]
 })
 export class LoginModule {
 }
