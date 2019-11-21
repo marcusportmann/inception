@@ -40,7 +40,9 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CodesService {
 
   /**

@@ -33,7 +33,9 @@ import {I18n} from "@ngx-translate/i18n-polyfill";
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SchedulerService {
 
   /**

@@ -24,7 +24,9 @@ import {ComponentPortal} from '@angular/cdk/portal';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SpinnerService {
 
   private overlayRef?: OverlayRef;

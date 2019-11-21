@@ -33,7 +33,9 @@ import {DialogData} from '../../components/dialogs/dialog-data';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DialogService {
 
   /**

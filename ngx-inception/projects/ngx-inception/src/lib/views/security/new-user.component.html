@@ -1,0 +1,108 @@
+<form [formGroup]="newUserForm" autocomplete="off" class="d-flex flex-column flex-fill" validatedForm>
+  <mat-card class="flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-fill">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_username">Username</mat-label>
+            <input type="text" matInput formControlName="username" required="true" autofocus>
+            <mat-error *ngIf="newUserForm.get('username').errors && !newUserForm.get('username').untouched">
+              <span *ngIf="newUserForm.get('username').errors?.required" i18n="@@security_new_user_component_error_username_required">A username is required.</span>
+              <span *ngIf="newUserForm.get('username').errors?.maxlength" i18n="@@security_new_user_component_error_username_maxlength">Username must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_first_name">First Name</mat-label>
+            <input type="text" matInput formControlName="firstName">
+            <mat-error *ngIf="newUserForm.get('firstName').errors && !newUserForm.get('firstName').untouched">
+              <span *ngIf="newUserForm.get('firstName').errors?.required" i18n="@@security_new_user_component_error_first_name_required">A first name is required.</span>
+              <span *ngIf="newUserForm.get('firstName').errors?.maxlength" i18n="@@security_new_user_component_error_first_name_maxlength">First name must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_last_name">Last Name</mat-label>
+            <input type="text" matInput formControlName="lastName">
+            <mat-error *ngIf="newUserForm.get('lastName').errors && !newUserForm.get('lastName').untouched">
+              <span *ngIf="newUserForm.get('lastName').errors?.required" i18n="@@security_new_user_component_error_last_name_required">A last name is required.</span>
+              <span *ngIf="newUserForm.get('lastName').errors?.maxlength" i18n="@@security_new_user_component_error_last_name_maxlength">Last name must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_email">E-mail</mat-label>
+            <input type="text" matInput formControlName="email">
+            <mat-error *ngIf="newUserForm.get('email').errors && !newUserForm.get('email').untouched">
+              <span *ngIf="newUserForm.get('email').errors?.maxlength" i18n="@@security_new_user_component_error_email_maxlength">E-mail must not exceed 100 characters.</span>
+              <span *ngIf="newUserForm.get('email').errors?.pattern" i18n="@@security_new_user_component_error_email_pattern">A valid e-mail is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_phone_number">Phone Number</mat-label>
+            <input type="text" matInput formControlName="phoneNumber">
+            <mat-error *ngIf="newUserForm.get('phoneNumber').errors && !newUserForm.get('phoneNumber').untouched">
+              <span *ngIf="newUserForm.get('phoneNumber').errors?.maxlength" i18n="@@security_new_user_component_error_phone_number_maxlength">Phone number must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_mobile_number">Mobile Number</mat-label>
+            <input type="text" matInput formControlName="mobileNumber">
+            <mat-error *ngIf="newUserForm.get('mobileNumber').errors && !newUserForm.get('mobileNumber').untouched">
+              <span *ngIf="newUserForm.get('mobileNumber').errors?.maxlength" i18n="@@security_new_user_component_error_mobile_number_maxlength">Mobile number must not exceed 100 characters.</span>
+              <span *ngIf="newUserForm.get('mobileNumber').errors?.pattern" i18n="@@security_new_user_component_error_mobile_number_pattern">A valid international format mobile number is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_password">Password</mat-label>
+            <input type="password" matInput formControlName="password" required="true">
+            <mat-error *ngIf="newUserForm.get('password').errors && !newUserForm.get('password').untouched">
+              <span *ngIf="newUserForm.get('password').errors?.required" i18n="@@security_new_user_component_error_password_required">A password is required.</span>
+              <span *ngIf="newUserForm.get('password').errors?.maxlength" i18n="@@security_new_user_component_error_password_maxlength">Password must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label i18n="@@security_new_user_component_label_confirm_password">Confirm Password</mat-label>
+            <input type="password" matInput formControlName="confirmPassword" required="true">
+            <mat-error *ngIf="newUserForm.get('confirmPassword').errors && !newUserForm.get('confirmPassword').untouched">
+              <span *ngIf="newUserForm.get('confirmPassword').errors?.required" i18n="@@security_new_user_component_error_confirm_password_required">A password is required.</span>
+              <span *ngIf="newUserForm.get('confirmPassword').errors?.maxlength" i18n="@@security_new_user_component_error_confirm_password_maxlength">Password must not exceed 100 characters.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="newUserForm.contains('expiredPassword') || newUserForm.contains('userLocked')" class="row">
+        <div class="col-sm">
+          <checkbox-form-field>
+            <mat-label i18n="@@security_new_user_component_label_options">Options</mat-label>
+            <mat-checkbox *ngIf="newUserForm.contains('expiredPassword')" formControlName="expiredPassword" i18n="@@security_new_user_component_label_expired_password">Expired Password?</mat-checkbox>
+            <mat-checkbox *ngIf="newUserForm.contains('userLocked')" formControlName="userLocked" i18n="@@security_new_user_component_label_user_locked">User Locked?</mat-checkbox>
+          </checkbox-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button type="button" mat-flat-button color="link" (click)="cancel()" i18n="@@security_new_user_component_button_cancel">Cancel</button>
+      <button type="button" mat-flat-button color="primary" [disabled]="!newUserForm.valid" (click)="ok()" i18n="@@security_new_user_component_button_ok">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

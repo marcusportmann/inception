@@ -34,7 +34,9 @@ import {ReportDefinitionSummary} from "./report-definition-summary";
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReportingService {
 
   static readonly MAX_TEMPLATE_SIZE: number = 10485760;

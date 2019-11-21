@@ -71,7 +71,9 @@ import {OrganizationUserDirectory} from "./organization-user-directory";
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SecurityService {
 
   /**

@@ -35,7 +35,9 @@ import {ErrorServiceError} from './error.service.errors';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ErrorService {
 
   /**

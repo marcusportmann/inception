@@ -34,7 +34,9 @@ import {Configuration} from './configuration';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ConfigurationService {
 
   /**

@@ -34,7 +34,9 @@ import {MailTemplateSummary} from "./mail-template-summary";
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MailService {
 
   /**

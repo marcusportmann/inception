@@ -32,7 +32,9 @@ import {environment} from '../../../../environments/environment';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SessionService {
 
   /**

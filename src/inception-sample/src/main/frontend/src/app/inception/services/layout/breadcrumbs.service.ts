@@ -26,7 +26,9 @@ import {Breadcrumb} from './breadcrumb';
  *
  * @author Marcus Portmann
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BreadcrumbsService {
 
   breadcrumbs$: Subject<Breadcrumb[]> = new ReplaySubject<Breadcrumb[]>();

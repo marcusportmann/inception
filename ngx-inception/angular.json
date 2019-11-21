@@ -10,10 +10,13 @@
       "prefix": "inception",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@linnenschmidt/build-ng-packagr:build",
           "options": {
+            "project": "projects/ngx-inception/ng-package.json",
             "tsConfig": "projects/ngx-inception/tsconfig.lib.json",
-            "project": "projects/ngx-inception/ng-package.json"
+            "assets": [
+              "src/assets"
+            ]
           }
         },
         "test": {
