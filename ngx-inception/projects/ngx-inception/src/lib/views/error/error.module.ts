@@ -19,9 +19,9 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Angular classes
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from '@angular/router';
 // Import Inception modules
-import {InceptionModule} from "../../inception.module";
+import {InceptionModule} from '../../inception.module';
 // Import Inception components
 import {SendErrorReportComponent} from './send-error-report.component';
 

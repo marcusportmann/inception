@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -41,12 +41,11 @@ import {BackNavigation} from '../../components/layout/back-navigation';
  */
 @Component({
   templateUrl: 'codes.component.html',
-  styleUrls: ['codes.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['codes.component.css']
 })
 export class CodesComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   codeCategoryId: string;
 
@@ -54,23 +53,26 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   displayedColumns = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    // Retrieve the route parameters
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    this.codeCategoryId = decodeURIComponent(codeCategoryId);
 
     // Set the data source filter
     this.dataSource.filterPredicate =
-      (data, filter): boolean => data.id.toLowerCase().includes(filter) ||
-        data.name.toLowerCase().includes(filter);
+      (data, filter): boolean => data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
   }
 
   get backNavigation(): BackNavigation {
@@ -84,7 +86,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     return this.i18n({
       id: '@@codes_codes_component_title',
       value: 'Codes'
-    })
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -94,13 +96,12 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   }
 
   deleteCode(codeId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@codes_codes_component_confirm_delete_code',
-          value: 'Are you sure you want to delete the code?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@codes_codes_component_confirm_delete_code',
+        value: 'Are you sure you want to delete the code?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -140,8 +141,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
         this.dataSource.data = codes;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -156,8 +156,8 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.loadCodes();
   }

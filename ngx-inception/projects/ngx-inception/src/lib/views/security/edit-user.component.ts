@@ -54,15 +54,12 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   username: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+    // Initialise the form controls
 
     // Initialise the form
     this.editUserForm = new FormGroup({
@@ -92,7 +89,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     return this.i18n({
       id: '@@security_edit_user_component_title',
       value: 'Edit User'
-    })
+    });
   }
 
   cancel(): void {
@@ -104,6 +101,12 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
+    // Retrieve the route parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+
+
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 

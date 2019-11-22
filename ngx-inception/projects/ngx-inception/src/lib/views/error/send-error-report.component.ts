@@ -15,12 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ErrorService} from '../../services/error/error.service';
 import {first, map} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -28,9 +23,9 @@ import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
 import {InformationDialogComponent} from '../../components/dialogs';
-import {ApiError} from "../../errors/api-error";
+import {ApiError} from '../../errors/api-error';
 
 /**
  * The SendErrorReportComponent class implements the send error report component.
@@ -52,15 +47,12 @@ export class SendErrorReportComponent implements OnInit {
 
   sendErrorReportForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private errorService: ErrorService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private dialogService: DialogService,
+              private errorService: ErrorService, private spinnerService: SpinnerService) {
+
     // Initialise the form controls
     this.emailFormControl = new FormControl('', Validators.email);
-
     this.feedbackFormControl = new FormControl('');
-
     this.messageFormControl = new FormControl('');
 
     // Initialise the form
@@ -86,8 +78,8 @@ export class SendErrorReportComponent implements OnInit {
             if (this.error.cause) {
               console.log('Cause: ', this.error.cause);
 
-              if ((<ApiError>this.error.cause).stackTrace) {
-                console.log('StackTrace: ', (<ApiError>this.error.cause).stackTrace);
+              if ((this.error.cause as ApiError).stackTrace) {
+                console.log('StackTrace: ', (this.error.cause as ApiError).stackTrace);
               }
             }
           }
@@ -104,19 +96,17 @@ export class SendErrorReportComponent implements OnInit {
     if (this.sendErrorReportForm.valid && this.error) {
       this.spinnerService.showSpinner();
 
-      this.errorService.sendErrorReport(this.error, this.emailFormControl.value,
-        this.feedbackFormControl.value)
+      this.errorService.sendErrorReport(this.error, this.emailFormControl.value, this.feedbackFormControl.value)
         .pipe(first())
         .subscribe(() => {
           this.spinnerService.hideSpinner();
 
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {
-              message: this.i18n({
-                id: '@@error_send_error_component_error_report_submitted',
-                value: 'Your error report was submitted.'
-              }, {})
-            });
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog({
+            message: this.i18n({
+              id: '@@error_send_error_component_error_report_submitted',
+              value: 'Your error report was submitted.'
+            }, {})
+          });
 
           dialogRef.afterClosed()
             .pipe(first())

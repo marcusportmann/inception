@@ -42,12 +42,11 @@ import {DialogData} from './dialog-data';
         <button mat-flat-button (click)="ok()" tabindex="-1" i18n="@@information_dialog_button_ok">OK</button>
       </ng-template>
     </div>
-  `, // tslint:disable-next-line
-  host: {
-    'class': 'information-dialog'
-  }
+  `
 })
 export class InformationDialogComponent {
+
+  @HostBinding('class') hostClass = 'information-dialog';
 
   /**
    * Constructs a new InformationDialogComponent.

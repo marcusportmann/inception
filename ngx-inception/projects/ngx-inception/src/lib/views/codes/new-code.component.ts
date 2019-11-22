@@ -43,25 +43,28 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   code?: Code;
 
-  codeCategoryId: string;
+  idFormControl: FormControl;
+
+  nameFormControl: FormControl;
 
   newCodeForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  valueFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    // Initialise the form controls
+    this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.valueFormControl = new FormControl('', Validators.required);
 
     // Initialise the form
     this.newCodeForm = new FormGroup({
-      id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      value: new FormControl('', Validators.required),
+      id: this.idFormControl,
+      name: this.nameFormControl,
+      value: this.valueFormControl,
     });
   }
 
@@ -76,22 +79,33 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
     return this.i18n({
       id: '@@codes_new_code_component_title',
       value: 'New Code'
-    })
+    });
   }
+
   cancel(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 
   ngAfterViewInit(): void {
-    this.code = new Code('', this.codeCategoryId, '', '');
+    // Retrieve the route parameters
+    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    codeCategoryId = decodeURIComponent(codeCategoryId);
+
+    // Create the new code
+    this.code = new Code('', codeCategoryId, '', '');
   }
 
   ok(): void {
     if (this.code && this.newCodeForm.valid) {
-      this.code.id = this.newCodeForm.get('id')!.value;
-      this.code.name = this.newCodeForm.get('name')!.value;
-      this.code.value = this.newCodeForm.get('value')!.value;
+      this.code.id = this.idFormControl.value;
+      this.code.name = this.nameFormControl.value;
+      this.code.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
@@ -102,8 +116,7 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

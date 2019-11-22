@@ -44,7 +44,14 @@ export class OrganizationTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.securityService.getOrganizationName(
-      activatedRouteSnapshot.paramMap.get('organizationId')!);
+    let organizationId = activatedRouteSnapshot.paramMap.get('organizationId');
+
+    if (!organizationId) {
+      throw(new Error('No organizationId route parameter found'));
+    }
+
+    organizationId = decodeURIComponent(organizationId);
+
+    return this.securityService.getOrganizationName(organizationId);
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -40,36 +40,34 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
  */
 @Component({
   templateUrl: 'code-categories.component.html',
-  styleUrls: ['code-categories.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['code-categories.component.css']
 })
 export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   dataSource: MatTableDataSource<CodeCategorySummary> = new MatTableDataSource<CodeCategorySummary>();
 
   displayedColumns = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.id.toLowerCase().includes(
-      filter) || data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate =
+      (data, filter): boolean => data.id.toLowerCase().includes(filter) || data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
     return this.i18n({
       id: '@@codes_code_categories_component_title',
       value: 'Code Categories'
-    })
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -84,13 +82,12 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
   }
 
   deleteCodeCategory(codeCategoryId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@codes_code_categories_component_confirm_delete_code_category',
-          value: 'Are you sure you want to delete the code category?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@codes_code_categories_component_confirm_delete_code_category',
+        value: 'Are you sure you want to delete the code category?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -130,8 +127,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
         this.dataSource.data = codeCategorySummaries;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -146,8 +142,8 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.loadCodeCategorySummaries();
   }

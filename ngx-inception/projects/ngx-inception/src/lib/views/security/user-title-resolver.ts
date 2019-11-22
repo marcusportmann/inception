@@ -44,8 +44,22 @@ export class UserTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.securityService.getUserFullName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('userDirectoryId')!),
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('username')!));
+    let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    let username = activatedRouteSnapshot.paramMap.get('username');
+
+    if (!username) {
+      throw(new Error('No username route parameter found'));
+    }
+
+    username = decodeURIComponent(username);
+
+    return this.securityService.getUserFullName(userDirectoryId, username);
   }
 }

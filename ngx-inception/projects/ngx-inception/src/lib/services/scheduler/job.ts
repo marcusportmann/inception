@@ -90,8 +90,7 @@ export class Job {
    * @param enabled           Is the job enabled for execution?
    * @param parameters        The parameters for the job.
    */
-  constructor(id: string, name: string, schedulingPattern: string, jobClass: string,
-              enabled: boolean, parameters: JobParameter[]) {
+  constructor(id: string, name: string, schedulingPattern: string, jobClass: string, enabled: boolean, parameters: JobParameter[]) {
     this.id = id;
     this.name = name;
     this.schedulingPattern = schedulingPattern;

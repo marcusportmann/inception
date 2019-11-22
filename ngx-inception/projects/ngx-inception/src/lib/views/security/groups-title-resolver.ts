@@ -42,15 +42,17 @@ export class GroupsTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    const userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+    let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
 
-    if (!!userDirectoryId) {
-      return of (userDirectoryId);
-    } else {
-      return of(this.i18n({
-        id: '@@security_groups_title_resolver_title',
-        value: 'Groups'
-      }));
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
     }
+
+    userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    return of(this.i18n({
+      id: '@@security_groups_title_resolver_title',
+      value: 'Groups'
+    }));
   }
 }

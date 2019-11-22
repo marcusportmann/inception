@@ -17,9 +17,7 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
-
 import {first, flatMap} from 'rxjs/operators';
-
 import {SessionService} from './session.service';
 
 /**
@@ -41,8 +39,7 @@ export class SessionInterceptor implements HttpInterceptor {
   }
 
   // tslint:disable-next-line
-  intercept(httpRequest: HttpRequest<any>,
-            // tslint:disable-next-line
+  intercept(httpRequest: HttpRequest<any>, // tslint:disable-next-line
             nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
       return this.sessionService.session$.pipe(first(), flatMap(session => {

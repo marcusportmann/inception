@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ReportingService} from "../../services/reporting/reporting.service";
+import {ReportingService} from '../../services/reporting/reporting.service';
 
 /**
  * The ReportDefinitionTitleResolver class provides the route data resolver that resolves the
@@ -42,9 +42,15 @@ export class ReportDefinitionTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.reportingService.getReportDefinitionName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('reportDefinitionId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let reportDefinitionId = activatedRouteSnapshot.paramMap.get('reportDefinitionId');
+
+    if (!reportDefinitionId) {
+      throw(new Error('No reportDefinitionId route parameter found'));
+    }
+
+    reportDefinitionId = decodeURIComponent(reportDefinitionId);
+
+    return this.reportingService.getReportDefinitionName(reportDefinitionId);
   }
 }

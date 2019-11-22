@@ -19,18 +19,18 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-import {InceptionModule} from '../../../inception/inception.module';
+import {InceptionModule} from '../../inception.module';
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
 // Import Inception components
 import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
-import {ReportDefinitionsComponent} from "./report-definitions.component";
-import {NewReportDefinitionComponent} from "./new-report-definition.component";
-import {EditReportDefinitionComponent} from "./edit-report-definition.component";
-import {EditReportDefinitionTitleResolver} from "./edit-report-definition-title-resolver";
-import {ReportDefinitionsTitleResolver} from "./report-definitions-title-resolver";
-import {NewReportDefinitionTitleResolver} from "./new-report-definition-title-resolver";
-import {ReportDefinitionTitleResolver} from "./report-definition-title-resolver";
+import {ReportDefinitionsComponent} from './report-definitions.component';
+import {NewReportDefinitionComponent} from './new-report-definition.component';
+import {EditReportDefinitionComponent} from './edit-report-definition.component';
+import {EditReportDefinitionTitleResolver} from './edit-report-definition-title-resolver';
+import {ReportDefinitionsTitleResolver} from './report-definitions-title-resolver';
+import {NewReportDefinitionTitleResolver} from './new-report-definition-title-resolver';
+import {ReportDefinitionTitleResolver} from './report-definition-title-resolver';
 
 
 const routes: Routes = [{
@@ -43,8 +43,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: ReportDefinitionsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
-        'FUNCTION_Reporting.ReportDefinitionAdministration'
+      authorities: ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration', 'FUNCTION_Reporting.ReportDefinitionAdministration'
       ]
     }
   }, {
@@ -53,8 +52,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: NewReportDefinitionComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration',
-        'FUNCTION_Reporting.ReportDefinitionAdministration'
+      authorities: ['ROLE_Administrator', 'FUNCTION_Reporting.ReportingAdministration', 'FUNCTION_Reporting.ReportDefinitionAdministration'
       ]
     },
     resolve: {
@@ -95,11 +93,10 @@ const routes: Routes = [{
 
     RouterModule.forChild(routes)
   ],
-  declarations: [EditReportDefinitionComponent, ReportDefinitionsComponent,
-    NewReportDefinitionComponent
+  declarations: [EditReportDefinitionComponent, ReportDefinitionsComponent, NewReportDefinitionComponent
   ],
-  providers: [ReportDefinitionsTitleResolver, ReportDefinitionTitleResolver,
-    EditReportDefinitionTitleResolver, NewReportDefinitionTitleResolver
+  providers: [ReportDefinitionsTitleResolver, ReportDefinitionTitleResolver, EditReportDefinitionTitleResolver,
+    NewReportDefinitionTitleResolver
   ]
 })
 export class ReportingModule {

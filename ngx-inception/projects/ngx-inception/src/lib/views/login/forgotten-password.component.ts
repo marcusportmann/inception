@@ -25,9 +25,9 @@ import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {SecurityServiceError} from "../../services/security/security.service.errors";
-import {MatDialogRef} from "@angular/material/dialog";
-import {InformationDialogComponent} from "../../components/dialogs";
+import {SecurityServiceError} from '../../services/security/security.service.errors';
+import {MatDialogRef} from '@angular/material/dialog';
+import {InformationDialogComponent} from '../../components/dialogs';
 
 /**
  * The ForgottenPasswordComponent class implements the forgotten password component.
@@ -41,25 +41,27 @@ export class ForgottenPasswordComponent {
 
   forgottenPasswordForm: FormGroup;
 
+  usernameFormControl: FormControl;
+
   /**
    * Constructs a new ForgottenPasswordComponent.
    *
    * @param router          The router.
    * @param activatedRoute  The activated route.
-   * @param formBuilder     The form builder.
    * @param i18n            The internationalization service.
    * @param dialogService   The dialog service.
    * @param securityService The security service.
    * @param spinnerService  The spinner service.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private securityService: SecurityService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private dialogService: DialogService,
+              private securityService: SecurityService, private spinnerService: SpinnerService) {
+
+    // Initialise the form controls
+    this.usernameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.forgottenPasswordForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      username: this.usernameFormControl,
     });
   }
 
@@ -72,23 +74,22 @@ export class ForgottenPasswordComponent {
 
   resetPassword(): void {
     if (this.forgottenPasswordForm.valid) {
-      const username = this.forgottenPasswordForm.get('username')!.value;
+      const username = this.usernameFormControl.value;
 
-      let resetPasswordUrl = window.location.href.substr(0,
-        window.location.href.length - this.router.url.length) + '/login/reset-password';
+      const resetPasswordUrl = window.location.href.substr(0, window.location.href.length - this.router.url.length) +
+        '/login/reset-password';
 
       this.spinnerService.showSpinner();
 
       this.securityService.initiatePasswordReset(username, resetPasswordUrl)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {
-              message: this.i18n({
-                id: '@@login_forgotten_password_component_password_reset_initiated',
-                value: 'The password reset process was initiated. Please check your e-mail to proceed.'
-              })
-            });
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog({
+            message: this.i18n({
+              id: '@@login_forgotten_password_component_password_reset_initiated',
+              value: 'The password reset process was initiated. Please check your e-mail to proceed.'
+            })
+          });
 
           dialogRef.afterClosed()
             .pipe(first())

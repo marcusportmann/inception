@@ -44,14 +44,13 @@ export class NavigationService {
     console.log('Initializing the Navigation Service');
 
     this.sessionService.session$.pipe(map((session: Session | null) => {
-      this.userNavigation$.next(
-        Object.assign([], this.filterNavigationItems(this.navigation, session)));
+      this.userNavigation$.next(Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();
   }
 
   private static hasAccessToNavigationItem(authorities: string[], session: Session): boolean {
-    for (let i = 0; i < authorities.length; i++) {
-      if (session.hasAuthority(authorities[i])) {
+    for (const authority of authorities) {
+      if (session.hasAuthority(authority)) {
         return true;
       }
     }
@@ -69,40 +68,33 @@ export class NavigationService {
     this.userNavigation$.next(this.filterNavigationItems(navigation, null));
   }
 
-  private filterNavigationItems(navigationItems: NavigationItem[],
-                                session: Session | null): NavigationItem[] {
+  private filterNavigationItems(navigationItems: NavigationItem[], session: Session | null): NavigationItem[] {
     if (!navigationItems) {
       return navigationItems;
     }
 
     const filteredNavigationItems: NavigationItem[] = [];
 
-    for (let i = 0; i < navigationItems.length; i++) {
-      const navigationItem: NavigationItem = navigationItems[i];
-
+    for (const navigationItem of navigationItems) {
       const authorities = (navigationItem.authorities == null) ? [] : navigationItem.authorities;
 
       if (authorities.length > 0) {
         if (session) {
           if (NavigationService.hasAccessToNavigationItem(authorities, session)) {
-            const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
-              navigationItem.children, session);
+            const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(navigationItem.children, session);
 
             filteredNavigationItems.push(
-              new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
-                navigationItem.authorities, filteredChildNavigationItems, navigationItem.cssClass,
-                navigationItem.variant, navigationItem.badge, navigationItem.divider,
+              new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url, navigationItem.authorities,
+                filteredChildNavigationItems, navigationItem.cssClass, navigationItem.variant, navigationItem.badge, navigationItem.divider,
                 navigationItem.title));
           }
         }
       } else {
-        const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(
-          navigationItem.children, session);
+        const filteredChildNavigationItems: NavigationItem[] = this.filterNavigationItems(navigationItem.children, session);
 
         filteredNavigationItems.push(
-          new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url,
-            navigationItem.authorities, filteredChildNavigationItems, navigationItem.cssClass,
-            navigationItem.variant, navigationItem.badge, navigationItem.divider,
+          new NavigationItem(navigationItem.icon, navigationItem.name, navigationItem.url, navigationItem.authorities,
+            filteredChildNavigationItems, navigationItem.cssClass, navigationItem.variant, navigationItem.badge, navigationItem.divider,
             navigationItem.title));
       }
     }

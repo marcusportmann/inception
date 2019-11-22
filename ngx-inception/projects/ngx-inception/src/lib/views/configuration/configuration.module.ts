@@ -31,7 +31,6 @@ import {ConfigurationsTitleResolver} from './configurations-title-resolver';
 import {NewConfigurationTitleResolver} from './new-configuration-title-resolver';
 import {EditConfigurationTitleResolver} from './edit-configuration-title-resolver';
 import {ConfigurationTitleResolver} from './configuration-title-resolver';
-import {DisabledFunctionGuard} from '../../routing/disabled-function-guard';
 
 const routes: Routes = [{
   path: '',
@@ -71,8 +70,10 @@ const routes: Routes = [{
     resolve: {
       title: EditConfigurationTitleResolver
     }
-  }]
-}];
+  }
+  ]
+}
+];
 
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,

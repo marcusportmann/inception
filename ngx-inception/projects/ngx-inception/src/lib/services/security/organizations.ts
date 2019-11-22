@@ -64,8 +64,8 @@ export class Organizations {
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  constructor(organizations: Organization[], total: number, filter?: string,
-              sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
+  constructor(organizations: Organization[], total: number, filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+              pageSize?: number) {
     this.organizations = organizations;
     this.total = total;
     this.filter = filter;

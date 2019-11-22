@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {InceptionModule} from '../../inception.module';
+import {INCEPTION_CONFIG} from '../../inception.module';
 import {SecurityService} from '../../services/security/security.service';
 import {finalize, first, map} from 'rxjs/operators';
 import {SessionService} from '../../services/session/session.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Error} from '../../errors/error';
 import {SpinnerService} from '../../services/layout/spinner.service';
-import {
-  PasswordExpiredError,
-  SessionServiceError
-} from '../../services/session/session.service.errors';
+import {PasswordExpiredError, SessionServiceError} from '../../services/session/session.service.errors';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {MatDialogRef} from '@angular/material/dialog';
-import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {Session} from '../../services/session/session';
 import {Organization} from '../../services/security/organization';
 import {Organizations} from '../../services/security/organizations';
+import {InceptionConfig} from '../../inception-config';
 
 /**
  * The LoginComponent class implements the login component.
@@ -49,35 +45,38 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  passwordFormControl: FormControl;
+
+  usernameFormControl: FormControl;
+
   /**
    * Constructs a new LoginComponent.
    *
+   * @param config          The Inception configuration.
    * @param router          The router.
    * @param activatedRoute  The activated route.
-   * @param formBuilder     The form builder.
    * @param i18n            The internationalization service.
    * @param dialogService   The dialog service.
    * @param securityService The security service.
    * @param sessionService  The session service.
    * @param spinnerService  The spinner service.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private securityService: SecurityService,
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router, private activatedRoute: ActivatedRoute,
+              private i18n: I18n, private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private spinnerService: SpinnerService) {
+    // Initialise the form controls
+    this.passwordFormControl = new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]);
+    this.usernameFormControl = new FormControl('Password1', [Validators.required, Validators.maxLength(100)]);
+
     // Initialise the form
     this.loginForm = new FormGroup({
-      username: new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]),
-      password: new FormControl('Password1', [Validators.required, Validators.maxLength(100)])
+      username: this.passwordFormControl,
+      password: this.usernameFormControl
     });
   }
 
-  static isForgottenPasswordEnabled(): boolean {
-    return InceptionModule.forgottenPasswordEnabled;
-  }
-
-  static isRegistrationEnabled(): boolean {
-    return InceptionModule.registrationEnabled;
+  isForgottenPasswordEnabled(): boolean {
+    return this.config.forgottenPasswordEnabled;
   }
 
   forgotPassword(): void {
@@ -88,8 +87,8 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.loginForm.valid) {
-      let username = this.loginForm.get('username')!.value;
-      let password = this.loginForm.get('password')!.value;
+      const username = this.usernameFormControl.value;
+      const password = this.passwordFormControl.value;
 
       this.spinnerService.showSpinner();
 
@@ -121,7 +120,7 @@ export class LoginComponent implements OnInit {
                   } else {
                     this.dialogService.showErrorDialog(error);
                   }
-                })
+                });
             } else {
               this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
                 .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
@@ -132,8 +131,10 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/']);
                   } else {
                     // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigate(['select-organization'],
-                      {relativeTo: this.activatedRoute, state: {organizations}});
+                    this.router.navigate(['select-organization'], {
+                      relativeTo: this.activatedRoute,
+                      state: {organizations}
+                    });
                   }
                 }, (error: Error) => {
                   // noinspection SuspiciousTypeOfGuard
@@ -156,15 +157,14 @@ export class LoginComponent implements OnInit {
           this.spinnerService.hideSpinner();
 
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof SessionServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else if (error instanceof PasswordExpiredError) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['expired-password'], {
               relativeTo: this.activatedRoute,
-              state: {username: username}
+              state: {username}
             });
           } else {
             this.dialogService.showErrorDialog(error);
@@ -178,7 +178,7 @@ export class LoginComponent implements OnInit {
       .pipe(first(), map(() => window.history.state))
       .subscribe((state) => {
         if (state.username) {
-          this.loginForm.get('username')!.setValue(state.username);
+          this.usernameFormControl.setValue(state.username);
         }
       });
   }

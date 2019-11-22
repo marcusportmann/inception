@@ -29,7 +29,7 @@ import {first} from 'rxjs/operators';
  */
 export class OrganizationDatasource implements DataSource<Organization> {
 
-  private totalSubject$: Subject<number>  = new ReplaySubject<number>();
+  private totalSubject$: Subject<number> = new ReplaySubject<number>();
 
   private dataSubject$: Subject<Organization[]> = new ReplaySubject<Organization[]>();
 
@@ -67,8 +67,7 @@ export class OrganizationDatasource implements DataSource<Organization> {
    * @param pageIndex     The optional page index.
    * @param pageSize      The optional page size.
    */
-  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-       pageSize?: number): void {
+  load(filter?: string, sortDirection?: SortDirection, pageIndex?: number, pageSize?: number): void {
     this.loadingSubject$.next(true);
 
     this.securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize)

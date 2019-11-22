@@ -17,9 +17,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 import {SessionService} from '../services/session/session.service';
-import {Session} from '../services/session/session';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
 
 /**
  * The DisabledFunctionGuard class implements the routing guard that restricts access to a disabled

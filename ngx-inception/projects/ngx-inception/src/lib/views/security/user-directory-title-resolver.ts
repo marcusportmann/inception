@@ -44,7 +44,14 @@ export class UserDirectoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.securityService.getUserDirectoryName(
-      activatedRouteSnapshot.paramMap.get('userDirectoryId')!);
+    let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    return this.securityService.getUserDirectoryName(userDirectoryId);
   }
 }

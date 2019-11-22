@@ -14,9 +14,9 @@
           <mat-form-field>
             <mat-label i18n="@@codes_edit_code_category_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
-            <mat-error *ngIf="editCodeCategoryForm.get('name').errors && !editCodeCategoryForm.get('name').untouched">
-              <span *ngIf="editCodeCategoryForm.get('name').errors?.required" i18n="@@codes_edit_code_category_component_error_name_required">A name is required.</span>
-              <span *ngIf="editCodeCategoryForm.get('name').errors?.maxlength" i18n="@@codes_edit_code_category_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            <mat-error *ngIf="nameFormField.errors && !nameFormField.untouched">
+              <span *ngIf="nameFormField.errors?.required" i18n="@@codes_edit_code_category_component_error_name_required">A name is required.</span>
+              <span *ngIf="nameFormField.errors?.maxlength" i18n="@@codes_edit_code_category_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

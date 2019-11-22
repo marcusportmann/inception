@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,27 +43,32 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   configuration?: Configuration;
 
+  descriptionFormControl: FormControl;
+
   editConfigurationForm: FormGroup;
 
-  key: string;
+  keyFormControl: FormControl;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private configurationService: ConfigurationService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  valueFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+              private configurationService: ConfigurationService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.key = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('key')!);
+    // Initialise the form controls
+    this.descriptionFormControl = new FormControl('', [Validators.maxLength(100)]);
+    this.keyFormControl = new FormControl({
+      value: '',
+      disabled: true
+    }, [Validators.required, Validators.maxLength(100)]);
+    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialise the form
     this.editConfigurationForm = new FormGroup({
-      description: new FormControl(''),
-      key: new FormControl({
-        value: '',
-        disabled: true
-      }, [Validators.required, Validators.maxLength(4000)]),
-      value: new FormControl('', [Validators.maxLength(4000)])
+      description: this.descriptionFormControl,
+      key: this.keyFormControl,
+      value: this.valueFormControl
     });
   }
 
@@ -78,7 +83,7 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
     return this.i18n({
       id: '@@configuration_edit_configuration_component_title',
       value: 'Edit Configuration'
-    })
+    });
   }
 
   cancel(): void {
@@ -87,17 +92,26 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    this.spinnerService.showSpinner();
+    // Retrieve the route parameters
+    let key = this.activatedRoute.snapshot.paramMap.get('key');
+
+    if (key == null) {
+      throw(new Error('No key route parameter found'));
+    }
+
+    key = decodeURIComponent(key);
 
     // Retrieve the existing configuration and initialise the form controls
-    this.configurationService.getConfiguration(this.key)
+    this.spinnerService.showSpinner();
+
+    this.configurationService.getConfiguration(key)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((configuration: Configuration) => {
         this.configuration = configuration;
 
-        this.editConfigurationForm.get('key')!.setValue(configuration.key);
-        this.editConfigurationForm.get('value')!.setValue(configuration.value);
-        this.editConfigurationForm.get('description')!.setValue(configuration.description);
+        this.keyFormControl.setValue(configuration.key);
+        this.valueFormControl.setValue(configuration.value);
+        this.descriptionFormControl.setValue(configuration.description);
       }, (error: Error) => {
         this.spinnerService.hideSpinner();
         // noinspection SuspiciousTypeOfGuard
@@ -113,8 +127,8 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   ok(): void {
     if (this.configuration && this.editConfigurationForm.valid) {
-      this.configuration.description = this.editConfigurationForm.get('description')!.value;
-      this.configuration.value = this.editConfigurationForm.get('value')!.value;
+      this.configuration.description = this.descriptionFormControl.value;
+      this.configuration.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 
@@ -125,8 +139,8 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
           this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof ConfigurationServiceError) ||
-            (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

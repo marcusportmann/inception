@@ -51,12 +51,11 @@ export interface ConfirmationDialogData {
       <button mat-flat-button (click)="no()" tabindex="-1" i18n="@@confirmation_dialog_button_no">No</button>
       <button mat-flat-button (click)="yes()" tabindex="-1" i18n="@@confirmation_dialog_button_yes">Yes</button>
     </div>
-  `, // tslint:disable-next-line
-  host: {
-    'class': 'confirmation-dialog'
-  }
+  `
 })
 export class ConfirmationDialogComponent {
+
+  @HostBinding('class') hostClass = 'confirmation-dialog';
 
   /**
    * Constructs a new ConfirmationDialogComponent.

@@ -40,6 +40,6 @@ export class SecurityOverviewComponent extends AdminContainerView {
     return this.i18n({
       id: '@@security_security_overview_component_title',
       value: 'Security Overview'
-    })
+    });
   }
 }

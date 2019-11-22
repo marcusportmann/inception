@@ -19,8 +19,8 @@ import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 import {first} from 'rxjs/operators';
-import {GroupMember} from "./group-member";
-import {GroupMembers} from "./group-members";
+import {GroupMember} from './group-member';
+import {GroupMembers} from './group-members';
 
 /**
  * The GroupMemberDatasource class implements the group members data source.
@@ -70,12 +70,11 @@ export class GroupMemberDatasource implements DataSource<GroupMember> {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId: string, groupName: string, filter?: string, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): void {
+  load(userDirectoryId: string, groupName: string, filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+       pageSize?: number): void {
     this.loadingSubject$.next(true);
 
-    this.securityService.getMembersForGroup(userDirectoryId, groupName, filter, sortDirection,
-      pageIndex, pageSize)
+    this.securityService.getMembersForGroup(userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize)
       .pipe(first())
       .subscribe((groupMembers: GroupMembers) => {
         this.loadingSubject$.next(false);

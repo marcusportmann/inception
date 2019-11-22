@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, HostBinding, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {DialogData} from './dialog-data';
 
@@ -42,12 +42,11 @@ import {DialogData} from './dialog-data';
         <button mat-flat-button (click)="ok()" tabindex="-1" i18n="@@warning_dialog_button_ok">OK</button>
       </ng-template>
     </div>
-  `, // tslint:disable-next-line
-  host: {
-    'class': 'warning-dialog'
-  }
+  `
 })
 export class WarningDialogComponent {
+
+  @HostBinding('class') hostClass = 'warning-dialog';
 
   /**
    * Constructs a new WarningDialogComponent.

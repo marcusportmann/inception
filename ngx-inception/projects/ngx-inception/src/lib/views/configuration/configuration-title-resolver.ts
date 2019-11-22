@@ -40,8 +40,15 @@ export class ConfigurationTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('key')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let key = activatedRouteSnapshot.paramMap.get('key');
+
+    if (!key) {
+      throw(new Error('No key route parameter found'));
+    }
+
+    key = decodeURIComponent(key);
+
+    return of(key);
   }
 }

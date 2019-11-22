@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -45,7 +45,13 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   codeCategoryId: string;
 
+  dataFormField: FormControl;
+
   editCodeCategoryForm: FormGroup;
+
+  idFormField: FormControl;
+
+  nameFormField: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private formBuilder: FormBuilder, private i18n: I18n,
@@ -53,18 +59,28 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    // Retrieve the route parameters
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    this.codeCategoryId = codeCategoryId;
+
+    // Initialise the form fields
+    this.dataFormField = new FormControl('');
+    this.idFormField = new FormControl({
+      value: '',
+      disabled: true
+    }, [Validators.required, Validators.maxLength(100)]);
+    this.nameFormField = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.editCodeCategoryForm = new FormGroup({
-      data: new FormControl(''),
-      id: new FormControl({
-        value: '',
-        disabled: true
-      }, [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      data: this.dataFormField,
+      id: this.idFormField,
+      name: this.nameFormField
     });
   }
 
@@ -79,7 +95,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     return this.i18n({
       id: '@@codes_edit_code_category_component_title',
       value: 'Edit Code Category'
-    })
+    });
   }
 
   cancel(): void {
@@ -95,9 +111,9 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: CodeCategory) => {
         this.codeCategory = codeCategory;
-        this.editCodeCategoryForm.get('id')!.setValue(codeCategory.id);
-        this.editCodeCategoryForm.get('name')!.setValue(codeCategory.name);
-        this.editCodeCategoryForm.get('data')!.setValue(codeCategory.data);
+        this.idFormField.setValue(codeCategory.id);
+        this.nameFormField.setValue(codeCategory.name);
+        this.dataFormField.setValue(codeCategory.data);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
@@ -112,9 +128,9 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   ok(): void {
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
-      const data = this.editCodeCategoryForm.get('data')!.value;
+      const data = this.dataFormField.value;
 
-      this.codeCategory.name = this.editCodeCategoryForm.get('name')!.value;
+      this.codeCategory.name = this.nameFormField.value;
       this.codeCategory.data = (!!data) ? data : null;
 
       this.spinnerService.showSpinner();

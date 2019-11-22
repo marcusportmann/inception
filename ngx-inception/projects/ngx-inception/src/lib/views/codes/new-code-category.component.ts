@@ -43,20 +43,29 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   codeCategory?: CodeCategory;
 
+  dataFormControl: FormControl;
+
+  idFormControl: FormControl;
+
+  nameFormControl: FormControl;
+
   newCodeCategoryForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.dataFormControl = new FormControl('');
+    this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.newCodeCategoryForm = new FormGroup({
-      data: new FormControl(''),
-      id: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
-    })
+      data: this.dataFormControl,
+      id: this.idFormControl,
+      name: this.nameFormControl
+    });
   }
 
   get backNavigation(): BackNavigation {
@@ -70,7 +79,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
     return this.i18n({
       id: '@@codes_new_code_category_component_title',
       value: 'New Code Category'
-    })
+    });
   }
 
   cancel(): void {
@@ -84,10 +93,10 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
 
   ok(): void {
     if (this.codeCategory && this.newCodeCategoryForm.valid) {
-      const data = this.newCodeCategoryForm.get('data')!.value;
+      const data = this.dataFormControl.value;
 
-      this.codeCategory.id = this.newCodeCategoryForm.get('id')!.value;
-      this.codeCategory.name = this.newCodeCategoryForm.get('name')!.value;
+      this.codeCategory.id = this.idFormControl.value;
+      this.codeCategory.name = this.nameFormControl.value;
       this.codeCategory.data = (!!data) ? data : null;
 
       this.spinnerService.showSpinner();
@@ -99,8 +108,7 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
           this.router.navigate(['..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

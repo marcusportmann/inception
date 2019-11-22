@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -41,11 +41,10 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 @Component({
   templateUrl: 'code-categories.component.html',
   styleUrls: ['code-categories.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
 })
 export class CodeCategoriesComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   dataSource: MatTableDataSource<CodeCategorySummary> = new MatTableDataSource<CodeCategorySummary>();
 

@@ -42,6 +42,14 @@ export class GroupTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    return of(decodeURIComponent(activatedRouteSnapshot.paramMap.get('groupName')!));
+    let groupName = activatedRouteSnapshot.paramMap.get('groupName');
+
+    if (!groupName) {
+      throw(new Error('No groupName route parameter found'));
+    }
+
+    groupName = decodeURIComponent(groupName);
+
+    return of(groupName);
   }
 }

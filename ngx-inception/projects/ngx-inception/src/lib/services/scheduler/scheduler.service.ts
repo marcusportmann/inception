@@ -20,9 +20,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../errors/api-error';
-import {
-  DuplicateJobError, JobNotFoundError, SchedulerServiceError
-} from './scheduler.service.errors';
+import {DuplicateJobError, JobNotFoundError, SchedulerServiceError} from './scheduler.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -58,8 +56,7 @@ export class SchedulerService {
    * @return True if the job was created successfully or false otherwise.
    */
   createJob(job: Job): Observable<boolean> {
-    return this.httpClient.post<boolean>(this.config.schedulerApiUrlPrefix + '/jobs', job,
-      {observe: 'response'})
+    return this.httpClient.post<boolean>(this.config.schedulerApiUrlPrefix + '/jobs', job, {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -92,28 +89,27 @@ export class SchedulerService {
    * @return True if the job was deleted or false otherwise.
    */
   deleteJob(jobId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(
-      this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId),
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+    return this.httpClient.delete<boolean>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId), {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'JobNotFoundError') {
-          return throwError(new JobNotFoundError(this.i18n, apiError));
+          if (apiError.code === 'JobNotFoundError') {
+            return throwError(new JobNotFoundError(this.i18n, apiError));
+          } else {
+            return throwError(new SchedulerServiceError(this.i18n({
+              id: '@@scheduler_delete_job_error',
+              value: 'Failed to delete the job.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SchedulerServiceError(this.i18n({
-            id: '@@scheduler_delete_job_error',
-            value: 'Failed to delete the job.'
-          }), apiError));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+      }));
   }
 
   /**
@@ -124,28 +120,27 @@ export class SchedulerService {
    * @return The job.
    */
   getJob(jobId: string): Observable<Job> {
-    return this.httpClient.get<Job>(
-      this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId),
-      {reportProgress: true}).pipe(map((job: Job) => {
-      return job;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+    return this.httpClient.get<Job>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId), {reportProgress: true})
+      .pipe(map((job: Job) => {
+        return job;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'JobNotFoundError') {
-          return throwError(new JobNotFoundError(this.i18n, apiError));
+          if (apiError.code === 'JobNotFoundError') {
+            return throwError(new JobNotFoundError(this.i18n, apiError));
+          } else {
+            return throwError(new SchedulerServiceError(this.i18n({
+              id: '@@scheduler_get_job_error',
+              value: 'Failed to retrieve the job.'
+            }), apiError));
+          }
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
         } else {
-          return throwError(new SchedulerServiceError(this.i18n({
-            id: '@@scheduler_get_job_error',
-            value: 'Failed to retrieve the job.'
-          }), apiError));
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+      }));
   }
 
   /**
@@ -156,10 +151,9 @@ export class SchedulerService {
    * @return The name of the job.
    */
   getJobName(jobId: string): Observable<string> {
-    return this.httpClient.get<string>(
-      this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId) + '/name', {
-        reportProgress: true,
-      }).pipe(map((jobName: string) => {
+    return this.httpClient.get<string>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(jobId) + '/name', {
+      reportProgress: true,
+    }).pipe(map((jobName: string) => {
       return jobName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -187,8 +181,7 @@ export class SchedulerService {
    * @return The jobs.
    */
   getJobs(): Observable<Job[]> {
-    return this.httpClient.get<Job[]>(this.config.schedulerApiUrlPrefix + '/jobs',
-      {reportProgress: true})
+    return this.httpClient.get<Job[]>(this.config.schedulerApiUrlPrefix + '/jobs', {reportProgress: true})
       .pipe(map((jobs: Job[]) => {
         return jobs;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -215,8 +208,7 @@ export class SchedulerService {
    * @return True if the job was updated successfully or false otherwise.
    */
   updateJob(job: Job): Observable<boolean> {
-    return this.httpClient.put<boolean>(
-      this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(job.id), job,
+    return this.httpClient.put<boolean>(this.config.schedulerApiUrlPrefix + '/jobs/' + encodeURIComponent(job.id), job,
       {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {

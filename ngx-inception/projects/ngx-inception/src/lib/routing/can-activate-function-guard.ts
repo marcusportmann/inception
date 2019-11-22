@@ -45,8 +45,8 @@ export class CanActivateFunctionGuard implements CanActivate {
         if (activatedRouteSnapshot.data) {
           if (activatedRouteSnapshot.data.authorities) {
             if (session) {
-              for (let i = 0; i < activatedRouteSnapshot.data.authorities.length; i++) {
-                if (session.hasAuthority(activatedRouteSnapshot.data.authorities[i])) {
+              for (const authority of activatedRouteSnapshot.data.authorities) {
+                if (session.hasAuthority(authority)) {
                   return true;
                 }
               }

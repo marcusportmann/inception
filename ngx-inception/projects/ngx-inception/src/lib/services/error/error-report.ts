@@ -88,8 +88,8 @@ export class ErrorReport {
    * @param feedback           The optional feedback provided by the user for the error.
    * @param data               The optional base-64 encoded data associated with the error report.
    */
-  constructor(id: string, applicationId: string, applicationVersion: string, description: string,
-              detail: string, created: Date, who?: string, feedback?: string, data?: string) {
+  constructor(id: string, applicationId: string, applicationVersion: string, description: string, detail: string, created: Date,
+              who?: string, feedback?: string, data?: string) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;

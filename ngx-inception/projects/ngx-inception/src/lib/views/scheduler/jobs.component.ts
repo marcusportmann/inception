@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -29,10 +29,10 @@ import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
-import {Job} from "../../services/scheduler/job";
-import {SchedulerService} from "../../services/scheduler/scheduler.service";
-import {SchedulerServiceError} from "../../services/scheduler/scheduler.service.errors";
-import {JobStatus} from "../../services/scheduler/job-status";
+import {Job} from '../../services/scheduler/job';
+import {SchedulerService} from '../../services/scheduler/scheduler.service';
+import {SchedulerServiceError} from '../../services/scheduler/scheduler.service.errors';
+import {JobStatus} from '../../services/scheduler/job-status';
 
 /**
  * The JobsComponent class implements the jobs component.
@@ -41,38 +41,35 @@ import {JobStatus} from "../../services/scheduler/job-status";
  */
 @Component({
   templateUrl: 'jobs.component.html',
-  styleUrls: ['jobs.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['jobs.component.css']
 })
 export class JobsComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   JobStatus = JobStatus;
 
   dataSource: MatTableDataSource<Job> = new MatTableDataSource<Job>();
 
-  displayedColumns = [ 'name', 'status', 'nextExecution', 'actions'];
+  displayedColumns = ['name', 'status', 'nextExecution', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private schedulerService: SchedulerService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+              private schedulerService: SchedulerService, private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(
-      filter);
+    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
     return this.i18n({
       id: '@@scheduler_jobs_component_title',
       value: 'Jobs'
-    })
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -82,13 +79,12 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
   }
 
   deleteJob(jobId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@scheduler_jobs_component_confirm_delete_job',
-          value: 'Are you sure you want to delete the job?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@scheduler_jobs_component_confirm_delete_job',
+        value: 'Are you sure you want to delete the job?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -128,8 +124,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
         this.dataSource.data = jobs;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SchedulerService) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SchedulerService) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -144,8 +139,8 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.loadJobs();
   }

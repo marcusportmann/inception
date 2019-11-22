@@ -60,8 +60,7 @@ export class BreadcrumbsService {
                 url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
                 if (routeSnapshot.data.title) {
-                  breadcrumbs.push(
-                    new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
+                  breadcrumbs.push(new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
                 }
               }
               currentRoute = route;

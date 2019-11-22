@@ -67,8 +67,8 @@ export class UserDirectorySummaries {
    * @param pageIndex              The optional page index.
    * @param pageSize               The optional page size.
    */
-  constructor(userDirectorySummaries: UserDirectorySummary[], total: number, filter?: string,
-              sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
+  constructor(userDirectorySummaries: UserDirectorySummary[], total: number, filter?: string, sortDirection?: SortDirection,
+              pageIndex?: number, pageSize?: number) {
     this.userDirectorySummaries = userDirectorySummaries;
     this.total = total;
     this.filter = filter;

@@ -58,13 +58,10 @@ export class Error {
       } else if (cause instanceof HttpErrorResponse) {
         if (cause.error) {
           this.cause =
-            new HttpError(cause.error.error ? cause.error.error : '',
-              cause.error.error_description ? cause.error.error_description :
-                '', cause.message, cause.status, cause.statusText,
-              cause.url ? cause.url : '');
+            new HttpError(cause.error.error ? cause.error.error : '', cause.error.error_description ? cause.error.error_description : '',
+              cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
         } else {
-          this.cause = new HttpError('', '', cause.message, cause.status,
-            cause.statusText, cause.url ? cause.url : '');
+          this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
         }
       } else {
         this.cause = cause;

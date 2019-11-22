@@ -21,7 +21,7 @@ import { ValidatorFn, AbstractControl } from '@angular/forms';
  *
  * @author Marcus Portmann
  */
-export namespace FileValidator {
+export class FileValidator {
 
   /**
    * Validator function to validate that the total length of one or more files does not exceed the
@@ -31,7 +31,7 @@ export namespace FileValidator {
    *
    * @returns The validator function.
    */
-  export function maxSize(bytes: number): ValidatorFn {
+  public static maxSize(bytes: number): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const size = control && control.value ? (control.value as File[]).map(f => f.size).reduce((acc, i) => acc + i, 0) : 0;
       const condition = bytes >= size;
@@ -54,7 +54,7 @@ export namespace FileValidator {
    *
    * @returns The validator function.
    */
-  export function minSize(bytes: number): ValidatorFn {
+  public static minSize(bytes: number): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (!(control && control.value)) {
         return null;

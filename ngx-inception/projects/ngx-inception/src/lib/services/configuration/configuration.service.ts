@@ -23,9 +23,7 @@ import {ApiError} from '../../errors/api-error';
 import {CodesServiceError} from '../codes/codes.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
-import {
-  ConfigurationNotFoundError, ConfigurationServiceError
-} from './configuration.service.errors';
+import {ConfigurationNotFoundError, ConfigurationServiceError} from './configuration.service.errors';
 import {Configuration} from './configuration';
 import {INCEPTION_CONFIG} from '../../inception.module';
 import {InceptionConfig} from '../../inception-config';
@@ -59,8 +57,7 @@ export class ConfigurationService {
    * @return True if the configuration was deleted or false otherwise.
    */
   deleteConfiguration(key: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(
-      this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key),
+    return this.httpClient.delete<boolean>(this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key),
       {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
@@ -92,8 +89,7 @@ export class ConfigurationService {
    * @return The configuration.
    */
   getConfiguration(key: string): Observable<Configuration> {
-    return this.httpClient.get<Configuration>(
-      this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key),
+    return this.httpClient.get<Configuration>(this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key),
       {reportProgress: true})
       .pipe(map((configuration: Configuration) => {
         return configuration;
@@ -125,11 +121,9 @@ export class ConfigurationService {
    * @return The configuration value.
    */
   getConfigurationValue(key: string): Observable<string> {
-    return this.httpClient.get<string>(
-      this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key) +
-      '/value', {
-        reportProgress: true
-      }).pipe(map((value: string) => {
+    return this.httpClient.get<string>(this.config.configurationApiUrlPrefix + '/configurations/' + encodeURIComponent(key) + '/value', {
+      reportProgress: true
+    }).pipe(map((value: string) => {
       return value;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
@@ -157,8 +151,7 @@ export class ConfigurationService {
    * @return The configurations.
    */
   getConfigurations(): Observable<Configuration[]> {
-    return this.httpClient.get<Configuration[]>(
-      this.config.configurationApiUrlPrefix + '/configurations', {reportProgress: true})
+    return this.httpClient.get<Configuration[]>(this.config.configurationApiUrlPrefix + '/configurations', {reportProgress: true})
       .pipe(map((configurations: Configuration[]) => {
         return configurations;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -185,23 +178,22 @@ export class ConfigurationService {
    * @return True if the configuration was saved successfully or false otherwise.
    */
   saveConfiguration(configuration: Configuration): Observable<boolean> {
-    return this.httpClient.post<boolean>(
-      this.config.configurationApiUrlPrefix + '/configurations', configuration,
-      {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+    return this.httpClient.post<boolean>(this.config.configurationApiUrlPrefix + '/configurations', configuration, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new CodesServiceError(this.i18n({
-          id: '@@configuration_save_configuration_error',
-          value: 'Failed to save the configuration.'
-        }), apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+          return throwError(new CodesServiceError(this.i18n({
+            id: '@@configuration_save_configuration_error',
+            value: 'Failed to save the configuration.'
+          }), apiError));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
   }
 }

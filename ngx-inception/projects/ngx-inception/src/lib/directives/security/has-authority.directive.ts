@@ -15,10 +15,10 @@
  */
 
 import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {SessionService} from "../../services/session/session.service";
-import {Subscription} from "rxjs";
-import {Session} from "../../services/session/session";
-import {first} from "rxjs/operators";
+import {SessionService} from '../../services/session/session.service';
+import {Subscription} from 'rxjs';
+import {Session} from '../../services/session/session';
+import {first} from 'rxjs/operators';
 
 /**
  * The HasAuthorityDirective class implements the has authority directive.
@@ -33,7 +33,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
-  @Input("hasAuthority") requiredAuthorities: string[] | undefined;
+  @Input('hasAuthority') requiredAuthorities: string[] | undefined;
 
   /**
    * Constructs a new HasAuthorityDirective.
@@ -43,8 +43,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
    * @param sessionService The session service.
    */
   // tslint:disable-next-line
-  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef,
-              private sessionService: SessionService) {
+  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, private sessionService: SessionService) {
   }
 
 
@@ -53,12 +52,12 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    if (!!this.requiredAuthorities) {
+    if (this.requiredAuthorities && (this.requiredAuthorities.length > 0)) {
       this.subscriptions.add(this.sessionService.session$.pipe(first()).subscribe((session: (Session | null)) => {
         if (session) {
-          let foundAuthority: boolean = false;
+          let foundAuthority = false;
 
-          for (let requiredAuthority of this.requiredAuthorities!) {
+          for (const requiredAuthority of this.requiredAuthorities) {
             if (session.hasAuthority(requiredAuthority)) {
               foundAuthority = true;
               break;

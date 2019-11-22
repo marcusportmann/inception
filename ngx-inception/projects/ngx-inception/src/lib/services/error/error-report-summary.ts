@@ -72,8 +72,8 @@ export class ErrorReportSummary {
    * @param deviceId           The optional Universally Unique Identifier (UUID) used to uniquely
    *                           identify the device the error report originated from.
    */
-  constructor(id: string, applicationId: string, applicationVersion: string, description: string,
-              created: Date, who?: string, deviceId?: string) {
+  constructor(id: string, applicationId: string, applicationVersion: string, description: string, created: Date, who?: string,
+              deviceId?: string) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;

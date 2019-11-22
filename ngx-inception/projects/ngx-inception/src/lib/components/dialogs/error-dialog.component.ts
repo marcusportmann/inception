@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, HostBinding, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {Error} from '../../errors/error';
 
@@ -51,12 +51,11 @@ export interface ErrorDialogData {
     <div class="button">
       <button mat-flat-button (click)="ok()" tabindex="-1" i18n="@@error_dialog_button_ok">OK</button>
     </div>
-  `, // tslint:disable-next-line
-  host: {
-    'class': 'error-dialog'
-  }
+  `
 })
 export class ErrorDialogComponent {
+
+  @HostBinding('class') hostClass = 'error-dialog';
 
   /**
    * Constructs a new ErrorDialogComponent.

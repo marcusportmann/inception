@@ -18,7 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../errors/http-error';
 import {Error} from '../../errors/error';
 import {ApiError} from '../../errors/api-error';
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The DuplicateMailTemplateError class holds the information for a duplicate mail template

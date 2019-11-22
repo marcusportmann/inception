@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -26,11 +26,11 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
-import {ReportDefinition} from "../../services/reporting/report-definition";
-import {ReportingService} from "../../services/reporting/reporting.service";
-import {ReportingServiceError} from "../../services/reporting/reporting.service.errors";
-import {Base64} from "../../util";
-import {FileValidator} from "../../validators/file-validator";
+import {ReportDefinition} from '../../services/reporting/report-definition';
+import {ReportingService} from '../../services/reporting/reporting.service';
+import {ReportingServiceError} from '../../services/reporting/reporting.service.errors';
+import {Base64} from '../../util';
+import {FileValidator} from '../../validators/file-validator';
 
 /**
  * The EditReportDefinitionComponent class implements the edit report definition component.
@@ -43,32 +43,35 @@ import {FileValidator} from "../../validators/file-validator";
 })
 export class EditReportDefinitionComponent extends AdminContainerView implements AfterViewInit {
 
-  reportDefinition?: ReportDefinition;
-
-  reportDefinitionId: string;
-
   editReportDefinitionForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private reportingService: ReportingService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  idFormControl: FormControl;
+
+  nameFormControl: FormControl;
+
+  reportDefinition?: ReportDefinition;
+
+  templateFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+              private reportingService: ReportingService, private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.reportDefinitionId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('reportDefinitionId')!);
+    // Initialise the form controls
+    this.idFormControl = new FormControl({
+      value: '',
+      disabled: true
+    }, [Validators.required, Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.templateFormControl =
+      new FormControl('', [Validators.required, FileValidator.minSize(1), FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
+      ]);
 
     // Initialise the form
     this.editReportDefinitionForm = new FormGroup({
-      id: new FormControl({
-        value: '',
-        disabled: true
-      }, [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      template: new FormControl('', [Validators.required, FileValidator.minSize(1),
-        FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)
-      ])
+      id: this.idFormControl,
+      name: this.nameFormControl,
+      template: this.templateFormControl
     });
   }
 
@@ -83,7 +86,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
     return this.i18n({
       id: '@@reporting_edit_report_definition_component_title',
       value: 'Edit Report Definition'
-    })
+    });
   }
 
   cancel(): void {
@@ -92,19 +95,27 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   }
 
   ngAfterViewInit(): void {
-    this.spinnerService.showSpinner();
+    // Retrieve the route parameters
+    let reportDefinitionId = this.activatedRoute.snapshot.paramMap.get('reportDefinitionId');
+
+    if (!reportDefinitionId) {
+      throw(new Error('No reportDefinitionId route parameter found'));
+    }
+
+    reportDefinitionId = decodeURIComponent(reportDefinitionId);
 
     // Retrieve the existing report definition and initialise the form controls
-    this.reportingService.getReportDefinition(this.reportDefinitionId)
+    this.spinnerService.showSpinner();
+
+    this.reportingService.getReportDefinition(reportDefinitionId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((reportDefinition: ReportDefinition) => {
         this.reportDefinition = reportDefinition;
-        this.editReportDefinitionForm.get('id')!.setValue(reportDefinition.id);
-        this.editReportDefinitionForm.get('name')!.setValue(reportDefinition.name);
+        this.idFormControl.setValue(reportDefinition.id);
+        this.nameFormControl.setValue(reportDefinition.name);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -116,30 +127,29 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   ok(): void {
     if (this.reportDefinition && this.editReportDefinitionForm.valid) {
 
-      let fileReader: FileReader = new FileReader();
+      const fileReader: FileReader = new FileReader();
 
       fileReader.onloadend = (ev: ProgressEvent) => {
-        let template = fileReader.result;
+        const template = fileReader.result;
 
-        if (template instanceof ArrayBuffer) {
+        if (this.reportDefinition && (template instanceof ArrayBuffer)) {
 
-          let base64: string = Base64.encode(template as ArrayBuffer);
+          const base64: string = Base64.encode(template as ArrayBuffer);
 
-          this.reportDefinition!.name = this.editReportDefinitionForm.get('name')!.value;
-          this.reportDefinition!.template = base64;
-
+          this.reportDefinition.name = this.nameFormControl.value;
+          this.reportDefinition.template = base64;
 
           this.spinnerService.showSpinner();
 
-          this.reportingService.updateReportDefinition(this.reportDefinition!)
+          this.reportingService.updateReportDefinition(this.reportDefinition)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof ReportingServiceError) ||
-                (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+              if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -147,13 +157,11 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
               }
             });
         } else {
-          console.log(
-            'Failed to read the template file for the report definition (' + fileReader.result +
-            ')');
+          console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
         }
       };
 
-      fileReader.readAsArrayBuffer(this.editReportDefinitionForm.get('template')!.value[0]);
+      fileReader.readAsArrayBuffer(this.templateFormControl.value[0]);
     }
   }
 }

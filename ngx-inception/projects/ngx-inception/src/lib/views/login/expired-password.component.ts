@@ -25,9 +25,9 @@ import {DialogService} from '../../services/dialog/dialog.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
-import {SecurityServiceError} from "../../services/security/security.service.errors";
-import {MatDialogRef} from "@angular/material/dialog";
-import {InformationDialogComponent} from "../../components/dialogs";
+import {SecurityServiceError} from '../../services/security/security.service.errors';
+import {MatDialogRef} from '@angular/material/dialog';
+import {InformationDialogComponent} from '../../components/dialogs';
 
 /**
  * The ExpiredPasswordComponent class implements the expired password component.
@@ -39,33 +39,44 @@ import {InformationDialogComponent} from "../../components/dialogs";
 })
 export class ExpiredPasswordComponent implements OnInit {
 
+  confirmNewPasswordFormControl: FormControl;
+
   expiredPasswordForm: FormGroup;
+
+  newPasswordFormControl: FormControl;
+
+  passwordFormControl: FormControl;
+
+  usernameFormControl: FormControl;
 
   /**
    * Constructs a new ExpiredPasswordComponent.
    *
    * @param router          The router.
    * @param activatedRoute  The activated route.
-   * @param formBuilder     The form builder.
    * @param i18n            The internationalization service.
    * @param dialogService   The dialog service.
    * @param securityService The security service.
    * @param spinnerService  The spinner service.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private dialogService: DialogService, private securityService: SecurityService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private dialogService: DialogService,
+              private securityService: SecurityService, private spinnerService: SpinnerService) {
+
+    // Initialise the form controls
+    this.confirmNewPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.newPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.passwordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.usernameFormControl = new FormControl({
+      value: '',
+      disabled: true
+    });
 
     // Initialise the form
     this.expiredPasswordForm = new FormGroup({
-      confirmNewPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      newPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      username: new FormControl({
-        value: '',
-        disabled: true
-      })
+      confirmNewPassword: this.confirmNewPasswordFormControl,
+      newPassword: this.newPasswordFormControl,
+      password: this.passwordFormControl,
+      username: this.usernameFormControl
     });
   }
 
@@ -78,10 +89,10 @@ export class ExpiredPasswordComponent implements OnInit {
 
   changePassword(): void {
     if (this.expiredPasswordForm.valid) {
-      const username = this.expiredPasswordForm.get('username')!.value;
-      const password = this.expiredPasswordForm.get('password')!.value;
-      const newPassword = this.expiredPasswordForm.get('newPassword')!.value;
-      const confirmNewPassword = this.expiredPasswordForm.get('confirmNewPassword')!.value;
+      const username = this.usernameFormControl.value;
+      const password = this.passwordFormControl.value;
+      const newPassword = this.newPasswordFormControl.value;
+      const confirmNewPassword = this.confirmNewPasswordFormControl.value;
 
       // Check that the password and confirmation password match
       if (newPassword !== confirmNewPassword) {
@@ -99,11 +110,12 @@ export class ExpiredPasswordComponent implements OnInit {
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
 
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {message: this.i18n({
-                id: '@@login_expired_password_component_your_password_was_successfully_changed',
-                value: 'Your password was successfully changed.'
-              })});
+          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog({
+            message: this.i18n({
+              id: '@@login_expired_password_component_your_password_was_successfully_changed',
+              value: 'Your password was successfully changed.'
+            })
+          });
 
           dialogRef.afterClosed()
             .pipe(first())
@@ -111,7 +123,7 @@ export class ExpiredPasswordComponent implements OnInit {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigate(['..'], {
                 relativeTo: this.activatedRoute,
-                state: {username: username}
+                state: {username}
               });
             });
         }, (error: Error) => {
@@ -132,7 +144,7 @@ export class ExpiredPasswordComponent implements OnInit {
       .pipe(first(), map(() => window.history.state))
       .subscribe((state) => {
         if (state.username) {
-          this.expiredPasswordForm.get('username')!.setValue(state.username);
+          this.usernameFormControl.setValue(state.username);
         } else {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['..'], {

@@ -42,9 +42,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   filteredOrganizations$: Subject<Organization[]> = new ReplaySubject<Organization[]>();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private sessionService: SessionService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private sessionService: SessionService) {
 
     // Initialise the form controls
     this.organizationFormControl = new FormControl('', Validators.required);
@@ -62,8 +60,7 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
   isOrganizationSelected(): boolean {
     if (this.selectOrganizationForm.valid) {
       if (this.organizationFormControl.value as Organization) {
-        if (typeof (this.organizationFormControl.value.id) !== 'undefined' &&
-          this.organizationFormControl.value.id !== null) {
+        if (typeof (this.organizationFormControl.value.id) !== 'undefined' && this.organizationFormControl.value.id !== null) {
           return true;
         }
       }
@@ -81,14 +78,11 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
       .pipe(first(), map(() => window.history.state))
       .subscribe((state) => {
         if (state.organizations) {
-          this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''),
-            map((value) => {
-                this.filteredOrganizations$.next(this.filterOrganizations(state.organizations, value));
-              }
-            )).subscribe());
+          this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''), map((value) => {
+            this.filteredOrganizations$.next(this.filterOrganizations(state.organizations, value));
+          })).subscribe());
         } else {
-          console.log(
-            'No organizations found, invalidating session and redirecting to the application root');
+          console.log('No organizations found, invalidating session and redirecting to the application root');
 
           // TODO: Invalidate session -- MARCUS
 
@@ -124,7 +118,6 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
       filterValue = (value as Organization).name.toLowerCase();
     }
 
-    return organizations.filter(
-      organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
+    return organizations.filter(organization => organization.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }

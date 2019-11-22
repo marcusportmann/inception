@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -42,12 +42,11 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
  */
 @Component({
   templateUrl: 'organizations.component.html',
-  styleUrls: ['organizations.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['organizations.component.css']
 })
 export class OrganizationsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   private subscriptions: Subscription = new Subscription();
 
@@ -55,9 +54,9 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
   @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
@@ -73,7 +72,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
     return this.i18n({
       id: '@@security_organizations_component_title',
       value: 'Organizations'
-    })
+    });
   }
 
   deleteOrganization(organizationId: string): void {

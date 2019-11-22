@@ -53,8 +53,7 @@ export class GroupMember {
    * @param memberType      The group member type.
    * @param memberName      The name identifying the group member.
    */
-  constructor(userDirectoryId: string, groupName: string, memberType: GroupMemberType,
-              memberName: string) {
+  constructor(userDirectoryId: string, groupName: string, memberType: GroupMemberType, memberName: string) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.memberType = memberType;

@@ -43,28 +43,31 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   codeCategory?: CodeCategory;
 
-  codeCategoryId: string;
+  dataFormControl: FormControl;
 
   editCodeCategoryForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private codesService: CodesService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  idFormControl: FormControl;
+
+  nameFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.codeCategoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('codeCategoryId')!);
+    // Initialise the form controls
+    this.dataFormControl = new FormControl('');
+    this.idFormControl = new FormControl({
+      value: '',
+      disabled: true
+    }, [Validators.required, Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.editCodeCategoryForm = new FormGroup({
-      data: new FormControl(''),
-      id: new FormControl({
-        value: '',
-        disabled: true
-      }, [Validators.required, Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      data: this.dataFormControl,
+      id: this.idFormControl,
+      name: this.nameFormControl
     });
   }
 
@@ -79,7 +82,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
     return this.i18n({
       id: '@@codes_edit_code_category_component_title',
       value: 'Edit Code Category'
-    })
+    });
   }
 
   cancel(): void {
@@ -88,20 +91,28 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    this.spinnerService.showSpinner();
+    // Retrieve the route parameters
+    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    codeCategoryId = decodeURIComponent(codeCategoryId);
 
     // Retrieve the existing code category and initialise the form controls
-    this.codesService.getCodeCategory(this.codeCategoryId)
+    this.spinnerService.showSpinner();
+
+    this.codesService.getCodeCategory(codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codeCategory: CodeCategory) => {
         this.codeCategory = codeCategory;
-        this.editCodeCategoryForm.get('id')!.setValue(codeCategory.id);
-        this.editCodeCategoryForm.get('name')!.setValue(codeCategory.name);
-        this.editCodeCategoryForm.get('data')!.setValue(codeCategory.data);
+        this.idFormControl.setValue(codeCategory.id);
+        this.nameFormControl.setValue(codeCategory.name);
+        this.dataFormControl.setValue(codeCategory.data);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -112,9 +123,9 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
 
   ok(): void {
     if (this.codeCategory && this.editCodeCategoryForm.valid) {
-      const data = this.editCodeCategoryForm.get('data')!.value;
+      const data = this.dataFormControl.value;
 
-      this.codeCategory.name = this.editCodeCategoryForm.get('name')!.value;
+      this.codeCategory.name = this.nameFormControl.value;
       this.codeCategory.data = (!!data) ? data : null;
 
       this.spinnerService.showSpinner();
@@ -126,8 +137,7 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
           this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

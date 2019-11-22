@@ -19,19 +19,19 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-import {InceptionModule} from '../../../inception/inception.module';
+import {InceptionModule} from '../../inception.module';
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
 // Import Inception components
 import {CanActivateFunctionGuard} from '../../routing/can-activate-function-guard';
-import {JobsComponent} from "./jobs.component";
-import {JobsTitleResolver} from "./jobs-title-resolver";
-import {JobTitleResolver} from "./job-title-resolver";
-import {EditJobTitleResolver} from "./edit-job-title-resolver";
-import {NewJobTitleResolver} from "./new-job-title-resolver";
-import {EditJobComponent} from "./edit-job.component";
-import {NewJobComponent} from "./new-job.component";
-import {JobParameterDialogComponent} from "./job-parameter-dialog.component";
+import {JobsComponent} from './jobs.component';
+import {JobsTitleResolver} from './jobs-title-resolver';
+import {JobTitleResolver} from './job-title-resolver';
+import {EditJobTitleResolver} from './edit-job-title-resolver';
+import {NewJobTitleResolver} from './new-job-title-resolver';
+import {EditJobComponent} from './edit-job.component';
+import {NewJobComponent} from './new-job.component';
+import {JobParameterDialogComponent} from './job-parameter-dialog.component';
 
 const routes: Routes = [{
   path: 'jobs',
@@ -43,8 +43,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: JobsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
-        'FUNCTION_Scheduler.JobAdministration'
+      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
       ]
     }
   },
@@ -56,8 +55,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: NewJobComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
-          'FUNCTION_Scheduler.JobAdministration'
+        authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
         ]
       },
       resolve: {
@@ -77,8 +75,7 @@ const routes: Routes = [{
         canActivate: [CanActivateFunctionGuard],
         component: EditJobComponent,
         data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration',
-            'FUNCTION_Scheduler.JobAdministration'
+          authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
           ]
         },
         resolve: {

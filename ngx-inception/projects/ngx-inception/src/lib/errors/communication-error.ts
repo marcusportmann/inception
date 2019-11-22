@@ -70,8 +70,7 @@ export class CommunicationError extends Error {
    *         otherwise.
    */
   static isCommunicationError(httpErrorResponse: HttpErrorResponse): boolean {
-    return (httpErrorResponse.name === 'HttpErrorResponse') && (httpErrorResponse.status === 0) &&
-      httpErrorResponse.error && (httpErrorResponse.error instanceof ProgressEvent) &&
-      (httpErrorResponse.error.type === 'error');
+    return (httpErrorResponse.name === 'HttpErrorResponse') && (httpErrorResponse.status === 0) && httpErrorResponse.error &&
+      (httpErrorResponse.error instanceof ProgressEvent) && (httpErrorResponse.error.type === 'error');
   }
 }

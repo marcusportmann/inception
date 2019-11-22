@@ -78,9 +78,8 @@ export class Users {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  constructor(userDirectoryId: string, users: User[], total: number, filter?: string,
-              sortBy?: UserSortBy, sortDirection?: SortDirection, pageIndex?: number,
-              pageSize?: number) {
+  constructor(userDirectoryId: string, users: User[], total: number, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
+              pageIndex?: number, pageSize?: number) {
     this.userDirectoryId = userDirectoryId;
     this.users = users;
     this.total = total;

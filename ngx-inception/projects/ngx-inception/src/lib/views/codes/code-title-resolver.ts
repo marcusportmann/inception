@@ -15,9 +15,9 @@
  */
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {CodesService} from "../../services/codes/codes.service";
+import {CodesService} from '../../services/codes/codes.service';
 
 /**
  * The CodeTitleResolver class provides the route data resolver that resolves the
@@ -42,10 +42,23 @@ export class CodeTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.codesService.getCodeName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeCategoryId')!),
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let codeCategoryId = activatedRouteSnapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    codeCategoryId = decodeURIComponent(codeCategoryId);
+
+    let codeId = activatedRouteSnapshot.paramMap.get('codeId');
+
+    if (!codeId) {
+      throw(new Error('No codeId route parameter found'));
+    }
+
+    codeId = decodeURIComponent(codeId);
+
+    return this.codesService.getCodeName(codeCategoryId, codeId);
   }
 }

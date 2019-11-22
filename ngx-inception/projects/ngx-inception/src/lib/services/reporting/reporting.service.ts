@@ -19,9 +19,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../errors/api-error';
-import {
-  DuplicateReportDefinitionError, ReportDefinitionNotFoundError, ReportingServiceError
-} from './reporting.service.errors';
+import {DuplicateReportDefinitionError, ReportDefinitionNotFoundError, ReportingServiceError} from './reporting.service.errors';
 import {CommunicationError} from '../../errors/communication-error';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -61,9 +59,7 @@ export class ReportingService {
    * @return True if the report definition was created successfully or false otherwise.
    */
   createReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
-    return this.httpClient.post<boolean>(
-      this.config.reportingApiUrlPrefix + '/report-definitions', reportDefinition,
-      {observe: 'response'})
+    return this.httpClient.post<boolean>(this.config.reportingApiUrlPrefix + '/report-definitions', reportDefinition, {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -98,8 +94,7 @@ export class ReportingService {
    */
   deleteReportDefinition(reportDefinitionId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' +
-      encodeURIComponent(reportDefinitionId), {observe: 'response'})
+      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId), {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -132,8 +127,7 @@ export class ReportingService {
    */
   getReportDefinition(reportDefinitionId: string): Observable<ReportDefinition> {
     return this.httpClient.get<ReportDefinition>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' +
-      encodeURIComponent(reportDefinitionId), {reportProgress: true})
+      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId), {reportProgress: true})
       .pipe(map((reportDefinition: ReportDefinition) => {
         return reportDefinition;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -166,8 +160,7 @@ export class ReportingService {
    */
   getReportDefinitionName(reportDefinitionId: string): Observable<string> {
     return this.httpClient.get<string>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' +
-      encodeURIComponent(reportDefinitionId) + '/name', {
+      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinitionId) + '/name', {
         reportProgress: true,
       }).pipe(map((reportDefinitionName: string) => {
       return reportDefinitionName;
@@ -197,8 +190,7 @@ export class ReportingService {
    * @return The summaries for all the report definitions.
    */
   getReportDefinitionSummaries(): Observable<ReportDefinitionSummary[]> {
-    return this.httpClient.get<ReportDefinitionSummary[]>(
-      this.config.reportingApiUrlPrefix + '/report-definitions', {reportProgress: true})
+    return this.httpClient.get<ReportDefinitionSummary[]>(this.config.reportingApiUrlPrefix + '/report-definitions', {reportProgress: true})
       .pipe(map((reportDefinitionSummaries: ReportDefinitionSummary[]) => {
         return reportDefinitionSummaries;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -223,8 +215,7 @@ export class ReportingService {
    * @return The report definitions.
    */
   getReportDefinitions(): Observable<ReportDefinition[]> {
-    return this.httpClient.get<ReportDefinition[]>(
-      this.config.reportingApiUrlPrefix + '/report-definitions', {reportProgress: true})
+    return this.httpClient.get<ReportDefinition[]>(this.config.reportingApiUrlPrefix + '/report-definitions', {reportProgress: true})
       .pipe(map((reportDefinitions: ReportDefinition[]) => {
         return reportDefinitions;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -252,8 +243,8 @@ export class ReportingService {
    */
   updateReportDefinition(reportDefinition: ReportDefinition): Observable<boolean> {
     return this.httpClient.put<boolean>(
-      this.config.reportingApiUrlPrefix + '/report-definitions/' +
-      encodeURIComponent(reportDefinition.id), reportDefinition, {observe: 'response'})
+      this.config.reportingApiUrlPrefix + '/report-definitions/' + encodeURIComponent(reportDefinition.id), reportDefinition,
+      {observe: 'response'})
       .pipe(map((httpResponse: HttpResponse<boolean>) => {
         return httpResponse.status === 204;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {

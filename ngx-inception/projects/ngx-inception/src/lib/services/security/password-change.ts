@@ -71,9 +71,8 @@ export class PasswordChange {
    * @param lockUser             Lock the user when performing an administrative password change.
    * @param resetPasswordHistory Reset the user's password history when performing an administrative password change.
    */
-  constructor(reason: PasswordChangeReason, newPassword: string, password?: string,
-              securityCode?: string, expirePassword?: boolean, lockUser?: boolean,
-              resetPasswordHistory?: boolean) {
+  constructor(reason: PasswordChangeReason, newPassword: string, password?: string, securityCode?: string, expirePassword?: boolean,
+              lockUser?: boolean, resetPasswordHistory?: boolean) {
     this.reason = reason;
     this.newPassword = newPassword;
     this.password = password;

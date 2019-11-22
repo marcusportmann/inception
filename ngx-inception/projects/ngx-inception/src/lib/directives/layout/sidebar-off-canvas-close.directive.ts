@@ -66,8 +66,7 @@ export class SidebarOffCanvasCloseDirective {
   @HostListener('click', ['$event']) toggleOpen($event: any): void {
     $event.preventDefault();
 
-    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'),
-      'sidebar-off-canvas')) {
+    if (SidebarOffCanvasCloseDirective.hasClass(document.querySelector('body'), 'sidebar-off-canvas')) {
       SidebarOffCanvasCloseDirective.toggleClass(document.querySelector('body'), 'sidebar-opened');
     }
   }

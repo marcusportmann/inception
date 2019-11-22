@@ -85,9 +85,8 @@ export class Session {
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
-              authorities: string[], accessToken: string, accessTokenExpiry?: Date,
-              refreshToken?: string) {
+  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[], authorities: string[], accessToken: string,
+              accessTokenExpiry?: Date, refreshToken?: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.userFullName = userFullName;
@@ -101,17 +100,17 @@ export class Session {
   /**
    * Confirm that the user associated with the session has the specified authority.
    *
-   * @param authority The authority.
+   * @param requiredAuthority The required authority.
    *
    * @return True if the user associated with the session has the specified authority or false
    *         otherwise.
    */
-  hasAuthority(authority: string): boolean {
+  hasAuthority(requiredAuthority: string): boolean {
 
-    authority = authority.toLowerCase();
+    requiredAuthority = requiredAuthority.toLowerCase();
 
-    for (let i = 0; i < this.authorities.length; i++) {
-      if (this.authorities[i].toLowerCase() === authority) {
+    for (const authority of this.authorities) {
+      if (authority.toLowerCase() === requiredAuthority) {
         return true;
       }
     }

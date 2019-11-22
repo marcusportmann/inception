@@ -15,12 +15,9 @@
  */
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {CodesService} from "../../services/codes/codes.service";
-import {first, map} from "rxjs/operators";
-import {CodeCategory} from "../../services/codes/code-category";
-import {SchedulerService} from "../../services/scheduler/scheduler.service";
+import {SchedulerService} from '../../services/scheduler/scheduler.service';
 
 /**
  * The JobTitleResolver class provides the route data resolver that resolves the
@@ -45,9 +42,15 @@ export class JobTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.schedulerService.getJobName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('jobId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let jobId = activatedRouteSnapshot.paramMap.get('jobId');
+
+    if (!jobId) {
+      throw(new Error('No jobId route parameter found'));
+    }
+
+    jobId = decodeURIComponent(jobId);
+
+    return this.schedulerService.getJobName(jobId);
   }
 }

@@ -51,7 +51,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   userDirectoryId: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
@@ -81,7 +81,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
     return this.i18n({
       id: '@@security_new_group_component_title',
       value: 'New Group'
-    })
+    });
   }
 
   cancel(): void {

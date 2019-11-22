@@ -6,8 +6,8 @@
           <mat-form-field>
             <mat-label i18n="@@mail_new_mail_template_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id" required="true" autofocus>
-            <mat-error *ngIf="newMailTemplateForm.get('id').errors && !newMailTemplateForm.get('id').untouched">
-              <span *ngIf="newMailTemplateForm.get('id').errors?.required" i18n="@@mail_new_mail_template_component_error_id_required">An ID is required.</span>
+            <mat-error *ngIf="idFormControl.errors && !idFormControl.untouched">
+              <span *ngIf="idFormControl.errors?.required" i18n="@@mail_new_mail_template_component_error_id_required">An ID is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -17,9 +17,9 @@
           <mat-form-field>
             <mat-label i18n="@@mail_new_mail_template_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
-            <mat-error *ngIf="newMailTemplateForm.get('name').errors && !newMailTemplateForm.get('name').untouched">
-              <span *ngIf="newMailTemplateForm.get('name').errors?.required" i18n="@@mail_new_mail_template_component_error_name_required">A name is required.</span>
-              <span *ngIf="newMailTemplateForm.get('name').errors?.maxlength" i18n="@@mail_new_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            <mat-error *ngIf="nameFormControl.errors && !nameFormControl.untouched">
+              <span *ngIf="nameFormControl.errors?.required" i18n="@@mail_new_mail_template_component_error_name_required">A name is required.</span>
+              <span *ngIf="nameFormControl.errors?.maxlength" i18n="@@mail_new_mail_template_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -33,8 +33,8 @@
                 {{MailTemplateContentType[contentType]}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="newMailTemplateForm.controls['contentType'].errors && !newMailTemplateForm.controls['contentType'].untouched">
-              <span *ngIf="newMailTemplateForm.controls['contentType'].errors?.required" i18n="@@mail_new_mail_template_component_error_content_type_required">A content type is required.</span>
+            <mat-error *ngIf="contentTypeFormControl.errors && !contentTypeFormControl.untouched">
+              <span *ngIf="contentTypeFormControl.errors?.required" i18n="@@mail_new_mail_template_component_error_content_type_required">A content type is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -44,10 +44,10 @@
           <mat-form-field>
             <mat-label i18n="@@mail_new_mail_template_component_label_template">Template</mat-label>
             <file-upload formControlName="template" i18n-placeholder="@@mail_new_mail_template_component_placeholder_no_file_selected" placeholder="No file selected" required></file-upload>
-            <mat-error *ngIf="newMailTemplateForm.get('template').errors && !newMailTemplateForm.get('template').untouched">
-              <span *ngIf="newMailTemplateForm.get('template').errors?.required" i18n="@@mail_new_mail_template_component_error_template_required">A template is required.</span>
-              <span *ngIf="newMailTemplateForm.get('template').errors?.minSize" i18n="@@mail_new_mail_template_component_error_template_min_size">The template is empty.</span>
-              <span *ngIf="newMailTemplateForm.get('template').errors?.maxSize" i18n="@@mail_new_mail_template_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
+            <mat-error *ngIf="templateFormControl.errors && !templateFormControl.untouched">
+              <span *ngIf="templateFormControl.errors?.required" i18n="@@mail_new_mail_template_component_error_template_required">A template is required.</span>
+              <span *ngIf="templateFormControl.errors?.minSize" i18n="@@mail_new_mail_template_component_error_template_min_size">The template is empty.</span>
+              <span *ngIf="templateFormControl.errors?.maxSize" i18n="@@mail_new_mail_template_component_error_template_max_size">The template exceeds the maximum allowed size.</span>
             </mat-error>
           </mat-form-field>
         </div>

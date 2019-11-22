@@ -53,7 +53,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
@@ -96,7 +96,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     return this.i18n({
       id: '@@security_reset_user_password_component_title',
       value: 'Reset User Password'
-    })
+    });
   }
 
   cancel(): void {

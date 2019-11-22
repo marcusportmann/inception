@@ -48,7 +48,7 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
   organization?: Organization;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
@@ -71,7 +71,7 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
     return this.i18n({
       id: '@@security_new_organization_component_title',
       value: 'New Organization'
-    })
+    });
   }
 
   cancel(): void {

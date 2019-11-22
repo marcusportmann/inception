@@ -65,10 +65,10 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   organizationId: string;
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
@@ -94,7 +94,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
     return this.i18n({
       id: '@@security_organization_user_directories_component_title',
       value: 'Organization User Directories'
-    })
+    });
   }
 
   addUserDirectoryToOrganization(): void {
@@ -172,7 +172,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
+    this.dataSource.paginator = this.paginator;
 
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();

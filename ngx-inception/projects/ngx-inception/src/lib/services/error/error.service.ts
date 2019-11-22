@@ -60,26 +60,25 @@ export class ErrorService {
    * @param feedback The optional feedback from the user submitting the error report.
    */
   sendErrorReport(error: Error, email?: string, feedback?: string): Observable<boolean> {
-    const errorReport: ErrorReport = new ErrorReport(uuid(), this.config.applicationId,
-      this.config.applicationVersion, error.message, error.cause ? JSON.stringify(error.cause) : '',
-      error.timestamp, email, feedback);
+    const errorReport: ErrorReport = new ErrorReport(uuid(), this.config.applicationId, this.config.applicationVersion, error.message,
+      error.cause ? JSON.stringify(error.cause) : '', error.timestamp, email, feedback);
 
-    return this.httpClient.post<boolean>(this.config.errorApiUrlPrefix + '/error-reports',
-      errorReport, {observe: 'response'}).pipe(map((httpResponse: HttpResponse<boolean>) => {
-      return httpResponse.status === 204;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
+    return this.httpClient.post<boolean>(this.config.errorApiUrlPrefix + '/error-reports', errorReport, {observe: 'response'})
+      .pipe(map((httpResponse: HttpResponse<boolean>) => {
+        return httpResponse.status === 204;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (ApiError.isApiError(httpErrorResponse)) {
+          const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ErrorServiceError(this.i18n({
-          id: '@@error_send_error_report_error',
-          value: 'Failed to send the error report.'
-        }), apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
-      }
-    }));
+          return throwError(new ErrorServiceError(this.i18n({
+            id: '@@error_send_error_report_error',
+            value: 'Failed to send the error report.'
+          }), apiError));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
   }
 }

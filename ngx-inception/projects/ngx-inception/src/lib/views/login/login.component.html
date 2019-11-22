@@ -12,9 +12,9 @@
                 <mat-form-field>
                   <mat-label i18n="@@login_login_component_label_username">Username</mat-label>
                   <input type="text" matInput formControlName="username" autofocus>
-                  <mat-error *ngIf="loginForm.controls['username'].errors && !loginForm.controls['username'].untouched">
-                    <span *ngIf="loginForm.controls['username'].errors?.required" i18n="@@login_login_component_error_username_required">A username is required.</span>
-                    <span *ngIf="loginForm.controls['username'].errors?.maxlength" i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
+                  <mat-error *ngIf="usernameFormControl.errors && !usernameFormControl.untouched">
+                    <span *ngIf="usernameFormControl.errors?.required" i18n="@@login_login_component_error_username_required">A username is required.</span>
+                    <span *ngIf="usernameFormControl.errors?.maxlength" i18n="@@login_login_component_error_username_maxlength">Username must not exceed 100 characters.</span>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -24,9 +24,9 @@
                 <mat-form-field>
                   <mat-label i18n="@@login_login_component_label_password">Password</mat-label>
                   <input type="password" matInput formControlName="password">
-                  <mat-error *ngIf="loginForm.controls['password'].errors && !loginForm.controls['password'].untouched">
-                    <span *ngIf="loginForm.controls['password'].errors?.required" i18n="@@login_login_component_error_password_required">A password is required.</span>
-                    <span *ngIf="loginForm.controls['password'].errors?.maxlength" i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
+                  <mat-error *ngIf="passwordFormControl.errors && !passwordFormControl.untouched">
+                    <span *ngIf="passwordFormControl.errors?.required" i18n="@@login_login_component_error_password_required">A password is required.</span>
+                    <span *ngIf="passwordFormControl.errors?.maxlength" i18n="@@login_login_component_error_password_maxlength">Password must not exceed 100 characters.</span>
                   </mat-error>
                 </mat-form-field>
               </div>

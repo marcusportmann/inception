@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -26,14 +26,14 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
-import {MailTemplate} from "../../services/mail/mail-template";
-import {MailService} from "../../services/mail/mail.service";
-import {MailTemplateContentType} from "../../services/mail/mail-template-content-type";
-import {MailServiceError} from "../../services/mail/mail.service.errors";
-import {v4 as uuid} from "uuid";
-import {FileValidator} from "../../validators/file-validator";
-import {Base64} from "../../util";
-import {ReportingService} from "../../services/reporting/reporting.service";
+import {MailTemplate} from '../../services/mail/mail-template';
+import {MailService} from '../../services/mail/mail.service';
+import {MailTemplateContentType} from '../../services/mail/mail-template-content-type';
+import {MailServiceError} from '../../services/mail/mail.service.errors';
+import {v4 as uuid} from 'uuid';
+import {FileValidator} from '../../validators/file-validator';
+import {Base64} from '../../util';
+import {ReportingService} from '../../services/reporting/reporting.service';
 
 /**
  * The NewMailTemplateComponent class implements the new mail template component.
@@ -48,28 +48,39 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
 
   MailTemplateContentType = MailTemplateContentType;
 
-  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
-    MailTemplateContentType.HTML, MailTemplateContentType.Unknown
+  contentTypeFormControl: FormControl;
+
+  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text, MailTemplateContentType.HTML, MailTemplateContentType.Unknown
   ];
+
+  idFormControl: FormControl;
 
   mailTemplate?: MailTemplate;
 
+  nameFormControl: FormControl;
+
   newMailTemplateForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private mailService: MailService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  templateFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private mailService: MailService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.contentTypeFormControl = new FormControl('', [Validators.required]);
+    this.idFormControl = new FormControl(uuid(), [Validators.required]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.templateFormControl =
+      new FormControl('', [Validators.required, FileValidator.minSize(1), FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)]);
 
     // Initialise the form
     this.newMailTemplateForm = new FormGroup({
-      contentType: new FormControl('', [Validators.required]),
-      id: new FormControl(uuid(), [Validators.required]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      template: new FormControl('', [Validators.required, FileValidator.minSize(1),
-        FileValidator.maxSize(ReportingService.MAX_TEMPLATE_SIZE)])
-    })
+      contentType: this.contentTypeFormControl,
+      id: this.idFormControl,
+      name: this.nameFormControl,
+      template: this.templateFormControl
+    });
   }
 
   get backNavigation(): BackNavigation {
@@ -83,7 +94,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
     return this.i18n({
       id: '@@mail_new_mail_template_component_title',
       value: 'New Mail Template'
-    })
+    });
   }
 
   cancel(): void {
@@ -98,25 +109,23 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
   ok(): void {
     if (this.mailTemplate && this.newMailTemplateForm.valid) {
 
-      let fileReader: FileReader = new FileReader();
+      const fileReader: FileReader = new FileReader();
 
       fileReader.onloadend = (ev: ProgressEvent) => {
-        let template = fileReader.result;
+        const template = fileReader.result;
 
-        if (template instanceof ArrayBuffer) {
+        if (this.mailTemplate && (template instanceof ArrayBuffer)) {
 
-          let base64: string = Base64.encode(template as ArrayBuffer);
+          const base64: string = Base64.encode(template as ArrayBuffer);
 
-          this.mailTemplate!.id = this.newMailTemplateForm.get('id')!.value;
-          this.mailTemplate!.name = this.newMailTemplateForm.get('name')!.value;
-          this.mailTemplate!.contentType = this.newMailTemplateForm.get('contentType')!.value;
-          this.mailTemplate!.template = base64;
-
-          console.log(this.mailTemplate!);
+          this.mailTemplate.id = this.idFormControl.value;
+          this.mailTemplate.name = this.nameFormControl.value;
+          this.mailTemplate.contentType = this.contentTypeFormControl.value;
+          this.mailTemplate.template = base64;
 
           this.spinnerService.showSpinner();
 
-          this.mailService.createMailTemplate(this.mailTemplate!)
+          this.mailService.createMailTemplate(this.mailTemplate)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               // noinspection JSIgnoredPromiseFromCall
@@ -136,7 +145,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
         }
       };
 
-      fileReader.readAsArrayBuffer(this.newMailTemplateForm.get('template')!.value[0]);
+      fileReader.readAsArrayBuffer(this.templateFormControl.value[0]);
     }
   }
 }

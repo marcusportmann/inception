@@ -19,7 +19,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-import {InceptionModule} from '../../../inception/inception.module';
+import {InceptionModule} from '../../inception.module';
 // Import Angular classes
 import {RouterModule, Routes} from '@angular/router';
 // Import Inception components
@@ -120,20 +120,26 @@ const routes: Routes = [{
         resolve: {
           title: EditCodeTitleResolver
         }
-      }]
-    }]
-  }]
-}];
+      }
+      ]
+    }
+    ]
+  }
+  ]
+}
+];
 
 @NgModule({
   imports: [CommonModule, FormsModule, InceptionModule,
 
     RouterModule.forChild(routes)
   ],
-  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent,
-    EditCodeComponent, NewCodeCategoryComponent, NewCodeComponent
+  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent, NewCodeCategoryComponent,
+    NewCodeComponent
   ],
-  providers: [CodeCategoriesTitleResolver, CodeCategoryTitleResolver, CodesTitleResolver, CodeTitleResolver, EditCodeCategoryTitleResolver, EditCodeTitleResolver, NewCodeCategoryTitleResolver, NewCodeTitleResolver]
+  providers: [CodeCategoriesTitleResolver, CodeCategoryTitleResolver, CodesTitleResolver, CodeTitleResolver, EditCodeCategoryTitleResolver,
+    EditCodeTitleResolver, NewCodeCategoryTitleResolver, NewCodeTitleResolver
+  ]
 })
 export class CodesModule {
 }

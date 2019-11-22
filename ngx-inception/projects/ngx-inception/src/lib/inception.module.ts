@@ -23,20 +23,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 // Import Inception modules
-import {DirectivesModule} from "./directives/directives.module";
+import {DirectivesModule} from './directives/directives.module';
 // Import Inception controls
-import {
-  CheckboxFormFieldComponent, FileUploadComponent,
-  RadioGroupFormFieldComponent,
-  TableFilterComponent
-} from "./components/controls";
+import {CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent} from './components/controls';
 // Import Inception dialogs
-import {
-  ConfirmationDialogComponent,
-  ErrorDialogComponent,
-  InformationDialogComponent,
-  WarningDialogComponent
-} from "./components/dialogs";
+import {ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent} from './components/dialogs';
 // Import Inception layout components
 import {
   AdminContainerComponent,
@@ -57,69 +48,68 @@ import {
   TitleBarComponent
 } from './components/layout';
 // Import Inception interceptors
-import {SessionInterceptor} from "./services/session/session.interceptor";
+import {SessionInterceptor} from './services/session/session.interceptor';
 // Import Inception services
-import {BreadcrumbsService} from "./services/layout/breadcrumbs.service";
-import {CodesService} from "./services/codes/codes.service";
-import {ConfigurationService} from "./services/configuration/configuration.service";
-import {DialogService} from "./services/dialog/dialog.service";
+import {BreadcrumbsService} from './services/layout/breadcrumbs.service';
+import {CodesService} from './services/codes/codes.service';
+import {ConfigurationService} from './services/configuration/configuration.service';
+import {DialogService} from './services/dialog/dialog.service';
 import {ErrorService} from './services/error/error.service';
-import {SpinnerService} from './services/layout/spinner.service'
+import {SpinnerService} from './services/layout/spinner.service';
 import {TitleBarService} from './services/layout/title-bar.service';
-import {NavigationService} from "./services/navigation/navigation.service";
+import {NavigationService} from './services/navigation/navigation.service';
 import {SecurityService} from './services/security/security.service';
 import {SessionService} from './services/session/session.service';
 // Import Inception miscellaneous
-import {CanActivateFunctionGuard} from "./routing/can-activate-function-guard";
-import {setInceptionInjector} from "./inception-injector";
+import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
+import {setInceptionInjector} from './inception-injector';
 // Import 3rd party modules
 // Import perfect scrollbar dependencies
-import {
-  PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule
-} from 'ngx-perfect-scrollbar';
+import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 // Import Material modules
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {MatButtonModule} from "@angular/material/button";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {MatCardModule} from "@angular/material/card";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from "@angular/material/core";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatExpansionModule} from "@angular/material/expansion";
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from "@angular/material/form-field";
-import {MatGridListModule} from "@angular/material/grid-list";
-import {MatIconModule} from "@angular/material/icon";
-import {MatInputModule} from "@angular/material/input";
-import {MatListModule} from "@angular/material/list";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {MatRadioModule} from "@angular/material/radio";
-import {MatSelectModule} from "@angular/material/select";
-import {MatSliderModule} from "@angular/material/slider";
-import {MatSortModule} from "@angular/material/sort";
-import {MatTableModule} from "@angular/material/table";
-import {MatTabsModule} from "@angular/material/tabs";
-import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 // Import Material miscellaneous
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from "@angular/material-moment-adapter";
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DisabledFunctionGuard} from './routing/disabled-function-guard';
-import {SchedulerService} from "./services/scheduler/scheduler.service";
-import {ReportingService} from "./services/reporting/reporting.service";
-import {MailService} from "./services/mail/mail.service";
-import {SchedulerModule} from "./views/scheduler/scheduler.module";
+import {SchedulerService} from './services/scheduler/scheduler.service';
+import {ReportingService} from './services/reporting/reporting.service';
+import {MailService} from './services/mail/mail.service';
 import {InceptionConfig} from './inception-config';
-
 
 
 /**
  * The injection token for the InceptionConfig.
  */
-export declare const INCEPTION_CONFIG: InjectionToken<InceptionConfig>;
+export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>('INCEPTION_CONFIG');
 
 
+const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -149,11 +139,10 @@ export const INCEPTION_DATE_FORMATS = {
     PerfectScrollbarModule,
 
     // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
-    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
-    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
+    MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule, MatTableModule,
+    MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
     DirectivesModule
@@ -166,11 +155,10 @@ export const INCEPTION_DATE_FORMATS = {
     PerfectScrollbarModule,
 
     // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
-    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
-    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
-    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule,
+    MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule,
+    MatPaginatorModule, MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule, MatTableModule,
+    MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
     DirectivesModule,
@@ -185,17 +173,15 @@ export const INCEPTION_DATE_FORMATS = {
     CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,
 
     // Inception layout components
-    BreadcrumbsComponent, AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent,
-    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
-    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
-    SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
-    SpinnerComponent, TitleBarComponent,
+    BreadcrumbsComponent, AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, NotFoundComponent, SidebarComponent,
+    SidebarFooterComponent, SidebarFormComponent, SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent, SpinnerComponent, TitleBarComponent,
 
     // Inception dialogs
-    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
-    WarningDialogComponent
+    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
   ],
-  entryComponents: [SpinnerComponent, ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent],
+  entryComponents: [SpinnerComponent, ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
+  ],
   bootstrap: [AdminContainerComponent, SimpleContainerComponent
   ]
 })
@@ -206,19 +192,20 @@ export class InceptionModule {
     setInceptionInjector(injector);
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(config: InceptionConfig): ModuleWithProviders {
     return {
       ngModule: InceptionModule,
       providers: [{
         provide: LocationStrategy,
         useClass: HashLocationStrategy,
+      }, {
+        provide: INCEPTION_CONFIG,
+        useValue: config
+      }, {
+        provide: HTTP_INTERCEPTORS,
+        useClass: SessionInterceptor,
+        multi: true
       },
-
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: SessionInterceptor,
-          multi: true
-        },
 
         {
           provide: PERFECT_SCROLLBAR_CONFIG,
@@ -248,11 +235,10 @@ export class InceptionModule {
 
         CanActivateFunctionGuard, DisabledFunctionGuard,
 
-        BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService,
-        MailService, NavigationService, ReportingService, SchedulerService, SecurityService,
-        ReportingService, SessionService, SpinnerService, TitleBarService
+        BreadcrumbsService, CodesService, ConfigurationService, DialogService, ErrorService, MailService, NavigationService,
+        ReportingService, SchedulerService, SecurityService, ReportingService, SessionService, SpinnerService, TitleBarService
       ]
-    }
+    };
   }
 }
 

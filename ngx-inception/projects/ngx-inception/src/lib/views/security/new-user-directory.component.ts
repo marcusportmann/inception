@@ -62,7 +62,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
   userDirectoryTypes: UserDirectoryType[] = [];
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
-              private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
+              private activatedRoute: ActivatedRoute,
               private i18n: I18n, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
@@ -91,7 +91,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     return this.i18n({
       id: '@@security_new_user_directory_component_title',
       value: 'New User Directory'
-    })
+    });
   }
 
   cancel(): void {

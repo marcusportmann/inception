@@ -15,11 +15,9 @@
  */
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {CodesService} from "../../services/codes/codes.service";
-import {first, map} from "rxjs/operators";
-import {CodeCategory} from "../../services/codes/code-category";
+import {CodesService} from '../../services/codes/codes.service';
 
 /**
  * The CodeCategoryTitleResolver class provides the route data resolver that resolves the
@@ -44,9 +42,15 @@ export class CodeCategoryTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.codesService.getCodeCategoryName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('codeCategoryId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let codeCategoryId = activatedRouteSnapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    codeCategoryId = decodeURIComponent(codeCategoryId);
+
+    return this.codesService.getCodeCategoryName(codeCategoryId);
   }
 }

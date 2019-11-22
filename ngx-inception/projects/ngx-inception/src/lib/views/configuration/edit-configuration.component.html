@@ -14,8 +14,8 @@
           <mat-form-field>
             <mat-label i18n="@@configuration_edit_configuration_component_label_value">Value</mat-label>
             <input type="text" matInput formControlName="value">
-            <mat-error *ngIf="editConfigurationForm.get('value').errors && !editConfigurationForm.get('value').untouched">
-              <span *ngIf="editConfigurationForm.get('value').errors?.maxlength" i18n="@@configuration_edit_configuration_component_error_value_maxlength">Value must not exceed 4000 characters.</span>
+            <mat-error *ngIf="valueFormControl.errors && !valueFormControl.untouched">
+              <span *ngIf="valueFormControl.errors?.maxlength" i18n="@@configuration_edit_configuration_component_error_value_maxlength">Value must not exceed 4000 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -25,6 +25,9 @@
           <mat-form-field>
             <mat-label i18n="@@configuration_edit_configuration_component_label_description">Description</mat-label>
             <textarea matInput formControlName="description" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="4" cdkAutosizeMaxRows="4"></textarea>
+            <mat-error *ngIf="descriptionFormControl.errors && !descriptionFormControl.untouched">
+              <span *ngIf="descriptionFormControl.errors?.maxlength" i18n="@@configuration_edit_configuration_component_error_description_maxlength">Value must not exceed 100 characters.</span>
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,19 +43,29 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
 
   configuration?: Configuration;
 
+  descriptionFormControl: FormControl;
+
+  keyFormControl: FormControl;
+
   newConfigurationForm: FormGroup;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
-              private configurationService: ConfigurationService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  valueFormControl: FormControl;
+
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
+              private configurationService: ConfigurationService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.descriptionFormControl = new FormControl('', [Validators.maxLength(100)]);
+    this.keyFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.valueFormControl = new FormControl('', [Validators.maxLength(4000)]);
 
     // Initialise the form
     this.newConfigurationForm = new FormGroup({
-      description: new FormControl('', [Validators.maxLength(4000)]),
-      key: new FormControl('', [Validators.required, Validators.maxLength(4000)]),
-      value: new FormControl('', [Validators.maxLength(4000)])
+      description: this.descriptionFormControl,
+      key: this.keyFormControl,
+      value: this.valueFormControl
     });
   }
 
@@ -70,7 +80,7 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
     return this.i18n({
       id: '@@configuration_new_configuration_component_title',
       value: 'New Configuration'
-    })
+    });
   }
 
   cancel(): void {
@@ -84,9 +94,9 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
 
   ok(): void {
     if (this.configuration && this.newConfigurationForm.valid) {
-      this.configuration.description = this.newConfigurationForm.get('description')!.value;
-      this.configuration.key = this.newConfigurationForm.get('key')!.value;
-      this.configuration.value = this.newConfigurationForm.get('value')!.value;
+      this.configuration.description = this.descriptionFormControl.value;
+      this.configuration.key = this.keyFormControl.value;
+      this.configuration.value = this.valueFormControl.value;
 
       this.spinnerService.showSpinner();
 

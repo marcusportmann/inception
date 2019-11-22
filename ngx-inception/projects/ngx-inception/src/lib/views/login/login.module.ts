@@ -25,14 +25,14 @@ import {InceptionModule} from '../../inception.module';
 // Import Inception components
 import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
-import {ExpiredPasswordComponent} from "./expired-password.component";
-import {ForgottenPasswordComponent} from "./forgotten-password.component";
-import {ResetPasswordComponent} from "./reset-password.component";
-import {ExpiredPasswordTitleResolver} from "./expired-password-title-resolver";
-import {ForgottenPasswordTitleResolver} from "./forgotten-password-title-resolver";
-import {LoginTitleResolver} from "./login-title-resolver";
-import {ResetPasswordTitleResolver} from "./reset-password-title-resolver";
-import {SelectOrganizationTitleResolver} from "./select-organization-title-resolver";
+import {ExpiredPasswordComponent} from './expired-password.component';
+import {ForgottenPasswordComponent} from './forgotten-password.component';
+import {ResetPasswordComponent} from './reset-password.component';
+import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
+import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';
+import {LoginTitleResolver} from './login-title-resolver';
+import {ResetPasswordTitleResolver} from './reset-password-title-resolver';
+import {SelectOrganizationTitleResolver} from './select-organization-title-resolver';
 
 const routes: Routes = [{
   path: '',
@@ -76,11 +76,10 @@ const routes: Routes = [{
     RouterModule.forChild(routes)
   ],
   exports: [CommonModule, FormsModule, ReactiveFormsModule],
-  declarations: [ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent,
-    ResetPasswordComponent, SelectOrganizationComponent
+  declarations: [ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent, ResetPasswordComponent, SelectOrganizationComponent
   ],
-  providers: [ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver,
-    ResetPasswordTitleResolver, SelectOrganizationTitleResolver
+  providers: [ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver, ResetPasswordTitleResolver,
+    SelectOrganizationTitleResolver
   ]
 })
 export class LoginModule {

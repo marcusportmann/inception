@@ -48,12 +48,11 @@ import {UserDirectoryCapabilities} from "../../services/security/user-directory-
  */
 @Component({
   templateUrl: 'groups.component.html',
-  styleUrls: ['groups.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['groups.component.css']
 })
 export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   private subscriptions: Subscription = new Subscription();
 
@@ -61,9 +60,9 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
   @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
@@ -76,7 +75,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect?: MatSelect;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private sessionService: SessionService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
@@ -100,7 +99,7 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     return this.i18n({
       id: '@@security_groups_component_title',
       value: 'Groups'
-    })
+    });
   }
 
   // noinspection JSUnusedLocalSymbols

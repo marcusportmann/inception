@@ -85,7 +85,7 @@ export class SessionService {
 
     return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
       .pipe(flatMap((tokenResponse: TokenResponse) => {
-        this.session$.next(this.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
+        this.session$.next(SessionService.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
 
         return this.session$;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
@@ -162,7 +162,7 @@ export class SessionService {
 
             return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
               .pipe(map((tokenResponse: TokenResponse) => {
-                const refreshedSession: Session = this.createSessionFromAccessToken(tokenResponse.access_token,
+                const refreshedSession: Session = SessionService.createSessionFromAccessToken(tokenResponse.access_token,
                   currentSession.refreshToken);
 
                 refreshedSession.organization = selectedOrganization;

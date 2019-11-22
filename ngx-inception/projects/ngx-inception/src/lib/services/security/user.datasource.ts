@@ -18,7 +18,6 @@ import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
-
 import {first} from 'rxjs/operators';
 import {User} from './user';
 import {Users} from './users';
@@ -73,12 +72,11 @@ export class UserDatasource implements DataSource<User> {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  load(userDirectoryId: string, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection,
-       pageIndex?: number, pageSize?: number): void {
+  load(userDirectoryId: string, filter?: string, sortBy?: UserSortBy, sortDirection?: SortDirection, pageIndex?: number,
+       pageSize?: number): void {
     this.loadingSubject$.next(true);
 
-    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
-      pageSize)
+    this.securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize)
       .pipe(first())
       .subscribe((users: Users) => {
         this.loadingSubject$.next(false);

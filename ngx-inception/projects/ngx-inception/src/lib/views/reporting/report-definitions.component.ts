@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -29,9 +29,9 @@ import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
-import {ReportDefinitionSummary} from "../../services/reporting/report-definition-summary";
-import {ReportingService} from "../../services/reporting/reporting.service";
-import {ReportingServiceError} from "../../services/reporting/reporting.service.errors";
+import {ReportDefinitionSummary} from '../../services/reporting/report-definition-summary';
+import {ReportingService} from '../../services/reporting/reporting.service';
+import {ReportingServiceError} from '../../services/reporting/reporting.service.errors';
 
 /**
  * The ReportDefinitionsComponent class implements the Report Definitions component.
@@ -40,20 +40,19 @@ import {ReportingServiceError} from "../../services/reporting/reporting.service.
  */
 @Component({
   templateUrl: 'report-definitions.component.html',
-  styleUrls: ['report-definitions.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['report-definitions.component.css']
 })
 export class ReportDefinitionsComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   dataSource: MatTableDataSource<ReportDefinitionSummary> = new MatTableDataSource<ReportDefinitionSummary>();
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private reportingService: ReportingService, private dialogService: DialogService,
@@ -69,7 +68,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
     return this.i18n({
       id: '@@reporting_report_definitions_component_title',
       value: 'Report Definitions'
-    })
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -142,8 +141,8 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.loadReportDefinitions();
   }

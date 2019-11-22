@@ -48,14 +48,13 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
   organizationId: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.organizationId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
+    // Initialise the form controls
+
 
     // Initialise the form
     this.editOrganizationForm = new FormGroup({
@@ -74,7 +73,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
     return this.i18n({
       id: '@@security_edit_organization_component_title',
       value: 'Edit Organization'
-    })
+    });
   }
 
   cancel(): void {
@@ -83,6 +82,11 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
+    // Retrieve the route parameters
+    this.organizationId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
+
+
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 

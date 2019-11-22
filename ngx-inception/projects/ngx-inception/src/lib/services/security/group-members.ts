@@ -77,9 +77,8 @@ export class GroupMembers {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  constructor(userDirectoryId: string, groupName: string, groupMembers: GroupMember[],
-              total: number, filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-              pageSize?: number) {
+  constructor(userDirectoryId: string, groupName: string, groupMembers: GroupMember[], total: number, filter?: string,
+              sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.groupMembers = groupMembers;

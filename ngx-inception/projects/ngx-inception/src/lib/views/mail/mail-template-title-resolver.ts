@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {MailService} from "../../services/mail/mail.service";
+import {MailService} from '../../services/mail/mail.service';
 
 /**
  * The MailTemplateTitleResolver class provides the route data resolver that resolves the
@@ -42,9 +42,15 @@ export class MailTemplateTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return this.mailService.getMailTemplateName(
-      decodeURIComponent(activatedRouteSnapshot.paramMap.get('mailTemplateId')!));
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+    let mailTemplateId = activatedRouteSnapshot.paramMap.get('mailTemplateId');
+
+    if (!mailTemplateId) {
+      throw(new Error('No mailTemplateId route parameter found'));
+    }
+
+    mailTemplateId = decodeURIComponent(mailTemplateId);
+
+    return this.mailService.getMailTemplateName(mailTemplateId);
   }
 }

@@ -6,8 +6,8 @@
           <mat-form-field>
             <mat-label i18n="@@scheduler_new_job_component_label_id">ID</mat-label>
             <input type="text" matInput formControlName="id" required="true" autofocus>
-            <mat-error *ngIf="newJobForm.get('id').errors && !newJobForm.get('id').untouched">
-              <span *ngIf="newJobForm.get('id').errors?.required" i18n="@@scheduler_new_job_component_error_id_required">An ID is required.</span>
+            <mat-error *ngIf="idFormControl.errors && !idFormControl.untouched">
+              <span *ngIf="idFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_id_required">An ID is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -17,9 +17,9 @@
           <mat-form-field>
             <mat-label i18n="@@scheduler_new_job_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true">
-            <mat-error *ngIf="newJobForm.get('name').errors && !newJobForm.get('name').untouched">
-              <span *ngIf="newJobForm.get('name').errors?.required" i18n="@@scheduler_new_job_component_error_name_required">A name is required.</span>
-              <span *ngIf="newJobForm.get('name').errors?.maxlength" i18n="@@scheduler_new_job_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            <mat-error *ngIf="nameFormControl.errors && !nameFormControl.untouched">
+              <span *ngIf="nameFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_name_required">A name is required.</span>
+              <span *ngIf="nameFormControl.errors?.maxlength" i18n="@@scheduler_new_job_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -29,9 +29,9 @@
           <mat-form-field>
             <mat-label i18n="@@scheduler_new_job_component_label_job_class">Job Class</mat-label>
             <input type="text" matInput formControlName="jobClass" required="true">
-            <mat-error *ngIf="newJobForm.get('jobClass').errors && !newJobForm.get('jobClass').untouched">
-              <span *ngIf="newJobForm.get('jobClass').errors?.required" i18n="@@scheduler_new_job_component_error_job_class_required">A job class is required.</span>
-              <span *ngIf="newJobForm.get('jobClass').errors?.maxlength" i18n="@@scheduler_new_job_component_error_job_class_maxlength">Job class must not exceed 1000 characters.</span>
+            <mat-error *ngIf="jobClassFormControl.errors && !jobClassFormControl.untouched">
+              <span *ngIf="jobClassFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_job_class_required">A job class is required.</span>
+              <span *ngIf="jobClassFormControl.errors?.maxlength" i18n="@@scheduler_new_job_component_error_job_class_maxlength">Job class must not exceed 1000 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -41,10 +41,10 @@
           <mat-form-field>
             <mat-label i18n="@@scheduler_new_job_component_label_scheduling_pattern">Scheduling Pattern</mat-label>
             <input type="text" matInput formControlName="schedulingPattern" required="true">
-            <mat-error *ngIf="newJobForm.get('schedulingPattern').errors && !newJobForm.get('schedulingPattern').untouched">
-              <span *ngIf="newJobForm.get('schedulingPattern').errors?.required" i18n="@@scheduler_new_job_component_error_scheduling_pattern_required">A scheduling pattern is required.</span>
-              <span *ngIf="newJobForm.get('schedulingPattern').errors?.maxlength" i18n="@@scheduler_new_job_component_error_scheduling_pattern_maxlength">Scheduling pattern must not exceed 100 characters.</span>
-              <span *ngIf="newJobForm.get('schedulingPattern').errors?.pattern" i18n="@@scheduler_new_job_component_error_scheduling_pattern_pattern">A valid cron statement is required.</span>
+            <mat-error *ngIf="schedulingPatternFormControl.errors && !schedulingPatternFormControl.untouched">
+              <span *ngIf="schedulingPatternFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_scheduling_pattern_required">A scheduling pattern is required.</span>
+              <span *ngIf="schedulingPatternFormControl.errors?.maxlength" i18n="@@scheduler_new_job_component_error_scheduling_pattern_maxlength">Scheduling pattern must not exceed 100 characters.</span>
+              <span *ngIf="schedulingPatternFormControl.errors?.pattern" i18n="@@scheduler_new_job_component_error_scheduling_pattern_pattern">A valid cron statement is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -57,8 +57,8 @@
               <mat-option [value]="true" i18n="@@scheduler_new_job_component_enabled_yes">Yes</mat-option>
               <mat-option [value]="false" i18n="@@scheduler_new_job_component_enabled_no">No</mat-option>
             </mat-select>
-            <mat-error *ngIf="newJobForm.controls['enabled'].errors && !newJobForm.controls['enabled'].untouched">
-              <span *ngIf="newJobForm.controls['enabled'].errors?.required" i18n="@@scheduler_new_job_component_error_enabled_required">Select whether the job is enabled.</span>
+            <mat-error *ngIf="enabledFormControl.errors && !enabledFormControl.untouched">
+              <span *ngIf="enabledFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_enabled_required">Select whether the job is enabled.</span>
             </mat-error>
           </mat-form-field>
         </div>
@@ -72,8 +72,8 @@
                 {{JobStatus[jobStatus]}}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="newJobForm.controls['status'].errors && !newJobForm.controls['status'].untouched">
-              <span *ngIf="newJobForm.controls['status'].errors?.required" i18n="@@scheduler_new_job_component_error_status_required">A status is required.</span>
+            <mat-error *ngIf="statusFormControl.errors && !statusFormControl.untouched">
+              <span *ngIf="statusFormControl.errors?.required" i18n="@@scheduler_new_job_component_error_status_required">A status is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

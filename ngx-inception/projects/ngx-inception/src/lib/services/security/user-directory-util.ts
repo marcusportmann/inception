@@ -90,8 +90,7 @@ export class UserDirectoryUtil {
    *
    * @return The parameter with the specified name or null if the parameter cannot be found.
    */
-  static setParameter(object: UserDirectory | UserDirectoryParameter[], name: string,
-                      value: string): void {
+  static setParameter(object: UserDirectory | UserDirectoryParameter[], name: string, value: string): void {
     if (object instanceof UserDirectory) {
       for (const userDirectoryParameter of object.parameters) {
         if (userDirectoryParameter.name === name) {

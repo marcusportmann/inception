@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -45,12 +45,11 @@ import {BackNavigation} from "../../components/layout/back-navigation";
  */
 @Component({
   templateUrl: 'group-members.component.html',
-  styleUrls: ['group-members.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['group-members.component.css']
 })
 export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   private subscriptions: Subscription = new Subscription();
 
@@ -58,9 +57,9 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   displayedColumns = ['memberName', 'memberType', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
   @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
 
@@ -95,7 +94,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     return this.i18n({
       id: '@@security_group_members_component_title',
       value: 'Group Members'
-    })
+    });
   }
 
   addMemberToGroup(): void {

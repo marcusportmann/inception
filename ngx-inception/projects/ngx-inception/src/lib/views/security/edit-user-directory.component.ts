@@ -63,14 +63,12 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   userDirectoryTypes: UserDirectoryType[] = [];
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
-              private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder,
+              private activatedRoute: ActivatedRoute,
               private i18n: I18n, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    // Initialise the form controls
 
     // Initialise the form
     this.editUserDirectoryForm = new FormGroup({
@@ -96,7 +94,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     return this.i18n({
       id: '@@security_edit_user_directory_component_title',
       value: 'Edit User Directory'
-    })
+    });
   }
 
   cancel(): void {
@@ -105,6 +103,11 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
+    // Retrieve the route parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+
+    // Retrieve the user directory types and the existing user directory
     this.spinnerService.showSpinner();
 
     combineLatest([this.securityService.getUserDirectoryTypes(),

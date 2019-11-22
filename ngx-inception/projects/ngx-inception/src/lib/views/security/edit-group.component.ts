@@ -54,15 +54,12 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   userDirectoryId: string;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private formBuilder: FormBuilder, private i18n: I18n,
+              private i18n: I18n,
               private securityService: SecurityService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
+    // Initialise the form controls
 
     // Initialise the form
     this.editGroupForm = new FormGroup({
@@ -88,7 +85,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
     return this.i18n({
       id: '@@security_edit_group_component_title',
       value: 'Edit Group'
-    })
+    });
   }
 
   cancel(): void {
@@ -100,6 +97,11 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   ngAfterViewInit(): void {
+    // Retrieve the route parameters
+    this.userDirectoryId =
+      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
+
     // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
 

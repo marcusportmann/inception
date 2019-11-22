@@ -71,8 +71,8 @@ export class Groups {
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
    */
-  constructor(userDirectoryId: string, groups: Group[], total: number, filter?: string,
-              sortDirection?: SortDirection, pageIndex?: number, pageSize?: number) {
+  constructor(userDirectoryId: string, groups: Group[], total: number, filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+              pageSize?: number) {
     this.userDirectoryId = userDirectoryId;
     this.groups = groups;
     this.total = total;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -29,10 +29,10 @@ import {ConfirmationDialogComponent} from '../../components/dialogs';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
-import {MailTemplateContentType} from "../../services/mail/mail-template-content-type";
-import {MailService} from "../../services/mail/mail.service";
-import {MailServiceError} from "../../services/mail/mail.service.errors";
-import {MailTemplateSummary} from "../../services/mail/mail-template-summary";
+import {MailTemplateContentType} from '../../services/mail/mail-template-content-type';
+import {MailService} from '../../services/mail/mail.service';
+import {MailServiceError} from '../../services/mail/mail.service.errors';
+import {MailTemplateSummary} from '../../services/mail/mail-template-summary';
 
 /**
  * The MailTemplatesComponent class implements the mail templates component.
@@ -41,12 +41,11 @@ import {MailTemplateSummary} from "../../services/mail/mail-template-summary";
  */
 @Component({
   templateUrl: 'mail-templates.component.html',
-  styleUrls: ['mail-templates.component.css'],
-  host: {
-    'class': 'flex flex-column flex-fill',
-  }
+  styleUrls: ['mail-templates.component.css']
 })
 export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
+
+  @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   MailTemplateContentType = MailTemplateContentType;
 
@@ -54,25 +53,23 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
 
   displayedColumns = ['name', 'contentType', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator?: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  @ViewChild(MatSort, {static: true}) sort?: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private mailService: MailService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private mailService: MailService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate =
-      (data, filter): boolean => data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
     return this.i18n({
       id: '@@mail_mail_templates_component_title',
       value: 'Mail Templates'
-    })
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -82,13 +79,12 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
   }
 
   deleteMailTemplate(mailTemplateId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@mail_mail_templates_component_confirm_delete_mail_template',
-          value: 'Are you sure you want to delete the mail template?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@mail_mail_templates_component_confirm_delete_mail_template',
+        value: 'Are you sure you want to delete the mail template?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -116,8 +112,7 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
 
   editMailTemplate(mailTemplateId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(mailTemplateId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(mailTemplateId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadMailTemplates(): void {
@@ -129,8 +124,7 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
         this.dataSource.data = mailTemplateSummaries;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof MailService) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof MailService) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -145,8 +139,8 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
     this.loadMailTemplates();
   }
