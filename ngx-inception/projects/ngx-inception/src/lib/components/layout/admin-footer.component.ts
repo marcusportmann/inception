@@ -50,7 +50,7 @@ export class AdminFooterComponent implements OnInit {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {
-        bodySelector.classList.add('admin-footer-fixed')
+        bodySelector.classList.add('admin-footer-fixed');
       }
     }
   }

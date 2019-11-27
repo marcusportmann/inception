@@ -30,7 +30,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {CodeCategorySummary} from './code-category-summary';
 import {AccessDeniedError} from '../../errors/access-denied-error';
 import {InceptionConfig} from '../../inception-config';
-import {INCEPTION_CONFIG} from '../../inception.module';
+import {INCEPTION_CONFIG} from '../../inception-config'
 
 /**
  * The Codes Service implementation.

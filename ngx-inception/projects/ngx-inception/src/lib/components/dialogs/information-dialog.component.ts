@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {Component, HostBinding, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogData} from './dialog-data';
 
 /**
@@ -54,8 +54,7 @@ export class InformationDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<InformationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  constructor(private dialogRef: MatDialogRef<InformationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
   ok(): void {

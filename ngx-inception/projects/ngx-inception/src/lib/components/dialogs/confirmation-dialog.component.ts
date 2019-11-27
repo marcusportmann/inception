@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {Component, HostBinding, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 /**
  * The ConfirmationDialogData interface defines the data that is displayed by a confirmation dialog.
@@ -63,8 +63,7 @@ export class ConfirmationDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData) {
+  constructor(private dialogRef: MatDialogRef<ConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: ConfirmationDialogData) {
   }
 
   get message(): string {

@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -29,8 +29,8 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
-import {Group} from "../../services/security/group";
-import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
+import {Group} from '../../services/security/group';
+import {UserDirectoryCapabilities} from '../../services/security/user-directory-capabilities';
 
 /**
  * The EditGroupComponent class implements the edit group component.
@@ -43,31 +43,52 @@ import {UserDirectoryCapabilities} from "../../services/security/user-directory-
 })
 export class EditGroupComponent extends AdminContainerView implements AfterViewInit {
 
+  descriptionFormControl: FormControl;
+
   editGroupForm: FormGroup;
 
   group?: Group;
 
   groupName: string;
 
+  nameFormControl: FormControl;
+
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
   userDirectoryId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
+
+    if (!groupName) {
+      throw(new Error('No groupName route parameter found'));
+    }
+
+    this.groupName = decodeURIComponent(groupName);
+
     // Initialise the form controls
+    this.descriptionFormControl = new FormControl('', [Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl({
+      value: '',
+      disabled: true
+    });
 
     // Initialise the form
     this.editGroupForm = new FormGroup({
-      description: new FormControl('', [Validators.maxLength(100)]),
-      name: new FormControl({
-        value: '',
-        disabled: true
-      })
+      description: this.descriptionFormControl,
+      name: this.nameFormControl
     });
   }
 
@@ -97,11 +118,6 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
-
     // Retrieve the existing group and initialise the form fields
     this.spinnerService.showSpinner();
 
@@ -114,12 +130,11 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
         this.group = results[1];
 
-        this.editGroupForm.get('description')!.setValue(results[1].description);
-        this.editGroupForm.get('name')!.setValue(results[1].name);
+        this.descriptionFormControl.setValue(results[1].description);
+        this.nameFormControl.setValue(results[1].name);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -130,7 +145,7 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
 
   ok(): void {
     if (this.group && this.editGroupForm.valid) {
-      this.group.description = this.editGroupForm.get('description')!.value;
+      this.group.description = this.descriptionFormControl.value;
 
       this.spinnerService.showSpinner();
 

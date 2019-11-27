@@ -63,7 +63,7 @@ export class BreadcrumbsComponent implements OnInit {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {
-        bodySelector.classList.add('breadcrumbs-fixed')
+        bodySelector.classList.add('breadcrumbs-fixed');
       }
     }
   }

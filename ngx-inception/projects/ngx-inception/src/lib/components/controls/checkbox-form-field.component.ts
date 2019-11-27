@@ -29,9 +29,11 @@ import {
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions } from '@angular/material/form-field';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS} from '@angular/material/core';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions
+} from '@angular/material/form-field';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {startWith} from 'rxjs/operators';
 import {Directionality} from '@angular/cdk/bidi';
@@ -83,7 +85,7 @@ export function getMatCheckboxMissingControlError(): Error {
     .mat-form-field.checkbox-form-field .mat-form-field-infix {
       padding-bottom: 0 !important;
     }
-    
+
     .mat-form-field.checkbox-form-field.mat-form-field-slim {
       border: 1px solid red !important;
     }
@@ -91,7 +93,7 @@ export function getMatCheckboxMissingControlError(): Error {
   ],
   animations: [matFormFieldAnimations.transitionMessages], // tslint:disable-next-line
   host: {
-    'class': 'mat-form-field checkbox-form-field',
+    class: 'mat-form-field checkbox-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
     '[class.mat-form-field-appearance-fill]': 'appearance == "fill"',
     '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
@@ -106,44 +108,18 @@ export function getMatCheckboxMissingControlError(): Error {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 }) // tslint:disable-next-line
-export class CheckboxFormFieldComponent extends MatFormField implements AfterContentInit,
-  AfterContentChecked, AfterViewInit, CanColor {
+export class CheckboxFormFieldComponent extends MatFormField implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
 
   /**
    * The checkboxes associated with the checkbox form field.
    */
   @ContentChildren(MatCheckbox) checkboxChildren?: QueryList<MatCheckbox>;
 
-  // constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-  //             labelOptions: LabelOptions, dir: Directionality, defaults: MatFormFieldDefaultOptions,
-  //             platform: Platform, ngZone: NgZone, animationMode: string) {
-
-
-
-  // constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-  //             @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
-  //             @Optional() directionality: Directionality, @Optional() @Inject(
-  //     MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-  //             platform?: Platform, zone?: NgZone,
-  //             @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode?: string) {
-  //   super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
-  //     platform, zone, animationMode);
-  //
-  //   if (labelOptions) {
-  //     this.floatLabel = labelOptions.float;
-  //   } else {
-  //     this.floatLabel = 'always';
-  //   }
-  // }
-
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
-              @Optional() directionality: Directionality, @Optional() @Inject(
-      MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              platform: Platform, zone: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode: string) {
-    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
-      platform, zone, animationMode);
+              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions, @Optional() directionality: Directionality,
+              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, platform: Platform,
+              zone: NgZone, @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode: string) {
+    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions, platform, zone, animationMode);
 
     if (labelOptions && labelOptions.float) {
       this.floatLabel = labelOptions.float;

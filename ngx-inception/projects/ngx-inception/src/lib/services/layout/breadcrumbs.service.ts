@@ -18,8 +18,10 @@ import {Injectable} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {ReplaySubject, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
-import * as format from 'string-template';
+import * as format_ from 'string-template';
 import {Breadcrumb} from './breadcrumb';
+
+const format = format_;
 
 /**
  * The Breadcrumbs Service implementation.

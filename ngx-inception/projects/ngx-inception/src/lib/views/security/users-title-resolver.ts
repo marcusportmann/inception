@@ -40,8 +40,7 @@ export class UsersTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
-    Observable<string> {
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
     let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {

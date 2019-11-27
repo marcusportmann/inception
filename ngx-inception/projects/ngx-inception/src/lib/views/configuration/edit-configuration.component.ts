@@ -47,6 +47,8 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
 
   editConfigurationForm: FormGroup;
 
+  key: string;
+
   keyFormControl: FormControl;
 
   valueFormControl: FormControl;
@@ -55,6 +57,15 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
               private configurationService: ConfigurationService, private dialogService: DialogService,
               private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const key = this.activatedRoute.snapshot.paramMap.get('key');
+
+    if (key == null) {
+      throw(new Error('No key route parameter found'));
+    }
+
+    this.key = decodeURIComponent(key);
 
     // Initialise the form controls
     this.descriptionFormControl = new FormControl('', [Validators.maxLength(100)]);
@@ -92,19 +103,10 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    let key = this.activatedRoute.snapshot.paramMap.get('key');
-
-    if (key == null) {
-      throw(new Error('No key route parameter found'));
-    }
-
-    key = decodeURIComponent(key);
-
     // Retrieve the existing configuration and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.configurationService.getConfiguration(key)
+    this.configurationService.getConfiguration(this.key)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((configuration: Configuration) => {
         this.configuration = configuration;

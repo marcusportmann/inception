@@ -117,8 +117,7 @@ export class AdminHeaderComponent implements OnInit {
    * @param router         The router.
    * @param sessionService The session service.
    */
-  constructor(private elementRef: ElementRef, private router: Router,
-              private sessionService: SessionService) {
+  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
   }
 
   // // tslint:disable-next-line
@@ -134,7 +133,7 @@ export class AdminHeaderComponent implements OnInit {
       const bodySelector = document.querySelector('body');
 
       if (bodySelector) {
-        bodySelector.classList.add('admin-header-fixed')
+        bodySelector.classList.add('admin-header-fixed');
       }
     }
   }

@@ -15,17 +15,7 @@
  */
 
 import {
-  Component,
-  DoCheck,
-  ElementRef,
-  HostBinding,
-  HostListener,
-  Input,
-  OnDestroy,
-  OnInit,
-  Optional,
-  Renderer2,
-  Self
+  Component, DoCheck, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit, Optional, Renderer2, Self
 } from '@angular/core';
 import {ControlValueAccessor, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material';
@@ -34,8 +24,9 @@ import {FocusMonitor} from '@angular/cdk/a11y';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
 
 
-import {FileUploadMixinBase} from "./file-upload-mixin";
+import {FileUploadMixinBase} from './file-upload-mixin';
 
+/* tslint:disable:variable-name */
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'file-upload',
@@ -47,6 +38,7 @@ import {FileUploadMixinBase} from "./file-upload-mixin";
     :host {
       display: inline-block;
     }
+
     :host:not(.file-input-disabled) {
       cursor: pointer;
     }
@@ -63,10 +55,16 @@ import {FileUploadMixinBase} from "./file-upload-mixin";
     .filename {
       display: inline-block;
     }
-  `],
-  providers: [{ provide: MatFormFieldControl, useExisting: FileUploadComponent }]
+  `
+  ],
+  providers: [{
+    provide: MatFormFieldControl,
+    useExisting: FileUploadComponent
+  }
+  ]
 })
-export class FileUploadComponent extends FileUploadMixinBase implements MatFormFieldControl<File[]>, ControlValueAccessor, OnInit, OnDestroy, DoCheck {
+export class FileUploadComponent extends FileUploadMixinBase implements MatFormFieldControl<File[]>, ControlValueAccessor, OnInit,
+  OnDestroy, DoCheck {
   static nextId = 0;
 
   focused = false;
@@ -76,8 +74,8 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
 
   private _required = false;
 
-  @Input() placeholder: string = '';
-  @Input() multiple: boolean = false;
+  @Input() placeholder = '';
+  @Input() multiple = false;
   @Input() accept: string | null = null;
   @Input() errorStateMatcher: ErrorStateMatcher;
 
@@ -87,17 +85,9 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
   /**
    * @see https://angular.io/api/forms/ControlValueAccessor
    */
-  constructor(
-    private fm: FocusMonitor,
-    private _elementRef: ElementRef,
-    private _renderer: Renderer2,
-    public _defaultErrorStateMatcher: ErrorStateMatcher,
-    @Optional()
-    @Self()
-    public ngControl: NgControl,
-    @Optional() public _parentForm: NgForm,
-    @Optional() public _parentFormGroup: FormGroupDirective,
-  ) {
+  constructor(private fm: FocusMonitor, private _elementRef: ElementRef, private _renderer: Renderer2,
+              public _defaultErrorStateMatcher: ErrorStateMatcher, @Optional() @Self() public ngControl: NgControl,
+              @Optional() public _parentForm: NgForm, @Optional() public _parentFormGroup: FormGroupDirective) {
     super(_defaultErrorStateMatcher, _parentForm, _parentFormGroup, ngControl);
 
     this.errorStateMatcher = _defaultErrorStateMatcher;
@@ -116,10 +106,10 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this.describedBy = ids.join(' ');
   }
 
-  @Input()
-  get value(): File[] | null {
+  @Input() get value(): File[] | null {
     return this.empty ? null : this._elementRef.nativeElement.value || [];
   }
+
   set value(files: File[] | null) {
     if (files) {
       this.writeValue(files);
@@ -134,28 +124,27 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     return !this._elementRef.nativeElement.value || this._elementRef.nativeElement.value.length === 0;
   }
 
-  @HostBinding('class.mat-form-field-should-float')
-  get shouldLabelFloat() {
+  @HostBinding('class.mat-form-field-should-float') get shouldLabelFloat() {
     return this.focused || !this.empty || this.placeholder !== undefined;
   }
 
-  @Input()
-  get required() {
+  @Input() get required() {
     return this._required;
   }
+
   set required(req: boolean) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
   }
 
-  @HostBinding('class.file-input-disabled')
-  get isDisabled() {
+  @HostBinding('class.file-input-disabled') get isDisabled() {
     return this.disabled;
   }
-  @Input()
-  get disabled(): boolean {
+
+  @Input() get disabled(): boolean {
     return this._elementRef.nativeElement.disabled;
   }
+
   set disabled(dis: boolean) {
     this.setDisabledState(coerceBooleanProperty(dis));
     this.stateChanges.next();
@@ -169,12 +158,14 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     }
   }
 
-  private _onChange = (_: any) => {};
-  private _onTouched = () => {};
+  private _onChange = (_: any) => {
+  };
+  private _onTouched = () => {
+  };
 
   get fileNames() {
     if (this.value) {
-     return this.value.map((f: File) => f.name).join(',');
+      return this.value.map((f: File) => f.name).join(',');
     } else {
       return this.placeholder;
     }
@@ -206,11 +197,11 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this._onChange(this.value);
   }
 
-  @HostListener('change', ['$event'])
-  change(event: Event) {
-    const fileList: FileList | null = (<HTMLInputElement>event.target).files;
+  @HostListener('change', ['$event']) change(event: Event) {
+    const fileList: FileList | null = (event.target as HTMLInputElement).files;
     const fileArray: File[] = [];
     if (fileList) {
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < fileList.length; i++) {
         fileArray.push(fileList[i]);
       }
@@ -219,8 +210,7 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this._onChange(this.value);
   }
 
-  @HostListener('focusout')
-  blur() {
+  @HostListener('focusout') blur() {
     this.focused = false;
     this._onTouched();
   }

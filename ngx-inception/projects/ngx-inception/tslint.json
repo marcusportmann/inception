@@ -12,6 +12,7 @@
       "element",
       "inception",
       "kebab-case"
-    ]
+    ],
+    "no-conditional-assignment": true
   }
 }

@@ -28,9 +28,11 @@ import {
   Optional,
   ViewEncapsulation
 } from '@angular/core';
-import { CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { MatRadioGroup } from '@angular/material/radio';
+import {CanColor, LabelOptions, MAT_LABEL_GLOBAL_OPTIONS} from '@angular/material/core';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormField, matFormFieldAnimations, MatFormFieldDefaultOptions
+} from '@angular/material/form-field';
+import {MatRadioGroup} from '@angular/material/radio';
 import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
 import {startWith} from 'rxjs/operators';
 import {Directionality} from '@angular/cdk/bidi';
@@ -56,7 +58,7 @@ export function getMatRadioGroupMissingControlError(): Error {
               <ng-content select="mat-label"></ng-content>
               <span class="mat-placeholder-required mat-form-field-required-marker"
                     aria-hidden="true"
-                    *ngIf="!hideRequiredMarker && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
+                    *ngIf="!hideRequiredMarker && radioGroup && radioGroup.required && !radioGroup.disabled">&nbsp;*</span>
               <!-- @deletion-target 8.0.0 remove \`mat-placeholder-required\` class -->
             </label>
           </span>
@@ -94,7 +96,7 @@ export function getMatRadioGroupMissingControlError(): Error {
   ],
   animations: [matFormFieldAnimations.transitionMessages], // tslint:disable-next-line
   host: {
-    'class': 'mat-form-field radio-group-form-field',
+    class: 'mat-form-field radio-group-form-field',
     '[class.mat-form-field-appearance-standard]': 'appearance == "standard"',
     '[class.mat-form-field-appearance-fill]': 'appearance == "fill"',
     '[class.mat-form-field-appearance-outline]': 'appearance == "outline"',
@@ -102,7 +104,7 @@ export function getMatRadioGroupMissingControlError(): Error {
     '[class.mat-form-field-invalid]': 'hasError',
     '[class.mat-form-field-can-float]': '_canLabelFloat',
     '[class.mat-form-field-should-float]': 'shouldLabelFloat',
-    '[class.mat-form-field-disabled]': 'radioGroup.disabled',
+    '[class.mat-form-field-disabled]': 'radioGroup && radioGroup.disabled',
     '[class.mat-accent]': 'color == "accent"',
     '[class.mat-warn]': 'color == "warn"',
     '[class._mat-animation-noopable]': '!_animationsEnabled'
@@ -111,8 +113,7 @@ export function getMatRadioGroupMissingControlError(): Error {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 }) // tslint:disable-next-line
-export class RadioGroupFormFieldComponent extends MatFormField implements AfterContentInit,
-  AfterContentChecked, AfterViewInit, CanColor {
+export class RadioGroupFormFieldComponent extends MatFormField implements AfterContentInit, AfterContentChecked, AfterViewInit, CanColor {
 
   /**
    * The radio group associated with the radio group form field.
@@ -120,13 +121,10 @@ export class RadioGroupFormFieldComponent extends MatFormField implements AfterC
   @ContentChild(MatRadioGroup, {static: false}) radioGroup?: MatRadioGroup;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
-              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions,
-              @Optional() directionality: Directionality, @Optional() @Inject(
-      MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, // @deletion-target 7.0.0 _platform, _ngZone and _animationMode to be made required.
-              platform: Platform, zone: NgZone,
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode: string) {
-    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions,
-      platform, zone, animationMode);
+              @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions, @Optional() directionality: Directionality,
+              @Optional() @Inject(MAT_FORM_FIELD_DEFAULT_OPTIONS) formFieldDefaultOptions: MatFormFieldDefaultOptions, platform: Platform,
+              zone: NgZone, @Optional() @Inject(ANIMATION_MODULE_TYPE) animationMode: string) {
+    super(elementRef, changeDetectorRef, labelOptions, directionality, formFieldDefaultOptions, platform, zone, animationMode);
 
     this.changeDetectorRef = changeDetectorRef;
 

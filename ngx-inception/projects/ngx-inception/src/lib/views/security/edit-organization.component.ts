@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,22 +43,31 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
 
   editOrganizationForm: FormGroup;
 
+  nameFormControl: FormControl;
+
   organization?: Organization;
 
   organizationId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Initialise the form controls
+    // Retrieve the route parameters
+    const organizationId = this.activatedRoute.snapshot.paramMap.get('organizationId');
 
+    if (!organizationId) {
+      throw(new Error('No organizationId route parameter found'));
+    }
+
+    this.organizationId = decodeURIComponent(organizationId);
+
+    // Initialise the form controls
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.editOrganizationForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      name: this.nameFormControl
     });
   }
 
@@ -82,11 +91,6 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    this.organizationId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
-
-
     // Retrieve the existing user and initialise the form fields
     this.spinnerService.showSpinner();
 
@@ -95,11 +99,10 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
       .subscribe((organization: Organization) => {
         this.organization = organization;
 
-        this.editOrganizationForm.get('name')!.setValue(organization.name);
+        this.nameFormControl.setValue(organization.name);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -110,7 +113,7 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
 
   ok(): void {
     if (this.organization && this.editOrganizationForm.valid) {
-      this.organization.name = this.editOrganizationForm.get('name')!.value;
+      this.organization.name = this.nameFormControl.value;
 
       this.spinnerService.showSpinner();
 

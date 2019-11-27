@@ -25,7 +25,7 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import {CommunicationError} from '../../errors/communication-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
-import {INCEPTION_CONFIG} from '../../inception.module';
+import {INCEPTION_CONFIG} from '../../inception-config';
 import {InceptionConfig} from '../../inception-config';
 
 /**

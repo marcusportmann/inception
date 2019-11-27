@@ -33,7 +33,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
 
   private subscriptions: Subscription = new Subscription();
 
-  @Input('hasAuthority') requiredAuthorities: string[] | undefined;
+  @Input('hasAuthority') requiredAuthorities: string[] = [];
 
   /**
    * Constructs a new HasAuthorityDirective.
@@ -46,13 +46,12 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, private sessionService: SessionService) {
   }
 
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
   ngOnInit(): void {
-    if (this.requiredAuthorities && (this.requiredAuthorities.length > 0)) {
+    if (this.requiredAuthorities.length > 0) {
       this.subscriptions.add(this.sessionService.session$.pipe(first()).subscribe((session: (Session | null)) => {
         if (session) {
           let foundAuthority = false;

@@ -15,7 +15,7 @@
  */
 
 import {Component, HostBinding, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Error} from '../../errors/error';
 
 /**
@@ -63,8 +63,7 @@ export class ErrorDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<ErrorDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
+  constructor(private dialogRef: MatDialogRef<ErrorDialogComponent>, @Inject(MAT_DIALOG_DATA) private data: ErrorDialogData) {
   }
 
   get message(): string {

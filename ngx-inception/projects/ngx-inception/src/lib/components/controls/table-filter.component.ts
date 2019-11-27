@@ -15,12 +15,7 @@
  */
 
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnDestroy, OnInit,
-  Output,
-  ViewChild
+  Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild
 } from '@angular/core';
 import {fromEvent, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
@@ -29,7 +24,6 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
   // tslint:disable-next-line
   selector: 'table-filter',
   template: `
-
     <div class="table-filter-container">
       <div class="table-filter-icon">
         <i class="fa fa-search"></i>
@@ -91,7 +85,7 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
   filter = '';
 
-  @ViewChild('tableFilterInput', { static: true }) tableFilterInput?: ElementRef;
+  @ViewChild('tableFilterInput', {static: true}) tableFilterInput?: ElementRef;
 
   ngOnDestroy(): void {
     if (this.tableFilterInputSubscription) {
@@ -102,16 +96,12 @@ export class TableFilterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.tableFilterInput) {
       this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
-        .pipe(
-          debounceTime(250),
-          distinctUntilChanged(),
-          tap(() => {
-            if (this.tableFilterInput) {
-              this.filter = this.tableFilterInput.nativeElement.value;
-              this.changed.emit(this.filter);
-            }
-          })
-        )
+        .pipe(debounceTime(250), distinctUntilChanged(), tap(() => {
+          if (this.tableFilterInput) {
+            this.filter = this.tableFilterInput.nativeElement.value;
+            this.changed.emit(this.filter);
+          }
+        }))
         .subscribe();
     }
   }

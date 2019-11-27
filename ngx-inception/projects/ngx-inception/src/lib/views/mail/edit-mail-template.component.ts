@@ -58,6 +58,8 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
   mailTemplate?: MailTemplate;
 
+  mailTemplateId: string;
+
   nameFormControl: FormControl;
 
   templateFormControl: FormControl;
@@ -65,6 +67,15 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private mailService: MailService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const mailTemplateId = this.activatedRoute.snapshot.paramMap.get('mailTemplateId');
+
+    if (!mailTemplateId) {
+      throw(new Error('No mailTemplateId route parameter found'));
+    }
+
+    this.mailTemplateId = decodeURIComponent(mailTemplateId);
 
     // Initialise the form controls
     this.contentTypeFormControl = new FormControl('', [Validators.required]);
@@ -106,19 +117,10 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    let mailTemplateId = this.activatedRoute.snapshot.paramMap.get('mailTemplateId');
-
-    if (!mailTemplateId) {
-      throw(new Error('No mailTemplateId route parameter found'));
-    }
-
-    mailTemplateId = decodeURIComponent(mailTemplateId);
-
     // Retrieve the existing mail template and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.mailService.getMailTemplate(mailTemplateId)
+    this.mailService.getMailTemplate(this.mailTemplateId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((mailTemplate: MailTemplate) => {
         this.mailTemplate = mailTemplate;

@@ -27,6 +27,7 @@ import {Router} from '@angular/router';
   // tslint:disable-next-line
   selector: 'sidebar-nav-item',
   template: `
+    <ng-template *ngIf="this.navItem">
     <ng-container *ngIf="isDivider(); else checkForTitle">
       <li class="nav-divider"></li>
     </ng-container>
@@ -37,7 +38,7 @@ import {Router} from '@angular/router';
     </ng-template>
     <ng-template #checkForDropdown>
       <ng-container *ngIf="isDropdown(); else sidebarNavLink">
-        <li [ngClass]="hasClass() ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
+        <li [ngClass]="!!this.navItem.cssClass ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
             [class.open]="isActive()"
             routerLinkActive="open"
             sidebarNavDropdown>
@@ -46,24 +47,29 @@ import {Router} from '@angular/router';
       </ng-container>
     </ng-template>
     <ng-template #sidebarNavLink>
-      <li [ngClass]="hasClass() ? 'nav-item ' + navItem.cssClass : 'nav-item'">
+      <li [ngClass]="!!this.navItem.cssClass ? 'nav-item ' + navItem.cssClass : 'nav-item'">
         <a *ngIf="!isExternalLink(); else externalLink"
-           [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'"
+           [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem.variant : 'nav-link'"
            routerLinkActive="active"
            [routerLink]="[navItem.url]"
            (click)="hideMobile()">
-          <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
+          <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem.icon }}"></i>
           {{ navItem.name }}
-          <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
+          <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+            {{ navItem.badge.text }}
+          </span>
         </a>
         <ng-template #externalLink>
-          <a [ngClass]="hasVariant() ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
-            <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
+          <a [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
+            <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem.icon }}"></i>
             {{ navItem.name }}
-            <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
+            <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+              {{ navItem.badge.text }}
+            </span>
           </a>
         </ng-template>
       </li>
+    </ng-template>
     </ng-template>
   `
 })
@@ -78,22 +84,6 @@ export class SidebarNavItemComponent {
    * @param router     The router.
    */
   constructor(private elementRef: ElementRef, private router: Router) {
-  }
-
-  hasBadge(): boolean {
-    return !!this.navItem && !!this.navItem.badge;
-  }
-
-  hasClass(): boolean {
-    return !!this.navItem && !!this.navItem.cssClass;
-  }
-
-  hasIcon(): boolean {
-    return !!this.navItem && !!this.navItem.icon;
-  }
-
-  hasVariant(): boolean {
-    return !!this.navItem && !!this.navItem.variant;
   }
 
   hideMobile() {

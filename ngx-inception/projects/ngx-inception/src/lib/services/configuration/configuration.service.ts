@@ -25,7 +25,7 @@ import {CommunicationError} from '../../errors/communication-error';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ConfigurationNotFoundError, ConfigurationServiceError} from './configuration.service.errors';
 import {Configuration} from './configuration';
-import {INCEPTION_CONFIG} from '../../inception.module';
+import {INCEPTION_CONFIG} from '../../inception-config'
 import {InceptionConfig} from '../../inception-config';
 
 /**

@@ -15,7 +15,7 @@
  */
 
 import {Component, HostBinding, Inject} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogData} from './dialog-data';
 
 /**
@@ -54,8 +54,7 @@ export class WarningDialogComponent {
    * @param dialogRef The dialog reference.
    * @param data      The dialog data.
    */
-  constructor(private dialogRef: MatDialogRef<WarningDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  constructor(private dialogRef: MatDialogRef<WarningDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
   ok(): void {

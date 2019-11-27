@@ -43,18 +43,15 @@ import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
   templateUrl: 'edit-user-directory.component.html',
   styleUrls: ['edit-user-directory.component.css'],
 })
-export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit,
-  OnDestroy {
+export class EditUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
   editUserDirectoryForm: FormGroup;
 
-  @ViewChild(InternalUserDirectoryComponent,
-    {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
+  @ViewChild(InternalUserDirectoryComponent, {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
 
-  @ViewChild(LdapUserDirectoryComponent,
-    {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
+  @ViewChild(LdapUserDirectoryComponent, {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
 
   userDirectory?: UserDirectory;
 
@@ -62,11 +59,19 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private i18n: I18n, private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router, private activatedRoute: ActivatedRoute,
+              private i18n: I18n, private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
 
     // Initialise the form controls
 
@@ -103,15 +108,10 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-
     // Retrieve the user directory types and the existing user directory
     this.spinnerService.showSpinner();
 
-    combineLatest([this.securityService.getUserDirectoryTypes(),
-      this.securityService.getUserDirectory(this.userDirectoryId)
+    combineLatest([this.securityService.getUserDirectoryTypes(), this.securityService.getUserDirectory(this.userDirectoryId)
     ])
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((results: [UserDirectoryType[], UserDirectory]) => {
@@ -121,8 +121,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
         this.editUserDirectoryForm.get('userDirectoryType')!.setValue(results[1].type);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -166,8 +165,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     }
   }
 
-  userDirectoryTypeSelected(previousUserDirectoryType: string,
-                              currentUserDirectoryType: string): void {
+  userDirectoryTypeSelected(previousUserDirectoryType: string, currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
     if (!!previousUserDirectoryType) {
       this.userDirectory!.parameters = [];

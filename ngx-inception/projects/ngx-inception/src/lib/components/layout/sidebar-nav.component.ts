@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, OnDestroy, OnInit,} from '@angular/core';
+import {Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 
 import {NavigationService} from '../../services/navigation/navigation.service';
 import {NavigationItem} from '../../services/navigation/navigation-item';
@@ -36,13 +36,11 @@ import {map} from 'rxjs/operators';
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
 
-  navItems: NavigationItem[];
-
-  @HostBinding('class.sidebar-nav') sidebarNav() { return true; };
-
   @HostBinding('attr.role') role = 'nav';
 
   private userNavigationSubscription?: Subscription;
+
+  navItems: NavigationItem[];
 
   /**
    * Constructs a new SidebarNavComponent.
@@ -53,6 +51,10 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     this.navItems = new Array<NavigationItem>();
   }
 
+  @HostBinding('class.sidebar-nav') sidebarNav() {
+    return true;
+  }
+
   ngOnDestroy(): void {
     if (this.userNavigationSubscription) {
       this.userNavigationSubscription.unsubscribe();
@@ -60,10 +62,9 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userNavigationSubscription =
-      this.navigationService.userNavigation$.pipe(map((navigation: NavigationItem[]) => {
-        this.navItems = navigation;
-      })).subscribe();
+    this.userNavigationSubscription = this.navigationService.userNavigation$.pipe(map((navigation: NavigationItem[]) => {
+      this.navItems = navigation;
+    })).subscribe();
   }
 }
 

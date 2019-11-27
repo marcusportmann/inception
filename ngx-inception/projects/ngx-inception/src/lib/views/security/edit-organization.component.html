@@ -6,9 +6,9 @@
           <mat-form-field>
             <mat-label i18n="@@security_edit_organization_component_label_name">Name</mat-label>
             <input type="text" matInput formControlName="name" required="true" autofocus>
-            <mat-error *ngIf="editOrganizationForm.get('name').errors && !editOrganizationForm.get('name').untouched">
-              <span *ngIf="editOrganizationForm.get('name').errors?.required" i18n="@@security_edit_organization_component_error_name_required">A name is required.</span>
-              <span *ngIf="editOrganizationForm.get('name').errors?.maxlength" i18n="@@security_edit_organization_component_error_name_maxlength">Name must not exceed 100 characters.</span>
+            <mat-error *ngIf="nameFormControl.errors && !nameFormControl.untouched">
+              <span *ngIf="nameFormControl.errors?.required" i18n="@@security_edit_organization_component_error_name_required">A name is required.</span>
+              <span *ngIf="nameFormControl.errors?.maxlength" i18n="@@security_edit_organization_component_error_name_maxlength">Name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

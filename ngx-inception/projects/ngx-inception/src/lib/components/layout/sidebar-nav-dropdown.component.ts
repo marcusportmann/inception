@@ -26,14 +26,18 @@ import {NavigationItem} from '../../services/navigation/navigation-item';
   // tslint:disable-next-line
   selector: 'sidebar-nav-dropdown',
   template: `
-    <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
-      <i *ngIf="hasIcon()" class="nav-icon {{ navItem.icon }}"></i>
-      {{ navItem.name }}
-      <span *ngIf="hasBadge()" [ngClass]="'badge badge-' + navItem.badge.variant">{{ navItem.badge.text }}</span>
-    </a>
-    <ul class="nav-dropdown-items">
-      <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
-    </ul>
+    <ng-template *ngIf="navItem">
+      <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
+        <i *ngIf="this.navItem.icon && !!this.navItem.icon" class="nav-icon {{ navItem.icon }}"></i>
+        {{ navItem.name }}
+        <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+          {{ navItem.badge.text }}
+        </span>
+      </a>
+      <ul class="nav-dropdown-items">
+        <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
+      </ul>
+    </ng-template>
   `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }']
 })
@@ -45,13 +49,5 @@ export class SidebarNavDropdownComponent {
    * Constructs a new SidebarNavDropdownComponent.
    */
   constructor() {
-  }
-
-  hasBadge(): boolean {
-    return !!this.navItem && !!this.navItem.badge;
-  }
-
-  hasIcon(): boolean {
-    return !!this.navItem && !!this.navItem.icon;
   }
 }

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {InjectionToken} from '@angular/core';
+
 /**
  * The InceptionConfig interface defines the configuration that can be passed to the InceptionModule
  * module.
@@ -35,12 +37,12 @@ export interface InceptionConfig {
   /**
    * The Codes API URL prefix.
    */
-  codesApiUrlPrefix?: string;
+  codesApiUrlPrefix: string;
 
   /**
    * The Configuration API URL prefix.
    */
-  configurationApiUrlPrefix?: string;
+  configurationApiUrlPrefix: string;
 
   /**
    * The Error API URL prefix.
@@ -50,30 +52,36 @@ export interface InceptionConfig {
   /**
    * Is the forgotten password functionality enabled.
    */
-  forgottenPasswordEnabled?: boolean;
+  forgottenPasswordEnabled: boolean;
 
   /**
    * The Mail API URL prefix.
    */
-  mailApiUrlPrefix?: string;
+  mailApiUrlPrefix: string;
 
   /**
    * The OAuth Token URL e.g. http://localhost:8080/oauth/token.
    */
-  oauthTokenUrl?: string;
+  oauthTokenUrl: string;
 
   /**
    * The Reporting API URL prefix.
    */
-  reportingApiUrlPrefix?: string;
+  reportingApiUrlPrefix: string;
 
   /**
    * The Scheduler API URL prefix.
    */
-  schedulerApiUrlPrefix?: string;
+  schedulerApiUrlPrefix: string;
 
   /**
    * The Security API URL prefix.
    */
-  securityApiUrlPrefix?: string;
+  securityApiUrlPrefix: string;
 }
+
+/**
+ * The injection token for the InceptionConfig.
+ */
+export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>('INCEPTION_CONFIG');
+

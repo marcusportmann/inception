@@ -27,7 +27,7 @@ export class BackNavigation {
   /**
    * The router navigation commands for the back navigation.
    */
-  // tslint:disable-next-line
+    // tslint:disable-next-line
   commands: any[];
 
   /**

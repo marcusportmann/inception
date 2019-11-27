@@ -51,11 +51,22 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
 
   reportDefinition?: ReportDefinition;
 
+  reportDefinitionId: string;
+
   templateFormControl: FormControl;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private reportingService: ReportingService, private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const reportDefinitionId = this.activatedRoute.snapshot.paramMap.get('reportDefinitionId');
+
+    if (!reportDefinitionId) {
+      throw(new Error('No reportDefinitionId route parameter found'));
+    }
+
+    this.reportDefinitionId = decodeURIComponent(reportDefinitionId);
 
     // Initialise the form controls
     this.idFormControl = new FormControl({
@@ -95,19 +106,10 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    let reportDefinitionId = this.activatedRoute.snapshot.paramMap.get('reportDefinitionId');
-
-    if (!reportDefinitionId) {
-      throw(new Error('No reportDefinitionId route parameter found'));
-    }
-
-    reportDefinitionId = decodeURIComponent(reportDefinitionId);
-
     // Retrieve the existing report definition and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.reportingService.getReportDefinition(reportDefinitionId)
+    this.reportingService.getReportDefinition(this.reportDefinitionId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((reportDefinition: ReportDefinition) => {
         this.reportDefinition = reportDefinition;

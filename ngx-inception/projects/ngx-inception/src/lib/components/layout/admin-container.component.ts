@@ -107,10 +107,9 @@ export class AdminContainerComponent {
         if (typeof (title) === 'string') {
           this.titleBarService.setTitle(title);
         } else {
-          this.adminContainerViewTitleSubscription = title.subscribe(
-            (title: string) => {
-              this.titleBarService.setTitle(title);
-            });
+          this.adminContainerViewTitleSubscription = title.subscribe((newTitle: string) => {
+            this.titleBarService.setTitle(newTitle);
+          });
         }
       }
     }

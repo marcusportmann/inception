@@ -15,7 +15,7 @@
  */
 
 import {Component, HostBinding, Input, OnInit} from '@angular/core';
-import {SIDEBAR_CSS_CLASSES} from "./sidebar-css-classes";
+import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 
 /**
  * The SidebarComponent class implements the sidebar component.
@@ -40,7 +40,9 @@ export class SidebarComponent implements OnInit {
 
   @Input() offCanvas?: boolean;
 
-  @HostBinding('class.sidebar') get sidebar() { return true; };
+  @HostBinding('class.sidebar') get sidebar() {
+    return true;
+  }
 
   /**
    * Constructs a new SidebarComponent.

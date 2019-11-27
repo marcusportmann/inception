@@ -25,7 +25,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {MailTemplate} from './mail-template';
 import {MailTemplateSummary} from './mail-template-summary';
-import {INCEPTION_CONFIG} from '../../inception.module';
+import {INCEPTION_CONFIG} from '../../inception-config'
 import {InceptionConfig} from '../../inception-config';
 
 /**

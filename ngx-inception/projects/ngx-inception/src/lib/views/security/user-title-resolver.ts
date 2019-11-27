@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {SecurityService} from "../../services/security/security.service";
+import {SecurityService} from '../../services/security/security.service';
 
 /**
  * The UserTitleResolver class provides the route data resolver that resolves the
@@ -42,8 +42,7 @@ export class UserTitleResolver implements Resolve<string> {
    * @param activatedRouteSnapshot The activate route snapshot.
    * @param routerStateSnapshot    The router state snapshot.
    */
-  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
-          routerStateSnapshot: RouterStateSnapshot): Observable<string> {
+  resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot): Observable<string> {
     let userDirectoryId = activatedRouteSnapshot.paramMap.get('userDirectoryId');
 
     if (!userDirectoryId) {

@@ -98,13 +98,9 @@ import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {SchedulerService} from './services/scheduler/scheduler.service';
 import {ReportingService} from './services/reporting/reporting.service';
 import {MailService} from './services/mail/mail.service';
-import {InceptionConfig} from './inception-config';
+import {INCEPTION_CONFIG, InceptionConfig} from './inception-config';
 
 
-/**
- * The injection token for the InceptionConfig.
- */
-export const INCEPTION_CONFIG = new InjectionToken<InceptionConfig>('INCEPTION_CONFIG');
 
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {

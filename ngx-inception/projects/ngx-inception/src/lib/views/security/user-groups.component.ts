@@ -15,7 +15,6 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -29,12 +28,11 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {MatTableDataSource} from "@angular/material/table";
-import {GroupMemberType} from "../../services/security/group-member-type";
-import {MatDialogRef} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "../../components/dialogs";
-import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from '@angular/material/table';
+import {GroupMemberType} from '../../services/security/group-member-type';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {MatPaginator} from '@angular/material/paginator';
 
 /**
  * The UserGroupsComponent class implements the user groups component.
@@ -59,22 +57,32 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
 
-  selectedGroupName: string = '';
+  selectedGroupName = '';
 
   userDirectoryId: string;
 
   username: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    const username = this.activatedRoute.snapshot.paramMap.get('username');
+
+    if (!username) {
+      throw(new Error('No username route parameter found'));
+    }
+
+    this.username = decodeURIComponent(username);
   }
 
   get backNavigation(): BackNavigation {
@@ -98,8 +106,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
     if (!!this.selectedGroupName) {
       this.spinnerService.showSpinner();
 
-      this.securityService.addMemberToGroup(this.userDirectoryId, this.selectedGroupName,
-        GroupMemberType.User, this.username)
+      this.securityService.addMemberToGroup(this.userDirectoryId, this.selectedGroupName, GroupMemberType.User, this.username)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           this.loadGroupNamesForUser();
@@ -125,12 +132,10 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       .subscribe((groupNamesForUser: string[]) => {
         this.dataSource.data = groupNamesForUser;
 
-        this.availableGroupNames$.next(
-          this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
+        this.availableGroupNames$.next(this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -153,8 +158,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
         this.loadGroupNamesForUser();
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -168,13 +172,12 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
   }
 
   removeUserFromGroup(groupName: string) {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_user_groups_component_confirm_remove_user_from_group',
-          value: 'Are you sure you want to remove the user from the group?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_user_groups_component_confirm_remove_user_from_group',
+        value: 'Are you sure you want to remove the user from the group?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -182,8 +185,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName,
-            GroupMemberType.User, this.username)
+          this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName, GroupMemberType.User, this.username)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.loadGroupNamesForUser();
@@ -202,23 +204,22 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
       });
   }
 
-  private calculateAvailableGroupNames(allGroupNames: string[],
-                                       existingGroupNames: string[]): string[] {
+  private calculateAvailableGroupNames(allGroupNames: string[], existingGroupNames: string[]): string[] {
 
-    let availableGroupNames: string[] = [];
+    const availableGroupNames: string[] = [];
 
-    for (let i = 0; i < allGroupNames.length; i++) {
-      let foundExistingGroup: boolean = false;
+    for (const possibleGroupName of allGroupNames) {
+      let foundExistingGroup = false;
 
-      for (let j = 0; j < existingGroupNames.length; j++) {
-        if (allGroupNames[i] == existingGroupNames[j]) {
+      for (const existingGroupName of existingGroupNames) {
+        if (possibleGroupName === existingGroupName) {
           foundExistingGroup = true;
           break;
         }
       }
 
       if (!foundExistingGroup) {
-        availableGroupNames.push(allGroupNames[i]);
+        availableGroupNames.push(possibleGroupName);
       }
     }
 

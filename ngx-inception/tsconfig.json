@@ -4,7 +4,8 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": false,
+    /* Inception Option: true */
+    "declaration": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "esnext",
@@ -25,8 +26,19 @@
       "ngx-inception/*": [
         "dist/ngx-inception/*"
       ]
-    }
+    },
+    /* Inception Options */
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "strictNullChecks": true
   },
+
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

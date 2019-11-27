@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -36,11 +36,10 @@ import {UserDatasource} from '../../services/security/user.datasource';
 import {SessionService} from '../../services/session/session.service';
 import {Session} from '../../services/session/session';
 import {UserDirectorySummary} from '../../services/security/user-directory-summary';
-import {FormBuilder} from '@angular/forms';
 import {MatSelect, MatSelectChange} from '@angular/material';
 import {UserSortBy} from '../../services/security/user-sort-by';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
-import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
+import {UserDirectoryCapabilities} from '../../services/security/user-directory-capabilities';
 
 /**
  * The UsersComponent class implements the users component.
@@ -75,29 +74,24 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect?: MatSelect;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private sessionService: SessionService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private sessionService: SessionService, private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     this.dataSource = new UserDatasource(this.sessionService, this.securityService);
   }
 
   get enableActionsMenu$(): Observable<boolean> {
-    return this.userDirectoryCapabilities$.pipe(
-      map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-        return userDirectoryCapabilities.supportsUserAdministration ||
-          userDirectoryCapabilities.supportsGroupAdministration ||
-          userDirectoryCapabilities.supportsAdminChangePassword;
-      }));
+    return this.userDirectoryCapabilities$.pipe(map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+      return userDirectoryCapabilities.supportsUserAdministration || userDirectoryCapabilities.supportsGroupAdministration ||
+        userDirectoryCapabilities.supportsAdminChangePassword;
+    }));
   }
 
   get enableNewButton$(): Observable<boolean> {
-    return this.userDirectoryCapabilities$.pipe(
-      map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-        return userDirectoryCapabilities.supportsUserAdministration;
-      }));
+    return this.userDirectoryCapabilities$.pipe(map((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+      return userDirectoryCapabilities.supportsUserAdministration;
+    }));
   }
 
   get title(): string {
@@ -110,13 +104,12 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   // noinspection JSUnusedLocalSymbols
   deleteUser(username: string): void {
     // noinspection JSUnusedLocalSymbols
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_users_component_confirm_delete_user',
-          value: 'Are you sure you want to delete the user?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_users_component_confirm_delete_user',
+        value: 'Are you sure you want to delete the user?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -127,12 +120,12 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
           this.securityService.deleteUser(this.userDirectoryId$.value, username)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
-              this.tableFilter!.reset(false);
+              this.tableFilter.reset(false);
 
-              this.paginator!.pageIndex = 0;
+              this.paginator.pageIndex = 0;
 
-              this.sort!.active = '';
-              this.sort!.direction = 'asc' as SortDirection;
+              this.sort.active = '';
+              this.sort.direction = 'asc' as SortDirection;
 
               this.loadUsers();
             }, (error: Error) => {
@@ -150,36 +143,35 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   editUser(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadUsers(): void {
     let filter = '';
 
-    if (!!this.tableFilter!.filter) {
-      filter = this.tableFilter!.filter;
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
       filter = filter.trim();
       filter = filter.toLowerCase();
     }
 
     let sortBy: UserSortBy = UserSortBy.Username;
+    let sortDirection = SortDirection.Ascending;
 
-    if (!!this.sort!.active) {
-      if (this.sort!.active === 'firstName') {
+    if (!!this.sort.active) {
+      if (this.sort.active === 'firstName') {
         sortBy = UserSortBy.FirstName;
-      } else if (this.sort!.active === 'lastName') {
+      } else if (this.sort.active === 'lastName') {
         sortBy = UserSortBy.LastName;
+      }
+
+      if (this.sort.direction === 'desc') {
+        sortDirection = SortDirection.Descending;
       }
     }
 
-    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending :
-      SortDirection.Descending;
-
     if (!!this.userDirectoryId$.value) {
-      this.dataSource.load(this.userDirectoryId$.value, filter, sortBy, sortDirection,
-        this.paginator!.pageIndex, this.paginator!.pageSize);
+      this.dataSource.load(this.userDirectoryId$.value, filter, sortBy, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
     } else {
       this.dataSource.clear();
     }
@@ -193,12 +185,12 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   ngAfterViewInit(): void {
     this.subscriptions.add(this.userDirectoryId$.subscribe((userDirectoryId: string) => {
       if (!!userDirectoryId) {
-        this.tableFilter!.reset(false);
+        this.tableFilter.reset(false);
 
-        this.paginator!.pageIndex = 0;
+        this.paginator.pageIndex = 0;
 
-        this.sort!.active = 'firstName';
-        this.sort!.direction = 'asc' as SortDirection;
+        this.sort.active = 'firstName';
+        this.sort.direction = 'asc' as SortDirection;
 
         this.spinnerService.showSpinner();
 
@@ -223,14 +215,13 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
     this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
-        this.spinnerService.showSpinner()
+        this.spinnerService.showSpinner();
       } else {
-        this.spinnerService.hideSpinner()
+        this.spinnerService.hideSpinner();
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -238,34 +229,32 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
       }
     }));
 
-    this.subscriptions.add(
-      this.userDirectorySelect!.selectionChange.subscribe((matSelectChange: MatSelectChange) => {
-        this.userDirectoryId$.next(matSelectChange.value);
-      }));
+    this.subscriptions.add(this.userDirectorySelect.selectionChange.subscribe((matSelectChange: MatSelectChange) => {
+      this.userDirectoryId$.next(matSelectChange.value);
+    }));
 
-    this.subscriptions.add(this.sort!.sortChange.subscribe(() => {
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(this.tableFilter!.changed.subscribe(() => {
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(
-      merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
-        .pipe(tap(() => {
-          this.loadUsers();
-        })).subscribe());
+    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+      .pipe(tap(() => {
+        this.loadUsers();
+      })).subscribe());
 
     this.sessionService.session$.pipe(first()).subscribe((session: Session | null) => {
       if (session && session.organization) {
         this.spinnerService.showSpinner();
 
-        this.securityService.getUserDirectorySummariesForOrganization(session.organization.id!)
+        this.securityService.getUserDirectorySummariesForOrganization(session.organization.id)
           .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
           .subscribe((userDirectories: UserDirectorySummary[]) => {
             this.userDirectories = userDirectories;
@@ -282,10 +271,10 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
                 .pipe(first(), map(() => window.history.state))
                 .subscribe((state) => {
                   if (state.userDirectoryId) {
-                    for (let i = 0; i < userDirectories.length; i++) {
-                      if (userDirectories[i].id == state.userDirectoryId) {
-                        this.userDirectorySelect!.value = userDirectories[i].id;
-                        this.userDirectoryId$.next(userDirectories[i].id);
+                    for (const userDirectory of userDirectories) {
+                      if (userDirectory.id === state.userDirectoryId) {
+                        this.userDirectorySelect.value = userDirectory.id;
+                        this.userDirectoryId$.next(userDirectory.id);
                         break;
                       }
                     }
@@ -312,15 +301,12 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   resetUserPassword(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/reset-user-password'],
+    this.router.navigate([this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/reset-user-password'],
       {relativeTo: this.activatedRoute});
   }
 
   userGroups(username: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(
-      [this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/groups'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([this.userDirectoryId$.value + '/' + encodeURIComponent(username) + '/groups'], {relativeTo: this.activatedRoute});
   }
 }
