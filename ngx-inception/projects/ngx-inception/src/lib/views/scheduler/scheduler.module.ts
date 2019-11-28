@@ -46,46 +46,41 @@ const routes: Routes = [{
       authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
       ]
     }
-  },
-
-
-    {
-      path: 'new',
-      pathMatch: 'full',
+  }, {
+    path: 'new',
+    pathMatch: 'full',
+    canActivate: [CanActivateFunctionGuard],
+    component: NewJobComponent,
+    data: {
+      authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
+      ]
+    },
+    resolve: {
+      title: NewJobTitleResolver
+    }
+  }, {
+    path: ':jobId',
+    pathMatch: 'full',
+    redirectTo: ':jobId/edit'
+  }, {
+    path: ':jobId',
+    resolve: {
+      title: JobTitleResolver
+    },
+    children: [{
+      path: 'edit',
       canActivate: [CanActivateFunctionGuard],
-      component: NewJobComponent,
+      component: EditJobComponent,
       data: {
         authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
         ]
       },
       resolve: {
-        title: NewJobTitleResolver
+        title: EditJobTitleResolver
       }
-    }, {
-      path: ':jobId',
-      pathMatch: 'full',
-      redirectTo: ':jobId/edit'
-    }, {
-      path: ':jobId',
-      resolve: {
-        title: JobTitleResolver
-      },
-      children: [{
-        path: 'edit',
-        canActivate: [CanActivateFunctionGuard],
-        component: EditJobComponent,
-        data: {
-          authorities: ['ROLE_Administrator', 'FUNCTION_Scheduler.SchedulerAdministration', 'FUNCTION_Scheduler.JobAdministration'
-          ]
-        },
-        resolve: {
-          title: EditJobTitleResolver
-        }
-      }
-      ]
     }
-
-
+    ]
+  }
   ]
 }
 ];

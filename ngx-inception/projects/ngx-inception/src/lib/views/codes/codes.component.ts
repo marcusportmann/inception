@@ -53,9 +53,9 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   displayedColumns = ['id', 'name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {

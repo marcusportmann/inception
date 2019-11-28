@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -30,8 +30,7 @@ import {User} from '../../services/security/user';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {combineLatest} from 'rxjs';
-import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
-import {PasswordChangeReason} from "../../services/security/password-change-reason";
+import {UserDirectoryCapabilities} from '../../services/security/user-directory-capabilities';
 
 /**
  * The ResetUserPasswordComponent class implements the reset user password component.
@@ -44,41 +43,77 @@ import {PasswordChangeReason} from "../../services/security/password-change-reas
 })
 export class ResetUserPasswordComponent extends AdminContainerView implements AfterViewInit {
 
+  confirmPasswordFormControl: FormControl;
+
+  expirePasswordFormControl: FormControl;
+
+  firstNameFormControl: FormControl;
+
+  lastNameFormControl: FormControl;
+
+  lockUserFormControl: FormControl;
+
+  passwordFormControl: FormControl;
+
+  resetPasswordHistoryFormControl: FormControl;
+
   resetUserPasswordForm: FormGroup;
 
   userDirectoryId: string;
 
   username: string;
 
+  usernameFormControl: FormControl;
+
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.username = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('username')!);
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    const username = this.activatedRoute.snapshot.paramMap.get('username');
+
+    if (!username) {
+      throw(new Error('No username route parameter found'));
+    }
+
+    this.username = decodeURIComponent(username);
+
+    // Initialise the form controls
+    this.confirmPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.expirePasswordFormControl = new FormControl(false);
+    this.firstNameFormControl = new FormControl({
+      value: '',
+      disabled: true
+    });
+    this.lastNameFormControl = new FormControl({
+      value: '',
+      disabled: true
+    });
+    this.lockUserFormControl = new FormControl(false);
+    this.passwordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.resetPasswordHistoryFormControl = new FormControl(false);
+    this.usernameFormControl = new FormControl({
+      value: '',
+      disabled: true
+    });
 
     // Initialise the form
     this.resetUserPasswordForm = new FormGroup({
-      confirmPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      firstName: new FormControl({
-        value: '',
-        disabled: true
-      }),
-      lastName: new FormControl({
-        value: '',
-        disabled: true
-      }),
-      password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      username: new FormControl({
-        value: '',
-        disabled: true
-      })
+      confirmPassword: this.confirmPasswordFormControl,
+      firstName: this.firstNameFormControl,
+      lastName: this.lastNameFormControl,
+      password: this.passwordFormControl,
+      username: this.usernameFormControl
     });
   }
 
@@ -118,25 +153,24 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
       .subscribe((results: [UserDirectoryCapabilities, User]) => {
         this.userDirectoryCapabilities = results[0];
 
-        this.resetUserPasswordForm.get('firstName')!.setValue(results[1].firstName);
-        this.resetUserPasswordForm.get('lastName')!.setValue(results[1].lastName);
-        this.resetUserPasswordForm.get('username')!.setValue(results[1].username);
+        this.firstNameFormControl.setValue(results[1].firstName);
+        this.lastNameFormControl.setValue(results[1].lastName);
+        this.usernameFormControl.setValue(results[1].username);
 
-        if (this.userDirectoryCapabilities!.supportsPasswordExpiry) {
-          this.resetUserPasswordForm.addControl('expirePassword', new FormControl(false));
+        if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
+          this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordFormControl);
         }
 
-        if (this.userDirectoryCapabilities!.supportsUserLocks) {
-          this.resetUserPasswordForm.addControl('lockUser', new FormControl(false));
+        if (this.userDirectoryCapabilities.supportsUserLocks) {
+          this.resetUserPasswordForm.addControl('lockUser', this.lockUserFormControl);
         }
 
-        if (this.userDirectoryCapabilities!.supportsPasswordHistory) {
-          this.resetUserPasswordForm.addControl('resetPasswordHistory', new FormControl(false));
+        if (this.userDirectoryCapabilities.supportsPasswordHistory) {
+          this.resetUserPasswordForm.addControl('resetPasswordHistory', this.resetPasswordHistoryFormControl);
         }
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -148,8 +182,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   ok(): void {
     if (this.resetUserPasswordForm.valid) {
       // Check that the password and confirmation password match
-      if (this.resetUserPasswordForm.get('password')!.value !==
-        this.resetUserPasswordForm.get('confirmPassword')!.value) {
+      if (this.passwordFormControl.value !== this.confirmPasswordFormControl.value) {
         this.dialogService.showErrorDialog(new Error(this.i18n({
           id: '@@security_reset_user_password_component_passwords_do_not_match',
           value: 'The passwords do not match.'
@@ -158,17 +191,14 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
         return;
       }
 
-      const password = this.resetUserPasswordForm.get('password')!.value;
+      const password = this.passwordFormControl.value;
 
       this.spinnerService.showSpinner();
 
       this.securityService.adminChangePassword(this.userDirectoryId, this.username, password,
-        this.resetUserPasswordForm.contains('expirePassword') ?
-          this.resetUserPasswordForm.get('expirePassword')!.value : false,
-        this.resetUserPasswordForm.contains('lockUser') ?
-          this.resetUserPasswordForm.get('lockUser')!.value : false,
-        this.resetUserPasswordForm.contains('resetPasswordHistory') ?
-          this.resetUserPasswordForm.get('resetPasswordHistory')!.value : false)
+        this.resetUserPasswordForm.contains('expirePassword') ? this.expirePasswordFormControl.value : false,
+        this.resetUserPasswordForm.contains('lockUser') ? this.lockUserFormControl.value : false,
+        this.resetUserPasswordForm.contains('resetPasswordHistory') ? this.resetPasswordHistoryFormControl.value : false)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -44,36 +44,40 @@ import {v4 as uuid} from 'uuid';
   templateUrl: 'new-user-directory.component.html',
   styleUrls: ['new-user-directory.component.css'],
 })
-export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit,
-  OnDestroy {
+export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  nameFormControl: FormControl;
+
   newUserDirectoryForm: FormGroup;
 
-  @ViewChild(InternalUserDirectoryComponent,
-    {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
+  @ViewChild(InternalUserDirectoryComponent, {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
 
-  @ViewChild(LdapUserDirectoryComponent,
-    {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
+  @ViewChild(LdapUserDirectoryComponent, {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
 
   userDirectory?: UserDirectory;
 
+  userDirectoryTypeFormControl: FormControl;
+
   userDirectoryTypes: UserDirectoryType[] = [];
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private i18n: I18n, private securityService: SecurityService,
-              private dialogService: DialogService, private spinnerService: SpinnerService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router, private activatedRoute: ActivatedRoute,
+              private i18n: I18n, private securityService: SecurityService, private dialogService: DialogService,
+              private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userDirectoryTypeFormControl = new FormControl('', [Validators.required]);
 
     // Initialise the form
     this.newUserDirectoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userDirectoryType: new FormControl('', [Validators.required])
+      name: this.nameFormControl,
+      userDirectoryType: this.userDirectoryTypeFormControl
     });
 
-    this.subscriptions.add(this.newUserDirectoryForm.get('userDirectoryType')!.valueChanges
+    this.subscriptions.add(this.userDirectoryTypeFormControl.valueChanges
       .pipe(startWith(null), pairwise())
       .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
         this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
@@ -109,8 +113,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
         this.userDirectory = new UserDirectory(uuid(), '', '', []);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -125,8 +128,8 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
   ok(): void {
     if (this.userDirectory && this.newUserDirectoryForm.valid) {
-      this.userDirectory.name = this.newUserDirectoryForm.get('name')!.value;
-      this.userDirectory.type = this.newUserDirectoryForm.get('userDirectoryType')!.value;
+      this.userDirectory.name = this.nameFormControl.value;
+      this.userDirectory.type = this.userDirectoryTypeFormControl.value;
 
       if (this.internalUserDirectory) {
         this.userDirectory.parameters = this.internalUserDirectory.getParameters();
@@ -152,11 +155,10 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     }
   }
 
-  userDirectoryTypeSelected(previousUserDirectoryType: string,
-                              currentUserDirectoryType: string): void {
+  userDirectoryTypeSelected(previousUserDirectoryType: string, currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
-    if (!!previousUserDirectoryType) {
-      this.userDirectory!.parameters = [];
+    if (!!previousUserDirectoryType && this.userDirectory) {
+      this.userDirectory.parameters = [];
     }
 
     // Remove the controls for the user directory types
@@ -173,10 +175,12 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     this.changeDetectorRef.detectChanges();
 
     // Populate the nested InternalUserDirectoryComponent or LdapUserDirectoryComponent
-    if (this.internalUserDirectory) {
-      this.internalUserDirectory.setParameters(this.userDirectory!.parameters);
-    } else if (this.ldapUserDirectory) {
-      this.ldapUserDirectory.setParameters(this.userDirectory!.parameters);
+    if (this.userDirectory) {
+      if (this.internalUserDirectory) {
+        this.internalUserDirectory.setParameters(this.userDirectory.parameters);
+      } else if (this.ldapUserDirectory) {
+        this.ldapUserDirectory.setParameters(this.userDirectory.parameters);
+      }
     }
   }
 }

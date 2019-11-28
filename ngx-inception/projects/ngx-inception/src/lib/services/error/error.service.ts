@@ -27,7 +27,7 @@ import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {ErrorReport} from './error-report';
 import {v4 as uuid} from 'uuid';
 import {ErrorServiceError} from './error.service.errors';
-import {INCEPTION_CONFIG} from '../../inception-config'
+import {INCEPTION_CONFIG} from '../../inception-config';
 import {InceptionConfig} from '../../inception-config';
 
 /**

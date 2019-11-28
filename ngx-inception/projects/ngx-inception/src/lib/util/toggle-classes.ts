@@ -25,7 +25,7 @@ export const removeClasses = (classNames: string[]): boolean => {
   } else {
     return false;
   }
-}
+};
 
 export const toggleClasses = (toggle: string, classNames: string[]): void => {
   const level = classNames.indexOf(toggle);
@@ -40,7 +40,7 @@ export const toggleClasses = (toggle: string, classNames: string[]): void => {
       bodySelector.classList.add(toggle);
     }
   }
-}
+};
 
 
 /*

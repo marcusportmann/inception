@@ -60,11 +60,11 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   displayedColumns = ['firstName', 'lastName', 'username', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
 
   userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
 
@@ -72,7 +72,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   userDirectories: UserDirectorySummary[] = [];
 
-  @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect?: MatSelect;
+  @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect!: MatSelect;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
               private sessionService: SessionService, private dialogService: DialogService, private spinnerService: SpinnerService) {

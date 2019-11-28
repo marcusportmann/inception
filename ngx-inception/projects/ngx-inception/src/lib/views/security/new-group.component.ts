@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -28,8 +28,8 @@ import {AdminContainerView} from '../../components/layout/admin-container-view';
 import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityService} from '../../services/security/security.service';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
-import {Group} from "../../services/security/group";
-import {UserDirectoryCapabilities} from "../../services/security/user-directory-capabilities";
+import {Group} from '../../services/security/group';
+import {UserDirectoryCapabilities} from '../../services/security/user-directory-capabilities';
 
 /**
  * The NewGroupComponent class implements the new group component.
@@ -42,28 +42,39 @@ import {UserDirectoryCapabilities} from "../../services/security/user-directory-
 })
 export class NewGroupComponent extends AdminContainerView implements AfterViewInit {
 
-  newGroupForm: FormGroup;
+  descriptionFormControl: FormControl;
 
   group?: Group;
+
+  nameFormControl: FormControl;
+
+  newGroupForm: FormGroup;
 
   userDirectoryCapabilities?: UserDirectoryCapabilities;
 
   userDirectoryId: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    // Initialise the form controls
+    this.descriptionFormControl = new FormControl('', [Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.newGroupForm = new FormGroup({
-      description: new FormControl('', [Validators.maxLength(100)]),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      description: this.descriptionFormControl,
+      name: this.nameFormControl,
     });
   }
 
@@ -104,8 +115,7 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
         this.group = new Group(this.userDirectoryId, '', '');
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -117,8 +127,8 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   ok(): void {
     if (this.group && this.newGroupForm.valid) {
 
-      this.group.name = this.newGroupForm.get('name')!.value;
-      this.group.description = this.newGroupForm.get('description')!.value;
+      this.group.name = this.nameFormControl.value;
+      this.group.description = this.descriptionFormControl.value;
 
       this.spinnerService.showSpinner();
 

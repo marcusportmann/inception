@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl} from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -29,12 +29,12 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatDialogRef} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "../../components/dialogs";
-import {UserDirectorySummary} from "../../services/security/user-directory-summary";
-import {UserDirectorySummaries} from "../../services/security/user-directory-summaries";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {UserDirectorySummary} from '../../services/security/user-directory-summary';
+import {UserDirectorySummaries} from '../../services/security/user-directory-summaries';
+import {MatPaginator} from '@angular/material/paginator';
 
 /**
  * The OrganizationUserDirectoriesComponent class implements the organization user directories
@@ -46,8 +46,7 @@ import {MatPaginator} from "@angular/material/paginator";
   templateUrl: 'organization-user-directories.component.html',
   styleUrls: ['organization-user-directories.component.css']
 })
-export class OrganizationUserDirectoriesComponent extends AdminContainerView
-  implements AfterViewInit, OnDestroy {
+export class OrganizationUserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
@@ -65,20 +64,23 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   organizationId: string;
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const organizationId = this.activatedRoute.snapshot.paramMap.get('organizationId');
+
+    if (!organizationId) {
+      throw(new Error('No organizationId route parameter found'));
+    }
+
+    this.organizationId = decodeURIComponent(organizationId);
 
     // Initialise the form controls
     this.newUserDirectoryFormControl = new FormControl('');
-
-    // Retrieve parameters
-    this.organizationId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('organizationId')!);
   }
 
   get backNavigation(): BackNavigation {
@@ -97,12 +99,34 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
     });
   }
 
+  private static calculateAvailableUserDirectories(allUserDirectories: UserDirectorySummary[],
+                                                   existingOrganizationUserDirectories: UserDirectorySummary[]): UserDirectorySummary[] {
+
+    const availableUserDirectories: UserDirectorySummary[] = [];
+
+    for (const possibleUserDirectory of allUserDirectories) {
+      let foundExistingUserDirectory = false;
+
+      for (const existingOrganizationUserDirectory of existingOrganizationUserDirectories) {
+        if (possibleUserDirectory.id === existingOrganizationUserDirectory.id) {
+          foundExistingUserDirectory = true;
+          break;
+        }
+      }
+
+      if (!foundExistingUserDirectory) {
+        availableUserDirectories.push(possibleUserDirectory);
+      }
+    }
+
+    return availableUserDirectories;
+  }
+
   addUserDirectoryToOrganization(): void {
     if (this.isUserDirectorySelected()) {
       this.spinnerService.showSpinner();
 
-      this.securityService.addUserDirectoryToOrganization(this.organizationId,
-        this.newUserDirectoryFormControl.value.id)
+      this.securityService.addUserDirectoryToOrganization(this.organizationId, this.newUserDirectoryFormControl.value.id)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           this.loadUserDirectoriesForOrganization();
@@ -132,8 +156,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
 
   isUserDirectorySelected(): boolean {
     if (this.newUserDirectoryFormControl.value as UserDirectorySummary) {
-      if (typeof (this.newUserDirectoryFormControl.value.id) !== 'undefined' &&
-        this.newUserDirectoryFormControl.value.id !== null) {
+      if (typeof (this.newUserDirectoryFormControl.value.id) !== 'undefined' && this.newUserDirectoryFormControl.value.id !== null) {
         return true;
       }
     }
@@ -149,20 +172,17 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
       .subscribe((userDirectorySummaries: UserDirectorySummary[]) => {
         this.dataSource.data = userDirectorySummaries;
 
-        let availableUserDirectories = this.calculateAvailableUserDirectories(
-          this.allUserDirectories, this.dataSource.data);
+        const availableUserDirectories = OrganizationUserDirectoriesComponent.calculateAvailableUserDirectories(this.allUserDirectories,
+          this.dataSource.data);
 
-        this.subscriptions.add(
-          this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
-            this.filteredUserDirectories$.next(
-              this.filterUserDirectories(availableUserDirectories, value));
-          })).subscribe());
+        this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
+          this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
+        })).subscribe());
 
         this.availableUserDirectories$.next(availableUserDirectories);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -185,8 +205,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
         this.loadUserDirectoriesForOrganization();
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -200,13 +219,12 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
   }
 
   removeUserDirectoryFromOrganization(userDirectoryId: string) {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_organization_user_directories_component_confirm_remove_user_directory_from_organization',
-          value: 'Are you sure you want to remove the user directory from the organization?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_organization_user_directories_component_confirm_remove_user_directory_from_organization',
+        value: 'Are you sure you want to remove the user directory from the organization?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -214,8 +232,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.removeUserDirectoryFromOrganization(this.organizationId,
-            userDirectoryId)
+          this.securityService.removeUserDirectoryFromOrganization(this.organizationId, userDirectoryId)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.loadUserDirectoriesForOrganization();
@@ -234,31 +251,7 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
       });
   }
 
-  private calculateAvailableUserDirectories(allUserDirectories: UserDirectorySummary[],
-                                            existingOrganizationUserDirectories: UserDirectorySummary[]): UserDirectorySummary[] {
-
-    let availableUserDirectories: UserDirectorySummary[] = [];
-
-    for (let i = 0; i < allUserDirectories.length; i++) {
-      let foundExistingUserDirectory: boolean = false;
-
-      for (let j = 0; j < existingOrganizationUserDirectories.length; j++) {
-        if (allUserDirectories[i].id === existingOrganizationUserDirectories[j].id) {
-          foundExistingUserDirectory = true;
-          break;
-        }
-      }
-
-      if (!foundExistingUserDirectory) {
-        availableUserDirectories.push(allUserDirectories[i]);
-      }
-    }
-
-    return availableUserDirectories;
-  }
-
-  private filterUserDirectories(userDirectories: UserDirectorySummary[],
-                                value: string | UserDirectorySummary): UserDirectorySummary[] {
+  private filterUserDirectories(userDirectories: UserDirectorySummary[], value: string | UserDirectorySummary): UserDirectorySummary[] {
     let filterValue = '';
 
     if (typeof value === 'string') {
@@ -267,7 +260,6 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView
       filterValue = (value as UserDirectorySummary).name.toLowerCase();
     }
 
-    return userDirectories.filter(
-      userDirecory => userDirecory.name.toLowerCase().indexOf(filterValue) === 0);
+    return userDirectories.filter(userDirecory => userDirecory.name.toLowerCase().indexOf(filterValue) === 0);
   }
 }

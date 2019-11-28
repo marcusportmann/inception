@@ -45,7 +45,7 @@ import {Observable} from 'rxjs';
 })
 export class TitleBarComponent implements OnInit {
 
-  @Input() fixed?: boolean;
+  @Input() fixed = false;
 
   /**
    * Constructs a new TitleBarComponent.

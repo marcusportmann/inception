@@ -50,9 +50,9 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   displayedColumns = ['key', 'value', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
               private configurationService: ConfigurationService, private dialogService: DialogService,

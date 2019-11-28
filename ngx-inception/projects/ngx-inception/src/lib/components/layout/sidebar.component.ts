@@ -30,6 +30,7 @@ import {SIDEBAR_CSS_CLASSES} from './sidebar-css-classes';
 })
 export class SidebarComponent implements OnInit {
 
+  // TODO: Confirm if we can default these properties to false -- MARCUS
   @Input() compact?: boolean;
 
   @Input() display?: string;

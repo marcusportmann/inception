@@ -4,9 +4,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_password_attempts">Max Password Attempts</mat-label>
         <input type="text" matInput formControlName="maxPasswordAttempts" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('maxPasswordAttempts').errors && !internalUserDirectoryForm.get('maxPasswordAttempts').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('maxPasswordAttempts').errors?.required" i18n="@@security_internal_user_directory_component_error_max_password_attempts_required">The maximum number of password attempts is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('maxPasswordAttempts').errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_password_attempts_pattern">A valid number is required.</span>
+        <mat-error *ngIf="maxPasswordAttemptsFormControl.errors && !maxPasswordAttemptsFormControl.untouched">
+          <span *ngIf="maxPasswordAttemptsFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_max_password_attempts_required">The maximum number of password attempts is required.</span>
+          <span *ngIf="maxPasswordAttemptsFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_password_attempts_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -16,9 +16,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_password_expiry_months">Password Expiry Months</mat-label>
         <input type="text" matInput formControlName="passwordExpiryMonths" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('passwordExpiryMonths').errors && !internalUserDirectoryForm.get('passwordExpiryMonths').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('passwordExpiryMonths').errors?.required" i18n="@@security_internal_user_directory_component_error_password_expiry_months_required">The number of months before a password expires is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('passwordExpiryMonths').errors?.pattern" i18n="@@security_internal_user_directory_component_error_password_expiry_months_pattern">A valid number is required.</span>
+        <mat-error *ngIf="passwordExpiryMonthsFormControl.errors && !passwordExpiryMonthsFormControl.untouched">
+          <span *ngIf="passwordExpiryMonthsFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_password_expiry_months_required">The number of months before a password expires is required.</span>
+          <span *ngIf="passwordExpiryMonthsFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_password_expiry_months_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -28,9 +28,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_password_history_months">Password History Months</mat-label>
         <input type="text" matInput formControlName="passwordHistoryMonths" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('passwordHistoryMonths').errors && !internalUserDirectoryForm.get('passwordHistoryMonths').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('passwordHistoryMonths').errors?.required" i18n="@@security_internal_user_directory_component_error_password_history_months_required">The number of months before a password can be reused is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('passwordHistoryMonths').errors?.pattern" i18n="@@security_internal_user_directory_component_error_password_history_months_pattern">A valid number is required.</span>
+        <mat-error *ngIf="passwordHistoryMonthsFormControl.errors && !passwordHistoryMonthsFormControl.untouched">
+          <span *ngIf="passwordHistoryMonthsFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_password_history_months_required">The number of months before a password can be reused is required.</span>
+          <span *ngIf="passwordHistoryMonthsFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_password_history_months_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -40,9 +40,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_users">Max Filtered Users</mat-label>
         <input type="text" matInput formControlName="maxFilteredUsers" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('maxFilteredUsers').errors && !internalUserDirectoryForm.get('maxFilteredUsers').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredUsers').errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_users_required">The maximum number of filtered users is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredUsers').errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_users_pattern">A valid number is required.</span>
+        <mat-error *ngIf="maxFilteredUsersFormControl.errors && !maxFilteredUsersFormControl.untouched">
+          <span *ngIf="maxFilteredUsersFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_users_required">The maximum number of filtered users is required.</span>
+          <span *ngIf="maxFilteredUsersFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_users_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -52,9 +52,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_groups">Max Filtered Groups</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroups" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('maxFilteredGroups').errors && !internalUserDirectoryForm.get('maxFilteredGroups').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredGroups').errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_groups_required">The maximum number of filtered groups is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredGroups').errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
+        <mat-error *ngIf="maxFilteredGroupsFormControl.errors && !maxFilteredGroupsFormControl.untouched">
+          <span *ngIf="maxFilteredGroupsFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_groups_required">The maximum number of filtered groups is required.</span>
+          <span *ngIf="maxFilteredGroupsFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_groups_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -64,9 +64,9 @@
       <mat-form-field>
         <mat-label i18n="@@security_internal_user_directory_component_label_max_filtered_group_members">Max Filtered Group Members</mat-label>
         <input type="text" matInput formControlName="maxFilteredGroupMembers" required="true">
-        <mat-error *ngIf="internalUserDirectoryForm.get('maxFilteredGroupMembers').errors && !internalUserDirectoryForm.get('maxFilteredGroupMembers').untouched">
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredGroupMembers').errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_required">The maximum number of filtered group members is required.</span>
-          <span *ngIf="internalUserDirectoryForm.get('maxFilteredGroupMembers').errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
+        <mat-error *ngIf="maxFilteredGroupMembersFormControl.errors && !maxFilteredGroupMembersFormControl.untouched">
+          <span *ngIf="maxFilteredGroupMembersFormControl.errors?.required" i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_required">The maximum number of filtered group members is required.</span>
+          <span *ngIf="maxFilteredGroupMembersFormControl.errors?.pattern" i18n="@@security_internal_user_directory_component_error_max_filtered_group_members_pattern">A valid number is required.</span>
         </mat-error>
       </mat-form-field>
     </div>

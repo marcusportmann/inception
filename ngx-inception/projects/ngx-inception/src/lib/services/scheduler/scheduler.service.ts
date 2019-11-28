@@ -24,7 +24,7 @@ import {DuplicateJobError, JobNotFoundError, SchedulerServiceError} from './sche
 import {CommunicationError} from '../../errors/communication-error';
 import {SystemUnavailableError} from '../../errors/system-unavailable-error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {INCEPTION_CONFIG} from '../../inception-config'
+import {INCEPTION_CONFIG} from '../../inception-config';
 import {InceptionConfig} from '../../inception-config';
 
 /**

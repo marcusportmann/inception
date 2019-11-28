@@ -33,7 +33,7 @@ import {Replace} from '../../util';
 })
 export class AdminFooterComponent implements OnInit {
 
-  @Input() fixed?: boolean;
+  @Input() fixed = false;
 
   /**
    * Constructs a new AdminFooterComponent.

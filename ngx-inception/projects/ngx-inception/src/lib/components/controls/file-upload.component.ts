@@ -76,7 +76,7 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
 
   @Input() placeholder = '';
   @Input() multiple = false;
-  @Input() accept: string | null = null;
+  @Input() accept?: string;
   @Input() errorStateMatcher: ErrorStateMatcher;
 
   @HostBinding() id = `ngx-mat-file-input-${FileUploadComponent.nextId++}`;
@@ -159,9 +159,9 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
   }
 
   private _onChange = (_: any) => {
-  };
+  }
   private _onTouched = () => {
-  };
+  }
 
   get fileNames() {
     if (this.value) {
@@ -242,5 +242,4 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
       this.updateErrorState();
     }
   }
-
 }

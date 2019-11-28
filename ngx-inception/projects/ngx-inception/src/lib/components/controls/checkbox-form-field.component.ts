@@ -113,7 +113,7 @@ export class CheckboxFormFieldComponent extends MatFormField implements AfterCon
   /**
    * The checkboxes associated with the checkbox form field.
    */
-  @ContentChildren(MatCheckbox) checkboxChildren?: QueryList<MatCheckbox>;
+  @ContentChildren(MatCheckbox) checkboxChildren!: QueryList<MatCheckbox>;
 
   constructor(elementRef: ElementRef, private changeDetectorRef: ChangeDetectorRef,
               @Optional() @Inject(MAT_LABEL_GLOBAL_OPTIONS) labelOptions: LabelOptions, @Optional() directionality: Directionality,
@@ -165,10 +165,8 @@ export class CheckboxFormFieldComponent extends MatFormField implements AfterCon
   }
 
   protected validateCheckboxChildren(): void {
-    if (this.checkboxChildren) {
-      if (this.checkboxChildren.length > 0) {
-        return;
-      }
+    if (this.checkboxChildren.length > 0) {
+      return;
     }
 
     throw getMatCheckboxMissingControlError();

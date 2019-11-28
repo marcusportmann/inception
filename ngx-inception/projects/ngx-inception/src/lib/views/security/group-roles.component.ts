@@ -15,7 +15,6 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -29,13 +28,12 @@ import {BackNavigation} from '../../components/layout/back-navigation';
 import {SecurityServiceError} from '../../services/security/security.service.errors';
 import {SecurityService} from '../../services/security/security.service';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatDialogRef} from "@angular/material/dialog";
-import {ConfirmationDialogComponent} from "../../components/dialogs";
-import {Role} from "../../services/security/role";
-import {GroupRole} from "../../services/security/group-role";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialogRef} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../components/dialogs';
+import {Role} from '../../services/security/role';
+import {GroupRole} from '../../services/security/group-role';
+import {MatPaginator} from '@angular/material/paginator';
 
 /**
  * The GroupRolesComponent class implements the group roles component.
@@ -58,7 +56,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   displayedColumns = ['existingRoleName', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   selectedRole?: Role;
 
@@ -66,16 +64,26 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   groupName: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
+
+    if (!groupName) {
+      throw(new Error('No groupName route parameter found'));
+    }
+
+    this.groupName = decodeURIComponent(groupName);
   }
 
   get backNavigation(): BackNavigation {
@@ -95,12 +103,35 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
     });
   }
 
+  private static calculateAvailableRoles(allRoles: Role[], existingGroupRoles: GroupRole[]): Role[] {
+
+    const availableRoles: Role[] = [];
+
+    for (const possibleRole of allRoles) {
+      let foundExistingRole = false;
+
+      for (const existingRole of existingGroupRoles) {
+        if (possibleRole.code === existingRole.roleCode) {
+          foundExistingRole = true;
+          break;
+        }
+      }
+
+      if (!foundExistingRole) {
+        if (possibleRole.code !== 'Administrator') {
+          availableRoles.push(possibleRole);
+        }
+      }
+    }
+
+    return availableRoles;
+  }
+
   addRoleToGroup(): void {
     if (this.selectedRole) {
       this.spinnerService.showSpinner();
 
-      this.securityService.addRoleToGroup(this.userDirectoryId, this.groupName,
-        this.selectedRole.code)
+      this.securityService.addRoleToGroup(this.userDirectoryId, this.groupName, this.selectedRole.code)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           this.loadRolesForGroup();
@@ -126,11 +157,10 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       .subscribe((groupRoles: GroupRole[]) => {
         this.dataSource.data = groupRoles;
 
-        this.availableRoles$.next(this.calculateAvailableRoles(this.allRoles, this.dataSource.data));
+        this.availableRoles$.next(GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data));
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -153,8 +183,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
         this.loadRolesForGroup();
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -168,13 +197,12 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   }
 
   removeRoleFromGroup(roleCode: string) {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_group_roles_component_confirm_remove_role_from_group',
-          value: 'Are you sure you want to remove the role from the group?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_group_roles_component_confirm_remove_role_from_group',
+        value: 'Are you sure you want to remove the role from the group?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -201,34 +229,10 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       });
   }
 
-  private calculateAvailableRoles(allRoles: Role[], existingGroupRoles: GroupRole[]): Role[] {
-
-    let availableRoles: Role[] = [];
-
-    for (let i = 0; i < allRoles.length; i++) {
-      let foundExistingRole: boolean = false;
-
-      for (let j = 0; j < existingGroupRoles.length; j++) {
-        if (allRoles[i].code === existingGroupRoles[j].roleCode) {
-          foundExistingRole = true;
-          break;
-        }
-      }
-
-      if (!foundExistingRole) {
-        if (allRoles[i].code !== 'Administrator') {
-          availableRoles.push(allRoles[i]);
-        }
-      }
-    }
-
-    return availableRoles;
-  }
-
   private roleCodeToName(roleCode: string): string {
-    for (let i = 0; i < this.allRoles.length; i++) {
-      if (this.allRoles[i].code === roleCode) {
-        return this.allRoles[i].name;
+    for (const role of this.allRoles) {
+      if (role.code === roleCode) {
+        return role.name;
       }
     }
 

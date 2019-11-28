@@ -17,7 +17,7 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../util';
 import {BreadcrumbsService} from '../../services/layout/breadcrumbs.service';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 /**
  * The BreadcrumbsComponent class implements the breadcrumbs component.
@@ -44,7 +44,7 @@ export class BreadcrumbsComponent implements OnInit {
 
   breadcrumbs: Observable<Array<{}>>;
 
-  @Input() fixed?: boolean;
+  @Input() fixed = false;
 
   /**
    * Constructs a new BreadcrumbsComponent.

@@ -55,7 +55,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   displayedColumns = ['existingGroupName', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
   selectedGroupName = '';
 

@@ -15,8 +15,8 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {INCEPTION_CONFIG} from '../../inception.module';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {SecurityService} from '../../services/security/security.service';
 import {finalize, first, map} from 'rxjs/operators';
 import {SessionService} from '../../services/session/session.service';
@@ -31,7 +31,6 @@ import {AccessDeniedError} from '../../errors/access-denied-error';
 import {Session} from '../../services/session/session';
 import {Organization} from '../../services/security/organization';
 import {Organizations} from '../../services/security/organizations';
-import {InceptionConfig} from '../../inception-config';
 
 /**
  * The LoginComponent class implements the login component.
@@ -64,6 +63,7 @@ export class LoginComponent implements OnInit {
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private router: Router, private activatedRoute: ActivatedRoute,
               private i18n: I18n, private dialogService: DialogService, private securityService: SecurityService,
               private sessionService: SessionService, private spinnerService: SpinnerService) {
+
     // Initialise the form controls
     this.passwordFormControl = new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]);
     this.usernameFormControl = new FormControl('Password1', [Validators.required, Validators.maxLength(100)]);

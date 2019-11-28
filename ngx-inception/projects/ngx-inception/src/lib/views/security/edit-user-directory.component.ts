@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -53,9 +53,13 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   @ViewChild(LdapUserDirectoryComponent, {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
 
+  nameFormControl: FormControl;
+
   userDirectory?: UserDirectory;
 
   userDirectoryId: string;
+
+  userDirectoryTypeFormControl: FormControl;
 
   userDirectoryTypes: UserDirectoryType[] = [];
 
@@ -74,14 +78,16 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.userDirectoryId = decodeURIComponent(userDirectoryId);
 
     // Initialise the form controls
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userDirectoryTypeFormControl = new FormControl('', [Validators.required]);
 
     // Initialise the form
     this.editUserDirectoryForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userDirectoryType: new FormControl('', [Validators.required])
+      name: this.nameFormControl,
+      userDirectoryType: this.userDirectoryTypeFormControl
     });
 
-    this.subscriptions.add(this.editUserDirectoryForm.get('userDirectoryType')!.valueChanges
+    this.subscriptions.add(this.userDirectoryTypeFormControl.valueChanges
       .pipe(startWith(null), pairwise())
       .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
         this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
@@ -117,8 +123,8 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
       .subscribe((results: [UserDirectoryType[], UserDirectory]) => {
         this.userDirectoryTypes = results[0];
         this.userDirectory = results[1];
-        this.editUserDirectoryForm.get('name')!.setValue(results[1].name);
-        this.editUserDirectoryForm.get('userDirectoryType')!.setValue(results[1].type);
+        this.nameFormControl.setValue(results[1].name);
+        this.userDirectoryTypeFormControl.setValue(results[1].type);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
@@ -136,8 +142,8 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   ok(): void {
     if (this.userDirectory && this.editUserDirectoryForm.valid) {
-      this.userDirectory.name = this.editUserDirectoryForm.get('name')!.value;
-      this.userDirectory.type = this.editUserDirectoryForm.get('userDirectoryType')!.value;
+      this.userDirectory.name = this.nameFormControl.value;
+      this.userDirectory.type = this.userDirectoryTypeFormControl.value;
 
       if (this.internalUserDirectory) {
         this.userDirectory.parameters = this.internalUserDirectory.getParameters();
@@ -167,8 +173,8 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   userDirectoryTypeSelected(previousUserDirectoryType: string, currentUserDirectoryType: string): void {
     // Clear the user directory parameters if required
-    if (!!previousUserDirectoryType) {
-      this.userDirectory!.parameters = [];
+    if (!!previousUserDirectoryType && this.userDirectory) {
+      this.userDirectory.parameters = [];
     }
 
     // Remove the controls for the user directory types
@@ -185,10 +191,12 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     this.changeDetectorRef.detectChanges();
 
     // Populate the nested InternalUserDirectoryComponent or LdapUserDirectoryComponent
-    if (this.internalUserDirectory) {
-      this.internalUserDirectory.setParameters(this.userDirectory!.parameters);
-    } else if (this.ldapUserDirectory) {
-      this.ldapUserDirectory.setParameters(this.userDirectory!.parameters);
+    if (this.userDirectory) {
+      if (this.internalUserDirectory) {
+        this.internalUserDirectory.setParameters(this.userDirectory.parameters);
+      } else if (this.ldapUserDirectory) {
+        this.ldapUserDirectory.setParameters(this.userDirectory.parameters);
+      }
     }
   }
 }

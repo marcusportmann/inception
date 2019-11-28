@@ -16,21 +16,13 @@
 
 import {Component, forwardRef} from '@angular/core';
 import {
-  AbstractControl,
-  ControlValueAccessor,
-  FormControl,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-  Validators
+  AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators
 } from '@angular/forms';
 import {UserDirectoryParameter} from '../../services/security/user-directory-parameter';
 import {UserDirectoryUtil} from '../../services/security/user-directory-util';
 
 @Component({
-  selector: 'internal-user-directory',
+  selector: 'inception-internal-user-directory',
   templateUrl: 'internal-user-directory.component.html',
   styleUrls: ['internal-user-directory.component.css'],
   providers: [{
@@ -48,41 +40,54 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
 
   internalUserDirectoryForm: FormGroup;
 
+  maxFilteredGroupMembersFormControl: FormControl;
+
+  maxFilteredGroupsFormControl: FormControl;
+
+  maxFilteredUsersFormControl: FormControl;
+
+  maxPasswordAttemptsFormControl: FormControl;
+
+  passwordExpiryMonthsFormControl: FormControl;
+
+  passwordHistoryMonthsFormControl: FormControl;
+
   constructor() {
+    // Initialise the form controls
+    this.maxFilteredGroupMembersFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.maxFilteredGroupsFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.maxFilteredUsersFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.maxPasswordAttemptsFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.passwordExpiryMonthsFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.passwordHistoryMonthsFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+
     // Initialise the form
     this.internalUserDirectoryForm = new FormGroup({
-      maxFilteredGroupMembers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredGroups: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxPasswordAttempts: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      passwordExpiryMonths: new FormControl('',
-        [Validators.required, Validators.pattern('^\\d+$')]),
-      passwordHistoryMonths: new FormControl('',
-        [Validators.required, Validators.pattern('^\\d+$')])
+      maxFilteredGroupMembers: this.maxFilteredGroupMembersFormControl,
+      maxFilteredGroups: this.maxFilteredGroupMembersFormControl,
+      maxFilteredUsers: this.maxFilteredUsersFormControl,
+      maxPasswordAttempts: this.maxPasswordAttemptsFormControl,
+      passwordExpiryMonths: this.passwordExpiryMonthsFormControl,
+      passwordHistoryMonths: this.passwordHistoryMonthsFormControl
     });
   }
 
   getParameters(): UserDirectoryParameter[] {
     const parameters: UserDirectoryParameter[] = [];
 
-    UserDirectoryUtil.setParameter(parameters, 'MaxPasswordAttempts',
-      this.internalUserDirectoryForm.get('maxPasswordAttempts')!.value);
-    UserDirectoryUtil.setParameter(parameters, 'PasswordExpiryMonths',
-      this.internalUserDirectoryForm.get('passwordExpiryMonths')!.value);
-    UserDirectoryUtil.setParameter(parameters, 'PasswordHistoryMonths',
-      this.internalUserDirectoryForm.get('passwordHistoryMonths')!.value);
-    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredUsers',
-      this.internalUserDirectoryForm.get('maxFilteredUsers')!.value);
-    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroups',
-      this.internalUserDirectoryForm.get('maxFilteredGroups')!.value);
-    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroupMembers',
-      this.internalUserDirectoryForm.get('maxFilteredGroupMembers')!.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxPasswordAttempts', this.maxPasswordAttemptsFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'PasswordExpiryMonths', this.passwordExpiryMonthsFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'PasswordHistoryMonths', this.passwordHistoryMonthsFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredUsers', this.maxFilteredUsersFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroups', this.maxFilteredGroupsFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroupMembers', this.maxFilteredGroupMembersFormControl.value);
 
     return parameters;
   }
 
+  // TODO: CHECK IF WE CAN REMOVE THIS -- MARCUS
   onTouched: () => void = () => {
-  };
+  }
 
   // tslint:disable-next-line:no-any
   registerOnChange(fn: any): void {
@@ -99,24 +104,20 @@ export class InternalUserDirectoryComponent implements ControlValueAccessor, Val
   }
 
   setParameters(parameters: UserDirectoryParameter[]) {
-    this.internalUserDirectoryForm.get('maxPasswordAttempts')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'MaxPasswordAttempts') ?
-        UserDirectoryUtil.getParameter(parameters, 'MaxPasswordAttempts') : '5');
-    this.internalUserDirectoryForm.get('passwordExpiryMonths')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'PasswordExpiryMonths') ?
-        UserDirectoryUtil.getParameter(parameters, 'PasswordExpiryMonths') : '12');
-    this.internalUserDirectoryForm.get('passwordHistoryMonths')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'PasswordHistoryMonths') ?
-        UserDirectoryUtil.getParameter(parameters, 'PasswordHistoryMonths') : '24');
-    this.internalUserDirectoryForm.get('maxFilteredUsers')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredUsers') ?
-        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredUsers') : '100');
-    this.internalUserDirectoryForm.get('maxFilteredGroups')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ?
-        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') : '100');
-    this.internalUserDirectoryForm.get('maxFilteredGroupMembers')!.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroupMembers') ?
-        UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers') : '100');
+    this.maxPasswordAttemptsFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'MaxPasswordAttempts') ?
+      UserDirectoryUtil.getParameter(parameters, 'MaxPasswordAttempts') : '5');
+    this.passwordExpiryMonthsFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'PasswordExpiryMonths') ?
+      UserDirectoryUtil.getParameter(parameters, 'PasswordExpiryMonths') : '12');
+    this.passwordHistoryMonthsFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'PasswordHistoryMonths') ?
+      UserDirectoryUtil.getParameter(parameters, 'PasswordHistoryMonths') : '24');
+    this.maxFilteredUsersFormControl.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredUsers') ? UserDirectoryUtil.getParameter(parameters, 'MaxFilteredUsers') :
+        '100');
+    this.maxFilteredGroupsFormControl.setValue(
+      UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ? UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') :
+        '100');
+    this.maxFilteredGroupMembersFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroupMembers') ?
+      UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers') : '100');
   }
 
   validate(c: AbstractControl): ValidationErrors | null {

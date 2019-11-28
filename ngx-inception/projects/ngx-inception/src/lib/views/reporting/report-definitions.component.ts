@@ -50,18 +50,16 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private reportingService: ReportingService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+              private reportingService: ReportingService, private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     // Set the data source filter
-    this.dataSource.filterPredicate =
-      (data, filter): boolean => data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data, filter): boolean => data.name.toLowerCase().includes(filter);
   }
 
   get title(): string {
@@ -78,13 +76,12 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
   }
 
   deleteReportDefinition(reportDefinitionId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@reporting_report_definitions_component_confirm_delete_report_definition',
-          value: 'Are you sure you want to delete the report definition?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@reporting_report_definitions_component_confirm_delete_report_definition',
+        value: 'Are you sure you want to delete the report definition?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -112,8 +109,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
 
   editReportDefinition(reportDefinitionId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(reportDefinitionId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(reportDefinitionId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadReportDefinitions(): void {
@@ -125,8 +121,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
         this.dataSource.data = reportDefinitionSummaries;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof ReportingService) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof ReportingService) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

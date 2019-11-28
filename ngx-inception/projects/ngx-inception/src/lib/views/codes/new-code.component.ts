@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,6 +43,8 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
 
   code?: Code;
 
+  codeCategoryId: string;
+
   idFormControl: FormControl;
 
   nameFormControl: FormControl;
@@ -54,6 +56,15 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    this.codeCategoryId = decodeURIComponent(codeCategoryId);
 
     // Initialise the form controls
     this.idFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -88,17 +99,8 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   }
 
   ngAfterViewInit(): void {
-    // Retrieve the route parameters
-    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
-
-    if (!codeCategoryId) {
-      throw(new Error('No codeCategoryId route parameter found'));
-    }
-
-    codeCategoryId = decodeURIComponent(codeCategoryId);
-
     // Create the new code
-    this.code = new Code('', codeCategoryId, '', '');
+    this.code = new Code('', this.codeCategoryId, '', '');
   }
 
   ok(): void {

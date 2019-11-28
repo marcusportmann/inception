@@ -17,7 +17,7 @@
 import {Component, forwardRef} from '@angular/core';
 import {
   AbstractControl,
-  ControlValueAccessor,
+  ControlValueAccessor, Form,
   FormControl,
   FormGroup,
   NG_VALIDATORS,
@@ -30,7 +30,7 @@ import {UserDirectoryParameter} from '../../services/security/user-directory-par
 import {UserDirectoryUtil} from '../../services/security/user-directory-util';
 
 @Component({
-  selector: 'ldap-user-directory',
+  selector: 'inception-ldap-user-directory',
   templateUrl: 'ldap-user-directory.component.html',
   styleUrls: ['ldap-user-directory.component.css'],
   providers: [{
@@ -46,42 +46,128 @@ import {UserDirectoryUtil} from '../../services/security/user-directory-util';
 })
 export class LdapUserDirectoryComponent implements ControlValueAccessor, Validator {
 
+  baseDNFormControl: FormControl;
+
+  bindDNFormControl: FormControl;
+
+  bindPasswordFormControl: FormControl;
+
+  groupBaseDNFormControl: FormControl;
+
+  groupDescriptionAttributeFormControl: FormControl;
+
+  groupMemberAttributeFormControl: FormControl;
+
+  groupNameAttributeFormControl: FormControl;
+
+  groupObjectClassFormControl: FormControl;
+
+  hostFormControl: FormControl;
+
   ldapUserDirectoryForm: FormGroup;
 
+  maxFilteredGroupMembersFormControl: FormControl;
+
+  maxFilteredGroupsFormControl: FormControl;
+
+  maxFilteredUsersFormControl: FormControl;
+
+  portFormControl: FormControl;
+
+  supportsAdminChangePasswordFormControl: FormControl;
+
+  supportsChangePasswordFormControl: FormControl;
+
+  supportsGroupAdministrationFormControl: FormControl;
+
+  supportsGroupMemberAdministrationFormControl: FormControl;
+
+  supportsUserAdministrationFormControl: FormControl;
+
+  userBaseDNFormControl: FormControl;
+
+  userObjectClassFormControl: FormControl;
+
+  userEmailAttributeFormControl: FormControl;
+
+  userFirstNameAttributeFormControl: FormControl;
+
+  userFullNameAttributeFormControl: FormControl;
+
+  userLastNameAttributeFormControl: FormControl;
+
+  userMobileNumberAttributeFormControl: FormControl;
+
+  userPhoneNumberAttributeFormControl: FormControl;
+
+  userUsernameAttributeFormControl: FormControl;
+
+  useSSLFormControl: FormControl;
+
   constructor() {
+    // Initialise the form controls
+    this.baseDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.bindDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.bindPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.groupBaseDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.groupDescriptionAttributeFormControl = new FormControl('',
+      [Validators.required, Validators.maxLength(100)]);
+    this.groupMemberAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.groupNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.groupObjectClassFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.hostFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.maxFilteredGroupMembersFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.maxFilteredGroupsFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.maxFilteredUsersFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.portFormControl = new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]);
+    this.supportsAdminChangePasswordFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+    this.supportsChangePasswordFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+    this.supportsGroupAdministrationFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+    this.supportsGroupMemberAdministrationFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+    this.supportsUserAdministrationFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+    this.userBaseDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userObjectClassFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userEmailAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userFirstNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userFullNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userLastNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userMobileNumberAttributeFormControl = new FormControl('',
+      [Validators.required, Validators.maxLength(100)]);
+    this.userPhoneNumberAttributeFormControl = new FormControl('',
+      [Validators.required, Validators.maxLength(100)]);
+    this.userUsernameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.useSSLFormControl = new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]);
+
     // Initialise the form
     this.ldapUserDirectoryForm = new FormGroup({
-      baseDN: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      bindDN: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      bindPassword: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      groupBaseDN: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      groupDescriptionAttribute: new FormControl('',
-        [Validators.required, Validators.maxLength(100)]),
-      groupMemberAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      groupNameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      groupObjectClass: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      host: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      maxFilteredGroupMembers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredGroups: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      maxFilteredUsers: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      port: new FormControl('', [Validators.required, Validators.pattern('^\\d+$')]),
-      supportsAdminChangePassword: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
-      supportsChangePassword: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
-      supportsGroupAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
-      supportsGroupMemberAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
-      supportsUserAdministration: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')]),
-      userBaseDN: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userObjectClass: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userEmailAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userFirstNameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userFullNameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userLastNameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      userMobileNumberAttribute: new FormControl('',
-        [Validators.required, Validators.maxLength(100)]),
-      userPhoneNumberAttribute: new FormControl('',
-        [Validators.required, Validators.maxLength(100)]),
-      userUsernameAttribute: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      useSSL: new FormControl('', [Validators.required, Validators.pattern('^(true|false)$')])
+      baseDN: this.baseDNFormControl,
+      bindDN: this.bindDNFormControl,
+      bindPassword: this.bindPasswordFormControl,
+      groupBaseDN: this.groupBaseDNFormControl,
+      groupDescriptionAttribute: this.groupDescriptionAttributeFormControl,
+      groupMemberAttribute: this.groupMemberAttributeFormControl,
+      groupNameAttribute: this.groupNameAttributeFormControl,
+      groupObjectClass: this.groupObjectClassFormControl,
+      host: this.hostFormControl,
+      maxFilteredGroupMembers: this.maxFilteredGroupMembersFormControl,
+      maxFilteredGroups: this.maxFilteredGroupsFormControl,
+      maxFilteredUsers: this.maxFilteredUsersFormControl,
+      port: this.portFormControl,
+      supportsAdminChangePassword: this.supportsAdminChangePasswordFormControl,
+      supportsChangePassword: this.supportsChangePasswordFormControl,
+      supportsGroupAdministration: this.supportsGroupAdministrationFormControl,
+      supportsGroupMemberAdministration: this.supportsGroupMemberAdministrationFormControl,
+      supportsUserAdministration: this.supportsUserAdministrationFormControl,
+      userBaseDN: this.userBaseDNFormControl,
+      userObjectClass: this.userObjectClassFormControl,
+      userEmailAttribute: this.userEmailAttributeFormControl,
+      userFirstNameAttribute: this.userFirstNameAttributeFormControl,
+      userFullNameAttribute: this.userFullNameAttributeFormControl,
+      userLastNameAttribute: this.userLastNameAttributeFormControl,
+      userMobileNumberAttribute: this.userMobileNumberAttributeFormControl,
+      userPhoneNumberAttribute: this.userPhoneNumberAttributeFormControl,
+      userUsernameAttribute: this.userUsernameAttributeFormControl,
+      useSSL: this.useSSLFormControl
     });
   }
 
@@ -90,61 +176,61 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     const parameters: UserDirectoryParameter[] = [];
 
     UserDirectoryUtil.setParameter(parameters, 'BaseDN',
-      this.ldapUserDirectoryForm.get('baseDN')!.value);
+      this.baseDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'BindDN',
-      this.ldapUserDirectoryForm.get('bindDN')!.value);
+      this.bindDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'BindPassword',
-      this.ldapUserDirectoryForm.get('bindPassword')!.value);
+      this.bindPasswordFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupBaseDN',
-      this.ldapUserDirectoryForm.get('groupBaseDN')!.value);
+      this.groupBaseDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupDescriptionAttribute',
-      this.ldapUserDirectoryForm.get('groupDescriptionAttribute')!.value);
+      this.groupDescriptionAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupMemberAttribute',
-      this.ldapUserDirectoryForm.get('groupMemberAttribute')!.value);
+      this.groupMemberAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupNameAttribute',
-      this.ldapUserDirectoryForm.get('groupNameAttribute')!.value);
+      this.groupNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'GroupObjectClass',
-      this.ldapUserDirectoryForm.get('groupObjectClass')!.value);
+     this.groupObjectClassFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'Host',
-      this.ldapUserDirectoryForm.get('host')!.value);
+      this.hostFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroupMembers',
-      this.ldapUserDirectoryForm.get('maxFilteredGroupMembers')!.value);
+      this.maxFilteredGroupMembersFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredGroups',
-      this.ldapUserDirectoryForm.get('maxFilteredGroups')!.value);
+      this.maxFilteredGroupsFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'MaxFilteredUsers',
-      this.ldapUserDirectoryForm.get('maxFilteredUsers')!.value);
+      this.maxFilteredUsersFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'Port',
-      this.ldapUserDirectoryForm.get('port')!.value);
+      this.portFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'SupportsAdminChangePassword',
-      this.ldapUserDirectoryForm.get('supportsAdminChangePassword')!.value);
+      this.supportsAdminChangePasswordFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'SupportsChangePassword',
-      this.ldapUserDirectoryForm.get('supportsChangePassword')!.value);
+      this.supportsChangePasswordFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'SupportsGroupAdministration',
-      this.ldapUserDirectoryForm.get('supportsGroupAdministration')!.value);
+      this.supportsGroupAdministrationFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'SupportsGroupMemberAdministration',
-      this.ldapUserDirectoryForm.get('supportsGroupMemberAdministration')!.value);
+      this.supportsGroupMemberAdministrationFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'SupportsUserAdministration',
-      this.ldapUserDirectoryForm.get('supportsUserAdministration')!.value);
+      this.supportsUserAdministrationFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserBaseDN',
-      this.ldapUserDirectoryForm.get('userBaseDN')!.value);
+      this.userBaseDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserObjectClass',
-      this.ldapUserDirectoryForm.get('userObjectClass')!.value);
+      this.userObjectClassFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserEmailAttribute',
-      this.ldapUserDirectoryForm.get('userEmailAttribute')!.value);
+      this.userEmailAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserFirstNameAttribute',
-      this.ldapUserDirectoryForm.get('userFirstNameAttribute')!.value);
+      this.userFirstNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserFullNameAttribute',
-      this.ldapUserDirectoryForm.get('userFullNameAttribute')!.value);
+      this.userFullNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserLastNameAttribute',
-      this.ldapUserDirectoryForm.get('userLastNameAttribute')!.value);
+      this.userLastNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserMobileNumberAttribute',
-      this.ldapUserDirectoryForm.get('userMobileNumberAttribute')!.value);
+      this.userMobileNumberAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserPhoneNumberAttribute',
-      this.ldapUserDirectoryForm.get('userPhoneNumberAttribute')!.value);
+      this.userPhoneNumberAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserUsernameAttribute',
-      this.ldapUserDirectoryForm.get('userUsernameAttribute')!.value);
+      this.userUsernameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UseSSL',
-      this.ldapUserDirectoryForm.get('useSSL')!.value);
+      this.useSSLFormControl.value);
 
     return parameters;
   }
@@ -167,88 +253,88 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
   }
 
   setParameters(parameters: UserDirectoryParameter[]) {
-    this.ldapUserDirectoryForm.get('baseDN')!.setValue(
+    this.baseDNFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'BaseDN') ?
         UserDirectoryUtil.getParameter(parameters, 'BaseDN') : '');
-    this.ldapUserDirectoryForm.get('bindDN')!.setValue(
+    this.bindDNFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'BindDN') ?
         UserDirectoryUtil.getParameter(parameters, 'BindDN') : '');
-    this.ldapUserDirectoryForm.get('bindPassword')!.setValue(
+    this.bindPasswordFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'BindPassword') ?
         UserDirectoryUtil.getParameter(parameters, 'BindPassword') : '');
-    this.ldapUserDirectoryForm.get('groupBaseDN')!.setValue(
+    this.groupBaseDNFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupBaseDN') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupBaseDN') : '');
-    this.ldapUserDirectoryForm.get('groupDescriptionAttribute')!.setValue(
+    this.groupDescriptionAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupDescriptionAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupDescriptionAttribute') : 'description');
-    this.ldapUserDirectoryForm.get('groupMemberAttribute')!.setValue(
+    this.groupMemberAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupMemberAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupMemberAttribute') : 'member');
-    this.ldapUserDirectoryForm.get('groupNameAttribute')!.setValue(
+    this.groupNameAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupNameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupNameAttribute') : 'cn');
-    this.ldapUserDirectoryForm.get('groupObjectClass')!.setValue(
+    this.groupObjectClassFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'GroupObjectClass') ?
         UserDirectoryUtil.getParameter(parameters, 'GroupObjectClass') : 'groupOfNames');
-    this.ldapUserDirectoryForm.get('host')!.setValue(
+    this.hostFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'Host') ?
         UserDirectoryUtil.getParameter(parameters, 'Host') : '');
-    this.ldapUserDirectoryForm.get('maxFilteredGroupMembers')!.setValue(
+    this.maxFilteredGroupMembersFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroupMembers') ?
         UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroupMembers') : '100');
-    this.ldapUserDirectoryForm.get('maxFilteredGroups')!.setValue(
+    this.maxFilteredGroupsFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredGroups') ?
         UserDirectoryUtil.getParameter(parameters, 'MaxFilteredGroups') : '100');
-    this.ldapUserDirectoryForm.get('maxFilteredUsers')!.setValue(
+    this.maxFilteredUsersFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'MaxFilteredUsers') ?
         UserDirectoryUtil.getParameter(parameters, 'MaxFilteredUsers') : '100');
-    this.ldapUserDirectoryForm.get('port')!.setValue(
+    this.portFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'Port') ?
         UserDirectoryUtil.getParameter(parameters, 'Port') : '');
-    this.ldapUserDirectoryForm.get('supportsAdminChangePassword')!.setValue(
+    this.supportsAdminChangePasswordFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsAdminChangePassword') ?
         UserDirectoryUtil.getParameter(parameters, 'SupportsAdminChangePassword') : '');
-    this.ldapUserDirectoryForm.get('supportsChangePassword')!.setValue(
+    this.supportsChangePasswordFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsChangePassword') ?
         UserDirectoryUtil.getParameter(parameters, 'SupportsChangePassword') : '');
-    this.ldapUserDirectoryForm.get('supportsGroupAdministration')!.setValue(
+    this.supportsGroupAdministrationFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupAdministration') ?
         UserDirectoryUtil.getParameter(parameters, 'SupportsGroupAdministration') : '');
-    this.ldapUserDirectoryForm.get('supportsGroupMemberAdministration')!.setValue(
+    this.supportsGroupMemberAdministrationFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsGroupMemberAdministration') ?
         UserDirectoryUtil.getParameter(parameters, 'SupportsGroupMemberAdministration') : '');
-    this.ldapUserDirectoryForm.get('supportsUserAdministration')!.setValue(
+    this.supportsUserAdministrationFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'SupportsUserAdministration') ?
         UserDirectoryUtil.getParameter(parameters, 'SupportsUserAdministration') : '');
-    this.ldapUserDirectoryForm.get('userBaseDN')!.setValue(
+    this.userBaseDNFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserBaseDN') ?
         UserDirectoryUtil.getParameter(parameters, 'UserBaseDN') : '');
-    this.ldapUserDirectoryForm.get('userObjectClass')!.setValue(
+    this.userObjectClassFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserObjectClass') ?
         UserDirectoryUtil.getParameter(parameters, 'UserObjectClass') : 'inetOrgPerson');
-    this.ldapUserDirectoryForm.get('userEmailAttribute')!.setValue(
+    this.userEmailAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserEmailAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserEmailAttribute') : 'mail');
-    this.ldapUserDirectoryForm.get('userFirstNameAttribute')!.setValue(
+    this.userFirstNameAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserFirstNameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserFirstNameAttribute') : 'givenName');
-    this.ldapUserDirectoryForm.get('userFullNameAttribute')!.setValue(
+    this.userFullNameAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserFullNameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserFullNameAttribute') : 'cn');
-    this.ldapUserDirectoryForm.get('userLastNameAttribute')!.setValue(
+    this.userLastNameAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserLastNameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserLastNameAttribute') : 'sn');
-    this.ldapUserDirectoryForm.get('userMobileNumberAttribute')!.setValue(
+    this.userMobileNumberAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserMobileNumberAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserMobileNumberAttribute') : 'mobile');
-    this.ldapUserDirectoryForm.get('userPhoneNumberAttribute')!.setValue(
+    this.userPhoneNumberAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserPhoneNumberAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserPhoneNumberAttribute') : 'telephoneNumber');
-    this.ldapUserDirectoryForm.get('userUsernameAttribute')!.setValue(
+    this.userUsernameAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserUsernameAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserUsernameAttribute') : 'uid');
-    this.ldapUserDirectoryForm.get('useSSL')!.setValue(
+    this.useSSLFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UseSSL') ?
         UserDirectoryUtil.getParameter(parameters, 'UseSSL') : 'false');
   }

@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,20 +43,26 @@ import {v4 as uuid} from 'uuid';
 })
 export class NewOrganizationComponent extends AdminContainerView implements AfterViewInit {
 
+  createUserDirectoryFormControl: FormControl;
+
+  nameFormControl: FormControl;
+
   newOrganizationForm: FormGroup;
 
   organization?: Organization;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
-              private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Initialise the form controls
+    this.createUserDirectoryFormControl = new FormControl(false);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.newOrganizationForm = new FormGroup({
-      createUserDirectory: new FormControl(false),
-      name: new FormControl('', [Validators.required, Validators.maxLength(100)])
+      createUserDirectory: this.createUserDirectoryFormControl,
+      name: this.nameFormControl
     });
   }
 
@@ -85,12 +91,11 @@ export class NewOrganizationComponent extends AdminContainerView implements Afte
 
   ok(): void {
     if (this.organization && this.newOrganizationForm.valid) {
-      this.organization.name = this.newOrganizationForm.get('name')!.value;
+      this.organization.name = this.nameFormControl.value;
 
       this.spinnerService.showSpinner();
 
-      this.securityService.createOrganization(this.organization,
-        this.newOrganizationForm.get('createUserDirectory')!.value)
+      this.securityService.createOrganization(this.organization, this.createUserDirectoryFormControl.value)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           // noinspection JSIgnoredPromiseFromCall

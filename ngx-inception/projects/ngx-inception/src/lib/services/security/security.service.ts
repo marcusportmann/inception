@@ -65,7 +65,7 @@ import {PasswordChange} from './password-change';
 import {Role} from './role';
 import {GroupRole} from './group-role';
 import {OrganizationUserDirectory} from './organization-user-directory';
-import {INCEPTION_CONFIG} from '../../inception-config'
+import {INCEPTION_CONFIG} from '../../inception-config';
 import {InceptionConfig} from '../../inception-config';
 
 /**

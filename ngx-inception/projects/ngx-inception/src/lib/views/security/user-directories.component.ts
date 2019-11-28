@@ -54,15 +54,14 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     this.dataSource = new UserDirectorySummaryDatasource(this.securityService);
@@ -76,13 +75,12 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
   }
 
   deleteUserDirectory(userDirectoryId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_user_directories_component_confirm_delete_organization',
-          value: 'Are you sure you want to delete the user directory?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_user_directories_component_confirm_delete_organization',
+        value: 'Are you sure you want to delete the user directory?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -116,16 +114,15 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
   loadUserDirectorySummaries(): void {
     let filter = '';
 
-    if (!!this.tableFilter!.filter) {
-      filter = this.tableFilter!.filter;
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
       filter = filter.trim();
       filter = filter.toLowerCase();
     }
 
-    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
+    const sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(filter, sortDirection, this.paginator!.pageIndex,
-      this.paginator!.pageSize);
+    this.dataSource.load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   newUserDirectory(): void {
@@ -136,14 +133,13 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
   ngAfterViewInit(): void {
     this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
-        this.spinnerService.showSpinner()
+        this.spinnerService.showSpinner();
       } else {
         this.spinnerService.hideSpinner();
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -151,21 +147,18 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
       }
     }));
 
-    this.subscriptions.add(
-      this.sort!.sortChange.subscribe(() => {
-        this.paginator!.pageIndex = 0
-      }));
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+    }));
 
-    this.subscriptions.add(
-      this.tableFilter!.changed.subscribe(() => {
-        this.paginator!.pageIndex = 0
-      }));
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
+      this.paginator.pageIndex = 0;
+    }));
 
-    this.subscriptions.add(
-      merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
-        .pipe(tap(() => {
-          this.loadUserDirectorySummaries();
-        })).subscribe());
+    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+      .pipe(tap(() => {
+        this.loadUserDirectorySummaries();
+      })).subscribe());
 
     this.loadUserDirectorySummaries();
   }

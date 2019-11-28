@@ -105,10 +105,10 @@ export class AdminHeaderComponent implements OnInit {
   // tslint:disable-next-line
   @Input() brandMinimized?: any;
 
-  @Input() fixed?: boolean;
+  @Input() fixed = false;
 
   // tslint:disable-next-line
-  @Input() sidebarToggler?: any;
+  @Input() sidebarToggler!: any;
 
   /**
    * Constructs a new AdminHeaderComponent.

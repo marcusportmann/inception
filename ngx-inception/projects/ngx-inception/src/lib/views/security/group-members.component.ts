@@ -33,10 +33,10 @@ import {SortDirection} from '../../services/security/sort-direction';
 import {merge, Subscription} from 'rxjs';
 import {TableFilterComponent} from '../../components/controls';
 import {AdminContainerView} from '../../components/layout/admin-container-view';
-import {GroupMemberDatasource} from "../../services/security/group-member.datasource";
-import {GroupMember} from "../../services/security/group-member";
-import {GroupMemberType} from "../../services/security/group-member-type";
-import {BackNavigation} from "../../components/layout/back-navigation";
+import {GroupMemberDatasource} from '../../services/security/group-member.datasource';
+import {GroupMember} from '../../services/security/group-member';
+import {GroupMemberType} from '../../services/security/group-member-type';
+import {BackNavigation} from '../../components/layout/back-navigation';
 
 /**
  * The GroupMembersComponent class implements the group members component.
@@ -57,25 +57,36 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   displayedColumns = ['memberName', 'memberType', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
 
   userDirectoryId: string;
 
   groupName: string;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
-    // Retrieve parameters
-    this.userDirectoryId =
-      decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('userDirectoryId')!);
-    this.groupName = decodeURIComponent(this.activatedRoute.snapshot.paramMap.get('groupName')!);
+    // Retrieve the route parameters
+    const userDirectoryId = this.activatedRoute.snapshot.paramMap.get('userDirectoryId');
+
+    if (!userDirectoryId) {
+      throw(new Error('No userDirectoryId route parameter found'));
+    }
+
+    this.userDirectoryId = decodeURIComponent(userDirectoryId);
+
+    const groupName = this.activatedRoute.snapshot.paramMap.get('groupName');
+
+    if (!groupName) {
+      throw(new Error('No groupName route parameter found'));
+    }
+
+    this.groupName = decodeURIComponent(groupName);
 
     this.dataSource = new GroupMemberDatasource(this.securityService);
   }
@@ -103,9 +114,9 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   groupMemberTypeName(groupMemberType: GroupMemberType): string {
-    if (groupMemberType == GroupMemberType.User) {
+    if (groupMemberType === GroupMemberType.User) {
       return 'User';
-    } else if (groupMemberType == GroupMemberType.Group) {
+    } else if (groupMemberType === GroupMemberType.Group) {
       return 'Group';
     } else {
       return 'Unknown';
@@ -115,30 +126,27 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   loadGroupMembers(): void {
     let filter = '';
 
-    if (!!this.tableFilter!.filter) {
-      filter = this.tableFilter!.filter;
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
       filter = filter.trim();
       filter = filter.toLowerCase();
     }
 
-    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending :
-      SortDirection.Descending;
+    const sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(this.userDirectoryId, this.groupName, filter, sortDirection,
-      this.paginator!.pageIndex, this.paginator!.pageSize);
+    this.dataSource.load(this.userDirectoryId, this.groupName, filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   ngAfterViewInit(): void {
     this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
-        this.spinnerService.showSpinner()
+        this.spinnerService.showSpinner();
       } else {
         this.spinnerService.hideSpinner();
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -146,23 +154,22 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
       }
     }));
 
-    this.subscriptions.add(this.sort!.sortChange.subscribe(() => {
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(this.tableFilter!.changed.subscribe(() => {
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(
-      merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
-        .pipe(tap(() => {
-          this.loadGroupMembers();
-        })).subscribe());
+    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+      .pipe(tap(() => {
+        this.loadGroupMembers();
+      })).subscribe());
 
     this.loadGroupMembers();
   }
@@ -172,13 +179,12 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   removeMemberFromGroup(groupMember: GroupMember): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_group_members_component_confirm_remove_group_member_from_group',
-          value: 'Are you sure you want to remove the group member from the group?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_group_members_component_confirm_remove_group_member_from_group',
+        value: 'Are you sure you want to remove the group member from the group?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -186,8 +192,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
         if (confirmation === true) {
           this.spinnerService.showSpinner();
 
-          this.securityService.removeMemberFromGroup(this.userDirectoryId, this.groupName,
-            groupMember.memberType, groupMember.memberName)
+          this.securityService.removeMemberFromGroup(this.userDirectoryId, this.groupName, groupMember.memberType, groupMember.memberName)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
             .subscribe(() => {
               this.loadGroupMembers();

@@ -15,7 +15,7 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogService} from '../../services/dialog/dialog.service';
 import {SpinnerService} from '../../services/layout/spinner.service';
@@ -43,6 +43,10 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
 
   code?: Code;
 
+  codeCategoryId: string;
+
+  codeId: string;
+
   editCodeForm: FormGroup;
 
   idFormControl: FormControl;
@@ -54,6 +58,23 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private codesService: CodesService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
+
+    // Retrieve the route parameters
+    const codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
+
+    if (!codeCategoryId) {
+      throw(new Error('No codeCategoryId route parameter found'));
+    }
+
+    this.codeCategoryId = decodeURIComponent(codeCategoryId);
+
+    const codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
+
+    if (!codeId) {
+      throw(new Error('No codeId route parameter found'));
+    }
+
+    this.codeId = decodeURIComponent(codeId);
 
     // Initialise the form controls
     this.idFormControl = new FormControl({
@@ -91,19 +112,10 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    // Retrieve parameters
-    let codeCategoryId = this.activatedRoute.snapshot.paramMap.get('codeCategoryId');
-
-    codeCategoryId = decodeURIComponent(codeCategoryId);
-
-    let codeId = this.activatedRoute.snapshot.paramMap.get('codeId');
-
-    codeId = decodeURIComponent(codeId);
-
     // Retrieve the existing code and initialise the form controls
     this.spinnerService.showSpinner();
 
-    this.codesService.getCode(codeCategoryId, codeId)
+    this.codesService.getCode(this.codeCategoryId, this.codeId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((code: Code) => {
         this.code = code;

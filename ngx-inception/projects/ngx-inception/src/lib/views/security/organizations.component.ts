@@ -54,15 +54,14 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   displayedColumns = ['name', 'actions'];
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator | null;
+  @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort | null;
+  @ViewChild(MatSort, {static: true}) sort!: MatSort;
 
-  @ViewChild(TableFilterComponent, {static: true}) tableFilter?: TableFilterComponent;
+  @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n,
-              private securityService: SecurityService, private dialogService: DialogService,
-              private spinnerService: SpinnerService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private i18n: I18n, private securityService: SecurityService,
+              private dialogService: DialogService, private spinnerService: SpinnerService) {
     super();
 
     this.dataSource = new OrganizationDatasource(this.securityService);
@@ -76,13 +75,12 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
   }
 
   deleteOrganization(organizationId: string): void {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog(
-      {
-        message: this.i18n({
-          id: '@@security_organizations_component_confirm_delete_organization',
-          value: 'Are you sure you want to delete the organization?'
-        })
-      });
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: this.i18n({
+        id: '@@security_organizations_component_confirm_delete_organization',
+        value: 'Are you sure you want to delete the organization?'
+      })
+    });
 
     dialogRef.afterClosed()
       .pipe(first())
@@ -110,24 +108,21 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   editOrganization(organizationId: string): void {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(organizationId) + '/edit'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(organizationId) + '/edit'], {relativeTo: this.activatedRoute});
   }
 
   loadOrganizations(): void {
     let filter = '';
 
-    if (!!this.tableFilter!.filter) {
-      filter = this.tableFilter!.filter;
+    if (!!this.tableFilter.filter) {
+      filter = this.tableFilter.filter;
       filter = filter.trim();
       filter = filter.toLowerCase();
     }
 
-    const sortDirection = this.sort!.direction === 'asc' ? SortDirection.Ascending :
-      SortDirection.Descending;
+    const sortDirection = this.sort.direction === 'asc' ? SortDirection.Ascending : SortDirection.Descending;
 
-    this.dataSource.load(filter, sortDirection, this.paginator!.pageIndex,
-      this.paginator!.pageSize);
+    this.dataSource.load(filter, sortDirection, this.paginator.pageIndex, this.paginator.pageSize);
   }
 
   newOrganization(): void {
@@ -138,14 +133,13 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
   ngAfterViewInit(): void {
     this.subscriptions.add(this.dataSource.loading$.subscribe((next: boolean) => {
       if (next) {
-        this.spinnerService.showSpinner()
+        this.spinnerService.showSpinner();
       } else {
         this.spinnerService.hideSpinner();
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -153,23 +147,22 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
       }
     }));
 
-    this.subscriptions.add(this.sort!.sortChange.subscribe(() => {
+    this.subscriptions.add(this.sort.sortChange.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(this.tableFilter!.changed.subscribe(() => {
+    this.subscriptions.add(this.tableFilter.changed.subscribe(() => {
       if (this.paginator) {
-        this.paginator.pageIndex = 0
+        this.paginator.pageIndex = 0;
       }
     }));
 
-    this.subscriptions.add(
-      merge(this.sort!.sortChange, this.tableFilter!.changed, this.paginator!.page)
-        .pipe(tap(() => {
-          this.loadOrganizations();
-        })).subscribe());
+    this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
+      .pipe(tap(() => {
+        this.loadOrganizations();
+      })).subscribe());
 
     this.loadOrganizations();
   }
@@ -180,8 +173,7 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
 
   organizationUserDirectories(organizationId: string) {
     // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate([encodeURIComponent(organizationId) + '/user-directories'],
-      {relativeTo: this.activatedRoute});
+    this.router.navigate([encodeURIComponent(organizationId) + '/user-directories'], {relativeTo: this.activatedRoute});
   }
 }
 
