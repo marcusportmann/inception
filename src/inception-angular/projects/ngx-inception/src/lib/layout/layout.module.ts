@@ -77,6 +77,7 @@ import {
   TitleBarComponent
 } from './components';
 import {RouterModule} from '@angular/router';
+import {SecurityModule} from '../security/security.module';
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -116,7 +117,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatSelectModule, MatSliderModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
-    CoreModule.forRoot(), DialogModule.forRoot()
+    CoreModule.forRoot(), DialogModule.forRoot(), SecurityModule.forRoot()
   ],
   exports: [
 
@@ -134,7 +135,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatSelectModule, MatSliderModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Inception modules
-    CoreModule, DialogModule,
+    CoreModule, DialogModule, SecurityModule,
 
     // Components
     AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent, NotFoundComponent,

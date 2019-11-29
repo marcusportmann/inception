@@ -16,12 +16,12 @@
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {Replace} from '../../core/util';
-import {SessionService} from '../../security/services/session.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {Router} from '@angular/router';
 import {Session} from '../../security/services/session';
+import {SecurityService} from '../../security/services';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.
@@ -113,11 +113,11 @@ export class AdminHeaderComponent implements OnInit {
   /**
    * Constructs a new AdminHeaderComponent.
    *
-   * @param elementRef     The element reference.
-   * @param router         The router.
-   * @param sessionService The session service.
+   * @param elementRef      The element reference.
+   * @param router          The router.
+   * @param securityService The session service.
    */
-  constructor(private elementRef: ElementRef, private router: Router, private sessionService: SessionService) {
+  constructor(private elementRef: ElementRef, private router: Router, private securityService: SecurityService) {
   }
 
   // // tslint:disable-next-line
@@ -159,7 +159,7 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   isLoggedIn(): Observable<boolean> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
+    return this.securityService.session$.pipe(map((session: Session | null) => {
       return (!!session);
     }));
   }
@@ -170,14 +170,14 @@ export class AdminHeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.sessionService.logout();
+    this.securityService.logout();
 
     // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/']);
   }
 
   userFullName(): Observable<string> {
-    return this.sessionService.session$.pipe(map((session: Session | null) => {
+    return this.securityService.session$.pipe(map((session: Session | null) => {
       if (!!session) {
         return session.userFullName;
       } else {

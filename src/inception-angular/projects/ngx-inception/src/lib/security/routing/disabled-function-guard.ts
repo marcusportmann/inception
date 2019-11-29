@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
-import {SessionService} from '../services/session.service';
+import {SecurityService} from '../services';
 
 /**
  * The DisabledFunctionGuard class implements the routing guard that restricts access to a disabled
@@ -30,10 +30,10 @@ export class DisabledFunctionGuard implements CanActivate {
   /**
    * Constructs a new DisabledFunctionGuard.
    *
-   * @param router         The router.
-   * @param sessionService The session service.
+   * @param router          The router.
+   * @param securityService The session service.
    */
-  constructor(private router: Router, private sessionService: SessionService) {
+  constructor(private router: Router, private securityService: SecurityService) {
   }
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): boolean {

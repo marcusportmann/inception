@@ -30,10 +30,7 @@ import {setInceptionInjector} from './inception-injector';
 import {FormsModule} from '@angular/forms';
 import {AutofocusDirective, ValidatedFormDirective} from './directives';
 import {
-  CheckboxFormFieldComponent,
-  FileUploadComponent,
-  RadioGroupFormFieldComponent,
-  TableFilterComponent
+  CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent
 } from './components';
 
 // See the Moment.js docs for the meaning of these formats:

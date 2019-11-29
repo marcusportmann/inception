@@ -21,7 +21,6 @@ import {SortDirection} from './sort-direction';
 import {first} from 'rxjs/operators';
 import {User} from './user';
 import {Users} from './users';
-import {SessionService} from './session.service';
 import {UserSortBy} from './user-sort-by';
 
 /**
@@ -41,7 +40,7 @@ export class UserDatasource implements DataSource<User> {
 
   loading$ = this.loadingSubject$.asObservable();
 
-  constructor(private sessionService: SessionService, private securityService: SecurityService) {
+  constructor(private securityService: SecurityService) {
   }
 
   /**

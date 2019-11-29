@@ -18,31 +18,31 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {first, flatMap} from 'rxjs/operators';
-import {SessionService} from './session.service';
+import {SecurityService} from './security.service';
 
 /**
- * The SessionInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
+ * The SecurityInterceptor class implements an Angular HTTP interceptor, which injects the OAuth2
  * access token associated with the current active user session into HTTP requests as an
  * Authorization header.
  *
  * @author Marcus Portmann
  */
 @Injectable()
-export class SessionInterceptor implements HttpInterceptor {
+export class SecurityInterceptor implements HttpInterceptor {
 
   /**
-   * Constructs a new SessionInterceptor.
+   * Constructs a new SecurityInterceptor.
    *
-   * @param sessionService The session service.
+   * @param securityService The security service.
    */
-  constructor(private sessionService: SessionService) {
+  constructor(private securityService: SecurityService) {
   }
 
   // tslint:disable-next-line
   intercept(httpRequest: HttpRequest<any>, // tslint:disable-next-line
             nextHttpHandler: HttpHandler): Observable<HttpEvent<any>> {
     if (!httpRequest.url.endsWith('/oauth/token')) {
-      return this.sessionService.session$.pipe(first(), flatMap(session => {
+      return this.securityService.session$.pipe(first(), flatMap(session => {
         if (session) {
           httpRequest = httpRequest.clone({
             setHeaders: {

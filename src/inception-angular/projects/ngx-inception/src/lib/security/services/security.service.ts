@@ -15,8 +15,8 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
+import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
@@ -34,8 +34,10 @@ import {
   GroupNotFoundError,
   GroupRoleNotFoundError,
   InvalidSecurityCodeError,
+  LoginError,
   OrganizationNotFoundError,
   OrganizationUserDirectoryNotFound,
+  PasswordExpiredError,
   SecurityServiceError,
   UserDirectoryNotFoundError,
   UserLockedError,
@@ -66,6 +68,9 @@ import {Role} from './role';
 import {GroupRole} from './group-role';
 import {OrganizationUserDirectory} from './organization-user-directory';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {Session} from './session';
+import {TokenResponse} from './token-response';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 /**
  * The Security Service implementation.
@@ -78,6 +83,11 @@ import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 export class SecurityService {
 
   /**
+   * The current active session.
+   */
+  session$: Subject<Session | null> = new BehaviorSubject<Session | null>(null);
+
+  /**
    * Constructs a new SecurityService.
    *
    * @param config     The Inception configuration.
@@ -87,6 +97,14 @@ export class SecurityService {
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
               private i18n: I18n) {
     console.log('Initializing the Security Service');
+
+    // Start the session refresher
+    timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
+      .subscribe((refreshedSession: Session | null) => {
+        if (refreshedSession) {
+          console.log('Successfully refreshed session: ', refreshedSession);
+        }
+      });
   }
 
   /**
@@ -1528,6 +1546,62 @@ export class SecurityService {
   }
 
   /**
+   * Logon.
+   *
+   * @param username The username.
+   * @param password The password.
+   *
+   * @return The current active session.
+   */
+  login(username: string, password: string): Observable<Session | null> {
+
+    // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
+
+    const body = new HttpParams()
+      .set('grant_type', 'password')
+      .set('username', username)
+      .set('password', password)
+      .set('scope', 'inception-sample')
+      .set('client_id', 'inception-sample');
+
+    const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+    return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
+      .pipe(flatMap((tokenResponse: TokenResponse) => {
+        this.session$.next(
+          SecurityService.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
+
+        return this.session$;
+      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+        if (httpErrorResponse.status === 400) {
+          if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
+            httpErrorResponse.error.error_description) {
+            if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+              return throwError(new LoginError(this.i18n, httpErrorResponse));
+            } else if (httpErrorResponse.error.error_description.includes('User locked')) {
+              return throwError(new UserLockedError(this.i18n, httpErrorResponse));
+            } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+              return throwError(new PasswordExpiredError(this.i18n, httpErrorResponse));
+            }
+          }
+
+          return throwError(new LoginError(this.i18n, httpErrorResponse));
+        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        } else {
+          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        }
+      }));
+  }
+
+  /**
+   * Logout the current active session if one exists.
+   */
+  logout(): void {
+    this.session$.next(null);
+  }
+
+  /**
    * Remove the group member from the group.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
@@ -1832,5 +1906,68 @@ export class SecurityService {
           return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
         }
       }));
+  }
+
+  private static createSessionFromAccessToken(accessToken: string, refreshToken: string | undefined): Session {
+    const helper = new JwtHelperService();
+
+    // tslint:disable-next-line
+    const token: any = helper.decodeToken(accessToken);
+
+    const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
+
+    return new Session((!!token.user_name) ? token.user_name : '',
+      (!!token.user_directory_id) ? token.user_directory_id : '', (!!token.user_full_name) ? token.user_full_name : '',
+      (!!token.scope) ? token.scope : [], (!!token.authorities) ? token.authorities : [], accessToken,
+      (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
+  }
+
+  private refreshSession(): Observable<Session | null> {
+    return this.session$.pipe(mergeMap((currentSession: Session | null) => {
+      if (currentSession) {
+        const selectedOrganization = currentSession.organization;
+
+        /*
+         * If the access token will expire with 60 seconds then obtain a new one using the refresh
+         * token if it exists.
+         */
+        if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
+          if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
+            const body = new HttpParams()
+              .set('grant_type', 'refresh_token')
+              .set('refresh_token', currentSession.refreshToken)
+              .set('scope', 'inception-sample')
+              .set('client_id', 'inception-sample');
+
+            const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
+
+            return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
+              .pipe(map((tokenResponse: TokenResponse) => {
+                const refreshedSession: Session = SecurityService.createSessionFromAccessToken(
+                  tokenResponse.access_token, currentSession.refreshToken);
+
+                refreshedSession.organization = selectedOrganization;
+
+                this.session$.next(refreshedSession);
+
+                return refreshedSession;
+              }), catchError((httpErrorResponse: HttpErrorResponse) => {
+                console.log(this.i18n({
+                  id: '@@security_service_failed_to_refresh_the_user_session',
+                  value: 'Failed to refresh the user session.'
+                }), httpErrorResponse);
+
+                if (httpErrorResponse.status === 401) {
+                  this.session$.next(null);
+                }
+
+                return of(null);
+              }));
+          }
+        }
+      }
+
+      return of(null);
+    }));
   }
 }

@@ -17,9 +17,9 @@
 import {Injectable} from '@angular/core';
 import {NavigationItem} from './navigation-item';
 import {ReplaySubject, Subject} from 'rxjs';
-import {SessionService} from '../../security/services/session.service';
 import {map} from 'rxjs/operators';
 import {Session} from '../../security/services/session';
+import {SecurityService} from '../../security/services';
 
 /**
  * The Navigation Service implementation.
@@ -38,12 +38,12 @@ export class NavigationService {
   /**
    * Constructs a new NavigationService.
    *
-   * @param sessionService The session service.
+   * @param securityService The security service.
    */
-  constructor(private sessionService: SessionService) {
+  constructor(private securityService: SecurityService) {
     console.log('Initializing the Navigation Service');
 
-    this.sessionService.session$.pipe(map((session: Session | null) => {
+    this.securityService.session$.pipe(map((session: Session | null) => {
       this.userNavigation$.next(Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();
   }

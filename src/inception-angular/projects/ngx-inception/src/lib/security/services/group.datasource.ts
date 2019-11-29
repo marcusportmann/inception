@@ -20,7 +20,6 @@ import {SecurityService} from './security.service';
 import {SortDirection} from './sort-direction';
 
 import {first} from 'rxjs/operators';
-import {SessionService} from './session.service';
 import {Group} from './group';
 import {Groups} from './groups';
 
@@ -41,7 +40,7 @@ export class GroupDatasource implements DataSource<Group> {
 
   loading$ = this.loadingSubject$.asObservable();
 
-  constructor(private sessionService: SessionService, private securityService: SecurityService) {
+  constructor(private securityService: SecurityService) {
   }
 
   /**

@@ -316,6 +316,27 @@ export class InvalidSecurityCodeError extends Error {
 }
 
 /**
+ * The LoginError class holds the information for a login error.
+ *
+ * @author Marcus Portmann
+ */
+export class LoginError extends Error {
+
+  /**
+   * Constructs a new LoginError.
+   *
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
+   */
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@security_login_error',
+      value: 'Incorrect username or password.'
+    }), cause);
+  }
+}
+
+/**
  * The OrganizationNotFoundError class holds the information for an organization not found error.
  *
  * @author Marcus Portmann
@@ -359,6 +380,27 @@ export class OrganizationUserDirectoryNotFound extends Error {
 }
 
 /**
+ * The PasswordExpiredError class holds the information for a password expired error.
+ *
+ * @author Marcus Portmann
+ */
+export class PasswordExpiredError extends Error {
+
+  /**
+   * Constructs a new PasswordExpiredError.
+   *
+   * @param i18n  The internationalization service.
+   * @param cause The optional cause of the error.
+   */
+  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(i18n({
+      id: '@@security_password_expired_error',
+      value: 'The password has expired.'
+    }), cause);
+  }
+}
+
+/**
  * The SecurityServiceError class holds the information for a Security Service error.
  *
  * @author Marcus Portmann
@@ -369,6 +411,24 @@ export class SecurityServiceError extends Error {
    * Constructs a new SecurityServiceError.
    *
    * @param message The error message.
+   * @param cause   The optional cause of the error.
+   */
+  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+    super(message, cause);
+  }
+}
+
+/**
+ * The SessionError class holds the information for a session error.
+ *
+ * @author Marcus Portmann
+ */
+export class SessionError extends Error {
+
+  /**
+   * Constructs a new SecurityServiceError.
+   *
+   * @param message The error SessionError.
    * @param cause   The optional cause of the error.
    */
   constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {

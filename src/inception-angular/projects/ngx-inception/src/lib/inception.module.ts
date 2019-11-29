@@ -29,6 +29,7 @@ import {ErrorModule} from './error/error.module';
 import {MailModule} from './mail/mail.module';
 import {ReportingModule} from './reporting/reporting.module';
 import {SchedulerModule} from './scheduler/scheduler.module';
+import {SecurityModule} from './security/security.module';
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -47,7 +48,7 @@ import {SchedulerModule} from './scheduler/scheduler.module';
 
     // TODO: DECIDE IF THE APPLICATION MODULE SHOULD IMPORT THESE -- MARCUS
     CodesModule.forRoot(), ConfigurationModule.forRoot(), ErrorModule.forRoot(), MailModule.forRoot(),
-    ReportingModule.forRoot(), SchedulerModule.forRoot()
+    ReportingModule.forRoot(), SchedulerModule.forRoot(), SecurityModule.forRoot()
   ],
   exports: [
 
@@ -58,7 +59,7 @@ import {SchedulerModule} from './scheduler/scheduler.module';
     CoreModule, LayoutModule,
 
     // TODO: DECIDE IF THE APPLICATION MODULE SHOULD IMPORT THESE -- MARCUS
-    CodesModule, ConfigurationModule, ErrorModule, MailModule, ReportingModule, SchedulerModule,
+    CodesModule, ConfigurationModule, ErrorModule, MailModule, ReportingModule, SchedulerModule, SecurityModule,
 
     // Components
     NgxInceptionComponent
@@ -69,7 +70,7 @@ export class InceptionModule {
     console.log('Initialising the Inception Module');
   }
 
-  // TODO: MOVE THIS TO APPLICATION MODULE -- MARCUS
+  // TODO: MOVE THE PROVISION OF THE INCEPTION CONFIGURATION TO THE APPLICATION MODULE -- MARCUS
   static forRoot(config: InceptionConfig): ModuleWithProviders {
     return {
       ngModule: InceptionModule,

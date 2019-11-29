@@ -19,9 +19,7 @@ import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
 import {CanActivateFunctionGuard, DisabledFunctionGuard} from './routing';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {SecurityService} from './services/security.service';
-import {SessionInterceptor} from './services/session.interceptor';
-import {SessionService} from './services/session.service';
+import {SecurityInterceptor, SecurityService} from './services';
 import {HasAuthorityDirective} from './directives';
 
 /**
@@ -65,12 +63,12 @@ export class SecurityModule {
       ngModule: SecurityModule,
       providers: [{
         provide: HTTP_INTERCEPTORS,
-        useClass: SessionInterceptor,
+        useClass: SecurityInterceptor,
         multi: true
       },
 
         // Services
-        SecurityService, SessionService,
+        SecurityService,
 
         // Function Guards
         CanActivateFunctionGuard, DisabledFunctionGuard

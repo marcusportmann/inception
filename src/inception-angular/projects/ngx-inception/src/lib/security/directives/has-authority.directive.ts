@@ -15,9 +15,8 @@
  */
 
 import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {SessionService} from '../services/session.service';
 import {Subscription} from 'rxjs';
-import {Session} from '../services/session';
+import {SecurityService, Session} from '../services';
 import {first} from 'rxjs/operators';
 
 /**
@@ -38,13 +37,13 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
   /**
    * Constructs a new HasAuthorityDirective.
    *
-   * @param templateRef    The template reference.
-   * @param viewContainer  The view container for the element this directive is attached to.
-   * @param sessionService The session service.
+   * @param templateRef     The template reference.
+   * @param viewContainer   The view container for the element this directive is attached to.
+   * @param securityService The security service.
    */
   // tslint:disable-next-line
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef,
-              private sessionService: SessionService) {
+              private securityService: SecurityService) {
   }
 
   ngOnDestroy(): void {
@@ -53,7 +52,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     if (this.requiredAuthorities.length > 0) {
-      this.subscriptions.add(this.sessionService.session$.pipe(first()).subscribe((session: (Session | null)) => {
+      this.subscriptions.add(this.securityService.session$.pipe(first()).subscribe((session: (Session | null)) => {
         if (session) {
           let foundAuthority = false;
 
