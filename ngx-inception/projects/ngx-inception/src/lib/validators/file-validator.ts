@@ -27,48 +27,67 @@ export class FileValidator {
    * Validator function to validate that the total length of one or more files does not exceed the
    * maximum number of bytes allowed.
    *
-   * @param bytes The maximum number of bytes allowed.
+   * @param maximumBytes The maximum number of bytes allowed.
    *
    * @returns The validator function.
    */
-  public static maxSize(bytes: number): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      const size = control && control.value ? (control.value as File[]).map(f => f.size).reduce((acc, i) => acc + i, 0) : 0;
-      const condition = bytes >= size;
-      return condition
-        ? null
-        : {
-          maxSize: {
-            actualSize: size,
-            allowedSize: bytes
-          }
-        };
+  public static maxSize(maximumBytes: number): ValidatorFn {
+    const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {
+
+      if (control && control.value) {
+        let numberOfBytes = 0;
+
+        for (const file of (control.value as File[])) {
+          numberOfBytes += file.size;
+        }
+
+        if (numberOfBytes > maximumBytes) {
+          return {
+            maxSize: {
+              actualSize: numberOfBytes,
+              allowedSize: maximumBytes
+            }
+          };
+        }
+      }
+
+      return null;
     };
+
+    return validatorFn;
   }
 
   /**
    * Validator function to validate that the total length of one or more files is greater than the
    * minimum number of bytes required.
    *
-   * @param bytes The minimum number of bytes required.
+   * @param minimumBytes The minimum number of bytes required.
    *
    * @returns The validator function.
    */
-  public static minSize(bytes: number): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      if (!(control && control.value)) {
-        return null;
+  public static minSize(minimumBytes: number): ValidatorFn {
+    const validatorFn = (control: AbstractControl): { [key: string]: any } | null => {
+
+      if (control && control.value) {
+        let numberOfBytes = 0;
+
+        for (const file of (control.value as File[])) {
+          numberOfBytes += file.size;
+        }
+
+        if (numberOfBytes < minimumBytes) {
+          return {
+            maxSize: {
+              actualSize: numberOfBytes,
+              requiredSize: minimumBytes
+            }
+          };
+        }
       }
 
-      const size =  (control.value as File[]).map(f => f.size).reduce((acc, i) => acc + i, 0);
-      const condition = bytes < size;
-      return condition
-        ? null : {
-          minSize: {
-            actualSize: size,
-            requiredSize: bytes
-          }
-        };
+      return null;
     };
+
+    return validatorFn;
   }
 }

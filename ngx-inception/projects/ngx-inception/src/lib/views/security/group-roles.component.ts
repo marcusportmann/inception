@@ -229,7 +229,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       });
   }
 
-  private roleCodeToName(roleCode: string): string {
+  roleCodeToName(roleCode: string): string {
     for (const role of this.allRoles) {
       if (role.code === roleCode) {
         return role.name;

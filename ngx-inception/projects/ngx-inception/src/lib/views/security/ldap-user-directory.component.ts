@@ -236,7 +236,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
   }
 
   onTouched: () => void = () => {
-  };
+  }
 
   // tslint:disable-next-line:no-any
   registerOnChange(fn: any): void {

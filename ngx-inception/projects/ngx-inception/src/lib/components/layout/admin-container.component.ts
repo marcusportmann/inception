@@ -29,8 +29,7 @@ import {TitleBarService} from '../../services/layout/title-bar.service';
  * @author Marcus Portmann
  */
 @Component({
-  // tslint:disable-next-line
-  selector: 'admin-container',
+  selector: 'inception-admin-container',
   template: `
     <admin-header
       [fixed]="true"

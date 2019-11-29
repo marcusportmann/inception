@@ -11,7 +11,9 @@
               An error occurred while processing your request.
             </p>
             <p class="mat-error">
+              <ng-container *ngIf="error">
               {{error.message}}
+              </ng-container>
             </p>
             <p i18n="@@error_send_error_component_provide_feedback">
               Please provide a detailed description of what you were doing when the problem occurred.

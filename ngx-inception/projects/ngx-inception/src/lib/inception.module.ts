@@ -99,8 +99,7 @@ import {SchedulerService} from './services/scheduler/scheduler.service';
 import {ReportingService} from './services/reporting/reporting.service';
 import {MailService} from './services/mail/mail.service';
 import {INCEPTION_CONFIG, InceptionConfig} from './inception-config';
-
-
+import {NavigationTitle} from './services/navigation/navigation-title';
 
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
