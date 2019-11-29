@@ -62,7 +62,7 @@ import {
 })
 export class DialogModule {
   constructor() {
-    console.log('Initialising the Inception Dialog Module');
+    console.log('Initializing the Inception Dialog Module');
   }
 
   static forRoot(): ModuleWithProviders {

@@ -17,10 +17,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminContainerComponent, NotFoundComponent} from 'ngx-inception';
-// import {AdminContainerComponent, NotFoundComponent} from 'ngx-inception';
-// import {
-//   AdminContainerComponent, NotFoundComponent, SimpleContainerComponent
-// } from './inception/components/layout';
+
+
 // import {CanActivateFunctionGuard} from './inception/routing/can-activate-function-guard';
 // import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 

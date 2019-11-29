@@ -83,7 +83,7 @@ const ngxInceptionConfiguration: InceptionConfig = {
 export class AppModule extends InceptionAppModule {
   constructor() {
     super();
-    console.log('Initialising the Application Module');
+    console.log('Initializing the Application Module');
   }
 
   /**

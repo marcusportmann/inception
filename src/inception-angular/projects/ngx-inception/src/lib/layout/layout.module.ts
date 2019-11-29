@@ -150,7 +150,7 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 export class LayoutModule {
   constructor() {
-    console.log('Initialising the Inception Layout Module');
+    console.log('Initializing the Inception Layout Module');
   }
 
   static forRoot(): ModuleWithProviders {

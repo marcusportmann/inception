@@ -46,7 +46,7 @@ import {ErrorService} from './services/error.service';
 })
 export class ErrorModule {
   constructor() {
-    console.log('Initialising the Inception Error Module');
+    console.log('Initializing the Inception Error Module');
   }
 
   static forRoot(): ModuleWithProviders {

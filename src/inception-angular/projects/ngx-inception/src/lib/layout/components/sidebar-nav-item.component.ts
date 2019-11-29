@@ -27,7 +27,7 @@ import {Router} from '@angular/router';
   // tslint:disable-next-line
   selector: 'sidebar-nav-item',
   template: `
-    <ng-template *ngIf="this.navItem">
+    <ng-container *ngIf="this.navItem">
       <ng-container *ngIf="isDivider(); else checkForTitle">
         <li class="nav-divider"></li>
       </ng-container>
@@ -70,7 +70,7 @@ import {Router} from '@angular/router';
           </ng-template>
         </li>
       </ng-template>
-    </ng-template>
+    </ng-container>
   `
 })
 export class SidebarNavItemComponent {
@@ -93,22 +93,22 @@ export class SidebarNavItemComponent {
   }
 
   isActive(): boolean {
-    return !!this.navItem && !!this.navItem.url && this.router.isActive(this.navItem.url, false);
+    return this.navItem ? !!this.navItem.url && this.router.isActive(this.navItem.url, false) : false;
   }
 
   isDivider(): boolean {
-    return !!this.navItem && this.navItem.divider;
+    return this.navItem ? this.navItem.divider : false;
   }
 
   isDropdown(): boolean {
-    return !!this.navItem && this.navItem.children.length > 0;
+    return this.navItem ? this.navItem.children.length > 0 : false;
   }
 
   isExternalLink(): boolean {
-    return !!this.navItem && !!this.navItem.url && (this.navItem.url.substring(0, 4) === 'http');
+    return this.navItem ? !!this.navItem.url && (this.navItem.url.substring(0, 4) === 'http') : false;
   }
 
   isTitle(): boolean {
-    return !!this.navItem && this.navItem.title;
+    return this.navItem ? this.navItem.title : false;
   }
 }

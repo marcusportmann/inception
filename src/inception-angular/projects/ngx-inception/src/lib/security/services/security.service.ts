@@ -96,7 +96,7 @@ export class SecurityService {
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
               private i18n: I18n) {
-    console.log('Initializing the Security Service');
+    console.log('Initializing the Inception Security Service');
 
     // Start the session refresher
     timer(0, 10000).pipe(switchMap(() => this.refreshSession()))

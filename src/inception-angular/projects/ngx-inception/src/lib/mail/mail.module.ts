@@ -46,7 +46,7 @@ import {MailService} from './services/mail.service';
 })
 export class MailModule {
   constructor() {
-    console.log('Initialising the Inception Mail Module');
+    console.log('Initializing the Inception Mail Module');
   }
 
   static forRoot(): ModuleWithProviders {

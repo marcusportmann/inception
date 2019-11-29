@@ -86,7 +86,7 @@ export const INCEPTION_DATE_FORMATS = {
 })
 export class CoreModule {
   constructor(injector: Injector) {
-    console.log('Initialising the Inception Core Module');
+    console.log('Initializing the Inception Core Module');
     setInceptionInjector(injector);
   }
 

@@ -26,7 +26,7 @@ import {NavigationItem} from '../services/navigation-item';
   // tslint:disable-next-line
   selector: 'sidebar-nav-dropdown',
   template: `
-    <ng-template *ngIf="navItem">
+    <ng-container *ngIf="navItem">
       <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
         <i *ngIf="this.navItem.icon && !!this.navItem.icon" class="nav-icon {{ navItem.icon }}"></i>
         {{ navItem.name }}
@@ -37,7 +37,7 @@ import {NavigationItem} from '../services/navigation-item';
       <ul class="nav-dropdown-items">
         <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
       </ul>
-    </ng-template>
+    </ng-container>
   `,
   styles: ['.nav-dropdown-toggle { cursor: pointer; }']
 })

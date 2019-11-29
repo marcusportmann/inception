@@ -46,7 +46,7 @@ import {ReportingService} from './services/reporting.service';
 })
 export class ReportingModule {
   constructor() {
-    console.log('Initialising the Inception Reporting Module');
+    console.log('Initializing the Inception Reporting Module');
   }
 
   static forRoot(): ModuleWithProviders {

@@ -46,7 +46,7 @@ import {ConfigurationService} from './services';
 })
 export class ConfigurationModule {
   constructor() {
-    console.log('Initialising the Inception Configuration Module');
+    console.log('Initializing the Inception Configuration Module');
   }
 
   static forRoot(): ModuleWithProviders {

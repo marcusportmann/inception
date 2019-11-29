@@ -66,6 +66,8 @@
               "projects/inception-sample/src/assets"
             ],
             "styles": [
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
+              "projects/ngx-inception/src/assets/scss/styles.scss",
               "projects/inception-sample/src/styles.scss"
             ],
             "scripts": []

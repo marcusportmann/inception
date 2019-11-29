@@ -46,7 +46,7 @@ export class MailService {
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
               private i18n: I18n) {
-    console.log('Initializing the Mail Service');
+    console.log('Initializing the Inception Mail Service');
   }
 
   /**
