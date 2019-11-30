@@ -28,10 +28,12 @@ import {
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {setInceptionInjector} from './inception-injector';
 import {FormsModule} from '@angular/forms';
-import {AutofocusDirective, ValidatedFormDirective} from './directives';
-import {
-  CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent
-} from './components';
+import {CheckboxFormFieldComponent} from './components/checkbox-form-field.component';
+import {FileUploadComponent} from './components/file-upload.component';
+import {RadioGroupFormFieldComponent} from './components/radio-group-form-field.component';
+import {TableFilterComponent} from './components/table-filter.component';
+import {AutofocusDirective} from './directives/autofocus.directive';
+import {ValidatedFormDirective} from './directives/validated-form.directive';
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/

@@ -16,8 +16,9 @@
 
 import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {SecurityService, Session} from '../services';
 import {first} from 'rxjs/operators';
+import {SecurityService} from '../services/security.service';
+import {Session} from '../services/session';
 
 /**
  * The HasAuthorityDirective class implements the has authority directive.

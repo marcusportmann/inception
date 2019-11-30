@@ -48,36 +48,32 @@ import {BreadcrumbsService} from './services/breadcrumbs.service';
 import {SpinnerService} from './services/spinner.service';
 import {TitleBarService} from './services/title-bar.service';
 import {NavigationService} from './services/navigation.service';
-import {
-  BrandMinimizerDirective,
-  MobileSidebarTogglerDirective,
-  SidebarMinimizerDirective,
-  SidebarNavDropdownDirective,
-  SidebarNavDropdownTogglerDirective,
-  SidebarOffCanvasCloseDirective,
-  SidebarTogglerDirective
-} from './directives';
 import {DialogModule} from '../dialog/dialog.module';
-import {
-  AdminContainerComponent,
-  AdminFooterComponent,
-  AdminHeaderComponent,
-  BreadcrumbsComponent,
-  NotFoundComponent,
-  SidebarComponent,
-  SidebarFooterComponent,
-  SidebarFormComponent,
-  SidebarHeaderComponent,
-  SidebarMinimizerComponent,
-  SidebarNavComponent,
-  SidebarNavDropdownComponent,
-  SidebarNavItemComponent,
-  SimpleContainerComponent,
-  SpinnerComponent,
-  TitleBarComponent
-} from './components';
 import {RouterModule} from '@angular/router';
 import {SecurityModule} from '../security/security.module';
+import {AdminContainerComponent} from './components/admin-container.component';
+import {AdminFooterComponent} from './components/admin-footer.component';
+import {AdminHeaderComponent} from './components/admin-header.component';
+import {BreadcrumbsComponent} from './components/breadcrumbs.component';
+import {NotFoundComponent} from './components/not-found.component';
+import {SidebarComponent} from './components/sidebar.component';
+import {SidebarFooterComponent} from './components/sidebar-footer.component';
+import {SidebarNavDropdownComponent} from './components/sidebar-nav-dropdown.component';
+import {SidebarNavItemComponent} from './components/sidebar-nav-item.component';
+import {SidebarMinimizerComponent} from './components/sidebar-minimizer.component';
+import {SidebarNavComponent} from './components/sidebar-nav.component';
+import {SpinnerComponent} from './components/spinner.component';
+import {TitleBarComponent} from './components/title-bar.component';
+import {SidebarFormComponent} from './components/sidebar-form.component';
+import {SidebarHeaderComponent} from './components/sidebar-header.component';
+import {SimpleContainerComponent} from './components/simple-container.component';
+import {BrandMinimizerDirective} from './directives/brand-minimizer.directive';
+import {MobileSidebarTogglerDirective} from './directives/mobile-sidebar-toggler.directive';
+import {SidebarMinimizerDirective} from './directives/sidebar-minimizer.directive';
+import {SidebarNavDropdownDirective} from './directives/sidebar-nav-dropdown.directive';
+import {SidebarNavDropdownTogglerDirective} from './directives/sidebar-nav-dropdown-toggler.directive';
+import {SidebarOffCanvasCloseDirective} from './directives/sidebar-off-canvas-close.directive';
+import {SidebarTogglerDirective} from './directives/sidebar-toggler.directive';
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -146,7 +142,8 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // Directives
     BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective, SidebarNavDropdownDirective,
     SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective, SidebarTogglerDirective
-  ]
+  ],
+  entryComponents: [SpinnerComponent]
 })
 export class LayoutModule {
   constructor() {

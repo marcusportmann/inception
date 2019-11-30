@@ -49,7 +49,7 @@ export interface ErrorDialogData {
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button (click)="ok()" tabindex="-1" i18n="@@error_dialog_button_ok">OK</button>
+      <button mat-flat-button color="error" (click)="ok()" tabindex="-1" i18n="@@error_dialog_button_ok">OK</button>
     </div>
   `
 })

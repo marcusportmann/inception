@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, OnInit} from '@angular/core';
-import {Replace} from '../../core/util';
+import {Replace} from '../../core/util/replace';
 
 /**
  * The SidebarMinimizerComponent class implements the sidebar minimizer component.

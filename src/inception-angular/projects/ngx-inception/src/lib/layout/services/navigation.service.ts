@@ -19,7 +19,7 @@ import {NavigationItem} from './navigation-item';
 import {ReplaySubject, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Session} from '../../security/services/session';
-import {SecurityService} from '../../security/services';
+import {SecurityService} from '../../security/services/security.service';
 
 /**
  * The Navigation Service implementation.

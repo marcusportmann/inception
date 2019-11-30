@@ -15,13 +15,13 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../core/util';
+import {Replace} from '../../core/util/replace';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {Router} from '@angular/router';
 import {Session} from '../../security/services/session';
-import {SecurityService} from '../../security/services';
+import {SecurityService} from '../../security/services/security.service';
 
 /**
  * The AdminHeaderComponent class implements the admin header component.

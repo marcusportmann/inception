@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../core/util';
+import {Replace} from '../../core/util/replace';
 import {Router} from '@angular/router';
 import {BackNavigation} from './back-navigation';
 import {Observable} from 'rxjs';

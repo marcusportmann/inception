@@ -15,15 +15,13 @@
  */
 
 import {Injectable} from '@angular/core';
-
-import {
-  ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
-} from '../components';
-
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-
 import {Error} from '../../core/errors/error';
 import {DialogData} from '../dialog-data';
+import {ConfirmationDialogComponent} from '../components/confirmation-dialog.component';
+import {ErrorDialogComponent} from '../components/error-dialog.component';
+import {InformationDialogComponent} from '../components/information-dialog.component';
+import {WarningDialogComponent} from '../components/warning-dialog.component';
 
 /**
  * The service that provides the capability to show different standard dialogs.

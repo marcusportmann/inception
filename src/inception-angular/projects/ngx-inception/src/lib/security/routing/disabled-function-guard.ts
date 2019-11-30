@@ -16,7 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
-import {SecurityService} from '../services';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The DisabledFunctionGuard class implements the routing guard that restricts access to a disabled

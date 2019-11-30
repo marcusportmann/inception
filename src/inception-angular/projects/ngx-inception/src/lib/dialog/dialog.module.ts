@@ -17,11 +17,12 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
-import {MatDialogModule} from '@angular/material';
+import {MatButtonModule, MatDialogModule} from '@angular/material';
 import {DialogService} from './services/dialog.service';
-import {
-  ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
-} from './components';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog.component';
+import {ErrorDialogComponent} from './components/error-dialog.component';
+import {InformationDialogComponent} from './components/information-dialog.component';
+import {WarningDialogComponent} from './components/warning-dialog.component';
 
 /**
  * The DialogModule class implements the Inception Dialog Module.
@@ -51,13 +52,16 @@ import {
     CommonModule,
 
     // Material modules
-    MatDialogModule,
+    MatButtonModule, MatDialogModule,
 
     // Inception modules
     CoreModule,
 
     // Components
     ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
+  ],
+  entryComponents: [ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
+    WarningDialogComponent
   ]
 })
 export class DialogModule {

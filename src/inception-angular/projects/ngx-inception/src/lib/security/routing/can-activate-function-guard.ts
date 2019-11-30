@@ -16,10 +16,10 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
-import {Session} from '../services';
+import {Session} from '../services/session';
 import {Observable} from 'rxjs';
 import {first, map} from 'rxjs/operators';
-import {SecurityService} from '../services';
+import {SecurityService} from '../services/security.service';
 
 /**
  * The CanActivateFunctionGuard class implements the routing guard that restricts access to a route

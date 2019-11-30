@@ -17,10 +17,12 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
-import {CanActivateFunctionGuard, DisabledFunctionGuard} from './routing';
+import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
+import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {SecurityInterceptor, SecurityService} from './services';
-import {HasAuthorityDirective} from './directives';
+import {SecurityInterceptor} from './services/security.interceptor';
+import {SecurityService} from './services/security.service';
+import {HasAuthorityDirective} from './directives/has-authority.directive';
 
 /**
  * The SecurityModule class implements the Inception Security Module.

@@ -15,7 +15,7 @@
  */
 
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
-import {Replace} from '../../core/util';
+import {Replace} from '../../core/util/replace';
 import {BreadcrumbsService} from '../services/breadcrumbs.service';
 import {Observable} from 'rxjs';
 

@@ -19,8 +19,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdminContainerComponent, NotFoundComponent} from 'ngx-inception';
 
 
-// import {CanActivateFunctionGuard} from './inception/routing/can-activate-function-guard';
-// import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
+import {CanActivateFunctionGuard} from 'ngx-inception';
+// import {AdministrationTitleResolver} from 'ngx-inception';
 
 
 export const routes: Routes = [{
@@ -42,13 +42,13 @@ export const routes: Routes = [{
       authorities: ['ROLE_Administrator', 'FUNCTION_Application.Dashboard']
     },
     loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
-  }, {
+  }, */{
     path: 'inception',
     data: {
       title: 'Inception'
     },
     loadChildren: () => import('./views/inception/inception.module').then(m => m.InceptionModule)
-  },*/
+  },
     {
     path: 'menu1',
     data: {
@@ -56,9 +56,6 @@ export const routes: Routes = [{
     },
     loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
   },
-
-
-    /*
     {
     path: 'menu2',
     data: {
@@ -71,7 +68,7 @@ export const routes: Routes = [{
       title: 'Menu 3'
     },
     loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
-  }, {
+  } /* , {
     path: 'administration',
     resolve: {
       title: AdministrationTitleResolver
