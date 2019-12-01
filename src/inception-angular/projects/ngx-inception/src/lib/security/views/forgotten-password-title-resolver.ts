@@ -18,14 +18,15 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {Observable, of} from 'rxjs';
 
 /**
- * The Menu321TitleResolver class provides the resolver for the Menu321Component.
+ * The ForgottenPasswordTitleResolver class provides the route data resolver that resolves the
+ * title for the "Forgotten Password" route in the navigation hierarchy.
  *
  * @author Marcus Portmann
  */
-export class Menu321TitleResolver implements Resolve<string> {
+export class ForgottenPasswordTitleResolver implements Resolve<string> {
 
   /**
-   * Constructs a new Menu321TitleResolver.
+   * Constructs a new ForgottenPasswordTitleResolver.
    */
   constructor() {
   }
@@ -38,6 +39,6 @@ export class Menu321TitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Custom Menu 3.2.1 Title');
+    return of('Forgotten Password');
   }
 }

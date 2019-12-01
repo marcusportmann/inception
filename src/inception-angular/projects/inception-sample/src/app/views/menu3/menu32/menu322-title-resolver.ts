@@ -16,7 +16,6 @@
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The Menu322TitleResolver class provides the resolver for the Menu322Component.
@@ -27,10 +26,8 @@ export class Menu322TitleResolver implements Resolve<string> {
 
   /**
    * Constructs a new Menu322TitleResolver.
-   *
-   * @param i18n The internationalization service.
    */
-  constructor(private i18n: I18n) {
+  constructor() {
   }
 
   /**
@@ -41,9 +38,6 @@ export class Menu322TitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of(this.i18n({
-      id: '@@menu_322_title_resolver_title',
-      value: 'Custom Menu 3.2.2 Title'
-    }));
+    return of('Custom Menu 3.2.2 Title');
   }
 }

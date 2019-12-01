@@ -16,7 +16,7 @@
 
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -25,21 +25,6 @@ import {AppComponent} from './app.component';
 import {
   InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem, NavigationTitle
 } from 'ngx-inception';
-
-
-
-
-// TODO: Remove the lines below when Angular provides support for I18N in source natively -- MARCUS
-import {I18n} from '@ngx-translate/i18n-polyfill';
-
-// Use the require method provided by webpack
-// tslint:disable-next-line
-declare const require: any;
-
-// We use the webpack raw-loader to return the content as a string
-const translations = require('raw-loader!../locale/messages.en.xlf').default;
-export {translations};
-// TODO: Remove the lines above when Angular provides support for I18N in source natively -- MARCUS
 
 
 const ngxInceptionConfiguration: InceptionConfig = {
@@ -70,14 +55,6 @@ const ngxInceptionConfiguration: InceptionConfig = {
   ],
   exports: [InceptionModule],
   imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule, InceptionModule.forRoot(ngxInceptionConfiguration)
-  ],
-  providers: [{
-    provide: TRANSLATIONS,
-    useValue: translations
-  }, {
-    provide: TRANSLATIONS_FORMAT,
-    useValue: 'xlf2'
-  }, I18n
   ]
 })
 export class AppModule extends InceptionAppModule {

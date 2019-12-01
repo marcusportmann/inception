@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-import {Error} from './error';
-import {HttpErrorResponse} from '@angular/common/http';
+import {NgModule} from '@angular/core';
+import {LoginViewsModule} from 'ngx-inception';
 
-/**
- * The SystemUnavailableError class holds the information for a system unavailable error.
- *
- * @author Marcus Portmann
- */
-export class SystemUnavailableError extends Error {
-
-  /**
-   * Constructs a new SystemUnavailableError.
-   *
-   * @param httpErrorResponse The HTTP error response containing the error information.
-   */
-  constructor(httpErrorResponse: HttpErrorResponse) {
-
-    super('An error has occurred and the system is unable to process your request at this time.', httpErrorResponse);
-  }
+@NgModule({
+  imports: [LoginViewsModule]
+})
+export class LoginViewsWrapperModule {
 }

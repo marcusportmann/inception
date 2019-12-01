@@ -23,7 +23,6 @@ import {ApiError} from '../../core/errors/api-error';
 import {DuplicateJobError, JobNotFoundError, SchedulerServiceError} from './scheduler.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 
 /**
@@ -41,10 +40,8 @@ export class SchedulerService {
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
-   * @param i18n       The internationalization service.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
-              private i18n: I18n) {
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     console.log('Initializing the Inception Scheduler Service');
   }
 
@@ -64,19 +61,16 @@ export class SchedulerService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'JobNotFoundError') {
-            return throwError(new JobNotFoundError(this.i18n, apiError));
+            return throwError(new JobNotFoundError(apiError));
           } else if (apiError.code === 'DuplicateJobError') {
-            return throwError(new DuplicateJobError(this.i18n, apiError));
+            return throwError(new DuplicateJobError(apiError));
           } else {
-            return throwError(new SchedulerServiceError(this.i18n({
-              id: '@@scheduler_create_job_error',
-              value: 'Failed to create the job.'
-            }), apiError));
+            return throwError(new SchedulerServiceError('Failed to create the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -98,17 +92,14 @@ export class SchedulerService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'JobNotFoundError') {
-            return throwError(new JobNotFoundError(this.i18n, apiError));
+            return throwError(new JobNotFoundError(apiError));
           } else {
-            return throwError(new SchedulerServiceError(this.i18n({
-              id: '@@scheduler_delete_job_error',
-              value: 'Failed to delete the job.'
-            }), apiError));
+            return throwError(new SchedulerServiceError('Failed to delete the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -130,17 +121,14 @@ export class SchedulerService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'JobNotFoundError') {
-            return throwError(new JobNotFoundError(this.i18n, apiError));
+            return throwError(new JobNotFoundError(apiError));
           } else {
-            return throwError(new SchedulerServiceError(this.i18n({
-              id: '@@scheduler_get_job_error',
-              value: 'Failed to retrieve the job.'
-            }), apiError));
+            return throwError(new SchedulerServiceError('Failed to retrieve the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -163,17 +151,14 @@ export class SchedulerService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'JobNotFoundError') {
-          return throwError(new JobNotFoundError(this.i18n, apiError));
+          return throwError(new JobNotFoundError(apiError));
         } else {
-          return throwError(new SchedulerServiceError(this.i18n({
-            id: '@@scheduler_get_job_name_error',
-            value: 'Failed to retrieve the job name.'
-          }), apiError));
+          return throwError(new SchedulerServiceError('Failed to retrieve the job name.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        return throwError(new SystemUnavailableError(httpErrorResponse));
       }
     }));
   }
@@ -191,14 +176,11 @@ export class SchedulerService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new SchedulerServiceError(this.i18n({
-            id: '@@scheduler_get_jobs_error',
-            value: 'Failed to retrieve the jobs.'
-          }), apiError));
+          return throwError(new SchedulerServiceError('Failed to retrieve the jobs.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -219,17 +201,14 @@ export class SchedulerService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'JobNotFoundError') {
-          return throwError(new JobNotFoundError(this.i18n, apiError));
+          return throwError(new JobNotFoundError(apiError));
         } else {
-          return throwError(new SchedulerServiceError(this.i18n({
-            id: '@@scheduler_update_job_error',
-            value: 'Failed to update the job.'
-          }), apiError));
+          return throwError(new SchedulerServiceError('Failed to update the job.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        return throwError(new SystemUnavailableError(httpErrorResponse));
       }
     }));
   }

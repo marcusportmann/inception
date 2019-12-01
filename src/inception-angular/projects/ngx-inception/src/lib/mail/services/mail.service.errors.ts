@@ -18,7 +18,6 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
 import {ApiError} from '../../core/errors/api-error';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The DuplicateMailTemplateError class holds the information for a duplicate mail template
@@ -34,11 +33,8 @@ export class DuplicateMailTemplateError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@mail_duplicate_mail_template_error',
-      value: 'The mail template already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The mail template already exists.', cause);
   }
 }
 
@@ -74,11 +70,8 @@ export class MailTemplateNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@mail_mail_template_not_found_error',
-      value: 'The mail template could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The mail template could not be found.', cause);
   }
 }
 

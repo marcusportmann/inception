@@ -16,10 +16,11 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AdminContainerComponent, NotFoundComponent} from 'ngx-inception';
+import {AdminContainerComponent, LoginViewsModule, NotFoundComponent} from 'ngx-inception';
 
 
 import {CanActivateFunctionGuard} from 'ngx-inception';
+import {SimpleContainerComponent} from 'ngx-inception';
 // import {AdministrationTitleResolver} from 'ngx-inception';
 
 
@@ -81,14 +82,13 @@ export const routes: Routes = [{
 
 },
 
-  /*
 // Login route
   {
     path: 'login',
     component: SimpleContainerComponent,
-    loadChildren: () => import('./inception/views/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./login-views-wrapper.module').then(m => m.LoginViewsWrapperModule)
   },
-
+/*
 // Send Error Report route
   {
     path: 'error',

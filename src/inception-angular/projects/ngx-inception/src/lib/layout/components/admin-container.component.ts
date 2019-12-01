@@ -31,12 +31,7 @@ import {TitleBarService} from '../services/title-bar.service';
   // tslint:disable-next-line:component-selector
   selector: 'admin-container',
   template: `
-    <admin-header
-      [fixed]="true"
-      [brandFull]="{src: 'assets/images/logo.png', width: 100,  alt: 'Logo'}"
-      [brandMinimized]="{src: 'assets/images/logo-symbol.png', width: 30, height: 30, alt: 'Logo'}"
-      [sidebarToggler]="'lg'">
-    </admin-header>
+    <admin-header [fixed]="true" [sidebarToggler]="'lg'"></admin-header>
     <div class="admin-body">
       <sidebar [fixed]="true" [display]="'lg'">
         <sidebar-nav [perfectScrollbar] [disabled]="sidebarMinimized"></sidebar-nav>

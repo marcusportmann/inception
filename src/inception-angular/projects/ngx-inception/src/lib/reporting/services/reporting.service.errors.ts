@@ -18,7 +18,6 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
 import {ApiError} from '../../core/errors/api-error';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The DuplicateReportDefinitionError class holds the information for a duplicate report definition
@@ -34,11 +33,8 @@ export class DuplicateReportDefinitionError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@reporting_duplicate_report_definition_error',
-      value: 'The report definition already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The report definition already exists.', cause);
   }
 }
 
@@ -56,11 +52,8 @@ export class ReportDefinitionNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@reporting_report_definition_not_found_error',
-      value: 'The report definition could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The report definition could not be found.', cause);
   }
 }
 

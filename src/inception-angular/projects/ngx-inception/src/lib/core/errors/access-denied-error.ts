@@ -16,7 +16,6 @@
 
 import {Error} from './error';
 import {HttpErrorResponse} from '@angular/common/http';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ApiError} from './api-error';
 
 /**
@@ -45,14 +44,10 @@ export class AccessDeniedError extends Error {
    * Constructs a new AccessDeniedError.
    *
    * @param httpErrorResponse The HTTP error response containing the error information.
-   * @param i18n              The internationalization service.
    */
-  constructor(httpErrorResponse: HttpErrorResponse, i18n: I18n) {
+  constructor(httpErrorResponse: HttpErrorResponse) {
 
-    super(i18n({
-      id: '@@access_denied_error',
-      value: 'Access is denied. You do not have sufficient privileges to perform the requested operation.'
-    }));
+    super('Access is denied. You do not have sufficient privileges to perform the requested operation.');
 
     this.status = httpErrorResponse.status;
     this.statusText = httpErrorResponse.statusText;

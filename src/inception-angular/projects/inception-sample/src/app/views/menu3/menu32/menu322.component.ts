@@ -16,10 +16,8 @@
 
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AdminContainerView} from 'ngx-inception';
-import {BackNavigation} from 'ngx-inception';
+import {AdminContainerView, BackNavigation} from 'ngx-inception';
 import {ActivatedRoute} from '@angular/router';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The Menu322Component class implements the menu 3.2.2 component.
@@ -35,9 +33,8 @@ export class Menu322Component extends AdminContainerView {
    * Constructs a new Menu322Component.
    *
    * @param activatedRoute The activated route.
-   * @param i18n           The internationalization service.
    */
-  constructor(private activatedRoute: ActivatedRoute, private i18n: I18n) {
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
   }
 
@@ -45,20 +42,14 @@ export class Menu322Component extends AdminContainerView {
    * Tne back navigation for admin container view.
    */
   get backNavigation(): BackNavigation {
-    return new BackNavigation(this.i18n({
-      id: '@@menu_322_component_back_title',
-      value: 'Menu 3.1.1'
-    }), ['../menu321'], {relativeTo: this.activatedRoute});
+    return new BackNavigation('Menu 3.1.1', ['../menu321'], {relativeTo: this.activatedRoute});
   }
 
   /**
    * The title for the admin container view.
    */
   get title(): string | Observable<string> {
-    return this.i18n({
-      id: '@@menu_322_component_title',
-      value: 'Custom Menu 3.2.2 Title'
-    });
+    return 'Custom Menu 3.2.2 Title';
   }
 }
 

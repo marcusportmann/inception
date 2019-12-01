@@ -18,7 +18,6 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
 import {ApiError} from '../../core/errors/api-error';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The AuthenticationFailedError class holds the information for an authentication failed error.
@@ -33,11 +32,8 @@ export class AuthenticationFailedError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_authentication_failed_error',
-      value: 'Authentication failed.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('Authentication failed.', cause);
   }
 }
 
@@ -54,11 +50,8 @@ export class DuplicateGroupError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_duplicate_group_error',
-      value: 'A group with the specified name already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('A group with the specified name already exists.', cause);
   }
 }
 
@@ -75,11 +68,8 @@ export class DuplicateOrganizationError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_duplicate_organization_error',
-      value: 'An organization with the specified ID or name already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('An organization with the specified ID or name already exists.', cause);
   }
 }
 
@@ -96,11 +86,8 @@ export class DuplicateUserDirectoryError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_duplicate_user_directory_error',
-      value: 'A user directory with the specified ID or name already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('A user directory with the specified ID or name already exists.', cause);
   }
 }
 
@@ -117,11 +104,8 @@ export class DuplicateUserError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_duplicate_user_error',
-      value: 'A user with the specified username already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('A user with the specified username already exists.', cause);
   }
 }
 
@@ -138,11 +122,8 @@ export class ExistingGroupMemberError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_existing_group_member_error',
-      value: 'The group member already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group member already exists.', cause);
   }
 }
 
@@ -159,11 +140,8 @@ export class ExistingGroupMembersError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_existing_group_members_error',
-      value: 'The group has existing members.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group has existing members.', cause);
   }
 }
 
@@ -180,11 +158,8 @@ export class ExistingGroupRoleError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_existing_group_role_error',
-      value: 'The group role already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group role already exists.', cause);
   }
 }
 
@@ -202,11 +177,8 @@ export class ExistingOrganizationUserDirectoryError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_existing_organization_user_directory_error',
-      value: 'The organization user directory already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The organization user directory already exists.', cause);
   }
 }
 
@@ -223,11 +195,8 @@ export class ExistingPasswordError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_existing_password_error',
-      value: 'The new password has been used recently and is not valid.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The new password has been used recently and is not valid.', cause);
   }
 }
 
@@ -244,11 +213,8 @@ export class GroupMemberNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_group_member_not_found_error',
-      value: 'The group member could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group member could not be found.', cause);
   }
 }
 
@@ -265,11 +231,8 @@ export class GroupNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_group_not_found_error',
-      value: 'The group could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group could not be found.', cause);
   }
 }
 
@@ -286,11 +249,8 @@ export class GroupRoleNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_group_role_not_found_error',
-      value: 'The group role could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The group role could not be found.', cause);
   }
 }
 
@@ -307,11 +267,8 @@ export class InvalidSecurityCodeError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_invalid_security_code_error',
-      value: 'The security code is invalid.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The security code is invalid.', cause);
   }
 }
 
@@ -328,11 +285,8 @@ export class LoginError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_login_error',
-      value: 'Incorrect username or password.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('Incorrect username or password.', cause);
   }
 }
 
@@ -349,11 +303,8 @@ export class OrganizationNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_organization_not_found_error',
-      value: 'The organization could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The organization could not be found.', cause);
   }
 }
 
@@ -371,11 +322,8 @@ export class OrganizationUserDirectoryNotFound extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_organization_user_directory_not_found_error',
-      value: 'The organization user directory could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The organization user directory could not be found.', cause);
   }
 }
 
@@ -392,11 +340,8 @@ export class PasswordExpiredError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_password_expired_error',
-      value: 'The password has expired.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The password has expired.', cause);
   }
 }
 
@@ -449,11 +394,8 @@ export class UserDirectoryNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_user_directory_not_found_error',
-      value: 'The user directory could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The user directory could not be found.', cause);
   }
 }
 
@@ -470,11 +412,8 @@ export class UserLockedError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_user_locked_error',
-      value: 'The user has exceeded the maximum number of failed password attempts and has been locked.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The user has exceeded the maximum number of failed password attempts and has been locked.', cause);
   }
 }
 
@@ -491,11 +430,8 @@ export class UserNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@security_user_not_found_error',
-      value: 'The user could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The user could not be found.', cause);
   }
 }
 

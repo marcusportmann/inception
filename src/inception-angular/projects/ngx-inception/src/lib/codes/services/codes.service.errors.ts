@@ -18,7 +18,6 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
 import {ApiError} from '../../core/errors/api-error';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 /**
  * The CodeCategoryNotFoundError class holds the information for a code category not found error.
@@ -33,11 +32,8 @@ export class CodeCategoryNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@codes_code_category_not_found_error',
-      value: 'The code category could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The code category could not be found.', cause);
   }
 }
 
@@ -54,11 +50,8 @@ export class CodeNotFoundError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@codes_code_not_found_error',
-      value: 'The code could not be found.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The code could not be found.', cause);
   }
 }
 
@@ -93,11 +86,8 @@ export class DuplicateCodeCategoryError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@codes_duplicate_code_error',
-      value: 'The code category already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The code category already exists.', cause);
   }
 }
 
@@ -114,10 +104,7 @@ export class DuplicateCodeError extends Error {
    * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
-  constructor(i18n: I18n, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(i18n({
-      id: '@@codes_duplicate_code_error',
-      value: 'The code already exists.'
-    }), cause);
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super('The code already exists.', cause);
   }
 }

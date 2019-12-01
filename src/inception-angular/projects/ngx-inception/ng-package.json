@@ -5,7 +5,6 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "@auth0/angular-jwt": "angularJwt",
-      "@ngx-translate/i18n-polyfill": "i18nPolyfill",
       "ngx-perfect-scrollbar": "ngxPerfectScrollbar",
       "string-template": "format_",
       "uuid": "uuid"

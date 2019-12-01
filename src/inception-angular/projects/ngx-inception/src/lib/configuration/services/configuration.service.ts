@@ -16,7 +16,6 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {ApiError} from '../../core/errors/api-error';
@@ -42,10 +41,8 @@ export class ConfigurationService {
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
-   * @param i18n       The internationalization service.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
-              private i18n: I18n) {
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     console.log('Initializing the Inception Configuration Service');
   }
 
@@ -66,17 +63,14 @@ export class ConfigurationService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'ConfigurationNotFoundError') {
-            return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
+            return throwError(new ConfigurationNotFoundError(apiError));
           } else {
-            return throwError(new ConfigurationServiceError(this.i18n({
-              id: '@@configuration_delete_configuration_error',
-              value: 'Failed to delete the configuration.'
-            }), apiError));
+            return throwError(new ConfigurationServiceError('Failed to delete the configuration.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -98,17 +92,14 @@ export class ConfigurationService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           if (apiError.code === 'ConfigurationNotFoundError') {
-            return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
+            return throwError(new ConfigurationNotFoundError(apiError));
           } else {
-            return throwError(new ConfigurationServiceError(this.i18n({
-              id: '@@configuration_get_configuration_error',
-              value: 'Failed to retrieve the configuration.'
-            }), apiError));
+            return throwError(new ConfigurationServiceError('Failed to retrieve the configuration.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -131,17 +122,14 @@ export class ConfigurationService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         if (apiError.code === 'ConfigurationNotFoundError') {
-          return throwError(new ConfigurationNotFoundError(this.i18n, apiError));
+          return throwError(new ConfigurationNotFoundError(apiError));
         } else {
-          return throwError(new ConfigurationServiceError(this.i18n({
-            id: '@@configuration_get_configuration_value_error',
-            value: 'Failed to retrieve the configuration value.'
-          }), apiError));
+          return throwError(new ConfigurationServiceError('Failed to retrieve the configuration value.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+        return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+        return throwError(new SystemUnavailableError(httpErrorResponse));
       }
     }));
   }
@@ -160,14 +148,11 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError(this.i18n({
-            id: '@@configuration_get_configurations',
-            value: 'Failed to retrieve the configurations.'
-          }), apiError));
+          return throwError(new CodesServiceError('Failed to retrieve the configurations.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }
@@ -188,14 +173,11 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError(this.i18n({
-            id: '@@configuration_save_configuration_error',
-            value: 'Failed to save the configuration.'
-          }), apiError));
+          return throwError(new CodesServiceError('Failed to save the configuration.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }

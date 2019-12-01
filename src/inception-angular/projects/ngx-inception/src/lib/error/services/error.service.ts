@@ -18,7 +18,6 @@ import {Inject, Injectable} from '@angular/core';
 
 import {Error} from '../../core/errors/error';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {catchError, map} from 'rxjs/operators';
 import {ApiError} from '../../core/errors/api-error';
 import {Observable, throwError} from 'rxjs';
@@ -45,10 +44,8 @@ export class ErrorService {
    *
    * @param config     The Inception configuration.
    * @param httpClient The HTTP client.
-   * @param i18n       The internationalization service.
    */
-  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient,
-              private i18n: I18n) {
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     console.log('Initializing the Inception Error Service');
   }
 
@@ -71,14 +68,11 @@ export class ErrorService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new ErrorServiceError(this.i18n({
-            id: '@@error_send_error_report_error',
-            value: 'Failed to send the error report.'
-          }), apiError));
+          return throwError(new ErrorServiceError('Failed to send the error report.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse, this.i18n));
+          return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse, this.i18n));
+          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
       }));
   }

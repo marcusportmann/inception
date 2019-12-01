@@ -3,23 +3,24 @@
  */
 
 // Inception
+import {ExpiredPasswordTitleResolver} from './lib/security/views/expired-password-title-resolver';
+import {ForgottenPasswordTitleResolver} from './lib/security/views/forgotten-password-title-resolver';
+import {LoginTitleResolver} from './lib/security/views/login-title-resolver';
+import {ResetPasswordTitleResolver} from './lib/security/views/reset-password-title-resolver';
+import {SelectOrganizationTitleResolver} from './lib/security/views/select-organization-title-resolver';
+
 export * from './lib/inception.module';
 export * from './lib/inception-app.module';
 export * from './lib/inception-config';
 
-// Modules
+// Codes
 export * from './lib/codes/codes.module';
+
+// Configuration
 export * from './lib/configuration/configuration.module';
-export * from './lib/core/core.module';
-export * from './lib/dialog/dialog.module';
-export * from './lib/error/error.module';
-export * from './lib/layout/layout.module';
-export * from './lib/mail/mail.module';
-export * from './lib/reporting/reporting.module';
-export * from './lib/scheduler/scheduler.module';
-export * from './lib/security/security.module';
 
 // Core
+export * from './lib/core/core.module';
 export * from './lib/core/components/checkbox-form-field.component';
 export * from './lib/core/components/file-upload.component';
 export * from './lib/core/components/radio-group-form-field.component';
@@ -34,13 +35,18 @@ export * from './lib/core/errors/system-unavailable-error';
 export * from './lib/core/errors/validation-error';
 
 // Dialog
+export * from './lib/dialog/dialog.module';
 export * from './lib/dialog/components/confirmation-dialog.component';
 export * from './lib/dialog/components/error-dialog.component';
 export * from './lib/dialog/components/information-dialog.component';
 export * from './lib/dialog/components/warning-dialog.component';
 export * from './lib/dialog/services/dialog.service';
 
+// Error
+export * from './lib/error/error.module';
+
 // Layout
+export * from './lib/layout/layout.module';
 export * from './lib/layout/components/admin-container.component';
 export * from './lib/layout/components/admin-container-view';
 export * from './lib/layout/components/back-navigation';
@@ -53,11 +59,23 @@ export * from './lib/layout/services/navigation-title';
 export * from './lib/layout/services/spinner.service';
 export * from './lib/layout/services/title-bar.service';
 
+// Mail
+export * from './lib/mail/mail.module';
+
+// Reporting
+export * from './lib/reporting/reporting.module';
+
+// Scheduler
+export * from './lib/scheduler/scheduler.module';
+
 // Security
+export * from './lib/security/security.module';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';
-
-
-
-
+export * from './lib/security/views/login-views.module';
+// export * from './lib/security/views/expired-password-title-resolver';
+// export * from './lib/security/views/forgotten-password-title-resolver';
+// export * from './lib/security/views/login-title-resolver';
+// export * from './lib/security/views/reset-password-title-resolver';
+// export * from './lib/security/views/select-organization-title-resolver';
 
