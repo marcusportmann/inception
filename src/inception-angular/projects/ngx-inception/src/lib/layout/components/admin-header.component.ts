@@ -36,22 +36,10 @@ import {SecurityService} from '../../security/services/security.service';
       <button class="toggler d-lg-none" type="button" sidebarToggler>
         <span class="toggler-icon"></span>
       </button>
-      <ng-template [ngIf]="brandFull || brandMinimized">
-        <a class="brand" href="#">
-          <img *ngIf="brandFull"
-               [src]="imgSrc(brandFull)"
-               [attr.width]="imgWidth(brandFull)"
-               [attr.height]="imgHeight(brandFull)"
-               [attr.alt]="imgAlt(brandFull)"
-               class="brand-full">
-          <img *ngIf="brandMinimized"
-               [src]="imgSrc(brandMinimized)"
-               [attr.width]="imgWidth(brandMinimized)"
-               [attr.height]="imgHeight(brandMinimized)"
-               [attr.alt]="imgAlt(brandMinimized)"
-               class="brand-minimized">
-        </a>
-      </ng-template>
+      <a class="brand" href="#">
+        <div class="brand-full"></div>
+        <div class="brand-minimized"></div>
+      </a>
 
       <button class="toggler d-md-down-none" type="button" [sidebarToggler]="sidebarToggler">
         <span class="toggler-icon"></span>
@@ -99,12 +87,6 @@ import {SecurityService} from '../../security/services/security.service';
 })
 export class AdminHeaderComponent implements OnInit {
 
-  // tslint:disable-next-line
-  @Input() brandFull?: any;
-
-  // tslint:disable-next-line
-  @Input() brandMinimized?: any;
-
   @Input() fixed = false;
 
   // tslint:disable-next-line
@@ -136,26 +118,6 @@ export class AdminHeaderComponent implements OnInit {
         bodySelector.classList.add('admin-header-fixed');
       }
     }
-  }
-
-  // tslint:disable-next-line
-  imgSrc(brand: any): string {
-    return brand.src ? brand.src : '';
-  }
-
-  // tslint:disable-next-line
-  imgWidth(brand: any): number | string {
-    return brand.width ? brand.width : 'auto';
-  }
-
-  // tslint:disable-next-line
-  imgHeight(brand: any): number | string {
-    return brand.height ? brand.height : 'auto';
-  }
-
-  // tslint:disable-next-line
-  imgAlt(brand: any): string {
-    return brand.alt ? brand.alt : '';
   }
 
   isLoggedIn(): Observable<boolean> {

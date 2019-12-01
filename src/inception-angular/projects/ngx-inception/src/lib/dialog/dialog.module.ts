@@ -41,7 +41,7 @@ import {WarningDialogComponent} from './components/warning-dialog.component';
     CommonModule,
 
     // Material modules
-    MatDialogModule,
+    MatButtonModule, MatDialogModule,
 
     // Inception modules
     CoreModule.forRoot()
