@@ -21,7 +21,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {MailService} from './services/mail.service';
 
 /**
- * The MailModule class implements the Inception Mail Module.
+ * The MailViewsModule class implements the Inception Mail Module.
  *
  * @author Marcus Portmann
  */

@@ -36,6 +36,8 @@ import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 })
 export class MailService {
 
+  static readonly MAX_TEMPLATE_SIZE: number = 10485760;
+
   /**
    * Constructs a new MailService.
    *

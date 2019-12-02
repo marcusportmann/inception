@@ -21,7 +21,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {ReportingService} from './services/reporting.service';
 
 /**
- * The ReportingModule class implements the Inception Reporting Module.
+ * The ReportingViewsModule class implements the Inception Reporting Module.
  *
  * @author Marcus Portmann
  */

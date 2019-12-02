@@ -77,7 +77,7 @@ export class FileValidator {
 
         if (numberOfBytes < minimumBytes) {
           return {
-            maxSize: {
+            minSize: {
               actualSize: numberOfBytes,
               requiredSize: minimumBytes
             }

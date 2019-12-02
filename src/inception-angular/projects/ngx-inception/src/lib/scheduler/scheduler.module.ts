@@ -21,7 +21,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {SchedulerService} from './services/scheduler.service';
 
 /**
- * The SchedulerModule class implements the Inception Scheduler Module.
+ * The SchedulerViewsModule class implements the Inception Scheduler Module.
  *
  * @author Marcus Portmann
  */

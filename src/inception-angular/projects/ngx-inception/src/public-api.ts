@@ -60,12 +60,20 @@ export * from './lib/layout/services/title-bar.service';
 
 // Mail
 export * from './lib/mail/mail.module';
+export * from './lib/mail/views/mail-title-resolver';
+export * from './lib/mail/views/mail-views.module';
+
+
 
 // Reporting
 export * from './lib/reporting/reporting.module';
+export * from './lib/reporting/views/reporting-title-resolver';
+export * from './lib/reporting/views/reporting-views.module';
 
 // Scheduler
 export * from './lib/scheduler/scheduler.module';
+export * from './lib/scheduler/views/scheduler-title-resolver';
+export * from './lib/scheduler/views/scheduler-views.module';
 
 // Security
 export * from './lib/security/security.module';
