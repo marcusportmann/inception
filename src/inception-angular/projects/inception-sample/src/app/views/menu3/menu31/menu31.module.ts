@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
 import {Menu311Component} from './menu311.component';
 import {Menu312Component} from './menu312.component';

@@ -20,7 +20,7 @@ import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
 
 /**
- * The ErrorModule class implements the Inception Error Module.
+ * The ErrorViewsModule class implements the Inception Error Module.
  *
  * @author Marcus Portmann
  */

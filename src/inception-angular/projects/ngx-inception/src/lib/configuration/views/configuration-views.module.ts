@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception components
+
 import {ConfigurationsComponent} from './configurations.component';
 import {EditConfigurationComponent} from './edit-configuration.component';
 import {NewConfigurationComponent} from './new-configuration.component';

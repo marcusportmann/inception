@@ -16,36 +16,40 @@
 
 
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception module
-import {InceptionModule} from 'ngx-inception';
-// Example Form component
-import {ExampleFormComponent} from './example-form.component';
+
+import {SendErrorReportComponent} from './send-error-report.component';
+import {CoreModule} from '../../core/core.module';
+import {DialogModule} from '../../dialog/dialog.module';
+import {LayoutModule} from '../../layout/layout.module';
+import {ErrorModule} from '../error.module';
 
 const routes: Routes = [{
-  path: '',
-  redirectTo: 'example-form'
-}, {
-  path: 'example-form',
-  component: ExampleFormComponent,
+  path: 'send-error-report',
+  component: SendErrorReportComponent,
   data: {
-    title: 'Example Form',
+    title: 'Send Error Report'
   }
 }
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule,
+  declarations: [
 
-    InceptionModule,
-
-    RouterModule.forChild(routes)
+    // Components
+    SendErrorReportComponent
   ],
-  declarations: [ExampleFormComponent],
-  providers: []
+  imports: [
+
+    // Angular modules
+    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
+
+    // Inception modules
+    CoreModule.forRoot(), DialogModule.forRoot(), ErrorModule.forRoot(), LayoutModule.forRoot()
+  ]
 })
-export class FormModule {
+export class ErrorViewsModule {
 }

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception modules
+
 import {CoreModule} from '../../core/core.module';
 import {LayoutModule} from '../../layout/layout.module';
-// Import Inception components
+
 import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
 import {ExpiredPasswordComponent} from './expired-password.component';

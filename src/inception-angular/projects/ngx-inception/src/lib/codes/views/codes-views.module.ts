@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception components
+
 import {CodeCategoriesComponent} from './code-categories.component';
 import {CodesComponent} from './codes.component';
 import {EditCodeCategoryComponent} from './edit-code-category.component';
@@ -143,7 +143,7 @@ const routes: Routes = [{
 
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
-    
+
     // Inception modules
     CodesModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
   ],

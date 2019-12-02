@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
 // Import Inception module
 import {InceptionModule} from 'ngx-inception';

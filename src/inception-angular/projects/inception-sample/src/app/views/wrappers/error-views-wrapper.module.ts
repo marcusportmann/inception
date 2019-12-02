@@ -14,32 +14,11 @@
  * limitations under the License.
  */
 
-
-import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
+import {ErrorModule, ErrorViewsModule} from 'ngx-inception';
 
-import {RouterModule, Routes} from '@angular/router';
-
-import {Menu1Component} from './menu1.component';
-
-const routes: Routes = [{
-  path: '',
-  component: Menu1Component,
-}
-];
-
-/**
- * The Menu1Module class implements a module that contains a single component that is loaded into
- * the AdminContainerComponent component when the corresponding menu option is selected.
- *
- * @author Marcus Portmann
- */
 @NgModule({
-  imports: [CommonModule,
-
-    RouterModule.forChild(routes)
-  ],
-  declarations: [Menu1Component]
+  imports: [ErrorModule.forRoot(), ErrorViewsModule]
 })
-export class Menu1Module {
+export class ErrorViewsWrapperModule {
 }

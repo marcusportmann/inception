@@ -20,7 +20,6 @@ import {
   AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
 } from 'ngx-inception';
 import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
-import {AdministrationModule} from './views/administration/administration.module';
 
 export const routes: Routes = [{
   path: '',
@@ -72,20 +71,21 @@ export const routes: Routes = [{
   ]
 },
 
-// Login route
+  // Login route
   {
     path: 'login',
     component: SimpleContainerComponent,
     loadChildren: () => import('./views/wrappers/login-views-wrapper.module').then(m => m.LoginViewsWrapperModule)
-  }, /*
-// Send Error Report route
+  },
+
+  // Send Error Report route
   {
     path: 'error',
     component: SimpleContainerComponent,
-    loadChildren: () => import('./inception/views/error/error.module').then(m => m.ErrorModule)
+    loadChildren: () => import('./views/wrappers/error-views-wrapper.module').then(m => m.ErrorViewsWrapperModule)
   },
-*/
-// Default route for invalid paths
+
+  // Default route for invalid paths
   {
     path: '**',
     component: NotFoundComponent

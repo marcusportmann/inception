@@ -42,6 +42,7 @@ export * from './lib/dialog/services/dialog.service';
 
 // Error
 export * from './lib/error/error.module';
+export * from './lib/error/views/error-views.module';
 
 // Layout
 export * from './lib/layout/layout.module';

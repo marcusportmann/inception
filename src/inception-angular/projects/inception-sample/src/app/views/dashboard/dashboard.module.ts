@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception components
+
 import {DashboardComponent} from './dashboard.component';
 
 // Import 3rd party modules

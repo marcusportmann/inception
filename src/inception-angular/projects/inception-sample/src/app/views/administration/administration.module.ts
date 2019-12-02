@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-// Import Angular modules
+
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-// Import Angular classes
+
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception components
+
 import {AdministrationComponent} from './administration.component';
 import {AdministrationTitleResolver} from './administration-title-resolver';
 import {SystemTitleResolver} from './system-title-resolver';

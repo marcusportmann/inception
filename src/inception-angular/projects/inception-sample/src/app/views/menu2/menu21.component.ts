@@ -15,6 +15,8 @@
  */
 
 import {Component} from '@angular/core';
+import {Error} from 'ngx-inception';
+import {Router} from '@angular/router';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -22,10 +24,26 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 2.1`
+  template: `
+  <mat-card class="flex-grow-1">
+    <mat-card-content>
+  <button mat-flat-button color="primary" (click)="testErrorReporting()">Test Error Reporting</button>
+    </mat-card-content>
+  </mat-card>
+  `
 })
 export class Menu21Component {
 
-  constructor() {
+  constructor(private router: Router) {
+  }
+
+  testErrorReporting(): void {
+
+    const error: Error = new Error('Testing 1.. 2.. 3..');
+
+
+    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+
+
   }
 }
