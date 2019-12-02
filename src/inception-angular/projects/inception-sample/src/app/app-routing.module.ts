@@ -16,13 +16,11 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AdminContainerComponent, LoginViewsModule, NotFoundComponent} from 'ngx-inception';
-
-
-import {CanActivateFunctionGuard} from 'ngx-inception';
-import {SimpleContainerComponent} from 'ngx-inception';
-// import {AdministrationTitleResolver} from 'ngx-inception';
-
+import {
+  AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
+} from 'ngx-inception';
+import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
+import {AdministrationModule} from './views/administration/administration.module';
 
 export const routes: Routes = [{
   path: '',
@@ -31,10 +29,7 @@ export const routes: Routes = [{
 }, {
   path: '',
   component: AdminContainerComponent,
-  children: [
-    /*
-
-    {
+  children: [{
     path: 'dashboard',
     canActivate: [CanActivateFunctionGuard
     ],
@@ -43,21 +38,19 @@ export const routes: Routes = [{
       authorities: ['ROLE_Administrator', 'FUNCTION_Application.Dashboard']
     },
     loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
-  }, */{
+  }, {
     path: 'inception',
     data: {
       title: 'Inception'
     },
     loadChildren: () => import('./views/inception/inception.module').then(m => m.InceptionModule)
-  },
-    {
+  }, {
     path: 'menu1',
     data: {
       title: 'Menu 1'
     },
     loadChildren: () => import('./views/menu1/menu1.module').then(m => m.Menu1Module)
-  },
-    {
+  }, {
     path: 'menu2',
     data: {
       title: 'Menu 2'
@@ -69,26 +62,22 @@ export const routes: Routes = [{
       title: 'Menu 3'
     },
     loadChildren: () => import('./views/menu3/menu3.module').then(m => m.Menu3Module)
-  } /* , {
+  }, {
     path: 'administration',
     resolve: {
       title: AdministrationTitleResolver
     },
     loadChildren: () => import('./views/administration/administration.module').then(m => m.AdministrationModule)
   }
-
-  */
   ]
-
 },
 
 // Login route
   {
     path: 'login',
     component: SimpleContainerComponent,
-    loadChildren: () => import('./login-views-wrapper.module').then(m => m.LoginViewsWrapperModule)
-  },
-/*
+    loadChildren: () => import('./views/wrappers/login-views-wrapper.module').then(m => m.LoginViewsWrapperModule)
+  }, /*
 // Send Error Report route
   {
     path: 'error',
@@ -100,12 +89,18 @@ export const routes: Routes = [{
   {
     path: '**',
     component: NotFoundComponent
-  }];
+  }
+];
 
 @NgModule({
   // Tracing should only be enabled for DEBUG purposes
-  imports: [RouterModule.forRoot(routes, {enableTracing: false})],
-  exports: [RouterModule]
+  imports: [
+
+    // Angular modules
+    RouterModule.forRoot(routes, {enableTracing: false})
+  ],
+  exports: [RouterModule],
+  providers: [AdministrationTitleResolver]
 })
 export class AppRoutingModule {
 }

@@ -20,7 +20,7 @@ import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
 
 /**
- * The CodesModule class implements the Inception Codes Module.
+ * The CodesViewsModule class implements the Inception Codes Module.
  *
  * @author Marcus Portmann
  */

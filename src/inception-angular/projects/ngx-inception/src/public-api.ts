@@ -15,6 +15,8 @@ export * from './lib/inception-config';
 
 // Codes
 export * from './lib/codes/codes.module';
+export * from './lib/codes/views/code-categories-title-resolver';
+export * from './lib/codes/views/codes-views.module';
 
 // Configuration
 export * from './lib/configuration/configuration.module';
