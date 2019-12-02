@@ -20,7 +20,7 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS, MatButtonModule,
   MatCheckboxModule,
   MatFormFieldModule,
   MatRadioModule
@@ -69,7 +69,7 @@ export const INCEPTION_DATE_FORMATS = {
     CommonModule, FormsModule,
 
     // Material modules
-    MatCheckboxModule, MatFormFieldModule, MatRadioModule
+    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule
   ],
   exports: [
 
@@ -77,7 +77,7 @@ export const INCEPTION_DATE_FORMATS = {
     CommonModule, FormsModule,
 
     // Material modules
-    MatCheckboxModule, MatFormFieldModule, MatRadioModule,
+    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule,
 
     // Components
     CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,

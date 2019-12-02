@@ -3,12 +3,6 @@
  */
 
 // Inception
-import {ExpiredPasswordTitleResolver} from './lib/security/views/expired-password-title-resolver';
-import {ForgottenPasswordTitleResolver} from './lib/security/views/forgotten-password-title-resolver';
-import {LoginTitleResolver} from './lib/security/views/login-title-resolver';
-import {ResetPasswordTitleResolver} from './lib/security/views/reset-password-title-resolver';
-import {SelectOrganizationTitleResolver} from './lib/security/views/select-organization-title-resolver';
-
 export * from './lib/inception.module';
 export * from './lib/inception-app.module';
 export * from './lib/inception-config';
@@ -20,6 +14,8 @@ export * from './lib/codes/views/codes-views.module';
 
 // Configuration
 export * from './lib/configuration/configuration.module';
+export * from './lib/configuration/views/configurations-title-resolver';
+export * from './lib/configuration/views/configuration-views.module';
 
 // Core
 export * from './lib/core/core.module';

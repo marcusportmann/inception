@@ -24,7 +24,7 @@ import {AdministrationComponent} from './administration.component';
 import {AdministrationTitleResolver} from './administration-title-resolver';
 import {SystemTitleResolver} from './system-title-resolver';
 import {CodeCategoriesTitleResolver} from 'ngx-inception';
-// import {ConfigurationsTitleResolver} from 'ngx-inception';
+import {ConfigurationsTitleResolver} from 'ngx-inception';
 // import {SecurityTitleResolver} from 'ngx-inception';
 // import {MailTitleResolver} from 'ngx-inception';
 // import {SchedulerTitleResolver} from 'ngx-inception';
@@ -62,7 +62,7 @@ const routes: Routes = [{
     loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(m => m.CodesViewsWrapperModule)
   }
 
-  /*
+
   , {
     path: 'configuration',
     resolve: {
@@ -71,7 +71,7 @@ const routes: Routes = [{
     loadChildren: () => import('../wrappers/configuration-views-wrapper.module').then(
       m => m.ConfigurationViewsWrapperModule)
   }
-  */
+
 
   /*
   ,   {
@@ -116,7 +116,7 @@ const routes: Routes = [{
   providers: [
 
     // Resolvers
-    CodeCategoriesTitleResolver,
+    CodeCategoriesTitleResolver, ConfigurationsTitleResolver,
 
 
     // ConfigurationsTitleResolver,

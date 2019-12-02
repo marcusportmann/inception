@@ -133,24 +133,19 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  declarations: [CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent,
-    NewCodeCategoryComponent, NewCodeComponent
+  declarations: [
+
+    // Components
+    CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent, NewCodeCategoryComponent,
+    NewCodeComponent
   ],
   imports: [
 
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
-
+    
     // Inception modules
     CodesModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
-  ],
-  exports: [
-
-    // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule,
-
-    // Inception modules
-    CodesModule, CoreModule, DialogModule, LayoutModule
   ],
   providers: [
 

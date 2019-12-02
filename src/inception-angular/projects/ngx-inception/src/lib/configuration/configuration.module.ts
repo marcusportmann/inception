@@ -20,7 +20,7 @@ import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
 
 /**
- * The ConfigurationModule class implements the Inception Configuration Module.
+ * The ConfigurationViewsModule class implements the Inception Configuration Module.
  *
  * @author Marcus Portmann
  */

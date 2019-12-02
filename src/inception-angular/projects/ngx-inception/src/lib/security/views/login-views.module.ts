@@ -87,14 +87,6 @@ const routes: Routes = [{
     // Inception modules
     CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot(), SecurityModule.forRoot()
   ],
-  // exports: [
-  //
-  //   // Angular modules
-  //   CommonModule, FormsModule, ReactiveFormsModule,
-  //
-  //   // Inception modules
-  //   CoreModule, DialogModule, LayoutModule, SecurityModule
-  // ],
   providers: [
 
     // Resolvers
