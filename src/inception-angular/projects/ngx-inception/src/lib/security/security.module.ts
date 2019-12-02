@@ -21,7 +21,6 @@ import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
 import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {SecurityInterceptor} from './services/security.interceptor';
-import {SecurityService} from './services/security.service';
 import {HasAuthorityDirective} from './directives/has-authority.directive';
 
 /**
@@ -68,9 +67,6 @@ export class SecurityModule {
         useClass: SecurityInterceptor,
         multi: true
       },
-
-        // Services
-        SecurityService,
 
         // Function Guards
         CanActivateFunctionGuard, DisabledFunctionGuard

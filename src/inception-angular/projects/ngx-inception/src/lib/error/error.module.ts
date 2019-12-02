@@ -18,7 +18,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
-import {ErrorService} from './services/error.service';
 
 /**
  * The ErrorModule class implements the Inception Error Module.
@@ -51,12 +50,7 @@ export class ErrorModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ErrorModule,
-      providers: [
-
-        // Services
-        ErrorService
-      ]
+      ngModule: ErrorModule
     };
   }
 }

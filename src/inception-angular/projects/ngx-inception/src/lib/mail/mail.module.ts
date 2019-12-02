@@ -51,12 +51,7 @@ export class MailModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: MailModule,
-      providers: [
-
-        // Services
-        MailService
-      ]
+      ngModule: MailModule
     };
   }
 }

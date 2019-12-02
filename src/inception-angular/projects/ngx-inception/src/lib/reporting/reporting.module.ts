@@ -51,12 +51,7 @@ export class ReportingModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ReportingModule,
-      providers: [
-
-        // Services
-        ReportingService
-      ]
+      ngModule: ReportingModule
     };
   }
 }

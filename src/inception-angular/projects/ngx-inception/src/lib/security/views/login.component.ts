@@ -61,13 +61,13 @@ export class LoginComponent implements OnInit {
               private securityService: SecurityService, private spinnerService: SpinnerService) {
 
     // Initialise the form controls
-    this.passwordFormControl = new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]);
-    this.usernameFormControl = new FormControl('Password1', [Validators.required, Validators.maxLength(100)]);
+    this.passwordFormControl = new FormControl('Password1', [Validators.required, Validators.maxLength(100)]);
+    this.usernameFormControl = new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.loginForm = new FormGroup({
-      username: this.passwordFormControl,
-      password: this.usernameFormControl
+      password: this.passwordFormControl,
+      username: this.usernameFormControl
     });
   }
 

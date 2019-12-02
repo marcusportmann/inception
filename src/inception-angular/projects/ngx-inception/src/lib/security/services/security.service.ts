@@ -1820,7 +1820,7 @@ export class SecurityService {
                   tokenResponse.access_token, currentSession.refreshToken);
 
                 refreshedSession.organization = selectedOrganization;
-
+                
                 this.session$.next(refreshedSession);
 
                 return refreshedSession;

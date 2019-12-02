@@ -17,7 +17,6 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
-import {CodesService} from './services/codes.service';
 import {HttpClientModule} from '@angular/common/http';
 
 /**
@@ -51,11 +50,7 @@ export class CodesModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: CodesModule,
-      providers: [//
-        // Services
-        CodesService
-      ]
+      ngModule: CodesModule
     };
   }
 }

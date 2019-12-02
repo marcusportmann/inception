@@ -18,7 +18,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
-import {ConfigurationService} from './services/configuration.service';
 
 /**
  * The ConfigurationModule class implements the Inception Configuration Module.
@@ -51,12 +50,7 @@ export class ConfigurationModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: ConfigurationModule,
-      providers: [
-
-        // Services
-        ConfigurationService
-      ]
+      ngModule: ConfigurationModule
     };
   }
 }

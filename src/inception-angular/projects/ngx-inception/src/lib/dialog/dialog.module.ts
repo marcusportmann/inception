@@ -18,7 +18,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
 import {MatButtonModule, MatDialogModule} from '@angular/material';
-import {DialogService} from './services/dialog.service';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog.component';
 import {ErrorDialogComponent} from './components/error-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog.component';
@@ -71,12 +70,7 @@ export class DialogModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: DialogModule,
-      providers: [
-
-        // Services
-        DialogService
-      ]
+      ngModule: DialogModule
     };
   }
 }

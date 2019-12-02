@@ -33,20 +33,22 @@ const ngxInceptionConfiguration: InceptionConfig = {
   applicationVersion: '1.0.0',
 
   // OAuth Token URL
-  oauthTokenUrl: 'http://localhost:8080/oauth/token',
+  oauthTokenUrl: 'http://localhost:20000/oauth/token',
 
   // Inception API URLs
-  codesApiUrlPrefix: 'http://localhost:8080/api/codes',
-  configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',
-  errorApiUrlPrefix: 'http://localhost:8080/api/error',
-  mailApiUrlPrefix: 'http://localhost:8080/api/mail',
-  reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
-  schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
-  securityApiUrlPrefix: 'http://localhost:8080/api/security',
+  codesApiUrlPrefix: 'http://localhost:20000/api/codes',
+  configurationApiUrlPrefix: 'http://localhost:20000/api/configuration',
+  errorApiUrlPrefix: 'http://localhost:20000/api/error',
+  mailApiUrlPrefix: 'http://localhost:20000/api/mail',
+  reportingApiUrlPrefix: 'http://localhost:20000/api/reporting',
+  schedulerApiUrlPrefix: 'http://localhost:20000/api/scheduler',
+  securityApiUrlPrefix: 'http://localhost:20000/api/security',
 
   // Flags
   forgottenPasswordEnabled: true
 };
+
+
 
 
 @NgModule({

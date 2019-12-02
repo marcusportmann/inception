@@ -44,10 +44,6 @@ import {
   MatTooltipModule
 } from '@angular/material';
 import {CoreModule} from '../core/core.module';
-import {BreadcrumbsService} from './services/breadcrumbs.service';
-import {SpinnerService} from './services/spinner.service';
-import {TitleBarService} from './services/title-bar.service';
-import {NavigationService} from './services/navigation.service';
 import {DialogModule} from '../dialog/dialog.module';
 import {RouterModule} from '@angular/router';
 import {SecurityModule} from '../security/security.module';
@@ -156,10 +152,7 @@ export class LayoutModule {
       providers: [{
         provide: PERFECT_SCROLLBAR_CONFIG,
         useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
-      },
-
-        // Services
-        BreadcrumbsService, NavigationService, SpinnerService, TitleBarService
+      }
       ]
     };
   }

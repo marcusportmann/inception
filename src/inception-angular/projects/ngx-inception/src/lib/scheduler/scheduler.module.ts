@@ -51,12 +51,7 @@ export class SchedulerModule {
 
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SchedulerModule,
-      providers: [
-
-        // Services
-        SchedulerService
-      ]
+      ngModule: SchedulerModule
     };
   }
 }

@@ -122,6 +122,9 @@ export class AdminHeaderComponent implements OnInit {
 
   isLoggedIn(): Observable<boolean> {
     return this.securityService.session$.pipe(map((session: Session | null) => {
+
+      //console.log('isLoggedIn session = ', session);
+
       return (!!session);
     }));
   }
