@@ -1748,9 +1748,11 @@ public class InternalUserDirectory extends UserDirectoryBase
         throw new GroupNotFoundException(group.getName());
       }
 
-      groupOptional.get().setDescription(group.getDescription());
+      Group existingGroup = groupOptional.get();
 
-      getGroupRepository().saveAndFlush(group);
+      existingGroup.setDescription(group.getDescription());
+
+      getGroupRepository().saveAndFlush(existingGroup);
     }
     catch (GroupNotFoundException e)
     {

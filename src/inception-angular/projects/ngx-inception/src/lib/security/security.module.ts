@@ -24,7 +24,7 @@ import {SecurityInterceptor} from './services/security.interceptor';
 import {HasAuthorityDirective} from './directives/has-authority.directive';
 
 /**
- * The SecurityModule class implements the Inception Security Module.
+ * The SecurityViewsModule class implements the Inception Security Module.
  *
  * @author Marcus Portmann
  */

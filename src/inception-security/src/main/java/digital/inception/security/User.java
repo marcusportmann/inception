@@ -149,7 +149,7 @@ public class User
           + "|216|90|688|886|255|256|380|598|1|998|3906698|379|1784|58|1284|1340|84|678|681|685|967|27"
           + "|260|263)(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210"
           + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$")
-  @Column(name = "mobile", nullable = false, length = 100)
+  @Column(name = "mobile_number", nullable = false, length = 100)
   private String mobileNumber;
 
   /**
@@ -196,7 +196,7 @@ public class User
   @XmlElement(name = "PhoneNumber", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "phone", nullable = false, length = 100)
+  @Column(name = "phone_number", nullable = false, length = 100)
   private String phoneNumber;
 
   /**

@@ -39,7 +39,7 @@ import javax.xml.ws.WebFault;
  */
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
   reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "AuditServiceException", targetNamespace = "http://security.inception.digital",
+@WebFault(name = "AuditServiceException", targetNamespace = "http://audit.inception.digital",
   faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused" })

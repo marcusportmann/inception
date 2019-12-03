@@ -82,8 +82,6 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const favoriteCountryControl = this.exampleForm.get('favoriteCountry');
 
-    console.log('favoriteCountryControl = ', favoriteCountryControl);
-
     if (favoriteCountryControl) {
       this.subscriptions.add(favoriteCountryControl.valueChanges
         .pipe(startWith(''), map(value => {

@@ -30,5 +30,7 @@ export class NavigationTitle extends NavigationItem {
    */
   constructor(name: string) {
     super('', name, '');
+
+    this.title = true;
   }
 }

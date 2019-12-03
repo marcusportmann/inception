@@ -15,10 +15,10 @@
  */
 
 import {NgModule} from '@angular/core';
-import {ErrorModule, ErrorViewsModule} from 'ngx-inception';
+import {ErrorViewsModule} from 'ngx-inception';
 
 @NgModule({
-  imports: [ErrorModule.forRoot(), ErrorViewsModule]
+  imports: [ErrorViewsModule]
 })
 export class ErrorViewsWrapperModule {
 }

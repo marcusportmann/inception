@@ -1,5 +1,3 @@
-### Security Clean-up
-* Change IDs on Typescript UserDirectory and User classes to refer to Universally Unique Identifier (UUID).
 
 
 

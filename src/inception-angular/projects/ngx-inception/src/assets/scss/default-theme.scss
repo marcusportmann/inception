@@ -1,5 +1,5 @@
 // Override Boostrap variables
-@import "bootstrap-variables";
+@import "default-theme-bootstrap-variables";
 
 // Bootstrap imports
 @import "~bootstrap/scss/functions";
@@ -39,7 +39,7 @@
 @import "~bootstrap/scss/print";
 
 // Variables
-@import "variables";
+@import "default-theme-variables";
 @import "mixins";
 
 // Vendors (Import first so we can override)

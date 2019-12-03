@@ -23,13 +23,13 @@ import {RouterModule, Routes} from '@angular/router';
 import {AdministrationComponent} from './administration.component';
 import {AdministrationTitleResolver} from './administration-title-resolver';
 import {SystemTitleResolver} from './system-title-resolver';
-// import {SecurityTitleResolver} from 'ngx-inception';
 import {
   CodeCategoriesTitleResolver,
   ConfigurationsTitleResolver,
   MailTitleResolver,
   ReportingTitleResolver,
-  SchedulerTitleResolver
+  SchedulerTitleResolver,
+  SecurityTitleResolver
 } from 'ngx-inception';
 
 const routes: Routes = [{
@@ -39,57 +39,51 @@ const routes: Routes = [{
   resolve: {
     title: AdministrationTitleResolver
   }
+}, {
+  path: 'security',
+  resolve: {
+    title: SecurityTitleResolver
+  },
+  loadChildren: () => import('../wrappers/security-views-wrapper.module').then(m => m.SecurityViewsWrapperModule)
+}, {
+  path: 'system',
+  resolve: {
+    title: SystemTitleResolver
+  },
+  children: [{
+    path: 'code-categories',
+    resolve: {
+      title: CodeCategoriesTitleResolver
+    },
+    loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(m => m.CodesViewsWrapperModule)
+  }, {
+    path: 'configuration',
+    resolve: {
+      title: ConfigurationsTitleResolver
+    },
+    loadChildren: () => import('../wrappers/configuration-views-wrapper.module').then(
+      m => m.ConfigurationViewsWrapperModule)
+  }, {
+    path: 'mail',
+    resolve: {
+      title: MailTitleResolver
+    },
+    loadChildren: () => import('../wrappers/mail-views-wrapper.module').then(m => m.MailViewsWrapperModule)
+  }, {
+    path: 'scheduler',
+    resolve: {
+      title: SchedulerTitleResolver
+    },
+    loadChildren: () => import('../wrappers/scheduler-views-wrapper.module').then(m => m.SchedulerViewsWrapperModule)
+  }, {
+    path: 'reporting',
+    resolve: {
+      title: ReportingTitleResolver
+    },
+    loadChildren: () => import('../wrappers/reporting-views-wrapper.module').then(m => m.ReportingViewsWrapperModule)
+  }
+  ]
 }
-  /*
-  , {
-    path: 'security',
-    resolve: {
-      title: SecurityTitleResolver
-    },
-    loadChildren: () => import('../wrappers/security-views-wrapper.module').then(
-      m => m.SecurityViewsWrapperModule)
-  }
-  */
-
-  , {
-    path: 'system',
-    resolve: {
-      title: SystemTitleResolver
-    },
-    children: [{
-      path: 'code-categories',
-      resolve: {
-        title: CodeCategoriesTitleResolver
-      },
-      loadChildren: () => import('../wrappers/codes-views-wrapper.module').then(m => m.CodesViewsWrapperModule)
-    }, {
-      path: 'configuration',
-      resolve: {
-        title: ConfigurationsTitleResolver
-      },
-      loadChildren: () => import('../wrappers/configuration-views-wrapper.module').then(
-        m => m.ConfigurationViewsWrapperModule)
-    }, {
-      path: 'mail',
-      resolve: {
-        title: MailTitleResolver
-      },
-      loadChildren: () => import('../wrappers/mail-views-wrapper.module').then(m => m.MailViewsWrapperModule)
-    }, {
-      path: 'scheduler',
-      resolve: {
-        title: SchedulerTitleResolver
-      },
-      loadChildren: () => import('../wrappers/scheduler-views-wrapper.module').then(m => m.SchedulerViewsWrapperModule)
-    }, {
-      path: 'reporting',
-      resolve: {
-        title: ReportingTitleResolver
-      },
-      loadChildren: () => import('../wrappers/reporting-views-wrapper.module').then(m => m.ReportingViewsWrapperModule)
-    }
-    ]
-  }
 ];
 
 @NgModule({
@@ -99,11 +93,8 @@ const routes: Routes = [{
   providers: [
 
     // Resolvers
-    CodeCategoriesTitleResolver, ConfigurationsTitleResolver,
-
-    // ConfigurationsTitleResolver,
-    MailTitleResolver, ReportingTitleResolver, SchedulerTitleResolver, //  SecurityTitleResolver,
-    SystemTitleResolver
+    CodeCategoriesTitleResolver, ConfigurationsTitleResolver, MailTitleResolver, ReportingTitleResolver,
+    SchedulerTitleResolver, SecurityTitleResolver, SystemTitleResolver
   ]
 })
 export class AdministrationModule {

@@ -15,10 +15,10 @@
  */
 
 import {NgModule} from '@angular/core';
-import {CodesModule, CodesViewsModule} from 'ngx-inception';
+import {CodesViewsModule} from 'ngx-inception';
 
 @NgModule({
-  imports: [CodesModule.forRoot(), CodesViewsModule]
+  imports: [CodesViewsModule]
 })
 export class CodesViewsWrapperModule {
 }

@@ -84,8 +84,8 @@ CREATE TABLE security.users (
   status            INTEGER      NOT NULL,
   first_name        VARCHAR(100) NOT NULL DEFAULT '',
   last_name         VARCHAR(100) NOT NULL DEFAULT '',
-  phone             VARCHAR(100) NOT NULL DEFAULT '',
-  mobile            VARCHAR(100) NOT NULL DEFAULT '',
+  phone_number      VARCHAR(100) NOT NULL DEFAULT '',
+  mobile_number     VARCHAR(100) NOT NULL DEFAULT '',
   email             VARCHAR(100) NOT NULL DEFAULT '',
   password          VARCHAR(100) NOT NULL DEFAULT '',
   password_attempts INTEGER      NOT NULL DEFAULT 0,
@@ -111,9 +111,9 @@ COMMENT ON COLUMN security.users.first_name IS 'The first name for the user';
 
 COMMENT ON COLUMN security.users.last_name IS 'The last name for the user';
 
-COMMENT ON COLUMN security.users.phone IS 'The phone number for the user';
+COMMENT ON COLUMN security.users.phone_number IS 'The phone number for the user';
 
-COMMENT ON COLUMN security.users.mobile IS 'The mobile number for the user';
+COMMENT ON COLUMN security.users.mobile_number IS 'The mobile number for the user';
 
 COMMENT ON COLUMN security.users.email IS 'The e-mail address for the user';
 
@@ -294,7 +294,7 @@ INSERT INTO security.user_directories (id, type, name, configuration)
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
-INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone, mobile, email, password, password_attempts, password_expiry)
+INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
 INSERT INTO security.groups (id, user_directory_id, name, description)

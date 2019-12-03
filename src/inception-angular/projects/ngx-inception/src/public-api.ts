@@ -63,8 +63,6 @@ export * from './lib/mail/mail.module';
 export * from './lib/mail/views/mail-title-resolver';
 export * from './lib/mail/views/mail-views.module';
 
-
-
 // Reporting
 export * from './lib/reporting/reporting.module';
 export * from './lib/reporting/views/reporting-title-resolver';
@@ -80,9 +78,5 @@ export * from './lib/security/security.module';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';
 export * from './lib/security/views/login-views.module';
-// export * from './lib/security/views/expired-password-title-resolver';
-// export * from './lib/security/views/forgotten-password-title-resolver';
-// export * from './lib/security/views/login-title-resolver';
-// export * from './lib/security/views/reset-password-title-resolver';
-// export * from './lib/security/views/select-organization-title-resolver';
-
+export * from './lib/security/views/security-title-resolver';
+export * from './lib/security/views/security-views.module';
