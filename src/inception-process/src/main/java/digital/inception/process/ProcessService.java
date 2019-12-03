@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 @Service
 @SuppressWarnings({ "unused", "WeakerAccess" })
 public class ProcessService
-  implements IProcessServie
+  implements IProcessService
 {
 
 }
