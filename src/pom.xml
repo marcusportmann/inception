@@ -84,11 +84,13 @@
     <cxf.version>3.3.3</cxf.version>
     <freemarker.version>2.3.29</freemarker.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
+    <groovy.version>3.0.0-rc-1</groovy.version>
     <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
     <jasperreports.version>6.10.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <metrics-core.version>4.1.1</metrics-core.version>
     <mssql-jdbc.version>7.4.1.jre12</mssql-jdbc.version>
+    <mybatis.version>3.5.3</mybatis.version>
     <narayana.version>5.10.0.Final</narayana.version>
     <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
@@ -188,11 +190,6 @@
         <version>${cxf.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.freemarker</groupId>
-        <artifactId>freemarker</artifactId>
-        <version>${freemarker.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.wss4j</groupId>
         <artifactId>wss4j-ws-security-common</artifactId>
         <version>${wss4j-ws-security-common.version}</version>
@@ -201,6 +198,16 @@
         <groupId>org.camunda.bpm</groupId>
         <artifactId>camunda-engine-spring</artifactId>
         <version>${camunda.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-all</artifactId>
+        <version>${groovy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>${freemarker.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -226,6 +233,11 @@
         <groupId>org.jboss.narayana.jts</groupId>
         <artifactId>narayana-jts-integration</artifactId>
         <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.mybatis</groupId>
+        <artifactId>mybatis</artifactId>
+        <version>${mybatis.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.security</groupId>

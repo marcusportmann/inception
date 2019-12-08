@@ -48,7 +48,7 @@ public class InvalidSecurityCodeException extends ServiceException
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>InvalidSecurityCodeException</code> with the specified message.
+   * Constructs a new <code>InvalidSecurityCodeException</code>.
    */
   public InvalidSecurityCodeException()
   {

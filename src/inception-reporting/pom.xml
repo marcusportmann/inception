@@ -40,22 +40,6 @@
       <artifactId>spring-web</artifactId>
     </dependency>
 
-    <!-- Inception Dependencies -->
-    <!--
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-rs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-validation</artifactId>
-    </dependency>
-    -->
-
     <!-- Dependencies -->
     <dependency>
       <groupId>net.sf.jasperreports</groupId>

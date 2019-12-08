@@ -49,7 +49,7 @@ public class ErrorReportNotFoundException extends ServiceException
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ErrorReportNotFoundException</code> with the specified message.
+   * Constructs a new <code>ErrorReportNotFoundException</code>.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      error report

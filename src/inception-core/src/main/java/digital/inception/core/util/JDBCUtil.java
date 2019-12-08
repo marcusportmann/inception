@@ -52,7 +52,7 @@ public class JDBCUtil
    *
    * @param connection the connection to close
    */
-  public static void closex(Connection connection)
+  public static void close(Connection connection)
   {
     if (connection != null)
     {
@@ -72,7 +72,7 @@ public class JDBCUtil
    *
    * @param rs the result set to close
    */
-  public static void closex(ResultSet rs)
+  public static void close(ResultSet rs)
   {
     if (rs != null)
     {
@@ -92,7 +92,7 @@ public class JDBCUtil
    *
    * @param statement the statement to close
    */
-  public static void closex(Statement statement)
+  public static void close(Statement statement)
   {
     if (statement != null)
     {
@@ -187,6 +187,34 @@ public class JDBCUtil
       }
 
       return schemaSeparator;
+    }
+  }
+
+  /**
+   * Is the database associated with the specified data source an in-memory H2 database.
+   *
+   * @param dataSource the data source
+   *
+   * @return <code>true</code> if the database associated with the specified data source is an
+   *         in-memory H2 database or <code>false</code> otherwise
+   */
+  public static boolean isInMemoryH2Database(DataSource dataSource)
+    throws SQLException
+  {
+    try (Connection connection = dataSource.getConnection())
+    {
+      DatabaseMetaData metaData = connection.getMetaData();
+
+      switch (metaData.getDatabaseProductName())
+      {
+        case "H2":
+
+          return true;
+
+        default:
+
+          return false;
+      }
     }
   }
 

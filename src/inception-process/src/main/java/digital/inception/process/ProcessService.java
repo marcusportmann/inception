@@ -18,9 +18,19 @@ package digital.inception.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.RuntimeService;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 //~--- JDK imports ------------------------------------------------------------
+
+import javax.sql.DataSource;
+
+import javax.validation.Validator;
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
@@ -32,5 +42,26 @@ import org.springframework.stereotype.Service;
 public class ProcessService
   implements IProcessService
 {
+  /**
+   * The Camunda Process Engine.
+   */
+  private ProcessEngine processEngine;
+
+  /**
+   * Constructs a new <code>ProcessService</code>.
+   *
+   * @param processEngine the Camunda Process Engine
+   */
+  public ProcessService(ProcessEngine processEngine)
+  {
+    this.processEngine = processEngine;
+  }
+
+
+
+
+
+
+
 
 }

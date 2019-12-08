@@ -18,8 +18,23 @@ package digital.inception.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.ServiceUtil;
+
+import digital.inception.process.camunda.ProcessEngineConfiguration;
+import org.camunda.bpm.engine.*;
+import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
+
+import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.PlatformTransactionManager;
+
+//~--- JDK imports ------------------------------------------------------------
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ProcessConfiguration</code> class provides the Spring configuration
@@ -29,5 +44,124 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-  basePackages = { "digital.inception.process" })
-public class ProcessConfiguration {}
+    basePackages = { "digital.inception.process" })
+public class ProcessConfiguration
+{
+  /**
+   * The Spring application context.
+   */
+  private ApplicationContext applicationContext;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  private DataSource dataSource;
+
+  /* The name of the Process Engine instance. */
+  private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
+
+  /**
+   * The Spring platform transaction manager.
+   */
+  private PlatformTransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>ProcessConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param transactionManager the Spring platform transaction manager
+   */
+  public ProcessConfiguration(ApplicationContext applicationContext, @Qualifier(
+      "applicationDataSource") DataSource dataSource, PlatformTransactionManager transactionManager)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+    this.transactionManager = transactionManager;
+  }
+
+  /**
+   * Returns the Camunda Process Engine.
+   *
+   * @return the Camunda Process Engine
+   */
+  @Bean
+  public ProcessEngine processEngine()
+  {
+    try
+    {
+      digital.inception.process.camunda.ProcessEngineConfiguration processEngineConfiguration = new ProcessEngineConfiguration(
+          processEngineName, applicationContext, dataSource, transactionManager);
+
+      ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
+      factoryBean.setProcessEngineConfiguration(processEngineConfiguration);
+
+      return factoryBean.getObject();
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException("Failed to initialise the Camunda Process Engine", e);
+    }
+  }
+
+///**
+// * Return the History Service for the Camunda Process Engine.
+// *
+// * @return the History Service for the Camunda Process Engine
+// */
+//@Bean
+//@DependsOn("processEngine")
+//public HistoryService processEngineHistoryService()
+//{
+//  return processEngine().getHistoryService();
+//}
+//
+///**
+// * Return the Management Service for the Camunda Process Engine.
+// *
+// * @return the Management Service for the Camunda Process Engine
+// */
+//@Bean
+//@DependsOn("processEngine")
+//public ManagementService processEngineManagementService()
+//{
+//  return processEngine().getManagementService();
+//}
+//
+///**
+// * Return the Repository Service for the Camunda Process Engine.
+// *
+// * @return the Repository Service for the Camunda Process Engine
+// */
+//@Bean
+//@DependsOn("processEngine")
+//public RepositoryService processEngineRepositoryService()
+//{
+//  return processEngine().getRepositoryService();
+//}
+//
+///**
+// * Return the Runtime Service for the Camunda Process Engine.
+// *
+// * @return the Runtime Service for the Camunda Process Engine
+// */
+//@Bean
+//@DependsOn("processEngine")
+//public RuntimeService processEngineRuntimeService()
+//{
+//  return processEngine().getRuntimeService();
+//}
+//
+///**
+// * Return the Task Service for the Camunda Process Engine.
+// *
+// * @return the Task Service for the Camunda Process Engine
+// */
+//@Bean
+//@DependsOn("processEngine")
+//public TaskService processEngineTaskService()
+//{
+//  return processEngine().getTaskService();
+//}
+}

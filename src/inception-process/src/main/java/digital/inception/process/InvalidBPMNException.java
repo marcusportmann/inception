@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.configuration;
+package digital.inception.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -30,30 +30,28 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>ConfigurationNotFoundException</code> exception is thrown to indicate that the required
- * configuration could not be found when working with the Configuration Service.
+ * The <code>InvalidBPMNException</code> exception is thrown to indicate an error condition as a
+ * result of invalid BPMN 2.0 XML data.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The configuration could not be found")
-@WebFault(name = "ConfigurationNotFoundException",
-    targetNamespace = "http://configuration.inception.digital",
-    faultBean = "digital.inception.core.service.ServiceError")
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The BPMN 2.0 XML data is invalid")
+@WebFault(name = "InvalidBPMNException",
+  targetNamespace = "http://process.inception.digital",
+  faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused" })
-public class ConfigurationNotFoundException extends ServiceException
+public class InvalidBPMNException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ConfigurationNotFoundException</code>.
-   *
-   * @param key the key used to uniquely identify the configuration
+   * Constructs a new <code>InvalidBPMNException</code>.
    */
-  public ConfigurationNotFoundException(String key)
+  public InvalidBPMNException(String key)
   {
-    super("ConfigurationNotFoundError", "The configuration (" + key + ") could not be found");
+    super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid");
   }
 }
