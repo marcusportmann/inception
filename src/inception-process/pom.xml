@@ -22,6 +22,11 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-persistence</artifactId>
     </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-security</artifactId>
+    </dependency>
+
 
     <!-- Dependencies -->
     <dependency>

@@ -19,8 +19,9 @@ package digital.inception.process;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ServiceUtil;
-
 import digital.inception.process.camunda.ProcessEngineConfiguration;
+import digital.inception.security.ISecurityService;
+
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
 
@@ -61,6 +62,11 @@ public class ProcessConfiguration
   private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
   /**
+   * The Security Service.
+   */
+  private ISecurityService securityService;
+
+  /**
    * The Spring platform transaction manager.
    */
   private PlatformTransactionManager transactionManager;
@@ -72,12 +78,15 @@ public class ProcessConfiguration
    * @param dataSource         the data source used to provide connections to the application
    *                           database
    * @param transactionManager the Spring platform transaction manager
+   * @param securityService    the Security Service
    */
   public ProcessConfiguration(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, PlatformTransactionManager transactionManager)
+      "applicationDataSource") DataSource dataSource,
+      PlatformTransactionManager transactionManager, ISecurityService securityService)
   {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
+    this.securityService = securityService;
     this.transactionManager = transactionManager;
   }
 
@@ -91,8 +100,9 @@ public class ProcessConfiguration
   {
     try
     {
-      digital.inception.process.camunda.ProcessEngineConfiguration processEngineConfiguration = new ProcessEngineConfiguration(
-          processEngineName, applicationContext, dataSource, transactionManager);
+      digital.inception.process.camunda.ProcessEngineConfiguration processEngineConfiguration =
+          new ProcessEngineConfiguration(processEngineName, applicationContext, dataSource,
+          transactionManager, securityService);
 
       ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
       factoryBean.setProcessEngineConfiguration(processEngineConfiguration);

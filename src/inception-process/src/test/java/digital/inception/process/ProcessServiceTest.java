@@ -27,6 +27,8 @@ import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 
+import org.camunda.bpm.engine.task.Task;
+import org.camunda.bpm.engine.task.TaskQuery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -142,11 +144,11 @@ public class ProcessServiceTest
 
     Deployment deploymentV1 = processDeploymentV1.deploy();
 
-    DeploymentBuilder processDeploymentV2 = processEngine.getRepositoryService().createDeployment();
-    processDeploymentV2.addInputStream(testProcessId.toString() + ".bpmn20.xml",
-        new ByteArrayInputStream(testProcessV2Data));
-
-    Deployment deploymentV2 = processDeploymentV2.deploy();
+//    DeploymentBuilder processDeploymentV2 = processEngine.getRepositoryService().createDeployment();
+//    processDeploymentV2.addInputStream(testProcessId.toString() + ".bpmn20.xml",
+//        new ByteArrayInputStream(testProcessV2Data));
+//
+//    Deployment deploymentV2 = processDeploymentV2.deploy();
 
     List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService()
         .createProcessDefinitionQuery().latestVersion().list();
@@ -162,7 +164,40 @@ public class ProcessServiceTest
     processEngine.getRuntimeService().startProcessInstanceByKey("Process_14may5q");
 
 
-    Thread.sleep(30000L);
+//    Thread.sleep(10000L);
+
+
+
+
+
+    System.out.println("Retrieving tasks as the Administrator user");
+
+    processEngine.getIdentityService().setAuthenticatedUserId("Administrator");
+
+
+
+    TaskQuery taskQuery = processEngine.getTaskService().createTaskQuery();
+    taskQuery.taskCandidateGroup("Administrators");
+    List<Task> tasks = taskQuery.list();
+
+    if (tasks.size() > 0)
+    {
+
+      System.out.println("Found " + tasks.size() + " tasks");
+
+      processEngine.getTaskService().claim(tasks.get(0).getId(), "Administrator");
+
+      processEngine.getTaskService().complete(tasks.get(0).getId());
+    }
+    else
+    {
+      System.out.println("No tasks found");
+    }
+
+    //Thread.sleep(10000L);
+
+
+
 
     // processEngine.getRuntimeService().startProcessInstanceById()
 
