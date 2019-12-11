@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
@@ -53,10 +51,9 @@ public class DuplicateReportDefinitionException extends ServiceException
   /**
    * Constructs a new <code>DuplicateReportDefinitionException</code>.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public DuplicateReportDefinitionException(UUID reportDefinitionId)
+  public DuplicateReportDefinitionException(String reportDefinitionId)
   {
     super("DuplicateReportDefinitionError", "The report definition with ID (" + reportDefinitionId
         + ") already exists");

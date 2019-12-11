@@ -22,7 +22,7 @@
 export class ReportDefinitionSummary {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
   id: string;
 
@@ -34,8 +34,7 @@ export class ReportDefinitionSummary {
   /**
    * Constructs a new ReportDefinitionSummary.
    *
-   * @param id   The Universally Unique Identifier (UUID) used to uniquely identify the report
-   *             definition.
+   * @param id   The ID used to uniquely identify the report definition.
    * @param name The name of the report definition.
    */
   constructor(id: string, name: string) {

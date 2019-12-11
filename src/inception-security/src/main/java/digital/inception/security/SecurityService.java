@@ -122,15 +122,15 @@ public class SecurityService
    */
   private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
 
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
-
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the password reset mail
    * template.
    */
-  private static final UUID PASSWORD_RESET_MAIL_TEMPLATE_ID = UUID.fromString(
-      "38f386e1-e61a-4d95-b4d3-febf2f0b8287");
+  private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
+      "Inception.Security.PasswordResetMail";
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
   /**
    * The Spring application context.

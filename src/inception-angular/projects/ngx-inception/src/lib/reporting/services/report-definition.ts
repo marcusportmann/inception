@@ -22,7 +22,7 @@
 export class ReportDefinition {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the report definition.
+   * The ID used to uniquely identify the report definition.
    */
   id: string;
 
@@ -39,8 +39,7 @@ export class ReportDefinition {
   /**
    * Constructs a new ReportDefinition.
    *
-   * @param id       The Universally Unique Identifier (UUID) used to uniquely identify the report
-   *                 definition.
+   * @param id       The ID used to uniquely identify the report definition.
    * @param name     The name of the report definition.
    * @param template The base-64 encoded JasperReports template for the report definition.
    */

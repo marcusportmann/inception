@@ -41,7 +41,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -177,7 +176,7 @@ public class ReportingServiceTest
         "digital/inception/reporting/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setId(UUID.randomUUID());
+    reportDefinition.setId("TestReport" + reportDefinitionCount);
     reportDefinition.setName("Test Report Definition " + reportDefinitionCount);
     reportDefinition.setTemplate(testReportTemplate);
 

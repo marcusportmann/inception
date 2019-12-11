@@ -21,6 +21,8 @@ package digital.inception.core.util;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * The <code>ResourceUtil</code> class is a utility class which provides methods for working with
  * resources.
@@ -70,5 +72,19 @@ public final class ResourceUtil
     {
       throw new ResourceException("Failed to read the classpath resource (" + path + ")", e);
     }
+  }
+
+  /**
+   * Retrieves the resource with the specified path on the classpath using the context class loader.
+   *
+   * @param path the path to the resource on the classpath
+   *
+   * @return the resource with the specified path on the classpath using the context class loader
+   */
+  public static String getStringClasspathResource(String path)
+  {
+    byte[] data = getClasspathResource(path);
+
+    return new String(data, StandardCharsets.UTF_8);
   }
 }

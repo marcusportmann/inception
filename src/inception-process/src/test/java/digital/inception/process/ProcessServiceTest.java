@@ -27,6 +27,10 @@ import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 
+import org.camunda.bpm.engine.runtime.Job;
+import org.camunda.bpm.engine.runtime.JobQuery;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.junit.Test;
@@ -42,6 +46,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.testng.Assert;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -57,6 +62,8 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.sql.DataSource;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * The <code>ProcessServiceTest</code> class contains the implementation of the JUnit
@@ -133,16 +140,72 @@ public class ProcessServiceTest
   {
     byte[] testProcessV1Data = ResourceUtil.getClasspathResource(
         "digital/inception/process/TestV1.bpmn");
+
+    List<String> testProcessV1Ids = processService.validateBPMN(testProcessV1Data);
+
+    assertEquals("The correct number of process IDs was not retrieved for version 1 of the test process", 1, testProcessV1Ids.size());
+
+    assertEquals("The correct process ID was not retrieved for version 1 of the test process", "Inception.Test", testProcessV1Ids.get(0));
+
     byte[] testProcessV2Data = ResourceUtil.getClasspathResource(
         "digital/inception/process/TestV2.bpmn");
 
-    UUID testProcessId = UUID.randomUUID();
+    List<String> testProcessV2Ids = processService.validateBPMN(testProcessV2Data);
+
+    assertEquals("The correct number of process IDs was not retrieved for version 2 of the test process", 1, testProcessV2Ids.size());
+
+    assertEquals("The correct process ID was not retrieved for version 1 of the test process", "Inception.Test", testProcessV2Ids.get(0));
 
     DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
-    processDeploymentV1.addInputStream(testProcessId.toString() + ".bpmn20.xml",
+    processDeploymentV1.addInputStream(testProcessV1Ids.get(0) + ".bpmn20.xml",
         new ByteArrayInputStream(testProcessV1Data));
 
     Deployment deploymentV1 = processDeploymentV1.deploy();
+
+    List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService()
+        .createProcessDefinitionQuery().latestVersion().list();
+
+    processEngine.getRuntimeService().startProcessInstanceByKey("Inception.Test");
+
+    /*
+     * Version 1 of the test process starts asynchronously so we need to ensure it starts executing
+     * by executing the associated job.
+     */
+    JobQuery jobQuery = processEngine.getManagementService().createJobQuery();
+
+    List<Job> jobs = jobQuery.list();
+
+    for (Job job : jobs)
+    {
+      processEngine.getManagementService().executeJob(job.getId());
+    }
+
+    // Retrieve the list of running process instances
+    ProcessInstanceQuery processInstanceQuery = processEngine.getRuntimeService().createProcessInstanceQuery();
+    processInstanceQuery.processDefinitionKey(testProcessV1Ids.get(0));
+    List<ProcessInstance> processInstances = processInstanceQuery.list();
+
+    // Retrieve the tasks for the Administrators group
+    TaskQuery taskQuery = processEngine.getTaskService().createTaskQuery();
+    taskQuery.taskCandidateGroup("Administrators");
+    List<Task> tasks = taskQuery.list();
+
+    if (tasks.size() > 0)
+    {
+      processEngine.getTaskService().claim(tasks.get(0).getId(), "Administrator");
+
+      processEngine.getTaskService().complete(tasks.get(0).getId());
+    }
+
+
+
+
+
+    int xxx = 0;
+    xxx++;
+
+
+
 
 //    DeploymentBuilder processDeploymentV2 = processEngine.getRepositoryService().createDeployment();
 //    processDeploymentV2.addInputStream(testProcessId.toString() + ".bpmn20.xml",
@@ -150,51 +213,9 @@ public class ProcessServiceTest
 //
 //    Deployment deploymentV2 = processDeploymentV2.deploy();
 
-    List<ProcessDefinition> processDefinitions = processEngine.getRepositoryService()
-        .createProcessDefinitionQuery().latestVersion().list();
-
-    // processEngine.getRuntimeService().
-
-    // processEngine.getRepositoryService().get
-
-//  String id = deployment.getId();
-//
-//  System.out.println("deployment.getId() = " + deployment.getId());
-
-    processEngine.getRuntimeService().startProcessInstanceByKey("Process_14may5q");
 
 
 //    Thread.sleep(10000L);
-
-
-
-
-
-    System.out.println("Retrieving tasks as the Administrator user");
-
-    processEngine.getIdentityService().setAuthenticatedUserId("Administrator");
-
-
-
-    TaskQuery taskQuery = processEngine.getTaskService().createTaskQuery();
-    taskQuery.taskCandidateGroup("Administrators");
-    List<Task> tasks = taskQuery.list();
-
-    if (tasks.size() > 0)
-    {
-
-      System.out.println("Found " + tasks.size() + " tasks");
-
-      processEngine.getTaskService().claim(tasks.get(0).getId(), "Administrator");
-
-      processEngine.getTaskService().complete(tasks.get(0).getId());
-    }
-    else
-    {
-      System.out.println("No tasks found");
-    }
-
-    //Thread.sleep(10000L);
 
 
 

@@ -31,7 +31,6 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.persistence.LockModeType;
 
@@ -41,19 +40,20 @@ import javax.persistence.LockModeType;
  *
  * @author Marcus Portmann
  */
-public interface JobRepository extends JpaRepository<Job, UUID>
+public interface JobRepository extends JpaRepository<Job, String>
 {
   @Modifying
   @Query("delete from Job j where j.id = :jobId")
-  void deleteById(@Param("jobId") UUID jobId);
+  void deleteById(@Param("jobId") String jobId);
 
   @Query("select j from Job j where lower(j.name) like lower(:filter) or lower(j.jobClass) "
       + "like lower(:filter)")
   List<Job> findFiltered(String filter);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select j from Job j where j.status = 1 and (j.lastExecuted < :lastExecutedBefore or "
-      + "j.executionAttempts is null) and j.nextExecution <= current_timestamp")
+  @Query("select j from Job j where j.enabled = true and j.status = 1 and "
+     + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
+     + "and j.nextExecution <= current_timestamp")
   List<Job> findJobsScheduledForExecutionForWrite(@Param(
       "lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
 
@@ -65,13 +65,13 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   List<Job> findUnscheduledJobsForWrite(Pageable pageable);
 
   @Query("select j.name from Job j where j.id = :jobId")
-  Optional<String> getNameById(@Param("jobId") UUID jobId);
+  Optional<String> getNameById(@Param("jobId") String jobId);
 
   @Modifying
   @Query("update Job j set j.lockName = :lockName, j.status = 2, "
       + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
       + "where j.id = :jobId")
-  void lockJobForExecution(@Param("jobId") UUID jobId, @Param("lockName") String lockName, @Param(
+  void lockJobForExecution(@Param("jobId") String jobId, @Param("lockName") String lockName, @Param(
       "when") LocalDateTime when);
 
   @Modifying
@@ -83,13 +83,14 @@ public interface JobRepository extends JpaRepository<Job, UUID>
   @Modifying
   @Query("update Job j set j.status = 1, j.executionAttempts = null, "
       + "j.nextExecution = :nextExecution where j.id = :jobId")
-  void scheduleJob(@Param("jobId") UUID jobId, @Param("nextExecution") LocalDateTime nextExecution);
+  void scheduleJob(@Param("jobId") String jobId, @Param(
+      "nextExecution") LocalDateTime nextExecution);
 
   @Modifying
   @Query("update Job j set j.status = :status where j.id = :jobId")
-  void setJobStatus(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
+  void setJobStatus(@Param("jobId") String jobId, @Param("status") JobStatus status);
 
   @Modifying
   @Query("update Job j set j.status = :status, j.lockName = null where j.id = :jobId")
-  void unlockJob(@Param("jobId") UUID jobId, @Param("status") JobStatus status);
+  void unlockJob(@Param("jobId") String jobId, @Param("status") JobStatus status);
 }

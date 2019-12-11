@@ -7,7 +7,7 @@ CREATE SCHEMA mail;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE mail.mail_templates (
-  id           UUID         NOT NULL,
+  id           VARCHAR(100) NOT NULL,
   name         VARCHAR(100) NOT NULL,
   content_type INTEGER      NOT NULL,
   template     BLOB         NOT NULL,

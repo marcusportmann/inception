@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
@@ -52,10 +50,9 @@ public class ReportDefinitionNotFoundException extends ServiceException
    * w
    * Constructs a new <code>ReportDefinitionNotFoundException</code>.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public ReportDefinitionNotFoundException(UUID reportDefinitionId)
+  public ReportDefinitionNotFoundException(String reportDefinitionId)
   {
     super("ReportDefinitionNotFoundError", "The report definition with ID (" + reportDefinitionId
         + ") could not be found");

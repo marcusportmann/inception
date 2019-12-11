@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -113,7 +112,7 @@ public class SchedulerRestController extends SecureRestController
   /**
    * Delete the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
   @ApiOperation(value = "Delete the job", notes = "Delete the job")
   @ApiResponses(value = { @ApiResponse(code = 204, message = "The job was deleted successfully") ,
@@ -129,8 +128,8 @@ public class SchedulerRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void deleteJob(@ApiParam(name = "jobId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job", required = true)
-  @PathVariable UUID jobId)
+      value = "The ID used to uniquely identify the job", required = true)
+  @PathVariable String jobId)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {
     if (StringUtils.isEmpty(jobId))
@@ -144,7 +143,7 @@ public class SchedulerRestController extends SecureRestController
   /**
    * Retrieve the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the code job
+   * @param jobId the ID used to uniquely identify the code job
    *
    * @return the job
    */
@@ -161,10 +160,9 @@ public class SchedulerRestController extends SecureRestController
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public Job getJob(@ApiParam(name = "job",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
+  public Job getJob(@ApiParam(name = "job", value = "The ID used to uniquely identify the job",
       required = true)
-  @PathVariable UUID jobId)
+  @PathVariable String jobId)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {
     if (StringUtils.isEmpty(jobId))
@@ -178,7 +176,7 @@ public class SchedulerRestController extends SecureRestController
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the name of the job
    */
@@ -196,8 +194,8 @@ public class SchedulerRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public String getJobName(@ApiParam(name = "jobId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job", required = true)
-  @PathVariable UUID jobId)
+      value = "The ID used to uniquely identify the job", required = true)
+  @PathVariable String jobId)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {
     if (StringUtils.isEmpty(jobId))
@@ -231,7 +229,7 @@ public class SchedulerRestController extends SecureRestController
   /**
    * Update the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    * @param job   the job
    */
   @ApiOperation(value = "Update the job", notes = "Update the job")
@@ -248,9 +246,8 @@ public class SchedulerRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void updateJob(@ApiParam(name = "jobId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
-      required = true)
-  @PathVariable UUID jobId, @ApiParam(name = "job", value = "The job", required = true)
+      value = "The ID used to uniquely identify the job", required = true)
+  @PathVariable String jobId, @ApiParam(name = "job", value = "The job", required = true)
   @RequestBody Job job)
     throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException
   {

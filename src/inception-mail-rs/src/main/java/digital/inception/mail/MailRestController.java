@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -122,8 +121,7 @@ public class MailRestController extends SecureRestController
   /**
    * Delete the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    */
   @ApiOperation(value = "Delete the mail template", notes = "Delete the mail template")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -140,9 +138,8 @@ public class MailRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void deleteMailTemplate(@ApiParam(name = "mailTemplateId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
-      required = true)
-  @PathVariable UUID mailTemplateId)
+      value = "The ID used to uniquely identify the mail template", required = true)
+  @PathVariable String mailTemplateId)
     throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException
   {
     if (mailTemplateId == null)
@@ -156,8 +153,7 @@ public class MailRestController extends SecureRestController
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    */
   @ApiOperation(value = "Delete the mail template", notes = "Delete the mail template")
   @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
@@ -173,9 +169,8 @@ public class MailRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public MailTemplate getMailTemplate(@ApiParam(name = "mailTemplateId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
-      required = true)
-  @PathVariable UUID mailTemplateId)
+      value = "The ID used to uniquely identify the mail template", required = true)
+  @PathVariable String mailTemplateId)
     throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException
   {
     if (mailTemplateId == null)
@@ -189,8 +184,7 @@ public class MailRestController extends SecureRestController
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the name of the mail template
    */
@@ -209,9 +203,8 @@ public class MailRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public String getMailTemplateName(@ApiParam(name = "mailTemplateId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
-      required = true)
-  @PathVariable UUID mailTemplateId)
+      value = "The ID used to uniquely identify the mail template", required = true)
+  @PathVariable String mailTemplateId)
     throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException
   {
     if (StringUtils.isEmpty(mailTemplateId))
@@ -288,7 +281,7 @@ public class MailRestController extends SecureRestController
         MailServiceException
   {
     MailTemplate mailTemplate = new MailTemplate();
-    mailTemplate.setId(UUID.randomUUID());
+    mailTemplate.setId("TestMailTemplate");
     mailTemplate.setName("Test Mail Template");
     mailTemplate.setContentType(MailTemplateContentType.HTML);
     mailTemplate.setTemplate("Hello World!".getBytes());
@@ -304,8 +297,7 @@ public class MailRestController extends SecureRestController
   /**
    * Update the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    * @param mailTemplate   the mail template
    */
   @ApiOperation(value = "Update the mail template", notes = "Update the mail template")
@@ -323,9 +315,8 @@ public class MailRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void updateMailTemplate(@ApiParam(name = "mailTemplateId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mailTemplate",
-      required = true)
-  @PathVariable UUID mailTemplateId, @ApiParam(name = "mailTemplate", value = "The mail template",
+      value = "The ID used to uniquely identify the mailTemplate", required = true)
+  @PathVariable String mailTemplateId, @ApiParam(name = "mailTemplate", value = "The mail template",
       required = true)
   @RequestBody MailTemplate mailTemplate)
     throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException

@@ -37,7 +37,10 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -136,11 +139,11 @@ public class SchedulerService
   /**
    * Delete the job
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
   @Override
   @Transactional
-  public void deleteJob(UUID jobId)
+  public void deleteJob(String jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -267,12 +270,12 @@ public class SchedulerService
   /**
    * Retrieve the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the job
    */
   @Override
-  public Job getJob(UUID jobId)
+  public Job getJob(String jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -301,12 +304,12 @@ public class SchedulerService
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    *
    * @return the name of the job
    */
   @Override
-  public String getJobName(UUID jobId)
+  public String getJobName(String jobId)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -455,14 +458,13 @@ public class SchedulerService
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId             the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the job
+   * @param jobId             the ID used to uniquely identify the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *                          next execution time
    */
   @Override
   @Transactional
-  public void rescheduleJob(UUID jobId, String schedulingPattern)
+  public void rescheduleJob(String jobId, String schedulingPattern)
     throws SchedulerServiceException
   {
     try
@@ -565,12 +567,12 @@ public class SchedulerService
   /**
    * Set the status for the job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the job
    */
   @Override
   @Transactional
-  public void setJobStatus(UUID jobId, JobStatus status)
+  public void setJobStatus(String jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -596,12 +598,12 @@ public class SchedulerService
   /**
    * Unlock a locked job.
    *
-   * @param jobId  the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId  the ID used to uniquely identify the job
    * @param status the new status for the unlocked job
    */
   @Override
   @Transactional
-  public void unlockJob(UUID jobId, JobStatus status)
+  public void unlockJob(String jobId, JobStatus status)
     throws JobNotFoundException, SchedulerServiceException
   {
     try
@@ -650,6 +652,12 @@ public class SchedulerService
       existingJob.setParameters(job.getParameters());
       existingJob.setSchedulingPattern(job.getSchedulingPattern());
       existingJob.setStatus(job.getStatus());
+
+      if (!job.isEnabled())
+      {
+        job.setStatus(JobStatus.UNSCHEDULED);
+        job.setNextExecution(null);
+      }
 
       jobRepository.saveAndFlush(job);
     }

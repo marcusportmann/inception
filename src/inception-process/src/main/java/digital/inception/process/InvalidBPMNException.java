@@ -38,9 +38,8 @@ import javax.xml.ws.WebFault;
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The BPMN 2.0 XML data is invalid")
-@WebFault(name = "InvalidBPMNException",
-  targetNamespace = "http://process.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+@WebFault(name = "InvalidBPMNException", targetNamespace = "http://process.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({ "unused" })
 public class InvalidBPMNException extends ServiceException
@@ -50,8 +49,19 @@ public class InvalidBPMNException extends ServiceException
   /**
    * Constructs a new <code>InvalidBPMNException</code>.
    */
-  public InvalidBPMNException(String key)
+  public InvalidBPMNException()
   {
     super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid");
+  }
+
+  /**
+   * Constructs a new <code>InvalidBPMNException</code>.
+   *
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
+   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   */
+  public InvalidBPMNException(Throwable cause)
+  {
+    super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid", cause);
   }
 }

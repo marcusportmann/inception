@@ -25,7 +25,6 @@ import digital.inception.validation.ValidationError;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -104,7 +103,7 @@ public class MailWebService
    */
   @WebMethod(operationName = "DeleteMailTemplate")
   public void deleteMailTemplate(@WebParam(name = "MailTemplateId")
-  @XmlElement(required = true) UUID mailTemplateId)
+  @XmlElement(required = true) String mailTemplateId)
     throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException
   {
     if (mailTemplateId == null)

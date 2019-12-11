@@ -29,7 +29,7 @@ export class MailTemplate {
   contentType: MailTemplateContentType;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   * The ID used to uniquely identify the mail template.
    */
   id: string;
 
@@ -46,8 +46,7 @@ export class MailTemplate {
   /**
    * Constructs a new MailTemplate.
    *
-   * @param id          The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                    report definition.
+   * @param id          The ID used to uniquely identify the mail template.
    * @param name        The name of the mail template.
    * @param contentType The content type for the mail template.
    * @param template    The base-64 encoded Apache FreeMarker template for the mail template.

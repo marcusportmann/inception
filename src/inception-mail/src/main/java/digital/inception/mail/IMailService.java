@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * The <code>IMailService</code> interface defines the functionality provided by a Mail Service
@@ -45,32 +44,29 @@ public interface IMailService
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    */
-  void deleteMailTemplate(UUID mailTemplateId)
+  void deleteMailTemplate(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the mail template
    */
-  MailTemplate getMailTemplate(UUID mailTemplateId)
+  MailTemplate getMailTemplate(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the name of the mail template
    */
-  String getMailTemplateName(UUID mailTemplateId)
+  String getMailTemplateName(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
@@ -84,23 +80,21 @@ public interface IMailService
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the summary for the mail template
    */
-  MailTemplateSummary getMailTemplateSummary(UUID mailTemplateId)
+  MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Returns the date and time the mail template was last updated.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the date and time the mail template was last updated
    */
-  LocalDateTime getMailTemplateUpdated(UUID mailTemplateId)
+  LocalDateTime getMailTemplateUpdated(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**
@@ -122,24 +116,22 @@ public interface IMailService
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
-  boolean mailTemplateExists(UUID mailTemplateId)
+  boolean mailTemplateExists(String mailTemplateId)
     throws MailServiceException;
 
   /**
    * Process the mail template.
    *
-   * @param mailTemplateId     the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the mail template
+   * @param mailTemplateId     the ID used to uniquely identify the mail template
    * @param templateParameters the template parameters
    *
    * @return the output of processing the template
    */
-  String processMailTemplate(UUID mailTemplateId, Map<String, String> templateParameters)
+  String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
     throws MailServiceException;
 
   /**
@@ -149,12 +141,12 @@ public interface IMailService
    * @param subject                the subject for the mail
    * @param from                   the from e-mail address
    * @param fromName               the from e-mail name
-   * @param mailTemplateId         the Universally Unique Identifier (UUID) used to uniquely
+   * @param mailTemplateId         the ID used to uniquely
    *                               identify the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
-  void sendMail(List<String> to, String subject, String from, String fromName, UUID mailTemplateId,
-      Map<String, String> mailTemplateParameters)
+  void sendMail(List<String> to, String subject, String from, String fromName,
+      String mailTemplateId, Map<String, String> mailTemplateParameters)
     throws MailTemplateNotFoundException, MailServiceException;
 
   /**

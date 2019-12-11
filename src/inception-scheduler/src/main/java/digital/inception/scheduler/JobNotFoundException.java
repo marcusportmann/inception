@@ -50,9 +50,9 @@ public class JobNotFoundException extends ServiceException
   /**
    * Constructs a new <code>JobNotFoundException</code>.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
-  public JobNotFoundException(UUID jobId)
+  public JobNotFoundException(String jobId)
   {
     super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");
   }

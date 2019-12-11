@@ -22,8 +22,6 @@ import digital.inception.scheduler.*;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,7 +38,6 @@ import static org.junit.Assert.fail;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
@@ -228,7 +225,7 @@ public class SchedulerServiceTest
     jobCount++;
 
     Job job = new Job();
-    job.setId(UUID.randomUUID());
+    job.setId("TestJob" + jobCount);
     job.setName("Test Job Name " + jobCount);
     job.setSchedulingPattern("5 * * * *");
     job.setJobClass("digital.inception.scheduler.TestJob");

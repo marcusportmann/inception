@@ -43,14 +43,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.StringWriter;
 
-import java.nio.charset.StandardCharsets;
-
 import java.time.LocalDateTime;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -181,13 +178,12 @@ public class MailService
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    */
   @Override
   @Transactional
   @CacheEvict(value = "mailTemplates", key = "#mailTemplateId")
-  public void deleteMailTemplate(UUID mailTemplateId)
+  public void deleteMailTemplate(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try
@@ -220,14 +216,13 @@ public class MailService
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the mail template
    */
   @Override
   @Cacheable("mailTemplates")
-  public MailTemplate getMailTemplate(UUID mailTemplateId)
+  public MailTemplate getMailTemplate(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try
@@ -257,13 +252,12 @@ public class MailService
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the name of the mail template
    */
   @Override
-  public String getMailTemplateName(UUID mailTemplateId)
+  public String getMailTemplateName(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try
@@ -312,13 +306,12 @@ public class MailService
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the summary for the mail template
    */
   @Override
-  public MailTemplateSummary getMailTemplateSummary(UUID mailTemplateId)
+  public MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try
@@ -349,13 +342,12 @@ public class MailService
   /**
    * Returns the date and time the mail template was last updated.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return the date and time the mail template was last updated
    */
   @Override
-  public LocalDateTime getMailTemplateUpdated(UUID mailTemplateId)
+  public LocalDateTime getMailTemplateUpdated(String mailTemplateId)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try
@@ -424,13 +416,12 @@ public class MailService
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    *
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   @Override
-  public boolean mailTemplateExists(UUID mailTemplateId)
+  public boolean mailTemplateExists(String mailTemplateId)
     throws MailServiceException
   {
     try
@@ -447,14 +438,13 @@ public class MailService
   /**
    * Process the mail template.
    *
-   * @param mailTemplateId     the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the mail template
+   * @param mailTemplateId     the ID used to uniquely identify the mail template
    * @param templateParameters the template parameters
    *
    * @return the output of processing the template
    */
   @Override
-  public String processMailTemplate(UUID mailTemplateId, Map<String, String> templateParameters)
+  public String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
     throws MailServiceException
   {
     try
@@ -481,12 +471,12 @@ public class MailService
    * @param subject                the subject for the mail
    * @param from                   the from e-mail address
    * @param fromName               the from e-mail name
-   * @param mailTemplateId         the Universally Unique Identifier (UUID) used to uniquely
+   * @param mailTemplateId         the ID used to uniquely
    *                               identify the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
   public void sendMail(List<String> to, String subject, String from, String fromName,
-      UUID mailTemplateId, Map<String, String> mailTemplateParameters)
+      String mailTemplateId, Map<String, String> mailTemplateParameters)
     throws MailTemplateNotFoundException, MailServiceException
   {
     try

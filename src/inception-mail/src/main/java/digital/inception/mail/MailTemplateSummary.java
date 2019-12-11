@@ -29,8 +29,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -72,17 +70,16 @@ public class MailTemplateSummary
   private MailTemplateContentType contentType;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   * The ID used to uniquely identify the mail template.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the mail template",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @Size(min = 1, max = 100)
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private String id;
 
   /**
    * The name of the mail template.
@@ -103,12 +100,11 @@ public class MailTemplateSummary
   /**
    * Constructs a new <code>MailTemplateSummary</code>.
    *
-   * @param id          the Universally Unique Identifier (UUID) used to uniquely identify the mail
-   *                    template
+   * @param id          the ID used to uniquely identify the mail template
    * @param name        the name of the mail template
    * @param contentType the content type for the mail template
    */
-  public MailTemplateSummary(UUID id, String name, MailTemplateContentType contentType)
+  public MailTemplateSummary(String id, String name, MailTemplateContentType contentType)
   {
     this.id = id;
     this.name = name;
@@ -157,11 +153,11 @@ public class MailTemplateSummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   * Returns the ID used to uniquely identify the mail template.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the mail template
+   * @return the ID used to uniquely identify the mail template
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -200,11 +196,11 @@ public class MailTemplateSummary
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the mail template.
+   * Set the ID used to uniquely identify the mail template.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the mail template
+   * @param id the ID used to uniquely identify the mail template
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

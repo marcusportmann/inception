@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package digital.inception.reporting;
-
-//~--- non-JDK imports --------------------------------------------------------
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-/**
- * The <code>ReportDefinitionSummaryRepository</code> interface declares the repository for the
- * <code>ReportDefinitionSummary</code> domain type.
- *
- * @author Marcus Portmann
- */
-public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
-    String> {}
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://mail.inception.digital",
+    elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
+    xmlns = { @javax.xml.bind.annotation.XmlNs(prefix = "core",
+        namespaceURI = "http://core.inception.digital") ,
+        @javax.xml.bind.annotation.XmlNs(prefix = "validation",
+            namespaceURI = "http://validation.inception.digital") ,
+        @javax.xml.bind.annotation.XmlNs(prefix = "mail",
+            namespaceURI = "http://mail.inception.digital") , })
+package digital.inception.mail;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.reporting;
+package digital.inception.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
@@ -29,12 +29,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -42,66 +37,70 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
 
 /**
- * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
- * definition.
+ * The <code>ProcessDefinition</code> class holds the information for a process definition.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ReportDefinitionSummary")
+@ApiModel(value = "ProcessDefinition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name" })
-@XmlRootElement(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital")
-@XmlType(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital",
-    propOrder = { "id", "name" })
+@JsonPropertyOrder({ "id", "name", "data" })
+@XmlRootElement(name = "ProcessDefinition", namespace = "http://process.inception.digital")
+@XmlType(name = "ProcessDefinition", namespace = "http://process.inception.digital",
+    propOrder = { "id", "name", "data" })
 @XmlAccessorType(XmlAccessType.FIELD)
-@Entity
-@Table(schema = "reporting", name = "report_definitions")
-@SuppressWarnings({ "unused" })
-public class ReportDefinitionSummary
+@SuppressWarnings({ "unused", "WeakerAccess" })
+public class ProcessDefinition
   implements Serializable
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * The ID used to uniquely identify the report definition.
+   * The BPMN XML data for the process definition.
    */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the report definition",
+  @ApiModelProperty(value = "The BPMN XML data for the process definition", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Data", required = true)
+  @NotNull
+  @Size(min = 1)
+  private byte[] data;
+
+  /**
+   * The ID used to uniquely identify the process definition.
+   */
+  @ApiModelProperty(value = "The ID used to uniquely identify the process definition",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private String id;
+  private UUID id;
 
   /**
-   * The name of the report definition.
+   * The name of the process definition.
    */
-  @ApiModelProperty(value = "The name of the report definition", required = true)
+  @ApiModelProperty(value = "The name of the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false)
   private String name;
 
   /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
+   * Constructs a new <code>ProcessDefinition</code>.
    */
-  @SuppressWarnings("unused")
-  public ReportDefinitionSummary() {}
+  public ProcessDefinition() {}
 
   /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
+   * Constructs a new <code>ProcessDefinition</code>.
    *
-   * @param id   the ID used to uniquely identify the report definition
-   * @param name the name of the report definition
+   * @param id   the ID used to uniquely identify the process definition
+   * @param name the name of the process definition
+   * @param data the BPMN XML data for the process definition
    */
-  ReportDefinitionSummary(String id, String name)
+  public ProcessDefinition(UUID id, String name, byte[] data)
   {
     this.id = id;
     this.name = name;
+    this.data = data;
   }
 
   /**
@@ -130,25 +129,37 @@ public class ReportDefinitionSummary
       return false;
     }
 
-    ReportDefinitionSummary other = (ReportDefinitionSummary) object;
+    ProcessDefinition other = (ProcessDefinition) object;
 
     return (id != null) && id.equals(other.id);
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the BPMN XML data for the process definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the BPMN XML data for the process definition
    */
-  public String getId()
+  public byte[] getData()
+  {
+    return data;
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the process
+   * definition.
+   *
+   * @return the ID used to uniquely identify the process
+   *         definition
+   */
+  public UUID getId()
   {
     return id;
   }
 
   /**
-   * Returns the name of the report definition.
+   * Returns the name of the process definition.
    *
-   * @return the name of the report definition
+   * @return the name of the process definition
    */
   public String getName()
   {
@@ -169,6 +180,37 @@ public class ReportDefinitionSummary
   }
 
   /**
+   * Set the BPMN XML data for the process definition.
+   *
+   * @param data the BPMN XML data for the process definition
+   */
+  public void setData(byte[] data)
+  {
+    this.data = data;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the process definition.
+   *
+   * @param id the ID used to uniquely identify the process
+   *           definition
+   */
+  public void setId(UUID id)
+  {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the process definition.
+   *
+   * @param name the name of the process definition
+   */
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -176,6 +218,6 @@ public class ReportDefinitionSummary
   @Override
   public String toString()
   {
-    return "ReportDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
+    return "ProcessDefinition {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

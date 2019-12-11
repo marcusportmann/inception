@@ -51,9 +51,9 @@ public class DuplicateJobException extends ServiceException
   /**
    * Constructs a new <code>DuplicateJobException</code>.
    *
-   * @param jobId the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @param jobId the ID used to uniquely identify the job
    */
-  public DuplicateJobException(UUID jobId)
+  public DuplicateJobException(String jobId)
   {
     super("DuplicateJobError", "A job with the ID (" + jobId + ") already exists");
   }

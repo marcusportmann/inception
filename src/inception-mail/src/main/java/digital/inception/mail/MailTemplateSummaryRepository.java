@@ -30,4 +30,4 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, UUID> {}
+public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {}

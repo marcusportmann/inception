@@ -31,7 +31,6 @@ import {SystemUnavailableError} from '../../core/errors/system-unavailable-error
 import {Error} from '../../core/errors/error';
 import {Base64} from '../../core/util/base64';
 import {MailTemplateContentType} from '../services/mail-template-content-type';
-import {v4 as uuid} from 'uuid';
 
 /**
  * The NewMailTemplateComponent class implements the new mail template component.
@@ -68,7 +67,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
 
     // Initialise the form controls
     this.contentTypeFormControl = new FormControl('', [Validators.required]);
-    this.idFormControl = new FormControl(uuid(), [Validators.required]);
+    this.idFormControl = new FormControl('', [Validators.required]);
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.templateFormControl = new FormControl('',
       [Validators.required, FileValidator.minSize(1), FileValidator.maxSize(MailService.MAX_TEMPLATE_SIZE)]);

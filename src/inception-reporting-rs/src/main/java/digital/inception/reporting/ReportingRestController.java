@@ -39,7 +39,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Connection;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -131,8 +134,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
   @ApiResponses(value = { @ApiResponse(code = 204,
@@ -149,9 +151,8 @@ public class ReportingRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
-      required = true)
-  @PathVariable UUID reportDefinitionId)
+      value = "The ID used to uniquely identify the report definition", required = true)
+  @PathVariable String reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (reportDefinitionId == null)
@@ -239,8 +240,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    *
    * @return the report definition
    */
@@ -258,9 +258,8 @@ public class ReportingRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public ReportDefinition getReportDefinition(@ApiParam(name = "reportDefinition",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
-      required = true)
-  @PathVariable UUID reportDefinitionId)
+      value = "The ID used to uniquely identify the report definition", required = true)
+  @PathVariable String reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (StringUtils.isEmpty(reportDefinitionId))
@@ -274,8 +273,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    *
    * @return the name of the report definition
    */
@@ -292,9 +290,8 @@ public class ReportingRestController extends SecureRestController
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   public String getReportDefinitionName(@ApiParam(name = "reportDefinitionId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the report definition",
-      required = true)
-  @PathVariable UUID reportDefinitionId)
+      value = "The ID used to uniquely identify the report definition", required = true)
+  @PathVariable String reportDefinitionId)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
   {
     if (StringUtils.isEmpty(reportDefinitionId))
@@ -352,8 +349,7 @@ public class ReportingRestController extends SecureRestController
   /**
    * Update the report definition.
    *
-   * @param reportDefinitionId the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportDefinition   the report definition
    */
   @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
@@ -371,9 +367,8 @@ public class ReportingRestController extends SecureRestController
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the reportDefinition",
-      required = true)
-  @PathVariable UUID reportDefinitionId, @ApiParam(name = "reportDefinition",
+      value = "The ID used to uniquely identify the reportDefinition", required = true)
+  @PathVariable String reportDefinitionId, @ApiParam(name = "reportDefinition",
       value = "The report definition", required = true)
   @RequestBody ReportDefinition reportDefinition)
     throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException

@@ -78,7 +78,7 @@ export class SchedulerService {
   /**
    * Delete the job.
    *
-   * @param jobId The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * @param jobId The ID used to uniquely identify the job.
    *
    * @return True if the job was deleted or false otherwise.
    */
@@ -107,7 +107,7 @@ export class SchedulerService {
   /**
    * Retrieve the job.
    *
-   * @param jobId The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * @param jobId The ID used to uniquely identify the job.
    *
    * @return The job.
    */
@@ -136,7 +136,7 @@ export class SchedulerService {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * @param jobId The ID used to uniquely identify the job.
    *
    * @return The name of the job.
    */

@@ -84,8 +84,7 @@ export class ReportingService {
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId The Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition.
+   * @param reportDefinitionId The ID used to uniquely identify the report definition.
    *
    * @return True if the report definition was deleted or false otherwise.
    */
@@ -115,8 +114,7 @@ export class ReportingService {
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId The Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition.
+   * @param reportDefinitionId The ID used to uniquely identify the report definition.
    *
    * @return The report definition.
    */
@@ -146,8 +144,7 @@ export class ReportingService {
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId The Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the report definition.
+   * @param reportDefinitionId The ID used to uniquely identify the report definition.
    *
    * @return The name of the report definition.
    */

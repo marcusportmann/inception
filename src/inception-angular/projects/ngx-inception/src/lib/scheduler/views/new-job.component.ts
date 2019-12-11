@@ -32,7 +32,6 @@ import {SchedulerServiceError} from '../services/scheduler.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {JobStatus} from '../services/job-status';
-import {v4 as uuid} from 'uuid';
 
 /**
  * The NewJobComponent class implements the new job component.
@@ -76,7 +75,7 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
     // Initialise the form controls
     this.enabledFormControl = new FormControl(true, [Validators.required]);
-    this.idFormControl = new FormControl(uuid(), [Validators.required]);
+    this.idFormControl = new FormControl('', [Validators.required]);
     this.jobClassFormControl = new FormControl('', [Validators.required, Validators.maxLength(1000)]);
     this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.schedulingPatternFormControl =

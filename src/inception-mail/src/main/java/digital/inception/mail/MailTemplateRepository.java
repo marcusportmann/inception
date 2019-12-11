@@ -36,15 +36,15 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateRepository extends JpaRepository<MailTemplate, UUID>
+public interface MailTemplateRepository extends JpaRepository<MailTemplate, String>
 {
   @Modifying
   @Query("delete from MailTemplate mt where mt.id = :mailTemplateId")
-  void deleteById(@Param("mailTemplateId") UUID mailTemplateId);
+  void deleteById(@Param("mailTemplateId") String mailTemplateId);
 
   @Query("select mt.name from MailTemplate mt where mt.id = :mailTemplateId")
-  Optional<String> getNameById(@Param("mailTemplateId") UUID mailTemplateId);
+  Optional<String> getNameById(@Param("mailTemplateId") String mailTemplateId);
 
   @Query("select mt.updated from MailTemplate mt where mt.id = :mailTemplateId")
-  Optional<LocalDateTime> getUpdatedById(@Param("mailTemplateId") UUID mailTemplateId);
+  Optional<LocalDateTime> getUpdatedById(@Param("mailTemplateId") String mailTemplateId);
 }

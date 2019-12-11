@@ -18,10 +18,17 @@ package digital.inception.process;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.util.ServiceUtil;
+import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
+import org.springframework.beans.FatalBeanException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * The <code>ProcessServiceTestConfiguration/code> class.
@@ -29,4 +36,64 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  * @author Marcus Portmann
  */
 @Configuration
-public class ProcessServiceTestConfiguration {}
+public class ProcessServiceTestConfiguration
+{
+  /**
+   * The Spring application context.
+   */
+  private ApplicationContext applicationContext;
+
+  /**
+   * The data source used to provide connections to the application database.
+   */
+  private DataSource dataSource;
+
+  /* The name of the Process Engine instance. */
+  private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
+
+  /**
+   * The Spring platform transaction manager.
+   */
+  private PlatformTransactionManager transactionManager;
+
+  /**
+   * Constructs a new <code>ProcessServiceTestConfiguration</code>.
+   *
+   * @param applicationContext the Spring application context
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
+   * @param transactionManager the Spring platform transaction manager
+   */
+  public ProcessServiceTestConfiguration(ApplicationContext applicationContext, @Qualifier(
+    "applicationDataSource") DataSource dataSource, PlatformTransactionManager transactionManager)
+  {
+    this.applicationContext = applicationContext;
+    this.dataSource = dataSource;
+    this.transactionManager = transactionManager;
+  }
+
+  /**
+   * Returns the Camunda Process Engine.
+   *
+   * @return the Camunda Process Engine
+   */
+  @Bean
+  public ProcessEngine processEngine()
+  {
+    try
+    {
+      ProcessEngineConfiguration processEngineConfiguration =
+        new ProcessEngineConfiguration(processEngineName, applicationContext, dataSource,
+          transactionManager, false);
+
+      ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
+      factoryBean.setProcessEngineConfiguration(processEngineConfiguration);
+
+      return factoryBean.getObject();
+    }
+    catch (Throwable e)
+    {
+      throw new FatalBeanException("Failed to initialise the Camunda Process Engine", e);
+    }
+  }
+}

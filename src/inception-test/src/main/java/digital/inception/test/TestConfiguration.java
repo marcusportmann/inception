@@ -89,7 +89,9 @@ import javax.transaction.TransactionSynchronizationRegistry;
                 type = FilterType.REGEX) ,
         @ComponentScan.Filter(
             pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
-                type = FilterType.REGEX) })
+                type = FilterType.REGEX) ,
+        @ComponentScan.Filter(pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
+            type = FilterType.REGEX) })
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration
 {

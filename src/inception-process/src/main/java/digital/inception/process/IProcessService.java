@@ -16,6 +16,10 @@
 
 package digital.inception.process;
 
+//~--- JDK imports ------------------------------------------------------------
+
+import java.util.List;
+
 /**
  * The <code>IAuditService</code> interface defines the functionality provided by a Process
  * Service implementation.
@@ -25,6 +29,23 @@ package digital.inception.process;
 @SuppressWarnings("unused")
 public interface IProcessService
 {
+  /**
+   * Validate the BPMN XML data.
+   *
+   * @param bpmnXml the BPMN XML data
+   *
+   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   */
+  List<String> validateBPMN(byte[] bpmnXml)
+    throws InvalidBPMNException, ProcessServiceException;
 
-
+  /**
+   * Validate the BPMN XML data.
+   *
+   * @param bpmnXml the BPMN XML data
+   *
+   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   */
+  List<String> validateBPMN(String bpmnXml)
+    throws InvalidBPMNException, ProcessServiceException;
 }

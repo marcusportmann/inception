@@ -60,7 +60,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import javax.sql.DataSource;
 
@@ -192,8 +191,8 @@ public class SampleApplication extends Application
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
           "digital/inception/sample/SampleReport.jasper");
 
-      ReportDefinition sampleReportDefinition = new ReportDefinition(UUID.fromString(
-          "11111111-1111-1111-1111-111111111111"), "Sample Report", sampleReportDefinitionData);
+      ReportDefinition sampleReportDefinition = new ReportDefinition(
+          "Inception.Sample.SampleReport", "Sample Report", sampleReportDefinitionData);
 
       if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
       {

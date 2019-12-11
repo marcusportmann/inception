@@ -30,8 +30,6 @@ import java.nio.charset.StandardCharsets;
 
 import java.time.ZoneOffset;
 
-import java.util.UUID;
-
 /**
  * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template loader.
  *
@@ -58,9 +56,10 @@ public class FreeMarkerTemplateLoader
   /**
    * Closes the template source, releasing any resources held that are only required for reading the
    * template and/or its metadata. This is the last method that is called by the
-   * {@link TemplateCache} for a template source, except that {@link Object#equals(Object)} is might
-   * called later too. {@link TemplateCache} ensures that this method will be called on every object
-   * that is returned from {@link #findTemplateSource(String)}.
+   * {@link freemarker.cache.TemplateCache} for a template source, except that
+   * {@link Object#equals(Object)} is might called later too. {@link freemarker.cache.TemplateCache}
+   * ensures that this method will be called on every object that is returned from
+   * {@link #findTemplateSource(String)}.
    *
    * @param templateSource the template source that should be closed.
    */
@@ -86,7 +85,7 @@ public class FreeMarkerTemplateLoader
   {
     try
     {
-      MailTemplate mailTemplate = mailService.getMailTemplate(UUID.fromString(name));
+      MailTemplate mailTemplate = mailService.getMailTemplate(name);
 
       return mailTemplate.getId();
     }
@@ -115,14 +114,14 @@ public class FreeMarkerTemplateLoader
   {
     try
     {
-      if (templateSource instanceof UUID)
+      if (templateSource instanceof String)
       {
-        MailTemplate mailTemplate = mailService.getMailTemplate((UUID) templateSource);
+        MailTemplate mailTemplate = mailService.getMailTemplate((String) templateSource);
 
         return mailTemplate.getUpdated().toInstant(ZoneOffset.UTC).toEpochMilli();
       }
     }
-    catch (Throwable e) {}
+    catch (Throwable ignored) {}
 
     return -1;
   }
@@ -152,9 +151,9 @@ public class FreeMarkerTemplateLoader
    *                       loaders should ignore the encoding parameter.
    *
    * @return A {@link Reader} representing the template character stream. It's the responsibility of
-   *         the caller (which is {@link TemplateCache} usually) to {@code close()} it. The
-   *         {@link Reader} is not required to work after the {@code templateSource} was closed
-   *         ({@link #closeTemplateSource(Object)}).
+   *         the caller (which is {@link freemarker.cache.TemplateCache} usually) to {@code close()}
+   *         it. The {@link Reader} is not required to work after the {@code templateSource} was
+   *         closed ({@link #closeTemplateSource(Object)}).
    */
   @Override
   public Reader getReader(Object templateSource, String encoding)
@@ -162,9 +161,9 @@ public class FreeMarkerTemplateLoader
   {
     try
     {
-      if (templateSource instanceof UUID)
+      if (templateSource instanceof String)
       {
-        MailTemplate mailTemplate = mailService.getMailTemplate((UUID) templateSource);
+        MailTemplate mailTemplate = mailService.getMailTemplate((String) templateSource);
 
         return new StringReader(new String(mailTemplate.getTemplate(), StandardCharsets.UTF_8));
       }

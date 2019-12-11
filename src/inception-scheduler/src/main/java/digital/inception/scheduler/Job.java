@@ -36,7 +36,6 @@ import java.time.LocalDateTime;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.*;
 
@@ -90,17 +89,16 @@ public class Job
   private Integer executionAttempts;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * The ID used to uniquely identify the job.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the job",
-      required = true)
+  @ApiModelProperty(value = "The ID used to uniquely identify the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @Size(min = 1, max = 100)
   @Id
   @Column(name = "id", nullable = false)
-  private UUID id;
+  private String id;
 
   /**
    * The fully qualified name of the Java class that implements the job.
@@ -199,8 +197,7 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the Universally Unique Identifier (UUID) used to uniquely identify
-   *                          the job
+   * @param id                the ID used to uniquely identify the job
    * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass          the fully qualified name of the Java class that implements the job
@@ -212,7 +209,7 @@ public class Job
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
    */
-  public Job(UUID id, String name, String schedulingPattern, String jobClass, boolean enabled,
+  public Job(String id, String name, String schedulingPattern, String jobClass, boolean enabled,
       JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
       LocalDateTime nextExecution)
   {
@@ -282,11 +279,11 @@ public class Job
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Returns the ID used to uniquely identify the job.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the job
+   * @return the ID used to uniquely identify the job
    */
-  public UUID getId()
+  public String getId()
   {
     return id;
   }
@@ -450,11 +447,11 @@ public class Job
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the job.
+   * Set the ID used to uniquely identify the job.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the scheduled job
+   * @param id the ID used to uniquely identify the scheduled job
    */
-  public void setId(UUID id)
+  public void setId(String id)
   {
     this.id = id;
   }

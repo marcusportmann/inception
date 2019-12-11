@@ -53,10 +53,9 @@ public class DuplicateMailTemplateException extends ServiceException
   /**
    * Constructs a new <code>DuplicateMailTemplateException</code>.
    *
-   * @param mailTemplateId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template
+   * @param mailTemplateId the ID used to uniquely identify the mail template
    */
-  public DuplicateMailTemplateException(UUID mailTemplateId)
+  public DuplicateMailTemplateException(String mailTemplateId)
   {
     super("DuplicateMailTemplateError", "The mail template with ID (" + mailTemplateId
         + ") already exists");

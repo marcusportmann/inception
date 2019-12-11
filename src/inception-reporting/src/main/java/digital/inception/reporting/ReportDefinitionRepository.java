@@ -26,7 +26,6 @@ import org.springframework.data.repository.query.Param;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * The <code>ReportDefinitionRepository</code> interface declares the repository for the
@@ -34,12 +33,12 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, UUID>
+public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, String>
 {
   @Modifying
   @Query("delete from ReportDefinition rd where rd.id = :reportDefinitionId")
-  void deleteById(@Param("reportDefinitionId") UUID reportDefinitionId);
+  void deleteById(@Param("reportDefinitionId") String reportDefinitionId);
 
   @Query("select rd.name from ReportDefinition rd where rd.id = :reportDefinitionId")
-  Optional<String> getNameById(@Param("reportDefinitionId") UUID reportDefinitionId);
+  Optional<String> getNameById(@Param("reportDefinitionId") String reportDefinitionId);
 }

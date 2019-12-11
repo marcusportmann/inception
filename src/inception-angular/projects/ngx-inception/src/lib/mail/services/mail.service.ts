@@ -82,8 +82,7 @@ export class MailService {
   /**
    * Delete the mail template.
    *
-   * @param mailTemplateId The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template.
+   * @param mailTemplateId The ID used to uniquely identify the mail template.
    *
    * @return True if the mail template was deleted or false otherwise.
    */
@@ -112,8 +111,7 @@ export class MailService {
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       template.
+   * @param mailTemplateId The ID used to uniquely identify the template.
    *
    * @return The mail template.
    */
@@ -142,8 +140,7 @@ export class MailService {
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId The Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       mail template.
+   * @param mailTemplateId The ID used to uniquely identify the mail template.
    *
    * @return The name of the mail template.
    */

@@ -171,7 +171,7 @@ public class MailServiceTest
         "digital/inception/mail/TestMailTemplate");
 
     MailTemplate mailTemplate = new MailTemplate();
-    mailTemplate.setId(UUID.randomUUID());
+    mailTemplate.setId("TestMailTemplate" + mailTemplateCount);
     mailTemplate.setName("Test Mail Template " + mailTemplateCount);
     mailTemplate.setContentType(MailTemplateContentType.HTML);
     mailTemplate.setTemplate(testMailTemplate);
