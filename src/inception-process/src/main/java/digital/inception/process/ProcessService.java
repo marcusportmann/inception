@@ -22,8 +22,13 @@ import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
 
 import org.camunda.bpm.engine.ProcessEngine;
-
+import org.camunda.bpm.engine.repository.Deployment;
+import org.camunda.bpm.engine.repository.DeploymentBuilder;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -77,13 +82,168 @@ public class ProcessService
   }
 
   /**
+   * Create the new process definition.
+   *
+   * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
+   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
+   */
+  @Override
+  @Transactional
+  public List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
+    throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException
+  {
+    try
+    {
+      List<ProcessDefinitionSummary> processDefinitionSummaries = validateBPMN(
+          processDefinitionData);
+
+      for (ProcessDefinitionSummary processDefinitionSummary : processDefinitionSummaries)
+      {
+        if (processDefinitionExists(processDefinitionSummary.getId()))
+        {
+          throw new DuplicateProcessDefinitionException(processDefinitionSummary.getId());
+        }
+      }
+
+      if (processDefinitionSummaries.size() != 1)
+      {
+        throw new InvalidBPMNException(
+            "The BPMN 2.0 XML data does not contain a single process definition");
+      }
+
+      DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
+      processDeployment.addInputStream(processDefinitionSummaries.get(0).getId() + ".bpmn",
+          new ByteArrayInputStream(processDefinitionData));
+
+      Deployment deployment = processDeployment.deploy();
+
+      return processDefinitionSummaries;
+    }
+    catch (InvalidBPMNException | DuplicateProcessDefinitionException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to create the process definition", e);
+    }
+  }
+
+  /**
+   * Returns the summaries for all the process definitions.
+   *
+   * @return the summaries for all the process definitions
+   */
+  @Override
+  public List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
+    throws ProcessServiceException
+  {
+    try
+    {
+      ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
+          .createProcessDefinitionQuery().latestVersion();
+
+      List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
+
+      for (ProcessDefinition processDefinition : processDefinitionQuery.list())
+      {
+        processDefinitionSummaries.add(new ProcessDefinitionSummary(processDefinition.getKey(),
+            processDefinition.getName()));
+      }
+
+      return processDefinitionSummaries;
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to retrieve the process definition summaries", e);
+    }
+  }
+
+  /**
+   * Check whether the process definition exists.
+   *
+   * @param processDefinitionId the ID used to uniquely identify the process definition
+   *
+   * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
+   */
+  @Override
+  public boolean processDefinitionExists(String processDefinitionId)
+    throws ProcessServiceException
+  {
+    try
+    {
+      ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
+          .createProcessDefinitionQuery();
+      processDefinitionQuery.processDefinitionKey(processDefinitionId).latestVersion();
+
+      return processDefinitionQuery.count() > 0;
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to check whether the process definition ("
+          + processDefinitionId + ") exists", e);
+    }
+  }
+
+  /**
+   * Update the process definition(s).
+   *
+   * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
+   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
+   */
+  @Override
+  @Transactional
+  public List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
+    throws InvalidBPMNException, ProcessDefinitionNotFoundException, ProcessServiceException
+  {
+    try
+    {
+      List<ProcessDefinitionSummary> processDefinitionSummaries = validateBPMN(
+          processDefinitionData);
+
+      for (ProcessDefinitionSummary processDefinitionSummary : processDefinitionSummaries)
+      {
+        if (!processDefinitionExists(processDefinitionSummary.getId()))
+        {
+          throw new ProcessDefinitionNotFoundException(processDefinitionSummary.getId());
+        }
+      }
+
+      if (processDefinitionSummaries.size() != 1)
+      {
+        throw new InvalidBPMNException(
+            "The BPMN 2.0 XML data does not contain a single process definition");
+      }
+
+      DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
+      processDeployment.addInputStream(processDefinitionSummaries.get(0).getId() + ".bpmn",
+          new ByteArrayInputStream(processDefinitionData));
+
+      Deployment deployment = processDeployment.deploy();
+
+      return processDefinitionSummaries;
+    }
+    catch (InvalidBPMNException | ProcessDefinitionNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to update the process definition", e);
+    }
+  }
+
+  /**
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
    *
-   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
+   *         successfully validated
    */
-  public List<String> validateBPMN(byte[] bpmnXml)
+  public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
     throws InvalidBPMNException, ProcessServiceException
   {
     try
@@ -124,8 +284,10 @@ public class ProcessService
           }
           );
 
-      Schema schema = schemaFactory.newSchema(new StreamSource(new ByteArrayInputStream(
-          ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))));
+      Schema schema = schemaFactory.newSchema(new StreamSource[] { new StreamSource(
+          new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/BPMN20.xsd"))),
+          new StreamSource(new ByteArrayInputStream(ResourceUtil.getClasspathResource(
+              "META-INF/BPMN20.xsd"))) });
 
       DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
       documentBuilderFactory.setNamespaceAware(true);
@@ -161,7 +323,7 @@ public class ProcessService
       NodeList processElements = document.getDocumentElement().getElementsByTagNameNS(
           "http://www.omg.org/spec/BPMN/20100524/MODEL", "process");
 
-      List<String> processIds = new ArrayList<>();
+      List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
       for (int i = 0; i < processElements.getLength(); i++)
       {
@@ -171,11 +333,12 @@ public class ProcessService
         {
           Element processElement = (Element) node;
 
-          processIds.add(processElement.getAttribute("id"));
+          processDefinitionSummaries.add(new ProcessDefinitionSummary(processElement.getAttribute(
+              "id"), processElement.getAttribute("name")));
         }
       }
 
-      return processIds;
+      return processDefinitionSummaries;
     }
     catch (SAXException e)
     {
@@ -192,9 +355,10 @@ public class ProcessService
    *
    * @param bpmnXml the BPMN XML data
    *
-   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
+   *         successfully validated
    */
-  public List<String> validateBPMN(String bpmnXml)
+  public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
     throws InvalidBPMNException, ProcessServiceException
   {
     return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));

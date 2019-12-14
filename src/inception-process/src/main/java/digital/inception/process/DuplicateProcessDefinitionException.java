@@ -30,42 +30,32 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>ProcessServiceException</code> exception is thrown to indicate an error condition when
- * working with the Process Service.
+ * The <code>DuplicateProcessDefinitionException</code> exception is thrown to indicate an error
+ * condition as a result of an attempt to create a duplicate process definition i.e a process
+ * definition with the specified ID already exists.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "ProcessServiceException", targetNamespace = "http://process.inception.digital",
+@ResponseStatus(value = HttpStatus.CONFLICT,
+    reason = "A process definition with the specified ID already exists")
+@WebFault(name = "DuplicateProcessDefinitionException",
+    targetNamespace = "http://process.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class ProcessServiceException extends ServiceException
+public class DuplicateProcessDefinitionException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ProcessServiceException</code> with the specified message.
+   * Constructs a new <code>DuplicateProcessDefinitionException</code>.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param processDefinitionId the ID used to uniquely identify the process definition
    */
-  public ProcessServiceException(String message)
+  public DuplicateProcessDefinitionException(String processDefinitionId)
   {
-    super("ProcessServiceError", message);
-  }
-
-  /**
-   * Constructs a new <code>ProcessServiceException</code> with the specified message and cause.
-   *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public ProcessServiceException(String message, Throwable cause)
-  {
-    super("ProcessServiceError", message, cause);
+    super("DuplicateProcessDefinitionError", "The process definition with ID ("
+        + processDefinitionId + ") already exists");
   }
 }

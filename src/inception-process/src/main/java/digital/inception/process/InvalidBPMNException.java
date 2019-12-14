@@ -55,6 +55,16 @@ public class InvalidBPMNException extends ServiceException
   }
 
   /**
+   * Constructs a new <code>InvalidBPMNException</code> with the specified message.
+   *
+   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   */
+  public InvalidBPMNException(String message)
+  {
+    super("InvalidBPMNError", message);
+  }
+
+  /**
    * Constructs a new <code>InvalidBPMNException</code>.
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.

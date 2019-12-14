@@ -23,13 +23,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-//~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorService</code> class provides the Error Service implementation.
@@ -71,6 +72,7 @@ public class ErrorService
    *                    error report
    */
   @Override
+  @Transactional
   public void createErrorReport(ErrorReport errorReport)
     throws ErrorServiceException
   {

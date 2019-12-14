@@ -30,42 +30,31 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>ProcessServiceException</code> exception is thrown to indicate an error condition when
- * working with the Process Service.
+ * The <code>ProcessDefinitionNotFoundException</code> exception is thrown to indicate an error
+ * condition as a result of a process definition that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "ProcessServiceException", targetNamespace = "http://process.inception.digital",
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The process definition could not be found")
+@WebFault(name = "ProcessDefinitionNotFoundException",
+    targetNamespace = "http://process.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class ProcessServiceException extends ServiceException
+public class ProcessDefinitionNotFoundException extends ServiceException
 {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ProcessServiceException</code> with the specified message.
+   * w
+   * Constructs a new <code>ProcessDefinitionNotFoundException</code>.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param processDefinitionId the ID used to uniquely identify the process definition
    */
-  public ProcessServiceException(String message)
+  public ProcessDefinitionNotFoundException(String processDefinitionId)
   {
-    super("ProcessServiceError", message);
-  }
-
-  /**
-   * Constructs a new <code>ProcessServiceException</code> with the specified message and cause.
-   *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public ProcessServiceException(String message, Throwable cause)
-  {
-    super("ProcessServiceError", message, cause);
+    super("ProcessDefinitionNotFoundError", "The process definition with ID ("
+        + processDefinitionId + ") could not be found");
   }
 }

@@ -431,7 +431,7 @@ public class MailService
     catch (Throwable e)
     {
       throw new MailServiceException("Failed to check whether the mail template (" + mailTemplateId
-          + ")", e);
+          + ") exists", e);
     }
   }
 

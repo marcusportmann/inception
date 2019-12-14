@@ -20,7 +20,8 @@ package digital.inception.process;
 
 import digital.inception.core.util.ServiceUtil;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
+import org.camunda.bpm.engine.ProcessEngineConfiguration;
+import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +30,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+
+import static org.camunda.bpm.engine.ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE;
 
 /**
  * The <code>ProcessServiceTestConfiguration/code> class.
@@ -82,18 +87,29 @@ public class ProcessServiceTestConfiguration
   {
     try
     {
-      ProcessEngineConfiguration processEngineConfiguration =
-        new ProcessEngineConfiguration(processEngineName, applicationContext, dataSource,
-          transactionManager, false);
+      SpringProcessEngineConfiguration processEngineConfiguration =
+        new SpringProcessEngineConfiguration();
+      processEngineConfiguration.setApplicationContext(applicationContext);
+      processEngineConfiguration.setDatabaseSchema("CAMUNDA");
+      processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+      processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
+      processEngineConfiguration.setDataSource(dataSource);
+      processEngineConfiguration.setTransactionManager(transactionManager);
+      processEngineConfiguration.setJobExecutorActivate(false);
 
-      ProcessEngineFactoryBean factoryBean = new ProcessEngineFactoryBean();
-      factoryBean.setProcessEngineConfiguration(processEngineConfiguration);
+      // Disable specific capabilities
+      processEngineConfiguration.setAuthorizationEnabled(false);
+      processEngineConfiguration.setCmmnEnabled(false);
+      processEngineConfiguration.setDbHistoryUsed(false);
+      processEngineConfiguration.setDbIdentityUsed(false);
+      processEngineConfiguration.setDmnEnabled(false);
+      processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_NONE);
 
-      return factoryBean.getObject();
+      return processEngineConfiguration.buildProcessEngine();
     }
     catch (Throwable e)
     {
-      throw new FatalBeanException("Failed to initialise the Camunda Process Engine", e);
+      throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
     }
   }
 }

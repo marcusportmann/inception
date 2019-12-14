@@ -30,13 +30,98 @@ import java.util.List;
 public interface IProcessService
 {
   /**
+   * Create the new process definition(s).
+   *
+   * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
+   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
+   */
+  List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
+    throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException;
+
+//  /**
+//   * Delete the existing process definition.
+//   *
+//   * @param processDefinitionId the ID used to uniquely identify the process definition
+//   */
+//  void deleteProcessDefinition(String processDefinitionId)
+//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+
+//  /**
+//   * Retrieve the process definition.
+//   *
+//   * @param processDefinitionId the ID used to uniquely identify the process definition
+//   *
+//   * @return the process definition
+//   */
+//  ProcessDefinition getProcessDefinition(String processDefinitionId)
+//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+
+//  /**
+//   * Retrieve the name of the process definition.
+//   *
+//   * @param processDefinitionId the ID used to uniquely identify the process definition
+//   *
+//   * @return the name of the process definition
+//   */
+//  String getProcessDefinitionName(String processDefinitionId)
+//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+
+  /**
+   * Returns the summaries for all the process definitions.
+   *
+   * @return the summaries for all the process definitions
+   */
+  List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
+    throws ProcessServiceException;
+
+//  /**
+//   * Retrieve the summary for the process definition.
+//   *
+//   * @param processDefinitionId the ID used to uniquely identify the process definition
+//   *
+//   * @return the summary for the process definition
+//   */
+//  ProcessDefinitionSummary getProcessDefinitionSummary(String processDefinitionId)
+//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+//
+//  /**
+//   * Returns all the process definitions.
+//   *
+//   * @return all the process definitions
+//   */
+//  List<ProcessDefinition> getProcessDefinitions()
+//    throws ProcessServiceException;
+
+  /**
+   * Check whether the process definition exists.
+   *
+   * @param processDefinitionId the ID used to uniquely identify the process definition
+   *
+   * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
+   */
+  boolean processDefinitionExists(String processDefinitionId)
+    throws ProcessServiceException;
+
+  /**
+   * Update the process definition(s).
+   *
+   * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
+   * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
+   */
+  List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
+    throws InvalidBPMNException, ProcessDefinitionNotFoundException, ProcessServiceException;
+
+  /**
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
    *
-   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
+   *         successfully validated
    */
-  List<String> validateBPMN(byte[] bpmnXml)
+  List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
     throws InvalidBPMNException, ProcessServiceException;
 
   /**
@@ -44,8 +129,9 @@ public interface IProcessService
    *
    * @param bpmnXml the BPMN XML data
    *
-   * @return the IDs for the BPMN processes if the BPMN XML data was successfully validated
+   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
+   *         successfully validated
    */
-  List<String> validateBPMN(String bpmnXml)
+  List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
     throws InvalidBPMNException, ProcessServiceException;
 }

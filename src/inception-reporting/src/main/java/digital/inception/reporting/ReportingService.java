@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import org.w3c.dom.Document;
@@ -98,6 +99,7 @@ public class ReportingService
    *                         for the new report definition
    */
   @Override
+  @Transactional
   public void createReportDefinition(ReportDefinition reportDefinition)
     throws DuplicateReportDefinitionException, ReportingServiceException
   {
@@ -261,6 +263,7 @@ public class ReportingService
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   @Override
+  @Transactional
   public void deleteReportDefinition(String reportDefinitionId)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
@@ -477,7 +480,7 @@ public class ReportingService
     catch (Throwable e)
     {
       throw new ReportingServiceException("Failed to check whether the report definition ("
-          + reportDefinitionId + ")", e);
+          + reportDefinitionId + ") exists", e);
     }
   }
 
@@ -499,6 +502,7 @@ public class ReportingService
    *                         information for the report definition
    */
   @Override
+  @Transactional
   public void updateReportDefinition(ReportDefinition reportDefinition)
     throws ReportDefinitionNotFoundException, ReportingServiceException
   {
