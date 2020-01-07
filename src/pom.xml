@@ -11,6 +11,7 @@
   <packaging>pom</packaging>
 
   <repositories>
+    <!--
     <repository>
       <id>apache-snapshots</id>
       <name>Apache SNAPSHOT Repository</name>
@@ -19,8 +20,18 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    -->
+    <repository>
+      <id>maven-central-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
+
+  <!--
   <pluginRepositories>
     <pluginRepository>
       <id>apache-snapshots</id>
@@ -31,6 +42,7 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+  -->
 
 
   <!--
@@ -80,19 +92,18 @@
     <camunda.version>7.13.0-SNAPSHOT</camunda.version>
     <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-io.version>2.6</commons-io.version>
-    <cxf.version>3.3.3</cxf.version>
+    <cxf.version>3.3.4</cxf.version>
     <freemarker.version>2.3.29</freemarker.version>
     <glassfish-jaxb-runtime.version>2.3.2</glassfish-jaxb-runtime.version>
     <groovy.version>3.0.0-rc-2</groovy.version>
     <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
-    <jasperreports.version>6.10.0</jasperreports.version>
+    <jasperreports.version>6.11.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
-    <metrics-core.version>4.1.1</metrics-core.version>
+    <metrics-core.version>4.1.2</metrics-core.version>
     <mssql-jdbc.version>7.4.1.jre12</mssql-jdbc.version>
-    <!--<mybatis.version>3.5.3</mybatis.version>-->
-    <narayana.version>5.10.0.Final</narayana.version>
-    <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
-    <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
+    <narayana.version>5.10.1.Final</narayana.version>
+    <spring-security-jwt.version>1.1.0.RELEASE</spring-security-jwt.version>
+    <spring-security-oauth2.version>2.4.0.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
@@ -205,7 +216,12 @@
       </dependency>
       <dependency>
         <groupId>org.codehaus.groovy</groupId>
-        <artifactId>groovy-all</artifactId>
+        <artifactId>groovy</artifactId>
+        <version>${groovy.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.groovy</groupId>
+        <artifactId>groovy-jsr223</artifactId>
         <version>${groovy.version}</version>
       </dependency>
       <dependency>
@@ -261,6 +277,11 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-audit</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-bmi</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -361,11 +382,6 @@
       <dependency>
         <groupId>digital.inception</groupId>
         <artifactId>inception-persistence</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-process</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -474,6 +490,7 @@
   <modules>
     <module>inception-application</module>
     <module>inception-audit</module>
+    <module>inception-bmi</module>
     <module>inception-cache</module>
     <module>inception-codes</module>
     <module>inception-codes-rs</module>
@@ -494,7 +511,6 @@
     <module>inception-messaging-rs</module>
     <module>inception-messaging-ws</module>
     <module>inception-persistence</module>
-    <module>inception-process</module>
     <module>inception-reporting</module>
     <module>inception-reporting-rs</module>
     <module>inception-reporting-ws</module>

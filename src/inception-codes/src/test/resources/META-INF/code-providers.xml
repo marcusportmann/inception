@@ -3,6 +3,6 @@
 <codeProviders>
   <codeProvider>
     <name>Test Code Provider</name>
-    <class>digital.inception.codes.TestCodeProvider</class>
+    <class>digital.inception.codes.test.TestCodeProvider</class>
   </codeProvider>
 </codeProviders>

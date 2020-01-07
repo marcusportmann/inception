@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://test.process.inception.digital" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <process id="Inception.Test" name="Test" isExecutable="true" camunda:versionTag="1.0.0">
+    <startEvent id="StartEvent" name="Start" />
+    <endEvent id="EndEvent" name="End" />
+    <scriptTask id="TestScriptTask" name="Test Script Task" scriptFormat="groovy">
+      <script>println "Test Script Task"</script>
+    </scriptTask>
+    <sequenceFlow id="flow1" sourceRef="StartEvent" targetRef="TestScriptTask" />
+    <userTask id="TestUserTask" name="Test User Task" camunda:candidateGroups="Administrators" />
+    <sequenceFlow id="flow2" sourceRef="TestScriptTask" targetRef="TestUserTask" />
+    <sequenceFlow id="flow3" sourceRef="TestUserTask" targetRef="EndEvent" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Inception.Test">
+    <bpmndi:BPMNPlane id="BPMNPlane_Inception.Test" bpmnElement="Inception.Test">
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent" bpmnElement="StartEvent">
+        <omgdc:Bounds x="160" y="90" width="35" height="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="166" y="125" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_EndEvent" bpmnElement="EndEvent">
+        <omgdc:Bounds x="600" y="90" width="35" height="35" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="608" y="125" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_TestTask" bpmnElement="TestScriptTask">
+        <omgdc:Bounds x="260" y="80" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_UserTask" bpmnElement="TestUserTask">
+        <omgdc:Bounds x="440" y="80" width="105" height="55" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow1" bpmnElement="flow1">
+        <omgdi:waypoint x="195" y="107" />
+        <omgdi:waypoint x="260" y="107" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow2" bpmnElement="flow2">
+        <omgdi:waypoint x="365" y="107" />
+        <omgdi:waypoint x="440" y="107" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_flow3" bpmnElement="flow3">
+        <omgdi:waypoint x="545" y="107" />
+        <omgdi:waypoint x="600" y="107" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
