@@ -7,7 +7,7 @@
     <bpmn:endEvent id="EndEvent_1iyuhek">
       <bpmn:incoming>SequenceFlow_1xtgwmx</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="CallCaseTask" name="Call Case Task" camunda:caseRef="Test">
+    <bpmn:callActivity id="CallCaseTask" name="Call Case Task" camunda:caseRef="Inception.Test">
       <bpmn:incoming>SequenceFlow_1y6tlba</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_10d8phz</bpmn:outgoing>
     </bpmn:callActivity>

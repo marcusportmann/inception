@@ -19,6 +19,7 @@ package digital.inception.bmi;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The <code>IProcessService</code> interface defines the functionality provided by a Process
@@ -39,33 +40,33 @@ public interface IProcessService
   List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
     throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException;
 
-//  /**
-//   * Delete the existing process definition.
-//   *
-//   * @param processDefinitionId the ID used to uniquely identify the process definition
-//   */
-//  void deleteProcessDefinition(String processDefinitionId)
-//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+///**
+// * Delete the existing process definition.
+// *
+// * @param processDefinitionId the ID used to uniquely identify the process definition
+// */
+//void deleteProcessDefinition(String processDefinitionId)
+//  throws ProcessDefinitionNotFoundException, ProcessServiceException;
 
-//  /**
-//   * Retrieve the process definition.
-//   *
-//   * @param processDefinitionId the ID used to uniquely identify the process definition
-//   *
-//   * @return the process definition
-//   */
-//  ProcessDefinition getProcessDefinition(String processDefinitionId)
-//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+///**
+// * Retrieve the process definition.
+// *
+// * @param processDefinitionId the ID used to uniquely identify the process definition
+// *
+// * @return the process definition
+// */
+//ProcessDefinition getProcessDefinition(String processDefinitionId)
+//  throws ProcessDefinitionNotFoundException, ProcessServiceException;
 
-//  /**
-//   * Retrieve the name of the process definition.
-//   *
-//   * @param processDefinitionId the ID used to uniquely identify the process definition
-//   *
-//   * @return the name of the process definition
-//   */
-//  String getProcessDefinitionName(String processDefinitionId)
-//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
+///**
+// * Retrieve the name of the process definition.
+// *
+// * @param processDefinitionId the ID used to uniquely identify the process definition
+// *
+// * @return the name of the process definition
+// */
+//String getProcessDefinitionName(String processDefinitionId)
+//  throws ProcessDefinitionNotFoundException, ProcessServiceException;
 
   /**
    * Returns the summaries for all the process definitions.
@@ -74,24 +75,6 @@ public interface IProcessService
    */
   List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
     throws ProcessServiceException;
-
-//  /**
-//   * Retrieve the summary for the process definition.
-//   *
-//   * @param processDefinitionId the ID used to uniquely identify the process definition
-//   *
-//   * @return the summary for the process definition
-//   */
-//  ProcessDefinitionSummary getProcessDefinitionSummary(String processDefinitionId)
-//    throws ProcessDefinitionNotFoundException, ProcessServiceException;
-//
-//  /**
-//   * Returns all the process definitions.
-//   *
-//   * @return all the process definitions
-//   */
-//  List<ProcessDefinition> getProcessDefinitions()
-//    throws ProcessServiceException;
 
   /**
    * Check whether the process definition exists.
@@ -102,6 +85,33 @@ public interface IProcessService
    */
   boolean processDefinitionExists(String processDefinitionId)
     throws ProcessServiceException;
+
+///**
+// * Retrieve the summary for the process definition.
+// *
+// * @param processDefinitionId the ID used to uniquely identify the process definition
+// *
+// * @return the summary for the process definition
+// */
+//ProcessDefinitionSummary getProcessDefinitionSummary(String processDefinitionId)
+//  throws ProcessDefinitionNotFoundException, ProcessServiceException;
+//
+///**
+// * Returns all the process definitions.
+// *
+// * @return all the process definitions
+// */
+//List<ProcessDefinition> getProcessDefinitions()
+//  throws ProcessServiceException;
+
+  /**
+   * Start a process instance.
+   *
+   * @param processDefinitionId the ID used to uniquely identify the process definition
+   * @param parameters          the parameters for the process instance
+   */
+  void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
+    throws ProcessDefinitionNotFoundException, ProcessServiceException;
 
   /**
    * Update the process definition(s).

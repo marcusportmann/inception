@@ -27,6 +27,7 @@ import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.repository.ProcessDefinitionQuery;
 
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ import java.nio.charset.StandardCharsets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -243,6 +245,7 @@ public class ProcessService
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
    *         successfully validated
    */
+  @Override
   public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
     throws InvalidBPMNException, ProcessServiceException
   {
@@ -361,9 +364,41 @@ public class ProcessService
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
    *         successfully validated
    */
+  @Override
   public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
     throws InvalidBPMNException, ProcessServiceException
   {
     return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));
   }
+
+  /**
+   * Start a process instance.
+   *
+   * @param processDefinitionId the ID used to uniquely identify the process definition
+   * @param parameters          the parameters for the process instance
+   */
+  @Override
+  @Transactional
+  public void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
+  throws ProcessDefinitionNotFoundException, ProcessServiceException
+  {
+    try
+    {
+      if (!processDefinitionExists(processDefinitionId))
+      {
+        throw new ProcessDefinitionNotFoundException(processDefinitionId);
+      }
+
+      ProcessInstance processInstance = processEngine.getRuntimeService().startProcessInstanceByKey(processDefinitionId, parameters);
+    }
+    catch (ProcessDefinitionNotFoundException e)
+    {
+      throw e;
+    }
+    catch (Throwable e)
+    {
+      throw new ProcessServiceException("Failed to start the process instance (" + processDefinitionId + ")", e);
+    }
+  }
+
 }

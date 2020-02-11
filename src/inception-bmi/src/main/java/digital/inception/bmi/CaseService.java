@@ -253,10 +253,16 @@ public class CaseService
           {
             switch (systemId)
             {
+              case "CMMN11CaseModel.xsd":
+              {
+                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
+                  "META-INF/cmmn/CMMN11CaseModel.xsd");
+              }
+
               case "CMMNDI11.xsd":
               {
                 return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/cmmn/CMMNDI.xsd");
+                    "META-INF/cmmn/CMMNDI11.xsd");
               }
 
               case "DC.xsd":

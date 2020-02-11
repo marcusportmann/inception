@@ -1,3 +1,14 @@
+--
+-- Complete the following steps to update the Camunda schema in this file:
+--
+-- 1. Clone the camunda-bpm-platform repository (https://github.com/camunda/camunda-bpm-platform.git)
+--
+-- 2. Apply the changes in the appropriate file in under the following folder:
+--
+--    camunda-bpm-platform/engine/src/main/resources/org/camunda/bpm/engine/db/upgrade
+--
+--    e.g. h2_engine_7.12_to_7.13.sql
+--
 create schema CAMUNDA;
 
 create table CAMUNDA.ACT_GE_PROPERTY (
@@ -97,6 +108,7 @@ create table CAMUNDA.ACT_RU_JOB (
     RETRIES_ integer,
     EXCEPTION_STACK_ID_ varchar(64),
     EXCEPTION_MSG_ varchar(4000),
+    FAILED_ACT_ID_ varchar(255),
     DUEDATE_ timestamp,
     REPEAT_ varchar(255),
     REPEAT_OFFSET_ bigint DEFAULT 0,
@@ -226,6 +238,7 @@ create table CAMUNDA.ACT_RU_INCIDENT (
     INCIDENT_TYPE_ varchar(255) not null,
     EXECUTION_ID_ varchar(64),
     ACTIVITY_ID_ varchar(255),
+    FAILED_ACTIVITY_ID_ varchar(255),
     PROC_INST_ID_ varchar(64),
     PROC_DEF_ID_ varchar(64),
     CAUSE_INCIDENT_ID_ varchar(64),
@@ -515,22 +528,7 @@ alter table CAMUNDA.ACT_RU_BATCH
     add constraint ACT_FK_BATCH_JOB_DEF
         foreign key (BATCH_JOB_DEF_ID_)
             references ACT_RU_JOBDEF (ID_);
---
--- Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
--- under one or more contributor license agreements. See the NOTICE file
--- distributed with this work for additional information regarding copyright
--- ownership. Camunda licenses this file to you under the Apache License,
--- Version 2.0; you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
---
---     http://www.apache.org/licenses/LICENSE-2.0
---
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed ON CAMUNDA.an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
---
+
 
 -- create case definition table --
 
@@ -949,6 +947,7 @@ create table CAMUNDA.ACT_HI_INCIDENT (
     INCIDENT_MSG_ varchar(4000),
     INCIDENT_TYPE_ varchar(255) not null,
     ACTIVITY_ID_ varchar(255),
+    FAILED_ACTIVITY_ID_ varchar(255),
     CAUSE_INCIDENT_ID_ varchar(64),
     ROOT_CAUSE_INCIDENT_ID_ varchar(64),
     CONFIGURATION_ varchar(255),
@@ -974,6 +973,7 @@ create table CAMUNDA.ACT_HI_JOB_LOG (
     JOB_DEF_TYPE_ varchar(255),
     JOB_DEF_CONFIGURATION_ varchar(255),
     ACT_ID_ varchar(255),
+    FAILED_ACT_ID_ varchar(255),
     EXECUTION_ID_ varchar(64),
     ROOT_PROC_INST_ID_ varchar(64),
     PROCESS_INSTANCE_ID_ varchar(64),
@@ -982,7 +982,9 @@ create table CAMUNDA.ACT_HI_JOB_LOG (
     DEPLOYMENT_ID_ varchar(64),
     SEQUENCE_COUNTER_ integer,
     TENANT_ID_ varchar(64),
+    HOSTNAME_ varchar(255),
     REMOVAL_TIME_ timestamp,
+
     primary key (ID_)
 );
 
@@ -1087,6 +1089,7 @@ create index ACT_IDX_HI_VAR_INST_TENANT_ID ON CAMUNDA.ACT_HI_VARINST(TENANT_ID_)
 create index ACT_IDX_HI_VAR_INST_PROC_DEF_KEY ON CAMUNDA.ACT_HI_VARINST(PROC_DEF_KEY_);
 create index ACT_IDX_HI_VARINST_BYTEAR ON CAMUNDA.ACT_HI_VARINST(BYTEARRAY_ID_);
 create index ACT_IDX_HI_VARINST_RM_TIME ON CAMUNDA.ACT_HI_VARINST(REMOVAL_TIME_);
+create index ACT_IDX_HI_VAR_PI_NAME_TYPE on CAMUNDA.ACT_HI_VARINST(PROC_INST_ID_, NAME_, VAR_TYPE_);
 
 create index ACT_IDX_HI_INCIDENT_TENANT_ID ON CAMUNDA.ACT_HI_INCIDENT(TENANT_ID_);
 create index ACT_IDX_HI_INCIDENT_PROC_DEF_KEY ON CAMUNDA.ACT_HI_INCIDENT(PROC_DEF_KEY_);

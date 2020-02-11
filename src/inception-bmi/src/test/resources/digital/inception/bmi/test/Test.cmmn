@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/cmmn" id="Definitions_17dk4n2" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
-  <cmmn:case id="Test" name="Test">
+  <cmmn:case id="Inception.Test" name="Test">
     <cmmn:casePlanModel id="CasePlanModel_0c8j7co" name="A CasePlanModel">
       <cmmn:extensionElements />
       <cmmn:planItem id="RequiredHumanTask" name="Required Human Task" definitionRef="HumanTask_14pkppn">

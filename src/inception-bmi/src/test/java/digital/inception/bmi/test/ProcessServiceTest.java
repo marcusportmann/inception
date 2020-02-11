@@ -18,6 +18,7 @@ package digital.inception.bmi.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.bmi.CaseDefinitionSummary;
 import digital.inception.bmi.ICaseService;
 import digital.inception.bmi.IProcessService;
 import digital.inception.bmi.ProcessDefinitionSummary;
@@ -105,7 +106,7 @@ public class ProcessServiceTest
   /**
    * Check database test.
    */
-  @Test
+  //@Test
   public void checkDatabaseTest()
     throws Exception
   {
@@ -141,8 +142,15 @@ public class ProcessServiceTest
   public void caseDefinitionTest()
     throws Exception
   {
-    byte[] testCaseData = ResourceUtil.getClasspathResource(
-      "digital/inception/bmi/test/TestV1.bpmn");
+    byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
+
+    List<CaseDefinitionSummary> caseDefinitionSummaries = caseService.createCaseDefinition(testCaseData);
+
+    caseDefinitionSummaries = caseService.updateCaseDefinition(testCaseData);
+
+
+    int xxx = 0;
+    xxx++;
 
   }
 
@@ -156,15 +164,52 @@ public class ProcessServiceTest
     byte[] testProcessV1Data = ResourceUtil.getClasspathResource(
       "digital/inception/bmi/test/TestV1.bpmn");
 
-    processService.createProcessDefinition(testProcessV1Data);
+    List<ProcessDefinitionSummary> processDefinitionSummaries = processService.createProcessDefinition(testProcessV1Data);
+
+    assertEquals(
+      "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition", 1,
+      processDefinitionSummaries.size());
+
+    assertEquals("The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition",
+      "Inception.Test", processDefinitionSummaries.get(0).getId());
 
     byte[] testProcessV2Data = ResourceUtil.getClasspathResource(
       "digital/inception/bmi/test/TestV2.bpmn");
 
-    processService.updateProcessDefinition(testProcessV2Data);
+    processDefinitionSummaries = processService.updateProcessDefinition(testProcessV2Data);
 
-    List<ProcessDefinitionSummary> processDefinitionSummaries =
+    assertEquals(
+      "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition", 1,
+      processDefinitionSummaries.size());
+
+    assertEquals("The correct process definition ID was not retrieved for version 2 of the Inception.Test process definition",
+      "Inception.Test", processDefinitionSummaries.get(0).getId());
+
+    List<ProcessDefinitionSummary> retrievedProcessDefinitionSummaries =
         processService.getProcessDefinitionSummaries();
+
+    boolean foundProcessDefinition = false;
+
+    for (ProcessDefinitionSummary processDefinitionSummary : retrievedProcessDefinitionSummaries)
+    {
+      if (processDefinitionSummary.getId().equals("Inception.Test"))
+      {
+        foundProcessDefinition = true;
+
+        break;
+      }
+    }
+
+    if (!foundProcessDefinition)
+    {
+      fail("Failed to retrieve the summary for the process definition (Inception.Test)");
+    }
+
+//    Map<String, Object> parameters = new HashMap<>();
+//
+//    processService.startProcessInstance("Inception.Test", parameters);
+
+
 
   }
 
@@ -183,10 +228,10 @@ public class ProcessServiceTest
         testProcessV1Data);
 
     assertEquals(
-        "The correct number of processes was not retrieved for version 1 of the test process", 1,
+        "The correct number of process definitions was not retrieved for version 1 of the Inception.Test process definition", 1,
         processDefinitionSummaries.size());
 
-    assertEquals("The correct process ID was not retrieved for version 1 of the test process",
+    assertEquals("The correct process definition ID was not retrieved for version 1 of the Inception.Test process definition",
         "Inception.Test", processDefinitionSummaries.get(0).getId());
 
     byte[] testProcessV2Data = ResourceUtil.getClasspathResource(
@@ -195,10 +240,10 @@ public class ProcessServiceTest
     processDefinitionSummaries = processService.validateBPMN(testProcessV2Data);
 
     assertEquals(
-        "The correct number of process IDs was not retrieved for version 2 of the test process", 1,
+        "The correct number of process definitions was not retrieved for version 2 of the Inception.Test process definition", 1,
         processDefinitionSummaries.size());
 
-    assertEquals("The correct process ID was not retrieved for version 1 of the test process",
+    assertEquals("The correct process definition ID was not retrieved for version 1 of the Inception.Test process",
         "Inception.Test", processDefinitionSummaries.get(0).getId());
 
     DeploymentBuilder processDeploymentV1 = processEngine.getRepositoryService().createDeployment();
@@ -301,7 +346,7 @@ public class ProcessServiceTest
   /**
    * Test the process with case functionality.
    */
-  @Test
+  //@Test
   public void processWithCaseTest()
     throws Exception
   {
