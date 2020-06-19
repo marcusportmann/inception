@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Marcus Portmann
+ * Copyright 2020 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import {TitleBarService} from '../services/title-bar.service';
       </main>
     </div>
     <admin-footer [fixed]="false">
-      <span>2019 &copy; <span class="copyright-name"></span></span>
+      <span>2020 &copy; <span class="copyright-name"></span></span>
     </admin-footer>
   `
 })
