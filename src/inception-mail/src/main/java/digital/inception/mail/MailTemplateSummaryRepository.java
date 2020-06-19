@@ -16,18 +16,16 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>MailTemplateSummaryRepository</code> interface declares the repository for the
- * <code>MailTemplateSummary</code> domain type.
+ * The <code>MailTemplateSummaryRepository</code> interface declares the repository for the <code>
+ * MailTemplateSummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {
-
-}
+public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {}

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -29,14 +29,10 @@ import org.springframework.stereotype.Component;
  */
 @SuppressWarnings("unused")
 @Component
-public class UserSortByToIntegerConverter
-    implements Converter<UserSortBy, Integer> {
+public class UserSortByToIntegerConverter implements Converter<UserSortBy, Integer> {
 
-  /**
-   * Constructs a new <code>UserSortByToStringConverter</code>.
-   */
-  public UserSortByToIntegerConverter() {
-  }
+  /** Constructs a new <code>UserSortByToStringConverter</code>. */
+  public UserSortByToIntegerConverter() {}
 
   @Override
   public Integer convert(UserSortBy source) {

@@ -16,13 +16,12 @@
 
 package digital.inception.configuration;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,31 +35,30 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Configuration</code> class stores the summary for a configuration.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ConfigurationSummary")
+@Schema(description = "ConfigurationSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "description"})
 @XmlRootElement(name = "ConfigurationSummary", namespace = "http://configuration.inception.digital")
-@XmlType(name = "ConfigurationSummary", namespace = "http://configuration.inception.digital",
+@XmlType(
+    name = "ConfigurationSummary",
+    namespace = "http://configuration.inception.digital",
     propOrder = {"key", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "configuration", name = "configuration")
-public class ConfigurationSummary
-    implements Serializable {
+public class ConfigurationSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The description for the configuration.
-   */
-  @ApiModelProperty(value = "The description for the configuration", required = true)
+  /** The description for the configuration. */
+  @Schema(description = "The description for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -68,10 +66,8 @@ public class ConfigurationSummary
   @Column(name = "description", nullable = false, length = 100)
   private String description;
 
-  /**
-   * The key used to uniquely identify the configuration.
-   */
-  @ApiModelProperty(value = "The key used to uniquely identify the configuration", required = true)
+  /** The key uniquely identifying the configuration. */
+  @Schema(description = "The key uniquely identifying the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
@@ -80,16 +76,13 @@ public class ConfigurationSummary
   @Column(name = "key", nullable = false, length = 100)
   private String key;
 
-  /**
-   * Constructs a new <code>ConfigurationSummary</code>.
-   */
-  public ConfigurationSummary() {
-  }
+  /** Constructs a new <code>ConfigurationSummary</code>. */
+  public ConfigurationSummary() {}
 
   /**
    * Constructs a new <code>ConfigurationSummary</code>.
    *
-   * @param key         the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param description the description for the configuration
    */
   ConfigurationSummary(String key, String description) {
@@ -101,9 +94,8 @@ public class ConfigurationSummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -143,18 +135,18 @@ public class ConfigurationSummary
   }
 
   /**
-   * Returns the key used to uniquely identify the configuration.
+   * Returns the key uniquely identifying the configuration.
    *
-   * @return the key used to uniquely identify the configuration
+   * @return the key uniquely identifying the configuration
    */
   public String getKey() {
     return key;
   }
 
   /**
-   * Set the key used to uniquely identify the configuration.
+   * Set the key uniquely identifying the configuration.
    *
-   * @param key the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    */
   public void setKey(String key) {
     this.key = key;
@@ -167,8 +159,6 @@ public class ConfigurationSummary
    */
   @Override
   public int hashCode() {
-    return (key == null)
-        ? 0
-        : key.hashCode();
+    return (key == null) ? 0 : key.hashCode();
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.configuration;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.Base64Util;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationService</code> class provides the Configuration Service implementation.
@@ -34,26 +34,22 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings("unused")
-public class ConfigurationService
-    implements IConfigurationService {
+public class ConfigurationService implements IConfigurationService {
 
-  /**
-   * The Configuration Repository.
-   */
+  /** The Configuration Repository. */
   private ConfigurationRepository configurationRepository;
 
-  /**
-   * The Configuration Summary Repository.
-   */
+  /** The Configuration Summary Repository. */
   private ConfigurationSummaryRepository configurationSummaryRepository;
 
   /**
    * Constructs a new <code>ConfigurationService</code>.
    *
-   * @param configurationRepository        the Configuration Repository
+   * @param configurationRepository the Configuration Repository
    * @param configurationSummaryRepository the Configuration Summary Repository
    */
-  public ConfigurationService(ConfigurationRepository configurationRepository,
+  public ConfigurationService(
+      ConfigurationRepository configurationRepository,
       ConfigurationSummaryRepository configurationSummaryRepository) {
     this.configurationRepository = configurationRepository;
     this.configurationSummaryRepository = configurationSummaryRepository;
@@ -62,7 +58,7 @@ public class ConfigurationService
   /**
    * Remove the configuration with the specified key.
    *
-   * @param key the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    */
   @Override
   @Transactional
@@ -77,16 +73,15 @@ public class ConfigurationService
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to delete the configuration with the key ("
-          + key + ")", e);
+      throw new ConfigurationServiceException(
+          "Failed to delete the configuration with the key (" + key + ")", e);
     }
   }
 
   /**
    * Retrieve the binary configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the binary configuration
    */
   @Override
@@ -111,14 +106,12 @@ public class ConfigurationService
   /**
    * Retrieve the binary configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the binary configuration or the default value if the configuration does not exist
    */
   @Override
-  public byte[] getBinary(String key, byte[] defaultValue)
-      throws ConfigurationServiceException {
+  public byte[] getBinary(String key, byte[] defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -132,8 +125,7 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Boolean</code> configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the <code>Boolean</code> configuration
    */
   @Override
@@ -158,15 +150,13 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Boolean</code> configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Boolean</code> configuration or the default value if the configuration value
-   * does not exist
+   *     does not exist
    */
   @Override
-  public boolean getBoolean(String key, boolean defaultValue)
-      throws ConfigurationServiceException {
+  public boolean getBoolean(String key, boolean defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -180,16 +170,15 @@ public class ConfigurationService
   /**
    * Retrieve the configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the configuration
    */
   @Override
   public Configuration getConfiguration(String key)
       throws ConfigurationNotFoundException, ConfigurationServiceException {
     try {
-      Optional<Configuration> configurationOptional = configurationRepository.findByKeyIgnoreCase(
-          key);
+      Optional<Configuration> configurationOptional =
+          configurationRepository.findByKeyIgnoreCase(key);
 
       if (configurationOptional.isEmpty()) {
         throw new ConfigurationNotFoundException(key);
@@ -199,8 +188,8 @@ public class ConfigurationService
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to retrieve the configuration with the key ("
-          + key + ")", e);
+      throw new ConfigurationServiceException(
+          "Failed to retrieve the configuration with the key (" + key + ")", e);
     }
   }
 
@@ -225,8 +214,7 @@ public class ConfigurationService
    * @return all the configurations
    */
   @Override
-  public List<Configuration> getConfigurations()
-      throws ConfigurationServiceException {
+  public List<Configuration> getConfigurations() throws ConfigurationServiceException {
     try {
       return configurationRepository.findAllByOrderByKeyDesc();
     } catch (Throwable e) {
@@ -237,8 +225,7 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Double</code> configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the <code>Double</code> configuration
    */
   @Override
@@ -263,15 +250,13 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Double</code> configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Double</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   @Override
-  public double getDouble(String key, double defaultValue)
-      throws ConfigurationServiceException {
+  public double getDouble(String key, double defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -286,7 +271,6 @@ public class ConfigurationService
    * Retrieve the filtered configuration summaries.
    *
    * @param filter the filter to apply to the keys for the configuration summaries
-   *
    * @return the filtered configuration summaries
    */
   @Override
@@ -308,7 +292,6 @@ public class ConfigurationService
    * Retrieve the filtered configurations.
    *
    * @param filter the filter to apply to the keys for the configurations
-   *
    * @return the configurations
    */
   @Override
@@ -329,8 +312,7 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Integer</code> configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the <code>Integer</code> configuration
    */
   @Override
@@ -355,15 +337,13 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Integer</code> configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Integer</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   @Override
-  public int getInteger(String key, int defaultValue)
-      throws ConfigurationServiceException {
+  public int getInteger(String key, int defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -377,8 +357,7 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Long</code> configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the <code>Long</code> configuration
    */
   @Override
@@ -403,15 +382,13 @@ public class ConfigurationService
   /**
    * Retrieve the <code>Long</code> configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Long</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   @Override
-  public long getLong(String key, long defaultValue)
-      throws ConfigurationServiceException {
+  public long getLong(String key, long defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -425,8 +402,7 @@ public class ConfigurationService
   /**
    * Retrieve the value for the <code>String</code> configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the value for the <code>String</code> configuration
    */
   @Override
@@ -451,15 +427,13 @@ public class ConfigurationService
   /**
    * Retrieve the value for the <code>String</code> configuration.
    *
-   * @param key          the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the value for the <code>String</code> configuration or the default value if the
-   * configuration does not exist
+   *     configuration does not exist
    */
   @Override
-  public String getString(String key, String defaultValue)
-      throws ConfigurationServiceException {
+  public String getString(String key, String defaultValue) throws ConfigurationServiceException {
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -473,19 +447,17 @@ public class ConfigurationService
   /**
    * Check if a configuration with the specified key exists.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
-   * @return <code>true</code> if a configuration with the specified key exists or
-   * <code>false</code> otherwise
+   * @param key the key uniquely identifying the configuration
+   * @return <code>true</code> if a configuration with the specified key exists or <code>false
+   *     </code> otherwise
    */
   @Override
-  public boolean keyExists(String key)
-      throws ConfigurationServiceException {
+  public boolean keyExists(String key) throws ConfigurationServiceException {
     try {
       return configurationRepository.existsByKeyIgnoreCase(key);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to checked whether the configuration key ("
-          + key + ") exists", e);
+      throw new ConfigurationServiceException(
+          "Failed to checked whether the configuration key (" + key + ") exists", e);
     }
   }
 
@@ -496,21 +468,20 @@ public class ConfigurationService
    */
   @Override
   @Transactional
-  public void setConfiguration(Configuration configuration)
-      throws ConfigurationServiceException {
+  public void setConfiguration(Configuration configuration) throws ConfigurationServiceException {
     try {
       configurationRepository.saveAndFlush(configuration);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to set the configuration with the key ("
-          + configuration.getKey() + ")", e);
+      throw new ConfigurationServiceException(
+          "Failed to set the configuration with the key (" + configuration.getKey() + ")", e);
     }
   }
 
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key         the key used to uniquely identify the configuration
-   * @param value       the value for the configuration
+   * @param key the key uniquely identifying the configuration
+   * @param value the value for the configuration
    * @param description the description for the configuration
    */
   @Override
@@ -530,8 +501,8 @@ public class ConfigurationService
 
       configurationRepository.save(new Configuration(key, stringValue, description));
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to set the configuration with the key ("
-          + key + ")", e);
+      throw new ConfigurationServiceException(
+          "Failed to set the configuration with the key (" + key + ")", e);
     }
   }
 }

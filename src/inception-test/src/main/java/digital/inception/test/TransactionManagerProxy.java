@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,31 +31,26 @@ import javax.transaction.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionManagerProxy</code> class provides a proxy that tracks the Java Transaction
- * (JTA) API transactions associated with the current thread and managed by a
- * <code>javax.transaction.TransactionManager</code> implementation.
+ * (JTA) API transactions associated with the current thread and managed by a <code>
+ * javax.transaction.TransactionManager</code> implementation.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused"})
-public class TransactionManagerProxy
-    implements TransactionManager {
+public class TransactionManagerProxy implements TransactionManager {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManagerProxy.class);
 
-  /**
-   * The stack traces for the active transactions associated with the current thread.
-   */
+  /** The stack traces for the active transactions associated with the current thread. */
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The JTA transaction manager.
-   */
+  /** The JTA transaction manager. */
   private TransactionManager transactionManager;
 
   /**
@@ -77,16 +72,15 @@ public class TransactionManagerProxy
   }
 
   @Override
-  public void begin()
-      throws NotSupportedException, SystemException {
+  public void begin() throws NotSupportedException, SystemException {
     try {
       transactionManager.begin();
     } finally {
       Transaction afterTransaction = getTransaction();
 
       if (afterTransaction != null) {
-        getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
-            .getStackTrace());
+        getActiveTransactionStackTraces()
+            .put(afterTransaction, Thread.currentThread().getStackTrace());
       }
     }
   }
@@ -94,7 +88,7 @@ public class TransactionManagerProxy
   @Override
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-      SecurityException, IllegalStateException, SystemException {
+          SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getTransaction();
 
     try {
@@ -109,14 +103,12 @@ public class TransactionManagerProxy
   }
 
   @Override
-  public int getStatus()
-      throws SystemException {
+  public int getStatus() throws SystemException {
     return transactionManager.getStatus();
   }
 
   @Override
-  public Transaction getTransaction()
-      throws SystemException {
+  public Transaction getTransaction() throws SystemException {
     return transactionManager.getTransaction();
   }
 
@@ -127,8 +119,7 @@ public class TransactionManagerProxy
   }
 
   @Override
-  public void rollback()
-      throws IllegalStateException, SecurityException, SystemException {
+  public void rollback() throws IllegalStateException, SecurityException, SystemException {
     Transaction beforeTransaction = getTransaction();
 
     try {
@@ -143,8 +134,7 @@ public class TransactionManagerProxy
   }
 
   @Override
-  public void setRollbackOnly()
-      throws IllegalStateException, SystemException {
+  public void setRollbackOnly() throws IllegalStateException, SystemException {
     /*
      * This check to confirm that we have a valid transaction was added to handle the issue
      * where the Hibernate JPA implementation would try to rollback a transaction even if one
@@ -156,14 +146,12 @@ public class TransactionManagerProxy
   }
 
   @Override
-  public void setTransactionTimeout(int i)
-      throws SystemException {
+  public void setTransactionTimeout(int i) throws SystemException {
     transactionManager.setTransactionTimeout(i);
   }
 
   @Override
-  public Transaction suspend()
-      throws SystemException {
+  public Transaction suspend() throws SystemException {
     return transactionManager.suspend();
   }
 }

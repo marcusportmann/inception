@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Organization;
@@ -24,26 +24,21 @@ import java.io.Serializable;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganizationData</code> class holds the information for an organization.
  *
  * @author Marcus Portmann
  */
-public class OrganizationData
-    implements Serializable {
+public class OrganizationData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   private UUID id;
 
-  /**
-   * The name of the organization.
-   */
+  /** The name of the organization. */
   private String name;
 
   /**
@@ -54,9 +49,8 @@ public class OrganizationData
   OrganizationData(Element element) {
     try {
       this.id = UUID.fromString(element.getChildText("Id"));
-      this.name = StringUtils.isEmpty(element.getChildText("Name"))
-          ? ""
-          : element.getChildText("Name");
+      this.name =
+          StringUtils.isEmpty(element.getChildText("Name")) ? "" : element.getChildText("Name");
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the organization data from the WBXML", e);
     }
@@ -73,18 +67,18 @@ public class OrganizationData
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the organization.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the organization
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
    */
   public void setId(UUID id) {
     this.id = id;
@@ -117,9 +111,7 @@ public class OrganizationData
     Element organizationElement = new Element("Organization");
 
     organizationElement.addContent(new Element("Id", id.toString()));
-    organizationElement.addContent(new Element("Name", StringUtils.isEmpty(name)
-        ? ""
-        : name));
+    organizationElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
 
     return organizationElement;
   }

@@ -16,10 +16,10 @@
 
 package digital.inception.validation;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ValidationErrorAttribute</code> attribute represents an attribute associated with the
@@ -35,41 +35,36 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ValidationErrorAttribute")
+@Schema(description = "ValidationErrorAttribute")
 @JsonPropertyOrder({"name", "value"})
-@XmlRootElement(name = "ValidationErrorAttribute",
+@XmlRootElement(
+    name = "ValidationErrorAttribute",
     namespace = "http://validation.inception.digital")
-@XmlType(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital",
+@XmlType(
+    name = "ValidationErrorAttribute",
+    namespace = "http://validation.inception.digital",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ValidationErrorAttribute
-    implements Serializable, Cloneable {
+public class ValidationErrorAttribute implements Serializable, Cloneable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The name for the validation error attribute.
-   */
+  /** The name for the validation error attribute. */
   @XmlElement(name = "Name", required = true)
   private String name;
 
-  /**
-   * The value for the validation error attribute.
-   */
+  /** The value for the validation error attribute. */
   @XmlElement(name = "Value")
   private String value;
 
-  /**
-   * Constructs a new <code>ValidationErrorAttribute</code>.
-   */
-  public ValidationErrorAttribute() {
-  }
+  /** Constructs a new <code>ValidationErrorAttribute</code>. */
+  public ValidationErrorAttribute() {}
 
   /**
    * Constructs a new <code>ValidationErrorAttribute</code>.
    *
-   * @param name  the name for the validation error attribute
+   * @param name the name for the validation error attribute
    * @param value the value for the validation error attribute
    */
   public ValidationErrorAttribute(String name, String value) {
@@ -114,8 +109,7 @@ public class ValidationErrorAttribute
   }
 
   @Override
-  protected Object clone()
-      throws CloneNotSupportedException {
+  protected Object clone() throws CloneNotSupportedException {
     return new ValidationErrorAttribute(name, value);
   }
 }

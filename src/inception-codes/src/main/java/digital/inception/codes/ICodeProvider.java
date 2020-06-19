@@ -16,7 +16,7 @@
 
 package digital.inception.codes;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,31 +33,26 @@ public interface ICodeProvider {
   /**
    * Returns whether the code provider supports the code category.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   * otherwise
+   *     otherwise
    */
-  boolean codeCategoryExists(String codeCategoryId)
-      throws CodeProviderException;
+  boolean codeCategoryExists(String codeCategoryId) throws CodeProviderException;
 
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param codeId         the ID used to uniquely identify the code
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeId the ID uniquely identifying the code
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
-  boolean codeExists(String codeCategoryId, String codeId)
-      throws CodeProviderException;
+  boolean codeExists(String codeCategoryId, String codeId) throws CodeProviderException;
 
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param codeId         the ID uniquely identifying the code
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeId the ID uniquely identifying the code
    * @return the code
    */
   Code getCode(String codeCategoryId, String codeId)
@@ -68,14 +63,12 @@ public interface ICodeProvider {
    *
    * @return all the code categories for the code provider
    */
-  List<CodeCategory> getCodeCategories()
-      throws CodeProviderException;
+  List<CodeCategory> getCodeCategories() throws CodeProviderException;
 
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return the code category
    */
   CodeCategory getCodeCategory(String codeCategoryId)
@@ -84,8 +77,7 @@ public interface ICodeProvider {
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return the date and time the code category was last updated
    */
   LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
@@ -94,8 +86,7 @@ public interface ICodeProvider {
   /**
    * Retrieve the name of the code category.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return the name of the code category
    */
   String getCodeCategoryName(String codeCategoryId)
@@ -104,9 +95,8 @@ public interface ICodeProvider {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param codeId         the ID uniquely identifying the code
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeId the ID uniquely identifying the code
    * @return the name of code
    */
   String getCodeName(String codeCategoryId, String codeId)
@@ -114,13 +104,12 @@ public interface ICodeProvider {
 
   /**
    * Retrieve the codes for the code category.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   *
+   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategory(String codeCategoryId)
@@ -128,29 +117,27 @@ public interface ICodeProvider {
 
   /**
    * Retrieve the codes for the code category using the specified parameters.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the codes from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   *
+   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param parameters     the parameters
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param parameters the parameters
    * @return the codes for the code category
    */
-  List<Code> getCodesForCodeCategoryWithParameters(String codeCategoryId, Map<String,
-      String> parameters)
+  List<Code> getCodesForCodeCategoryWithParameters(
+      String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the XML or JSON data for the code category.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the data from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
    * @return the XML or JSON data for the code category
    */
   String getDataForCodeCategory(String codeCategoryId)
@@ -158,14 +145,13 @@ public interface ICodeProvider {
 
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
-   * <p/>
-   * NOTE: This will also attempt to retrieve the data from the appropriate code provider that has
-   * been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
    * configuration file.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
-   * @param parameters     the parameters
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param parameters the parameters
    * @return the XML or JSON data for the code category
    */
   String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String, String> parameters)

@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>DuplicateJobException</code> is thrown to indicate that a security operation failed as a
  * result of a duplicate job.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.CONFLICT, reason = "A job with the specified ID already exists")
-@WebFault(name = "DuplicateJobException", targetNamespace = "http://scheduler.inception.digital",
+@WebFault(
+    name = "DuplicateJobException",
+    targetNamespace = "http://scheduler.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -47,7 +50,7 @@ public class DuplicateJobException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateJobException</code>.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the ID uniquely identifying the job
    */
   public DuplicateJobException(String jobId) {
     super("DuplicateJobError", "A job with the ID (" + jobId + ") already exists");

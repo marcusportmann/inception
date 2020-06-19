@@ -16,14 +16,14 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent a mobile device to
@@ -35,14 +35,12 @@ import java.util.UUID;
 public class MessagePartDownloadRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
+   * The Universally Unique Identifier (UUID) uniquely identifying the device the message part
    * download request originated from.
    */
   private UUID deviceId;
 
-  /**
-   * The username identifying the user whose message parts should be downloaded.
-   */
+  /** The username identifying the user whose message parts should be downloaded. */
   private String username;
 
   /**
@@ -61,8 +59,8 @@ public class MessagePartDownloadRequest {
   /**
    * Constructs a new <code>MessagePartDownloadRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message part download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message part download request originated from
    * @param username the username identifying the user whose message parts should be downloaded
    */
   public MessagePartDownloadRequest(UUID deviceId, String username) {
@@ -75,9 +73,8 @@ public class MessagePartDownloadRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message part download request
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -89,22 +86,22 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message part download request originated from.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * part download request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message part download request originated from
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   *     part download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * part download request originated from.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message part
+   * download request originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message part download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message part download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -135,8 +132,8 @@ public class MessagePartDownloadRequest {
    */
   @Override
   public String toString() {
-    return String.format("<MessagePartDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
-        username);
+    return String.format(
+        "<MessagePartDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId, username);
   }
 
   /**

@@ -16,16 +16,14 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <code>CodeCategorySummaryRepository</code> interface declares the repository for the
- * <code>CodeCategorySummary</code> domain type.
+ * The <code>CodeCategorySummaryRepository</code> interface declares the repository for the <code>
+ * CodeCategorySummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {
-
-}
+public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {}

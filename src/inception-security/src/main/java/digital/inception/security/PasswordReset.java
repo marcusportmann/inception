@@ -16,14 +16,13 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -41,34 +40,32 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordReset</code> class holds the information for a password rest.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "PasswordReset")
+@Schema(description = "PasswordReset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"username", "requested", "completed", "expired", "status",
-    "securityCodeHash"})
+@JsonPropertyOrder({"username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
-@XmlType(name = "PasswordReset", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "PasswordReset",
+    namespace = "http://security.inception.digital",
     propOrder = {"username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 @Entity
 @Table(schema = "security", name = "password_resets")
 @IdClass(PasswordResetId.class)
-public class PasswordReset
-    implements Serializable {
+public class PasswordReset implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the password reset was completed.
-   */
-  @ApiModelProperty(value = "The date and time the password reset was completed")
+  /** The date and time the password reset was completed. */
+  @Schema(description = "The date and time the password reset was completed")
   @JsonProperty
   @XmlElement(name = "Completed")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -76,10 +73,8 @@ public class PasswordReset
   @Column(name = "completed")
   private LocalDateTime completed;
 
-  /**
-   * The date and time the password reset expired.
-   */
-  @ApiModelProperty(value = "The date and time the password reset expired")
+  /** The date and time the password reset expired. */
+  @Schema(description = "The date and time the password reset expired")
   @JsonProperty
   @XmlElement(name = "Expired")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -87,10 +82,8 @@ public class PasswordReset
   @Column(name = "expired")
   private LocalDateTime expired;
 
-  /**
-   * The date and time the password reset was requested.
-   */
-  @ApiModelProperty(value = "The date and time the password reset was requested")
+  /** The date and time the password reset was requested. */
+  @Schema(description = "The date and time the password reset was requested")
   @JsonProperty
   @XmlElement(name = "Requested")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -99,10 +92,8 @@ public class PasswordReset
   @Column(name = "requested", nullable = false)
   private LocalDateTime requested;
 
-  /**
-   * The security code hash.
-   */
-  @ApiModelProperty(value = "The security code hash", required = true)
+  /** The security code hash. */
+  @Schema(description = "The security code hash", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SecurityCodeHash", required = true)
   @NotNull
@@ -110,20 +101,17 @@ public class PasswordReset
   @Column(name = "security_code_hash", nullable = false, length = 100)
   private String securityCodeHash;
 
-  /**
-   * The status of the password reset.
-   */
-  @ApiModelProperty(value = "The status of the password reset", required = true)
+  /** The status of the password reset. */
+  @Schema(description = "The status of the password reset", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Reason", required = true)
   @NotNull
   @Column(name = "status", nullable = false)
   private PasswordResetStatus status;
 
-  /**
-   * The username for the user associated with the password reset.
-   */
-  @ApiModelProperty(value = "The username for the user associated with the password reset",
+  /** The username for the user associated with the password reset. */
+  @Schema(
+      description = "The username for the user associated with the password reset",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
@@ -133,16 +121,13 @@ public class PasswordReset
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>PasswordReset</code>.
-   */
-  public PasswordReset() {
-  }
+  /** Constructs a new <code>PasswordReset</code>. */
+  public PasswordReset() {}
 
   /**
    * Constructs a new <code>PasswordReset</code>.
    *
-   * @param username         the username for the user associated with the password reset
+   * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
    */
   public PasswordReset(String username, String securityCodeHash) {

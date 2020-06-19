@@ -16,7 +16,7 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -26,20 +26,17 @@ import java.io.Serializable;
 /**
  * The <code>CDATA</code> class stores the data for a CDATA (Character Data) content type in a WBXML
  * document.
- * <p/>
- * This content type is used to store a text string.
+ *
+ * <p>This content type is used to store a text string.
  *
  * @author Marcus Portmann
  */
-public class CDATA
-    implements Serializable, Content {
+public class CDATA implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
   private String text;
 
-  /**
-   * Constructs a new empty <code>CDATA</code>.
-   */
+  /** Constructs a new empty <code>CDATA</code>. */
   public CDATA() {
     text = "";
   }
@@ -83,7 +80,7 @@ public class CDATA
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out    the <code>OuputStream</code> to output the content to
+   * @param out the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {
@@ -99,7 +96,6 @@ public class CDATA
 
   /**
    * @return the string representation of the <code>CDATA</code> instance
-   *
    * @see Object#toString()
    */
   @Override

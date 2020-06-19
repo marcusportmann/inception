@@ -16,7 +16,7 @@
 
 package digital.inception.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -40,7 +40,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PersistenceConfiguration</code> class provides the Spring configuration for the
@@ -52,14 +52,10 @@ import org.springframework.util.StringUtils;
 @EnableJpaRepositories
 public class PersistenceConfiguration {
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
-  /**
-   * The optional comma-delimited packages on the classpath to scan for JPA entities.
-   */
+  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
   @Value("${application.database.packagesToScanForEntities:#{null}}")
   private String packagesToScanForEntities;
 
@@ -96,14 +92,12 @@ public class PersistenceConfiguration {
 
         switch (metaData.getDatabaseProductName()) {
           case "H2":
-
             jpaVendorAdapter.setDatabase(Database.H2);
             jpaVendorAdapter.setShowSql(true);
 
             break;
 
           case "Microsoft SQL Server":
-
             jpaVendorAdapter.setDatabase(Database.SQL_SERVER);
             jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.SQLServer2012Dialect");
             jpaVendorAdapter.setShowSql(false);
@@ -111,7 +105,6 @@ public class PersistenceConfiguration {
             break;
 
           default:
-
             jpaVendorAdapter.setDatabase(Database.DEFAULT);
             jpaVendorAdapter.setShowSql(false);
 
@@ -123,18 +116,19 @@ public class PersistenceConfiguration {
       entityManagerFactoryBean.setJtaDataSource(dataSource);
 
       // TODO: REMOVE THIS -- MARCUS
-      entityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-          packagesToScanForEntities()));
+      entityManagerFactoryBean.setPackagesToScan(
+          StringUtils.toStringArray(packagesToScanForEntities()));
       entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-      PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
-          PlatformTransactionManager.class);
+      PlatformTransactionManager platformTransactionManager =
+          applicationContext.getBean(PlatformTransactionManager.class);
 
       if (platformTransactionManager instanceof JtaTransactionManager) {
         Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
-        jpaPropertyMap.put("hibernate.transaction.jta.platform", new JtaPlatform(
-            ((JtaTransactionManager) platformTransactionManager)));
+        jpaPropertyMap.put(
+            "hibernate.transaction.jta.platform",
+            new JtaPlatform(((JtaTransactionManager) platformTransactionManager)));
       }
 
       return entityManagerFactoryBean;

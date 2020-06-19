@@ -16,16 +16,16 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplateContentType</code> enumeration defines the possible content types for mail
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "MailTemplateContentType")
+@Schema(description = "MailTemplateContentType")
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "http://mail.inception.digital")
 @SuppressWarnings("unused")
@@ -57,7 +57,6 @@ public enum MailTemplateContentType {
    * Returns the mail template content type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the mail template content type
-   *
    * @return the mail template content type given by the specified numeric code value
    */
   @JsonCreator
@@ -74,7 +73,8 @@ public enum MailTemplateContentType {
 
       default:
         throw new RuntimeException(
-            "Failed to determine the mail template content type with the invalid code (" + code
+            "Failed to determine the mail template content type with the invalid code ("
+                + code
                 + ")");
     }
   }
@@ -103,7 +103,7 @@ public enum MailTemplateContentType {
    * content type.
    *
    * @return the <code>String</code> representation of the numeric code for the mail template
-   * content type
+   *     content type
    */
   public String getCodeAsString() {
     return String.valueOf(code);

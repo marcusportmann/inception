@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JobNotFoundException</code> exception is thrown to indicate an error condition as a
  * result of a job that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The job could not be found")
-@WebFault(name = "JobNotFoundException", targetNamespace = "http://scheduler.inception.digital",
+@WebFault(
+    name = "JobNotFoundException",
+    targetNamespace = "http://scheduler.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class JobNotFoundException extends ServiceException {
@@ -46,7 +49,7 @@ public class JobNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>JobNotFoundException</code>.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the ID uniquely identifying the job
    */
   public JobNotFoundException(String jobId) {
     super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");

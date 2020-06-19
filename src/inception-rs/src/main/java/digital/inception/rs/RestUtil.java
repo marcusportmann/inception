@@ -16,12 +16,12 @@
 
 package digital.inception.rs;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.StringWriter;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestUtil</code> class provides utility methods that are useful when working with
@@ -37,7 +37,6 @@ public class RestUtil {
    * JSON text, a string cannot contain a control character or an unescaped quote or backslash.
    *
    * @param string a String
-   *
    * @return a String correctly formatted for insertion in a JSON text
    */
   public static String quote(String string) {
@@ -118,6 +117,5 @@ public class RestUtil {
     sw.write('"');
 
     return sw.getBuffer().toString();
-
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,56 +25,59 @@ import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDetails</code> class stores the details for a user.
  *
  * @author Marcus Portmann
  */
-public class UserDetails
-    implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
-  /**
-   * The authorities granted to the user.
-   */
+  /** The authorities granted to the user. */
   private List<GrantedAuthority> authorities;
 
-  /**
-   * The user.
-   */
+  /** The user. */
   private User user;
 
   /**
    * Constructs a new <code>UserDetails</code>.
    *
-   * @param user             the user
-   * @param roleCodes        the codes for the roles that the user has been assigned
-   * @param functionCodes    the function codes for the user
-   * @param organizationIds  the Universally Unique Identifiers (UUIDs) used to uniquely identify
-   *                         the organizations the user is associated with
+   * @param user the user
+   * @param roleCodes the codes for the roles that the user has been assigned
+   * @param functionCodes the function codes for the user
+   * @param organizationIds the Universally Unique Identifiers (UUIDs) uniquely identifying the
+   *     organizations the user is associated with
    * @param userDirectoryIds the list of Universally Unique Identifiers (UUIDs) used to uniquely
-   *                         identify the user directories the user is associated with as a result
-   *                         of being associated with one or more organizations
+   *     identify the user directories the user is associated with as a result of being associated
+   *     with one or more organizations
    */
-  UserDetails(User user, List<String> roleCodes, List<String> functionCodes,
-      List<UUID> organizationIds, List<UUID> userDirectoryIds) {
+  UserDetails(
+      User user,
+      List<String> roleCodes,
+      List<String> functionCodes,
+      List<UUID> organizationIds,
+      List<UUID> userDirectoryIds) {
     this.user = user;
 
     // Build the list of granted authorities
     this.authorities = new ArrayList<>();
 
-    organizationIds.stream().map(organizationId -> new SimpleGrantedAuthority("ORGANIZATION_"
-        + organizationId)).forEach(authorities::add);
+    organizationIds.stream()
+        .map(organizationId -> new SimpleGrantedAuthority("ORGANIZATION_" + organizationId))
+        .forEach(authorities::add);
 
-    userDirectoryIds.stream().map(userDirectoryId -> new SimpleGrantedAuthority("USER_DIRECTORY_"
-        + userDirectoryId)).forEach(authorities::add);
+    userDirectoryIds.stream()
+        .map(userDirectoryId -> new SimpleGrantedAuthority("USER_DIRECTORY_" + userDirectoryId))
+        .forEach(authorities::add);
 
-    functionCodes.stream().map(functionCode -> new SimpleGrantedAuthority("FUNCTION_"
-        + functionCode)).forEach(authorities::add);
+    functionCodes.stream()
+        .map(functionCode -> new SimpleGrantedAuthority("FUNCTION_" + functionCode))
+        .forEach(authorities::add);
 
-    roleCodes.stream().map(roleCode -> new SimpleGrantedAuthority("ROLE_" + roleCode)).forEach(
-        authorities::add);
+    roleCodes.stream()
+        .map(roleCode -> new SimpleGrantedAuthority("ROLE_" + roleCode))
+        .forEach(authorities::add);
   }
 
   /**
@@ -119,8 +122,7 @@ public class UserDetails
   /**
    * Returns whether the user's account has expired.
    *
-   * @return <code>true</code> if the user's account has NOT expired or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the user's account has NOT expired or <code>false</code> otherwise
    */
   @Override
   public boolean isAccountNonExpired() {
@@ -141,7 +143,7 @@ public class UserDetails
    * Returns whether the user's credentials have expired.
    *
    * @return <code>true</code> if the user's credentials have NOT expired or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   @Override
   public boolean isCredentialsNonExpired() {

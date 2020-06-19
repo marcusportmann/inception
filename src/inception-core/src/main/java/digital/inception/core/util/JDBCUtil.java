@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -35,7 +35,7 @@ import java.util.StringTokenizer;
 import javax.sql.DataSource;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.
@@ -45,11 +45,8 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JDBCUtil {
 
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private JDBCUtil() {
-  }
+  /** Private default constructor to enforce utility pattern. */
+  private JDBCUtil() {}
 
   /**
    * Close the connection.
@@ -100,12 +97,10 @@ public class JDBCUtil {
    * Execute the SQL statement using the database connection.
    *
    * @param connection the database connection to use
-   * @param sql        the SQL statement to execute
-   *
+   * @param sql the SQL statement to execute
    * @return the row count
    */
-  public static int executeStatement(Connection connection, String sql)
-      throws SQLException {
+  public static int executeStatement(Connection connection, String sql) throws SQLException {
     try (Statement statement = connection.createStatement()) {
       return statement.executeUpdate(sql);
     } catch (Throwable e) {
@@ -117,9 +112,8 @@ public class JDBCUtil {
    * Execute the SQL statements in the file with the specified resource path using the database
    * connection.
    *
-   * @param connection   the database connection to use
+   * @param connection the database connection to use
    * @param resourcePath the resource path to the file containing the SQL statements
-   *
    * @return the number of SQL statements successfully executed
    */
   public static int executeStatements(Connection connection, String resourcePath)
@@ -127,8 +121,8 @@ public class JDBCUtil {
     int numberOfStatementsExecuted = 0;
 
     try {
-      List<String> sqlStatements = loadSQL(Thread.currentThread().getContextClassLoader()
-          .getResource(resourcePath));
+      List<String> sqlStatements =
+          loadSQL(Thread.currentThread().getContextClassLoader().getResource(resourcePath));
 
       for (String sqlStatement : sqlStatements) {
         System.out.println("EXECUTING: " + sqlStatement);
@@ -139,8 +133,8 @@ public class JDBCUtil {
 
       return numberOfStatementsExecuted;
     } catch (Throwable e) {
-      throw new SQLException("Failed to execute the SQL statements in the resource file ("
-          + resourcePath + ")", e);
+      throw new SQLException(
+          "Failed to execute the SQL statements in the resource file (" + resourcePath + ")", e);
     }
   }
 
@@ -148,11 +142,9 @@ public class JDBCUtil {
    * Retrieve the schema separator for the database associated with the specified data source.
    *
    * @param dataSource the data source
-   *
    * @return the schema separator for the database associated with the specified data source
    */
-  public static String getSchemaSeparator(DataSource dataSource)
-      throws SQLException {
+  public static String getSchemaSeparator(DataSource dataSource) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();
 
@@ -171,22 +163,18 @@ public class JDBCUtil {
    * Is the database associated with the specified data source an in-memory H2 database.
    *
    * @param dataSource the data source
-   *
    * @return <code>true</code> if the database associated with the specified data source is an
-   * in-memory H2 database or <code>false</code> otherwise
+   *     in-memory H2 database or <code>false</code> otherwise
    */
-  public static boolean isInMemoryH2Database(DataSource dataSource)
-      throws SQLException {
+  public static boolean isInMemoryH2Database(DataSource dataSource) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();
 
       switch (metaData.getDatabaseProductName()) {
         case "H2":
-
           return true;
 
         default:
-
           return false;
       }
     }
@@ -196,11 +184,9 @@ public class JDBCUtil {
    * Load the SQL statements from the specified URL.
    *
    * @param url the URL
-   *
    * @return the SQL statements loaded from the specified URL
    */
-  public static List<String> loadSQL(URL url)
-      throws IOException {
+  public static List<String> loadSQL(URL url) throws IOException {
     List<String> sqlStatements = new ArrayList<>();
 
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
@@ -286,8 +272,10 @@ public class JDBCUtil {
       }
 
       if ((multiLineBuffer != null) && (!StringUtils.isEmpty(multiLineBuffer.toString()))) {
-        throw new IOException("Failed to process the last SQL statement from the file ("
-            + url.getPath() + ") since it was not terminated by a ';'");
+        throw new IOException(
+            "Failed to process the last SQL statement from the file ("
+                + url.getPath()
+                + ") since it was not terminated by a ';'");
       }
 
       return sqlStatements;
@@ -298,13 +286,11 @@ public class JDBCUtil {
    * Read the blob associated with the column with the specified index from the specified result
    * set.
    *
-   * @param rs    the result set
+   * @param rs the result set
    * @param index the index of the column containing the blob
-   *
    * @return the binary data for the BLOB
    */
-  public static byte[] readBlob(ResultSet rs, int index)
-      throws SQLException {
+  public static byte[] readBlob(ResultSet rs, int index) throws SQLException {
     try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
         BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(index))) {
       int noBytes;
@@ -316,8 +302,8 @@ public class JDBCUtil {
 
       return bos.toByteArray();
     } catch (IOException e) {
-      throw new SQLException("An IO error occurred while reading the BLOB from the database: "
-          + e.getMessage());
+      throw new SQLException(
+          "An IO error occurred while reading the BLOB from the database: " + e.getMessage());
     }
   }
 
@@ -341,9 +327,8 @@ public class JDBCUtil {
    * connection.
    *
    * @param connection the database connection to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name
    * @return true if the schema exists or false otherwise
    */
   @SuppressWarnings("resource")
@@ -357,12 +342,10 @@ public class JDBCUtil {
 
     try (ResultSet rs = metaData.getSchemas()) {
       while (rs.next()) {
-        String tmpCatalog = StringUtils.isEmpty(rs.getString("TABLE_CATALOG"))
-            ? ""
-            : rs.getString("TABLE_CATALOG");
-        String tmpSchema = StringUtils.isEmpty(rs.getString("TABLE_SCHEM"))
-            ? ""
-            : rs.getString("TABLE_SCHEM");
+        String tmpCatalog =
+            StringUtils.isEmpty(rs.getString("TABLE_CATALOG")) ? "" : rs.getString("TABLE_CATALOG");
+        String tmpSchema =
+            StringUtils.isEmpty(rs.getString("TABLE_SCHEM")) ? "" : rs.getString("TABLE_SCHEM");
 
         if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog)) {
           if (tmpSchema.equalsIgnoreCase(schema)) {
@@ -373,7 +356,6 @@ public class JDBCUtil {
     }
 
     return false;
-
   }
 
   /**
@@ -381,9 +363,8 @@ public class JDBCUtil {
    * data source.
    *
    * @param dataSource the data source to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name
    * @return true if the schema exists or false otherwise
    */
   @SuppressWarnings("resource")
@@ -401,13 +382,12 @@ public class JDBCUtil {
   /**
    * Close and release all connections that are currently stored in the connection pool associated
    * with the data source.
-   * <p/>
-   * The HSQLDB database associated with the data source will also be shutdown.
+   *
+   * <p>The HSQLDB database associated with the data source will also be shutdown.
    *
    * @param connection the HSQLDB database connection
    */
-  public static void shutdownHsqlDatabase(Connection connection)
-      throws SQLException {
+  public static void shutdownHsqlDatabase(Connection connection) throws SQLException {
     try (Statement statement = connection.createStatement()) {
       // language=H2
       statement.executeUpdate("SHUTDOWN");
@@ -419,16 +399,14 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param connection the database connection to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name or <code>null</code> if a schema should not be used
-   * @param table      the name of the table
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name or <code>null</code> if a schema should not be used
+   * @param table the name of the table
    * @return true if the table exists or false otherwise
    */
   @SuppressWarnings("resource")
-  public static boolean tableExists(Connection connection, String catalog, String schema,
-      String table)
-      throws SQLException {
+  public static boolean tableExists(
+      Connection connection, String catalog, String schema, String table) throws SQLException {
     if (table == null) {
       throw new SQLException("Failed to check whether the table (null) exists");
     }
@@ -440,11 +418,10 @@ public class JDBCUtil {
 
     DatabaseMetaData metaData = connection.getMetaData();
 
-    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[]{"TABLE"})) {
+    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[] {"TABLE"})) {
       while (rs.next()) {
-        String tmpTable = StringUtils.isEmpty(rs.getString("TABLE_NAME"))
-            ? ""
-            : rs.getString("TABLE_NAME");
+        String tmpTable =
+            StringUtils.isEmpty(rs.getString("TABLE_NAME")) ? "" : rs.getString("TABLE_NAME");
 
         if (table.equals(tmpTable)) {
           return true;
@@ -460,16 +437,14 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param dataSource the data source to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name or <code>null</code> if a schema should not be used
-   * @param table      the name of the table
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name or <code>null</code> if a schema should not be used
+   * @param table the name of the table
    * @return true if the table exists or false otherwise
    */
   @SuppressWarnings("resource")
-  public static boolean tableExists(DataSource dataSource, String catalog, String schema,
-      String table)
-      throws SQLException {
+  public static boolean tableExists(
+      DataSource dataSource, String catalog, String schema, String table) throws SQLException {
     if (table == null) {
       throw new SQLException("Failed to check whether the table (null) exists");
     }

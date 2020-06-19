@@ -61,14 +61,14 @@ export class Users {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new Users.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    * @param users           The users.
    * @param total           The total number of users.

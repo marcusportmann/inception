@@ -16,13 +16,12 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +35,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
@@ -44,27 +43,24 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ReportDefinitionSummary")
+@Schema(description = "ReportDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital")
-@XmlType(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital",
+@XmlType(
+    name = "ReportDefinitionSummary",
+    namespace = "http://reporting.inception.digital",
     propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reporting", name = "report_definitions")
 @SuppressWarnings({"unused"})
-public class ReportDefinitionSummary
-    implements Serializable {
+public class ReportDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the report definition.
-   */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the report definition",
-      required = true)
+  /** The ID uniquely identifying the report definition. */
+  @Schema(description = "The ID uniquely identifying the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -72,10 +68,8 @@ public class ReportDefinitionSummary
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the report definition.
-   */
-  @ApiModelProperty(value = "The name of the report definition", required = true)
+  /** The name of the report definition. */
+  @Schema(description = "The name of the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -83,17 +77,14 @@ public class ReportDefinitionSummary
   @Column(name = "name", nullable = false)
   private String name;
 
-  /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
-   */
+  /** Constructs a new <code>ReportDefinitionSummary</code>. */
   @SuppressWarnings("unused")
-  public ReportDefinitionSummary() {
-  }
+  public ReportDefinitionSummary() {}
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id   the ID used to uniquely identify the report definition
+   * @param id the ID uniquely identifying the report definition
    * @param name the name of the report definition
    */
   ReportDefinitionSummary(String id, String name) {
@@ -105,9 +96,8 @@ public class ReportDefinitionSummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -129,9 +119,9 @@ public class ReportDefinitionSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the ID uniquely identifying the report definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the ID uniquely identifying the report definition
    */
   public String getId() {
     return id;
@@ -153,9 +143,7 @@ public class ReportDefinitionSummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**

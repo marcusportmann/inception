@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
@@ -33,17 +33,15 @@ public interface IErrorService {
    * Create the entry for the error report in the database.
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
+   *     error report
    */
-  void createErrorReport(ErrorReport errorReport)
-      throws ErrorServiceException;
+  void createErrorReport(ErrorReport errorReport) throws ErrorServiceException;
 
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
+   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   *     report
    * @return the error report or <code>null</code> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
@@ -52,11 +50,10 @@ public interface IErrorService {
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
+   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   *     report
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   * found
+   *     found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
       throws ErrorReportNotFoundException, ErrorServiceException;
@@ -65,8 +62,7 @@ public interface IErrorService {
    * Retrieve the summaries for the most recent error reports.
    *
    * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
-   *                               to retrieve
-   *
+   *     to retrieve
    * @return the summaries for the most recent error reports
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
@@ -77,6 +73,5 @@ public interface IErrorService {
    *
    * @return the total number of error reports
    */
-  long getNumberOfErrorReports()
-      throws ErrorServiceException;
+  long getNumberOfErrorReports() throws ErrorServiceException;
 }

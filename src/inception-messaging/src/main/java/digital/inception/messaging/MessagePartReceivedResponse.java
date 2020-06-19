@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -24,7 +24,7 @@ import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePartReceivedResponse</code> class represents the response to a request sent by a
@@ -35,14 +35,10 @@ import java.io.PrintWriter;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagePartReceivedResponse {
 
-  /**
-   * The error code returned to indicate an invalid request.
-   */
+  /** The error code returned to indicate an invalid request. */
   public static final int ERROR_INVALID_REQUEST = -1;
 
-  /**
-   * The error code returned to indicate an unknown error.
-   */
+  /** The error code returned to indicate an unknown error. */
   public static final int ERROR_UNKNOWN = -2;
 
   /**
@@ -92,9 +88,9 @@ public class MessagePartReceivedResponse {
   /**
    * Constructs a new <code>MessagePartReceivedResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message part download
-   *               request
+   *     request
    */
   public MessagePartReceivedResponse(long code, String detail) {
     this.code = code;
@@ -104,10 +100,10 @@ public class MessagePartReceivedResponse {
   /**
    * Constructs a new <code>MessagePartReceivedResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message part received
-   *               request
-   * @param cause  the exception that resulted from processing the message part received request
+   *     request
+   * @param cause the exception that resulted from processing the message part received request
    */
   public MessagePartReceivedResponse(long code, String detail, Throwable cause) {
     this.code = code;
@@ -123,8 +119,9 @@ public class MessagePartReceivedResponse {
 
         exception = baos.toString();
       } catch (Throwable e) {
-        exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
-            e.getMessage());
+        exception =
+            String.format(
+                "Unable to dump the stack for the exception (%s): %s", cause, e.getMessage());
       }
     }
   }
@@ -134,9 +131,8 @@ public class MessagePartReceivedResponse {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message part received response
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -170,7 +166,7 @@ public class MessagePartReceivedResponse {
    * request.
    *
    * @return the user-friendly text description of the result of processing the message part
-   * received request
+   *     received request
    */
   public String getDetail() {
     return detail;
@@ -181,7 +177,7 @@ public class MessagePartReceivedResponse {
    * request.
    *
    * @param detail the user-friendly text description of the result of processing the message part
-   *               download request
+   *     download request
    */
   public void setDetail(String detail) {
     this.detail = detail;
@@ -192,7 +188,7 @@ public class MessagePartReceivedResponse {
    * part received request.
    *
    * @return the flattened information for the exception that resulted from processing the message
-   * part received request
+   *     part received request
    */
   public String getException() {
     return exception;
@@ -203,7 +199,7 @@ public class MessagePartReceivedResponse {
    * download request.
    *
    * @param exception the flattened information for the exception that resulted from processing the
-   *                  message part download request
+   *     message part download request
    */
   public void setException(String exception) {
     this.exception = exception;

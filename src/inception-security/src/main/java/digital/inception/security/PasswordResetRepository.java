@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,19 +25,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>PasswordResetRepository</code> interface declares the repository for the
- * <code>PasswordReset</code> domain type.
+ * The <code>PasswordResetRepository</code> interface declares the repository for the <code>
+ * PasswordReset</code> domain type.
  *
  * @author Marcus Portmann
  */
 public interface PasswordResetRepository extends JpaRepository<PasswordReset, PasswordResetId> {
 
   @Modifying
-  @Query("update PasswordReset pr set pr.expired = current_timestamp, pr.status = 3 "
-      + "where pr.status = 1 and pr.requested < :requestedBefore")
+  @Query(
+      "update PasswordReset pr set pr.expired = current_timestamp, pr.status = 3 "
+          + "where pr.status = 1 and pr.requested < :requestedBefore")
   void expirePasswordResets(@Param("requestedBefore") LocalDateTime requestedBefore);
 
   List<PasswordReset> findAllByUsernameAndStatus(String username, PasswordResetStatus status);

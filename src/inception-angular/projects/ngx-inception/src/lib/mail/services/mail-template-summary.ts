@@ -29,7 +29,7 @@ export class MailTemplateSummary {
   contentType: MailTemplateContentType;
 
   /**
-   * The ID used to uniquely identify the mail template.
+   * The ID uniquely identifying the mail template.
    */
   id: string;
 
@@ -41,7 +41,7 @@ export class MailTemplateSummary {
   /**
    * Constructs a new MailTemplateSummary.
    *
-   * @param id          The ID used to uniquely identify the mail template.
+   * @param id          The ID uniquely identifying the mail template.
    * @param name        The name of the mail template.
    * @param contentType The content type for the mail template.
    */

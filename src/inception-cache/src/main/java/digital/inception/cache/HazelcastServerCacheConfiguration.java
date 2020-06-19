@@ -16,7 +16,7 @@
 
 package digital.inception.cache;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.hazelcast.config.AwsConfig;
 import com.hazelcast.config.Config;
@@ -37,7 +37,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>HazelcastServerCacheConfiguration</code> class provides the Hazelcast server cache
@@ -52,14 +52,10 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("application.hazelcast.server")
 public class HazelcastServerCacheConfiguration {
 
-  /**
-   * The distributed in-memory caches.
-   */
+  /** The distributed in-memory caches. */
   private List<CacheConfig> caches;
 
-  /**
-   * The distributed in-memory cache cluster configuration.
-   */
+  /** The distributed in-memory cache cluster configuration. */
   private ClusterConfig cluster;
 
   /**
@@ -153,19 +149,19 @@ public class HazelcastServerCacheConfiguration {
     for (CacheConfig cacheConfig : getCaches()) {
       MapConfig mapConfig = config.getMapConfig(cacheConfig.getName());
 
-      mapConfig.setInMemoryFormat(Enum.valueOf(InMemoryFormat.class,
-          cacheConfig.getInMemoryFormat()));
+      mapConfig.setInMemoryFormat(
+          Enum.valueOf(InMemoryFormat.class, cacheConfig.getInMemoryFormat()));
 
-      mapConfig.setEvictionPolicy(Enum.valueOf(EvictionPolicy.class,
-          cacheConfig.getEvictionPolicy()));
+      mapConfig.setEvictionPolicy(
+          Enum.valueOf(EvictionPolicy.class, cacheConfig.getEvictionPolicy()));
 
       mapConfig.setStatisticsEnabled(cacheConfig.getStatisticsEnabled());
 
       mapConfig.setMaxIdleSeconds(cacheConfig.getMaxIdleSeconds());
 
       MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
-      maxSizeConfig.setMaxSizePolicy(Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class,
-          cacheConfig.getMaxSizePolicy()));
+      maxSizeConfig.setMaxSizePolicy(
+          Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class, cacheConfig.getMaxSizePolicy()));
       maxSizeConfig.setSize(cacheConfig.getMaxSize());
 
       mapConfig.setMaxSizeConfig(maxSizeConfig);
@@ -188,54 +184,34 @@ public class HazelcastServerCacheConfiguration {
    */
   public static class CacheConfig {
 
-    /**
-     * Are statistics enabled for the distributed in-memory cache?
-     */
+    /** Are statistics enabled for the distributed in-memory cache? */
     boolean statisticsEnabled;
 
-    /**
-     * The number of asynchronous backups for the distributed in-memory cache.
-     */
+    /** The number of asynchronous backups for the distributed in-memory cache. */
     private int asyncBackupCount;
 
-    /**
-     * The number of synchronous backups for the distributed in-memory cache.
-     */
+    /** The number of synchronous backups for the distributed in-memory cache. */
     private int backupCount;
 
-    /**
-     * The eviction policy for the distributed in-memory cache.
-     */
+    /** The eviction policy for the distributed in-memory cache. */
     private String evictionPolicy;
 
-    /**
-     * The in-memory format for the distributed in-memory cache.
-     */
+    /** The in-memory format for the distributed in-memory cache. */
     private String inMemoryFormat;
 
-    /**
-     * The maximum idle seconds for the distributed in-memory cache.
-     */
+    /** The maximum idle seconds for the distributed in-memory cache. */
     private int maxIdleSeconds;
 
-    /**
-     * The maximum size for the distributed in-memory cache.
-     */
+    /** The maximum size for the distributed in-memory cache. */
     private int maxSize;
 
-    /**
-     * The maximum size policy for the distributed in-memory cache.
-     */
+    /** The maximum size policy for the distributed in-memory cache. */
     private String maxSizePolicy;
 
-    /**
-     * The name of the distributed in-memory cache.
-     */
+    /** The name of the distributed in-memory cache. */
     private String name;
 
-    /**
-     * Is read-backup-data enabled for the distributed in-memory cache.
-     */
+    /** Is read-backup-data enabled for the distributed in-memory cache. */
     private boolean readBackupData;
 
     /**
@@ -251,7 +227,7 @@ public class HazelcastServerCacheConfiguration {
      * Set the number of asynchronous backups for the distributed in-memory cache.
      *
      * @param asyncBackupCount the number of asynchronous backups for the distributed in-memory
-     *                         cache
+     *     cache
      */
     public void setAsyncBackupCount(int asyncBackupCount) {
       this.asyncBackupCount = asyncBackupCount;
@@ -386,8 +362,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Returns whether read-backup-data is enabled for the distributed in-memory cache.
      *
-     * @return <code>true</code> if read-backup-data is enabled for the distributed in-memory
-     * cache or <code>false</code> otherwise
+     * @return <code>true</code> if read-backup-data is enabled for the distributed in-memory cache
+     *     or <code>false</code> otherwise
      */
     public boolean getReadBackupData() {
       return readBackupData;
@@ -397,7 +373,7 @@ public class HazelcastServerCacheConfiguration {
      * Set whether read-backup-data is enabled for the distributed in-memory cache.
      *
      * @param readBackupData <code>true</code> if read-backup-data enabled for the distributed
-     *                       in-memory cache or <code>false</code> otherwise
+     *     in-memory cache or <code>false</code> otherwise
      */
     public void setReadBackupData(boolean readBackupData) {
       this.readBackupData = readBackupData;
@@ -406,8 +382,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Returns whether statistics are enabled for the distributed in-memory cache?
      *
-     * @return <code>true</code> if statistics are enabled for the distributed in-memory cache
-     * or <code>false</code> otherwise
+     * @return <code>true</code> if statistics are enabled for the distributed in-memory cache or
+     *     <code>false</code> otherwise
      */
     public boolean getStatisticsEnabled() {
       return statisticsEnabled;
@@ -417,13 +393,12 @@ public class HazelcastServerCacheConfiguration {
      * Set whether statistics are enabled for the distributed in-memory cache.
      *
      * @param statisticsEnabled <code>true</code> if statistics are enabled for the distributed
-     *                          in-memory cache or <code>false</code> otherwise
+     *     in-memory cache or <code>false</code> otherwise
      */
     public void setStatisticsEnabled(boolean statisticsEnabled) {
       this.statisticsEnabled = statisticsEnabled;
     }
   }
-
 
   /**
    * The <code>ClusterConfig</code> class provides access to the distributed in-memory cache cluster
@@ -437,19 +412,13 @@ public class HazelcastServerCacheConfiguration {
      */
     private String members;
 
-    /**
-     * The name of the distributed in-memory cache cluster.
-     */
+    /** The name of the distributed in-memory cache cluster. */
     private String name;
 
-    /**
-     * The password used to connect to the distributed in-memory cache cluster.
-     */
+    /** The password used to connect to the distributed in-memory cache cluster. */
     private String password;
 
-    /**
-     * The port for the distributed in-memory cache cluster.
-     */
+    /** The port for the distributed in-memory cache cluster. */
     private int port;
 
     /**
@@ -457,7 +426,7 @@ public class HazelcastServerCacheConfiguration {
      * in-memory cache cluster.
      *
      * @return the comma-delimited IP addresses or hostnames for the members of the distributed
-     * in-memory cache cluster
+     *     in-memory cache cluster
      */
     public String getMembers() {
       return members;
@@ -468,7 +437,7 @@ public class HazelcastServerCacheConfiguration {
      * in-memory cache cluster.
      *
      * @param members the comma-delimited IP addresses or hostnames for the members of the
-     *                distributed in-memory cache cluster
+     *     distributed in-memory cache cluster
      */
     public void setMembers(String members) {
       this.members = members;

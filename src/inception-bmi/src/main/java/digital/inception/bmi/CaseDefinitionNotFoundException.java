@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CaseDefinitionNotFoundException</code> exception is thrown to indicate an error
  * condition as a result of a case definition that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The case definition could not be found")
-@WebFault(name = "CaseDefinitionNotFoundException",
+@WebFault(
+    name = "CaseDefinitionNotFoundException",
     targetNamespace = "http://bmi.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -47,10 +49,11 @@ public class CaseDefinitionNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>CaseDefinitionNotFoundException</code>.
    *
-   * @param caseDefinitionId the ID used to uniquely identify the case definition
+   * @param caseDefinitionId the ID uniquely identifying the case definition
    */
   public CaseDefinitionNotFoundException(String caseDefinitionId) {
-    super("CaseDefinitionNotFoundError", "The case definition with ID ("
-        + caseDefinitionId + ") could not be found");
+    super(
+        "CaseDefinitionNotFoundError",
+        "The case definition with ID (" + caseDefinitionId + ") could not be found");
   }
 }

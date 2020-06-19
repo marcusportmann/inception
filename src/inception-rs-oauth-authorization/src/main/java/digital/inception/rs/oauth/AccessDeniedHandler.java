@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.io.BufferedOutputStream;
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AccessDeniedHandler</code> implements the custom access denied handler.
@@ -44,7 +44,9 @@ public class AccessDeniedHandler
     implements org.springframework.security.web.access.AccessDeniedHandler {
 
   @Override
-  public void handle(HttpServletRequest request, HttpServletResponse response,
+  public void handle(
+      HttpServletRequest request,
+      HttpServletResponse response,
       AccessDeniedException accessDeniedException)
       throws IOException, ServletException {
     try {
@@ -62,8 +64,8 @@ public class AccessDeniedHandler
       response.setCharacterEncoding(StandardCharsets.UTF_8.name());
       response.setContentType("application/json");
 
-      try (BufferedOutputStream outputStream = new BufferedOutputStream(
-          response.getOutputStream())) {
+      try (BufferedOutputStream outputStream =
+          new BufferedOutputStream(response.getOutputStream())) {
         outputStream.write(jsonObject.toString().getBytes(StandardCharsets.UTF_8));
       }
     } catch (Throwable e) {

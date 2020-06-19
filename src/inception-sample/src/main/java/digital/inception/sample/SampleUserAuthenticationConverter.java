@@ -16,7 +16,7 @@
 
 package digital.inception.sample;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.security.ISecurityService;
 import java.util.ArrayList;
@@ -31,18 +31,16 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleUserAuthenticationConverter</code> class.
  *
  * @author Marcus Portmann
  */
-public class SampleUserAuthenticationConverter
-    implements UserAuthenticationConverter {
+public class SampleUserAuthenticationConverter implements UserAuthenticationConverter {
 
-  @Autowired
-  private ISecurityService securityService;
+  @Autowired private ISecurityService securityService;
 
   @Override
   public Map<String, ?> convertUserAuthentication(Authentication authentication) {
@@ -62,11 +60,11 @@ public class SampleUserAuthenticationConverter
       Object principal = map.get(USERNAME);
       Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
 
-//    if (userDetailsService != null) {
-//      UserDetails user = userDetailsService.loadUserByUsername((String) map.get(USERNAME));
-//      authorities = user.getAuthorities();
-//      principal = user;
-//    }
+      //    if (userDetailsService != null) {
+      //      UserDetails user = userDetailsService.loadUserByUsername((String) map.get(USERNAME));
+      //      authorities = user.getAuthorities();
+      //      principal = user;
+      //    }
       return new UsernamePasswordAuthenticationToken(principal, "N/A", authorities);
     }
 

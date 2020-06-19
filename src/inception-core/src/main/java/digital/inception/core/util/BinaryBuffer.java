@@ -18,15 +18,14 @@ package digital.inception.core.util;
 
 /**
  * The <code>BinaryBuffer</code> class manages binary data. It provides the capabilities similar to
- * the <code>StringBuffer</code> class when working with  binary data (bytes).
- * <p/>
- * This class is thread-safe.
+ * the <code>StringBuffer</code> class when working with binary data (bytes).
+ *
+ * <p>This class is thread-safe.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class BinaryBuffer
-    implements java.io.Serializable {
+public class BinaryBuffer implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
   private byte[] data;
@@ -35,7 +34,7 @@ public class BinaryBuffer
    * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied
-   *             and managed by the <code>BinaryBuffer</code> instance
+   *     and managed by the <code>BinaryBuffer</code> instance
    */
   public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
@@ -45,7 +44,7 @@ public class BinaryBuffer
    * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data the binary data that will be copied and managed by the <code>BinaryBuffer</code>
-   *             instance
+   *     instance
    */
   public BinaryBuffer(byte[] data) {
     this.data = new byte[data.length];
@@ -63,8 +62,8 @@ public class BinaryBuffer
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the
-   * <code>BinaryBuffer</code>.
+   * Append the specified binary data to the binary data already stored in the <code>BinaryBuffer
+   * </code>.
    *
    * @param data the binary data to append
    */
@@ -77,9 +76,7 @@ public class BinaryBuffer
     this.data = newData;
   }
 
-  /**
-   * Clears the <code>BinaryBuffer</code>.
-   */
+  /** Clears the <code>BinaryBuffer</code>. */
   public void clear() {
     this.data = new byte[0];
   }

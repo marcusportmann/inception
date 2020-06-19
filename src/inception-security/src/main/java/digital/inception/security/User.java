@@ -16,15 +16,14 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -47,53 +46,74 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>User</code> class holds the information for a user.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "User")
+@Schema(description = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry"})
+@JsonPropertyOrder({
+  "userDirectoryId",
+  "username",
+  "firstName",
+  "lastName",
+  "mobileNumber",
+  "phoneNumber",
+  "email",
+  "status",
+  "password",
+  "passwordAttempts",
+  "passwordExpiry"
+})
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
-@XmlType(name = "User", namespace = "http://security.inception.digital",
-    propOrder = {"userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry"})
+@XmlType(
+    name = "User",
+    namespace = "http://security.inception.digital",
+    propOrder = {
+      "userDirectoryId",
+      "username",
+      "firstName",
+      "lastName",
+      "mobileNumber",
+      "phoneNumber",
+      "email",
+      "status",
+      "password",
+      "passwordAttempts",
+      "passwordExpiry"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "users")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class User
-    implements Serializable {
+public class User implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The e-mail address for the user.
-   */
-  @ApiModelProperty(value = "The e-mail address for the user", required = true)
+  /** The e-mail address for the user. */
+  @Schema(description = "The e-mail address for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Email", required = true)
   @NotNull
   @Size(max = 100)
-  @Pattern(message = "invalid e-mail address",
-      regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
-          + ".[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d"
-          + "-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\"
-          + ".)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
-          + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
-          + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e"
-          + "-\\x7f])+)\\])")
+  @Pattern(
+      message = "invalid e-mail address",
+      regexp =
+          "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
+              + ".[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d"
+              + "-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\"
+              + ".)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
+              + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
+              + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e"
+              + "-\\x7f])+)\\])")
   @Column(name = "email", nullable = false, length = 100)
   private String email;
 
-  /**
-   * The first name for the user.
-   */
-  @ApiModelProperty(value = "The first name for the user", required = true)
+  /** The first name for the user. */
+  @Schema(description = "The first name for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "FirstName", required = true)
   @NotNull
@@ -101,27 +121,21 @@ public class User
   @Column(name = "first_name", nullable = false, length = 100)
   private String firstName;
 
-  /**
-   * The groups the user is associated with.
-   */
+  /** The groups the user is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "users")
   private Set<Group> groups = new HashSet<>();
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user. */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The last name for the user.
-   */
-  @ApiModelProperty(value = "The last name for the user", required = true)
+  /** The last name for the user. */
+  @Schema(description = "The last name for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LastName", required = true)
   @NotNull
@@ -129,38 +143,38 @@ public class User
   @Column(name = "last_name", nullable = false, length = 100)
   private String lastName;
 
-  /**
-   * The mobile number for the user.
-   */
-  @ApiModelProperty(value = "The mobile number for the user", required = true)
+  /** The mobile number for the user. */
+  @Schema(description = "The mobile number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
   @Size(max = 100)
-  @Pattern(message = "invalid mobile number",
-      regexp = "(\\+|00)(297|93|244|1264|358|355|376|971|54|374|1684|1268|61"
-          + "|43|994|257|32|229|226|880|359|973|1242|387|590|375|501|1441|591|55|1246|673|975|267|236|1"
-          + "|61|41|56|86|225|237|243|242|682|57|269|238|506|53|5999|61|1345|357|420|49|253|1767|45|1809"
-          + "|1829|1849|213|593|20|291|212|34|372|251|358|679|500|33|298|691|241|44|995|44|233|350|224"
-          + "|590|220|245|240|30|1473|299|502|594|1671|592|852|504|385|509|36|62|44|91|246|353|98|964|354"
-          + "|972|39|1876|44|962|81|76|77|254|996|855|686|1869|82|383|965|856|961|231|218|1758|423|94|266"
-          + "|370|352|371|853|590|212|377|373|261|960|52|692|389|223|356|95|382|976|1670|258|222|1664|596"
-          + "|230|265|60|262|264|687|227|672|234|505|683|31|47|977|674|64|968|92|507|64|51|63|680|675|48"
-          + "|1787|1939|850|351|595|970|689|974|262|40|7|250|966|249|221|65|500|4779|677|232|503|378|252"
-          + "|508|381|211|239|597|421|386|46|268|1721|248|963|1649|235|228|66|992|690|993|670|676|1868"
-          + "|216|90|688|886|255|256|380|598|1|998|3906698|379|1784|58|1284|1340|84|678|681|685|967|27"
-          + "|260|263)(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210"
-          + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$")
+  @Pattern(
+      message = "invalid mobile number",
+      regexp =
+          "(\\+|00)(297|93|244|1264|358|355|376|971|54|374|1684|1268|61"
+              + "|43|994|257|32|229|226|880|359|973|1242|387|590|375|501|1441|591|55|1246|673|975|267|236|1"
+              + "|61|41|56|86|225|237|243|242|682|57|269|238|506|53|5999|61|1345|357|420|49|253|1767|45|1809"
+              + "|1829|1849|213|593|20|291|212|34|372|251|358|679|500|33|298|691|241|44|995|44|233|350|224"
+              + "|590|220|245|240|30|1473|299|502|594|1671|592|852|504|385|509|36|62|44|91|246|353|98|964|354"
+              + "|972|39|1876|44|962|81|76|77|254|996|855|686|1869|82|383|965|856|961|231|218|1758|423|94|266"
+              + "|370|352|371|853|590|212|377|373|261|960|52|692|389|223|356|95|382|976|1670|258|222|1664|596"
+              + "|230|265|60|262|264|687|227|672|234|505|683|31|47|977|674|64|968|92|507|64|51|63|680|675|48"
+              + "|1787|1939|850|351|595|970|689|974|262|40|7|250|966|249|221|65|500|4779|677|232|503|378|252"
+              + "|508|381|211|239|597|421|386|46|268|1721|248|963|1649|235|228|66|992|690|993|670|676|1868"
+              + "|216|90|688|886|255|256|380|598|1|998|3906698|379|1784|58|1284|1340|84|678|681|685|967|27"
+              + "|260|263)(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210"
+              + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$")
   @Column(name = "mobile_number", nullable = false, length = 100)
   private String mobileNumber;
 
   /**
    * The password or password hash for the user.
-   * <p>
-   * NOTE: The password is not required as part of the JSON or XML representation of the user, other
-   * than when creating the user, so the field is nullable but the database column is not.
+   *
+   * <p>NOTE: The password is not required as part of the JSON or XML representation of the user,
+   * other than when creating the user, so the field is nullable but the database column is not.
    */
-  @ApiModelProperty(value = "The password or password hash for the user")
+  @Schema(description = "The password or password hash for the user")
   @JsonProperty
   @XmlElement(name = "Password")
   @Size(max = 100)
@@ -168,21 +182,20 @@ public class User
   private String password;
 
   /**
-   * The number of failed authentication attempts as a result of an incorrect password for the
-   * user.
+   * The number of failed authentication attempts as a result of an incorrect password for the user.
    */
-  @ApiModelProperty(
-      value = "The number of failed authentication attempts as a result of an incorrect password for the user",
+  @Schema(
+      description =
+          "The number of failed authentication attempts as a result of an incorrect password for "
+              + "the user",
       example = "0")
   @JsonProperty
   @XmlElement(name = "PasswordAttempts")
   @Column(name = "password_attempts", nullable = false)
   private Integer passwordAttempts;
 
-  /**
-   * The date and time the password for the user expires.
-   */
-  @ApiModelProperty(value = "The date and time the password for the user expires")
+  /** The date and time the password for the user expires. */
+  @Schema(description = "The date and time the password for the user expires")
   @JsonProperty
   @XmlElement(name = "PasswordExpiry")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -190,10 +203,8 @@ public class User
   @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
-  /**
-   * The phone number for the user.
-   */
-  @ApiModelProperty(value = "The phone number for the user", required = true)
+  /** The phone number for the user. */
+  @Schema(description = "The phone number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PhoneNumber", required = true)
   @NotNull
@@ -201,11 +212,11 @@ public class User
   @Column(name = "phone_number", nullable = false, length = 100)
   private String phoneNumber;
 
-  /**
-   * The status for the user.
-   */
-  @ApiModelProperty(value = "The status for the user",
-      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired", required = true)
+  /** The status for the user. */
+  @Schema(
+      description = "The status for the user",
+      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
@@ -213,11 +224,13 @@ public class User
   private UserStatus status;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user
-   * is associated with.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is
+   * associated with.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with",
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the "
+              + "user is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -225,10 +238,8 @@ public class User
   @Column(name = "user_directory_id", nullable = false)
   private UUID userDirectoryId;
 
-  /**
-   * The username for the user.
-   */
-  @ApiModelProperty(value = "The username for the user", required = true)
+  /** The username for the user. */
+  @Schema(description = "The username for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
@@ -236,19 +247,15 @@ public class User
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>User</code>.
-   */
-  public User() {
-  }
+  /** Constructs a new <code>User</code>. */
+  public User() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -324,18 +331,18 @@ public class User
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user
    */
   public void setId(UUID id) {
     this.id = id;
@@ -400,7 +407,7 @@ public class User
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   * the user
+   *     the user
    */
   public Integer getPasswordAttempts() {
     return passwordAttempts;
@@ -470,22 +477,22 @@ public class User
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the user is associated with.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * user is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the user is associated with
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   *     user is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * user is associated with.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the user
+   * is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory the user is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
@@ -517,7 +524,7 @@ public class User
    * Has the password for the user expired?
    *
    * @return <code>true</code> if the password for the user has expired or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   public boolean hasPasswordExpired() {
     if (passwordExpiry != null) {
@@ -534,9 +541,7 @@ public class User
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**

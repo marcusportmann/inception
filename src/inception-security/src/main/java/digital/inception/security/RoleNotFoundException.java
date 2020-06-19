@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>RoleNotFoundException</code> is thrown to indicate that a security operation failed as a
  * result of a role that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The role could not be found")
-@WebFault(name = "RoleNotFoundException", targetNamespace = "http://security.inception.digital",
+@WebFault(
+    name = "RoleNotFoundException",
+    targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused"})
@@ -47,7 +50,7 @@ public class RoleNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>RoleNotFoundException</code>.
    *
-   * @param roleCode the code used to uniquely identify the role
+   * @param roleCode the code uniquely identifying the role
    */
   public RoleNotFoundException(String roleCode) {
     super("RoleNotFoundError", "The role (" + roleCode + ") could not be found");

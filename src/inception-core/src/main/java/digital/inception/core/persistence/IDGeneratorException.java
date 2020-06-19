@@ -16,7 +16,7 @@
 
 package digital.inception.core.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,9 +37,7 @@ public class IDGeneratorException extends RuntimeException {
   private String code;
   private Date when;
 
-  /**
-   * Constructs a new <code>IDGeneratorException</code> with <code>null</code> as its message.
-   */
+  /** Constructs a new <code>IDGeneratorException</code> with <code>null</code> as its message. */
   public IDGeneratorException() {
     super();
     this.when = new Date();
@@ -61,7 +59,7 @@ public class IDGeneratorException extends RuntimeException {
    * message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public IDGeneratorException(Throwable cause) {
     super(cause);
@@ -71,7 +69,7 @@ public class IDGeneratorException extends RuntimeException {
   /**
    * Constructs a new <code>IDGeneratorException</code> with the specified code and message.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public IDGeneratorException(String code, String message) {
@@ -84,8 +82,8 @@ public class IDGeneratorException extends RuntimeException {
    * Constructs a new <code>IDGeneratorException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public IDGeneratorException(String message, Throwable cause) {
     super(message, cause);
@@ -95,10 +93,10 @@ public class IDGeneratorException extends RuntimeException {
   /**
    * Constructs a new <code>IDGeneratorException</code> with the specified code, message and cause.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public IDGeneratorException(String code, String message, Throwable cause) {
     super(message, cause);
@@ -112,9 +110,7 @@ public class IDGeneratorException extends RuntimeException {
    * @return the error code identifying the error or NONE if no error code was specified
    */
   public String getCode() {
-    return (code == null)
-        ? NO_ERROR_CODE
-        : code;
+    return (code == null) ? NO_ERROR_CODE : code;
   }
 
   /**

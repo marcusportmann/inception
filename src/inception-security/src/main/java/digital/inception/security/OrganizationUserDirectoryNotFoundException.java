@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,19 +26,22 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>OrganizationUserDirectoryNotFoundException</code> is thrown to indicate that a security
  * operation failed as a result of an organization user directory that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND,
+@ResponseStatus(
+    value = HttpStatus.NOT_FOUND,
     reason = "The organization user directory could not be found")
-@WebFault(name = "OrganizationUserDirectoryNotFoundException",
+@WebFault(
+    name = "OrganizationUserDirectoryNotFoundException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -50,14 +53,18 @@ public class OrganizationUserDirectoryNotFoundException extends ServiceException
   /**
    * Constructs a new <code>OrganizationUserDirectoryNotFoundException</code>.
    *
-   * @param organizationId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        organization
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
   public OrganizationUserDirectoryNotFoundException(UUID organizationId, UUID userDirectoryId) {
-    super("OrganizationUserDirectoryNotFoundError",
-        "The organization user directory for the organization (" + organizationId
-            + ") and user directory (" + userDirectoryId + ") could not be found");
+    super(
+        "OrganizationUserDirectoryNotFoundError",
+        "The organization user directory for the organization ("
+            + organizationId
+            + ") and user directory ("
+            + userDirectoryId
+            + ") could not be found");
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.codes;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
@@ -28,25 +28,20 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 @SuppressWarnings("WeakerAccess")
-public class CodeProviderConfig
-    implements Serializable {
+public class CodeProviderConfig implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The fully qualified name of the class that implements the code provider.
-   */
+  /** The fully qualified name of the class that implements the code provider. */
   private String className;
 
-  /**
-   * The name of the code provider.
-   */
+  /** The name of the code provider. */
   private String name;
 
   /**
    * Constructs a new <code>CodeProviderConfig</code>.
    *
-   * @param name      the name of the code provider
+   * @param name the name of the code provider
    * @param className fully qualified name of the class that implements the code provider
    */
   CodeProviderConfig(String name, String className) {

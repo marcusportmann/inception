@@ -16,23 +16,23 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupMemberType</code> enumeration defines the possible group member types.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "GroupMemberType")
+@Schema(description = "GroupMemberType")
 @XmlEnum
 @XmlType(name = "GroupMemberType", namespace = "http://security.inception.digital")
 public enum GroupMemberType {
@@ -53,7 +53,6 @@ public enum GroupMemberType {
    * Returns the group member type given by the specified code value.
    *
    * @param code the code value identifying the group member type
-   *
    * @return the group member type given by the specified code value
    */
   @JsonCreator

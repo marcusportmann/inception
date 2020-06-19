@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -27,27 +27,25 @@ import javax.validation.Validator;
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "MessagingService", name = "IMessagingService",
+@WebService(
+    serviceName = "MessagingService",
+    name = "IMessagingService",
     targetNamespace = "http://messaging.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
 public class MessagingWebService {
 
-  /**
-   * The Messaging Service.
-   */
+  /** The Messaging Service. */
   private IMessagingService messagingService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>MessagingWebService</code>.
    *
    * @param messagingService the Messaging Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public MessagingWebService(IMessagingService messagingService, Validator validator) {
     this.messagingService = messagingService;

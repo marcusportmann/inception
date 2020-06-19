@@ -16,7 +16,7 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,11 +25,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>CodeCategoryRepository</code> interface declares the repository for the
- * <code>CodeCategory</code> domain type.
+ * The <code>CodeCategoryRepository</code> interface declares the repository for the <code>
+ * CodeCategory</code> domain type.
  *
  * @author Marcus Portmann
  */
@@ -49,8 +49,11 @@ public interface CodeCategoryRepository extends JpaRepository<CodeCategory, Stri
   Optional<LocalDateTime> getUpdatedById(@Param("codeCategoryId") String codeCategoryId);
 
   @Modifying
-  @Query("update CodeCategory cc set cc.data = :data, cc.updated = :updated "
-      + "where cc.id = :codeCategoryId")
-  int setDataAndUpdatedById(@Param("codeCategoryId") String codeCategoryId, @Param(
-      "data") String data, @Param("updated") LocalDateTime updated);
+  @Query(
+      "update CodeCategory cc set cc.data = :data, cc.updated = :updated "
+          + "where cc.id = :codeCategoryId")
+  int setDataAndUpdatedById(
+      @Param("codeCategoryId") String codeCategoryId,
+      @Param("data") String data,
+      @Param("updated") LocalDateTime updated);
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.rs;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestControllerErrorHandler</code> class implements the error handler for RESTful web
@@ -44,31 +44,39 @@ public class RestControllerErrorHandler {
 
   @ExceptionHandler
   @ResponseBody
-  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request,
-      HttpMessageNotReadableException ex) {
-    return new ResponseEntity<>(new RestControllerError(request, HttpStatus.BAD_REQUEST,
-        ex.getMostSpecificCause()), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  protected ResponseEntity<RestControllerError> handle(
+      HttpServletRequest request, HttpMessageNotReadableException ex) {
+    return new ResponseEntity<>(
+        new RestControllerError(request, HttpStatus.BAD_REQUEST, ex.getMostSpecificCause()),
+        new HttpHeaders(),
+        HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler
   @ResponseBody
-  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request,
-      Throwable cause) {
-    ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
-        ResponseStatus.class);
+  protected ResponseEntity<RestControllerError> handle(
+      HttpServletRequest request, Throwable cause) {
+    ResponseStatus annotation =
+        AnnotatedElementUtils.findMergedAnnotation(cause.getClass(), ResponseStatus.class);
 
     if (annotation != null) {
       HttpStatus responseStatus = annotation.value();
 
-      return new ResponseEntity<>(new RestControllerError(request, responseStatus, cause),
-          new HttpHeaders(), responseStatus);
+      return new ResponseEntity<>(
+          new RestControllerError(request, responseStatus, cause),
+          new HttpHeaders(),
+          responseStatus);
     } else {
       if (cause instanceof AccessDeniedException) {
-        return new ResponseEntity<>(new RestControllerError(request, HttpStatus.FORBIDDEN, cause),
-            new HttpHeaders(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+            new RestControllerError(request, HttpStatus.FORBIDDEN, cause),
+            new HttpHeaders(),
+            HttpStatus.FORBIDDEN);
       } else {
-        return new ResponseEntity<>(new RestControllerError(request, HttpStatus
-            .INTERNAL_SERVER_ERROR, cause), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+            new RestControllerError(request, HttpStatus.INTERNAL_SERVER_ERROR, cause),
+            new HttpHeaders(),
+            HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
   }

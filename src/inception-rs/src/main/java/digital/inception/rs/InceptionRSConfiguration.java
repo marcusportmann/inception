@@ -16,7 +16,7 @@
 
 package digital.inception.rs;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InceptionRSConfiguration</code> class provides the configuration for the
@@ -45,33 +45,23 @@ public class InceptionRSConfiguration {
   @Value("${server.cors.allowCredentials:false}")
   private boolean corsAllowCredentials;
 
-  /**
-   * Instruct browsers to allow the specified headers.
-   */
+  /** Instruct browsers to allow the specified headers. */
   @Value("${server.cors.allowedHeaders:}")
   private String[] corsAllowedHeaders;
 
-  /**
-   * Instruct browsers to allow the specified methods.
-   */
+  /** Instruct browsers to allow the specified methods. */
   @Value("${server.cors.allowedMethods:}")
   private String[] corsAllowedMethods;
 
-  /**
-   * Instruct browsers to allow code from the specified origins.
-   */
+  /** Instruct browsers to allow code from the specified origins. */
   @Value("${server.cors.allowedOrigins:}")
   private String[] corsAllowedOrigins;
 
-  /**
-   * Enable cross-origin resource sharing (CORS).
-   */
+  /** Enable cross-origin resource sharing (CORS). */
   @Value("${server.cors.enabled:false}")
   private boolean corsEnabled;
 
-  /**
-   * Instruct browsers to expose the specified headers.
-   */
+  /** Instruct browsers to expose the specified headers. */
   @Value("${server.cors.exposedHeaders:}")
   private String[] corsExposedHeaders;
 

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -29,15 +29,13 @@ import javax.persistence.Converter;
  */
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
-public class GroupMemberTypeConverter
-    implements AttributeConverter<GroupMemberType, Integer> {
+public class GroupMemberTypeConverter implements AttributeConverter<GroupMemberType, Integer> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
    *
    * @param attribute the entity attribute value to be converted
-   *
    * @return the converted data to be stored in the database column
    */
   @Override
@@ -52,7 +50,6 @@ public class GroupMemberTypeConverter
    * providers are not expected to do such type conversion.
    *
    * @param dbData the data from the database column to be converted
-   *
    * @return the converted value to be stored in the entity attribute
    */
   @Override

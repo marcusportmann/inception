@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -26,7 +26,7 @@ import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.http.auth.DefaultBasicAuthSupplier;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFBasicSecurityProxyConfigurator</code> class provides the capability to configure a
@@ -39,7 +39,7 @@ public class CXFBasicSecurityProxyConfigurator {
   /**
    * Configure the CXF web service proxy to support basic authentication.
    *
-   * @param proxy    the web service proxy to configure
+   * @param proxy the web service proxy to configure
    * @param username the username to use when authenticating using basic authentication
    * @param password the password to use when authenticating using basic authentication
    */

@@ -22,7 +22,7 @@
 export class ErrorReportSummary {
 
   /**
-   * The ID used to uniquely identify the application that generated the error report.
+   * The ID uniquely identifying the application that generated the error report.
    */
   applicationId: string;
 
@@ -42,13 +42,13 @@ export class ErrorReportSummary {
   description: string;
 
   /**
-   * The optional Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the
    * error report originated from.
    */
   deviceId?: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * The Universally Unique Identifier (UUID) uniquely identifying the error report.
    */
   id: string;
 
@@ -60,9 +60,9 @@ export class ErrorReportSummary {
   /**
    * Constructs a new ErrorReportSummary.
    *
-   * @param id                 The Universally Unique Identifier (UUID) used to uniquely identify
+   * @param id                 The Universally Unique Identifier (UUID) uniquely identifying
    *                           the error report.
-   * @param applicationId      The ID used to uniquely identify the application that generated the
+   * @param applicationId      The ID uniquely identifying the application that generated the
    *                           error report.
    * @param applicationVersion The version of the application that generated the error report.
    * @param description        The description of the error.

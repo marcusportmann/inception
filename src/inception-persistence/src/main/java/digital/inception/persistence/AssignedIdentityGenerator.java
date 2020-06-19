@@ -16,13 +16,13 @@
 
 package digital.inception.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.Serializable;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AssignedIdentityGenerator</code> implements a Hibernate generator that allows a value
@@ -38,8 +38,7 @@ public class AssignedIdentityGenerator extends IdentityGenerator {
    * Generate a new identifier.
    *
    * @param session the session from which the request originates
-   * @param object  the entity or collection for which the ID is being generated
-   *
+   * @param object the entity or collection for which the ID is being generated
    * @return a new identifier
    */
   @Override

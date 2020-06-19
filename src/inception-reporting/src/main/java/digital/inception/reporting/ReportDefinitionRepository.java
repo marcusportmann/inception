@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,11 +24,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ReportDefinitionRepository</code> interface declares the repository for the
- * <code>ReportDefinition</code> domain type.
+ * The <code>ReportDefinitionRepository</code> interface declares the repository for the <code>
+ * ReportDefinition</code> domain type.
  *
  * @author Marcus Portmann
  */

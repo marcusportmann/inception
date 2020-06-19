@@ -16,14 +16,13 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -40,31 +39,30 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategorySummary</code> class holds the summary information for a code category.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "CodeCategorySummary")
+@Schema(description = "CodeCategorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "updated"})
 @XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")
-@XmlType(name = "CodeCategorySummary", namespace = "http://codes.inception.digital",
+@XmlType(
+    name = "CodeCategorySummary",
+    namespace = "http://codes.inception.digital",
     propOrder = {"id", "name", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
-public class CodeCategorySummary
-    implements Serializable {
+public class CodeCategorySummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the code category.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the code category", required = true)
+  /** The ID uniquely identifying the code category. */
+  @Schema(description = "The ID uniquely identifying the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -73,10 +71,8 @@ public class CodeCategorySummary
   @Column(name = "id", nullable = false, length = 100)
   private String id;
 
-  /**
-   * The name of the code category.
-   */
-  @ApiModelProperty(value = "The name of the code category", required = true)
+  /** The name of the code category. */
+  @Schema(description = "The name of the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -84,10 +80,8 @@ public class CodeCategorySummary
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The date and time the code category was last updated.
-   */
-  @ApiModelProperty(value = "The date and time the code category was last updated")
+  /** The date and time the code category was last updated. */
+  @Schema(description = "The date and time the code category was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -95,17 +89,14 @@ public class CodeCategorySummary
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <code>CodeCategorySummary</code>.
-   */
-  public CodeCategorySummary() {
-  }
+  /** Constructs a new <code>CodeCategorySummary</code>. */
+  public CodeCategorySummary() {}
 
   /**
    * Constructs a new <code>CodeCategorySummary</code>.
    *
-   * @param id      the ID used to uniquely identify the code category
-   * @param name    the name of the code category
+   * @param id the ID uniquely identifying the code category
+   * @param name the name of the code category
    * @param updated the date and time the code category was last updated
    */
   public CodeCategorySummary(String id, String name, LocalDateTime updated) {
@@ -118,9 +109,8 @@ public class CodeCategorySummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -142,9 +132,9 @@ public class CodeCategorySummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the code category.
+   * Returns the ID uniquely identifying the code category.
    *
-   * @return the ID used to uniquely identify the code category
+   * @return the ID uniquely identifying the code category
    */
   public String getId() {
     return id;
@@ -175,8 +165,6 @@ public class CodeCategorySummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

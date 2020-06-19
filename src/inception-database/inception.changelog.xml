@@ -21,7 +21,7 @@
     </sql>
 
     <createTable schemaName="codes" tableName="code_categories" remarks="Code Categories">
-      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code category"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the code category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the code category"/>
       <column name="data" type="clob" remarks="The code data for the code category"/>
       <column name="updated" type="timestamp" remarks="The date and time the code category was last updated"/>
@@ -31,8 +31,8 @@
     <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="name"/>
 
     <createTable schemaName="codes" tableName="codes" remarks="Codes">
-      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code"/>
-      <column name="code_category_id" type="nvarchar(100)" remarks="The ID used to uniquely identify the code category the code is associated with"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the code"/>
+      <column name="code_category_id" type="nvarchar(100)" remarks="The ID uniquely identifying the code category the code is associated with"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the code"/>
       <column name="value" type="nvarchar(4000)" remarks="The value for the code"/>
     </createTable>
@@ -58,7 +58,7 @@
     </sql>
 
     <createTable schemaName="configuration" tableName="configuration" remarks="Configuration">
-      <column name="key" type="nvarchar(100)" remarks="The key used to uniquely identify the configuration value"/>
+      <column name="key" type="nvarchar(100)" remarks="The key uniquely identifying the configuration value"/>
       <column name="value" type="nvarchar(4000)" remarks="The value for the configuration value"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the configuration value"/>
     </createTable>
@@ -79,14 +79,14 @@
     </sql>
 
     <createTable schemaName="error" tableName="error_reports" remarks="Error Reports">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the error report"/>
-      <column name="application_id" type="nvarchar(200)" remarks="The ID used to uniquely identify the application that generated the error report"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the error report"/>
+      <column name="application_id" type="nvarchar(200)" remarks="The ID uniquely identifying the application that generated the error report"/>
       <column name="application_version" type="nvarchar(50)" remarks="The version of the application that generated the error report"/>
       <column name="description" type="nvarchar(4000)" remarks="The description of the error"/>
       <column name="detail" type="clob" remarks="The error detail e.g. a stack trace"/>
       <column name="created" type="timestamp" remarks="The date and time the error report was created"/>
       <column name="who" type="nvarchar(100)" remarks="The optional username identifying the user associated with the error report"/>
-      <column name="device_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from"/>
+      <column name="device_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) uniquely identifying the device the error report originated from"/>
       <column name="feedback" type="nvarchar(4000)" remarks="The optional feedback provided by the user for the error"/>
       <column name="data" type="clob" remarks="The optional base-64 encoded data associated with the error report"/>
     </createTable>
@@ -119,7 +119,7 @@
     </sql>
 
     <createTable schemaName="mail" tableName="mail_templates" remarks="Mail Templates">
-      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the mail template"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the mail template"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the mail template"/>
       <column name="content_type" type="int" remarks="The content type for the mail template"/>
       <column name="template" type="${blob_type}" remarks="The Apache FreeMarker template for the mail template"/>
@@ -142,7 +142,7 @@
     </sql>
 
     <createTable schemaName="messaging" tableName="message_types" remarks="Message Types">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message type"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the message type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the message type"/>
     </createTable>
     <addPrimaryKey schemaName="messaging" tableName="message_types" columnNames="id"/>
@@ -156,10 +156,10 @@
     <addPrimaryKey schemaName="messaging" tableName="message_statuses" columnNames="code"/>
 
     <createTable schemaName="messaging" tableName="messages" remarks="Messages">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
       <column name="username" type="nvarchar(100)" remarks="The username identifying the user associated with the message"/>
-      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from"/>
-      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of message"/>
+      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
       <column name="correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
       <column name="priority" type="int" remarks="The message priority"/>
       <column name="status" type="int" remarks="The message status e.g. Initialised, QueuedForSending, etc"/>
@@ -203,16 +203,16 @@
     </createIndex>
 
     <createTable schemaName="messaging" tableName="message_parts" remarks="Message Parts">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message part"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the message part"/>
       <column name="part_no" type="int" remarks="The number of the message part in the set of message parts for the original message"/>
       <column name="total_parts" type="int" remarks="The total number of parts in the set of message parts for the original message"/>
       <column name="send_attempts" type="int" remarks="The number of times that the sending of the message part was attempted"/>
       <column name="download_attempts" type="int" remarks="The number of times that an attempt was made to download the message part"/>
       <column name="status" type="int" remarks="The message part status e.g. Initialised, QueuedForSending, etc"/>
-      <column name="message_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the original message"/>
+      <column name="message_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the original message"/>
       <column name="message_username" type="nvarchar(100)" remarks="The username identifying the user associated with the original message"/>
-      <column name="message_device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from"/>
-      <column name="message_type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message"/>
+      <column name="message_device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the original message originated from"/>
+      <column name="message_type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of the original message"/>
       <column name="message_correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the original message"/>
       <column name="message_priority" type="int" remarks="The priority for the original message"/>
       <column name="message_created" type="timestamp" remarks="The date and time the original message was created"/>
@@ -252,10 +252,10 @@
     </createIndex>
     
     <createTable schemaName="messaging" tableName="archived_messages" remarks="Archived Messages">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the message"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
       <column name="username" type="nvarchar(100)" remarks="The username identifying the user associated with the message"/>
-      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from"/>
-      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the type of message"/>
+      <column name="device_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+      <column name="type_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
       <column name="correlation_id" type="uuid" remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
       <column name="created" type="timestamp" remarks="The date and time the message was created"/>
       <column name="archived" type="timestamp" remarks="The date and time the message was archived"/>
@@ -382,7 +382,7 @@
     </sql>
 
     <createTable schemaName="reporting" tableName="report_definitions" remarks="Report Definitions">
-      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the report definition"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the report definition"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the report definition"/>
       <column name="template" type="${blob_type}" remarks="The JasperReports template for the report definition"/>
     </createTable>
@@ -403,7 +403,7 @@
     </sql>
 
     <createTable schemaName="scheduler" tableName="jobs" remarks="Jobs">
-      <column name="id" type="nvarchar(100)" remarks="The ID used to uniquely identify the job"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the job"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the job"/>
       <column name="scheduling_pattern" type="nvarchar(100)" remarks="The cron-style scheduling pattern for the job"/>
       <column name="job_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the job"/>
@@ -423,7 +423,7 @@
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="status"/>
 
     <createTable schemaName="scheduler" tableName="job_parameters" remarks="Job Parameters">
-      <column name="job_id" type="nvarchar(100)" remarks="The ID used to uniquely identify the job"/>
+      <column name="job_id" type="nvarchar(100)" remarks="The ID uniquely identifying the job"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the job parameter"/>
       <column name="value" type="nvarchar(4000)" remarks="The value of the job parameter"/>
     </createTable>
@@ -451,7 +451,7 @@
     </sql>
 
     <createTable schemaName="security" tableName="organizations" remarks="Organizations">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the organization"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the organization"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the organization"/>
       <column name="status" type="int" remarks="The status for the organization"/>
     </createTable>
@@ -464,7 +464,7 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="user_directory_types" remarks="User Directory Types">
-      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the user directory type"/>
+      <column name="code" type="nvarchar(100)" remarks="The code uniquely identifying the user directory type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory type"/>
       <column name="user_directory_class" type="nvarchar(1000)" remarks="The fully qualified name of the Java class that implements the user directory type"/>
     </createTable>
@@ -474,8 +474,8 @@
     <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="user_directory_class"/>
 
     <createTable schemaName="security" tableName="user_directories" remarks="User Directories">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory"/>
-      <column name="type" type="nvarchar(100)" remarks="The code used to uniquely identify the user directory type"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+      <column name="type" type="nvarchar(100)" remarks="The code uniquely identifying the user directory type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
       <column name="configuration" type="nvarchar(4000)" remarks="The XML configuration data for the user directory"/>
     </createTable>
@@ -490,8 +490,8 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="user_directory_to_organization_map" remarks="User Directory To Organization Mappings">
-      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory"/>
-      <column name="organization_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the organization"/>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+      <column name="organization_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the organization"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="user_directory_to_organization_map" columnNames="user_directory_id, organization_id"/>
     <addNotNullConstraint schemaName="security" tableName="user_directory_to_organization_map" columnName="user_directory_id"/>
@@ -506,8 +506,8 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="users" remarks="Users">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
-      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory the user is associated with"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is associated with"/>
       <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
       <column name="status" type="int" remarks="The status for the user"/>
       <column name="first_name" type="nvarchar(100)" remarks="The first name for the user"/>
@@ -541,7 +541,7 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="users_password_history" remarks="User Password History">
-      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
       <column name="changed" type="timestamp" remarks="When the password change took place for the user"/>
       <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
     </createTable>
@@ -557,8 +557,8 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="groups" remarks="Groups">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
-      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+      <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is associated with"/>
       <column name="name" type="nvarchar(100)" remarks="The name for the group"/>
       <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
     </createTable>
@@ -576,8 +576,8 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="user_to_group_map" remarks="User To Group Mappings">
-      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the user"/>
-      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
+      <column name="user_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="user_to_group_map" columnNames="user_id, group_id"/>
     <addNotNullConstraint schemaName="security" tableName="user_to_group_map" columnName="user_id"/>
@@ -592,7 +592,7 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="functions" remarks="Functions">
-      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the function"/>
+      <column name="code" type="nvarchar(100)" remarks="The code uniquely identifying the function"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the function"/>
       <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
     </createTable>
@@ -601,7 +601,7 @@
     <addNotNullConstraint schemaName="security" tableName="functions" columnName="name"/>
 
     <createTable schemaName="security" tableName="roles" remarks="Roles">
-      <column name="code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
+      <column name="code" type="nvarchar(100)" remarks="The code uniquely identifying the role"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the role"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
     </createTable>
@@ -610,8 +610,8 @@
     <addNotNullConstraint schemaName="security" tableName="roles" columnName="name"/>
 
     <createTable schemaName="security" tableName="function_to_role_map" remarks="Function To Role Mappings">
-      <column name="function_code" type="nvarchar(100)" remarks="The code used to uniquely identify the function"/>
-      <column name="role_code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
+      <column name="function_code" type="nvarchar(100)" remarks="The code uniquely identifying the function"/>
+      <column name="role_code" type="nvarchar(100)" remarks="The code uniquely identifying the role"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="function_to_role_map" columnNames="function_code, role_code"/>
     <addNotNullConstraint schemaName="security" tableName="function_to_role_map" columnName="function_code"/>
@@ -626,8 +626,8 @@
     </createIndex>
 
     <createTable schemaName="security" tableName="role_to_group_map" remarks="Role To Group Mappings">
-      <column name="role_code" type="nvarchar(100)" remarks="The code used to uniquely identify the role"/>
-      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the group"/>
+      <column name="role_code" type="nvarchar(100)" remarks="The code uniquely identifying the role"/>
+      <column name="group_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="role_to_group_map" columnNames="role_code, group_id"/>
     <addNotNullConstraint schemaName="security" tableName="role_to_group_map" columnName="role_code"/>
@@ -890,7 +890,7 @@
     </sql>
 
     <createTable schemaName="sms" tableName="sms" remarks="SMSs">
-      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) used to uniquely identify the SMS"/>
+      <column name="id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the SMS"/>
       <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number to send the SMS to"/>
       <column name="message" type="nvarchar(1000)" remarks="The message to send"/>
       <column name="status" type="int" remarks="The status of the SMS"/>

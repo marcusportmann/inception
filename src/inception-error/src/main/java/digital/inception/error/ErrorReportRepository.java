@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,11 +24,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ErrorRepository</code> interface declares the repository for the
- * <code>ErrorReport</code> domain type.
+ * The <code>ErrorRepository</code> interface declares the repository for the <code>ErrorReport
+ * </code> domain type.
  *
  * @author Marcus Portmann
  */

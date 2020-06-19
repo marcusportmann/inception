@@ -16,7 +16,7 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +32,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundSMSSender
-    implements InitializingBean {
+public class BackgroundSMSSender implements InitializingBean {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
@@ -50,9 +49,7 @@ public class BackgroundSMSSender
     this.smsService = smsService;
   }
 
-  /**
-   * Initialize the Background SMS Sender.
-   */
+  /** Initialize the Background SMS Sender. */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background SMS Sender");
@@ -75,9 +72,7 @@ public class BackgroundSMSSender
     }
   }
 
-  /**
-   * Send the SMSs.
-   */
+  /** Send the SMSs. */
   @Scheduled(cron = "0 * * * * *")
   @Async
   void sendSMSs() {
@@ -124,17 +119,21 @@ public class BackgroundSMSSender
            * "QueuedForSending".
            */
           if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts()) {
-            logger.warn(String.format(
-                "The queued SMS (%d) has exceeded the maximum number of send attempts and will be "
-                    + "marked as \"Failed\"", sms.getId()));
+            logger.warn(
+                String.format(
+                    "The queued SMS (%d) has exceeded the maximum number of send attempts and will be "
+                        + "marked as \"Failed\"",
+                    sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
           } else {
             smsService.unlockSMS(sms.getId(), SMSStatus.QUEUED_FOR_SENDING);
           }
         } catch (Throwable f) {
-          logger.error(String.format("Failed to unlock and set the status for the queued SMS (%d)",
-              sms.getId()), f);
+          logger.error(
+              String.format(
+                  "Failed to unlock and set the status for the queued SMS (%d)", sms.getId()),
+              f);
         }
       }
     }

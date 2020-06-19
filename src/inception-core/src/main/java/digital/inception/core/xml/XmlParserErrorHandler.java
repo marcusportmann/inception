@@ -16,7 +16,7 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.slf4j.Logger;
 import org.xml.sax.ErrorHandler;
@@ -28,16 +28,12 @@ import org.xml.sax.SAXParseException;
  *
  * @author Marcus Portmann
  */
-public class XmlParserErrorHandler
-    implements ErrorHandler {
+public class XmlParserErrorHandler implements ErrorHandler {
 
   private Logger logger = null;
 
-  /**
-   * Constructs a new <code>XmlParserErrorHandler</code>.
-   */
-  public XmlParserErrorHandler() {
-  }
+  /** Constructs a new <code>XmlParserErrorHandler</code>. */
+  public XmlParserErrorHandler() {}
 
   /**
    * Constructs a new <code>XmlParserErrorHandler</code> using the specified <code>Logger</code>.

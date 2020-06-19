@@ -23,7 +23,4 @@ package digital.inception.audit;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IAuditService {
-
-
-}
+public interface IAuditService {}

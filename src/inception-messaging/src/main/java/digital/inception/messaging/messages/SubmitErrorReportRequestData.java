@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
@@ -31,78 +31,56 @@ import java.time.ZoneId;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SubmitErrorReportRequestData</code> class manages the data for a "Submit Error Report
  * Request" message.
- * <p/>
- * This is an asynchronous message.
+ *
+ * <p>This is an asynchronous message.
  *
  * @author Marcus Portmann
  */
 public class SubmitErrorReportRequestData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Submit Error Report Request" message.
-   */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "ff638c33-b4f1-4e79-804c-9560da2543d6");
+  /** The UUID for the "Submit Error Report Request" message. */
+  public static final UUID MESSAGE_TYPE_ID =
+      UUID.fromString("ff638c33-b4f1-4e79-804c-9560da2543d6");
 
-  /**
-   * The ID used to uniquely identify the application that generated the error report.
-   */
+  /** The ID uniquely identifying the application that generated the error report. */
   private String applicationId;
 
-  /**
-   * The version of the application that generated the error report.
-   */
+  /** The version of the application that generated the error report. */
   private String applicationVersion;
 
-  /**
-   * The date and time the error report was created.
-   */
+  /** The date and time the error report was created. */
   private LocalDateTime created;
 
-  /**
-   * The optional base-64 encoded data associated with the error report.
-   */
+  /** The optional base-64 encoded data associated with the error report. */
   private String data;
 
-  /**
-   * The description of the error.
-   */
+  /** The description of the error. */
   private String description;
 
-  /**
-   * The error detail.
-   */
+  /** The error detail. */
   private String detail;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the error report
+   * The Universally Unique Identifier (UUID) uniquely identifying the device the error report
    * originated from.
    */
   private UUID deviceId;
 
-  /**
-   * The feedback provided by the user for the error.
-   */
+  /** The feedback provided by the user for the error. */
   private String feedback;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
   private UUID id;
 
-  /**
-   * The username identifying the user associated with the error report.
-   */
+  /** The username identifying the user associated with the error report. */
   private String who;
 
-  /**
-   * Constructs a new <code>SubmitErrorReportRequestData</code>.
-   */
+  /** Constructs a new <code>SubmitErrorReportRequestData</code>. */
   public SubmitErrorReportRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -110,23 +88,30 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>SubmitErrorReportRequestData</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the error report
-   * @param applicationId      the ID used to uniquely identify the application that generated the
-   *                           error report
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @param applicationId the ID uniquely identifying the application that generated the error
+   *     report
    * @param applicationVersion the version of the application that generated the error report
-   * @param description        the description of the error
-   * @param detail             the error detail
-   * @param feedback           the feedback provided by the user for the error
-   * @param created            the date and time the error report was created
-   * @param who                the username identifying the user associated with the error report
-   * @param deviceId           the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the device the error report originated from
-   * @param data               the optional Base-64 encoded data associated with the error report
+   * @param description the description of the error
+   * @param detail the error detail
+   * @param feedback the feedback provided by the user for the error
+   * @param created the date and time the error report was created
+   * @param who the username identifying the user associated with the error report
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     error report originated from
+   * @param data the optional Base-64 encoded data associated with the error report
    */
-  public SubmitErrorReportRequestData(UUID id, String applicationId, String applicationVersion,
-      String description, String detail, String feedback, LocalDateTime created, String who,
-      UUID deviceId, String data) {
+  public SubmitErrorReportRequestData(
+      UUID id,
+      String applicationId,
+      String applicationVersion,
+      String description,
+      String detail,
+      String feedback,
+      LocalDateTime created,
+      String who,
+      UUID deviceId,
+      String data) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.id = id;
@@ -145,13 +130,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData)
-      throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -185,12 +168,16 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
       try {
         this.created = ISO8601Util.toLocalDateTime(createdValue);
       } catch (Throwable e) {
-        throw new RuntimeException("Failed to parse the When ISO8601 timestamp (" + createdValue
-            + ") for the \"Submit Error Report Request\" message", e);
+        throw new RuntimeException(
+            "Failed to parse the When ISO8601 timestamp ("
+                + createdValue
+                + ") for the \"Submit Error Report Request\" message",
+            e);
       }
     } else {
-      this.created = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(createdValue)),
-          ZoneId.systemDefault());
+      this.created =
+          LocalDateTime.ofInstant(
+              Instant.ofEpochSecond(Long.parseLong(createdValue)), ZoneId.systemDefault());
     }
 
     this.who = rootElement.getChildText("Who");
@@ -204,9 +191,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the ID used to uniquely identify the application that generated the error report.
+   * Returns the ID uniquely identifying the application that generated the error report.
    *
-   * @return the ID used to uniquely identify the application that generated the error report
+   * @return the ID uniquely identifying the application that generated the error report
    */
   public String getApplicationId() {
     return applicationId;
@@ -258,11 +245,11 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the error
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the error
    * report originated from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
-   * report originated from
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the error
+   *     report originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -278,9 +265,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
    */
   public UUID getId() {
     return id;
@@ -300,7 +287,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {
@@ -309,26 +296,15 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
     rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("ApplicationId", applicationId));
     rootElement.addContent(new Element("ApplicationVersion", applicationVersion));
-    rootElement.addContent(new Element("Description",
-        StringUtils.isEmpty(description)
-            ? ""
-            : description));
-    rootElement.addContent(new Element("Detail",
-        StringUtils.isEmpty(detail)
-            ? ""
-            : detail));
-    rootElement.addContent(new Element("Feedback",
-        StringUtils.isEmpty(feedback)
-            ? ""
-            : feedback));
-    rootElement.addContent(new Element("Created",
-        (created == null)
-            ? ISO8601Util.now()
-            : ISO8601Util.fromLocalDateTime(created)));
-    rootElement.addContent(new Element("Who",
-        StringUtils.isEmpty(who)
-            ? ""
-            : who));
+    rootElement.addContent(
+        new Element("Description", StringUtils.isEmpty(description) ? "" : description));
+    rootElement.addContent(new Element("Detail", StringUtils.isEmpty(detail) ? "" : detail));
+    rootElement.addContent(new Element("Feedback", StringUtils.isEmpty(feedback) ? "" : feedback));
+    rootElement.addContent(
+        new Element(
+            "Created",
+            (created == null) ? ISO8601Util.now() : ISO8601Util.fromLocalDateTime(created)));
+    rootElement.addContent(new Element("Who", StringUtils.isEmpty(who) ? "" : who));
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
 
     if (data != null) {

@@ -29,16 +29,14 @@ public interface ITestJPAService {
    *
    * @param testData the test data
    */
-  void createTestData(TestData testData)
-      throws TestJPAServiceException;
+  void createTestData(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the test data in a new transaction.
    *
    * @param testData the test data
    */
-  void createTestDataInNewTransaction(TestData testData)
-      throws TestJPAServiceException;
+  void createTestDataInNewTransaction(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the test data in a new transaction with a checked exception.
@@ -61,34 +59,28 @@ public interface ITestJPAService {
    *
    * @param testData the test data
    */
-  void createTestDataWithCheckedException(TestData testData)
-      throws TestJPAServiceException;
+  void createTestDataWithCheckedException(TestData testData) throws TestJPAServiceException;
 
   /**
    * Create the test data with a runtime exception.
    *
    * @param testData the test data
    */
-  void createTestDataWithRuntimeException(TestData testData)
-      throws TestJPAServiceException;
+  void createTestDataWithRuntimeException(TestData testData) throws TestJPAServiceException;
 
   /**
    * Retrieve the test data.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  TestData getTestData(String id)
-      throws TestJPAServiceException;
+  TestData getTestData(String id) throws TestJPAServiceException;
 
   /**
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  TestData getTestDataWithoutTransaction(String id)
-      throws TestJPAServiceException;
+  TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException;
 }

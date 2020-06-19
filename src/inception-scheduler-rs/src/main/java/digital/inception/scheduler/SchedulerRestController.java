@@ -16,18 +16,20 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -42,34 +44,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SchedulerRestController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Scheduler API")
+@Tag(name = "Scheduler API")
 @RestController
 @RequestMapping(value = "/api/scheduler")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SchedulerRestController extends SecureRestController {
 
-  /**
-   * The Scheduler Service.
-   */
-  private ISchedulerService schedulerService;
+  /** The Scheduler Service. */
+  private final ISchedulerService schedulerService;
 
-  /**
-   * The JSR-303 validator.
-   */
-  private Validator validator;
+  /** The JSR-303 validator. */
+  private final Validator validator;
 
   /**
    * Constructs a new <code>SchedulerRestController</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SchedulerRestController(ISchedulerService schedulerService, Validator validator) {
     this.schedulerService = schedulerService;
@@ -81,20 +79,40 @@ public class SchedulerRestController extends SecureRestController {
    *
    * @param job the job to create
    */
-  @ApiOperation(value = "Create the job", notes = "Create the job")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The job was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "A job with the specified ID already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
+  @Operation(summary = "Create the job", description = "Create the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A job with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
   @RequestMapping(value = "/jobs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public void createJob(@ApiParam(name = "job", value = "The job", required = true)
-  @RequestBody Job job)
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public void createJob(
+      @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
       throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
     if (job == null) {
       throw new InvalidArgumentException("job");
@@ -103,8 +121,8 @@ public class SchedulerRestController extends SecureRestController {
     Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("job", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "job", ValidationError.toValidationErrors(constraintViolations));
     }
 
     schedulerService.createJob(job);
@@ -113,24 +131,50 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Delete the job.
    *
-   * @param jobId the ID used to uniquely identify the job
+   * @param jobId the ID uniquely identifying the job
    */
-  @ApiOperation(value = "Delete the job", notes = "Delete the job")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The job was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The job could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/jobs/{jobId}", method = RequestMethod.DELETE,
+  @Operation(summary = "Delete the job", description = "Delete the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public void deleteJob(@ApiParam(name = "jobId",
-      value = "The ID used to uniquely identify the job", required = true)
-  @PathVariable String jobId)
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public void deleteJob(
+      @Parameter(
+              name = "jobId",
+              description = "The ID uniquely identifying the job",
+              required = true)
+          @PathVariable
+          String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
       throw new InvalidArgumentException("jobId");
@@ -142,26 +186,48 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID used to uniquely identify the code job
-   *
+   * @param jobId the ID uniquely identifying the code job
    * @return the job
    */
-  @ApiOperation(value = "Retrieve the job", notes = "Retrieve the job")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The job could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/jobs/{jobId}", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the job", description = "Retrieve the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public Job getJob(@ApiParam(name = "job", value = "The ID used to uniquely identify the job",
-      required = true)
-  @PathVariable String jobId)
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public Job getJob(
+      @Parameter(name = "job", description = "The ID uniquely identifying the job", required = true)
+          @PathVariable
+          String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
       throw new InvalidArgumentException("jobId");
@@ -173,26 +239,51 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the ID used to uniquely identify the job
-   *
+   * @param jobId the ID uniquely identifying the job
    * @return the name of the job
    */
-  @ApiOperation(value = "Retrieve the name of the job", notes = "Retrieve the name of the job")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The job could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/jobs/{jobId}/name", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the name of the job", description = "Retrieve the name of the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}/name",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public String getJobName(@ApiParam(name = "jobId",
-      value = "The ID used to uniquely identify the job", required = true)
-  @PathVariable String jobId)
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public String getJobName(
+      @Parameter(
+              name = "jobId",
+              description = "The ID uniquely identifying the job",
+              required = true)
+          @PathVariable
+          String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
       throw new InvalidArgumentException("jobId");
@@ -206,43 +297,77 @@ public class SchedulerRestController extends SecureRestController {
    *
    * @return the jobs
    */
-  @ApiOperation(value = "Retrieve the jobs", notes = "Retrieve the jobs")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
+  @Operation(summary = "Retrieve the jobs", description = "Retrieve the jobs")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
   @RequestMapping(value = "/jobs", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public List<Job> getJobs()
-      throws SchedulerServiceException {
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public List<Job> getJobs() throws SchedulerServiceException {
     return schedulerService.getJobs();
   }
 
   /**
    * Update the job.
    *
-   * @param jobId the ID used to uniquely identify the job
-   * @param job   the job
+   * @param jobId the ID uniquely identifying the job
+   * @param job the job
    */
-  @ApiOperation(value = "Update the job", notes = "Update the job")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The job was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The job could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/jobs/{jobId}", method = RequestMethod.PUT,
+  @Operation(summary = "Update the job", description = "Update the job")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The job was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The job could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/jobs/{jobId}",
+      method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
-  public void updateJob(@ApiParam(name = "jobId",
-      value = "The ID used to uniquely identify the job", required = true)
-  @PathVariable String jobId, @ApiParam(name = "job", value = "The job", required = true)
-  @RequestBody Job job)
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
+          + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
+  public void updateJob(
+      @Parameter(
+              name = "jobId",
+              description = "The ID uniquely identifying the job",
+              required = true)
+          @PathVariable
+          String jobId,
+      @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
       throw new InvalidArgumentException("jobId");
@@ -259,8 +384,8 @@ public class SchedulerRestController extends SecureRestController {
     Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("job", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "job", ValidationError.toValidationErrors(constraintViolations));
     }
 
     schedulerService.updateJob(job);

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,19 +26,22 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>ExistingOrganizationUserDirectoryException</code> is thrown to indicate that a security
  * operation failed as a result of an existing organization user directory.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "The organization user directory already exists")
-@WebFault(name = "ExistingOrganizationUserDirectoryException",
+@WebFault(
+    name = "ExistingOrganizationUserDirectoryException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -50,14 +53,18 @@ public class ExistingOrganizationUserDirectoryException extends ServiceException
   /**
    * Constructs a new <code>ExistingOrganizationUserDirectoryException</code>.
    *
-   * @param organizationId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        organization
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
   public ExistingOrganizationUserDirectoryException(UUID organizationId, UUID userDirectoryId) {
-    super("ExistingOrganizationUserDirectoryError",
-        "The organization user directory for the organization (" + organizationId
-            + ") and user directory (" + userDirectoryId + ") already exists");
+    super(
+        "ExistingOrganizationUserDirectoryError",
+        "The organization user directory for the organization ("
+            + organizationId
+            + ") and user directory ("
+            + userDirectoryId
+            + ") already exists");
   }
 }

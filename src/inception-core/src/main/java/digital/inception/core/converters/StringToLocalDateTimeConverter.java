@@ -16,7 +16,7 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>StringToLocalDateTimeConverter</code> class implements the Spring converter that
@@ -34,14 +34,10 @@ import org.springframework.util.StringUtils;
  */
 @SuppressWarnings("unused")
 @Component
-public final class StringToLocalDateTimeConverter
-    implements Converter<String, LocalDateTime> {
+public final class StringToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
 
-  /**
-   * Constructs a new <code>StringToLocalDateTimeConverter</code>.
-   */
-  public StringToLocalDateTimeConverter() {
-  }
+  /** Constructs a new <code>StringToLocalDateTimeConverter</code>. */
+  public StringToLocalDateTimeConverter() {}
 
   @Override
   public LocalDateTime convert(String source) {
@@ -52,8 +48,8 @@ public final class StringToLocalDateTimeConverter
     try {
       return ISO8601Util.toLocalDateTime(source);
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to parse the ISO8601Util date time value (" + source
-          + ")", e);
+      throw new RuntimeException(
+          "Failed to parse the ISO8601Util date time value (" + source + ")", e);
     }
   }
 }

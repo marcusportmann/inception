@@ -16,7 +16,7 @@
 
 package digital.inception.core.service;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import java.io.ByteArrayOutputStream;
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceError</code> class holds the service error information.
@@ -39,55 +39,45 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "ServiceError", namespace = "http://core.inception.digital")
-@XmlType(name = "ServiceError", namespace = "http://core.inception.digital",
+@XmlType(
+    name = "ServiceError",
+    namespace = "http://core.inception.digital",
     propOrder = {"when", "code", "message", "detail"})
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ServiceError {
 
-  /**
-   * The code identifying the service error.
-   */
+  /** The code identifying the service error. */
   @XmlElement(name = "Code", required = true)
   private String code;
 
-  /**
-   * The detail for the service error
-   */
+  /** The detail for the service error */
   @XmlElement(name = "Detail", required = true)
   private String detail;
 
-  /**
-   * The message for the service error.
-   */
+  /** The message for the service error. */
   @XmlElement(name = "Message", required = true)
   private String message;
 
-  /**
-   * The date and time the service error occurred.
-   */
+  /** The date and time the service error occurred. */
   @XmlElement(name = "When", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /**
-   * Constructs a new <code>ServiceError</code>.
-   */
-  public ServiceError() {
-  }
+  /** Constructs a new <code>ServiceError</code>. */
+  public ServiceError() {}
 
   /**
    * Constructs a new <code>ServiceError</code>.
    *
-   * @param code  the code identifying the service error
+   * @param code the code identifying the service error
    * @param cause the cause of the service error
    */
   public ServiceError(String code, Throwable cause) {
     this.code = code;
     this.when = LocalDateTime.now();
-    this.message = (cause.getMessage() != null)
-        ? cause.getMessage()
-        : cause.getClass().getSimpleName();
+    this.message =
+        (cause.getMessage() != null) ? cause.getMessage() : cause.getClass().getSimpleName();
 
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();

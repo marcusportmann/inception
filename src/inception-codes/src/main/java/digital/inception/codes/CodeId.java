@@ -16,7 +16,7 @@
 
 package digital.inception.codes;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
@@ -26,33 +26,24 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class CodeId
-    implements Serializable {
+public class CodeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the code category the code is associated with.
-   */
+  /** The ID uniquely identifying the code category the code is associated with. */
   private String codeCategoryId;
 
-  /**
-   * The ID used to uniquely identify the code.
-   */
+  /** The ID uniquely identifying the code. */
   private String id;
 
-  /**
-   * Constructs a new <code>CodeId</code>.
-   */
-  public CodeId() {
-  }
+  /** Constructs a new <code>CodeId</code>. */
+  public CodeId() {}
 
   /**
    * Constructs a new <code>CodeId</code>.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
-   *                       with
-   * @param id             the ID used to uniquely identify the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param id the ID uniquely identifying the code
    */
   public CodeId(String codeCategoryId, String id) {
     this.codeCategoryId = codeCategoryId;
@@ -63,9 +54,8 @@ public class CodeId
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -87,37 +77,36 @@ public class CodeId
   }
 
   /**
-   * Returns the ID used to uniquely identify the code category the code is associated with.
+   * Returns the ID uniquely identifying the code category the code is associated with.
    *
-   * @return the ID used to uniquely identify the code category the code is associated with
+   * @return the ID uniquely identifying the code category the code is associated with
    */
   public String getCodeCategoryId() {
     return codeCategoryId;
   }
 
   /**
-   * Set the ID used to uniquely identify the code category the code is associated with.
+   * Set the ID uniquely identifying the code category the code is associated with.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
-   *                       with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
    */
   public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
   }
 
   /**
-   * Returns the ID used to uniquely identify the code.
+   * Returns the ID uniquely identifying the code.
    *
-   * @return the ID used to uniquely identify the code
+   * @return the ID uniquely identifying the code
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the code.
+   * Set the ID uniquely identifying the code.
    *
-   * @param id the ID used to uniquely identify the code
+   * @param id the ID uniquely identifying the code
    */
   public void setId(String id) {
     this.id = id;
@@ -130,10 +119,7 @@ public class CodeId
    */
   @Override
   public int hashCode() {
-    return ((codeCategoryId == null)
-        ? 0
-        : codeCategoryId.hashCode()) + ((id == null)
-        ? 0
-        : id.hashCode());
+    return ((codeCategoryId == null) ? 0 : codeCategoryId.hashCode())
+        + ((id == null) ? 0 : id.hashCode());
   }
 }

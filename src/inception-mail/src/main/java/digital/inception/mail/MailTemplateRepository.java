@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,11 +25,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>MailTemplateRepository</code> interface declares the repository for the
- * <code>MailTemplate</code> domain type.
+ * The <code>MailTemplateRepository</code> interface declares the repository for the <code>
+ * MailTemplate</code> domain type.
  *
  * @author Marcus Portmann
  */

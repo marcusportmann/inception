@@ -16,23 +16,23 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserStatus</code> enumeration defines the possible statuses for a user.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserStatus")
+@Schema(description = "UserStatus")
 @XmlEnum
 @XmlType(name = "UserStatus", namespace = "http://security.inception.digital")
 public enum UserStatus {
@@ -57,7 +57,6 @@ public enum UserStatus {
    * Returns the user status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the user status
-   *
    * @return the user status given by the specified numeric code value
    */
   @JsonCreator

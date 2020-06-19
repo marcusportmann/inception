@@ -16,14 +16,13 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,51 +44,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Group</code> class holds the information for a group.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Group")
+@Schema(description = "Group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "name", "description"})
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
-@XmlType(name = "Group", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "Group",
+    namespace = "http://security.inception.digital",
     propOrder = {"userDirectoryId", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "groups")
 @SuppressWarnings({"unused"})
-public class Group
-    implements Serializable {
+public class Group implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The description for the group.
-   */
-  @ApiModelProperty(value = "The description for the group")
+  /** The description for the group. */
+  @Schema(description = "The description for the group")
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(max = 100)
   @Column(name = "description", length = 100)
   private String description;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the group.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the group. */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name identifying the group.
-   */
-  @ApiModelProperty(value = "The name identifying the group", required = true)
+  /** The name identifying the group. */
+  @Schema(description = "The name identifying the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -97,23 +91,25 @@ public class Group
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The roles associated with the group.
-   */
+  /** The roles associated with the group. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(schema = "security", name = "role_to_group_map",
+  @JoinTable(
+      schema = "security",
+      name = "role_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
   private Set<Role> roles = new HashSet<>();
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
-   * is associated with.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is
+   * associated with.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with",
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the "
+              + "group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -121,22 +117,19 @@ public class Group
   @Column(name = "user_directory_id", nullable = false)
   private UUID userDirectoryId;
 
-  /**
-   * The users associated with the group.
-   */
+  /** The users associated with the group. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(schema = "security", name = "user_to_group_map",
+  @JoinTable(
+      schema = "security",
+      name = "user_to_group_map",
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();
 
-  /**
-   * Constructs a new <code>Group</code>.
-   */
-  public Group() {
-  }
+  /** Constructs a new <code>Group</code>. */
+  public Group() {}
 
   /**
    * Constructs a new <code>Group</code>.
@@ -150,10 +143,10 @@ public class Group
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
-   * @param name            the name identifying the group
-   * @param description     the description for the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory the group is associated with
+   * @param name the name identifying the group
+   * @param description the description for the group
    */
   public Group(UUID userDirectoryId, String name, String description) {
     this.userDirectoryId = userDirectoryId;
@@ -185,9 +178,8 @@ public class Group
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -227,18 +219,18 @@ public class Group
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the group.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the group
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the group.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the group
    */
   public void setId(UUID id) {
     this.id = id;
@@ -281,22 +273,22 @@ public class Group
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * group is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   *     group is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * group is associated with.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
@@ -327,9 +319,7 @@ public class Group
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**

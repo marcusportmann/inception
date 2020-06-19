@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ServiceUtil;
 import javax.sql.DataSource;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BMIConfiguration</code> class provides the Spring configuration for the Business
@@ -40,38 +40,33 @@ import org.springframework.transaction.PlatformTransactionManager;
  * @author Marcus Portmann
  */
 @Configuration
-@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.bmi"})
 public class BMIConfiguration {
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private DataSource dataSource;
 
   /* The name of the Process Engine instance. */
   private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
-  /**
-   * The Spring platform transaction manager.
-   */
+  /** The Spring platform transaction manager. */
   private PlatformTransactionManager transactionManager;
 
   /**
    * Constructs a new <code>ProcessConfiguration</code>.
    *
    * @param applicationContext the Spring application context
-   * @param dataSource         the data source used to provide connections to the application
-   *                           database
+   * @param dataSource the data source used to provide connections to the application database
    * @param transactionManager the Spring platform transaction manager
    */
-  public BMIConfiguration(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource,
+  public BMIConfiguration(
+      ApplicationContext applicationContext,
+      @Qualifier("applicationDataSource") DataSource dataSource,
       PlatformTransactionManager transactionManager) {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
@@ -91,8 +86,8 @@ public class BMIConfiguration {
       processEngineConfiguration.setApplicationContext(applicationContext);
       processEngineConfiguration.setCmmnEnabled(true);
       processEngineConfiguration.setDatabaseSchema("CAMUNDA");
-      processEngineConfiguration
-          .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+      processEngineConfiguration.setDatabaseSchemaUpdate(
+          ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
       processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
       processEngineConfiguration.setDataSource(dataSource);
       processEngineConfiguration.setJobExecutorActivate(true);

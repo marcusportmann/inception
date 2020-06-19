@@ -16,7 +16,7 @@
 
 package digital.inception.core.support;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.IOException;
 import java.util.Properties;
@@ -24,7 +24,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MergedMessageSource</code> class implements the merged message source that provides
@@ -46,16 +46,16 @@ public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
     }
   }
 
-  private PropertiesHolder refreshClassPathProperties(String filename,
-      PropertiesHolder propertiesHolder) {
+  private PropertiesHolder refreshClassPathProperties(
+      String filename, PropertiesHolder propertiesHolder) {
     Properties properties = new Properties();
     long lastModified = -1;
     try {
       Resource[] resources = resolver.getResources(filename + PROPERTIES_SUFFIX);
       for (Resource resource : resources) {
         String resourcePath = resource.getURI().toString().replace(PROPERTIES_SUFFIX, "");
-        PropertiesHolder resourcePropertiesHolder = super.refreshProperties(resourcePath,
-            propertiesHolder);
+        PropertiesHolder resourcePropertiesHolder =
+            super.refreshProperties(resourcePath, propertiesHolder);
 
         Properties resourceProperties = resourcePropertiesHolder.getProperties();
 

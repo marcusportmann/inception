@@ -16,28 +16,26 @@
 
 package digital.inception.sms;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>SMSStatusConverter</code> class implements the custom JPA converter for the
- * <code>SMSStatus</code> enumeration.
+ * The <code>SMSStatusConverter</code> class implements the custom JPA converter for the <code>
+ * SMSStatus</code> enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
-public class SMSStatusConverter
-    implements AttributeConverter<SMSStatus, Integer> {
+public class SMSStatusConverter implements AttributeConverter<SMSStatus, Integer> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
    *
    * @param attribute the entity attribute value to be converted
-   *
    * @return the converted data to be stored in the database column
    */
   @Override
@@ -52,7 +50,6 @@ public class SMSStatusConverter
    * providers are not expected to do such type conversion.
    *
    * @param dbData the data from the database column to be converted
-   *
    * @return the converted value to be stored in the entity attribute
    */
   @Override

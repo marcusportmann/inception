@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,20 +25,23 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DuplicateReportDefinitionException</code> exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate report definition i.e a report
  * definition with the specified ID already exists.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "A report definition with the specified ID already exists")
-@WebFault(name = "DuplicateReportDefinitionException",
+@WebFault(
+    name = "DuplicateReportDefinitionException",
     targetNamespace = "http://reporting.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,10 +52,11 @@ public class DuplicateReportDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateReportDefinitionException</code>.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    */
   public DuplicateReportDefinitionException(String reportDefinitionId) {
-    super("DuplicateReportDefinitionError", "The report definition with ID (" + reportDefinitionId
-        + ") already exists");
+    super(
+        "DuplicateReportDefinitionError",
+        "The report definition with ID (" + reportDefinitionId + ") already exists");
   }
 }

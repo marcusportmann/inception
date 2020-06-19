@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -28,31 +28,23 @@ import java.time.LocalDateTime;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class PasswordResetId
-    implements Serializable {
+public class PasswordResetId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the password reset was requested.
-   */
+  /** The date and time the password reset was requested. */
   private LocalDateTime requested;
 
-  /**
-   * The username for the user associated with the password reset.
-   */
+  /** The username for the user associated with the password reset. */
   private String username;
 
-  /**
-   * Constructs a new <code>PasswordResetId</code>.
-   */
-  public PasswordResetId() {
-  }
+  /** Constructs a new <code>PasswordResetId</code>. */
+  public PasswordResetId() {}
 
   /**
    * Constructs a new <code>CodeId</code>.
    *
-   * @param username  the username for the user associated with the password reset
+   * @param username the username for the user associated with the password reset
    * @param requested the date and time the password reset was requested
    */
   public PasswordResetId(String username, LocalDateTime requested) {
@@ -64,9 +56,8 @@ public class PasswordResetId
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -130,10 +121,7 @@ public class PasswordResetId
    */
   @Override
   public int hashCode() {
-    return ((username == null)
-        ? 0
-        : username.hashCode()) + ((requested == null)
-        ? 0
-        : requested.hashCode());
+    return ((username == null) ? 0 : username.hashCode())
+        + ((requested == null) ? 0 : requested.hashCode());
   }
 }

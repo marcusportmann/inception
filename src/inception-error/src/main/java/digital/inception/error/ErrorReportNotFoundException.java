@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,18 +26,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReportNotFoundException</code> exception is thrown to indicate that the required
  * error report could not be found when working with the Error Service.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The error report could not be found")
-@WebFault(name = "ErrorReportNotFoundException", targetNamespace = "http://error.inception.digital",
+@WebFault(
+    name = "ErrorReportNotFoundException",
+    targetNamespace = "http://error.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused"})
@@ -48,11 +51,11 @@ public class ErrorReportNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>ErrorReportNotFoundException</code>.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
+   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   *     report
    */
   public ErrorReportNotFoundException(UUID errorReportId) {
-    super("ErrorReportNotFoundError",
-        "The error report (" + errorReportId + ") could not be found");
+    super(
+        "ErrorReportNotFoundError", "The error report (" + errorReportId + ") could not be found");
   }
 }

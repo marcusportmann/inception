@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://sample.inception.digital",
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://sample.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {@javax.xml.bind.annotation.XmlNs(prefix = "inception",
-        namespaceURI = "http://inception.digital"),
-        @javax.xml.bind.annotation.XmlNs(prefix = "validation",
-            namespaceURI = "http://validation.inception.digital"),
-        @javax.xml.bind.annotation.XmlNs(prefix = "sample",
-            namespaceURI = "http://sample.inception.digital"),})
-@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({@javax.xml.bind.annotation.adapters
-    .XmlJavaTypeAdapter(type = java.time.LocalDateTime.class,
-    value = digital.inception.core.xml.LocalDateTimeAdapter.class),
-    @javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(type = java.time.ZonedDateTime.class,
-        value = digital.inception.core.xml.ZonedDateTimeAdapter.class)})
+    xmlns = {
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "inception",
+          namespaceURI = "http://inception.digital"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "validation",
+          namespaceURI = "http://validation.inception.digital"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "sample",
+          namespaceURI = "http://sample.inception.digital"),
+    })
+@javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters({
+  @javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
+      type = java.time.LocalDateTime.class,
+      value = digital.inception.core.xml.LocalDateTimeAdapter.class),
+  @javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter(
+      type = java.time.ZonedDateTime.class,
+      value = digital.inception.core.xml.ZonedDateTimeAdapter.class)
+})
 package digital.inception.sample.model;

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -29,14 +29,10 @@ import org.springframework.stereotype.Component;
  */
 @SuppressWarnings("unused")
 @Component
-public class StringToSortDirectionConverter
-    implements Converter<String, SortDirection> {
+public class StringToSortDirectionConverter implements Converter<String, SortDirection> {
 
-  /**
-   * Constructs a new <code>StringToSortDirectionConverter</code>.
-   */
-  public StringToSortDirectionConverter() {
-  }
+  /** Constructs a new <code>StringToSortDirectionConverter</code>. */
+  public StringToSortDirectionConverter() {}
 
   @Override
   public SortDirection convert(String source) {

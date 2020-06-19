@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.handler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
@@ -53,7 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the
@@ -68,20 +68,16 @@ public class SystemMessageHandler extends MessageHandler {
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
 
   /* Codes Service */
-  @Autowired
-  private ICodesService codesService;
+  @Autowired private ICodesService codesService;
 
   /* Error Service */
-  @Autowired
-  private IErrorService errorService;
+  @Autowired private IErrorService errorService;
 
   /* Messaging Service */
-  @Autowired
-  private IMessagingService messagingService;
+  @Autowired private IMessagingService messagingService;
 
   /* Security Service */
-  @Autowired
-  private ISecurityService securityService;
+  @Autowired private ISecurityService securityService;
 
   /**
    * Constructs a new <code>SystemMessageHandler</code>.
@@ -97,12 +93,10 @@ public class SystemMessageHandler extends MessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   *
    * @return the response message or <code>null</code> if no response message exists
    */
   @Override
-  public Message processMessage(Message message)
-      throws MessageHandlerException {
+  public Message processMessage(Message message) throws MessageHandlerException {
     // Process a "Authenticate Request" message
     if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID)) {
       return processAuthenticateMessage(message);
@@ -133,104 +127,111 @@ public class SystemMessageHandler extends MessageHandler {
       return processGetCodeCategoryRequestMessage(message);
     }
 
-    throw new MessageHandlerException(String.format(
-        "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and "
-            + "device (%s)", message.getId(), message.getTypeId(), message.getUsername(),
-        message.getDeviceId()));
+    throw new MessageHandlerException(
+        String.format(
+            "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and "
+                + "device (%s)",
+            message.getId(), message.getTypeId(), message.getUsername(), message.getDeviceId()));
   }
 
-  private Message processAnotherTestMessage(Message requestMessage)
-      throws MessageHandlerException {
+  private Message processAnotherTestMessage(Message requestMessage) throws MessageHandlerException {
     try {
       logger.info(requestMessage.toString());
 
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      AnotherTestRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new AnotherTestRequestData());
+      AnotherTestRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new AnotherTestRequestData());
 
-      AnotherTestResponseData responseData = new AnotherTestResponseData(
-          requestData.getTestValue(), requestData.getTestData());
+      AnotherTestResponseData responseData =
+          new AnotherTestResponseData(requestData.getTestValue(), requestData.getTestData());
 
-      Message responseMessage = messageTranslator.toMessage(responseData,
-          requestMessage.getCorrelationId());
+      Message responseMessage =
+          messageTranslator.toMessage(responseData, requestMessage.getCorrelationId());
 
       logger.info(responseMessage.toString());
 
       return responseMessage;
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
   private Message processAuthenticateMessage(Message requestMessage)
       throws MessageHandlerException {
     try {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      AuthenticateRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new AuthenticateRequestData());
+      AuthenticateRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new AuthenticateRequestData());
 
       // Authenticate the user
       AuthenticateResponseData responseData;
 
       try {
-        UUID userDirectoryId = securityService.authenticate(requestData.getUsername(),
-            requestData.getPassword());
+        UUID userDirectoryId =
+            securityService.authenticate(requestData.getUsername(), requestData.getPassword());
 
-        List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
-            userDirectoryId);
+        List<Organization> organizations =
+            securityService.getOrganizationsForUserDirectory(userDirectoryId);
 
-        byte[] userEncryptionKey = messagingService.deriveUserDeviceEncryptionKey(
-            requestData.getUsername(), requestData.getDeviceId());
+        byte[] userEncryptionKey =
+            messagingService.deriveUserDeviceEncryptionKey(
+                requestData.getUsername(), requestData.getDeviceId());
 
         if (logger.isDebugEnabled()) {
-          logger.debug(String.format(
-              "Generated the encryption key (%s) for the user (%s) and the device (%s)",
-              Base64Util.encodeBytes(userEncryptionKey, false), requestData.getUsername(),
-              requestData.getDeviceId()));
+          logger.debug(
+              String.format(
+                  "Generated the encryption key (%s) for the user (%s) and the device (%s)",
+                  Base64Util.encodeBytes(userEncryptionKey, false),
+                  requestData.getUsername(),
+                  requestData.getDeviceId()));
         }
 
-        responseData = new AuthenticateResponseData(organizations, userEncryptionKey,
-            new HashMap<>());
+        responseData =
+            new AuthenticateResponseData(organizations, userEncryptionKey, new HashMap<>());
       } catch (AuthenticationFailedException | UserNotFoundException e) {
-        responseData = new AuthenticateResponseData(AuthenticateResponseData
-            .ERROR_CODE_UNKNOWN_ERROR, String.format("Failed to authenticate the user (%s)",
-            requestData.getUsername()));
+        responseData =
+            new AuthenticateResponseData(
+                AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
+                String.format("Failed to authenticate the user (%s)", requestData.getUsername()));
       } catch (Throwable e) {
-        logger.error(String.format("Failed to authenticate the user (%s)",
-            requestData.getUsername()), e);
+        logger.error(
+            String.format("Failed to authenticate the user (%s)", requestData.getUsername()), e);
 
-        responseData = new AuthenticateResponseData(AuthenticateResponseData
-            .ERROR_CODE_UNKNOWN_ERROR, String.format("Failed to authenticate the user (%s): %s",
-            requestData.getUsername(), e.getMessage()));
+        responseData =
+            new AuthenticateResponseData(
+                AuthenticateResponseData.ERROR_CODE_UNKNOWN_ERROR,
+                String.format(
+                    "Failed to authenticate the user (%s): %s",
+                    requestData.getUsername(), e.getMessage()));
       }
 
       return messageTranslator.toMessage(responseData, requestMessage.getCorrelationId());
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
   private Message processCheckUserExistsMessage(Message requestMessage)
       throws MessageHandlerException {
     try {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      CheckUserExistsRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new CheckUserExistsRequestData());
+      CheckUserExistsRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new CheckUserExistsRequestData());
 
       CheckUserExistsResponseData responseData;
 
       try {
         if (logger.isDebugEnabled()) {
-          logger.debug(String.format("Checking if the user (%s) exists",
-              requestData.getUsername()));
+          logger.debug(
+              String.format("Checking if the user (%s) exists", requestData.getUsername()));
         }
 
         if (securityService.getUserDirectoryIdForUser(requestData.getUsername()) != null) {
@@ -239,27 +240,29 @@ public class SystemMessageHandler extends MessageHandler {
           responseData = new CheckUserExistsResponseData(false);
         }
       } catch (Throwable e) {
-        responseData = new CheckUserExistsResponseData(CheckUserExistsResponseData
-            .ERROR_CODE_UNKNOWN_ERROR, String.format("Failed to check if the user (%s) exists: %s",
-            requestData.getUsername(), e.getMessage()));
-
+        responseData =
+            new CheckUserExistsResponseData(
+                CheckUserExistsResponseData.ERROR_CODE_UNKNOWN_ERROR,
+                String.format(
+                    "Failed to check if the user (%s) exists: %s",
+                    requestData.getUsername(), e.getMessage()));
       }
 
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
   private Message processGetCodeCategoryRequestMessage(Message requestMessage)
       throws MessageHandlerException {
     try {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      GetCodeCategoryRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new GetCodeCategoryRequestData());
+      GetCodeCategoryRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new GetCodeCategoryRequestData());
 
       GetCodeCategoryResponseData responseData;
 
@@ -273,72 +276,86 @@ public class SystemMessageHandler extends MessageHandler {
         if (requestData.getParameters().isEmpty()) {
           codes = codesService.getCodes(requestData.getCodeCategoryId());
         } else {
-          codes = codesService.getCodesWithParameters(requestData.getCodeCategoryId(),
-              requestData.getParameters());
+          codes =
+              codesService.getCodesWithParameters(
+                  requestData.getCodeCategoryId(), requestData.getParameters());
         }
 
         CodeCategoryData codeCategoryData = new CodeCategoryData(codeCategory, codeData, codes);
 
         responseData = new GetCodeCategoryResponseData(codeCategoryData);
       } catch (CodeCategoryNotFoundException e) {
-        responseData = new GetCodeCategoryResponseData(GetCodeCategoryResponseData
-            .ERROR_CODE_UNKNOWN_ERROR, String.format(
-            "Failed to retrieve the code category (%s): The code category could not be found",
-            requestData.getCodeCategoryId()));
+        responseData =
+            new GetCodeCategoryResponseData(
+                GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
+                String.format(
+                    "Failed to retrieve the code category (%s): The code category could not be found",
+                    requestData.getCodeCategoryId()));
       } catch (Throwable e) {
-        logger.error(String.format("Failed to retrieve the code category (%s)",
-            requestData.getCodeCategoryId()), e);
+        logger.error(
+            String.format(
+                "Failed to retrieve the code category (%s)", requestData.getCodeCategoryId()),
+            e);
 
-        responseData = new GetCodeCategoryResponseData(GetCodeCategoryResponseData
-            .ERROR_CODE_UNKNOWN_ERROR, String.format(
-            "Failed to retrieve the code category (%s): %s", requestData.getCodeCategoryId(),
-            ExceptionUtil.getNestedMessages(e)));
+        responseData =
+            new GetCodeCategoryResponseData(
+                GetCodeCategoryResponseData.ERROR_CODE_UNKNOWN_ERROR,
+                String.format(
+                    "Failed to retrieve the code category (%s): %s",
+                    requestData.getCodeCategoryId(), ExceptionUtil.getNestedMessages(e)));
       }
 
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
   private Message processSubmitErrorReportRequestMessage(Message requestMessage)
       throws MessageHandlerException {
     try {
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      SubmitErrorReportRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new SubmitErrorReportRequestData());
+      SubmitErrorReportRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new SubmitErrorReportRequestData());
 
-      ErrorReport errorReport = new ErrorReport(requestData.getId(),
-          requestData.getApplicationId(), requestData.getApplicationVersion(),
-          requestData.getDescription(), requestData.getDetail(), requestData.getCreated(),
-          requestData.getWho(), requestData.getDeviceId(), requestData.getFeedback(),
-          requestData.getData());
+      ErrorReport errorReport =
+          new ErrorReport(
+              requestData.getId(),
+              requestData.getApplicationId(),
+              requestData.getApplicationVersion(),
+              requestData.getDescription(),
+              requestData.getDetail(),
+              requestData.getCreated(),
+              requestData.getWho(),
+              requestData.getDeviceId(),
+              requestData.getFeedback(),
+              requestData.getData());
 
       errorService.createErrorReport(errorReport);
 
-      SubmitErrorReportResponseData responseData = new SubmitErrorReportResponseData(0,
-          SubmitErrorReportResponseData.ERROR_MESSAGE_SUCCESS, requestData.getId());
+      SubmitErrorReportResponseData responseData =
+          new SubmitErrorReportResponseData(
+              0, SubmitErrorReportResponseData.ERROR_MESSAGE_SUCCESS, requestData.getId());
 
       return messageTranslator.toMessage(responseData);
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 
-  private Message processTestMessage(Message requestMessage)
-      throws MessageHandlerException {
+  private Message processTestMessage(Message requestMessage) throws MessageHandlerException {
     try {
       logger.info(requestMessage.toString());
 
-      MessageTranslator messageTranslator = new MessageTranslator(requestMessage.getUsername(),
-          requestMessage.getDeviceId());
+      MessageTranslator messageTranslator =
+          new MessageTranslator(requestMessage.getUsername(), requestMessage.getDeviceId());
 
-      TestRequestData requestData = messageTranslator.fromMessage(requestMessage,
-          new TestRequestData());
+      TestRequestData requestData =
+          messageTranslator.fromMessage(requestMessage, new TestRequestData());
 
       TestResponseData responseData = new TestResponseData(requestData.getTestValue());
 
@@ -348,8 +365,8 @@ public class SystemMessageHandler extends MessageHandler {
 
       return responseMessage;
     } catch (Throwable e) {
-      throw new MessageHandlerException(String.format("Failed to process the message (%s)",
-          requestMessage.getTypeId()), e);
+      throw new MessageHandlerException(
+          String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
   }
 }

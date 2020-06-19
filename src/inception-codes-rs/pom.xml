@@ -1,39 +1,40 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-
   <artifactId>inception-codes-rs</artifactId>
-  <name>inception-codes-rs</name>
-
-  <parent>
-    <groupId>digital.inception</groupId>
-    <artifactId>inception</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
 
   <dependencies>
     <!-- Inception Dependencies -->
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-codes</artifactId>
+      <groupId>digital.inception</groupId>
     </dependency>
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-rs</artifactId>
+      <groupId>digital.inception</groupId>
     </dependency>
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-validation</artifactId>
+      <groupId>digital.inception</groupId>
     </dependency>
 
     <!-- Test Dependencies -->
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-test</artifactId>
+      <groupId>digital.inception</groupId>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>inception-codes-rs</name>
+
+  <parent>
+    <artifactId>inception</artifactId>
+    <groupId>digital.inception</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
 </project>
 

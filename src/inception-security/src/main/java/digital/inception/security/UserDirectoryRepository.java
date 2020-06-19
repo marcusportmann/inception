@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +27,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>UserDirectoryRepository</code> interface declares the repository for the
- * <code>UserDirectory</code> domain type.
+ * The <code>UserDirectoryRepository</code> interface declares the repository for the <code>
+ * UserDirectory</code> domain type.
  *
  * @author Marcus Portmann
  */

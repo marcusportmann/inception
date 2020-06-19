@@ -16,7 +16,7 @@
 
 package digital.inception.sample.model;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,8 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,32 +41,31 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Data</code> class.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Data")
+@Schema(description = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlRootElement(name = "Data", namespace = "http://sample.inception.digital")
-@XmlType(name = "Data", namespace = "http://sample.inception.digital",
+@XmlType(
+    name = "Data",
+    namespace = "http://sample.inception.digital",
     propOrder = {"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "sample", name = "data")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Data
-    implements Serializable {
+public class Data implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The timestamp value for the data.
-   */
-  @ApiModelProperty(value = "The timestamp value for the data")
+  /** The timestamp value for the data. */
+  @Schema(description = "The timestamp value for the data")
   @JsonProperty
   @XmlElement(name = "TimestampValue")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -75,10 +73,8 @@ public class Data
   @Column(name = "timestamp_value")
   public LocalDateTime timestampValue;
 
-  /**
-   * The date value for the data.
-   */
-  @ApiModelProperty(value = "The date value for the data")
+  /** The date value for the data. */
+  @Schema(description = "The date value for the data")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @XmlElement(name = "DateValue")
@@ -87,10 +83,8 @@ public class Data
   @Column(name = "date_value")
   private LocalDate dateValue;
 
-  /**
-   * The ID used to uniquely identify the data.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the data", required = true)
+  /** The ID uniquely identifying the data. */
+  @Schema(description = "The ID uniquely identifying the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -98,51 +92,47 @@ public class Data
   @Column(name = "id", nullable = false)
   private long id;
 
-  /**
-   * The integer value for the data.
-   */
-  @ApiModelProperty(value = "The integer value for the data")
+  /** The integer value for the data. */
+  @Schema(description = "The integer value for the data")
   @JsonProperty
   @XmlElement(name = "IntegerValue")
   @Column(name = "integer_value")
   private Integer integerValue;
 
-  /**
-   * The name for the data.
-   */
-  @ApiModelProperty(value = "The name for the data", required = true)
+  /** The name for the data. */
+  @Schema(description = "The name for the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Column(name = "name", nullable = false)
   private String name;
 
-  /**
-   * The string string value for the data.
-   */
-  @ApiModelProperty(value = "The string string value for the data")
+  /** The string string value for the data. */
+  @Schema(description = "The string string value for the data")
   @JsonProperty
   @XmlElement(name = "StringValue")
   @Column(name = "string_value")
   private String stringValue;
 
-  /**
-   * Constructs a new <code>Data</code>.
-   */
-  public Data() {
-  }
+  /** Constructs a new <code>Data</code>. */
+  public Data() {}
 
   /**
    * Constructs a new <code>Data</code>.
    *
-   * @param id             the ID used to uniquely identify the data
-   * @param name           the name for the data
-   * @param integerValue   the integer value
-   * @param stringValue    the string value for the data
-   * @param dateValue      the date value for the data
+   * @param id the ID uniquely identifying the data
+   * @param name the name for the data
+   * @param integerValue the integer value
+   * @param stringValue the string value for the data
+   * @param dateValue the date value for the data
    * @param timestampValue the timestamp value for the data
    */
-  public Data(long id, String name, Integer integerValue, String stringValue, LocalDate dateValue,
+  public Data(
+      long id,
+      String name,
+      Integer integerValue,
+      String stringValue,
+      LocalDate dateValue,
       LocalDateTime timestampValue) {
     this.id = id;
     this.name = name;
@@ -156,9 +146,8 @@ public class Data
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -198,18 +187,18 @@ public class Data
   }
 
   /**
-   * Returns the ID used to uniquely identify the data.
+   * Returns the ID uniquely identifying the data.
    *
-   * @return the ID used to uniquely identify the data
+   * @return the ID uniquely identifying the data
    */
   public long getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the data.
+   * Set the ID uniquely identifying the data.
    *
-   * @param id the ID used to uniquely identify the data
+   * @param id the ID uniquely identifying the data
    */
   public void setId(long id) {
     this.id = id;
@@ -304,8 +293,18 @@ public class Data
    */
   @Override
   public String toString() {
-    return "Data {id=\"" + id + "\", name=\"" + name + "\", integerValue=\"" + integerValue
-        + "\", stringValue=\"" + stringValue + "\", dateValue=\"" + dateValue
-        + "\", timestampValue=\"" + timestampValue + "\"}";
+    return "Data {id=\""
+        + id
+        + "\", name=\""
+        + name
+        + "\", integerValue=\""
+        + integerValue
+        + "\", stringValue=\""
+        + stringValue
+        + "\", dateValue=\""
+        + dateValue
+        + "\", timestampValue=\""
+        + timestampValue
+        + "\"}";
   }
 }

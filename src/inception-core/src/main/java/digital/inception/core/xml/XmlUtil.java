@@ -16,7 +16,7 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlUtil</code> class provides utility methods for working with XML documents.
@@ -57,11 +57,10 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <code>javax.xml.datatype.XMLGregorianCalendar</code> instance to a
-   * <code>java.util.Date</code> instance.
+   * Converts a <code>javax.xml.datatype.XMLGregorianCalendar</code> instance to a <code>
+   * java.util.Date</code> instance.
    *
    * @param calendar the <code>javax.xml.datatype.XMLGregorianCalendar</code> instance to convert
-   *
    * @return the converted <code>java.util.Date</code> instance
    */
   public static java.util.Date asDate(XMLGregorianCalendar calendar) {
@@ -73,11 +72,10 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <code>java.util.Date</code> instance to a
-   * <code>javax.xml.datatype.XMLGregorianCalendar</code> instance.
+   * Converts a <code>java.util.Date</code> instance to a <code>
+   * javax.xml.datatype.XMLGregorianCalendar</code> instance.
    *
    * @param date the <code>java.util.Date</code> instance to convert
-   *
    * @return the converted <code>javax.xml.datatype.XMLGregorianCalendar</code> instance
    */
   public static XMLGregorianCalendar asXMLGregorianCalendar(java.util.Date date) {
@@ -96,10 +94,9 @@ public class XmlUtil {
    * Returns the child element with the specified name for the specified element.
    *
    * @param element the parent element
-   * @param name    the name of the child element to return
-   *
+   * @param name the name of the child element to return
    * @return the child element or <code>null</code> if a child element with the specified name could
-   * not be found
+   *     not be found
    */
   public static Element getChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
@@ -124,10 +121,9 @@ public class XmlUtil {
    * the specified element.
    *
    * @param element the parent element
-   * @param name    the name of the child element to return
-   *
+   * @param name the name of the child element to return
    * @return the boolean value of the text content for the child element or <code>null</code> if a
-   * child element with the specified name could not be found
+   *     child element with the specified name could not be found
    */
   public static Boolean getChildElementBoolean(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
@@ -142,8 +138,10 @@ public class XmlUtil {
           try {
             return Boolean.parseBoolean(childElement.getTextContent());
           } catch (Throwable e) {
-            throw new RuntimeException("Failed to parse the invalid boolean value ("
-                + childElement.getTextContent() + ")");
+            throw new RuntimeException(
+                "Failed to parse the invalid boolean value ("
+                    + childElement.getTextContent()
+                    + ")");
           }
         }
       }
@@ -157,10 +155,9 @@ public class XmlUtil {
    * element.
    *
    * @param element the parent element
-   * @param name    the name of the child element to return
-   *
+   * @param name the name of the child element to return
    * @return the text content for the child element or <code>null</code> if a child element with the
-   * specified name could not be found
+   *     specified name could not be found
    */
   public static String getChildElementText(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
@@ -184,8 +181,7 @@ public class XmlUtil {
    * Returns the child elements with the specified name for the specified element.
    *
    * @param element the parent element
-   * @param name    the name of the child elements to return
-   *
+   * @param name the name of the child elements to return
    * @return the child elements with the specified name for the specified element
    */
   public static List<Element> getChildElements(Element element, String name) {
@@ -212,16 +208,13 @@ public class XmlUtil {
    * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
    *
    * @param document the <code>org.w3c.dom.Document</code> instance used to determine the namespace
-   *                 URI for the QName if the namespace is referenced using a prefix as part of the
-   *                 <code>name</code> parameter
-   * @param qname    the QName
-   *
+   *     URI for the QName if the namespace is referenced using a prefix as part of the <code>name
+   *     </code> parameter
+   * @param qname the QName
    * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
    */
   public static QName getQName(Document document, String qname) {
-    qname = StringUtils.isEmpty(qname)
-        ? ""
-        : qname.trim();
+    qname = StringUtils.isEmpty(qname) ? "" : qname.trim();
 
     String[] nameParts = qname.split(":");
 
@@ -232,9 +225,10 @@ public class XmlUtil {
         return new QName(XMLConstants.NULL_NS_URI, nameParts[0], XMLConstants.DEFAULT_NS_PREFIX);
       }
     } else if (nameParts.length == 2) {
-      String namespaceURI = nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
-          ? document.lookupNamespaceURI(null)
-          : document.lookupNamespaceURI(nameParts[0]);
+      String namespaceURI =
+          nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
+              ? document.lookupNamespaceURI(null)
+              : document.lookupNamespaceURI(nameParts[0]);
 
       return new QName(namespaceURI, nameParts[1], nameParts[0]);
     } else {
@@ -246,10 +240,9 @@ public class XmlUtil {
    * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
    *
    * @param element the <code>org.w3c.dom.Element</code> instance used to determine the namespace
-   *                URI for the QName if the namespace is referenced using a prefix as part of the
-   *                <code>name</code> parameter
-   * @param qname   the QName
-   *
+   *     URI for the QName if the namespace is referenced using a prefix as part of the <code>name
+   *     </code> parameter
+   * @param qname the QName
    * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
    */
   public static QName getQName(Element element, String qname) {
@@ -261,10 +254,9 @@ public class XmlUtil {
    * <code>false</code> otherwise.
    *
    * @param element the parent element
-   * @param name    the name of the child element
-   *
+   * @param name the name of the child element
    * @return <code>true</code> if the specified element has a child with the specified name or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public static boolean hasChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();

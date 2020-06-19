@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -26,7 +26,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
-    String> {
-
-}
+public interface ReportDefinitionSummaryRepository
+    extends JpaRepository<ReportDefinitionSummary, String> {}

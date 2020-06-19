@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,20 +25,24 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * An <code>ExistingPasswordException</code> is thrown to indicate that a security operation failed
  * as a result of an existing password e.g. when attempting to change a user's password using a
  * password that forms part of the user's password history.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "The new password for the user has been used recently and is not valid")
-@WebFault(name = "ExistingPasswordException", targetNamespace = "http://security.inception.digital",
+@WebFault(
+    name = "ExistingPasswordException",
+    targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -52,7 +56,8 @@ public class ExistingPasswordException extends ServiceException {
    * @param username the username for the user
    */
   public ExistingPasswordException(String username) {
-    super("ExistingPasswordError", "The new password for the user (" + username
-        + ") has been used recently and is not valid");
+    super(
+        "ExistingPasswordError",
+        "The new password for the user (" + username + ") has been used recently and is not valid");
   }
 }

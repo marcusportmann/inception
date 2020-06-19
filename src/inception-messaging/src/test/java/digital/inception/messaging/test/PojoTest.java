@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.Test;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PojoTest</code> class contains the implementation of the JUnit tests for the POJOs that
@@ -62,23 +62,37 @@ public class PojoTest {
   private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
   private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
   private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
-  private static final String MESSAGE_ENCRYPTION_IV = Base64Util.encodeBytes(
-      CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
+  private static final String MESSAGE_ENCRYPTION_IV =
+      Base64Util.encodeBytes(CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
   private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
   private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
   private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
   private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
   private static final UUID DEVICE_ID = UUID.randomUUID();
 
-  /**
-   * Test the <code>MessagePart</code> POJO.
-   */
+  /** Test the <code>MessagePart</code> POJO. */
   @Test
   public void messagePartTest() {
-    MessagePart messagePart = new MessagePart(MESSAGE_PART_ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS,
-        DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
-        MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA_HASH,
-        MESSAGE_ENCRYPTION_IV, MESSAGE_CHECKSUM, LOCK_NAME, MESSAGE_PART_DATA);
+    MessagePart messagePart =
+        new MessagePart(
+            MESSAGE_PART_ID,
+            PART_NO,
+            TOTAL_PARTS,
+            SEND_ATTEMPTS,
+            DOWNLOAD_ATTEMPTS,
+            MESSAGE_PART_STATUS,
+            MESSAGE_ID,
+            USERNAME,
+            DEVICE_ID,
+            MESSAGE_TYPE_ID,
+            MESSAGE_CORRELATION_ID,
+            MESSAGE_PRIORITY,
+            MESSAGE_CREATED,
+            MESSAGE_DATA_HASH,
+            MESSAGE_ENCRYPTION_IV,
+            MESSAGE_CHECKSUM,
+            LOCK_NAME,
+            MESSAGE_PART_DATA);
 
     assertEquals(MESSAGE_PART_ID, messagePart.getId());
     assertEquals(PART_NO, messagePart.getPartNo());
@@ -142,14 +156,21 @@ public class PojoTest {
     assertEquals(true, anotherMessagePart.messageIsEncrypted());
   }
 
-  /**
-   * Test the <code>Message</code> POJO.
-   */
+  /** Test the <code>Message</code> POJO. */
   @Test
   public void messageTest() {
-    Message message = new Message(MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
-        MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA, MESSAGE_DATA_HASH,
-        MESSAGE_ENCRYPTION_IV);
+    Message message =
+        new Message(
+            MESSAGE_ID,
+            USERNAME,
+            DEVICE_ID,
+            MESSAGE_TYPE_ID,
+            MESSAGE_CORRELATION_ID,
+            MESSAGE_PRIORITY,
+            MESSAGE_CREATED,
+            MESSAGE_DATA,
+            MESSAGE_DATA_HASH,
+            MESSAGE_ENCRYPTION_IV);
 
     assertEquals(MESSAGE_ID, message.getId());
     assertEquals(USERNAME, message.getUsername());

@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>MessageRepository</code> interface declares the repository for the
- * <code>Message</code> domain type.
+ * The <code>MessageRepository</code> interface declares the repository for the <code>Message</code>
+ * domain type.
  *
  * @author Marcus Portmann
  */
@@ -44,44 +44,53 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
   void deleteById(@Param("messageId") UUID messageId);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select m from Message m where m.status = 2 and "
-      + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.lastProcessed")
-  List<Message> findMessagesQueuedForProcessingForWrite(@Param(
-      "processedBefore") LocalDateTime processedBefore, Pageable pageable);
+  @Query(
+      "select m from Message m where m.status = 2 and "
+          + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.lastProcessed")
+  List<Message> findMessagesQueuedForProcessingForWrite(
+      @Param("processedBefore") LocalDateTime processedBefore, Pageable pageable);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select m from Message m where m.status = :status and m.username = :username and "
-      + "m.deviceId = :deviceId order by m.created")
-  List<Message> findMessagesWithStatusForUserAndDeviceForWrite(@Param(
-      "status") MessageStatus status, @Param("username") String username, @Param(
-      "deviceId") UUID deviceId, Pageable pageable);
+  @Query(
+      "select m from Message m where m.status = :status and m.username = :username and "
+          + "m.deviceId = :deviceId order by m.created")
+  List<Message> findMessagesWithStatusForUserAndDeviceForWrite(
+      @Param("status") MessageStatus status,
+      @Param("username") String username,
+      @Param("deviceId") UUID deviceId,
+      Pageable pageable);
 
   @Modifying
-  @Query("update Message m set m.lockName = :lockName, m.status = 8, "
-      + "m.downloadAttempts = m.downloadAttempts + 1 where m.id = :messageId")
-  void lockMessageForDownload(@Param("messageId") UUID messageId, @Param(
-      "lockName") String lockName);
+  @Query(
+      "update Message m set m.lockName = :lockName, m.status = 8, "
+          + "m.downloadAttempts = m.downloadAttempts + 1 where m.id = :messageId")
+  void lockMessageForDownload(
+      @Param("messageId") UUID messageId, @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update Message m set m.lockName = :lockName, m.status = 5, "
-      + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when "
-      + "where m.id = :messageId")
-  void lockMessageForProcessing(@Param("messageId") UUID messageId, @Param(
-      "lockName") String lockName, @Param("when") LocalDateTime when);
+  @Query(
+      "update Message m set m.lockName = :lockName, m.status = 5, "
+          + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when "
+          + "where m.id = :messageId")
+  void lockMessageForProcessing(
+      @Param("messageId") UUID messageId,
+      @Param("lockName") String lockName,
+      @Param("when") LocalDateTime when);
 
   @Modifying
-  @Query("update Message m set m.status = :newStatus, m.lockName = null "
-      + "where m.status = :status and m.lockName = :lockName ")
-  void resetStatusAndLocksForMessagesWithStatusAndLock(@Param("status") MessageStatus status,
-      @Param("newStatus") MessageStatus newStatus, @Param("lockName") String lockName);
+  @Query(
+      "update Message m set m.status = :newStatus, m.lockName = null "
+          + "where m.status = :status and m.lockName = :lockName ")
+  void resetStatusAndLocksForMessagesWithStatusAndLock(
+      @Param("status") MessageStatus status,
+      @Param("newStatus") MessageStatus newStatus,
+      @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update Message m set m.status = :status "
-      + "where m.id = :messageId")
+  @Query("update Message m set m.status = :status " + "where m.id = :messageId")
   void setMessageStatus(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 
   @Modifying
-  @Query("update Message m set m.status = :status, m.lockName = null "
-      + "where m.id = :messageId")
+  @Query("update Message m set m.status = :status, m.lockName = null " + "where m.id = :messageId")
   void unlockMessage(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 }

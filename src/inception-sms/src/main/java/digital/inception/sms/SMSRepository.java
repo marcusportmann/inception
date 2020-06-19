@@ -16,7 +16,7 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SMSRepository</code> interface declares the repository for the
- * <code>SMS</code> domain type.`
+ * The <code>SMSRepository</code> interface declares the repository for the <code>SMS</code> domain
+ * type.`
  *
  * @author Marcus Portmann
  */
@@ -44,21 +44,28 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
   void deleteById(@Param("smsId") UUID smsId);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select s from SMS s where s.status = 1 and (s.lastProcessed < :lastProcessedBefore "
-      + "or s.lastProcessed is null)")
-  List<SMS> findSMSsScheduledForExecutionForWrite(@Param(
-      "lastProcessedBefore") LocalDateTime lastProcessedBefore, Pageable pageable);
+  @Query(
+      "select s from SMS s where s.status = 1 and (s.lastProcessed < :lastProcessedBefore "
+          + "or s.lastProcessed is null)")
+  List<SMS> findSMSsScheduledForExecutionForWrite(
+      @Param("lastProcessedBefore") LocalDateTime lastProcessedBefore, Pageable pageable);
 
   @Modifying
-  @Query("update SMS s set s.lockName = :lockName, s.status = 2, "
-      + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when where s.id = :smsId")
-  void lockSMSForSending(@Param("smsId") UUID smsId, @Param("lockName") String lockName, @Param(
-      "when") LocalDateTime when);
+  @Query(
+      "update SMS s set s.lockName = :lockName, s.status = 2, "
+          + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when where s.id = :smsId")
+  void lockSMSForSending(
+      @Param("smsId") UUID smsId,
+      @Param("lockName") String lockName,
+      @Param("when") LocalDateTime when);
 
   @Modifying
-  @Query("update SMS s set s.status = :newStatus, s.lockName = null "
-      + "where s.lockName = :lockName and s.status = :status")
-  void resetSMSLocks(@Param("status") SMSStatus status, @Param("newStatus") SMSStatus newStatus,
+  @Query(
+      "update SMS s set s.status = :newStatus, s.lockName = null "
+          + "where s.lockName = :lockName and s.status = :status")
+  void resetSMSLocks(
+      @Param("status") SMSStatus status,
+      @Param("newStatus") SMSStatus newStatus,
       @Param("lockName") String lockName);
 
   @Modifying

@@ -16,7 +16,7 @@
 
 package digital.inception.sample.job;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.scheduler.IJob;
 import digital.inception.scheduler.JobExecutionContext;
@@ -29,15 +29,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class SampleJob
-    implements IJob {
+public class SampleJob implements IJob {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleJob.class);
 
   @Override
-  public void execute(JobExecutionContext context)
-      throws JobExecutionFailedException {
+  public void execute(JobExecutionContext context) throws JobExecutionFailedException {
     logger.info("Sample job execution started");
 
     try {

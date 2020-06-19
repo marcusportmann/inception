@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.MutualSSLSocketFactory;
 import digital.inception.core.util.NoTrustSSLSocketFactory;
@@ -33,7 +33,7 @@ import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.handler.HandlerResolver;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientSecurityHelper</code> class is a utility class that provides support
@@ -49,9 +49,7 @@ public class WebServiceClientSecurityHelper {
   public static final String JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY =
       "com.sun.xml.internal.ws.transport.https.client.SSLSocketFactory";
 
-  /**
-   * The name of the JAX-WS property that allows the SSL socket factory to be configured.
-   */
+  /** The name of the JAX-WS property that allows the SSL socket factory to be configured. */
   public static final String JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY =
       "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
 
@@ -79,43 +77,48 @@ public class WebServiceClientSecurityHelper {
    * Returns the secure web service proxy for the web service that has been secured with digest
    * authentication.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param username         the username
-   * @param password         the password
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with digest
-   * authentication
-   *
+   *     authentication
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getDigestAuthenticationServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint, String username,
+  public static <T> T getDigestAuthenticationServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
       String password)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
-      WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.DIGEST_AUTHENTICATION.code());
+      WebServiceClient webServiceClient =
+          webServiceClientCache.get(
+              serviceClass.getName() + "-" + WebServiceSecurityType.DIGEST_AUTHENTICATION.code());
 
       if (webServiceClient == null) {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
-        webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .DIGEST_AUTHENTICATION.code(), webServiceClient);
+        webServiceClientCache.put(
+            serviceClass.getName() + "-" + WebServiceSecurityType.DIGEST_AUTHENTICATION.code(),
+            webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       CXFDigestSecurityProxyConfigurator.configureProxy(proxy, username, password);
 
@@ -123,7 +126,8 @@ public class WebServiceClientSecurityHelper {
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
           "Failed to retrieve the web service proxy for the web service that has been secured "
-              + "using digest authentication", e);
+              + "using digest authentication",
+          e);
     }
   }
 
@@ -131,21 +135,23 @@ public class WebServiceClientSecurityHelper {
    * Returns the secure web service proxy for the web service that has been secured with basic HTTP
    * authentication.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param username         the username
-   * @param password         the password
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with basic HTTP
-   * authentication
-   *
+   *     authentication
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getHTTPAuthenticationServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint, String username,
+  public static <T> T getHTTPAuthenticationServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
       String password)
       throws WebServiceClientSecurityException {
     try {
@@ -158,14 +164,15 @@ public class WebServiceClientSecurityHelper {
         webServiceClientCache.put(serviceClass.getName(), webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       bindingProvider.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, username);
       bindingProvider.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, password);
@@ -175,8 +182,10 @@ public class WebServiceClientSecurityHelper {
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
-          "Failed to retrieve the web service proxy for the web service (" + serviceClass.getName()
-              + ") that has been secured using basic HTTP authentication", e);
+          "Failed to retrieve the web service proxy for the web service ("
+              + serviceClass.getName()
+              + ") that has been secured using basic HTTP authentication",
+          e);
     }
   }
 
@@ -184,74 +193,83 @@ public class WebServiceClientSecurityHelper {
    * Returns the secure web service proxy for the web service that has been secured with transport
    * level security using SSL client authentication.
    *
-   * @param serviceClass               the Java web service client class
-   * @param serviceInterface           the Java interface for the web service
-   * @param wsdlResourcePath           the resource path to the WSDL for the web service on the
-   *                                   classpath
-   * @param serviceEndpoint            the URL giving the web service endpoint
-   * @param keyStore                   the key store containing the private key and certificate
-   *                                   (public key) that will be used to perform the mutual SSL
-   *                                   authentication when invoking the web service
-   * @param keyStorePassword           the password for the key store that will be used to perform
-   *                                   the mutual SSL authentication when invoking the web service
-   * @param trustStore                 the key store containing the certificates that will be used
-   *                                   to verify the remote server when performing mutual SSL
-   *                                   authentication
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key) that will
+   *     be used to perform the mutual SSL authentication when invoking the web service
+   * @param keyStorePassword the password for the key store that will be used to perform the mutual
+   *     SSL authentication when invoking the web service
+   * @param trustStore the key store containing the certificates that will be used to verify the
+   *     remote server when performing mutual SSL authentication
    * @param disableServerTrustChecking disable trust checking of the remote server certificate
-   * @param <T>                        the Java interface for the web service
-   *
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with transport
-   * level security using mutual SSL authentication
-   *
+   *     level security using mutual SSL authentication
    * @throws WebServiceClientSecurityException
    */
   @SuppressWarnings("unchecked")
-  public static <T> T getMutualSSLServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
-      String wsdlResourcePath, String serviceEndpoint, KeyStore keyStore, String keyStorePassword,
-      KeyStore trustStore, boolean disableServerTrustChecking)
+  public static <T> T getMutualSSLServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      KeyStore trustStore,
+      boolean disableServerTrustChecking)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
-      WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.MUTUAL_SSL.code());
+      WebServiceClient webServiceClient =
+          webServiceClientCache.get(
+              serviceClass.getName() + "-" + WebServiceSecurityType.MUTUAL_SSL.code());
 
       if (webServiceClient == null) {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
-        webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .MUTUAL_SSL.code(), webServiceClient);
+        webServiceClientCache.put(
+            serviceClass.getName() + "-" + WebServiceSecurityType.MUTUAL_SSL.code(),
+            webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       // Retrieve the Mutual SSL socket factory
-      SSLSocketFactory mutualSSLSocketFactory = new MutualSSLSocketFactory(keyStore,
-          keyStorePassword, trustStore, disableServerTrustChecking);
+      SSLSocketFactory mutualSSLSocketFactory =
+          new MutualSSLSocketFactory(
+              keyStore, keyStorePassword, trustStore, disableServerTrustChecking);
 
       /*
        * NOTE: We use two different properties here because different JDKs seem to use the
        *       different property values.
        */
-      bindingProvider.getRequestContext().put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY,
-          mutualSSLSocketFactory);
-      bindingProvider.getRequestContext().put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY,
-          mutualSSLSocketFactory);
+      bindingProvider
+          .getRequestContext()
+          .put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY, mutualSSLSocketFactory);
+      bindingProvider
+          .getRequestContext()
+          .put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY, mutualSSLSocketFactory);
 
-      CXFMutualSSLSecurityProxyConfigurator.configureProxy(proxy, keyStore, keyStorePassword,
-          trustStore, disableServerTrustChecking);
+      CXFMutualSSLSecurityProxyConfigurator.configureProxy(
+          proxy, keyStore, keyStorePassword, trustStore, disableServerTrustChecking);
 
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
-          "Failed to retrieve the web service proxy for the web service (" + serviceClass.getName()
-              + ") that has been secured using mutual SSL authentication", e);
+          "Failed to retrieve the web service proxy for the web service ("
+              + serviceClass.getName()
+              + ") that has been secured using mutual SSL authentication",
+          e);
     }
   }
 
@@ -259,76 +277,85 @@ public class WebServiceClientSecurityHelper {
    * Returns the web service proxy for the web service that supports SSL without validating the
    * server certificate.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param <T> the Java interface for the web service
    * @return the web service proxy for the web service that supports SSL without validating the
-   * server certificate
-   *
+   *     server certificate
    * @throws WebServiceClientSecurityException
    */
   @SuppressWarnings("unchecked")
-  public static <T> T getNoTrustServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
-      String wsdlResourcePath, String serviceEndpoint)
+  public static <T> T getNoTrustServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
-      WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.MUTUAL_SSL.code());
+      WebServiceClient webServiceClient =
+          webServiceClientCache.get(
+              serviceClass.getName() + "-" + WebServiceSecurityType.MUTUAL_SSL.code());
 
       if (webServiceClient == null) {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
-        webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .MUTUAL_SSL.code(), webServiceClient);
+        webServiceClientCache.put(
+            serviceClass.getName() + "-" + WebServiceSecurityType.MUTUAL_SSL.code(),
+            webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       /*
        * NOTE: We use two different properties here because different JDKs seem to use the
        *       different property values.
        */
-      bindingProvider.getRequestContext().put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY,
-          getNoTrustSSLSocketFactory());
-      bindingProvider.getRequestContext().put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY,
-          getNoTrustSSLSocketFactory());
+      bindingProvider
+          .getRequestContext()
+          .put(JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY, getNoTrustSSLSocketFactory());
+      bindingProvider
+          .getRequestContext()
+          .put(JAX_WS_INTERNAL_PROPERTIES_SSL_SOCKET_FACTORY, getNoTrustSSLSocketFactory());
 
       CXFNoTrustSecurityProxyConfigurator.configureProxy(proxy);
 
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
-          "Failed to retrieve the web service proxy for the web service (" + serviceClass.getName()
-              + ") that has server certificate verification disabled", e);
+          "Failed to retrieve the web service proxy for the web service ("
+              + serviceClass.getName()
+              + ") that has server certificate verification disabled",
+          e);
     }
   }
 
   /**
    * Returns the web service proxy for the unsecured web service.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   *
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
-      String wsdlResourcePath, String serviceEndpoint)
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint)
       throws WebServiceClientSecurityException {
     return getServiceProxy(serviceClass, serviceInterface, wsdlResourcePath, serviceEndpoint, null);
   }
@@ -336,41 +363,45 @@ public class WebServiceClientSecurityHelper {
   /**
    * Returns the web service proxy for the unsecured web service.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param handlerResolver  the web service handler resolver
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param handlerResolver the web service handler resolver
+   * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   *
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
-      String wsdlResourcePath, String serviceEndpoint, HandlerResolver handlerResolver)
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      HandlerResolver handlerResolver)
       throws WebServiceClientSecurityException {
-    return getServiceProxy(serviceClass, serviceInterface, wsdlResourcePath, serviceEndpoint,
-        handlerResolver, false);
+    return getServiceProxy(
+        serviceClass, serviceInterface, wsdlResourcePath, serviceEndpoint, handlerResolver, false);
   }
 
   /**
    * Returns the web service proxy for the unsecured web service.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param handlerResolver  the web service handler resolver
-   * @param useClientCache   should the web service client cached be used
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param handlerResolver the web service handler resolver
+   * @param useClientCache should the web service client cached be used
+   * @param <T> the Java interface for the web service
    * @return the web service proxy for the unsecured web service
-   *
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getServiceProxy(Class<?> serviceClass, Class<T> serviceInterface,
-      String wsdlResourcePath, String serviceEndpoint, HandlerResolver handlerResolver,
+  public static <T> T getServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      HandlerResolver handlerResolver,
       boolean useClientCache)
       throws WebServiceClientSecurityException {
     try {
@@ -393,20 +424,23 @@ public class WebServiceClientSecurityHelper {
         }
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
           "Failed to retrieve the web service proxy for the unsecured web service ("
-              + serviceClass.getName() + ") ", e);
+              + serviceClass.getName()
+              + ") ",
+          e);
     }
   }
 
@@ -414,77 +448,96 @@ public class WebServiceClientSecurityHelper {
    * Returns the secure web service proxy for the web service that has been secured with message
    * level security using the Web Services Security Username Token profile.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param username         the username
-   * @param password         the password
-   * @param <T>              the Java interface for the web service
-   *
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
-   * level security using the Web Services Security Username Token profile
-   *
+   *     level security using the Web Services Security Username Token profile
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getWSSecurityUsernameTokenServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint, String username,
+  public static <T> T getWSSecurityUsernameTokenServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
       String password)
       throws WebServiceClientSecurityException {
-    return getWSSecurityUsernameTokenServiceProxy(serviceClass, serviceInterface, wsdlResourcePath,
-        serviceEndpoint, username, password, false);
+    return getWSSecurityUsernameTokenServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        username,
+        password,
+        false);
   }
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with message
    * level security using the Web Services Security Username Token profile.
    *
-   * @param serviceClass         the Java web service client class
-   * @param serviceInterface     the Java interface for the web service
-   * @param wsdlResourcePath     the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint      the URL giving the web service endpoint
-   * @param username             the username
-   * @param password             the password
+   * @param serviceClass the Java web service client class
+   * @param serviceInterface the Java interface for the web service
+   * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param username the username
+   * @param password the password
    * @param usePlainTextPassword should a plain text password be used
-   * @param <T>                  the Java interface for the web service
-   *
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
-   * level security using the Web Services Security Username Token profile
-   *
+   *     level security using the Web Services Security Username Token profile
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getWSSecurityUsernameTokenServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint, String username,
-      String password, boolean usePlainTextPassword)
+  public static <T> T getWSSecurityUsernameTokenServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      String username,
+      String password,
+      boolean usePlainTextPassword)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
-      WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN.code());
+      WebServiceClient webServiceClient =
+          webServiceClientCache.get(
+              serviceClass.getName()
+                  + "-"
+                  + WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN.code());
 
       if (webServiceClient == null) {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
-        webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .WSS_SECURITY_USERNAME_TOKEN.code(), webServiceClient);
+        webServiceClientCache.put(
+            serviceClass.getName()
+                + "-"
+                + WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN.code(),
+            webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
-      CXFWSSUsernameTokenProfileProxyConfigurator.configureProxy(proxy, username, password,
-          usePlainTextPassword);
+      CXFWSSUsernameTokenProfileProxyConfigurator.configureProxy(
+          proxy, username, password, usePlainTextPassword);
 
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
-          "Failed to retrieve the web service proxy for the web service (" + serviceClass.getName()
+          "Failed to retrieve the web service proxy for the web service ("
+              + serviceClass.getName()
               + ") that has been secured using the Web Services Security Username Token profile",
           e);
     }
@@ -494,80 +547,98 @@ public class WebServiceClientSecurityHelper {
    * Returns the secure web service proxy for the web service that has been secured with message
    * level security using the Web Services Security X.509 Certificate Token profile.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param keyStore         the key store containing the private key and certificate (public key)
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key)
    * @param keyStorePassword the password for the key store
-   * @param keyStoreAlias    the alias of the key-pair in the key store
-   * @param <T>              the Java interface for the web service
-   *
+   * @param keyStoreAlias the alias of the key-pair in the key store
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
-   * level security using the Web Services Security X.509 Certificate Token profile
-   *
+   *     level security using the Web Services Security X.509 Certificate Token profile
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getWSSecurityX509CertificateServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint,
-      KeyStore keyStore, String keyStorePassword, String keyStoreAlias)
+  public static <T> T getWSSecurityX509CertificateServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      String keyStoreAlias)
       throws WebServiceClientSecurityException {
-    return getWSSecurityX509CertificateServiceProxy(serviceClass, serviceInterface,
-        wsdlResourcePath, serviceEndpoint, keyStore, keyStorePassword, keyStoreAlias, keyStore);
+    return getWSSecurityX509CertificateServiceProxy(
+        serviceClass,
+        serviceInterface,
+        wsdlResourcePath,
+        serviceEndpoint,
+        keyStore,
+        keyStorePassword,
+        keyStoreAlias,
+        keyStore);
   }
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with message
    * level security using the Web Services Security X.509 Certificate Token profile.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param serviceInterface the Java interface for the web service
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   * @param serviceEndpoint  the URL giving the web service endpoint
-   * @param keyStore         the key store containing the private key and certificate (public key)
+   * @param serviceEndpoint the URL giving the web service endpoint
+   * @param keyStore the key store containing the private key and certificate (public key)
    * @param keyStorePassword the password for the key store
-   * @param keyStoreAlias    the alias of the key-pair in the key store
-   * @param trustStore       the key store containing the certificates that will be used to verify
-   *                         the remote web service
-   * @param <T>              the Java interface for the web service
-   *
+   * @param keyStoreAlias the alias of the key-pair in the key store
+   * @param trustStore the key store containing the certificates that will be used to verify the
+   *     remote web service
+   * @param <T> the Java interface for the web service
    * @return the secure web service proxy for the web service that has been secured with message
-   * level security using the Web Services Security X.509 Certificate Token profile
-   *
+   *     level security using the Web Services Security X.509 Certificate Token profile
    * @throws WebServiceClientSecurityException
    */
-  public static <T> T getWSSecurityX509CertificateServiceProxy(Class<?> serviceClass,
-      Class<T> serviceInterface, String wsdlResourcePath, String serviceEndpoint,
-      KeyStore keyStore, String keyStorePassword, String keyStoreAlias, KeyStore trustStore)
+  public static <T> T getWSSecurityX509CertificateServiceProxy(
+      Class<?> serviceClass,
+      Class<T> serviceInterface,
+      String wsdlResourcePath,
+      String serviceEndpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      String keyStoreAlias,
+      KeyStore trustStore)
       throws WebServiceClientSecurityException {
     try {
       // First attempt to retrieve the web service client from the cache
-      WebServiceClient webServiceClient = webServiceClientCache.get(serviceClass.getName() + "-"
-          + WebServiceSecurityType.WSS_SECURITY_X509_TOKEN.code());
+      WebServiceClient webServiceClient =
+          webServiceClientCache.get(
+              serviceClass.getName() + "-" + WebServiceSecurityType.WSS_SECURITY_X509_TOKEN.code());
 
       if (webServiceClient == null) {
         webServiceClient = getWebServiceClient(serviceClass, wsdlResourcePath);
 
-        webServiceClientCache.put(serviceClass.getName() + "-" + WebServiceSecurityType
-            .WSS_SECURITY_X509_TOKEN.code(), webServiceClient);
+        webServiceClientCache.put(
+            serviceClass.getName() + "-" + WebServiceSecurityType.WSS_SECURITY_X509_TOKEN.code(),
+            webServiceClient);
       }
 
-      T proxy = webServiceClient.getService().getPort(webServiceClient.getPortQName(),
-          serviceInterface);
+      T proxy =
+          webServiceClient.getService().getPort(webServiceClient.getPortQName(), serviceInterface);
 
       // Set the endpoint for the web service
       BindingProvider bindingProvider = ((BindingProvider) proxy);
 
-      bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-          serviceEndpoint);
+      bindingProvider
+          .getRequestContext()
+          .put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, serviceEndpoint);
 
-      CXFWSSX509CertificateTokenProfileProxyConfigurator.configureProxy(proxy, keyStore,
-          keyStorePassword, keyStoreAlias, trustStore);
+      CXFWSSX509CertificateTokenProfileProxyConfigurator.configureProxy(
+          proxy, keyStore, keyStorePassword, keyStoreAlias, trustStore);
 
       return proxy;
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
-          "Failed to retrieve the web service proxy for the web service (" + serviceClass.getName()
+          "Failed to retrieve the web service proxy for the web service ("
+              + serviceClass.getName()
               + ") that has been secured using the Web Services Security X.509 Certificate Token profile",
           e);
     }
@@ -578,7 +649,7 @@ public class WebServiceClientSecurityHelper {
    * server certificate.
    *
    * @return the socket factory used to connect to a web service using SSL without validating the
-   * server certificate
+   *     server certificate
    */
   private static SSLSocketFactory getNoTrustSSLSocketFactory() {
     try {
@@ -595,33 +666,34 @@ public class WebServiceClientSecurityHelper {
   /**
    * Returns the web service client.
    *
-   * @param serviceClass     the Java web service client class
+   * @param serviceClass the Java web service client class
    * @param wsdlResourcePath the resource path to the WSDL for the web service on the classpath
-   *
    * @return the web service client
-   *
    * @throws WebServiceClientSecurityException
    */
-  private static WebServiceClient getWebServiceClient(Class<?> serviceClass,
-      String wsdlResourcePath)
-      throws WebServiceClientSecurityException {
+  private static WebServiceClient getWebServiceClient(
+      Class<?> serviceClass, String wsdlResourcePath) throws WebServiceClientSecurityException {
     try {
       if (!Service.class.isAssignableFrom(serviceClass)) {
-        throw new WebServiceClientSecurityException("The web service client class ("
-            + serviceClass.getName() + ") does not extend the javax.xml.ws.Service class");
+        throw new WebServiceClientSecurityException(
+            "The web service client class ("
+                + serviceClass.getName()
+                + ") does not extend the javax.xml.ws.Service class");
       }
 
       /*
        * Retrieve the @WebServiceClient annotation from the service class to determine the qname
        * for the web service.
        */
-      javax.xml.ws.WebServiceClient webServiceClientAnnotation = serviceClass.getAnnotation(javax
-          .xml.ws.WebServiceClient.class);
+      javax.xml.ws.WebServiceClient webServiceClientAnnotation =
+          serviceClass.getAnnotation(javax.xml.ws.WebServiceClient.class);
 
       if (webServiceClientAnnotation == null) {
         throw new WebServiceClientSecurityException(
             "Failed to retrieve the @WebServiceClient annotation from the web service client "
-                + "class (" + serviceClass.getName() + ")");
+                + "class ("
+                + serviceClass.getName()
+                + ")");
       }
 
       ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -631,15 +703,17 @@ public class WebServiceClientSecurityHelper {
 
       if (wsdlLocation == null) {
         throw new WebServiceClientSecurityException(
-            "Failed to retrieve the WSDL for the web service (" + wsdlResourcePath
+            "Failed to retrieve the WSDL for the web service ("
+                + wsdlResourcePath
                 + ") as a resource from the classpath");
       }
 
       // Create a new instance of the web service client
       Constructor<?> constructor = serviceClass.getConstructor(URL.class, QName.class);
 
-      QName serviceQName = new QName(webServiceClientAnnotation.targetNamespace(),
-          webServiceClientAnnotation.name());
+      QName serviceQName =
+          new QName(
+              webServiceClientAnnotation.targetNamespace(), webServiceClientAnnotation.name());
 
       Object serviceObject = constructor.newInstance(wsdlLocation, serviceQName);
 
@@ -663,9 +737,11 @@ public class WebServiceClientSecurityHelper {
       }
 
       if (portName == null) {
-        throw new WebServiceClientSecurityException("Failed to determine the port name using the"
-            + " @WebEndpoint annotation on one of the methods on the web service client class ("
-            + serviceClass.getName() + ")");
+        throw new WebServiceClientSecurityException(
+            "Failed to determine the port name using the"
+                + " @WebEndpoint annotation on one of the methods on the web service client class ("
+                + serviceClass.getName()
+                + ")");
       }
 
       QName portQName = new QName(webServiceClientAnnotation.targetNamespace(), portName);
@@ -674,7 +750,9 @@ public class WebServiceClientSecurityHelper {
     } catch (Throwable e) {
       throw new WebServiceClientSecurityException(
           "Failed to retrieve the web service client for the web service ("
-              + serviceClass.getName() + ")", e);
+              + serviceClass.getName()
+              + ")",
+          e);
     }
   }
 
@@ -685,21 +763,17 @@ public class WebServiceClientSecurityHelper {
    */
   public static class WebServiceClient {
 
-    /**
-     * The QName for the port.
-     */
+    /** The QName for the port. */
     private QName portQName;
 
-    /**
-     * The web service client.
-     */
+    /** The web service client. */
     private Service service;
 
     /**
      * Constructs a new <code>CachedWebServiceClient</code>.
      *
      * @param portQName the QName for the port
-     * @param service   the web service client
+     * @param service the web service client
      */
     public WebServiceClient(QName portQName, Service service) {
       this.portQName = portQName;

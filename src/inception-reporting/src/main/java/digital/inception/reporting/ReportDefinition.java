@@ -16,13 +16,12 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,33 +35,31 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinition</code> class holds the information for a report definition.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ReportDefinition")
+@Schema(description = "ReportDefinition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "template"})
 @XmlRootElement(name = "ReportDefinition", namespace = "http://reporting.inception.digital")
-@XmlType(name = "ReportDefinition", namespace = "http://reporting.inception.digital",
+@XmlType(
+    name = "ReportDefinition",
+    namespace = "http://reporting.inception.digital",
     propOrder = {"id", "name", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reporting", name = "report_definitions")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ReportDefinition
-    implements Serializable {
+public class ReportDefinition implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the report definition.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the report definition",
-      required = true)
+  /** The ID uniquely identifying the report definition. */
+  @Schema(description = "The ID uniquely identifying the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -71,10 +68,8 @@ public class ReportDefinition
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the report definition.
-   */
-  @ApiModelProperty(value = "The name of the report definition", required = true)
+  /** The name of the report definition. */
+  @Schema(description = "The name of the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -82,10 +77,8 @@ public class ReportDefinition
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The JasperReports template for the report definition.
-   */
-  @ApiModelProperty(value = "The JasperReports template for the report definition", required = true)
+  /** The JasperReports template for the report definition. */
+  @Schema(description = "The JasperReports template for the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Template", required = true)
   @NotNull
@@ -93,17 +86,14 @@ public class ReportDefinition
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /**
-   * Constructs a new <code>ReportDefinition</code>.
-   */
-  public ReportDefinition() {
-  }
+  /** Constructs a new <code>ReportDefinition</code>. */
+  public ReportDefinition() {}
 
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id       the ID used to uniquely identify the report definition
-   * @param name     the name of the report definition
+   * @param id the ID uniquely identifying the report definition
+   * @param name the name of the report definition
    * @param template the JasperReports template for the report definition
    */
   public ReportDefinition(String id, String name, byte[] template) {
@@ -116,9 +106,8 @@ public class ReportDefinition
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -140,18 +129,18 @@ public class ReportDefinition
   }
 
   /**
-   * Returns the ID used to uniquely identify the report definition.
+   * Returns the ID uniquely identifying the report definition.
    *
-   * @return the ID used to uniquely identify the report definition
+   * @return the ID uniquely identifying the report definition
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the report definition.
+   * Set the ID uniquely identifying the report definition.
    *
-   * @param id the ID used to uniquely identify the report definition
+   * @param id the ID uniquely identifying the report definition
    */
   public void setId(String id) {
     this.id = id;
@@ -200,9 +189,7 @@ public class ReportDefinition
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**

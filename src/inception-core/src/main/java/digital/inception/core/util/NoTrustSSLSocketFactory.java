@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -41,27 +41,28 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
   private SSLSocketFactory socketFactory;
 
-  /**
-   * Constructs a new <code>NoTrustSSLSocketFactory</code>
-   */
+  /** Constructs a new <code>NoTrustSSLSocketFactory</code> */
   public NoTrustSSLSocketFactory() {
     try {
       // Create a trust manager that does not validate certificate chains
-      TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-        public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
-          // Skip client verification step
-        }
+      TrustManager[] trustAllCerts =
+          new TrustManager[] {
+            new X509TrustManager() {
+              public void checkClientTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException {
+                // Skip client verification step
+              }
 
-        public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
-          // Skip server verification step
-        }
+              public void checkServerTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException {
+                // Skip server verification step
+              }
 
-        public X509Certificate[] getAcceptedIssuers() {
-          return new X509Certificate[0];
-        }
-      }};
+              public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+              }
+            }
+          };
 
       // Setup the SSL contxt
       SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -82,53 +83,48 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
   /**
    * Creates a socket and connects it to the specified port number at the specified address.
-   * <p/>
-   * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and port
-   * as its arguments. This could result in a <code>SecurityException</code>.
+   *
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
+   * port as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the address of the server host
    * @param port the server port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
-  public Socket createSocket(InetAddress host, int port)
-      throws IOException {
+  public Socket createSocket(InetAddress host, int port) throws IOException {
     return socketFactory.createSocket(host, port);
   }
 
   /**
    * Creates a socket and connects it to the specified remote host at the specified remote port.
-   * <p/>
-   * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and port
-   * as its arguments. This could result in a <code>SecurityException</code>.
+   *
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
+   * port as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the server host
    * @param port the server port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
-  public Socket createSocket(String host, int port)
-      throws IOException {
+  public Socket createSocket(String host, int port) throws IOException {
     return socketFactory.createSocket(host, port);
   }
 
   /**
    * Creates a socket and connects it to the specified port number at the specified address. The
    * socket will also be bound to the local address and port supplied.
-   * <p/>
-   * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and port
-   * as its arguments. This could result in a <code>SecurityException</code>.
    *
-   * @param host      the address of the server host
-   * @param port      the server port
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
+   * port as its arguments. This could result in a <code>SecurityException</code>.
+   *
+   * @param host the address of the server host
+   * @param port the server port
    * @param localHost the local address
    * @param localPort the local port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -140,16 +136,15 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
   /**
    * Returns a socket layered over an existing socket connected to the named host, at the given
    * port.
-   * <p/>
-   * This constructor can be used when tunneling SSL through a proxy or when negotiating the use of
-   * SSL over an existing socket. The host and port refer to the logical peer destination. This
+   *
+   * <p>This constructor can be used when tunneling SSL through a proxy or when negotiating the use
+   * of SSL over an existing socket. The host and port refer to the logical peer destination. This
    * socket is configured using the socket options established for this factory.
    *
-   * @param s         the existing socket
-   * @param host      the server host
-   * @param port      the server port
+   * @param s the existing socket
+   * @param host the server host
+   * @param port the server port
    * @param autoClose close the underlying socket when this socket is closed
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -161,16 +156,15 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
   /**
    * Creates a socket and connects it to the specified remote host at the specified remote port. The
    * socket will also be bound to the local address and port supplied.
-   * <p/>
-   * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and port
-   * as its arguments. This could result in a <code>SecurityException</code>.
    *
-   * @param host      the server host
-   * @param port      the server port
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
+   * port as its arguments. This could result in a <code>SecurityException</code>.
+   *
+   * @param host the server host
+   * @param port the server port
    * @param localHost the local address
    * @param localPort the local port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -181,8 +175,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
   /**
    * Returns the set of cipher suites which are enabled by default.
-   * <p/>
-   * Unless a different list is enabled, handshaking on an SSL connection will use one of these
+   *
+   * <p>Unless a different list is enabled, handshaking on an SSL connection will use one of these
    * cipher suites. The minimum quality of service for these defaults requires confidentiality
    * protection and server authentication (that is, no anonymous cipher suites).
    *
@@ -195,8 +189,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
   /**
    * Returns the names of the cipher suites which could be enabled for use on an SSL connection.
-   * <p/>
-   * Normally, only a subset of these will actually be enabled by default, since this list may
+   *
+   * <p>Normally, only a subset of these will actually be enabled by default, since this list may
    * include cipher suites which do not meet quality of service requirements for those defaults.
    * Such cipher suites are useful in specialized applications.
    *

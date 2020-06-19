@@ -16,13 +16,12 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +29,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryCapabilities</code> class holds the information that describes the
@@ -38,130 +37,129 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserDirectoryCapabilities")
+@Schema(description = "UserDirectoryCapabilities")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"supportsAdminChangePassword", "supportsChangePassword",
-    "supportsGroupAdministration", "supportsPasswordExpiry", "supportsPasswordHistory",
-    "supportsUserAdministration"})
+@JsonPropertyOrder({
+  "supportsAdminChangePassword",
+  "supportsChangePassword",
+  "supportsGroupAdministration",
+  "supportsPasswordExpiry",
+  "supportsPasswordHistory",
+  "supportsUserAdministration"
+})
 @XmlRootElement(name = "UserDirectoryCapabilities", namespace = "http://security.inception.digital")
-@XmlType(name = "UserDirectoryCapabilities", namespace = "http://security.inception.digital",
-    propOrder = {"supportsAdminChangePassword", "supportsChangePassword",
-        "supportsGroupAdministration", "supportsPasswordExpiry", "supportsPasswordHistory",
-        "supportsUserAdministration"})
+@XmlType(
+    name = "UserDirectoryCapabilities",
+    namespace = "http://security.inception.digital",
+    propOrder = {
+      "supportsAdminChangePassword",
+      "supportsChangePassword",
+      "supportsGroupAdministration",
+      "supportsPasswordExpiry",
+      "supportsPasswordHistory",
+      "supportsUserAdministration"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class UserDirectoryCapabilities {
 
-  /**
-   * The user directory supports the admin change password capability.
-   */
-  @ApiModelProperty(value = "The the user directory supports the admin change password capability",
+  /** The user directory supports the admin change password capability. */
+  @Schema(
+      description = "The the user directory supports the admin change password capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsAdminChangePassword", required = true)
   @NotNull
   private boolean supportsAdminChangePassword;
 
-  /**
-   * The user directory supports the change password capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the change password capability",
+  /** The user directory supports the change password capability. */
+  @Schema(
+      description = "The user directory supports the change password capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsChangePassword", required = true)
   @NotNull
   private boolean supportsChangePassword;
 
-  /**
-   * The user directory supports the group administration capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the group administration capability",
+  /** The user directory supports the group administration capability. */
+  @Schema(
+      description = "The user directory supports the group administration capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsGroupAdministration", required = true)
   @NotNull
   private boolean supportsGroupAdministration;
 
-  /**
-   * The user directory supports the group member administration capability.
-   */
-  @ApiModelProperty(
-      value = "The user directory supports the group member administration capability",
+  /** The user directory supports the group member administration capability. */
+  @Schema(
+      description = "The user directory supports the group member administration capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsGroupMemberAdministration", required = true)
   @NotNull
   private boolean supportsGroupMemberAdministration;
 
-  /**
-   * The user directory supports the password expiry capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the password expiry capability",
+  /** The user directory supports the password expiry capability. */
+  @Schema(
+      description = "The user directory supports the password expiry capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsPasswordExpiry", required = true)
   @NotNull
   private boolean supportsPasswordExpiry;
 
-  /**
-   * The user directory supports the password history capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the password history capability",
+  /** The user directory supports the password history capability. */
+  @Schema(
+      description = "The user directory supports the password history capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsPasswordHistory", required = true)
   @NotNull
   private boolean supportsPasswordHistory;
 
-  /**
-   * The user directory supports the user administration capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the user administration capability",
+  /** The user directory supports the user administration capability. */
+  @Schema(
+      description = "The user directory supports the user administration capability",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsUserAdministration", required = true)
   @NotNull
   private boolean supportsUserAdministration;
 
-  /**
-   * The user directory supports the user locks capability.
-   */
-  @ApiModelProperty(value = "The user directory supports the user locks capability",
-      required = true)
+  /** The user directory supports the user locks capability. */
+  @Schema(description = "The user directory supports the user locks capability", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SupportsUserLocks", required = true)
   @NotNull
   private boolean supportsUserLocks;
 
-  /**
-   * Constructs a new <code>UserDirectoryCapabilities</code>.
-   */
-  public UserDirectoryCapabilities() {
-  }
+  /** Constructs a new <code>UserDirectoryCapabilities</code>. */
+  public UserDirectoryCapabilities() {}
 
   /**
    * Constructs a new <code>UserDirectoryCapabilities</code>.
    *
-   * @param supportsAdminChangePassword       the user directory supports the admin change password
-   *                                          capability
-   * @param supportsChangePassword            the user directory supports the change password
-   *                                          capability
-   * @param supportsGroupAdministration       the user directory supports the group administration
-   *                                          capability
+   * @param supportsAdminChangePassword the user directory supports the admin change password
+   *     capability
+   * @param supportsChangePassword the user directory supports the change password capability
+   * @param supportsGroupAdministration the user directory supports the group administration
+   *     capability
    * @param supportsGroupMemberAdministration the user directory supports the group member
-   *                                          administration capability
-   * @param supportsPasswordExpiry            the user directory supports the password expiry
-   *                                          capability
-   * @param supportsPasswordHistory           the user directory supports the password history
-   *                                          capability
-   * @param supportsUserAdministration        the user directory supports the user administration
-   *                                          capability
-   * @param supportsUserLocks                 the user directory supports the user locks capability
+   *     administration capability
+   * @param supportsPasswordExpiry the user directory supports the password expiry capability
+   * @param supportsPasswordHistory the user directory supports the password history capability
+   * @param supportsUserAdministration the user directory supports the user administration
+   *     capability
+   * @param supportsUserLocks the user directory supports the user locks capability
    */
-  public UserDirectoryCapabilities(boolean supportsAdminChangePassword,
-      boolean supportsChangePassword, boolean supportsGroupAdministration,
-      boolean supportsGroupMemberAdministration, boolean supportsPasswordExpiry,
-      boolean supportsPasswordHistory, boolean supportsUserAdministration,
+  public UserDirectoryCapabilities(
+      boolean supportsAdminChangePassword,
+      boolean supportsChangePassword,
+      boolean supportsGroupAdministration,
+      boolean supportsGroupMemberAdministration,
+      boolean supportsPasswordExpiry,
+      boolean supportsPasswordHistory,
+      boolean supportsUserAdministration,
       boolean supportsUserLocks) {
     this.supportsAdminChangePassword = supportsAdminChangePassword;
     this.supportsChangePassword = supportsChangePassword;
@@ -177,7 +175,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the admin change password capability.
    *
    * @return <code>true</code> if the user directory supports the admin change password capability
-   * or <code>false</code> otherwise
+   *     or <code>false</code> otherwise
    */
   public boolean getSupportsAdminChangePassword() {
     return supportsAdminChangePassword;
@@ -187,7 +185,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the change password capability.
    *
    * @return <code>true</code> if the user directory supports the change password capability or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public boolean getSupportsChangePassword() {
     return supportsChangePassword;
@@ -197,7 +195,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the group administration capability.
    *
    * @return <code>true</code> if the user directory supports the group administration capability or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public boolean getSupportsGroupAdministration() {
     return supportsGroupAdministration;
@@ -207,7 +205,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the group member administration capability.
    *
    * @return <code>true</code> if the user directory supports the group member administration
-   * capability or <code>false</code> otherwise
+   *     capability or <code>false</code> otherwise
    */
   public boolean getSupportsGroupMemberAdministration() {
     return supportsGroupMemberAdministration;
@@ -217,7 +215,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the password expiry capability.
    *
    * @return <code>true</code> if the user directory supports the password expiry capability or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public boolean getSupportsPasswordExpiry() {
     return supportsPasswordExpiry;
@@ -227,7 +225,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the password history capability.
    *
    * @return <code>true</code> if the user directory supports the password history capability or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public boolean getSupportsPasswordHistory() {
     return supportsPasswordHistory;
@@ -237,7 +235,7 @@ public class UserDirectoryCapabilities {
    * Returns whether the user directory supports the user administration capability.
    *
    * @return <code>true</code> if the user directory supports the user administration capability or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public boolean getSupportsUserAdministration() {
     return supportsUserAdministration;
@@ -246,8 +244,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the user locks capability.
    *
-   * @return <code>true</code> if the user directory supports the user locks capability or
-   * <code>false</code>
+   * @return <code>true</code> if the user directory supports the user locks capability or <code>
+   *     false</code>
    */
   public boolean getSupportsUserLocks() {
     return supportsUserLocks;

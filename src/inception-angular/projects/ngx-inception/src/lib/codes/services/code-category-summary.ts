@@ -22,7 +22,7 @@
 export class CodeCategorySummary {
 
   /**
-   * The ID used to uniquely identify the code category.
+   * The ID uniquely identifying the code category.
    */
   id: string;
 
@@ -39,7 +39,7 @@ export class CodeCategorySummary {
   /**
    * Constructs a new CodeCategorySummary.
    *
-   * @param id      The ID used to uniquely identify the code category.
+   * @param id      The ID uniquely identifying the code category.
    * @param name    The name of the code category.
    * @param updated The date and time the code category was last updated.
    */

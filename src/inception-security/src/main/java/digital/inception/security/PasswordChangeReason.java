@@ -16,16 +16,16 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordChangeReason</code> enumeration defines the possible reasons for why a user's
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "PasswordChangeReason")
+@Schema(description = "PasswordChangeReason")
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "http://security.inception.digital")
 public enum PasswordChangeReason {
@@ -56,7 +56,6 @@ public enum PasswordChangeReason {
    * Returns the password change reason given by the specified code value.
    *
    * @param code the code value identifying the password change reason
-   *
    * @return the password change reason given by the specified code value
    */
   @JsonCreator

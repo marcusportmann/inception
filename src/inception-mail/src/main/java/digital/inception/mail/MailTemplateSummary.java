@@ -16,13 +16,12 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,42 +35,39 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplateSummary</code> class holds the information for a mail template.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "MailTemplateSummary")
+@Schema(description = "MailTemplateSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType"})
 @XmlRootElement(name = "MailTemplateSummary", namespace = "http://mail.inception.digital")
-@XmlType(name = "MailTemplateSummary", namespace = "http://mail.inception.digital",
+@XmlType(
+    name = "MailTemplateSummary",
+    namespace = "http://mail.inception.digital",
     propOrder = {"id", "name", "contentType"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
 @SuppressWarnings({"unused"})
-public class MailTemplateSummary
-    implements Serializable {
+public class MailTemplateSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The content type for the mail template.
-   */
-  @ApiModelProperty(value = "The content type for the mail template", required = true)
+  /** The content type for the mail template. */
+  @Schema(description = "The content type for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ContentType", required = true)
   @NotNull
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
 
-  /**
-   * The ID used to uniquely identify the mail template.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the mail template", required = true)
+  /** The ID uniquely identifying the mail template. */
+  @Schema(description = "The ID uniquely identifying the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -80,10 +76,8 @@ public class MailTemplateSummary
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the mail template.
-   */
-  @ApiModelProperty(value = "The name of the mail template", required = true)
+  /** The name of the mail template. */
+  @Schema(description = "The name of the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -91,17 +85,14 @@ public class MailTemplateSummary
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>MailTemplateSummary</code>.
-   */
-  public MailTemplateSummary() {
-  }
+  /** Constructs a new <code>MailTemplateSummary</code>. */
+  public MailTemplateSummary() {}
 
   /**
    * Constructs a new <code>MailTemplateSummary</code>.
    *
-   * @param id          the ID used to uniquely identify the mail template
-   * @param name        the name of the mail template
+   * @param id the ID uniquely identifying the mail template
+   * @param name the name of the mail template
    * @param contentType the content type for the mail template
    */
   public MailTemplateSummary(String id, String name, MailTemplateContentType contentType) {
@@ -114,9 +105,8 @@ public class MailTemplateSummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -156,18 +146,18 @@ public class MailTemplateSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the mail template.
+   * Returns the ID uniquely identifying the mail template.
    *
-   * @return the ID used to uniquely identify the mail template
+   * @return the ID uniquely identifying the mail template
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the mail template.
+   * Set the ID uniquely identifying the mail template.
    *
-   * @param id the ID used to uniquely identify the mail template
+   * @param id the ID uniquely identifying the mail template
    */
   public void setId(String id) {
     this.id = id;
@@ -198,9 +188,7 @@ public class MailTemplateSummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -210,7 +198,12 @@ public class MailTemplateSummary
    */
   @Override
   public String toString() {
-    return "MailTemplateSummary {id=\"" + getId() + "\", name=\"" + getName()
-        + "\", contentType=\"" + getContentType() + "\"}";
+    return "MailTemplateSummary {id=\""
+        + getId()
+        + "\", name=\""
+        + getName()
+        + "\", contentType=\""
+        + getContentType()
+        + "\"}";
   }
 }

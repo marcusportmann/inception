@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
 import org.springframework.beans.FatalBeanException;
@@ -50,14 +50,10 @@ import org.springframework.util.StringUtils;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
-  /**
-   * The public key used to verify OAuth2 tokens.
-   */
+  /** The public key used to verify OAuth2 tokens. */
   @Value("${security.oauth2.jwt.publicKey:#{null}}")
   private String jwtPublicKey;
 
@@ -97,22 +93,26 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
       if (!StringUtils.isEmpty(userAuthenticationConverter)) {
         try {
-          Class<?> userAuthenticationConverterClass = Thread.currentThread().getContextClassLoader()
-              .loadClass(userAuthenticationConverter);
+          Class<?> userAuthenticationConverterClass =
+              Thread.currentThread().getContextClassLoader().loadClass(userAuthenticationConverter);
 
-          if (!UserAuthenticationConverter.class
-              .isAssignableFrom(userAuthenticationConverterClass)) {
-            throw new RuntimeException("The user authentication converter class ("
-                + userAuthenticationConverter
-                + ") does not implement the UserAuthenticationConverter interface");
+          if (!UserAuthenticationConverter.class.isAssignableFrom(
+              userAuthenticationConverterClass)) {
+            throw new RuntimeException(
+                "The user authentication converter class ("
+                    + userAuthenticationConverter
+                    + ") does not implement the UserAuthenticationConverter interface");
           }
 
           UserAuthenticationConverter userAuthenticationConverter =
-              userAuthenticationConverterClass.asSubclass(UserAuthenticationConverter.class)
-                  .getConstructor().newInstance();
+              userAuthenticationConverterClass
+                  .asSubclass(UserAuthenticationConverter.class)
+                  .getConstructor()
+                  .newInstance();
 
-          applicationContext.getAutowireCapableBeanFactory().autowireBean(
-              userAuthenticationConverter);
+          applicationContext
+              .getAutowireCapableBeanFactory()
+              .autowireBean(userAuthenticationConverter);
 
           DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
 
@@ -122,7 +122,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         } catch (Throwable e) {
           throw new RuntimeException(
               "Failed to initialize the custom UserAuthenticationConverter implementation ("
-                  + userAuthenticationConverter + ")", e);
+                  + userAuthenticationConverter
+                  + ")",
+              e);
         }
       }
 
@@ -136,8 +138,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
   }
 
   @Override
-  public void configure(HttpSecurity http)
-      throws Exception {
+  public void configure(HttpSecurity http) throws Exception {
     // TODO: Enable secure access based on configuration -- MARCUS
     // http.requiresChannel().anyRequest().requiresSecure();
 

@@ -16,14 +16,13 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
@@ -40,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Function</code> class holds the information for an authorised function that can be
@@ -48,33 +47,30 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Function")
+@Schema(description = "Function")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Function", namespace = "http://security.inception.digital")
-@XmlType(name = "Function", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "Function",
+    namespace = "http://security.inception.digital",
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "functions")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Function
-    implements java.io.Serializable {
+public class Function implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The roles the user is associated with.
-   */
+  /** The roles the user is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "functions")
   private Set<Role> roles = new HashSet<>();
 
-  /**
-   * The code used to uniquely identify the function.
-   */
-  @ApiModelProperty(value = "The code used to uniquely identify the function", required = true)
+  /** The code uniquely identifying the function. */
+  @Schema(description = "The code uniquely identifying the function", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -83,20 +79,16 @@ public class Function
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
-  /**
-   * The description for the function.
-   */
-  @ApiModelProperty(value = "The description for the function")
+  /** The description for the function. */
+  @Schema(description = "The description for the function")
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(max = 100)
   @Column(name = "description", length = 100)
   private String description;
 
-  /**
-   * The name of the function.
-   */
-  @ApiModelProperty(value = "The name of the function", required = true)
+  /** The name of the function. */
+  @Schema(description = "The name of the function", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -104,17 +96,14 @@ public class Function
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>Function</code>.
-   */
-  public Function() {
-  }
+  /** Constructs a new <code>Function</code>. */
+  public Function() {}
 
   /**
    * Constructs a new <code>Function</code>.
    *
-   * @param code        the code used to uniquely identify the function
-   * @param name        the name of the function
+   * @param code the code uniquely identifying the function
+   * @param name the name of the function
    * @param description the description for the function
    */
   public Function(String code, String name, String description) {
@@ -127,9 +116,8 @@ public class Function
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -151,18 +139,18 @@ public class Function
   }
 
   /**
-   * Returns the code used to uniquely identify the function.
+   * Returns the code uniquely identifying the function.
    *
-   * @return the code used to uniquely identify the function
+   * @return the code uniquely identifying the function
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Set the code used to uniquely identify the function.
+   * Set the code uniquely identifying the function.
    *
-   * @param code the code used to uniquely identify the function
+   * @param code the code uniquely identifying the function
    */
   public void setCode(String code) {
     this.code = code;
@@ -229,8 +217,6 @@ public class Function
    */
   @Override
   public int hashCode() {
-    return (code == null)
-        ? 0
-        : code.hashCode();
+    return (code == null) ? 0 : code.hashCode();
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.sms;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -27,27 +27,25 @@ import javax.validation.Validator;
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "SMSService", name = "ISMSService",
+@WebService(
+    serviceName = "SMSService",
+    name = "ISMSService",
     targetNamespace = "http://sms.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SMSWebService {
 
-  /**
-   * The SMS Service.
-   */
+  /** The SMS Service. */
   private ISMSService smsService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>SMSWebService</code>.
    *
    * @param smsService the SMS Service
-   * @param validator  the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SMSWebService(ISMSService smsService, Validator validator) {
     this.smsService = smsService;

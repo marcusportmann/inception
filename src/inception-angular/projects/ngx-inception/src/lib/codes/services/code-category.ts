@@ -27,7 +27,7 @@ export class CodeCategory {
   data?: string;
 
   /**
-   * The ID used to uniquely identify the code category.
+   * The ID uniquely identifying the code category.
    */
   id: string;
 
@@ -44,7 +44,7 @@ export class CodeCategory {
   /**
    * Constructs a new CodeCategory.
    *
-   * @param id      The ID used to uniquely identify the code category.
+   * @param id      The ID uniquely identifying the code category.
    * @param name    The name of the code category.
    * @param data    The optional code data for the code category.
    * @param updated The date and time the code category was last updated.

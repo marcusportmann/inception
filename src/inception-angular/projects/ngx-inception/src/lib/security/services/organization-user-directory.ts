@@ -22,21 +22,21 @@
 export class OrganizationUserDirectory {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
    */
   organizationId: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   * The Universally Unique Identifier (UUID) uniquely identifying the organization.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new OrganizationUserDirectory.
    *
-   * @param organizationId  The Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param organizationId  The Universally Unique Identifier (UUID) uniquely identifying the
    *                        organization.
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    */
   constructor(organizationId: string, userDirectoryId: string) {

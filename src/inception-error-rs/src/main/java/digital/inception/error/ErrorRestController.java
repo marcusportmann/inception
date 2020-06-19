@@ -16,17 +16,19 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -39,34 +41,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorRestController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Error API")
+@Tag(name = "Error API")
 @RestController
 @RequestMapping(value = "/api/error")
 @SuppressWarnings({"unused"})
 public class ErrorRestController extends SecureRestController {
 
-  /**
-   * The Error Service.
-   */
-  private IErrorService errorService;
+  /** The Error Service. */
+  private final IErrorService errorService;
 
-  /**
-   * The JSR-303 validator.
-   */
-  private Validator validator;
+  /** The JSR-303 validator. */
+  private final Validator validator;
 
   /**
    * Constructs a new <code>ErrorRestController</code>.
    *
    * @param errorService the Error Service
-   * @param validator    the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ErrorRestController(IErrorService errorService, Validator validator) {
     this.errorService = errorService;
@@ -78,25 +76,47 @@ public class ErrorRestController extends SecureRestController {
    *
    * @param errorReport the error report
    */
-  @ApiOperation(value = "Create the error report", notes = "Create the error report")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The error report was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/error-reports", method = RequestMethod.POST,
+  @Operation(summary = "Create the error report", description = "Create the error report")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The error report was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/error-reports",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void createErrorReport(@ApiParam(name = "errorReport", value = "The error report",
-      required = true)
-  @RequestBody ErrorReport errorReport)
+  public void createErrorReport(
+      @Parameter(name = "errorReport", description = "The error report", required = true)
+          @RequestBody
+          ErrorReport errorReport)
       throws InvalidArgumentException, ErrorServiceException {
+    if (errorReport == null) {
+      throw new InvalidArgumentException("errorReport");
+    }
+
     // Truncate the detail if required
     if ((errorReport.getDetail() != null)
         && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE)) {
-      errorReport.setDetail(errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3)
-          + "...");
+      errorReport.setDetail(
+          errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
     }
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,15 +125,11 @@ public class ErrorRestController extends SecureRestController {
       errorReport.setWho(authentication.getPrincipal().toString());
     }
 
-    if (errorReport == null) {
-      throw new InvalidArgumentException("code");
-    }
-
     Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("errorReport", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "errorReport", ValidationError.toValidationErrors(constraintViolations));
     }
 
     errorService.createErrorReport(errorReport);

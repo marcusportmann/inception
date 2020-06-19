@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
@@ -30,46 +30,38 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public abstract class UserDirectoryBase
-    implements IUserDirectory {
+public abstract class UserDirectoryBase implements IUserDirectory {
 
-  /**
-   * The Group Repository.
-   */
+  /** The Group Repository. */
   private GroupRepository groupRepository;
 
-  /**
-   * The parameters for the user directory.
-   */
+  /** The parameters for the user directory. */
   private List<UserDirectoryParameter> parameters;
 
-  /**
-   * The Role Repository.
-   */
+  /** The Role Repository. */
   private RoleRepository roleRepository;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   private UUID userDirectoryId;
 
-  /**
-   * The User Repository.
-   */
+  /** The User Repository. */
   private UserRepository userRepository;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param parameters      the parameters for the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
-   * @param userRepository  the User Repository
-   * @param roleRepository  the Role Repository
+   * @param userRepository the User Repository
+   * @param roleRepository the Role Repository
    */
-  public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
-      GroupRepository groupRepository, UserRepository userRepository,
+  public UserDirectoryBase(
+      UUID userDirectoryId,
+      List<UserDirectoryParameter> parameters,
+      GroupRepository groupRepository,
+      UserRepository userRepository,
       RoleRepository roleRepository) {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
@@ -106,9 +98,9 @@ public abstract class UserDirectoryBase
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -123,12 +115,10 @@ public abstract class UserDirectoryBase
     return userRepository;
   }
 
-
   /**
    * Checks whether the specified value is <code>null</code> or blank.
    *
    * @param value the value to check
-   *
    * @return true if the value is <code>null</code> or blank
    */
   protected boolean isNullOrEmpty(Object value) {

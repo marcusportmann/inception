@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,43 +27,35 @@ import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuthenticateRequestData</code> class manages the data for a "Authenticate Request"
  * message.
- * <p/>
- * This is a synchronous message.
+ *
+ * <p>This is a synchronous message.
  *
  * @author Marcus Portmann
  */
 public class AuthenticateRequestData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Authenticate Request" message.
-   */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
+  /** The UUID for the "Authenticate Request" message. */
+  public static final UUID MESSAGE_TYPE_ID =
+      UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * authentication request originated from.
+   * The Universally Unique Identifier (UUID) uniquely identifying the device the authentication
+   * request originated from.
    */
   private UUID deviceId;
 
-  /**
-   * The password used to authenticate the user.
-   */
+  /** The password used to authenticate the user. */
   private String password;
 
-  /**
-   * The username identifying the user associated with the message.
-   */
+  /** The username identifying the user associated with the message. */
   private String username;
 
-  /**
-   * Constructs a new <code>AuthenticateRequestData</code>.
-   */
+  /** Constructs a new <code>AuthenticateRequestData</code>. */
   public AuthenticateRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -73,8 +65,8 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    *
    * @param username the username identifying the user associated with the message
    * @param password the password used to authenticate the user
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the authentication request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     authentication request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -88,13 +80,11 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData)
-      throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -117,11 +107,11 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the
    * authentication request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * authentication request originated from
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     authentication request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -150,19 +140,15 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {
     Element rootElement = new Element("AuthenticateRequest");
 
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
-    rootElement.addContent(new Element("Password", StringUtils.isEmpty(password)
-        ? ""
-        : password));
-    rootElement.addContent(new Element("Username", StringUtils.isEmpty(username)
-        ? ""
-        : username));
+    rootElement.addContent(new Element("Password", StringUtils.isEmpty(password) ? "" : password));
+    rootElement.addContent(new Element("Username", StringUtils.isEmpty(username) ? "" : username));
 
     Document document = new Document(rootElement);
 

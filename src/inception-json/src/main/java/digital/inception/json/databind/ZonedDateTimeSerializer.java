@@ -16,7 +16,7 @@
 
 package digital.inception.json.databind;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -25,19 +25,19 @@ import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ZonedDateTimeDeserializer</code> class implements the Jackson serializer for the
- * <code>ZonedDateTime</code> type.
+ * The <code>ZonedDateTimeDeserializer</code> class implements the Jackson serializer for the <code>
+ * ZonedDateTime</code> type.
  *
  * @author Marcus Portmann
  */
 public class ZonedDateTimeSerializer extends JsonSerializer<ZonedDateTime> {
 
   @Override
-  public void serialize(ZonedDateTime localDateTime, JsonGenerator jsonGenerator,
-      SerializerProvider serializers)
+  public void serialize(
+      ZonedDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializers)
       throws IOException {
     jsonGenerator.writeString(ISO8601Util.fromZonedDateTime(localDateTime));
   }

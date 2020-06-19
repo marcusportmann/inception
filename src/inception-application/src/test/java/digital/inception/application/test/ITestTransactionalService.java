@@ -29,16 +29,14 @@ public interface ITestTransactionalService {
    *
    * @param testData the test data
    */
-  void createTestData(TestData testData)
-      throws TestTransactionalServiceException;
+  void createTestData(TestData testData) throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction.
    *
    * @param testData the test data
    */
-  void createTestDataInNewTransaction(TestData testData)
-      throws TestTransactionalServiceException;
+  void createTestDataInNewTransaction(TestData testData) throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction with a checked exception.
@@ -77,24 +75,20 @@ public interface ITestTransactionalService {
    *
    * @return the next ID
    */
-  long getNextIDWithException()
-      throws TestTransactionalServiceException;
+  long getNextIDWithException() throws TestTransactionalServiceException;
 
   /**
    * Retrieve the next ID without throwing an exception.
    *
    * @return the next ID
    */
-  long getNextIDWithoutException()
-      throws TestTransactionalServiceException;
+  long getNextIDWithoutException() throws TestTransactionalServiceException;
 
   /**
    * Retrieve the test data.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  TestData getTestData(String id)
-      throws TestTransactionalServiceException;
+  TestData getTestData(String id) throws TestTransactionalServiceException;
 }

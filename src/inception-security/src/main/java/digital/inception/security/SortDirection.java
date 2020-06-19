@@ -16,16 +16,16 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SortDirection</code> enumeration defines the possible sort directions when retrieving
@@ -33,19 +33,15 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "SortDirection")
+@Schema(description = "SortDirection")
 @XmlEnum
 @XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
 public enum SortDirection {
-  /**
-   * Sort ascending.
-   */
+  /** Sort ascending. */
   @XmlEnumValue("Ascending")
   ASCENDING("asc", "Ascending"),
 
-  /**
-   * Sort descending.
-   */
+  /** Sort descending. */
   @XmlEnumValue("Descending")
   DESCENDING("desc", "Descending");
 
@@ -61,7 +57,6 @@ public enum SortDirection {
    * Returns the sort direction given by the specified code value.
    *
    * @param code the code value identifying the sort direction
-   *
    * @return the sort direction given by the specified code value
    */
   @JsonCreator

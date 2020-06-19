@@ -24,11 +24,6 @@ package digital.inception.validation;
  */
 public class InvalidArgumentErrorTest {
 
-  /**
-   * Test the <code>InvalidArgumentError</code>< class.
-   */
-  public void invalidArgumentErrorTest() {
-
-  }
-
+  /** Test the <code>InvalidArgumentError</code>< class. */
+  public void invalidArgumentErrorTest() {}
 }

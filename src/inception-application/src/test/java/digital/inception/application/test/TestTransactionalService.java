@@ -16,7 +16,7 @@
 
 package digital.inception.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.test.DataSourceProxy;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestTransactionalService</code> class provides the Test Transactional Service
@@ -43,27 +43,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @SuppressWarnings("unused")
-public class TestTransactionalService
-    implements ITestTransactionalService {
+public class TestTransactionalService implements ITestTransactionalService {
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private DataSource dataSource;
 
-  /**
-   * The ID generator.
-   */
+  /** The ID generator. */
   private IDGenerator idGenerator;
 
   /**
    * Constructs a new <code>TestTransactionalService</code>.
    *
-   * @param dataSource  the data source used to provide connections to the application database
+   * @param dataSource the data source used to provide connections to the application database
    * @param idGenerator the ID generator
    */
-  public TestTransactionalService(@Qualifier("applicationDataSource") DataSource dataSource,
-      IDGenerator idGenerator) {
+  public TestTransactionalService(
+      @Qualifier("applicationDataSource") DataSource dataSource, IDGenerator idGenerator) {
     this.dataSource = dataSource;
     this.idGenerator = idGenerator;
   }
@@ -73,8 +68,7 @@ public class TestTransactionalService
    *
    * @param testData the test data
    */
-  public void createTestData(TestData testData)
-      throws TestTransactionalServiceException {
+  public void createTestData(TestData testData) throws TestTransactionalServiceException {
     String createTestDataSQL = "INSERT INTO TEST.TEST_DATA  (ID, NAME, VALUE) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
@@ -91,7 +85,8 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1) {
         throw new RuntimeException(
             "No rows were affected as a result of executing the SQL statement ("
-                + createTestDataSQL + ")");
+                + createTestDataSQL
+                + ")");
       }
     } catch (Throwable e) {
       throw new TestTransactionalServiceException("Failed to create the test data", e);
@@ -117,7 +112,8 @@ public class TestTransactionalService
       if (statement.executeUpdate() != 1) {
         throw new RuntimeException(
             "No rows were affected as a result of executing the SQL statement ("
-                + createTestDataSQL + ")");
+                + createTestDataSQL
+                + ")");
       }
     } catch (Throwable e) {
       throw new TestTransactionalServiceException(
@@ -182,8 +178,7 @@ public class TestTransactionalService
    *
    * @return the next ID
    */
-  public long getNextIDWithException()
-      throws TestTransactionalServiceException {
+  public long getNextIDWithException() throws TestTransactionalServiceException {
     idGenerator.next("Application.TestId");
 
     throw new TestTransactionalServiceException("Testing 1.. 2.. 3..");
@@ -194,8 +189,7 @@ public class TestTransactionalService
    *
    * @return the next ID
    */
-  public long getNextIDWithoutException()
-      throws TestTransactionalServiceException {
+  public long getNextIDWithoutException() throws TestTransactionalServiceException {
     return idGenerator.next("Application.TestId");
   }
 
@@ -203,11 +197,9 @@ public class TestTransactionalService
    * Retrieve the test data.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
-  public TestData getTestData(String id)
-      throws TestTransactionalServiceException {
+  public TestData getTestData(String id) throws TestTransactionalServiceException {
     String getTestDataSQL = "SELECT ID, NAME, VALUE FROM TEST.TEST_DATA WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
@@ -227,8 +219,7 @@ public class TestTransactionalService
     }
   }
 
-  private TestData buildTestDataFromResultSet(ResultSet rs)
-      throws SQLException {
+  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
     return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

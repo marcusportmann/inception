@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,18 +26,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation
  * failed as a result of a user directory that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The user directory could not be found")
-@WebFault(name = "UserDirectoryNotFoundException",
+@WebFault(
+    name = "UserDirectoryNotFoundException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,11 +51,12 @@ public class UserDirectoryNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>UserDirectoryNotFoundException</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
   public UserDirectoryNotFoundException(UUID userDirectoryId) {
-    super("UserDirectoryNotFoundError", "The user directory with ID (" + userDirectoryId
-        + ") could not be found");
+    super(
+        "UserDirectoryNotFoundError",
+        "The user directory with ID (" + userDirectoryId + ") could not be found");
   }
 }

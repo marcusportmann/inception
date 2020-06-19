@@ -16,14 +16,13 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -43,32 +42,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Role</code> class holds the information for a role.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Role")
+@Schema(description = "Role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Role", namespace = "http://security.inception.digital")
-@XmlType(name = "Role", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "Role",
+    namespace = "http://security.inception.digital",
     propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "roles")
 @SuppressWarnings({"unused"})
-public class Role
-    implements java.io.Serializable {
+public class Role implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code used to uniquely identify the role.
-   */
-  @ApiModelProperty(value = "The code used to uniquely identify the role", required = true)
+  /** The code uniquely identifying the role. */
+  @Schema(description = "The code uniquely identifying the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -77,39 +75,33 @@ public class Role
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
-  /**
-   * The description for the role.
-   */
-  @ApiModelProperty(value = "The description for the role")
+  /** The description for the role. */
+  @Schema(description = "The description for the role")
   @JsonProperty
   @XmlElement(name = "Description")
   @Size(max = 100)
   @Column(name = "description", length = 100)
   private String description;
 
-  /**
-   * The functions associated with the role.
-   */
+  /** The functions associated with the role. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(schema = "security", name = "function_to_role_map",
+  @JoinTable(
+      schema = "security",
+      name = "function_to_role_map",
       joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"),
       inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
   private Set<Function> functions = new HashSet<>();
 
-  /**
-   * The groups the role is associated with.
-   */
+  /** The groups the role is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "roles")
   private Set<Group> groups = new HashSet<>();
 
-  /**
-   * The name of the role.
-   */
-  @ApiModelProperty(value = "The name of the role", required = true)
+  /** The name of the role. */
+  @Schema(description = "The name of the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -117,11 +109,8 @@ public class Role
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>Role</code>.
-   */
-  public Role() {
-  }
+  /** Constructs a new <code>Role</code>. */
+  public Role() {}
 
   /**
    * Add the function to the role.
@@ -137,9 +126,8 @@ public class Role
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -161,18 +149,18 @@ public class Role
   }
 
   /**
-   * Returns the code used to uniquely identify the role.
+   * Returns the code uniquely identifying the role.
    *
-   * @return the code used to uniquely identify the role
+   * @return the code uniquely identifying the role
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Set the code used to uniquely identify the role.
+   * Set the code uniquely identifying the role.
    *
-   * @param code the code used to uniquely identify the role
+   * @param code the code uniquely identifying the role
    */
   public void setCode(String code) {
     this.code = code;
@@ -257,9 +245,7 @@ public class Role
    */
   @Override
   public int hashCode() {
-    return (code == null)
-        ? 0
-        : code.hashCode();
+    return (code == null) ? 0 : code.hashCode();
   }
 
   /**

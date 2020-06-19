@@ -16,7 +16,7 @@
 
 package digital.inception.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.fail;
 
@@ -43,33 +43,36 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 public class TestJPAServiceTest {
 
   private static int testDataCount = 1000;
-  @Autowired
-  private PlatformTransactionManager platformTransactionManager;
-  @Autowired
-  private ITestJPAService testJPAService;
+  @Autowired private PlatformTransactionManager platformTransactionManager;
+  @Autowired private ITestJPAService testJPAService;
 
   private static synchronized TestData getTestData() {
     testDataCount++;
 
-    return new TestData("Test Data ID " + testDataCount, "Test Name " + testDataCount,
+    return new TestData(
+        "Test Data ID " + testDataCount,
+        "Test Name " + testDataCount,
         "Test Description " + testDataCount);
   }
 
-  /**
-   * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
-   */
+  /** testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback */
   @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
       throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try {
       testJPAService.createTestDataWithCheckedException(testData);
@@ -77,47 +80,50 @@ public class TestJPAServiceTest {
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to retrieve the test data within the transaction");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to retrieve the test data within the transaction");
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after retrieving the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after retrieving the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "The transaction was not rolled back successfully");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData != null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Retrieved the test data after the transaction was rolled back");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Retrieved the test data after the transaction was rolled back");
     }
   }
 
-  /**
-   * testFailedExecutionWithCheckedExceptionInNewTransaction
-   */
+  /** testFailedExecutionWithCheckedExceptionInNewTransaction */
   @Test
-  public void testFailedExecutionWithCheckedExceptionInNewTransaction()
-      throws Exception {
+  public void testFailedExecutionWithCheckedExceptionInNewTransaction() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try {
       testJPAService.createTestDataInNewTransactionWithCheckedException(testData);
@@ -125,8 +131,9 @@ public class TestJPAServiceTest {
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
@@ -134,21 +141,21 @@ public class TestJPAServiceTest {
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to retrieve the test data after a checked exception was caught");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to retrieve the test data after a checked exception was caught");
     }
   }
 
-  /**
-   * testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback
-   */
+  /** testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback */
   @Test
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
       throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try {
       testJPAService.createTestDataWithRuntimeException(testData);
@@ -156,8 +163,9 @@ public class TestJPAServiceTest {
     }
 
     if (!transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find a transaction marked for rollback after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find a transaction marked for rollback after creating the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
@@ -165,21 +173,20 @@ public class TestJPAServiceTest {
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData != null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Retrieved the test data after the transaction was rolled back");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Retrieved the test data after the transaction was rolled back");
     }
   }
 
-  /**
-   * testFailedExecutionWithRuntimeExceptionInNewTransaction
-   */
+  /** testFailedExecutionWithRuntimeExceptionInNewTransaction */
   @Test
-  public void testFailedExecutionWithRuntimeExceptionInNewTransaction()
-      throws Exception {
+  public void testFailedExecutionWithRuntimeExceptionInNewTransaction() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     try {
       testJPAService.createTestDataInNewTransactionWithRuntimeException(testData);
@@ -187,8 +194,9 @@ public class TestJPAServiceTest {
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
@@ -196,17 +204,15 @@ public class TestJPAServiceTest {
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData != null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Retrieved the test data after a runtime exception was caught");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Retrieved the test data after a runtime exception was caught");
     }
   }
 
-  /**
-   * testFailedExecutionWithoutTransaction
-   */
+  /** testFailedExecutionWithoutTransaction */
   @Test
-  public void testFailedExecutionWithoutTransaction()
-      throws Exception {
+  public void testFailedExecutionWithoutTransaction() throws Exception {
     TestData testData = getTestData();
 
     try {
@@ -217,197 +223,207 @@ public class TestJPAServiceTest {
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service without an existing transaction: "
-          + "Failed to retrieve the test data after a checked exception was caught");
+      fail(
+          "Failed to invoked the Test JPA Service without an existing transaction: "
+              + "Failed to retrieve the test data after a checked exception was caught");
     }
   }
 
-  /**
-   * testSuccessfulExecutionInExistingTransaction
-   */
+  /** testSuccessfulExecutionInExistingTransaction */
   @Test
-  public void testSuccessfulExecutionInExistingTransaction()
-      throws Exception {
+  public void testSuccessfulExecutionInExistingTransaction() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestData(testData);
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to retrieve the test data within the transaction");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to retrieve the test data within the transaction");
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after retrieving the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after retrieving the test data");
     }
 
     platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "The transaction was not committed successfully");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "The transaction was not committed successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to retrieve the test data after the transaction was committed");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to retrieve the test data after the transaction was committed");
     }
   }
 
-  /**
-   * testSuccessfulExecutionInExistingTransactionWithRollback
-   */
+  /** testSuccessfulExecutionInExistingTransactionWithRollback */
   @Test
-  public void testSuccessfulExecutionInExistingTransactionWithRollback()
-      throws Exception {
+  public void testSuccessfulExecutionInExistingTransactionWithRollback() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestData(testData);
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to retrieve the test data within the transaction");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to retrieve the test data within the transaction");
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Failed to find an active transaction after retrieving the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Failed to find an active transaction after retrieving the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted()) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "The transaction was not rolled back successfully");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData != null) {
-      fail("Failed to invoked the Test JPA Service in an existing transaction: "
-          + "Retrieved the test data after the transaction was rolled back");
+      fail(
+          "Failed to invoked the Test JPA Service in an existing transaction: "
+              + "Retrieved the test data after the transaction was rolled back");
     }
   }
 
-  /**
-   * testSuccessfulExecutionInNewTransaction
-   */
+  /** testSuccessfulExecutionInNewTransaction */
   @Test
-  public void testSuccessfulExecutionInNewTransaction()
-      throws Exception {
+  public void testSuccessfulExecutionInNewTransaction() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestDataInNewTransaction(testData);
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to retrieve the test data within the transaction");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to retrieve the test data within the transaction");
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after retrieving the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after retrieving the test data");
     }
 
     platformTransactionManager.commit(transactionStatus);
 
     if (!transactionStatus.isCompleted()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "The transaction was not committed successfully");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "The transaction was not committed successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to retrieve the test data after the transaction was committed");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to retrieve the test data after the transaction was committed");
     }
   }
 
-  /**
-   * testSuccessfulExecutionInNewTransactionWithRollback
-   */
+  /** testSuccessfulExecutionInNewTransactionWithRollback */
   @Test
-  public void testSuccessfulExecutionInNewTransactionWithRollback()
-      throws Exception {
+  public void testSuccessfulExecutionInNewTransactionWithRollback() throws Exception {
     TestData testData = getTestData();
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     testJPAService.createTestDataInNewTransaction(testData);
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after creating the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after creating the test data");
     }
 
     TestData retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to retrieve the test data within the transaction");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to retrieve the test data within the transaction");
     }
 
     if (transactionStatus.isCompleted() || transactionStatus.isRollbackOnly()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to find an active transaction after retrieving the test data");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to find an active transaction after retrieving the test data");
     }
 
     platformTransactionManager.rollback(transactionStatus);
 
     if (!transactionStatus.isCompleted()) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "The transaction was not rolled back successfully");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "The transaction was not rolled back successfully");
     }
 
     retrievedTestData = testJPAService.getTestData(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service in a new transaction: "
-          + "Failed to retrieve the test data after the transaction was rolled back");
+      fail(
+          "Failed to invoked the Test JPA Service in a new transaction: "
+              + "Failed to retrieve the test data after the transaction was rolled back");
     }
   }
 
-  /**
-   * testSuccessfulExecutionWithoutTransaction
-   */
+  /** testSuccessfulExecutionWithoutTransaction */
   @Test
-  public void testSuccessfulExecutionWithoutTransaction()
-      throws Exception {
+  public void testSuccessfulExecutionWithoutTransaction() throws Exception {
     TestData testData = getTestData();
 
     // NOTE: The transactional createTestData method is called as merging requires a transaction
@@ -416,8 +432,9 @@ public class TestJPAServiceTest {
     TestData retrievedTestData = testJPAService.getTestDataWithoutTransaction(testData.getId());
 
     if (retrievedTestData == null) {
-      fail("Failed to invoked the Test JPA Service without an existing transaction: "
-          + "Failed to retrieve the test data");
+      fail(
+          "Failed to invoked the Test JPA Service without an existing transaction: "
+              + "Failed to retrieve the test data");
     }
   }
 }

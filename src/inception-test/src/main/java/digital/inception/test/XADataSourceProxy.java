@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -36,18 +36,13 @@ import javax.sql.XADataSource;
  *
  * @author Marcus Portmann
  */
-public class XADataSourceProxy
-    implements XADataSource {
+public class XADataSourceProxy implements XADataSource {
 
-  /**
-   * The active XA database connections associated with the current thread.
-   */
+  /** The active XA database connections associated with the current thread. */
   private static ThreadLocal<Map<XAConnection, StackTraceElement[]>> activeXADatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The XA data source.
-   */
+  /** The XA data source. */
   private XADataSource xaDataSource;
 
   /**
@@ -79,50 +74,42 @@ public class XADataSourceProxy
   }
 
   @Override
-  public ShardingKeyBuilder createShardingKeyBuilder()
-      throws SQLException {
+  public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
     return xaDataSource.createShardingKeyBuilder();
   }
 
   @Override
-  public XAConnectionBuilder createXAConnectionBuilder()
-      throws SQLException {
+  public XAConnectionBuilder createXAConnectionBuilder() throws SQLException {
     return xaDataSource.createXAConnectionBuilder();
   }
 
   @Override
-  public PrintWriter getLogWriter()
-      throws SQLException {
+  public PrintWriter getLogWriter() throws SQLException {
     return xaDataSource.getLogWriter();
   }
 
   @Override
-  public void setLogWriter(PrintWriter out)
-      throws SQLException {
+  public void setLogWriter(PrintWriter out) throws SQLException {
     xaDataSource.setLogWriter(out);
   }
 
   @Override
-  public int getLoginTimeout()
-      throws SQLException {
+  public int getLoginTimeout() throws SQLException {
     return xaDataSource.getLoginTimeout();
   }
 
   @Override
-  public void setLoginTimeout(int seconds)
-      throws SQLException {
+  public void setLoginTimeout(int seconds) throws SQLException {
     xaDataSource.setLoginTimeout(seconds);
   }
 
   @Override
-  public Logger getParentLogger()
-      throws SQLFeatureNotSupportedException {
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     return xaDataSource.getParentLogger();
   }
 
   @Override
-  public XAConnection getXAConnection()
-      throws SQLException {
+  public XAConnection getXAConnection() throws SQLException {
     XAConnection xaConnection = new XAConnectionProxy(xaDataSource.getXAConnection());
 
     addActiveXADatabaseConnection(xaConnection);
@@ -131,8 +118,7 @@ public class XADataSourceProxy
   }
 
   @Override
-  public XAConnection getXAConnection(String user, String password)
-      throws SQLException {
+  public XAConnection getXAConnection(String user, String password) throws SQLException {
     XAConnection xaConnection = new XAConnectionProxy(xaDataSource.getXAConnection(user, password));
 
     addActiveXADatabaseConnection(xaConnection);

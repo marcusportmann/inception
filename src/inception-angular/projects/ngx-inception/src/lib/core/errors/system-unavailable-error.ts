@@ -31,6 +31,6 @@ export class SystemUnavailableError extends Error {
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
 
-    super('An error has occurred and the system is unable to process your request at this time.', httpErrorResponse);
+    super('An error has occurred and your request could not be processed at this time.', httpErrorResponse);
   }
 }

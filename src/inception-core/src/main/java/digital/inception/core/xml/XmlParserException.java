@@ -16,14 +16,14 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.xml.sax.SAXParseException;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlParserException</code> exception is thrown to indicate an error condition when
@@ -40,9 +40,7 @@ public class XmlParserException extends RuntimeException {
   private String code;
   private Date when;
 
-  /**
-   * Constructs a new <code>XmlParserException</code> with <code>null</code> as its message.
-   */
+  /** Constructs a new <code>XmlParserException</code> with <code>null</code> as its message. */
   public XmlParserException() {
     super();
     this.when = new Date();
@@ -55,12 +53,17 @@ public class XmlParserException extends RuntimeException {
    * @param cause the <code>SAXParseException</code> giving the cause of the exception
    */
   public XmlParserException(SAXParseException cause) {
-    super(cause.getMessage() + " at line (" + cause.getLineNumber() + ") and column ("
-        + (cause.getColumnNumber() + ") with SystemID (" + ((cause.getSystemId() != null)
-        ? cause.getSystemId()
-        : "UNKNOWN") + ") and PublicID (" + ((cause.getPublicId() != null)
-        ? cause.getPublicId()
-        : "UNKNOWN") + ")"));
+    super(
+        cause.getMessage()
+            + " at line ("
+            + cause.getLineNumber()
+            + ") and column ("
+            + (cause.getColumnNumber()
+                + ") with SystemID ("
+                + ((cause.getSystemId() != null) ? cause.getSystemId() : "UNKNOWN")
+                + ") and PublicID ("
+                + ((cause.getPublicId() != null) ? cause.getPublicId() : "UNKNOWN")
+                + ")"));
     this.when = new Date();
   }
 
@@ -80,7 +83,7 @@ public class XmlParserException extends RuntimeException {
    * message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(Throwable cause) {
     super(cause);
@@ -90,7 +93,7 @@ public class XmlParserException extends RuntimeException {
   /**
    * Constructs a new <code>XmlParserException</code> with the specified code and message.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public XmlParserException(String code, String message) {
@@ -103,8 +106,8 @@ public class XmlParserException extends RuntimeException {
    * Constructs a new <code>XmlParserException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(String message, Throwable cause) {
     super(message, cause);
@@ -114,10 +117,10 @@ public class XmlParserException extends RuntimeException {
   /**
    * Constructs a new <code>XmlParserException</code> with the specified code, message and cause.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(String code, String message, Throwable cause) {
     super(message, cause);
@@ -131,9 +134,7 @@ public class XmlParserException extends RuntimeException {
    * @return the error code identifying the error or NONE if no error code was specified
    */
   public String getCode() {
-    return (code == null)
-        ? NO_ERROR_CODE
-        : code;
+    return (code == null) ? NO_ERROR_CODE : code;
   }
 
   /**

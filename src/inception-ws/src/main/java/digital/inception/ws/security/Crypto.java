@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -60,15 +60,14 @@ import org.apache.wss4j.common.ext.WSSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Crypto</code> class.
  *
  * @author Marcus Portmann
  */
-public class Crypto extends CryptoBase
-    implements org.apache.wss4j.common.crypto.Crypto {
+public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto.Crypto {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Crypto.class);
@@ -80,9 +79,9 @@ public class Crypto extends CryptoBase
   /**
    * Constructs a new <code>Crypto</code>.
    *
-   * @param keyStore         the key store
+   * @param keyStore the key store
    * @param keyStorePassword the key store password
-   * @param trustStore       the trust store
+   * @param trustStore the trust store
    */
   public Crypto(KeyStore keyStore, String keyStorePassword, KeyStore trustStore) {
     this.keyStore = keyStore;
@@ -94,21 +93,20 @@ public class Crypto extends CryptoBase
   /**
    * Constructs a new <code>Crypto</code>.
    *
-   * @param keyStore         the key store
+   * @param keyStore the key store
    * @param keyStorePassword the key store password
-   * @param trustStore       the trust store
-   * @param crlStore         the certificate revocation list store
+   * @param trustStore the trust store
+   * @param crlStore the certificate revocation list store
    */
-  public Crypto(KeyStore keyStore, String keyStorePassword, KeyStore trustStore,
-      CertStore crlStore) {
+  public Crypto(
+      KeyStore keyStore, String keyStorePassword, KeyStore trustStore, CertStore crlStore) {
     this.keyStore = keyStore;
     this.keyStorePassword = keyStorePassword;
     this.trustStore = trustStore;
     this.crlStore = crlStore;
   }
 
-  private static String createKeyStoreErrorMessage(KeyStore keyStore)
-      throws KeyStoreException {
+  private static String createKeyStoreErrorMessage(KeyStore keyStore) throws KeyStoreException {
     Enumeration<String> aliases = keyStore.aliases();
     StringBuilder buffer = new StringBuilder(keyStore.size() * 7);
     boolean firstAlias = true;
@@ -121,30 +119,37 @@ public class Crypto extends CryptoBase
       firstAlias = false;
     }
 
-    return " in key store of type (" + keyStore.getType() + ") from provider ("
-        + keyStore.getProvider() + ") with size (" + keyStore.size() + ") and aliases: {"
-        + buffer.toString() + "}";
+    return " in key store of type ("
+        + keyStore.getType()
+        + ") from provider ("
+        + keyStore.getProvider()
+        + ") with size ("
+        + keyStore.size()
+        + ") and aliases: {"
+        + buffer.toString()
+        + "}";
   }
 
   /**
    * Get the private key associated with the public key.
    *
-   * @param publicKey       the public key
+   * @param publicKey the public key
    * @param callbackHandler the callback handler
-   *
    * @return the private key associated with the public key
    */
   @Override
   public PrivateKey getPrivateKey(PublicKey publicKey, CallbackHandler callbackHandler)
       throws WSSecurityException {
     if (keyStore == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{
-          "The key store is null"});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
     }
 
     if (callbackHandler == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{
-          "The callback handler is null"});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          "empty",
+          new Object[] {"The callback handler is null"});
     }
 
     String alias = getAliasForPublicKey(publicKey, keyStore);
@@ -154,11 +159,14 @@ public class Crypto extends CryptoBase
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
         logger.error(message + keyStoreErrorMessage);
 
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty",
-            new Object[]{message});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
       } catch (KeyStoreException ex) {
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, ex, "noPrivateKey",
-            new Object[]{ex.getMessage()});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE,
+            ex,
+            "noPrivateKey",
+            new Object[] {ex.getMessage()});
       }
     }
 
@@ -171,16 +179,14 @@ public class Crypto extends CryptoBase
    * Gets the private key corresponding to the identifier.
    *
    * @param identifier the implementation-specific identifier corresponding to the private key
-   * @param password   the password required to access the key
-   *
+   * @param password the password required to access the key
    * @return the private key
    */
   @Override
-  public PrivateKey getPrivateKey(String identifier, String password)
-      throws WSSecurityException {
+  public PrivateKey getPrivateKey(String identifier, String password) throws WSSecurityException {
     if (keyStore == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{
-          "The key store is null"});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
     }
 
     try {
@@ -189,8 +195,8 @@ public class Crypto extends CryptoBase
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
         logger.error(message + keyStoreErrorMessage);
 
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty",
-            new Object[]{message});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
       }
 
       String pwd = password;
@@ -198,22 +204,23 @@ public class Crypto extends CryptoBase
         pwd = keyStorePassword;
       }
 
-      Key key = keyStore.getKey(identifier, (pwd == null)
-          ? new char[]{}
-          : pwd.toCharArray());
+      Key key = keyStore.getKey(identifier, (pwd == null) ? new char[] {} : pwd.toCharArray());
       if (!(key instanceof PrivateKey)) {
         String message = "The key with the alias (" + identifier + ") is not a private key";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
         logger.error(message + keyStoreErrorMessage);
 
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty",
-            new Object[]{message});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
       }
 
       return (PrivateKey) key;
     } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException ex) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, ex, "noPrivateKey",
-          new Object[]{ex.getMessage()});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          ex,
+          "noPrivateKey",
+          new Object[] {ex.getMessage()});
     }
   }
 
@@ -221,22 +228,23 @@ public class Crypto extends CryptoBase
    * Get the private key associated with the X.509 certificate using the password provided by the
    * callback handler.
    *
-   * @param certificate     the X.509 certificate
+   * @param certificate the X.509 certificate
    * @param callbackHandler the callback handler
-   *
    * @return the private key associated with the X.509 certificate
    */
   @Override
   public PrivateKey getPrivateKey(X509Certificate certificate, CallbackHandler callbackHandler)
       throws WSSecurityException {
     if (keyStore == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{
-          "The key store is null"});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
     }
 
     if (callbackHandler == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{
-          "The callback handler is null"});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          "empty",
+          new Object[] {"The callback handler is null"});
     }
 
     String alias = getAliasForPublicKey(certificate, keyStore);
@@ -246,11 +254,14 @@ public class Crypto extends CryptoBase
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
         logger.error(message + keyStoreErrorMessage);
 
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "empty",
-            new Object[]{message});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
       } catch (KeyStoreException ex) {
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, ex, "noPrivateKey",
-            new Object[]{ex.getMessage()});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE,
+            ex,
+            "noPrivateKey",
+            new Object[] {ex.getMessage()});
       }
     }
 
@@ -261,39 +272,28 @@ public class Crypto extends CryptoBase
 
   /**
    * Get the X.509 certificate or certificate chain for the crypto type.
-   * <p/>
-   * The supported types are as follows:
+   *
+   * <p>The supported types are as follows:
+   *
    * <ul>
-   *   <li>
-   *     <b>TYPE.ISSUER_SERIAL</b><br/>
-   *     The X.509 certificate (chain) is identified by the issuer name and serial number.
-   *   </li>
-   *   <li>
-   *     <b>TYPE.THUMBPRINT_SHA1</b><br/>
-   *     The X.509 certificate (chain) is identified by the SHA1 of the (root) certificate.
-   *   </li>
-   *   <li>
-   *     <b>TYPE.SKI_BYTES</b><br/>
-   *     The X.509 certificate (chain) is identified by the SKI bytes of the (root) certificate.
-   *   </li>
-   *   <li>
-   *     <b>TYPE.SUBJECT_DN</b><br/>
-   *     The X.509 certificate (chain) is identified by the subject DN of the (root) certificate.
-   *   </li>
-   *   <li>
-   *     <b>TYPE.ALIAS</b><br/>
-   *     The X.509 certificate (chain) is identified by an alias, which for this implementation
-   *     means an alias of the key store or trust store.
-   *   </li>
+   *   <li><b>TYPE.ISSUER_SERIAL</b><br>
+   *       The X.509 certificate (chain) is identified by the issuer name and serial number.
+   *   <li><b>TYPE.THUMBPRINT_SHA1</b><br>
+   *       The X.509 certificate (chain) is identified by the SHA1 of the (root) certificate.
+   *   <li><b>TYPE.SKI_BYTES</b><br>
+   *       The X.509 certificate (chain) is identified by the SKI bytes of the (root) certificate.
+   *   <li><b>TYPE.SUBJECT_DN</b><br>
+   *       The X.509 certificate (chain) is identified by the subject DN of the (root) certificate.
+   *   <li><b>TYPE.ALIAS</b><br>
+   *       The X.509 certificate (chain) is identified by an alias, which for this implementation
+   *       means an alias of the key store or trust store.
    * </ul>
    *
    * @param cryptoType the crypto type
-   *
    * @return the X.509 certificate or certificate chain for the crypto type
    */
   @Override
-  public X509Certificate[] getX509Certificates(CryptoType cryptoType)
-      throws WSSecurityException {
+  public X509Certificate[] getX509Certificates(CryptoType cryptoType) throws WSSecurityException {
     if (cryptoType == null) {
       return null;
     }
@@ -302,8 +302,9 @@ public class Crypto extends CryptoBase
     X509Certificate[] certificateChain = null;
     switch (type) {
       case ISSUER_SERIAL:
-        certificateChain = getX509CertificateChainForIssuerAndSerialNumber(cryptoType.getIssuer(),
-            cryptoType.getSerial());
+        certificateChain =
+            getX509CertificateChainForIssuerAndSerialNumber(
+                cryptoType.getIssuer(), cryptoType.getSerial());
 
         break;
 
@@ -338,13 +339,11 @@ public class Crypto extends CryptoBase
    * Get the identifier for the X.509 certificate i.e. the key store alias.
    *
    * @param certificate the X.509 certificate
-   *
    * @return the identifier for the X.509 certificate i.e. the key store alias or <code>null</code>
-   * if the X.509 certificate could not be found
+   *     if the X.509 certificate could not be found
    */
   @Override
-  public String getX509Identifier(X509Certificate certificate)
-      throws WSSecurityException {
+  public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
     String alias = null;
 
     if (keyStore != null) {
@@ -363,8 +362,7 @@ public class Crypto extends CryptoBase
    *
    * @param publicKey the public key
    */
-  public void verifyTrust(PublicKey publicKey)
-      throws WSSecurityException {
+  public void verifyTrust(PublicKey publicKey) throws WSSecurityException {
     // If the public key is null, do not trust the signature
     if (publicKey == null) {
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
@@ -381,8 +379,11 @@ public class Crypto extends CryptoBase
   }
 
   @Override
-  public void verifyTrust(X509Certificate[] certs, boolean enableRevocation,
-      Collection<Pattern> subjectCertConstraints, Collection<Pattern> issuerCertConstraints)
+  public void verifyTrust(
+      X509Certificate[] certs,
+      boolean enableRevocation,
+      Collection<Pattern> subjectCertConstraints,
+      Collection<Pattern> issuerCertConstraints)
       throws WSSecurityException {
     verifyTrust(certs, enableRevocation, subjectCertConstraints);
 
@@ -395,7 +396,7 @@ public class Crypto extends CryptoBase
    * Adds the trust anchors in the key store to the set.
    *
    * @param trustAnchors the set to which to add the trust anchors
-   * @param keyStore     the key store to search for trust anchors
+   * @param keyStore the key store to search for trust anchors
    */
   private void addTrustAnchors(Set<TrustAnchor> trustAnchors, KeyStore keyStore)
       throws KeyStoreException, WSSecurityException {
@@ -406,7 +407,6 @@ public class Crypto extends CryptoBase
       if (certificate != null) {
         TrustAnchor anchor = new TrustAnchor(certificate, getNameConstraints(certificate));
         trustAnchors.add(anchor);
-
       }
     }
   }
@@ -415,7 +415,6 @@ public class Crypto extends CryptoBase
    * Convert the subject DN to an X.500 principal.
    *
    * @param subjectDN the subject DN
-   *
    * @return the X.500 principal
    */
   private Object convertSubjectToPrincipal(String subjectDN) {
@@ -441,13 +440,12 @@ public class Crypto extends CryptoBase
   /**
    * Create the parameters for the PXIX algorithm used to validate the certificate path.
    *
-   * @param trustAnchors     the trust anchors
+   * @param trustAnchors the trust anchors
    * @param enableRevocation are certificate revocation checks enabled
-   *
    * @return he parameters for the PXIX algorithm used to validate the certificate path
    */
-  private PKIXParameters createPKIXParameters(Set<TrustAnchor> trustAnchors,
-      boolean enableRevocation)
+  private PKIXParameters createPKIXParameters(
+      Set<TrustAnchor> trustAnchors, boolean enableRevocation)
       throws InvalidAlgorithmParameterException {
     PKIXParameters pkixParameters = new PKIXParameters(trustAnchors);
     pkixParameters.setRevocationEnabled(enableRevocation);
@@ -463,8 +461,7 @@ public class Crypto extends CryptoBase
    * Get the key store alias that corresponds to the public key in the key store.
    *
    * @param publicKey the public key
-   * @param keyStore  the key store
-   *
+   * @param keyStore the key store
    * @return the key store alias that corresponds to the public key in the key store
    */
   private String getAliasForPublicKey(PublicKey publicKey, KeyStore keyStore)
@@ -478,7 +475,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate retrievedCert = keyStore.getCertificate(alias);
           if (retrievedCert != null) {
-            certificateChain = new Certificate[]{retrievedCert};
+            certificateChain = new Certificate[] {retrievedCert};
           }
         }
 
@@ -499,8 +496,7 @@ public class Crypto extends CryptoBase
    * Get the key store alias that corresponds to the X.509 certificate in the key store.
    *
    * @param certificate the X.509 certificate
-   * @param keyStore    the key store
-   *
+   * @param keyStore the key store
    * @return the key store alias that corresponds to the X.509 certificate in the key store
    */
   private String getAliasForPublicKey(X509Certificate certificate, KeyStore keyStore)
@@ -514,7 +510,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate retrievedCertificate = keyStore.getCertificate(alias);
           if (retrievedCertificate != null) {
-            certificateChain = new Certificate[]{retrievedCertificate};
+            certificateChain = new Certificate[] {retrievedCertificate};
           }
         }
 
@@ -535,18 +531,18 @@ public class Crypto extends CryptoBase
    * Get the certificate or certificate chain with the serial number and issuer DN from the key
    * store.
    *
-   * @param issuerRDN    the X500Principal or BouncyCastle X509Name instance identifying the issuer
+   * @param issuerRDN the X500Principal or BouncyCastle X509Name instance identifying the issuer
    * @param serialNumber the serial number
-   * @param keyStore     the key store
-   *
+   * @param keyStore the key store
    * @return the certificate or certificate chain
    */
-  private Certificate[] getCertificateChainForIssuerAndSerialNumber(Object issuerRDN,
-      BigInteger serialNumber, KeyStore keyStore)
-      throws WSSecurityException {
+  private Certificate[] getCertificateChainForIssuerAndSerialNumber(
+      Object issuerRDN, BigInteger serialNumber, KeyStore keyStore) throws WSSecurityException {
     if (logger.isDebugEnabled()) {
-      logger.debug("Searching the key store for the certificate with issuer {} and serial {}",
-          issuerRDN, serialNumber);
+      logger.debug(
+          "Searching the key store for the certificate with issuer {} and serial {}",
+          issuerRDN,
+          serialNumber);
     }
 
     try {
@@ -557,7 +553,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate cert = keyStore.getCertificate(alias);
           if (cert != null) {
-            certificateChain = new Certificate[]{cert};
+            certificateChain = new Certificate[] {cert};
           }
         }
 
@@ -567,13 +563,16 @@ public class Crypto extends CryptoBase
           X509Certificate certificate = (X509Certificate) certificateChain[0];
 
           if (logger.isDebugEnabled()) {
-            logger.debug("The key store alias {} has issuer {} and serial {}", alias,
-                certificate.getIssuerX500Principal().getName(), certificate.getSerialNumber());
+            logger.debug(
+                "The key store alias {} has issuer {} and serial {}",
+                alias,
+                certificate.getIssuerX500Principal().getName(),
+                certificate.getSerialNumber());
           }
 
           if (certificate.getSerialNumber().compareTo(serialNumber) == 0) {
-            Object certificateName = createBCX509Name(certificate.getIssuerX500Principal()
-                .getName());
+            Object certificateName =
+                createBCX509Name(certificate.getIssuerX500Principal().getName());
             if (certificateName.equals(issuerRDN)) {
               if (logger.isDebugEnabled()) {
                 logger.debug("Issuer serial match found using the key store alias {}", alias);
@@ -592,7 +591,7 @@ public class Crypto extends CryptoBase
       logger.debug("No issuer serial match found in the key store");
     }
 
-    return new Certificate[]{};
+    return new Certificate[] {};
   }
 
   /**
@@ -601,9 +600,9 @@ public class Crypto extends CryptoBase
    *
    * @param skiBytes the subject key identifier bytes
    * @param keyStore the key store
-   *
    * @return the certificate or certificate chain or <code>null</code> if the certificate or
-   * certificate chain identified by the subject key identifier could not be found in the key store
+   *     certificate chain identified by the subject key identifier could not be found in the key
+   *     store
    */
   private Certificate[] getCertificateChainForSKI(byte[] skiBytes, KeyStore keyStore)
       throws WSSecurityException {
@@ -618,7 +617,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result.
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
 
@@ -643,21 +642,20 @@ public class Crypto extends CryptoBase
     logger.debug(
         "Failed to find the certificate or certificate chain matching the subject key identifier in the key store");
 
-    return new Certificate[]{};
+    return new Certificate[] {};
   }
 
   /**
    * Get the certificate or certificate chain with the thumbprint from the key store using the SHA-1
    * message digest.
    *
-   * @param thumbprint        the thumbprint
-   * @param keyStore          the key store
+   * @param thumbprint the thumbprint
+   * @param keyStore the key store
    * @param sha1MessageDigest the SHA-1 message digest
-   *
    * @return the certificate or certificate chain
    */
-  private Certificate[] getCertificateChainForThumbprint(byte[] thumbprint, KeyStore keyStore,
-      MessageDigest sha1MessageDigest)
+  private Certificate[] getCertificateChainForThumbprint(
+      byte[] thumbprint, KeyStore keyStore, MessageDigest sha1MessageDigest)
       throws WSSecurityException {
     if (logger.isDebugEnabled()) {
       logger.debug("Searching the keystore for the certificate using a SHA-1 thumbprint");
@@ -671,7 +669,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
 
@@ -682,8 +680,8 @@ public class Crypto extends CryptoBase
           try {
             sha1MessageDigest.update(certificate.getEncoded());
           } catch (CertificateEncodingException ex) {
-            throw new WSSecurityException(WSSecurityException.ErrorCode.SECURITY_TOKEN_UNAVAILABLE,
-                ex, "encodeError");
+            throw new WSSecurityException(
+                WSSecurityException.ErrorCode.SECURITY_TOKEN_UNAVAILABLE, ex, "encodeError");
           }
 
           byte[] data = sha1MessageDigest.digest();
@@ -705,15 +703,14 @@ public class Crypto extends CryptoBase
       logger.debug("No thumbprint match found in the key store");
     }
 
-    return new Certificate[]{};
+    return new Certificate[] {};
   }
 
   /**
    * Get all the certificates and certificate chains matching the subject in the key store.
    *
    * @param subjectDN either an X500Principal or a BouncyCastle X509Name instance for the subject
-   * @param store     the key store
-   *
+   * @param store the key store
    * @return the certificates and certificate chains matching the subject in the key store
    */
   private List<Certificate[]> getCertificateChainsForSubject(Object subjectDN, KeyStore store)
@@ -731,7 +728,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = store.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
 
@@ -743,8 +740,10 @@ public class Crypto extends CryptoBase
           Object certificateX500PrincipalName = createBCX509Name(certificateDN.getName());
 
           if (subjectDN.equals(certificateX500PrincipalName)) {
-            logger.debug("Found the certificate with subject ({}) and alias ({}) in the key store",
-                subjectDN, alias);
+            logger.debug(
+                "Found the certificate with subject ({}) and alias ({}) in the key store",
+                subjectDN,
+                alias);
             foundCertificates.add(certificateChain);
           }
         }
@@ -765,21 +764,20 @@ public class Crypto extends CryptoBase
   /**
    * Get a password from the callback handler.
    *
-   * @param identifier      the identifier
+   * @param identifier the identifier
    * @param callbackHandler the callback handler
-   *
    * @return the password retrieved from the callback handler
    */
   private String getPassword(String identifier, CallbackHandler callbackHandler)
       throws WSSecurityException {
-    WSPasswordCallback passwordCallback = new WSPasswordCallback(identifier, WSPasswordCallback
-        .DECRYPT);
+    WSPasswordCallback passwordCallback =
+        new WSPasswordCallback(identifier, WSPasswordCallback.DECRYPT);
     try {
-      Callback[] callbacks = new Callback[]{passwordCallback};
+      Callback[] callbacks = new Callback[] {passwordCallback};
       callbackHandler.handle(callbacks);
     } catch (IOException | UnsupportedCallbackException e) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "noPassword",
-          new Object[]{identifier});
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, e, "noPassword", new Object[] {identifier});
     }
 
     return passwordCallback.getPassword();
@@ -790,9 +788,8 @@ public class Crypto extends CryptoBase
    * key store or trust store.
    *
    * @param alias the key store alias
-   *
-   * @return the X.509 certificate or certificate chain that corresponds to the identifier or
-   * <code>null</code> if no X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain that corresponds to the identifier or <code>
+   *     null</code> if no X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForAlias(String alias)
       throws WSSecurityException {
@@ -808,7 +805,7 @@ public class Crypto extends CryptoBase
         if ((certificateChain == null) || (certificateChain.length == 0)) {
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
       }
@@ -819,7 +816,7 @@ public class Crypto extends CryptoBase
         if (certificateChain == null) {
           Certificate certificate = trustStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
       }
@@ -838,15 +835,13 @@ public class Crypto extends CryptoBase
    * Get the X.509 certificate or certificate chain with the serial number and issuer from the key
    * store or trust store.
    *
-   * @param issuer       the issuer
+   * @param issuer the issuer
    * @param serialNumber the serial number
-   *
    * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
-   * certificate or certificate chain could not be found
+   *     certificate or certificate chain could not be found
    */
-  private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(String issuer,
-      BigInteger serialNumber)
-      throws WSSecurityException {
+  private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(
+      String issuer, BigInteger serialNumber) throws WSSecurityException {
     /*
      * Convert the subject DN to a java X500Principal object first. This is to ensure
      * interoperability with a DN constructed from .NET, where e.g. it uses "S" instead of "ST".
@@ -865,14 +860,14 @@ public class Crypto extends CryptoBase
 
     Certificate[] certificateChain = null;
     if (keyStore != null) {
-      certificateChain = getCertificateChainForIssuerAndSerialNumber(issuerName, serialNumber,
-          keyStore);
+      certificateChain =
+          getCertificateChainForIssuerAndSerialNumber(issuerName, serialNumber, keyStore);
     }
 
     // If we cannot find the issuer in the key store then look at the trust store
     if (((certificateChain == null) || (certificateChain.length == 0)) && (trustStore != null)) {
-      certificateChain = getCertificateChainForIssuerAndSerialNumber(issuerName, serialNumber,
-          trustStore);
+      certificateChain =
+          getCertificateChainForIssuerAndSerialNumber(issuerName, serialNumber, trustStore);
     }
 
     if ((certificateChain == null) || (certificateChain.length == 0)) {
@@ -887,9 +882,9 @@ public class Crypto extends CryptoBase
    * the key store or trust store.
    *
    * @param skiBytes the subject key identifier bytes
-   *
    * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
-   * certificate or certificate chain identified by the subject key identifier could not be found
+   *     certificate or certificate chain identified by the subject key identifier could not be
+   *     found
    */
   private X509Certificate[] getX509CertificateChainForSKI(byte[] skiBytes)
       throws WSSecurityException {
@@ -915,9 +910,8 @@ public class Crypto extends CryptoBase
    * or trust store.
    *
    * @param subjectDN the subject DN
-   *
-   * @return the X.509 certificate or certificate chain identified by the subject DN or
-   * <code>null</code> if the X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain identified by the subject DN or <code>null
+   *     </code> if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForSubject(String subjectDN)
       throws WSSecurityException {
@@ -938,8 +932,8 @@ public class Crypto extends CryptoBase
     }
 
     // We just choose the first entry
-    return Arrays.copyOf(certificateChains.get(0), certificateChains.get(0).length,
-        X509Certificate[].class);
+    return Arrays.copyOf(
+        certificateChains.get(0), certificateChains.get(0).length, X509Certificate[].class);
   }
 
   /**
@@ -947,9 +941,8 @@ public class Crypto extends CryptoBase
    * trust store.
    *
    * @param thumbprint the SHA1 thumbprint
-   *
    * @return the X.509 certificate or certificate chain matching the thumbprint or <code>null</code>
-   * if the X.509 certificate or certificate chain could not be found
+   *     if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForThumbprint(byte[] thumbprint)
       throws WSSecurityException {
@@ -968,8 +961,8 @@ public class Crypto extends CryptoBase
 
     // If we cannot find the issuer in the key store then look at the trust store
     if (((certificateChain == null) || (certificateChain.length == 0)) && (trustStore != null)) {
-      certificateChain = getCertificateChainForThumbprint(thumbprint, trustStore,
-          sha1MessageDigest);
+      certificateChain =
+          getCertificateChainForThumbprint(thumbprint, trustStore, sha1MessageDigest);
     }
 
     if ((certificateChain == null) || (certificateChain.length == 0)) {
@@ -982,11 +975,9 @@ public class Crypto extends CryptoBase
   /**
    * Check whether the public key is in the key store.
    *
-   * @param publicKey        the public key to search for
+   * @param publicKey the public key to search for
    * @param keyStoreToSearch the key store to search
-   *
-   * @return <code>true</code> if the public key is in the key store or <code>false</code>
-   * otherwise
+   * @return <code>true</code> if the public key is in the key store or <code>false</code> otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch) {
     if (keyStoreToSearch == null) {
@@ -1005,7 +996,7 @@ public class Crypto extends CryptoBase
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = keyStoreToSearch.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[]{certificate};
+            certificateChain = new Certificate[] {certificate};
           }
         }
 
@@ -1034,12 +1025,14 @@ public class Crypto extends CryptoBase
   /**
    * Evaluate whether a given certificate or certificate chain should be trusted.
    *
-   * @param certificateChain              the X.509 certificate (chain) to validate
-   * @param enableRevocation              whether to enable CRL verification or not
+   * @param certificateChain the X.509 certificate (chain) to validate
+   * @param enableRevocation whether to enable CRL verification or not
    * @param subjectCertificateConstraints the set of constraints on the Subject DN of the
-   *                                      certificates
+   *     certificates
    */
-  private void verifyTrust(X509Certificate[] certificateChain, boolean enableRevocation,
+  private void verifyTrust(
+      X509Certificate[] certificateChain,
+      boolean enableRevocation,
       Collection<Pattern> subjectCertificateConstraints)
       throws WSSecurityException {
     /*
@@ -1067,12 +1060,13 @@ public class Crypto extends CryptoBase
         try {
           certificateChain[0].checkValidity();
         } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-          throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_CHECK, e,
-              "invalidCert");
+          throw new WSSecurityException(
+              WSSecurityException.ErrorCode.FAILED_CHECK, e, "invalidCert");
         }
 
         if (logger.isDebugEnabled()) {
-          logger.debug("Direct trust for the certificate ({})",
+          logger.debug(
+              "Direct trust for the certificate ({})",
               certificateChain[0].getSubjectX500Principal().getName());
         }
 
@@ -1097,10 +1091,10 @@ public class Crypto extends CryptoBase
 
       // If we cannot find the issuer in the key store then look at the trust store
       if (((issuingCertificateChainsToVerifyAgainst == null)
-          || issuingCertificateChainsToVerifyAgainst.isEmpty())
+              || issuingCertificateChainsToVerifyAgainst.isEmpty())
           && (trustStore != null)) {
-        issuingCertificateChainsToVerifyAgainst = getCertificateChainsForSubject(subject,
-            trustStore);
+        issuingCertificateChainsToVerifyAgainst =
+            getCertificateChainsForSubject(subject, trustStore);
       }
 
       if ((issuingCertificateChainsToVerifyAgainst == null)
@@ -1111,11 +1105,14 @@ public class Crypto extends CryptoBase
         if (logger.isDebugEnabled()) {
           logger.debug(
               "No certificates found in the key store for the issuer ({}) of the certificate ({})",
-              issuerDN, subjectDN);
+              issuerDN,
+              subjectDN);
         }
 
-        throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, "certpath",
-            new Object[]{"No trusted certs found"});
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE,
+            "certpath",
+            new Object[] {"No trusted certs found"});
       }
     }
 
@@ -1161,7 +1158,11 @@ public class Crypto extends CryptoBase
           X509Certificate[] x509certs =
               new X509Certificate[issuingCertificateChainToVerifyAgainst.length + 1];
           x509certs[0] = certificateChain[0];
-          System.arraycopy(issuingCertificateChainToVerifyAgainst, 0, x509certs, 1,
+          System.arraycopy(
+              issuingCertificateChainToVerifyAgainst,
+              0,
+              x509certs,
+              1,
               issuingCertificateChainToVerifyAgainst.length);
 
           List<X509Certificate> certificateList = Arrays.asList(x509certs);
@@ -1188,8 +1189,11 @@ public class Crypto extends CryptoBase
 
         validator.validate(path, pkixParameters);
       }
-    } catch (NoSuchProviderException | NoSuchAlgorithmException | CertificateException
-        | InvalidAlgorithmParameterException | java.security.cert.CertPathValidatorException
+    } catch (NoSuchProviderException
+        | NoSuchAlgorithmException
+        | CertificateException
+        | InvalidAlgorithmParameterException
+        | java.security.cert.CertPathValidatorException
         | KeyStoreException e) {
       throw new WSSecurityException(WSSecurityException.ErrorCode.FAILURE, e, "certpath");
     }

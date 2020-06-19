@@ -16,7 +16,7 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToSMSStatusConverter
-    implements Converter<Integer, SMSStatus> {
+public class IntegerToSMSStatusConverter implements Converter<Integer, SMSStatus> {
 
-  /**
-   * Constructs a new <code>IntegerToSMSStatusConverter</code>.
-   */
-  public IntegerToSMSStatusConverter() {
-  }
+  /** Constructs a new <code>IntegerToSMSStatusConverter</code>. */
+  public IntegerToSMSStatusConverter() {}
 
   @Override
   public SMSStatus convert(Integer source) {

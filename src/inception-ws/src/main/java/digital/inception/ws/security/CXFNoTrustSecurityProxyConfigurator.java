@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -29,7 +29,7 @@ import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFNoTrustSecurityProxyConfigurator</code> class provides the capability to configure a
@@ -46,8 +46,7 @@ public class CXFNoTrustSecurityProxyConfigurator {
    *
    * @param proxy the web service proxy to configure
    */
-  public static void configureProxy(Object proxy)
-      throws Exception {
+  public static void configureProxy(Object proxy) throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
     if (invocationHandler instanceof ClientProxy) {
@@ -61,21 +60,24 @@ public class CXFNoTrustSecurityProxyConfigurator {
         TLSClientParameters tlsClientParameters = new TLSClientParameters();
 
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-          public void checkClientTrusted(X509Certificate[] chain, String authType)
-              throws CertificateException {
-            // Skip client verification
-          }
+        TrustManager[] trustAllCerts =
+            new TrustManager[] {
+              new X509TrustManager() {
+                public void checkClientTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                  // Skip client verification
+                }
 
-          public void checkServerTrusted(X509Certificate[] chain, String authType)
-              throws CertificateException {
-            // Skip server verification
-          }
+                public void checkServerTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                  // Skip server verification
+                }
 
-          public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
-          }
-        }};
+                public X509Certificate[] getAcceptedIssuers() {
+                  return new X509Certificate[0];
+                }
+              }
+            };
 
         tlsClientParameters.setTrustManagers(trustAllCerts);
 

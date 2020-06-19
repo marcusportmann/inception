@@ -94,10 +94,20 @@
     <spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
     <spring-security-oauth2.version>2.5.0.RELEASE</spring-security-oauth2.version>
     <spring-shell.version>2.0.0</spring-shell.version>
+
+    <springdoc-openapi-ui.version>1.4.1</springdoc-openapi-ui.version>
+
+    <!--
     <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
     <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+    -->
     <sun-activation.version>1.2.0</sun-activation.version>
+    <!--
     <swagger.version>1.5.24</swagger.version>
+    -->
+
+    <swagger-annotations.version>2.1.2</swagger-annotations.version>
+
     <wss4j-ws-security-common.version>2.2.5</wss4j-ws-security-common.version>
   </properties>
 
@@ -138,6 +148,7 @@
         <artifactId>agroal-narayana</artifactId>
         <version>${agroal-pool.version}</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>io.springfox</groupId>
         <artifactId>springfox-swagger2</artifactId>
@@ -148,16 +159,19 @@
         <artifactId>springfox-swagger-ui</artifactId>
         <version>${springfox-swagger-ui.version}</version>
       </dependency>
+      -->
       <dependency>
-        <groupId>io.swagger</groupId>
+        <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-annotations</artifactId>
-        <version>${swagger.version}</version>
+        <version>${swagger-annotations.version}</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>io.swagger</groupId>
         <artifactId>swagger-models</artifactId>
         <version>${swagger.version}</version>
       </dependency>
+      -->
       <dependency>
         <groupId>javax.jws</groupId>
         <artifactId>jsr181-api</artifactId>
@@ -237,6 +251,11 @@
         <groupId>org.jboss.narayana.jts</groupId>
         <artifactId>narayana-jts-integration</artifactId>
         <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-ui</artifactId>
+        <version>${springdoc-openapi-ui.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.security</groupId>

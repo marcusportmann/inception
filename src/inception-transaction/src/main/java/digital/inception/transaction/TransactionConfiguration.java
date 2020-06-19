@@ -16,7 +16,7 @@
 
 package digital.inception.transaction;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.arjuna.ats.arjuna.coordinator.TxControl;
 import com.arjuna.ats.arjuna.recovery.RecoveryManager;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionConfiguration</code> class.
@@ -50,19 +50,19 @@ public class TransactionConfiguration {
     TxControl.setXANodeName(nodeName());
 
     try {
-      transactionManagerProxyClass = Class.forName(
-          "digital.inception.test.TransactionManagerProxy");
+      transactionManagerProxyClass =
+          Class.forName("digital.inception.test.TransactionManagerProxy");
 
-      transactionManagerProxyConstructor = transactionManagerProxyClass.getConstructor(
-          TransactionManager.class);
+      transactionManagerProxyConstructor =
+          transactionManagerProxyClass.getConstructor(TransactionManager.class);
     } catch (ClassNotFoundException | NoSuchMethodException ignored) {
     }
 
     try {
       userTransactionProxyClass = Class.forName("digital.inception.test.UserTransactionProxy");
 
-      userTransactionProxyConstructor = userTransactionProxyClass.getConstructor(
-          UserTransaction.class, TransactionManager.class);
+      userTransactionProxyConstructor =
+          userTransactionProxyClass.getConstructor(UserTransaction.class, TransactionManager.class);
     } catch (ClassNotFoundException | NoSuchMethodException ignored) {
     }
   }
@@ -87,9 +87,7 @@ public class TransactionConfiguration {
       }
     }
 
-    String instanceName = (applicationName == null)
-        ? ""
-        : applicationName + "::";
+    String instanceName = (applicationName == null) ? "" : applicationName + "::";
 
     try {
       java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
@@ -127,8 +125,10 @@ public class TransactionConfiguration {
       Class<?> clazz = null;
 
       try {
-        clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigurationService");
+        clazz =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass("com.ibm.websphere.management.configservice.ConfigurationService");
       } catch (Throwable ignored) {
       }
 
@@ -151,8 +151,8 @@ public class TransactionConfiguration {
    */
   @Bean
   public RecoveryManager narayanaRecoveryManager() {
-    com.arjuna.ats.arjuna.recovery.RecoveryManager recoveryManager = com.arjuna.ats.arjuna.recovery
-        .RecoveryManager.manager();
+    com.arjuna.ats.arjuna.recovery.RecoveryManager recoveryManager =
+        com.arjuna.ats.arjuna.recovery.RecoveryManager.manager();
     recoveryManager.initialize();
 
     return recoveryManager;
@@ -165,8 +165,8 @@ public class TransactionConfiguration {
    */
   @Bean
   public com.arjuna.ats.jbossatx.jta.RecoveryManagerService narayanaRecoveryManagerService() {
-    com.arjuna.ats.jbossatx.jta.RecoveryManagerService recoveryManagerService = new com.arjuna.ats
-        .jbossatx.jta.RecoveryManagerService();
+    com.arjuna.ats.jbossatx.jta.RecoveryManagerService recoveryManagerService =
+        new com.arjuna.ats.jbossatx.jta.RecoveryManagerService();
     recoveryManagerService.create();
 
     return recoveryManagerService;
@@ -180,13 +180,13 @@ public class TransactionConfiguration {
   @Bean
   @DependsOn({"narayanaTransactionSynchronizationRegistry"})
   public TransactionManager narayanaTransactionManager() {
-    TransactionManager transactionManager = com.arjuna.ats.jta
-        .TransactionManager.transactionManager();
+    TransactionManager transactionManager =
+        com.arjuna.ats.jta.TransactionManager.transactionManager();
 
     if (transactionManagerProxyConstructor != null) {
       try {
-        return (TransactionManager) transactionManagerProxyConstructor.newInstance(
-            transactionManager);
+        return (TransactionManager)
+            transactionManagerProxyConstructor.newInstance(transactionManager);
       } catch (Throwable e) {
         return transactionManager;
       }
@@ -219,15 +219,15 @@ public class TransactionConfiguration {
 
     if (transactionManagerProxyConstructor != null) {
       try {
-        return (UserTransaction) userTransactionProxyConstructor.newInstance(userTransaction,
-            narayanaTransactionManager());
+        return (UserTransaction)
+            userTransactionProxyConstructor.newInstance(
+                userTransaction, narayanaTransactionManager());
       } catch (Throwable e) {
         return userTransaction;
       }
     } else {
       return userTransaction;
     }
-
   }
 
   /**

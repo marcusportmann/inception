@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -36,18 +36,13 @@ import javax.sql.DataSource;
  *
  * @author Marcus Portmann
  */
-public class DataSourceProxy
-    implements DataSource {
+public class DataSourceProxy implements DataSource {
 
-  /**
-   * The active database connections associated with the current thread.
-   */
+  /** The active database connections associated with the current thread. */
   private static ThreadLocal<Map<Connection, StackTraceElement[]>> activeDatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The data source.
-   */
+  /** The data source. */
   private DataSource dataSource;
 
   /**
@@ -79,20 +74,17 @@ public class DataSourceProxy
   }
 
   @Override
-  public ConnectionBuilder createConnectionBuilder()
-      throws SQLException {
+  public ConnectionBuilder createConnectionBuilder() throws SQLException {
     return dataSource.createConnectionBuilder();
   }
 
   @Override
-  public ShardingKeyBuilder createShardingKeyBuilder()
-      throws SQLException {
+  public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
     return dataSource.createShardingKeyBuilder();
   }
 
   @Override
-  public Connection getConnection()
-      throws SQLException {
+  public Connection getConnection() throws SQLException {
     Connection connection = new ConnectionProxy(dataSource.getConnection());
 
     addActiveDatabaseConnection(connection);
@@ -101,8 +93,7 @@ public class DataSourceProxy
   }
 
   @Override
-  public Connection getConnection(String username, String password)
-      throws SQLException {
+  public Connection getConnection(String username, String password) throws SQLException {
     Connection connection = new ConnectionProxy(dataSource.getConnection(username, password));
 
     addActiveDatabaseConnection(connection);
@@ -111,45 +102,38 @@ public class DataSourceProxy
   }
 
   @Override
-  public PrintWriter getLogWriter()
-      throws SQLException {
+  public PrintWriter getLogWriter() throws SQLException {
     return dataSource.getLogWriter();
   }
 
   @Override
-  public void setLogWriter(PrintWriter out)
-      throws SQLException {
+  public void setLogWriter(PrintWriter out) throws SQLException {
     dataSource.setLogWriter(out);
   }
 
   @Override
-  public int getLoginTimeout()
-      throws SQLException {
+  public int getLoginTimeout() throws SQLException {
     return dataSource.getLoginTimeout();
   }
 
   @Override
-  public void setLoginTimeout(int seconds)
-      throws SQLException {
+  public void setLoginTimeout(int seconds) throws SQLException {
     dataSource.setLoginTimeout(seconds);
   }
 
   @Override
-  public Logger getParentLogger()
-      throws SQLFeatureNotSupportedException {
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     return dataSource.getParentLogger();
   }
 
   @Override
-  public boolean isWrapperFor(Class<?> iface)
-      throws SQLException {
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return iface.isAssignableFrom(getClass());
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T unwrap(Class<T> iface)
-      throws SQLException {
+  public <T> T unwrap(Class<T> iface) throws SQLException {
     if (isWrapperFor(iface)) {
       return (T) this;
     }

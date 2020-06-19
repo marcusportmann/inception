@@ -16,7 +16,7 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -24,7 +24,7 @@ import java.util.Date;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LocalDateTimeToDateConverter</code> class implements the Spring converter that converts
@@ -34,14 +34,10 @@ import org.springframework.stereotype.Component;
  */
 @SuppressWarnings("unused")
 @Component
-public final class LocalDateTimeToDateConverter
-    implements Converter<LocalDateTime, Date> {
+public final class LocalDateTimeToDateConverter implements Converter<LocalDateTime, Date> {
 
-  /**
-   * Constructs a new <code>LocalDateTimeToDateConverter</code>.
-   */
-  public LocalDateTimeToDateConverter() {
-  }
+  /** Constructs a new <code>LocalDateTimeToDateConverter</code>. */
+  public LocalDateTimeToDateConverter() {}
 
   @Override
   public Date convert(LocalDateTime source) {

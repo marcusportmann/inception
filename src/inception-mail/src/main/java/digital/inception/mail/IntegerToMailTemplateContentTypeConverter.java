@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -34,11 +34,8 @@ import org.springframework.stereotype.Component;
 public class IntegerToMailTemplateContentTypeConverter
     implements Converter<Integer, MailTemplateContentType> {
 
-  /**
-   * Constructs a new <code>IntegerToMailTemplateContentTypeConverter</code>.
-   */
-  public IntegerToMailTemplateContentTypeConverter() {
-  }
+  /** Constructs a new <code>IntegerToMailTemplateContentTypeConverter</code>. */
+  public IntegerToMailTemplateContentTypeConverter() {}
 
   @Override
   public MailTemplateContentType convert(Integer source) {

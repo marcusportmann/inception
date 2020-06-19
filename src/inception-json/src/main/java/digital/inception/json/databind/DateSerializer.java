@@ -16,7 +16,7 @@
 
 package digital.inception.json.databind;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -25,11 +25,11 @@ import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
 import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>DateDeserializer</code> class implements the Jackson serializer for the
- * <code>Date</code> type.
+ * The <code>DateDeserializer</code> class implements the Jackson serializer for the <code>Date
+ * </code> type.
  *
  * @author Marcus Portmann
  */

@@ -16,18 +16,20 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
@@ -50,44 +52,39 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingRestController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Reporting API")
+@Tag(name = "Reporting API")
 @RestController
 @RequestMapping(value = "/api/reporting")
 @SuppressWarnings({"unused"})
 public class ReportingRestController extends SecureRestController {
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  private DataSource dataSource;
+  /** The data source used to provide connections to the application database. */
+  private final DataSource dataSource;
 
-  /**
-   * The Reporting Service.
-   */
-  private IReportingService reportingService;
+  /** The Reporting Service. */
+  private final IReportingService reportingService;
 
-  /**
-   * The JSR-303 validator.
-   */
-  private Validator validator;
+  /** The JSR-303 validator. */
+  private final Validator validator;
 
   /**
    * Constructs a new <code>ReportingRestController</code>.
    *
-   * @param dataSource       the data source used to provide connections to the application
-   *                         database
+   * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
-  public ReportingRestController(@Qualifier("applicationDataSource") DataSource dataSource,
-      IReportingService reportingService, Validator validator) {
+  public ReportingRestController(
+      @Qualifier("applicationDataSource") DataSource dataSource,
+      IReportingService reportingService,
+      Validator validator) {
     this.dataSource = dataSource;
     this.reportingService = reportingService;
     this.validator = validator;
@@ -98,34 +95,58 @@ public class ReportingRestController extends SecureRestController {
    *
    * @param reportDefinition the report definition to create
    */
-  @ApiOperation(value = "Create the report definition", notes = "Create the report definition")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The report definition was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "A report definition with the specified ID already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions", method = RequestMethod.POST,
+  @Operation(summary = "Create the report definition", description = "Create the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A report definition with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
-  public void createReportDefinition(@ApiParam(name = "reportDefinition",
-      value = "The report definition", required = true)
-  @RequestBody ReportDefinition reportDefinition)
-      throws InvalidArgumentException, DuplicateReportDefinitionException, ReportingServiceException {
+  public void createReportDefinition(
+      @Parameter(name = "reportDefinition", description = "The report definition", required = true)
+          @RequestBody
+          ReportDefinition reportDefinition)
+      throws InvalidArgumentException, DuplicateReportDefinitionException,
+          ReportingServiceException {
     if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
 
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations = validator.validate(
-        reportDefinition);
+    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
+        validator.validate(reportDefinition);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("reportDefinition", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
     }
 
     reportingService.createReportDefinition(reportDefinition);
@@ -134,26 +155,53 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    */
-  @ApiOperation(value = "Delete the report definition", notes = "Delete the report definition")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The report definition was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The report definition could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.DELETE,
+  @Operation(summary = "Delete the report definition", description = "Delete the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
-  public void deleteReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The ID used to uniquely identify the report definition", required = true)
-  @PathVariable String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+  public void deleteReportDefinition(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID uniquely identifying the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
     if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -165,34 +213,60 @@ public class ReportingRestController extends SecureRestController {
    * Generate the PDF report.
    *
    * @param generateReportRequest the request to generate the PDF report
-   *
    * @return the PDF report
    */
-  @ApiOperation(value = "Generate the PDF report", notes = "Generate the PDF report")
-  @ApiResponses(value = {@ApiResponse(code = 200,
-      message = "The PDF report was generated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The report definition could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/generate-report", method = RequestMethod.POST,
+  @Operation(summary = "Generate the PDF report", description = "Generate the PDF report")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "The PDF report was generated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/generate-report",
+      method = RequestMethod.POST,
       produces = "application/pdf")
-  public ResponseEntity<byte[]> generateReport(@ApiParam(name = "generateReportRequest",
-      value = "The request to generate a report", required = true)
-  @RequestBody GenerateReportRequest generateReportRequest)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+  public ResponseEntity<byte[]> generateReport(
+      @Parameter(
+              name = "generateReportRequest",
+              description = "The request to generate a report",
+              required = true)
+          @RequestBody
+          GenerateReportRequest generateReportRequest)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
     if (generateReportRequest == null) {
       throw new InvalidArgumentException("generateReportRequest");
     }
 
-    Set<ConstraintViolation<GenerateReportRequest>> constraintViolations = validator.validate(
-        generateReportRequest);
+    Set<ConstraintViolation<GenerateReportRequest>> constraintViolations =
+        validator.validate(generateReportRequest);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("generateReportRequest",
-          ValidationError.toValidationErrors(constraintViolations));
+      throw new InvalidArgumentException(
+          "generateReportRequest", ValidationError.toValidationErrors(constraintViolations));
     }
 
     Map<String, Object> parameters = new HashMap<>();
@@ -201,12 +275,13 @@ public class ReportingRestController extends SecureRestController {
       parameters.put(reportParameter.getName(), reportParameter.getValue());
     }
 
-    ReportDefinitionSummary reportDefinitionSummary = reportingService.getReportDefinitionSummary(
-        generateReportRequest.getReportDefinitionId());
+    ReportDefinitionSummary reportDefinitionSummary =
+        reportingService.getReportDefinitionSummary(generateReportRequest.getReportDefinitionId());
 
     try (Connection connection = dataSource.getConnection()) {
-      byte[] reportPDF = reportingService.createReportPDF(
-          generateReportRequest.getReportDefinitionId(), parameters, connection);
+      byte[] reportPDF =
+          reportingService.createReportPDF(
+              generateReportRequest.getReportDefinitionId(), parameters, connection);
 
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.parseMediaType("application/pdf"));
@@ -229,27 +304,54 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return the report definition
    */
-  @ApiOperation(value = "Retrieve the report definition", notes = "Retrieve the report definition")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The report definition could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the report definition",
+      description = "Retrieve the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
-  public ReportDefinition getReportDefinition(@ApiParam(name = "reportDefinition",
-      value = "The ID used to uniquely identify the report definition", required = true)
-  @PathVariable String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+  public ReportDefinition getReportDefinition(
+      @Parameter(
+              name = "reportDefinition",
+              description = "The ID uniquely identifying the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
     if (StringUtils.isEmpty(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -260,26 +362,52 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return the name of the report definition
    */
-  @ApiOperation(value = "Retrieve the name of the report definition",
-      notes = "Retrieve the name of the report definition")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The report definition could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions/{reportDefinitionId}/name",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the name of the report definition",
+      description = "Retrieve the name of the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}/name",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  public String getReportDefinitionName(@ApiParam(name = "reportDefinitionId",
-      value = "The ID used to uniquely identify the report definition", required = true)
-  @PathVariable String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+  public String getReportDefinitionName(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID uniquely identifying the report definition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
     if (StringUtils.isEmpty(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -292,13 +420,24 @@ public class ReportingRestController extends SecureRestController {
    *
    * @return the report definition summaries
    */
-  @ApiOperation(value = "Retrieve the report definition summaries",
-      notes = "Retrieve the report definition summaries")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definition-summaries", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the report definition summaries",
+      description = "Retrieve the report definition summaries")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definition-summaries",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
@@ -313,48 +452,86 @@ public class ReportingRestController extends SecureRestController {
    *
    * @return the report definitions
    */
-  @ApiOperation(value = "Retrieve the report definitions",
-      notes = "Retrieve the report definitions")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the report definitions",
+      description = "Retrieve the report definitions")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
-  public List<ReportDefinition> getReportDefinitions()
-      throws ReportingServiceException {
+  public List<ReportDefinition> getReportDefinitions() throws ReportingServiceException {
     return reportingService.getReportDefinitions();
   }
 
   /**
    * Update the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   * @param reportDefinition   the report definition
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinition the report definition
    */
-  @ApiOperation(value = "Update the report definition", notes = "Update the report definition")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The report definition was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The report definition could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/report-definitions/{reportDefinitionId}", method = RequestMethod.PUT,
+  @Operation(summary = "Update the report definition", description = "Update the report definition")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The report definition was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The report definition could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/report-definitions/{reportDefinitionId}",
+      method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
-  public void updateReportDefinition(@ApiParam(name = "reportDefinitionId",
-      value = "The ID used to uniquely identify the reportDefinition", required = true)
-  @PathVariable String reportDefinitionId, @ApiParam(name = "reportDefinition",
-      value = "The report definition", required = true)
-  @RequestBody ReportDefinition reportDefinition)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+  public void updateReportDefinition(
+      @Parameter(
+              name = "reportDefinitionId",
+              description = "The ID uniquely identifying the reportDefinition",
+              required = true)
+          @PathVariable
+          String reportDefinitionId,
+      @Parameter(name = "reportDefinition", description = "The report definition", required = true)
+          @RequestBody
+          ReportDefinition reportDefinition)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
     if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
@@ -363,12 +540,12 @@ public class ReportingRestController extends SecureRestController {
       throw new InvalidArgumentException("reportDefinitionId");
     }
 
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations = validator.validate(
-        reportDefinition);
+    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
+        validator.validate(reportDefinition);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("reportDefinition", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
     }
 
     reportingService.updateReportDefinition(reportDefinition);

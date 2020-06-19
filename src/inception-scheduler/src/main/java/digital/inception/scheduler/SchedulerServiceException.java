@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -24,19 +24,22 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SchedulerServiceException</code> exception is thrown to indicate an error condition
  * when working with the Scheduler Service.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the service is unable to process the request at this time")
-@WebFault(name = "SchedulerServiceException",
+@ResponseStatus(
+    value = HttpStatus.INTERNAL_SERVER_ERROR,
+    reason = "An error has occurred and the request could not be processed at this time")
+@WebFault(
+    name = "SchedulerServiceException",
     targetNamespace = "http://scheduler.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -67,7 +70,7 @@ public class SchedulerServiceException extends Exception {
    * message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public SchedulerServiceException(Throwable cause) {
     super(cause);
@@ -77,8 +80,8 @@ public class SchedulerServiceException extends Exception {
    * Constructs a new <code>SchedulerServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public SchedulerServiceException(String message, Throwable cause) {
     super(message, cause);

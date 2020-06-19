@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.util.regex.Pattern;
 
@@ -29,19 +29,17 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class MobilePhoneNumberUtil {
 
-  /**
-   * The regular expression used to validate an MobilePhoneNumberUtil.
-   */
+  /** The regular expression used to validate an MobilePhoneNumberUtil. */
   public static final String MSISDN_VALIDATION_REGEX =
       "(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210]"
           + "|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{1,14}$";
+
   private static final Pattern msisdnPattern = Pattern.compile(MSISDN_VALIDATION_REGEX);
 
   /**
    * Check whether the specified MobilePhoneNumberUtil is valid.
    *
    * @param msisdn the MobilePhoneNumberUtil
-   *
    * @return <code>true</code> if the MobilePhoneNumberUtil is valid or <code>false</code> otherwise
    */
   public static boolean isValidMSISDN(String msisdn) {
@@ -50,84 +48,89 @@ public final class MobilePhoneNumberUtil {
     return matcher.matches();
   }
 
-//  /**
-//   * Main.
-//   *
-//   * @param args the command line arguments
-//   */
-//  public static void main(String[] args)
-//  {
-//    System.out.println("+27 (0) 83 276 3107 = " + mobilePhoneNumberToMSISDN("+27 (0) 83 276 3107",
-//        "27"));
-//
-//    System.out.println("0832763107          = " + mobilePhoneNumberToMSISDN("0832763107", "27"));
-//
-//    System.out.println("083 276 3107        = " + mobilePhoneNumberToMSISDN("083 276 3107", "27"));
-//
-//    System.out.println("083-276-3107        = " + mobilePhoneNumberToMSISDN("083-276-3107", "27"));
-//
-//    System.out.println("+27832763107        = " + mobilePhoneNumberToMSISDN("+27832763107", "27"));
-//
-//    System.out.println("+27 83 276 3107     = " + mobilePhoneNumberToMSISDN("+27 83 276 3107",
-//        "27"));
-//
-//    System.out.println("27832763107         = " + mobilePhoneNumberToMSISDN("27832763107", "27"));
-//
-//    System.out.println("+36 55 002 709      = " + mobilePhoneNumberToMSISDN("+36 55 002 709",
-//        "27"));
-//
-//    System.out.println("+353 20 910 6402    = " + mobilePhoneNumberToMSISDN("+353 20 910 6402",
-//        "27"));
-//
-//    System.out.println("+1-202-555-0197     = " + mobilePhoneNumberToMSISDN("+1-202-555-0197",
-//        "27"));
-//
-//    System.out.println("+1-202-555-0197     = " + mobilePhoneNumberToMSISDN("+1-202-555-0197",
-//        "27"));
-//
-//    System.out.println("+27 (0) 83 276 3107 = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+27 (0) 83 276 3107", "27")));
-//
-//    System.out.println("0832763107          = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "0832763107", "27")));
-//
-//    System.out.println("083 276 3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "083 276 3107", "27")));
-//
-//    System.out.println("083-276-3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "083-276-3107", "27")));
-//
-//    System.out.println("+27832763107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+27832763107", "27")));
-//
-//    System.out.println("+27 83 276 3107     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+27 83 276 3107", "27")));
-//
-//    System.out.println("27832763107         = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "27832763107", "27")));
-//
-//    System.out.println("+36 55 002 709      = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+36 55 002 709", "27")));
-//
-//    System.out.println("+353 20 910 6402    = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+353 20 910 6402", "27")));
-//
-//    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+1-202-555-0197", "27")));
-//
-//    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
-//        "+1-202-555-0197", "27")));
-//  }
+  //  /**
+  //   * Main.
+  //   *
+  //   * @param args the command line arguments
+  //   */
+  //  public static void main(String[] args)
+  //  {
+  //    System.out.println("+27 (0) 83 276 3107 = " + mobilePhoneNumberToMSISDN("+27 (0) 83 276
+  // 3107",
+  //        "27"));
+  //
+  //    System.out.println("0832763107          = " + mobilePhoneNumberToMSISDN("0832763107",
+  // "27"));
+  //
+  //    System.out.println("083 276 3107        = " + mobilePhoneNumberToMSISDN("083 276 3107",
+  // "27"));
+  //
+  //    System.out.println("083-276-3107        = " + mobilePhoneNumberToMSISDN("083-276-3107",
+  // "27"));
+  //
+  //    System.out.println("+27832763107        = " + mobilePhoneNumberToMSISDN("+27832763107",
+  // "27"));
+  //
+  //    System.out.println("+27 83 276 3107     = " + mobilePhoneNumberToMSISDN("+27 83 276 3107",
+  //        "27"));
+  //
+  //    System.out.println("27832763107         = " + mobilePhoneNumberToMSISDN("27832763107",
+  // "27"));
+  //
+  //    System.out.println("+36 55 002 709      = " + mobilePhoneNumberToMSISDN("+36 55 002 709",
+  //        "27"));
+  //
+  //    System.out.println("+353 20 910 6402    = " + mobilePhoneNumberToMSISDN("+353 20 910 6402",
+  //        "27"));
+  //
+  //    System.out.println("+1-202-555-0197     = " + mobilePhoneNumberToMSISDN("+1-202-555-0197",
+  //        "27"));
+  //
+  //    System.out.println("+1-202-555-0197     = " + mobilePhoneNumberToMSISDN("+1-202-555-0197",
+  //        "27"));
+  //
+  //    System.out.println("+27 (0) 83 276 3107 = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+27 (0) 83 276 3107", "27")));
+  //
+  //    System.out.println("0832763107          = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "0832763107", "27")));
+  //
+  //    System.out.println("083 276 3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "083 276 3107", "27")));
+  //
+  //    System.out.println("083-276-3107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "083-276-3107", "27")));
+  //
+  //    System.out.println("+27832763107        = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+27832763107", "27")));
+  //
+  //    System.out.println("+27 83 276 3107     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+27 83 276 3107", "27")));
+  //
+  //    System.out.println("27832763107         = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "27832763107", "27")));
+  //
+  //    System.out.println("+36 55 002 709      = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+36 55 002 709", "27")));
+  //
+  //    System.out.println("+353 20 910 6402    = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+353 20 910 6402", "27")));
+  //
+  //    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+1-202-555-0197", "27")));
+  //
+  //    System.out.println("+1-202-555-0197     = " + isValidMSISDN(mobilePhoneNumberToMSISDN(
+  //        "+1-202-555-0197", "27")));
+  //  }
 
   /**
    * Returns the MobilePhoneNumberUtil for the specified mobile phone number.
    *
    * @param mobilePhoneNumber the mobile phone number
-   *
    * @return the MobilePhoneNumberUtil for the mobile phone number
    */
-  public static String mobilePhoneNumberToMSISDN(String mobilePhoneNumber,
-      String defaultInternationalPrefix) {
+  public static String mobilePhoneNumberToMSISDN(
+      String mobilePhoneNumber, String defaultInternationalPrefix) {
     // Remove any plus signs, white space (tabs and spaces) and dashes
     mobilePhoneNumber = mobilePhoneNumber.replaceAll("([+\\t -])", "");
 
@@ -135,8 +138,10 @@ public final class MobilePhoneNumberUtil {
     mobilePhoneNumber = mobilePhoneNumber.replaceFirst("(\\([0-9]*\\))", "");
 
     // Ensure that the default international prefix is applied
-    mobilePhoneNumber = mobilePhoneNumber.replaceFirst("^(?:" + defaultInternationalPrefix + "|\\+"
-        + defaultInternationalPrefix + "|0)", defaultInternationalPrefix);
+    mobilePhoneNumber =
+        mobilePhoneNumber.replaceFirst(
+            "^(?:" + defaultInternationalPrefix + "|\\+" + defaultInternationalPrefix + "|0)",
+            defaultInternationalPrefix);
 
     return mobilePhoneNumber;
   }

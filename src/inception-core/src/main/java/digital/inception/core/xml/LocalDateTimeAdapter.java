@@ -16,19 +16,17 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>LocalDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert
- * between
- * <code>String</code> and <code>LocalDateTime</code> types.
- * <br>
+ * The <code>LocalDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
+ * <code>String</code> and <code>LocalDateTime</code> types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -38,7 +36,6 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
    * Marshals the <code>java.time.LocalDateTime</code> value as an ISO8601Util string.
    *
    * @param value the value to marshal
-   *
    * @return the <code>java.time.LocalDateTime</code> value as an ISO8601Util string
    */
   public static String toISO8601(LocalDateTime value) {
@@ -53,7 +50,6 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
    * Unmarshals the ISO8601Util string value as a <code>java.time.LocalDateTime</code>.
    *
    * @param value the ISO8601Util string value
-   *
    * @return the ISO8601Util string value as a <code>java.time.LocalDateTime</code>
    */
   public static LocalDateTime toLocalDateTime(String value) {
@@ -72,7 +68,6 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
    * Marshals the <code>java.time.LocalDateTime</code> value as an ISO8601Util string.
    *
    * @param value the value to marshal
-   *
    * @return the <code>java.time.LocalDateTime</code> value as an ISO8601Util string
    */
   @Override
@@ -84,7 +79,6 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
    * Unmarshals the ISO8601Util string value as a <code>java.time.LocalDateTime</code>.
    *
    * @param value the ISO8601Util string value
-   *
    * @return the ISO8601Util string value as a <code>java.time.LocalDateTime</code>
    */
   @Override

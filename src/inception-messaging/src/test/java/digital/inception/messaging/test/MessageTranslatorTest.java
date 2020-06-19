@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -32,12 +32,9 @@ import org.junit.Test;
  */
 public class MessageTranslatorTest {
 
-  /**
-   * Test the encryption and decryption functionality.
-   */
+  /** Test the encryption and decryption functionality. */
   @Test
-  public void encryptionTest()
-      throws Exception {
+  public void encryptionTest() throws Exception {
     byte[] encryptionIV = CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE);
 
     byte[] encryptionKey = CryptoUtil.passwordToAESKey("ThisIsAPassword");
@@ -46,8 +43,8 @@ public class MessageTranslatorTest {
 
     byte[] encryptedData = MessageTranslator.encryptMessageData(encryptionKey, encryptionIV, data);
 
-    byte[] decryptedData = MessageTranslator.decryptMessageData(encryptionKey, encryptionIV,
-        encryptedData);
+    byte[] decryptedData =
+        MessageTranslator.decryptMessageData(encryptionKey, encryptionIV, encryptedData);
 
     assertArrayEquals(data, decryptedData);
   }

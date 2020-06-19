@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -48,39 +48,32 @@ import org.w3c.dom.Document;
  */
 @Service
 @SuppressWarnings("unused")
-public class ReportingService
-    implements IReportingService {
+public class ReportingService implements IReportingService {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private DataSource dataSource;
 
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
 
-  /**
-   * The Report Definition Repository.
-   */
+  /** The Report Definition Repository. */
   private ReportDefinitionRepository reportDefinitionRepository;
 
-  /**
-   * The Report Definition Summary Repository.
-   */
+  /** The Report Definition Summary Repository. */
   private ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
   /**
    * Constructs a new <code>ReportingService</code>.
    *
-   * @param dataSource                        the data source used to provide connections to the
-   *                                          application database
-   * @param reportDefinitionRepository        the Report Definition Repository
+   * @param dataSource the data source used to provide connections to the application database
+   * @param reportDefinitionRepository the Report Definition Repository
    * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
    */
-  public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource,
+  public ReportingService(
+      @Qualifier("applicationDataSource") DataSource dataSource,
       ReportDefinitionRepository reportDefinitionRepository,
       ReportDefinitionSummaryRepository reportDefinitionSummaryRepository) {
     this.dataSource = dataSource;
@@ -92,7 +85,7 @@ public class ReportingService
    * Create the new report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
-   *                         for the new report definition
+   *     for the new report definition
    */
   @Override
   @Transactional
@@ -107,17 +100,16 @@ public class ReportingService
     } catch (DuplicateReportDefinitionException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to create the report definition ("
-          + reportDefinition.getId() + ")", e);
+      throw new ReportingServiceException(
+          "Failed to create the report definition (" + reportDefinition.getId() + ")", e);
     }
   }
 
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   * @param parameters         the parameters for the report
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param parameters the parameters for the report
    * @return the PDF data for the report
    */
   @Override
@@ -130,26 +122,27 @@ public class ReportingService
     } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definition ("
-              + reportDefinitionId + ")", e);
+              + reportDefinitionId
+              + ")",
+          e);
     }
   }
 
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   * @param parameters         the parameters for the report
-   * @param connection         the database connection used to retrieve the report data
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param parameters the parameters for the report
+   * @param connection the database connection used to retrieve the report data
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
-      Connection connection)
+  public byte[] createReportPDF(
+      String reportDefinitionId, Map<String, Object> parameters, Connection connection)
       throws ReportDefinitionNotFoundException, ReportingServiceException {
     try {
-      Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
-          reportDefinitionId);
+      Optional<ReportDefinition> reportDefinitionOptional =
+          reportDefinitionRepository.findById(reportDefinitionId);
 
       if (reportDefinitionOptional.isEmpty()) {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
@@ -165,8 +158,11 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
-          reportDefinitionOptional.get().getTemplate()), localParameters, connection);
+      JasperPrint jasperPrint =
+          JasperFillManager.fillReport(
+              new ByteArrayInputStream(reportDefinitionOptional.get().getTemplate()),
+              localParameters,
+              connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     } catch (ReportDefinitionNotFoundException e) {
@@ -174,22 +170,23 @@ public class ReportingService
     } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definition ("
-              + reportDefinitionId + ")", e);
+              + reportDefinitionId
+              + ")",
+          e);
     }
   }
 
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   * @param parameters         the parameters for the report
-   * @param document           the XML document containing the report data
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param parameters the parameters for the report
+   * @param document the XML document containing the report data
    * @return the PDF data for the report
    */
   @Override
-  public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
-      Document document)
+  public byte[] createReportPDF(
+      String reportDefinitionId, Map<String, Object> parameters, Document document)
       throws ReportDefinitionNotFoundException, ReportingServiceException {
     try {
       ReportDefinition reportDefinition = getReportDefinition(reportDefinitionId);
@@ -210,8 +207,9 @@ public class ReportingService
         localParameters.put(name, parameters.get(name));
       }
 
-      JasperPrint jasperPrint = JasperFillManager.fillReport(new ByteArrayInputStream(
-          reportDefinition.getTemplate()), localParameters);
+      JasperPrint jasperPrint =
+          JasperFillManager.fillReport(
+              new ByteArrayInputStream(reportDefinition.getTemplate()), localParameters);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
     } catch (ReportDefinitionNotFoundException e) {
@@ -219,14 +217,16 @@ public class ReportingService
     } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definintion ("
-              + reportDefinitionId + ")", e);
+              + reportDefinitionId
+              + ")",
+          e);
     }
   }
 
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    */
   @Override
   @Transactional
@@ -241,8 +241,8 @@ public class ReportingService
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to delete the report definition ("
-          + reportDefinitionId + ")", e);
+      throw new ReportingServiceException(
+          "Failed to delete the report definition (" + reportDefinitionId + ")", e);
     }
   }
 
@@ -259,7 +259,7 @@ public class ReportingService
    * Set the real path to the folder where the local Jasper reports are stored.
    *
    * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
+   *     stored
    */
   public void setLocalReportFolderPath(String localReportFolderPath) {
     this.localReportFolderPath = localReportFolderPath;
@@ -271,8 +271,7 @@ public class ReportingService
    * @return the number of report definitions
    */
   @Override
-  public long getNumberOfReportDefinitions()
-      throws ReportingServiceException {
+  public long getNumberOfReportDefinitions() throws ReportingServiceException {
     try {
       return reportDefinitionRepository.count();
     } catch (Throwable e) {
@@ -283,16 +282,15 @@ public class ReportingService
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return the report definition
    */
   @Override
   public ReportDefinition getReportDefinition(String reportDefinitionId)
       throws ReportDefinitionNotFoundException, ReportingServiceException {
     try {
-      Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
-          reportDefinitionId);
+      Optional<ReportDefinition> reportDefinitionOptional =
+          reportDefinitionRepository.findById(reportDefinitionId);
 
       if (reportDefinitionOptional.isPresent()) {
         return reportDefinitionOptional.get();
@@ -302,16 +300,15 @@ public class ReportingService
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to retrieve the report definition ("
-          + reportDefinitionId + ")", e);
+      throw new ReportingServiceException(
+          "Failed to retrieve the report definition (" + reportDefinitionId + ")", e);
     }
   }
 
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return the name of the report definition
    */
   @Override
@@ -328,10 +325,9 @@ public class ReportingService
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to retrieve the name for the report definition ("
-          + reportDefinitionId + ")", e);
+      throw new ReportingServiceException(
+          "Failed to retrieve the name for the report definition (" + reportDefinitionId + ")", e);
     }
-
   }
 
   /**
@@ -353,8 +349,7 @@ public class ReportingService
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return the summary for the report definition
    */
   @Override
@@ -384,8 +379,7 @@ public class ReportingService
    * @return all the report definitions
    */
   @Override
-  public List<ReportDefinition> getReportDefinitions()
-      throws ReportingServiceException {
+  public List<ReportDefinition> getReportDefinitions() throws ReportingServiceException {
     try {
       return reportDefinitionRepository.findAll();
     } catch (Throwable e) {
@@ -396,8 +390,7 @@ public class ReportingService
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override
@@ -406,8 +399,8 @@ public class ReportingService
     try {
       return reportDefinitionRepository.existsById(reportDefinitionId);
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to check whether the report definition ("
-          + reportDefinitionId + ") exists", e);
+      throw new ReportingServiceException(
+          "Failed to check whether the report definition (" + reportDefinitionId + ") exists", e);
     }
   }
 
@@ -415,7 +408,7 @@ public class ReportingService
    * Update the report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
-   *                         information for the report definition
+   *     information for the report definition
    */
   @Override
   @Transactional
@@ -430,8 +423,8 @@ public class ReportingService
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to update the report definition ("
-          + reportDefinition.getId() + ")", e);
+      throw new ReportingServiceException(
+          "Failed to update the report definition (" + reportDefinition.getId() + ")", e);
     }
   }
 }

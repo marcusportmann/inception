@@ -16,23 +16,23 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSStatus</code> enumeration defines the possible statuses for a SMS.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "SMSStatus")
+@Schema(description = "SMSStatus")
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "http://sms.inception.digital")
 public enum SMSStatus {
@@ -61,7 +61,6 @@ public enum SMSStatus {
    * Returns the SMS status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the SMS status
-   *
    * @return the SMS status given by the specified numeric code value
    */
   @JsonCreator

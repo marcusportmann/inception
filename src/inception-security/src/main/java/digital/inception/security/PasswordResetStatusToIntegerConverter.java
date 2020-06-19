@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
@@ -34,11 +34,8 @@ import org.springframework.stereotype.Component;
 public class PasswordResetStatusToIntegerConverter
     implements Converter<PasswordResetStatus, Integer> {
 
-  /**
-   * Constructs a new <code>PasswordResetStatusToIntegerConverter</code>.
-   */
-  public PasswordResetStatusToIntegerConverter() {
-  }
+  /** Constructs a new <code>PasswordResetStatusToIntegerConverter</code>. */
+  public PasswordResetStatusToIntegerConverter() {}
 
   @Override
   public Integer convert(PasswordResetStatus source) {

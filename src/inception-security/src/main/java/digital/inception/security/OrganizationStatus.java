@@ -16,16 +16,16 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganizationStatus</code> enumeration defines the possible statuses for an
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "OrganizationStatus")
+@Schema(description = "OrganizationStatus")
 @XmlEnum
 @XmlType(name = "OrganizationStatus", namespace = "http://security.inception.digital")
 public enum OrganizationStatus {
@@ -54,7 +54,6 @@ public enum OrganizationStatus {
    * Returns the organization status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the organization status
-   *
    * @return the organization status given by the specified numeric code value
    */
   @JsonCreator

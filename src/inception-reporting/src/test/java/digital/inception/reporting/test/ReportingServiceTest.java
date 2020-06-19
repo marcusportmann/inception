@@ -16,7 +16,7 @@
 
 package digital.inception.reporting.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -44,7 +44,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingServiceTest</code> class contains the implementation of the JUnit tests for
@@ -54,29 +54,27 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 public class ReportingServiceTest {
 
   private static int reportDefinitionCount;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  private DataSource dataSource;
+  /** The data source used to provide connections to the application database. */
+  @Autowired private DataSource dataSource;
 
-  /**
-   * The Reporting Service.
-   */
-  @Autowired
-  private IReportingService reportingService;
+  /** The Reporting Service. */
+  @Autowired private IReportingService reportingService;
 
   private static synchronized ReportDefinition getTestReportDefinitionDetails() {
     reportDefinitionCount++;
 
-    byte[] testReportTemplate = ResourceUtil.getClasspathResource(
-        "digital/inception/reporting/test/TestReport.jasper");
+    byte[] testReportTemplate =
+        ResourceUtil.getClasspathResource("digital/inception/reporting/test/TestReport.jasper");
 
     ReportDefinition reportDefinition = new ReportDefinition();
     reportDefinition.setId("TestReport" + reportDefinitionCount);
@@ -86,12 +84,9 @@ public class ReportingServiceTest {
     return reportDefinition;
   }
 
-  /**
-   * Test the create report PDF functionality.
-   */
+  /** Test the create report PDF functionality. */
   @Test
-  public void createReportPDFTest()
-      throws Exception {
+  public void createReportPDFTest() throws Exception {
     ReportDefinition reportDefinition = getTestReportDefinitionDetails();
 
     reportingService.createReportDefinition(reportDefinition);
@@ -105,31 +100,30 @@ public class ReportingServiceTest {
     reportingService.deleteReportDefinition(reportDefinition.getId());
   }
 
-  /**
-   * Test the report definition functionality.
-   */
+  /** Test the report definition functionality. */
   @Test
-  public void reportDefinitionTest()
-      throws Exception {
+  public void reportDefinitionTest() throws Exception {
     ReportDefinition reportDefinition = getTestReportDefinitionDetails();
 
     reportingService.createReportDefinition(reportDefinition);
 
-    ReportDefinition retrievedReportDefinition = reportingService.getReportDefinition(
-        reportDefinition.getId());
+    ReportDefinition retrievedReportDefinition =
+        reportingService.getReportDefinition(reportDefinition.getId());
 
     compareReportDefinitions(reportDefinition, retrievedReportDefinition);
 
-    boolean reportDefinitionExists = reportingService.reportDefinitionExists(
-        reportDefinition.getId());
+    boolean reportDefinitionExists =
+        reportingService.reportDefinitionExists(reportDefinition.getId());
 
     assertTrue("The report definition does not exist", reportDefinitionExists);
 
-    String retrievedReportDefinitionName = reportingService.getReportDefinitionName(
-        reportDefinition.getId());
+    String retrievedReportDefinitionName =
+        reportingService.getReportDefinitionName(reportDefinition.getId());
 
-    assertEquals("The correct report definition name was not retrieved",
-        reportDefinition.getName(), retrievedReportDefinitionName);
+    assertEquals(
+        "The correct report definition name was not retrieved",
+        reportDefinition.getName(),
+        retrievedReportDefinitionName);
 
     reportDefinition.setName("Updated " + reportDefinition.getName());
 
@@ -145,30 +139,32 @@ public class ReportingServiceTest {
 
     long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
 
-    assertEquals("The correct number of report definitions was not retrieved", 1,
-        numberOfReportDefinitions);
+    assertEquals(
+        "The correct number of report definitions was not retrieved", 1, numberOfReportDefinitions);
 
     List<ReportDefinition> reportDefinitions = reportingService.getReportDefinitions();
 
-    assertEquals("The correct number of report definitions was not retrieved", 1,
-        reportDefinitions.size());
+    assertEquals(
+        "The correct number of report definitions was not retrieved", 1, reportDefinitions.size());
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
 
     ReportDefinitionSummary retrievedReportDefinitionSummary =
         reportingService.getReportDefinitionSummary(reportDefinition.getId());
 
-    compareReportDefinitionToReportDefinitionSummary(reportDefinition,
-        retrievedReportDefinitionSummary);
+    compareReportDefinitionToReportDefinitionSummary(
+        reportDefinition, retrievedReportDefinitionSummary);
 
     List<ReportDefinitionSummary> reportDefinitionSummaries =
         reportingService.getReportDefinitionSummaries();
 
-    assertEquals("The correct number of report definition summaries was not retrieved", 1,
+    assertEquals(
+        "The correct number of report definition summaries was not retrieved",
+        1,
         reportDefinitionSummaries.size());
 
-    compareReportDefinitionToReportDefinitionSummary(reportDefinition,
-        reportDefinitionSummaries.get(0));
+    compareReportDefinitionToReportDefinitionSummary(
+        reportDefinition, reportDefinitionSummaries.get(0));
 
     reportingService.deleteReportDefinition(reportDefinition.getId());
 
@@ -180,21 +176,31 @@ public class ReportingServiceTest {
     }
   }
 
-  private void compareReportDefinitionToReportDefinitionSummary(ReportDefinition reportDefinition,
-      ReportDefinitionSummary reportDefinitionSummary) {
-    assertEquals("The ID values for the two report definition summaries do not match",
-        reportDefinition.getId(), reportDefinitionSummary.getId());
-    assertEquals("The name values for the two report definition summaries do not match",
-        reportDefinition.getName(), reportDefinitionSummary.getName());
+  private void compareReportDefinitionToReportDefinitionSummary(
+      ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary) {
+    assertEquals(
+        "The ID values for the two report definition summaries do not match",
+        reportDefinition.getId(),
+        reportDefinitionSummary.getId());
+    assertEquals(
+        "The name values for the two report definition summaries do not match",
+        reportDefinition.getName(),
+        reportDefinitionSummary.getName());
   }
 
-  private void compareReportDefinitions(ReportDefinition reportDefinition1,
-      ReportDefinition reportDefinition2) {
-    assertEquals("The ID values for the two report definitions do not match",
-        reportDefinition1.getId(), reportDefinition2.getId());
-    assertEquals("The name values for the two report definitions do not match",
-        reportDefinition1.getName(), reportDefinition2.getName());
-    assertArrayEquals("The template values for the two report definitions do not match",
-        reportDefinition1.getTemplate(), reportDefinition2.getTemplate());
+  private void compareReportDefinitions(
+      ReportDefinition reportDefinition1, ReportDefinition reportDefinition2) {
+    assertEquals(
+        "The ID values for the two report definitions do not match",
+        reportDefinition1.getId(),
+        reportDefinition2.getId());
+    assertEquals(
+        "The name values for the two report definitions do not match",
+        reportDefinition1.getName(),
+        reportDefinition2.getName());
+    assertArrayEquals(
+        "The template values for the two report definitions do not match",
+        reportDefinition1.getTemplate(),
+        reportDefinition2.getTemplate());
   }
 }

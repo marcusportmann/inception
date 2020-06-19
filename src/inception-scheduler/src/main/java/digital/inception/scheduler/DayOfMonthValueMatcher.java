@@ -16,15 +16,15 @@
 
 package digital.inception.scheduler;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
  * The <code>DayOfMonthValueMatcher</code> class implements a <code>ValueMatcher</code> whose rules
  * are in a plain array of integer values.
- * <p/>
- * When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
+ *
+ * <p>When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
  * checks whether the last-day-of-month setting applies.
  *
  * @author Paul Fernley
@@ -33,17 +33,14 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
 
-  private static final int[] lastDays =
-      {
-          31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-      };
+  private static final int[] lastDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
   /**
    * Constructs a new <code>DayOfMonthValueMatcher</code>.
    *
    * @param integers The Integer elements, one for every value accepted by the matcher. The match()
-   *                 method will return <code>true</code> only if its parameter will be one of this
-   *                 list or the last-day-of-month setting applies.
+   *     method will return <code>true</code> only if its parameter will be one of this list or the
+   *     last-day-of-month setting applies.
    */
   public DayOfMonthValueMatcher(List<Integer> integers) {
     super(integers);
@@ -53,12 +50,11 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
    * Returns <code>true</code> if the given value is included in the matcher list or the
    * last-day-of-month setting applies otherwise <code>false</code>.
    *
-   * @param value      the value
-   * @param month      the month
+   * @param value the value
+   * @param month the month
    * @param isLeapYear <code>true</code> if this is a leap year <code>false</code> otherwise
-   *
-   * @return <code>true</code> if the given value matches the rules of the
-   * <code>ValueMatcher</code>, <code>false</code> otherwise
+   * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
+   *     , <code>false</code> otherwise
    */
   public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)

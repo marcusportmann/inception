@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,8 +30,7 @@ import javax.transaction.xa.XAResource;
  *
  * @author Marcus Portmann
  */
-public class XAConnectionProxy
-    implements XAConnection {
+public class XAConnectionProxy implements XAConnection {
 
   private XAConnection xaConnection;
 
@@ -50,16 +49,14 @@ public class XAConnectionProxy
   }
 
   @Override
-  public void close()
-      throws SQLException {
+  public void close() throws SQLException {
     XADataSourceProxy.getActiveXADatabaseConnections().remove(this);
 
     xaConnection.close();
   }
 
   @Override
-  public Connection getConnection()
-      throws SQLException {
+  public Connection getConnection() throws SQLException {
     Connection connection = new ConnectionProxy(xaConnection.getConnection());
 
     DataSourceProxy.addActiveDatabaseConnection(connection);
@@ -68,8 +65,7 @@ public class XAConnectionProxy
   }
 
   @Override
-  public XAResource getXAResource()
-      throws SQLException {
+  public XAResource getXAResource() throws SQLException {
     return xaConnection.getXAResource();
   }
 

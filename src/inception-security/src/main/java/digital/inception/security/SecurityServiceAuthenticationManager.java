@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.UUID;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,7 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityServiceAuthenticationManager</code> provides an authentication manager
@@ -38,27 +38,22 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class SecurityServiceAuthenticationManager
-    implements AuthenticationManager {
+public class SecurityServiceAuthenticationManager implements AuthenticationManager {
 
-  /**
-   * The Security Service.
-   */
+  /** The Security Service. */
   private ISecurityService securityService;
 
-  /**
-   * The User Details Service.
-   */
+  /** The User Details Service. */
   private UserDetailsService userDetailsService;
 
   /**
    * Constructs a new <code>SecurityServiceAuthenticationManager</code>.
    *
-   * @param securityService    the Security Service
+   * @param securityService the Security Service
    * @param userDetailsService the User Details Service
    */
-  public SecurityServiceAuthenticationManager(ISecurityService securityService,
-      UserDetailsService userDetailsService) {
+  public SecurityServiceAuthenticationManager(
+      ISecurityService securityService, UserDetailsService userDetailsService) {
     this.securityService = securityService;
     this.userDetailsService = userDetailsService;
   }
@@ -66,52 +61,57 @@ public class SecurityServiceAuthenticationManager
   /**
    * Attempts to authenticate the passed {@link Authentication} object, returning a fully populated
    * <code>Authentication</code> object (including granted authorities) if successful.
-   * <p>
-   * An <code>AuthenticationManager</code> must honour the following contract concerning
+   *
+   * <p>An <code>AuthenticationManager</code> must honour the following contract concerning
    * exceptions:
+   *
    * <ul>
-   * <li>A {@link DisabledException} must be thrown if an account is disabled and the
-   * <code>AuthenticationManager</code> can test for this state.</li>
-   * <li>A {@link LockedException} must be thrown if an account is locked and the
-   * <code>AuthenticationManager</code> can test for account locking.</li>
-   * <li>A {@link BadCredentialsException} must be thrown if incorrect credentials are
-   * presented. Whilst the above exceptions are optional, an
-   * <code>AuthenticationManager</code> must <B>always</B> test credentials.</li>
+   *   <li>A {@link DisabledException} must be thrown if an account is disabled and the <code>
+   *       AuthenticationManager</code> can test for this state.
+   *   <li>A {@link LockedException} must be thrown if an account is locked and the <code>
+   *       AuthenticationManager</code> can test for account locking.
+   *   <li>A {@link BadCredentialsException} must be thrown if incorrect credentials are presented.
+   *       Whilst the above exceptions are optional, an <code>AuthenticationManager</code> must
+   *       <B>always</B> test credentials.
    * </ul>
-   * Exceptions should be tested for and if applicable thrown in the order expressed
-   * above (i.e. if an account is disabled or locked, the authentication request is
-   * immediately rejected and the credentials testing process is not performed). This
-   * prevents credentials being tested against disabled or locked accounts.
+   *
+   * Exceptions should be tested for and if applicable thrown in the order expressed above (i.e. if
+   * an account is disabled or locked, the authentication request is immediately rejected and the
+   * credentials testing process is not performed). This prevents credentials being tested against
+   * disabled or locked accounts.
    *
    * @param authentication the authentication request object
-   *
    * @return a fully authenticated object including credentials
    */
   @Override
-  public Authentication authenticate(Authentication authentication)
-      throws AuthenticationException {
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     try {
       // Authenticate the user
-      UUID authenticationUserDirectoryId = securityService.authenticate(
-          authentication.getPrincipal().toString(), authentication.getCredentials().toString());
+      UUID authenticationUserDirectoryId =
+          securityService.authenticate(
+              authentication.getPrincipal().toString(), authentication.getCredentials().toString());
 
       // Retrieve the details for the user
-      UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getPrincipal()
-          .toString());
+      UserDetails userDetails =
+          userDetailsService.loadUserByUsername(authentication.getPrincipal().toString());
 
       return new AuthenticationToken(userDetails);
     } catch (AuthenticationFailedException | UserNotFoundException e) {
-      throw new BadCredentialsException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): Bad credentials");
+      throw new BadCredentialsException(
+          "Failed to authenticate the user ("
+              + authentication.getPrincipal()
+              + "): Bad credentials");
     } catch (UserLockedException e) {
-      throw new LockedException("Failed to authenticate the user (" + authentication.getPrincipal()
-          + "): User locked");
+      throw new LockedException(
+          "Failed to authenticate the user (" + authentication.getPrincipal() + "): User locked");
     } catch (ExpiredPasswordException e) {
-      throw new CredentialsExpiredException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + "): Credentials expired");
+      throw new CredentialsExpiredException(
+          "Failed to authenticate the user ("
+              + authentication.getPrincipal()
+              + "): Credentials expired");
     } catch (Throwable e) {
-      throw new AuthenticationServiceException("Failed to authenticate the user ("
-          + authentication.getPrincipal() + ")", e);
+      throw new AuthenticationServiceException(
+          "Failed to authenticate the user (" + authentication.getPrincipal() + ")", e);
     }
   }
 }

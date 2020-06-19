@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -29,12 +29,15 @@ import java.util.TimeZone;
 /**
  * The <code>Predictor</code> class provides the capability to predict when a scheduling pattern
  * will be matched.
- * <p/>
- * Suppose you want to know when the scheduler will execute a job scheduled with the pattern <em>0 3
- * * jan-jun,sep-dec mon-fri</em>. You can predict the next <em>n</em> execution of the job using a
- * Predictor instance:
- * <p/>
- * <p/>
+ *
+ * <p>Suppose you want to know when the scheduler will execute a job scheduled with the pattern
+ * <em>0 3 * jan-jun,sep-dec mon-fri</em>. You can predict the next <em>n</em> execution of the job
+ * using a Predictor instance:
+ *
+ * <p>
+ *
+ * <p>
+ *
  * <pre>
  * String pattern = &quot;0 3 * jan-jun,sep-dec mon-fri&quot;;
  * Predictor p = new Predictor(pattern);
@@ -49,19 +52,13 @@ import java.util.TimeZone;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Predictor {
 
-  /**
-   * The scheduling pattern on which the predictor works.
-   */
+  /** The scheduling pattern on which the predictor works. */
   private SchedulingPattern schedulingPattern;
 
-  /**
-   * The start time for the next prediction.
-   */
+  /** The start time for the next prediction. */
   private long time;
 
-  /**
-   * The time zone for the prediction.
-   */
+  /** The time zone for the prediction. */
   private TimeZone timeZone = TimeZone.getDefault();
 
   /**
@@ -78,8 +75,7 @@ public class Predictor {
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
-  public Predictor(String schedulingPattern)
-      throws InvalidSchedulingPatternException {
+  public Predictor(String schedulingPattern) throws InvalidSchedulingPatternException {
     this(schedulingPattern, System.currentTimeMillis());
   }
 
@@ -87,7 +83,7 @@ public class Predictor {
    * Constructs a new <code>SchedulingPattern</code>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
   public Predictor(SchedulingPattern schedulingPattern, Date start) {
     this(schedulingPattern, start.getTime());
@@ -97,7 +93,7 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
-   * @param start             the start time of the prediction as a milliseconds value
+   * @param start the start time of the prediction as a milliseconds value
    */
   public Predictor(SchedulingPattern schedulingPattern, long start) {
     this.schedulingPattern = schedulingPattern;
@@ -108,10 +104,9 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
-  public Predictor(String schedulingPattern, Date start)
-      throws InvalidSchedulingPatternException {
+  public Predictor(String schedulingPattern, Date start) throws InvalidSchedulingPatternException {
     this(schedulingPattern, start.getTime());
   }
 
@@ -119,10 +114,9 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
-  public Predictor(String schedulingPattern, long start)
-      throws InvalidSchedulingPatternException {
+  public Predictor(String schedulingPattern, long start) throws InvalidSchedulingPatternException {
     this.schedulingPattern = new SchedulingPattern(schedulingPattern);
     this.time = (start / (1000 * 60)) * 1000 * 60;
   }
@@ -142,8 +136,8 @@ public class Predictor {
    * @return the next matching moment as a {@link LocalDateTime} object
    */
   public synchronized LocalDateTime nextMatchingLocalDateTime() {
-    return LocalDateTime.ofInstant(Instant.ofEpochMilli(nextMatchingTime()),
-        ZoneId.systemDefault());
+    return LocalDateTime.ofInstant(
+        Instant.ofEpochMilli(nextMatchingTime()), ZoneId.systemDefault());
   }
 
   /**
@@ -184,11 +178,11 @@ public class Predictor {
       ValueMatcher dayOfWeekMatcher = schedulingPattern.dayOfWeekMatchers.get(k);
       ValueMatcher monthMatcher = schedulingPattern.monthMatchers.get(k);
 
-      for (; ; ) {          // day of week
-        for (; ; ) {        // month
-          for (; ; ) {      // day of month
-            for (; ; ) {    // hour
-              for (; ; ) {  // minutes
+      for (; ; ) { // day of week
+        for (; ; ) { // month
+          for (; ; ) { // day of month
+            for (; ; ) { // hour
+              for (; ; ) { // minutes
                 if (minuteMatcher.match(minute)) {
                   break;
                 } else {

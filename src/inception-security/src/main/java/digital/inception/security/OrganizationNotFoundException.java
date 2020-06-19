@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,18 +26,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * An <code>OrganizationNotFoundException</code> is thrown to indicate that a security operation
  * failed as a result of an organization that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The organization could not be found")
-@WebFault(name = "OrganizationNotFoundException",
+@WebFault(
+    name = "OrganizationNotFoundException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,11 +51,12 @@ public class OrganizationNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>OrganizationNotFoundException</code>.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    */
   public OrganizationNotFoundException(UUID organizationId) {
-    super("OrganizationNotFoundError", "The organization (" + organizationId
-        + ") could not be found");
+    super(
+        "OrganizationNotFoundError",
+        "The organization (" + organizationId + ") could not be found");
   }
 }

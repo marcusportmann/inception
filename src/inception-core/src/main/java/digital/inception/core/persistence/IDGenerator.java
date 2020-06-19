@@ -16,7 +16,7 @@
 
 package digital.inception.core.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -33,38 +33,34 @@ import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
- * <p>
- * It requires the idgenerator table which must be created under the idgenerator schema within the
- * database. The unique ID will be retrieved using a new transaction while suspending the existing
- * database transaction. This is done to reduce deadlocks and improve performance.
+ *
+ * <p>It requires the idgenerator table which must be created under the idgenerator schema within
+ * the database. The unique ID will be retrieved using a new transaction while suspending the
+ * existing database transaction. This is done to reduce deadlocks and improve performance.
  *
  * @author Marcus Portmann
  */
 @Repository
 public class IDGenerator {
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private DataSource dataSource;
 
-  /**
-   * The Spring platform transaction manager.
-   */
+  /** The Spring platform transaction manager. */
   private PlatformTransactionManager platformTransactionManager;
 
   /**
    * Constructs a new <code>IDGenerator</code>.
    *
-   * @param dataSource                 the data source used to provide connections to the
-   *                                   application database
+   * @param dataSource the data source used to provide connections to the application database
    * @param platformTransactionManager the Spring platform transaction manager
    */
-  public IDGenerator(@Qualifier("applicationDataSource") DataSource dataSource,
+  public IDGenerator(
+      @Qualifier("applicationDataSource") DataSource dataSource,
       PlatformTransactionManager platformTransactionManager) {
     this.dataSource = dataSource;
     this.platformTransactionManager = platformTransactionManager;
@@ -74,17 +70,17 @@ public class IDGenerator {
    * Get the next unique <code>long</code> ID for the entity with the specified type.
    *
    * @param type the type of entity to retrieve the next ID for
-   *
    * @return the next unique <code>long</code> ID for the entity with the specified type
    */
   public long next(String type) {
-    TransactionTemplate transactionTemplate = new TransactionTemplate(platformTransactionManager,
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
+    TransactionTemplate transactionTemplate =
+        new TransactionTemplate(
+            platformTransactionManager,
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
     try {
       return transactionTemplate.execute(
-          status ->
-          {
+          status -> {
             try (Connection connection = dataSource.getConnection()) {
               Long id = getCurrentId(connection, type);
 
@@ -112,14 +108,21 @@ public class IDGenerator {
 
               return id;
             } catch (Throwable e) {
-              throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the "
-                  + "entity of type (%s) from the idgenerator table", type), e);
+              throw new IDGeneratorException(
+                  String.format(
+                      "Failed to retrieve the new ID for the "
+                          + "entity of type (%s) from the idgenerator table",
+                      type),
+                  e);
             }
-          }
-      );
+          });
     } catch (TransactionException e) {
-      throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the entity "
-          + "of type (%s) from the idgenerator table", type), e);
+      throw new IDGeneratorException(
+          String.format(
+              "Failed to retrieve the new ID for the entity "
+                  + "of type (%s) from the idgenerator table",
+              type),
+          e);
     }
   }
 
@@ -148,10 +151,10 @@ public class IDGenerator {
     return UUID.randomUUID();
   }
 
-  private Long getCurrentId(Connection connection, String type)
-      throws SQLException {
-    try (PreparedStatement statement = connection.prepareStatement(
-        "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE")) {
+  private Long getCurrentId(Connection connection, String type) throws SQLException {
+    try (PreparedStatement statement =
+        connection.prepareStatement(
+            "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE")) {
       statement.setString(1, type);
 
       try (ResultSet rs = statement.executeQuery()) {
@@ -164,30 +167,35 @@ public class IDGenerator {
     }
   }
 
-  private void insertId(Connection connection, String type, long id)
-      throws SQLException {
-    try (PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)")) {
+  private void insertId(Connection connection, String type, long id) throws SQLException {
+    try (PreparedStatement statement =
+        connection.prepareStatement(
+            "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)")) {
       statement.setLong(1, id);
       statement.setString(2, type);
 
       if (statement.executeUpdate() == 0) {
-        throw new SQLException("No rows were affected while inserting the idgenerator.idgenerator "
-            + "table row for the type (" + type + ")");
+        throw new SQLException(
+            "No rows were affected while inserting the idgenerator.idgenerator "
+                + "table row for the type ("
+                + type
+                + ")");
       }
     }
   }
 
-  private void updateId(Connection connection, String type, long id)
-      throws SQLException {
-    try (PreparedStatement statement = connection.prepareStatement(
-        "UPDATE idgenerator.idgenerator SET current=? WHERE name=?")) {
+  private void updateId(Connection connection, String type, long id) throws SQLException {
+    try (PreparedStatement statement =
+        connection.prepareStatement("UPDATE idgenerator.idgenerator SET current=? WHERE name=?")) {
       statement.setLong(1, id);
       statement.setString(2, type);
 
       if (statement.executeUpdate() == 0) {
-        throw new SQLException("No rows were affected while updating the idgenerator.idgenerator "
-            + "table row for the type (" + type + ")");
+        throw new SQLException(
+            "No rows were affected while updating the idgenerator.idgenerator "
+                + "table row for the type ("
+                + type
+                + ")");
       }
     }
   }

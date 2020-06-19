@@ -16,7 +16,7 @@
 
 package digital.inception.json.databind;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -25,19 +25,19 @@ import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>LocalDateTimeDeserializer</code> class implements the Jackson serializer for the
- * <code>LocalDateTime</code> type.
+ * The <code>LocalDateTimeDeserializer</code> class implements the Jackson serializer for the <code>
+ * LocalDateTime</code> type.
  *
  * @author Marcus Portmann
  */
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
   @Override
-  public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator,
-      SerializerProvider serializers)
+  public void serialize(
+      LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializers)
       throws IOException {
     jsonGenerator.writeString(ISO8601Util.fromLocalDateTime(localDateTime));
   }

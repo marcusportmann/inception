@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
@@ -46,7 +46,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CaseService</code> class provides the Case Service implementation.
@@ -55,12 +55,9 @@ import org.xml.sax.SAXParseException;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class CaseService
-    implements ICaseService {
+public class CaseService implements ICaseService {
 
-  /**
-   * The Camunda Process Engine.
-   */
+  /** The Camunda Process Engine. */
   private ProcessEngine processEngine;
 
   /**
@@ -75,22 +72,20 @@ public class CaseService
   /**
    * Check whether the case definition exists.
    *
-   * @param caseDefinitionId the ID used to uniquely identify the case definition
-   *
+   * @param caseDefinitionId the ID uniquely identifying the case definition
    * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
   @Override
-  public boolean caseDefinitionExists(String caseDefinitionId)
-      throws CaseServiceException {
+  public boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException {
     try {
-      CaseDefinitionQuery caseDefinitionQuery = processEngine.getRepositoryService()
-          .createCaseDefinitionQuery();
+      CaseDefinitionQuery caseDefinitionQuery =
+          processEngine.getRepositoryService().createCaseDefinitionQuery();
       caseDefinitionQuery.caseDefinitionKey(caseDefinitionId).latestVersion();
 
       return caseDefinitionQuery.count() > 0;
     } catch (Throwable e) {
-      throw new CaseServiceException("Failed to check whether the case definition ("
-          + caseDefinitionId + ") exists", e);
+      throw new CaseServiceException(
+          "Failed to check whether the case definition (" + caseDefinitionId + ") exists", e);
     }
   }
 
@@ -98,7 +93,6 @@ public class CaseService
    * Create the new case definition.
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   *
    * @return the case definition summaries for the CMMN casees defined by the CMMN XML data
    */
   @Override
@@ -120,7 +114,8 @@ public class CaseService
       }
 
       DeploymentBuilder caseDeployment = processEngine.getRepositoryService().createDeployment();
-      caseDeployment.addInputStream(caseDefinitionSummaries.get(0).getId() + ".cmmn",
+      caseDeployment.addInputStream(
+          caseDefinitionSummaries.get(0).getId() + ".cmmn",
           new ByteArrayInputStream(caseDefinitionData));
 
       Deployment deployment = caseDeployment.deploy();
@@ -139,17 +134,16 @@ public class CaseService
    * @return the summaries for all the case definitions
    */
   @Override
-  public List<CaseDefinitionSummary> getCaseDefinitionSummaries()
-      throws CaseServiceException {
+  public List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws CaseServiceException {
     try {
-      CaseDefinitionQuery caseDefinitionQuery = processEngine.getRepositoryService()
-          .createCaseDefinitionQuery().latestVersion();
+      CaseDefinitionQuery caseDefinitionQuery =
+          processEngine.getRepositoryService().createCaseDefinitionQuery().latestVersion();
 
       List<CaseDefinitionSummary> caseDefinitionSummaries = new ArrayList<>();
 
       for (CaseDefinition caseDefinition : caseDefinitionQuery.list()) {
-        caseDefinitionSummaries.add(new CaseDefinitionSummary(caseDefinition.getKey(),
-            caseDefinition.getName()));
+        caseDefinitionSummaries.add(
+            new CaseDefinitionSummary(caseDefinition.getKey(), caseDefinition.getName()));
       }
 
       return caseDefinitionSummaries;
@@ -162,7 +156,6 @@ public class CaseService
    * Update the case definition(s).
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   *
    * @return the case definition summaries for the CMMN casees defined by the CMMN XML data
    */
   @Override
@@ -184,7 +177,8 @@ public class CaseService
       }
 
       DeploymentBuilder caseDeployment = processEngine.getRepositoryService().createDeployment();
-      caseDeployment.addInputStream(caseDefinitionSummaries.get(0).getId() + ".cmmn",
+      caseDeployment.addInputStream(
+          caseDefinitionSummaries.get(0).getId() + ".cmmn",
           new ByteArrayInputStream(caseDefinitionData));
 
       Deployment deployment = caseDeployment.deploy();
@@ -201,9 +195,8 @@ public class CaseService
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   *
    * @return the case definition summaries for the CMMN casees if the CMMN XML data was successfully
-   * validated
+   *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
       throws InvalidCMMNException, CaseServiceException {
@@ -211,68 +204,80 @@ public class CaseService
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
       schemaFactory.setResourceResolver(
-          (type, namespaceURI, publicId, systemId, baseURI) ->
-          {
+          (type, namespaceURI, publicId, systemId, baseURI) -> {
             switch (systemId) {
-              case "CMMN11CaseModel.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/cmmn/CMMN11CaseModel.xsd");
-              }
+              case "CMMN11CaseModel.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI,
+                      publicId,
+                      systemId,
+                      baseURI,
+                      "META-INF/cmmn/CMMN11CaseModel.xsd");
+                }
 
-              case "CMMNDI11.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/cmmn/CMMNDI11.xsd");
-              }
+              case "CMMNDI11.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/cmmn/CMMNDI11.xsd");
+                }
 
-              case "DC.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/cmmn/DC.xsd");
-              }
+              case "DC.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/cmmn/DC.xsd");
+                }
 
-              case "DI.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/cmmn/DI.xsd");
-              }
+              case "DI.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/cmmn/DI.xsd");
+                }
             }
 
             throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
-          }
-      );
+          });
 
-      Schema schema = schemaFactory.newSchema(new StreamSource[]{new StreamSource(
-          new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/cmmn/CMMN11.xsd"))),
-          new StreamSource(new ByteArrayInputStream(ResourceUtil.getClasspathResource(
-              "META-INF/cmmn/CMMN11.xsd")))});
+      Schema schema =
+          schemaFactory.newSchema(
+              new StreamSource[] {
+                new StreamSource(
+                    new ByteArrayInputStream(
+                        ResourceUtil.getClasspathResource("META-INF/cmmn/CMMN11.xsd"))),
+                new StreamSource(
+                    new ByteArrayInputStream(
+                        ResourceUtil.getClasspathResource("META-INF/cmmn/CMMN11.xsd")))
+              });
 
       DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
       documentBuilderFactory.setNamespaceAware(true);
       documentBuilderFactory.setSchema(schema);
 
       DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-      documentBuilder.setErrorHandler(new ErrorHandler() {
-        @Override
-        public void warning(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the CMMN XML data", exception);
-        }
+      documentBuilder.setErrorHandler(
+          new ErrorHandler() {
+            @Override
+            public void warning(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the CMMN XML data", exception);
+            }
 
-        @Override
-        public void error(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the CMMN XML data", exception);
-        }
+            @Override
+            public void error(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the CMMN XML data", exception);
+            }
 
-        @Override
-        public void fatalError(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the CMMN XML data", exception);
-        }
-      });
+            @Override
+            public void fatalError(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the CMMN XML data", exception);
+            }
+          });
 
       Document document = documentBuilder.parse(new InputSource(new ByteArrayInputStream(cmmnXml)));
 
-      NodeList caseElements = document.getDocumentElement().getElementsByTagNameNS(
-          "http://www.omg.org/spec/CMMN/20151109/MODEL", "case");
+      NodeList caseElements =
+          document
+              .getDocumentElement()
+              .getElementsByTagNameNS("http://www.omg.org/spec/CMMN/20151109/MODEL", "case");
 
       List<CaseDefinitionSummary> caseDefinitionSummaries = new ArrayList<>();
 
@@ -282,8 +287,9 @@ public class CaseService
         if (node instanceof Element) {
           Element caseElement = (Element) node;
 
-          caseDefinitionSummaries.add(new CaseDefinitionSummary(caseElement.getAttribute("id"),
-              caseElement.getAttribute("name")));
+          caseDefinitionSummaries.add(
+              new CaseDefinitionSummary(
+                  caseElement.getAttribute("id"), caseElement.getAttribute("name")));
         }
       }
 
@@ -299,9 +305,8 @@ public class CaseService
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   *
    * @return the case definition summaries for the CMMN casees if the CMMN XML data was successfully
-   * validated
+   *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(String cmmnXml)
       throws InvalidCMMNException, CaseServiceException {

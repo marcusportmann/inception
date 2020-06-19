@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -36,21 +36,16 @@ import java.util.stream.Stream;
  */
 public class PasswordUtil {
 
-  /**
-   * Special characters allowed in password.
-   */
+  /** Special characters allowed in password. */
   private static final String ALLOWED_SPL_CHARACTERS = "!@#$%^&*()_+";
 
-  /**
-   * The secure random number generator.
-   */
+  /** The secure random number generator. */
   private static final Random random = new SecureRandom();
 
   /**
    * Create the SHA-256 hash of the specified password.
    *
    * @param password the password to hash
-   *
    * @return the SHA-256 hash of the password
    */
   public static final String createPasswordHash(String password) {
@@ -61,8 +56,8 @@ public class PasswordUtil {
 
       return Base64Util.encodeBytes(md.digest());
     } catch (Throwable e) {
-      throw new RuntimeException(String.format(
-          "Failed to generate a SHA-256 hash of the password (%s)", password), e);
+      throw new RuntimeException(
+          String.format("Failed to generate a SHA-256 hash of the password (%s)", password), e);
     }
   }
 
@@ -72,14 +67,19 @@ public class PasswordUtil {
    * @return the random password
    */
   public static String generateRandomPassword() {
-    Stream<Character> pwdStream = Stream.concat(getRandomNumbers(2), Stream.concat(
-        getRandomSpecialChars(2), Stream.concat(getRandomAlphabets(2, true), getRandomAlphabets(4,
-            false))));
+    Stream<Character> pwdStream =
+        Stream.concat(
+            getRandomNumbers(2),
+            Stream.concat(
+                getRandomSpecialChars(2),
+                Stream.concat(getRandomAlphabets(2, true), getRandomAlphabets(4, false))));
     List<Character> charList = pwdStream.collect(Collectors.toList());
     Collections.shuffle(charList);
 
-    String password = charList.stream().collect(StringBuilder::new, StringBuilder::append,
-        StringBuilder::append).toString();
+    String password =
+        charList.stream()
+            .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+            .toString();
 
     return password;
   }

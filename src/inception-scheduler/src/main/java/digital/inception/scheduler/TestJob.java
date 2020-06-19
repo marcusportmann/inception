@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "SpringJavaAutowiredMembersInspection"})
-public class TestJob
-    implements IJob {
+public class TestJob implements IJob {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TestJob.class);
 
   /* Scheduler Service */
-  @Autowired
-  private ISchedulerService schedulerService;
+  @Autowired private ISchedulerService schedulerService;
 
   /**
    * Execute the job.
@@ -44,8 +42,7 @@ public class TestJob
    * @param context the job execution context
    */
   @Override
-  public void execute(JobExecutionContext context)
-      throws JobExecutionFailedException {
+  public void execute(JobExecutionContext context) throws JobExecutionFailedException {
     try {
       logger.info("Executing the test job (" + schedulerService + ")");
     } catch (Throwable e) {

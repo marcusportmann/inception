@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
@@ -48,7 +48,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.
@@ -57,12 +57,9 @@ import org.xml.sax.SAXParseException;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ProcessService
-    implements IProcessService {
+public class ProcessService implements IProcessService {
 
-  /**
-   * The Camunda Process Engine.
-   */
+  /** The Camunda Process Engine. */
   private ProcessEngine processEngine;
 
   /**
@@ -78,7 +75,6 @@ public class ProcessService
    * Create the new process definition.
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
-   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   @Override
@@ -86,8 +82,8 @@ public class ProcessService
   public List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
       throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException {
     try {
-      List<ProcessDefinitionSummary> processDefinitionSummaries = validateBPMN(
-          processDefinitionData);
+      List<ProcessDefinitionSummary> processDefinitionSummaries =
+          validateBPMN(processDefinitionData);
 
       for (ProcessDefinitionSummary processDefinitionSummary : processDefinitionSummaries) {
         if (processDefinitionExists(processDefinitionSummary.getId())) {
@@ -101,7 +97,8 @@ public class ProcessService
       }
 
       DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
-      processDeployment.addInputStream(processDefinitionSummaries.get(0).getId() + ".bpmn",
+      processDeployment.addInputStream(
+          processDefinitionSummaries.get(0).getId() + ".bpmn",
           new ByteArrayInputStream(processDefinitionData));
 
       Deployment deployment = processDeployment.deploy();
@@ -123,14 +120,17 @@ public class ProcessService
   public List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
       throws ProcessServiceException {
     try {
-      ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
-          .createProcessDefinitionQuery().latestVersion();
+      ProcessDefinitionQuery processDefinitionQuery =
+          processEngine.getRepositoryService().createProcessDefinitionQuery().latestVersion();
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
       for (ProcessDefinition processDefinition : processDefinitionQuery.list()) {
-        processDefinitionSummaries.add(new ProcessDefinitionSummary(processDefinition.getKey(),
-            processDefinition.getName(), processDefinition.getVersionTag()));
+        processDefinitionSummaries.add(
+            new ProcessDefinitionSummary(
+                processDefinition.getKey(),
+                processDefinition.getName(),
+                processDefinition.getVersionTag()));
       }
 
       return processDefinitionSummaries;
@@ -142,22 +142,21 @@ public class ProcessService
   /**
    * Check whether the process definition exists.
    *
-   * @param processDefinitionId the ID used to uniquely identify the process definition
-   *
+   * @param processDefinitionId the ID uniquely identifying the process definition
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    */
   @Override
   public boolean processDefinitionExists(String processDefinitionId)
       throws ProcessServiceException {
     try {
-      ProcessDefinitionQuery processDefinitionQuery = processEngine.getRepositoryService()
-          .createProcessDefinitionQuery();
+      ProcessDefinitionQuery processDefinitionQuery =
+          processEngine.getRepositoryService().createProcessDefinitionQuery();
       processDefinitionQuery.processDefinitionKey(processDefinitionId).latestVersion();
 
       return processDefinitionQuery.count() > 0;
     } catch (Throwable e) {
-      throw new ProcessServiceException("Failed to check whether the process definition ("
-          + processDefinitionId + ") exists", e);
+      throw new ProcessServiceException(
+          "Failed to check whether the process definition (" + processDefinitionId + ") exists", e);
     }
   }
 
@@ -165,7 +164,6 @@ public class ProcessService
    * Update the process definition(s).
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
-   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   @Override
@@ -173,8 +171,8 @@ public class ProcessService
   public List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
       throws InvalidBPMNException, ProcessDefinitionNotFoundException, ProcessServiceException {
     try {
-      List<ProcessDefinitionSummary> processDefinitionSummaries = validateBPMN(
-          processDefinitionData);
+      List<ProcessDefinitionSummary> processDefinitionSummaries =
+          validateBPMN(processDefinitionData);
 
       for (ProcessDefinitionSummary processDefinitionSummary : processDefinitionSummaries) {
         if (!processDefinitionExists(processDefinitionSummary.getId())) {
@@ -188,7 +186,8 @@ public class ProcessService
       }
 
       DeploymentBuilder processDeployment = processEngine.getRepositoryService().createDeployment();
-      processDeployment.addInputStream(processDefinitionSummaries.get(0).getId() + ".bpmn",
+      processDeployment.addInputStream(
+          processDefinitionSummaries.get(0).getId() + ".bpmn",
           new ByteArrayInputStream(processDefinitionData));
 
       Deployment deployment = processDeployment.deploy();
@@ -205,9 +204,8 @@ public class ProcessService
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
-   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   * successfully validated
+   *     successfully validated
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
@@ -216,68 +214,76 @@ public class ProcessService
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
       schemaFactory.setResourceResolver(
-          (type, namespaceURI, publicId, systemId, baseURI) ->
-          {
+          (type, namespaceURI, publicId, systemId, baseURI) -> {
             switch (systemId) {
-              case "BPMNDI.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/bpmn/BPMNDI.xsd");
-              }
+              case "BPMNDI.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/BPMNDI.xsd");
+                }
 
-              case "DC.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/bpmn/DC.xsd");
-              }
+              case "DC.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DC.xsd");
+                }
 
-              case "DI.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/bpmn/DI.xsd");
-              }
+              case "DI.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DI.xsd");
+                }
 
-              case "Semantic.xsd": {
-                return new XmlSchemaClasspathInputSource(namespaceURI, publicId, systemId, baseURI,
-                    "META-INF/bpmn/Semantic.xsd");
-              }
+              case "Semantic.xsd":
+                {
+                  return new XmlSchemaClasspathInputSource(
+                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/Semantic.xsd");
+                }
             }
 
             throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
-          }
-      );
+          });
 
-      Schema schema = schemaFactory.newSchema(new StreamSource[]{new StreamSource(
-          new ByteArrayInputStream(ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd"))),
-          new StreamSource(new ByteArrayInputStream(ResourceUtil.getClasspathResource(
-              "META-INF/bpmn/BPMN20.xsd")))});
+      Schema schema =
+          schemaFactory.newSchema(
+              new StreamSource[] {
+                new StreamSource(
+                    new ByteArrayInputStream(
+                        ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd"))),
+                new StreamSource(
+                    new ByteArrayInputStream(
+                        ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd")))
+              });
 
       DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
       documentBuilderFactory.setNamespaceAware(true);
       documentBuilderFactory.setSchema(schema);
 
       DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-      documentBuilder.setErrorHandler(new ErrorHandler() {
-        @Override
-        public void warning(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the BPMN XML data", exception);
-        }
+      documentBuilder.setErrorHandler(
+          new ErrorHandler() {
+            @Override
+            public void warning(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the BPMN XML data", exception);
+            }
 
-        @Override
-        public void error(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the BPMN XML data", exception);
-        }
+            @Override
+            public void error(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the BPMN XML data", exception);
+            }
 
-        @Override
-        public void fatalError(SAXParseException exception)
-            throws SAXException {
-          throw new SAXException("Failed to process the BPMN XML data", exception);
-        }
-      });
+            @Override
+            public void fatalError(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the BPMN XML data", exception);
+            }
+          });
 
       Document document = documentBuilder.parse(new InputSource(new ByteArrayInputStream(bpmnXml)));
 
-      NodeList processElements = document.getDocumentElement().getElementsByTagNameNS(
-          "http://www.omg.org/spec/BPMN/20100524/MODEL", "process");
+      NodeList processElements =
+          document
+              .getDocumentElement()
+              .getElementsByTagNameNS("http://www.omg.org/spec/BPMN/20100524/MODEL", "process");
 
       List<ProcessDefinitionSummary> processDefinitionSummaries = new ArrayList<>();
 
@@ -287,11 +293,14 @@ public class ProcessService
         if (node instanceof Element) {
           Element processElement = (Element) node;
 
-          String versionTag = processElement.getAttributeNS("http://camunda.org/schema/1.0/bpmn",
-              "versionTag");
+          String versionTag =
+              processElement.getAttributeNS("http://camunda.org/schema/1.0/bpmn", "versionTag");
 
-          processDefinitionSummaries.add(new ProcessDefinitionSummary(processElement.getAttribute(
-              "id"), processElement.getAttribute("name"), versionTag));
+          processDefinitionSummaries.add(
+              new ProcessDefinitionSummary(
+                  processElement.getAttribute("id"),
+                  processElement.getAttribute("name"),
+                  versionTag));
         }
       }
 
@@ -307,9 +316,8 @@ public class ProcessService
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
-   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   * successfully validated
+   *     successfully validated
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
@@ -320,8 +328,8 @@ public class ProcessService
   /**
    * Start a process instance.
    *
-   * @param processDefinitionId the ID used to uniquely identify the process definition
-   * @param parameters          the parameters for the process instance
+   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param parameters the parameters for the process instance
    */
   @Override
   @Transactional
@@ -332,8 +340,10 @@ public class ProcessService
         throw new ProcessDefinitionNotFoundException(processDefinitionId);
       }
 
-      ProcessInstance processInstance = processEngine.getRuntimeService()
-          .startProcessInstanceByKey(processDefinitionId, parameters);
+      ProcessInstance processInstance =
+          processEngine
+              .getRuntimeService()
+              .startProcessInstanceByKey(processDefinitionId, parameters);
     } catch (ProcessDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -341,5 +351,4 @@ public class ProcessService
           "Failed to start the process instance (" + processDefinitionId + ")", e);
     }
   }
-
 }

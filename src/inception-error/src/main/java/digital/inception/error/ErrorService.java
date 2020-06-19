@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorService</code> class provides the Error Service implementation.
@@ -38,26 +38,22 @@ import org.springframework.util.StringUtils;
  */
 @Service
 @SuppressWarnings({"unused"})
-public class ErrorService
-    implements IErrorService {
+public class ErrorService implements IErrorService {
 
-  /**
-   * The Error Report Repository.
-   */
+  /** The Error Report Repository. */
   private ErrorReportRepository errorReportRepository;
 
-  /**
-   * The Error Report Summary Repository.
-   */
+  /** The Error Report Summary Repository. */
   private ErrorReportSummaryRepository errorReportSummaryRepository;
 
   /**
    * Constructs a new <code>ErrorService</code>.
    *
-   * @param errorReportRepository        the Error Report Repository
+   * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
-  public ErrorService(ErrorReportRepository errorReportRepository,
+  public ErrorService(
+      ErrorReportRepository errorReportRepository,
       ErrorReportSummaryRepository errorReportSummaryRepository) {
     this.errorReportRepository = errorReportRepository;
     this.errorReportSummaryRepository = errorReportSummaryRepository;
@@ -67,12 +63,11 @@ public class ErrorService
    * Create the error report.
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
+   *     error report
    */
   @Override
   @Transactional
-  public void createErrorReport(ErrorReport errorReport)
-      throws ErrorServiceException {
+  public void createErrorReport(ErrorReport errorReport) throws ErrorServiceException {
     try {
       String description = errorReport.getDescription();
 
@@ -82,9 +77,7 @@ public class ErrorService
 
       errorReport.setDescription(description);
 
-      String detail = StringUtils.isEmpty(errorReport.getDetail())
-          ? ""
-          : errorReport.getDetail();
+      String detail = StringUtils.isEmpty(errorReport.getDetail()) ? "" : errorReport.getDetail();
 
       if (detail.length() > 4000) {
         detail = detail.substring(0, 4000);
@@ -110,17 +103,16 @@ public class ErrorService
 
       errorReportRepository.saveAndFlush(errorReport);
     } catch (Throwable e) {
-      throw new ErrorServiceException("Failed to create the error report (" + errorReport.getId()
-          + ")", e);
+      throw new ErrorServiceException(
+          "Failed to create the error report (" + errorReport.getId() + ")", e);
     }
   }
 
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
+   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   *     report
    * @return the error report or <code>null</code> if the error report could not be found
    */
   @Override
@@ -137,19 +129,18 @@ public class ErrorService
     } catch (ErrorReportNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ErrorServiceException("Failed to retrieve the error report (" + errorReportId
-          + ")", e);
+      throw new ErrorServiceException(
+          "Failed to retrieve the error report (" + errorReportId + ")", e);
     }
   }
 
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      error report
-   *
+   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   *     report
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   * found
+   *     found
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
@@ -166,8 +157,8 @@ public class ErrorService
     } catch (ErrorReportNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ErrorServiceException("Failed to retrieve the summary for the error report ("
-          + errorReportId + ")", e);
+      throw new ErrorServiceException(
+          "Failed to retrieve the summary for the error report (" + errorReportId + ")", e);
     }
   }
 
@@ -175,8 +166,7 @@ public class ErrorService
    * Retrieve the summaries for the most recent error reports.
    *
    * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
-   *                               to retrieve
-   *
+   *     to retrieve
    * @return the summaries for the most recent error reports
    */
   @Override
@@ -185,8 +175,8 @@ public class ErrorService
     try {
       Pageable pageable = PageRequest.of(0, maximumNumberOfEntries, Sort.Direction.DESC, "created");
 
-      Page<ErrorReportSummary> errorReportSummaryPage = errorReportSummaryRepository.findAll(
-          pageable);
+      Page<ErrorReportSummary> errorReportSummaryPage =
+          errorReportSummaryRepository.findAll(pageable);
 
       return errorReportSummaryPage.getContent();
     } catch (Throwable e) {
@@ -201,8 +191,7 @@ public class ErrorService
    * @return the total number of error reports
    */
   @Override
-  public long getNumberOfErrorReports()
-      throws ErrorServiceException {
+  public long getNumberOfErrorReports() throws ErrorServiceException {
     try {
       return errorReportRepository.count();
     } catch (Throwable e) {

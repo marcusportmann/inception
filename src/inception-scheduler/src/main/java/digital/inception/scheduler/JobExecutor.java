@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +26,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
-public class JobExecutor
-    implements Runnable {
+public class JobExecutor implements Runnable {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
@@ -38,7 +37,7 @@ public class JobExecutor
    * Constructs a new <code>JobExecutorThread</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param job              the job
+   * @param job the job
    */
   public JobExecutor(ISchedulerService schedulerService, Job job) {
     this.schedulerService = schedulerService;
@@ -61,19 +60,25 @@ public class JobExecutor
         try {
           schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
         } catch (Throwable f) {
-          logger.error(String.format(
-              "Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
-              job.getId()), f);
+          logger.error(
+              String.format(
+                  "Failed to unlock and set the status for the job (%s) to \"Scheduled\"",
+                  job.getId()),
+              f);
         }
       } catch (Throwable e) {
-        logger.warn(String.format(
-            "The job (%s) could not be rescheduled and will be marked as \"Failed\"", job.getId()));
+        logger.warn(
+            String.format(
+                "The job (%s) could not be rescheduled and will be marked as \"Failed\"",
+                job.getId()));
 
         try {
           schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
         } catch (Throwable f) {
-          logger.error(String.format(
-              "Failed to unlock and set the status for the job (%s) to \"Failed\"", job.getId()),
+          logger.error(
+              String.format(
+                  "Failed to unlock and set the status for the job (%s) to \"Failed\"",
+                  job.getId()),
               f);
         }
       }
@@ -87,17 +92,19 @@ public class JobExecutor
          * "Scheduled".
          */
         if (job.getExecutionAttempts() >= schedulerService.getMaximumJobExecutionAttempts()) {
-          logger.warn(String.format(
-              "The job (%s) has exceeded the maximum  number of execution attempts and will be "
-                  + "marked as \"Failed\"", job.getId()));
+          logger.warn(
+              String.format(
+                  "The job (%s) has exceeded the maximum  number of execution attempts and will be "
+                      + "marked as \"Failed\"",
+                  job.getId()));
 
           schedulerService.unlockJob(job.getId(), JobStatus.FAILED);
         } else {
           schedulerService.unlockJob(job.getId(), JobStatus.SCHEDULED);
         }
       } catch (Throwable f) {
-        logger.error(String.format("Failed to unlock and set the status for the job (%s)",
-            job.getId()), f);
+        logger.error(
+            String.format("Failed to unlock and set the status for the job (%s)", job.getId()), f);
       }
     }
   }

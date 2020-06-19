@@ -16,13 +16,12 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,7 +31,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessDefinitionSummary</code> class holds the summary information for a process
@@ -40,61 +39,52 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ProcessDefinitionSummary")
+@Schema(description = "ProcessDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "version"})
 @XmlRootElement(name = "ProcessDefinitionSummary", namespace = "http://bmi.inception.digital")
-@XmlType(name = "ProcessDefinitionSummary", namespace = "http://bmi.inception.digital",
+@XmlType(
+    name = "ProcessDefinitionSummary",
+    namespace = "http://bmi.inception.digital",
     propOrder = {"id", "name", "version"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ProcessDefinitionSummary
-    implements Serializable {
+public class ProcessDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the process definition.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the process definition",
-      required = true)
+  /** The ID uniquely identifying the process definition. */
+  @Schema(description = "The ID uniquely identifying the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String id;
 
-  /**
-   * The name of the process definition.
-   */
-  @ApiModelProperty(value = "The name of the process definition", required = true)
+  /** The name of the process definition. */
+  @Schema(description = "The name of the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String name;
 
-  /**
-   * The version of the process definition given by the custom Camunda versionTag.
-   */
-  @ApiModelProperty(value = "The version of the process definition", required = true)
+  /** The version of the process definition given by the custom Camunda versionTag. */
+  @Schema(description = "The version of the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String version;
 
-  /**
-   * Constructs a new <code>ProcessDefinitionSummary</code>.
-   */
-  public ProcessDefinitionSummary() {
-  }
+  /** Constructs a new <code>ProcessDefinitionSummary</code>. */
+  public ProcessDefinitionSummary() {}
 
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
-   * @param id      the ID used to uniquely identify the process definition
-   * @param name    the name of the process definition
+   * @param id the ID uniquely identifying the process definition
+   * @param name the name of the process definition
    * @param version the version of the process definition
    */
   public ProcessDefinitionSummary(String id, String name, String version) {
@@ -107,9 +97,8 @@ public class ProcessDefinitionSummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -131,9 +120,9 @@ public class ProcessDefinitionSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the process definition.
+   * Returns the ID uniquely identifying the process definition.
    *
-   * @return the ID used to uniquely identify the process definition
+   * @return the ID uniquely identifying the process definition
    */
   public String getId() {
     return id;
@@ -164,9 +153,7 @@ public class ProcessDefinitionSummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -176,7 +163,12 @@ public class ProcessDefinitionSummary
    */
   @Override
   public String toString() {
-    return "ProcessDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName()
-        + "\", version=\"" + getVersion() + "\"}";
+    return "ProcessDefinitionSummary {id=\""
+        + getId()
+        + "\", name=\""
+        + getName()
+        + "\", version=\""
+        + getVersion()
+        + "\"}";
   }
 }

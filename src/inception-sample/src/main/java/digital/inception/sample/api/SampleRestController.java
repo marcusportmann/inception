@@ -16,17 +16,19 @@
 
 package digital.inception.sample.api;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
 import digital.inception.validation.ValidationError;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -37,14 +39,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleServiceController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Sample API")
+@Schema(description = "Sample API")
 @RestController
 @RequestMapping(value = "/api/sample")
 @SuppressWarnings({"unused"})
@@ -67,8 +69,7 @@ public class SampleRestController {
    * @return all the data
    */
   @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
-  public List<Data> allData()
-      throws SampleServiceException {
+  public List<Data> allData() throws SampleServiceException {
     return sampleService.getAllData();
   }
 
@@ -78,12 +79,12 @@ public class SampleRestController {
    * @return the data
    */
   @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
-  public Data getData()
-      throws SampleServiceException {
+  public Data getData() throws SampleServiceException {
     long id = System.currentTimeMillis();
 
-    Data data = new Data(id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(),
-        LocalDateTime.now());
+    Data data =
+        new Data(
+            id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
 
     sampleService.addData(data);
 
@@ -92,12 +93,9 @@ public class SampleRestController {
     return data;
   }
 
-  /**
-   * Test the exception handling.
-   */
+  /** Test the exception handling. */
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
-  public void testExceptionHandling()
-      throws SampleServiceException {
+  public void testExceptionHandling() throws SampleServiceException {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
   }
 
@@ -106,14 +104,18 @@ public class SampleRestController {
    *
    * @param localDateTime the local date time
    */
-  @ApiOperation(value = "Test the local date time serialization",
-      notes = "Test the local date time serialization")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
-  @RequestMapping(value = "/test-local-date-time", method = RequestMethod.GET,
+  @Operation(
+      summary = "Test the local date time serialization",
+      description = "Test the local date time serialization")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+  @RequestMapping(
+      value = "/test-local-date-time",
+      method = RequestMethod.GET,
       produces = "application/json")
-  public LocalDateTime testLocalDateTime(@ApiParam(name = "localDateTime",
-      value = "The local date time", required = true)
-  @RequestParam("localDateTime") LocalDateTime localDateTime)
+  public LocalDateTime testLocalDateTime(
+      @Parameter(name = "localDateTime", description = "The local date time", required = true)
+          @RequestParam("localDateTime")
+          LocalDateTime localDateTime)
       throws SampleServiceException {
     if (true) {
       throw new SampleServiceException("Testing 1.. 2.. 3...");
@@ -129,14 +131,18 @@ public class SampleRestController {
    *
    * @param zonedDateTime the zoned date time
    */
-  @ApiOperation(value = "Test the zoned date time serialization",
-      notes = "Test the zoned date time serialization")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
-  @RequestMapping(value = "/test-zoned-date-time", method = RequestMethod.GET,
+  @Operation(
+      summary = "Test the zoned date time serialization",
+      description = "Test the zoned date time serialization")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+  @RequestMapping(
+      value = "/test-zoned-date-time",
+      method = RequestMethod.GET,
       produces = "application/json")
-  public ZonedDateTime testZonedDateTime(@ApiParam(name = "zonedDateTime",
-      value = "The zoned date time", required = true)
-  @RequestParam("zonedDateTime") ZonedDateTime zonedDateTime)
+  public ZonedDateTime testZonedDateTime(
+      @Parameter(name = "zonedDateTime", description = "The zoned date time", required = true)
+          @RequestParam("zonedDateTime")
+          ZonedDateTime zonedDateTime)
       throws SampleServiceException {
     if (false) {
       throw new SampleServiceException("Testing 1.. 2.. 3...");
@@ -147,16 +153,21 @@ public class SampleRestController {
     return zonedDateTime;
   }
 
-  /**
-   * Validate the data.
-   */
-  @ApiOperation(value = "Validate the data", notes = "Validate the data")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ValidationError.class,
-      responseContainer = "List")})
+  /** Validate the data. */
+  @Operation(summary = "Validate the data", description = "Validate the data")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ValidationError.class))))
+      })
   @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
-  public List<ValidationError> validate(@ApiParam(name = "data", value = "The data",
-      required = true)
-  @RequestBody Data data)
+  public List<ValidationError> validate(
+      @Parameter(name = "data", description = "The data", required = true) @RequestBody Data data)
       throws SampleServiceException {
     return sampleService.validate(data);
   }

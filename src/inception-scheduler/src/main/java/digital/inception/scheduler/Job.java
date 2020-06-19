@@ -16,15 +16,14 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -49,54 +48,68 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Job</code> class holds the information for a job.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Job")
+@Schema(description = "Job")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "schedulingPattern", "jobClass", "enabled", "status",
-    "executionAttempts", "lockName", "lastExecuted", "nextExecution"})
+@JsonPropertyOrder({
+  "id",
+  "name",
+  "schedulingPattern",
+  "jobClass",
+  "enabled",
+  "status",
+  "executionAttempts",
+  "lockName",
+  "lastExecuted",
+  "nextExecution"
+})
 @XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
-@XmlType(name = "Job", namespace = "http://scheduler.inception.digital",
-    propOrder = {"id", "name", "schedulingPattern", "jobClass", "enabled", "status",
-        "executionAttempts", "lockName", "lastExecuted", "nextExecution"})
+@XmlType(
+    name = "Job",
+    namespace = "http://scheduler.inception.digital",
+    propOrder = {
+      "id",
+      "name",
+      "schedulingPattern",
+      "jobClass",
+      "enabled",
+      "status",
+      "executionAttempts",
+      "lockName",
+      "lastExecuted",
+      "nextExecution"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "scheduler", name = "jobs")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Job
-    implements Serializable {
+public class Job implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Is the job enabled for execution?
-   */
-  @ApiModelProperty(value = "Is the job enabled for execution", required = true)
+  /** Is the job enabled for execution? */
+  @Schema(description = "Is the job enabled for execution", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Enabled", required = true)
   @NotNull
   @Column(name = "enabled", nullable = false)
   private boolean enabled;
 
-  /**
-   * The number of times the current execution of the job has been attempted.
-   */
-  @ApiModelProperty(
-      value = "The number of times the current execution of the job has been attempted")
+  /** The number of times the current execution of the job has been attempted. */
+  @Schema(description = "The number of times the current execution of the job has been attempted")
   @JsonProperty
   @XmlElement(name = "ExecutionAttempts")
   @Column(name = "execution_attempts")
   private Integer executionAttempts;
 
-  /**
-   * The ID used to uniquely identify the job.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the job", required = true)
+  /** The ID uniquely identifying the job. */
+  @Schema(description = "The ID uniquely identifying the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -105,10 +118,9 @@ public class Job
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The fully qualified name of the Java class that implements the job.
-   */
-  @ApiModelProperty(value = "The fully qualified name of the Java class that implements the job",
+  /** The fully qualified name of the Java class that implements the job. */
+  @Schema(
+      description = "The fully qualified name of the Java class that implements the job",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "JobClass", required = true)
@@ -117,10 +129,8 @@ public class Job
   @Column(name = "job_class", nullable = false, length = 1000)
   private String jobClass;
 
-  /**
-   * The date and time the job was last executed.
-   */
-  @ApiModelProperty(value = "The date and time the job was last executed")
+  /** The date and time the job was last executed. */
+  @Schema(description = "The date and time the job was last executed")
   @JsonProperty
   @XmlElement(name = "LastExecuted")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -128,19 +138,15 @@ public class Job
   @Column(name = "last_executed")
   private LocalDateTime lastExecuted;
 
-  /**
-   * The name of the entity that has locked the job for execution.
-   */
-  @ApiModelProperty(value = "The name of the entity that has locked the job for execution")
+  /** The name of the entity that has locked the job for execution. */
+  @Schema(description = "The name of the entity that has locked the job for execution")
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
   @Column(name = "lock_name", length = 100)
   private String lockName;
 
-  /**
-   * The name of the job.
-   */
-  @ApiModelProperty(value = "The name of the job", required = true)
+  /** The name of the job. */
+  @Schema(description = "The name of the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -148,10 +154,8 @@ public class Job
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The date and time when the job will next be executed.
-   */
-  @ApiModelProperty(value = "The date and time when the job will next be executed")
+  /** The date and time when the job will next be executed. */
+  @Schema(description = "The date and time when the job will next be executed")
   @JsonProperty
   @XmlElement(name = "NextExecution")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -159,24 +163,24 @@ public class Job
   @Column(name = "next_execution")
   private LocalDateTime nextExecution;
 
-  /**
-   * The parameters for the job.
-   */
-  @ApiModelProperty(value = "The parameters for the job")
+  /** The parameters for the job. */
+  @Schema(description = "The parameters for the job")
   @JsonProperty
   @JsonManagedReference
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
   @Valid
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(name = "job_id", referencedColumnName = "id", insertable = false, updatable = false,
+  @JoinColumn(
+      name = "job_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false,
       nullable = false)
   private Set<JobParameter> parameters = new HashSet<>();
 
-  /**
-   * The cron-style scheduling pattern for the job.
-   */
-  @ApiModelProperty(value = "The cron-style scheduling pattern for the job", required = true)
+  /** The cron-style scheduling pattern for the job. */
+  @Schema(description = "The cron-style scheduling pattern for the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SchedulingPattern", required = true)
   @NotNull
@@ -184,39 +188,42 @@ public class Job
   @Column(name = "scheduling_pattern", nullable = false, length = 100)
   private String schedulingPattern;
 
-  /**
-   * The status of the job.
-   */
-  @ApiModelProperty(value = "The status of the job", required = true)
+  /** The status of the job. */
+  @Schema(description = "The status of the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
   @Column(name = "status", nullable = false)
   private JobStatus status;
 
-  /**
-   * Constructs a new <code>Job</code>.
-   */
-  public Job() {
-  }
+  /** Constructs a new <code>Job</code>. */
+  public Job() {}
 
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id                the ID used to uniquely identify the job
-   * @param name              the name of the job
+   * @param id the ID uniquely identifying the job
+   * @param name the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
-   * @param jobClass          the fully qualified name of the Java class that implements the job
-   * @param enabled           is the job enabled for execution
-   * @param status            the status of the job
+   * @param jobClass the fully qualified name of the Java class that implements the job
+   * @param enabled is the job enabled for execution
+   * @param status the status of the job
    * @param executionAttempts the number of times the current execution of the job has been
-   *                          attempted
-   * @param lockName          the name of the entity that has locked the job for execution
-   * @param lastExecuted      the date and time the job was last executed
-   * @param nextExecution     the date and time when the job will next be executed
+   *     attempted
+   * @param lockName the name of the entity that has locked the job for execution
+   * @param lastExecuted the date and time the job was last executed
+   * @param nextExecution the date and time when the job will next be executed
    */
-  public Job(String id, String name, String schedulingPattern, String jobClass, boolean enabled,
-      JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
+  public Job(
+      String id,
+      String name,
+      String schedulingPattern,
+      String jobClass,
+      boolean enabled,
+      JobStatus status,
+      int executionAttempts,
+      String lockName,
+      LocalDateTime lastExecuted,
       LocalDateTime nextExecution) {
     this.id = id;
     this.name = name;
@@ -245,9 +252,8 @@ public class Job
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -281,25 +287,25 @@ public class Job
    * Set the number of times the current execution of the job has been attempted.
    *
    * @param executionAttempts the number of times the current execution of the job has been
-   *                          attempted
+   *     attempted
    */
   public void setExecutionAttempts(Integer executionAttempts) {
     this.executionAttempts = executionAttempts;
   }
 
   /**
-   * Returns the ID used to uniquely identify the job.
+   * Returns the ID uniquely identifying the job.
    *
-   * @return the ID used to uniquely identify the job
+   * @return the ID uniquely identifying the job
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the job.
+   * Set the ID uniquely identifying the job.
    *
-   * @param id the ID used to uniquely identify the scheduled job
+   * @param id the ID uniquely identifying the scheduled job
    */
   public void setId(String id) {
     this.id = id;
@@ -457,14 +463,10 @@ public class Job
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
-  /**
-   * Increment the number of execution attempts for the job.
-   */
+  /** Increment the number of execution attempts for the job. */
   public void incrementExecutionAttempts() {
     if (executionAttempts == null) {
       executionAttempts = 1;
@@ -486,7 +488,7 @@ public class Job
    * Set whether the job is enabled for execution.
    *
    * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
-   *                otherwise
+   *     otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

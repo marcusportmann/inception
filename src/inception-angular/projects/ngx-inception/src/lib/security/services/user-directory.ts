@@ -24,7 +24,7 @@ import {UserDirectoryParameter} from './user-directory-parameter';
 export class UserDirectory {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
    */
   id: string;
 
@@ -34,7 +34,7 @@ export class UserDirectory {
   name: string;
 
   /**
-   * The code used to uniquely identify the user directory type.
+   * The code uniquely identifying the user directory type.
    */
   type: string;
 
@@ -46,10 +46,10 @@ export class UserDirectory {
   /**
    * Constructs a new UserDirectory.
    *
-   * @param id         The Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param id         The Universally Unique Identifier (UUID) uniquely identifying the user
    *                   directory.
    * @param name       The name of the user directory.
-   * @param type       The code used to uniquely identify the user directory type.
+   * @param type       The code uniquely identifying the user directory type.
    * @param parameters The parameters for the user directory.
    */
   constructor(id: string, name: string, type: string, parameters?: UserDirectoryParameter[]) {

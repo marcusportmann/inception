@@ -16,23 +16,23 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The enumeration giving the possible statuses for a job.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "JobStatus")
+@Schema(description = "JobStatus")
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
 public enum JobStatus {
@@ -65,7 +65,6 @@ public enum JobStatus {
    * Returns the status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the status
-   *
    * @return the status given by the specified numeric code value
    */
   @JsonCreator

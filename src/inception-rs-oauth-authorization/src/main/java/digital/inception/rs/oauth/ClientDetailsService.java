@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 
@@ -31,8 +31,7 @@ public class ClientDetailsService
 
   @Override
   public org.springframework.security.oauth2.provider.ClientDetails loadClientByClientId(
-      String clientId)
-      throws ClientRegistrationException {
+      String clientId) throws ClientRegistrationException {
     ClientDetails clientDetails = new ClientDetails(clientId);
 
     return clientDetails;

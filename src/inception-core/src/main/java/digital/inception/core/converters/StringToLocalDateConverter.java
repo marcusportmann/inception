@@ -16,7 +16,7 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDate;
@@ -24,25 +24,20 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>StringToLocalDateConverter</code> class implements the Spring converter that converts
- * a
+ * The <code>StringToLocalDateConverter</code> class implements the Spring converter that converts a
  * <code>String</code> type into a <code>LocalDate</code> type.
  *
  * @author Marcus Portmann
  */
 @Component
 @SuppressWarnings("unused")
-public final class StringToLocalDateConverter
-    implements Converter<String, LocalDate> {
+public final class StringToLocalDateConverter implements Converter<String, LocalDate> {
 
-  /**
-   * Constructs a new <code>StringToLocalDateConverter</code>.
-   */
-  public StringToLocalDateConverter() {
-  }
+  /** Constructs a new <code>StringToLocalDateConverter</code>. */
+  public StringToLocalDateConverter() {}
 
   @Override
   public LocalDate convert(String source) {

@@ -16,7 +16,7 @@
 
 package digital.inception.json.databind;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -26,7 +26,7 @@ import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DateTimeModule</code> implements the custom Jackson module that registers the
@@ -36,9 +36,7 @@ import java.util.Date;
  */
 public class DateTimeModule extends SimpleModule {
 
-  /**
-   * Constructs a new <code>DateTimeModule</code>.
-   */
+  /** Constructs a new <code>DateTimeModule</code>. */
   public DateTimeModule() {
     super("DateTimeModule", new Version(1, 0, 0, null, null, null));
 

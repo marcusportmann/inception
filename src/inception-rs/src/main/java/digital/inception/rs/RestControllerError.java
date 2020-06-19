@@ -16,7 +16,7 @@
 
 package digital.inception.rs;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -34,7 +34,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestControllerError</code> class holds the information for an error returned by a
@@ -43,85 +43,64 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Marcus Portmann
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"uri", "timestamp", "status", "statusText", "code", "message", "detail",
-    "exception", "stackTrace", "name", "validationErrors"})
+@JsonPropertyOrder({
+  "uri",
+  "timestamp",
+  "status",
+  "statusText",
+  "code",
+  "message",
+  "detail",
+  "exception",
+  "stackTrace",
+  "name",
+  "validationErrors"
+})
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class RestControllerError
-    implements Serializable {
+public class RestControllerError implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional code identifying the error.
-   */
-  @JsonProperty
-  private String code;
+  /** The optional code identifying the error. */
+  @JsonProperty private String code;
 
-  /**
-   * The optional detail.
-   */
-  @JsonProperty
-  private String detail;
+  /** The optional detail. */
+  @JsonProperty private String detail;
 
-  /**
-   * The optional fully qualified name of the exception associated with the error.
-   */
-  @JsonProperty
-  private String exception;
+  /** The optional fully qualified name of the exception associated with the error. */
+  @JsonProperty private String exception;
 
-  /**
-   * The message.
-   */
-  @JsonProperty
-  private String message;
+  /** The message. */
+  @JsonProperty private String message;
 
   /**
    * The optional name of the entity associated with the error e.g. the name of the argument or
    * parameter.
    */
-  @JsonProperty
-  private String name;
+  @JsonProperty private String name;
 
-  /**
-   * The optional stack trace associated with the error.
-   */
-  @JsonProperty
-  private String stackTrace;
+  /** The optional stack trace associated with the error. */
+  @JsonProperty private String stackTrace;
 
-  /**
-   * The HTTP status-code for the error.
-   */
-  @JsonProperty
-  private int status;
+  /** The HTTP status-code for the error. */
+  @JsonProperty private int status;
 
-  /**
-   * The HTTP reason-phrase for the HTTP status-code for the error.
-   */
-  @JsonProperty
-  private String statusText;
+  /** The HTTP reason-phrase for the HTTP status-code for the error. */
+  @JsonProperty private String statusText;
 
-  /**
-   * The date and time the error occurred.
-   */
-  @JsonProperty
-  private LocalDateTime timestamp;
+  /** The date and time the error occurred. */
+  @JsonProperty private LocalDateTime timestamp;
 
-  /**
-   * The URI for the HTTP request that resulted in the error.
-   */
-  @JsonProperty
-  private String uri;
+  /** The URI for the HTTP request that resulted in the error. */
+  @JsonProperty private String uri;
 
-  /**
-   * The optional validation errors associated with the error.
-   */
-  @JsonProperty
-  private List<Object> validationErrors;
+  /** The optional validation errors associated with the error. */
+  @JsonProperty private List<Object> validationErrors;
 
   /**
    * Constructs a new <code>RestControllerError</code>.
    *
-   * @param request        the HTTP servlet request
+   * @param request the HTTP servlet request
    * @param responseStatus the HTTP response status
    */
   public RestControllerError(HttpServletRequest request, HttpStatus responseStatus) {
@@ -131,13 +110,13 @@ public class RestControllerError
   /**
    * Constructs a new <code>RestControllerError</code>.
    *
-   * @param request        the HTTP servlet request
+   * @param request the HTTP servlet request
    * @param responseStatus the HTTP response status
-   * @param cause          the exception
+   * @param cause the exception
    */
   @SuppressWarnings("unchecked")
-  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus,
-      Throwable cause) {
+  public RestControllerError(
+      HttpServletRequest request, HttpStatus responseStatus, Throwable cause) {
     this.timestamp = LocalDateTime.now();
 
     if (cause != null) {
@@ -145,8 +124,8 @@ public class RestControllerError
         this.code = ((ServiceException) cause).getServiceError().getCode();
       }
 
-      ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
-          ResponseStatus.class);
+      ResponseStatus annotation =
+          AnnotatedElementUtils.findMergedAnnotation(cause.getClass(), ResponseStatus.class);
 
       if (annotation != null) {
         // Use the HTTP response status specified through the @ResponseStatus annotation
@@ -184,8 +163,10 @@ public class RestControllerError
       }
 
       try {
-        if (cause.getClass().getName().equals(
-            "digital.inception.validation.InvalidArgumentException")) {
+        if (cause
+            .getClass()
+            .getName()
+            .equals("digital.inception.validation.InvalidArgumentException")) {
           Method getNameMethod = cause.getClass().getMethod("getName");
 
           if (getNameMethod != null) {

@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.security.KeyStore;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSX509CertificateTokenProfileEndpointConfigurator</code> class provides the
@@ -44,17 +44,21 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
    * Configure the CXF web service endpoint to support authentication using the the Web Services
    * Security X.509 Certificate Token profile.
    *
-   * @param endpoint         the web service endpoint to configure
-   * @param keyStore         the key store containing the private key and certificate (public key)
-   *                         for the web service
+   * @param endpoint the web service endpoint to configure
+   * @param keyStore the key store containing the private key and certificate (public key) for the
+   *     web service
    * @param keyStorePassword the password for the key store containing the private key and
-   *                         certificate (public key) for the web service
-   * @param keyStoreAlias    the alias of the key-pair in the key store for the web service
-   * @param trustStore       the key store containing the certificates that will be used to verify
-   *                         the web service clients
+   *     certificate (public key) for the web service
+   * @param keyStoreAlias the alias of the key-pair in the key store for the web service
+   * @param trustStore the key store containing the certificates that will be used to verify the web
+   *     service clients
    */
-  public static void configureEndpoint(Endpoint endpoint, KeyStore keyStore,
-      String keyStorePassword, String keyStoreAlias, KeyStore trustStore)
+  public static void configureEndpoint(
+      Endpoint endpoint,
+      KeyStore keyStore,
+      String keyStorePassword,
+      String keyStoreAlias,
+      KeyStore trustStore)
       throws Exception {
     if (endpoint instanceof EndpointImpl) {
       EndpointImpl endpointImpl = (EndpointImpl) endpoint;
@@ -64,42 +68,46 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
       // Enable timestamp and signature verification for incoming web service requests
       Map<String, Object> inProperties = new HashMap<>();
 
-      inProperties.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP + " "
-          + WSHandlerConstants.SIGNATURE);
+      inProperties.put(
+          WSHandlerConstants.ACTION,
+          WSHandlerConstants.TIMESTAMP + " " + WSHandlerConstants.SIGNATURE);
       inProperties.put(WSHandlerConstants.USER, keyStoreAlias);
-      inProperties.put(WSHandlerConstants.PW_CALLBACK_REF, new PasswordCallbackHandler(
-          keyStoreAlias, keyStorePassword));
+      inProperties.put(
+          WSHandlerConstants.PW_CALLBACK_REF,
+          new PasswordCallbackHandler(keyStoreAlias, keyStorePassword));
       inProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JInInterceptor wss4JInInterceptor = new WSS4JInInterceptor(inProperties) {
-        @Override
-        protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-            String propFilename, RequestData reqData)
-            throws WSSecurityException {
-          return crypto;
-        }
-      };
+      WSS4JInInterceptor wss4JInInterceptor =
+          new WSS4JInInterceptor(inProperties) {
+            @Override
+            protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
+                String propFilename, RequestData reqData) throws WSSecurityException {
+              return crypto;
+            }
+          };
 
       endpointImpl.getInInterceptors().add(wss4JInInterceptor);
 
       // Enable timestamp and signature verification for outgoing web service responses
       Map<String, Object> outProperties = new HashMap<>();
 
-      outProperties.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP + " "
-          + WSHandlerConstants.SIGNATURE);
+      outProperties.put(
+          WSHandlerConstants.ACTION,
+          WSHandlerConstants.TIMESTAMP + " " + WSHandlerConstants.SIGNATURE);
       outProperties.put(WSHandlerConstants.USER, keyStoreAlias);
-      outProperties.put(WSHandlerConstants.PW_CALLBACK_REF, new PasswordCallbackHandler(
-          keyStoreAlias, keyStorePassword));
+      outProperties.put(
+          WSHandlerConstants.PW_CALLBACK_REF,
+          new PasswordCallbackHandler(keyStoreAlias, keyStorePassword));
       outProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JOutInterceptor wss4JOutInterceptor = new WSS4JOutInterceptor(inProperties) {
-        @Override
-        protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-            String propFilename, RequestData reqData)
-            throws WSSecurityException {
-          return crypto;
-        }
-      };
+      WSS4JOutInterceptor wss4JOutInterceptor =
+          new WSS4JOutInterceptor(inProperties) {
+            @Override
+            protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
+                String propFilename, RequestData reqData) throws WSSecurityException {
+              return crypto;
+            }
+          };
 
       endpointImpl.getOutInterceptors().add(wss4JOutInterceptor);
     }

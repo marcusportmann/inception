@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToMessageStatusConverter
-    implements Converter<Integer, MessageStatus> {
+public class IntegerToMessageStatusConverter implements Converter<Integer, MessageStatus> {
 
-  /**
-   * Constructs a new <code>IntegerToMessageStatusConverter</code>.
-   */
-  public IntegerToMessageStatusConverter() {
-  }
+  /** Constructs a new <code>IntegerToMessageStatusConverter</code>. */
+  public IntegerToMessageStatusConverter() {}
 
   @Override
   public MessageStatus convert(Integer source) {

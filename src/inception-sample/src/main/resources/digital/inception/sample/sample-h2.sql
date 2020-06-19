@@ -17,7 +17,7 @@ CREATE TABLE sample.data (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN sample.data.id IS 'The ID used to uniquely identify the data';
+COMMENT ON COLUMN sample.data.id IS 'The ID uniquely identifying the data';
 
 COMMENT ON COLUMN sample.data.name IS 'The name for the data';
 

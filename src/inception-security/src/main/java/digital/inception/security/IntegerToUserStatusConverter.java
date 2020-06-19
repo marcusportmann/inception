@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToUserStatusConverter
-    implements Converter<Integer, UserStatus> {
+public class IntegerToUserStatusConverter implements Converter<Integer, UserStatus> {
 
-  /**
-   * Constructs a new <code>IntegerToUserStatusConverter</code>.
-   */
-  public IntegerToUserStatusConverter() {
-  }
+  /** Constructs a new <code>IntegerToUserStatusConverter</code>. */
+  public IntegerToUserStatusConverter() {}
 
   @Override
   public UserStatus convert(Integer source) {

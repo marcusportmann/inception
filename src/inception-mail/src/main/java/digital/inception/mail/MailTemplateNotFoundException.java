@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplateNotFoundException</code> exception is thrown to indicate an error condition
  * as a result of a mail template that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The mail template could not be found")
-@WebFault(name = "MailTemplateNotFoundException", targetNamespace = "http://mail.inception.digital",
+@WebFault(
+    name = "MailTemplateNotFoundException",
+    targetNamespace = "http://mail.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class MailTemplateNotFoundException extends ServiceException {
@@ -46,10 +49,11 @@ public class MailTemplateNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>MailTemplateNotFoundException</code>.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the ID uniquely identifying the mail template
    */
   public MailTemplateNotFoundException(String mailTemplateId) {
-    super("MailTemplateNotFoundError", "The mail template with ID (" + mailTemplateId
-        + ") could not be found");
+    super(
+        "MailTemplateNotFoundError",
+        "The mail template with ID (" + mailTemplateId + ") could not be found");
   }
 }

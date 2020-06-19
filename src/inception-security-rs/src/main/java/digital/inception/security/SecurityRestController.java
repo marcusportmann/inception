@@ -16,18 +16,20 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,34 +52,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityRestController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "Security API")
+@Tag(name = "Security API")
 @RestController
 @RequestMapping(value = "/api/security")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SecurityRestController extends SecureRestController {
 
-  /**
-   * The Security Service.
-   */
-  private ISecurityService securityService;
+  /** The Security Service. */
+  private final ISecurityService securityService;
 
-  /**
-   * The JSR-303 validator.
-   */
-  private Validator validator;
+  /** The JSR-303 validator. */
+  private final Validator validator;
 
   /**
    * Constructs a new <code>SecurityRestController</code>.
    *
    * @param securityService the Security Service
-   * @param validator       the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SecurityRestController(ISecurityService securityService, Validator validator) {
     this.securityService = securityService;
@@ -87,38 +85,75 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   * @param groupMember     the group member
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
+   * @param groupMember the group member
    */
-  @ApiOperation(value = "Add the group member to the group",
-      notes = "Add the group member to the group")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The group member was successfully added to the group"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "The group member already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
-      method = RequestMethod.POST, produces = "application/json")
+  @Operation(
+      summary = "Add the group member to the group",
+      description = "Add the group member to the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The group member was successfully added to the group"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The group member already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
+      method = RequestMethod.POST,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void addMemberToGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "groupMember", value = "The group member",
-      required = true)
-  @RequestBody GroupMember groupMember)
+  public void addMemberToGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(name = "groupMember", description = "The group member", required = true)
+          @RequestBody
+          GroupMember groupMember)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
+          UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -134,55 +169,90 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(groupMember);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("groupMember", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "groupMember", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.addMemberToGroup(userDirectoryId, groupName, groupMember.getMemberType(),
-        groupMember.getMemberName());
+    securityService.addMemberToGroup(
+        userDirectoryId, groupName, groupMember.getMemberType(), groupMember.getMemberName());
   }
 
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   * @param groupRole       the group role
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
+   * @param groupRole the group role
    */
-  @ApiOperation(value = "Add the role to the group", notes = "Add the role to the group")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The role was successfully added to the group"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group or role could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "The group role already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
-      method = RequestMethod.POST, produces = "application/json")
+  @Operation(summary = "Add the role to the group", description = "Add the role to the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The role was successfully added to the group"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group or role could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The group role already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
+      method = RequestMethod.POST,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void addRoleToGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "groupRole", value = "The group role",
-      required = true)
-  @RequestBody GroupRole groupRole)
+  public void addRoleToGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(name = "groupRole", description = "The group role", required = true) @RequestBody
+          GroupRole groupRole)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
+          RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -198,22 +268,27 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<GroupRole>> constraintViolations = validator.validate(groupRole);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("groupRole", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "groupRole", ValidationError.toValidationErrors(constraintViolations));
     }
 
     if (groupRole.getRoleCode().equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
         && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
-      throw new AccessDeniedException("Insufficient authority to add the " + SecurityService
-          .ADMINISTRATOR_ROLE_CODE + " role to the group (" + groupName
-          + ") for the user directory (" + userDirectoryId + ")");
+      throw new AccessDeniedException(
+          "Insufficient authority to add the "
+              + SecurityService.ADMINISTRATOR_ROLE_CODE
+              + " role to the group ("
+              + groupName
+              + ") for the user directory ("
+              + userDirectoryId
+              + ")");
     }
 
     securityService.addRoleToGroup(userDirectoryId, groupName, groupRole.getRoleCode());
@@ -222,35 +297,72 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Add the user directory to the organization.
    *
-   * @param organizationId            the Universally Unique Identifier (UUID) used to uniquely
-   *                                  identify the organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @param organizationUserDirectory the organization user directory
    */
-  @ApiOperation(value = "Add the user directory to the organization",
-      notes = "Add the user directory to the organization")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The user directory was successfully added to the organization"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization or user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "The organization user directory already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}/user-directories",
-      method = RequestMethod.POST, produces = "application/json")
+  @Operation(
+      summary = "Add the user directory to the organization",
+      description = "Add the user directory to the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The user directory was successfully added to the organization"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization or user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The organization user directory already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}/user-directories",
+      method = RequestMethod.POST,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void addUserDirectoryToOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId, @ApiParam(name = "organizationUserDirectory",
-      value = "The organization user directory", required = true)
-  @RequestBody OrganizationUserDirectory organizationUserDirectory)
-      throws InvalidArgumentException, OrganizationNotFoundException, UserDirectoryNotFoundException,
-      ExistingOrganizationUserDirectoryException, SecurityServiceException {
+  public void addUserDirectoryToOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId,
+      @Parameter(
+              name = "organizationUserDirectory",
+              description = "The organization user directory",
+              required = true)
+          @RequestBody
+          OrganizationUserDirectory organizationUserDirectory)
+      throws InvalidArgumentException, OrganizationNotFoundException,
+          UserDirectoryNotFoundException, ExistingOrganizationUserDirectoryException,
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (organizationId == null) {
@@ -261,55 +373,87 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("organizationUserDirectory");
     }
 
-    Set<ConstraintViolation<OrganizationUserDirectory>> constraintViolations = validator.validate(
-        organizationUserDirectory);
+    Set<ConstraintViolation<OrganizationUserDirectory>> constraintViolations =
+        validator.validate(organizationUserDirectory);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("organizationUserDirectory",
-          ValidationError.toValidationErrors(constraintViolations));
+      throw new InvalidArgumentException(
+          "organizationUserDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
 
     if (!organizationUserDirectory.getOrganizationId().equals(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
-    securityService.addUserDirectoryToOrganization(organizationId,
-        organizationUserDirectory.getUserDirectoryId());
+    securityService.addUserDirectoryToOrganization(
+        organizationId, organizationUserDirectory.getUserDirectoryId());
   }
 
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   * @param passwordChange  the password change
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
+   * @param passwordChange the password change
    */
-  @ApiOperation(value = "Administratively change the password for the user",
-      notes = "Administratively change the password for the user")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The password for the user was changed successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/password",
-      method = RequestMethod.PUT, produces = "application/json")
+  @Operation(
+      summary = "Administratively change the password for the user",
+      description = "Administratively change the password for the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The password for the user was changed successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}/password",
+      method = RequestMethod.PUT,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public void adminChangePassword(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change",
-      required = true)
-  @RequestBody PasswordChange passwordChange)
+  public void adminChangePassword(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username,
+      @Parameter(name = "passwordChange", description = "The password change", required = true)
+          @RequestBody
+          PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -329,65 +473,107 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(
-        passwordChange);
+    Set<ConstraintViolation<PasswordChange>> constraintViolations =
+        validator.validate(passwordChange);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.adminChangePassword(userDirectoryId, username, passwordChange.getNewPassword(),
-        (passwordChange.getExpirePassword() == null)
-            ? false
-            : passwordChange.getExpirePassword(),
-        (passwordChange.getLockUser() == null)
-            ? false
-            : passwordChange.getLockUser(),
+    securityService.adminChangePassword(
+        userDirectoryId,
+        username,
+        passwordChange.getNewPassword(),
+        (passwordChange.getExpirePassword() == null) ? false : passwordChange.getExpirePassword(),
+        (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
         (passwordChange.getResetPasswordHistory() == null)
             ? false
-            : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+            : passwordChange.getResetPasswordHistory(),
+        passwordChange.getReason());
   }
 
   /**
    * Change the password for the user.
    *
-   * @param username       the username identifying the user
+   * @param username the username identifying the user
    * @param passwordChange the password change
    */
-  @ApiOperation(value = "Change the password for the user",
-      notes = "Change the password for the user")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The password for the user was changed successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 401, message = "Authentication failed or invalid security code",
-          response = RestControllerError.class),
-      @ApiResponse(code = 403,
-          message = "The user has exceeded the maximum number of failed password attempts and has been locked",
-          response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409,
-          message = "The new password for the user has been used recently and is not valid",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/users/{username}/password", method = RequestMethod.PUT,
+  @Operation(
+      summary = "Change the password for the user",
+      description = "Change the password for the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The password for the user was changed successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "401",
+            description = "Authentication failed or invalid security code",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "403",
+            description =
+                "The user has exceeded the maximum number of failed password attempts and has been locked",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "The new password for the user has been used recently and is not valid",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/users/{username}/password",
+      method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void changePassword(@ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change",
-      required = true)
-  @RequestBody PasswordChange passwordChange)
+  public void changePassword(
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username,
+      @Parameter(name = "passwordChange", description = "The password change", required = true)
+          @RequestBody
+          PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
-      UserLockedException, SecurityServiceException {
+          AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
+          UserLockedException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (StringUtils.isEmpty(username)) {
@@ -404,86 +590,117 @@ public class SecurityRestController extends SecureRestController {
       throw new UserNotFoundException(username);
     }
 
-    Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(
-        passwordChange);
+    Set<ConstraintViolation<PasswordChange>> constraintViolations =
+        validator.validate(passwordChange);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "passwordChange", ValidationError.toValidationErrors(constraintViolations));
     }
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
       if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-        throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-            + ")");
+        throw new AccessDeniedException(
+            "Access denied to the user directory (" + userDirectoryId + ")");
       }
 
       if (hasRole(authentication, "Administrator")
           || hasAccessToFunction(authentication, "Security.OrganizationAdministration")
           || hasAccessToFunction(authentication, "Security.UserAdministration")
           || hasAccessToFunction(authentication, "Security.ResetUserPassword")) {
-        securityService.adminChangePassword(userDirectoryId, username,
+        securityService.adminChangePassword(
+            userDirectoryId,
+            username,
             passwordChange.getNewPassword(),
             (passwordChange.getExpirePassword() == null)
                 ? false
                 : passwordChange.getExpirePassword(),
-            (passwordChange.getLockUser() == null)
-                ? false
-                : passwordChange.getLockUser(),
+            (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
             (passwordChange.getResetPasswordHistory() == null)
                 ? false
-                : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+                : passwordChange.getResetPasswordHistory(),
+            passwordChange.getReason());
       } else {
-        throw new AccessDeniedException("Insufficient access to change the password for the user ("
-            + username + ")");
+        throw new AccessDeniedException(
+            "Insufficient access to change the password for the user (" + username + ")");
       }
     } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
       if (StringUtils.isEmpty(passwordChange.getPassword())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
-      securityService.changePassword(username, passwordChange.getPassword(),
-          passwordChange.getNewPassword());
+      securityService.changePassword(
+          username, passwordChange.getPassword(), passwordChange.getNewPassword());
     } else if (passwordChange.getReason() == PasswordChangeReason.RESET) {
       if (StringUtils.isEmpty(passwordChange.getSecurityCode())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
-      securityService.resetPassword(username, passwordChange.getNewPassword(),
-          passwordChange.getSecurityCode());
+      securityService.resetPassword(
+          username, passwordChange.getNewPassword(), passwordChange.getSecurityCode());
     }
   }
 
   /**
    * Create the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param group           the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param group the group
    */
-  @ApiOperation(value = "Create the group", notes = "Create the group")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "A group with the specified name already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups", method = RequestMethod.POST,
+  @Operation(summary = "Create the group", description = "Create the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The group was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A group with the specified name already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void createGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "group", value = "The group",
-      required = true)
-  @RequestBody Group group)
+  public void createGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(name = "group", description = "The group", required = true) @RequestBody
+          Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -492,17 +709,17 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("group");
     }
 
-    if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+    if (!hasAccessToUserDirectory(
+        SecurityContextHolder.getContext().getAuthentication(), userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("group", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "group", ValidationError.toValidationErrors(constraintViolations));
     }
 
     if (!group.getUserDirectoryId().equals(userDirectoryId)) {
@@ -515,30 +732,54 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Create the new organization.
    *
-   * @param organization        the organization
-   * @param createUserDirectory should a new internal user directory be created for the
-   *                            organization
+   * @param organization the organization
+   * @param createUserDirectory should a new internal user directory be created for the organization
    */
-  @ApiOperation(value = "Create the organization", notes = "Create the organization")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The organization was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 409,
-          message = "An organization with the specified ID or name already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations", method = RequestMethod.POST,
+  @Operation(summary = "Create the organization", description = "Create the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The organization was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "An organization with the specified ID or name already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void createOrganization(@ApiParam(name = "organization", value = "The organization",
-      required = true)
-  @RequestBody Organization organization, @ApiParam(name = "createUserDirectory",
-      value = "Should a new internal user directory be created for the organization")
-  @RequestParam(value = "createUserDirectory", required = false) Boolean createUserDirectory)
+  public void createOrganization(
+      @Parameter(name = "organization", description = "The organization", required = true)
+          @RequestBody
+          Organization organization,
+      @Parameter(
+              name = "createUserDirectory",
+              description = "Should a new internal user directory be created for the organization")
+          @RequestParam(value = "createUserDirectory", required = false)
+          Boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
@@ -547,50 +788,83 @@ public class SecurityRestController extends SecureRestController {
     Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.createOrganization(organization, (createUserDirectory != null)
-        && createUserDirectory);
+    securityService.createOrganization(
+        organization, (createUserDirectory != null) && createUserDirectory);
   }
 
   /**
    * Create the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param user            the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param user the user
    * @param expiredPassword create the user with its password expired
-   * @param userLocked      create the user locked
+   * @param userLocked create the user locked
    */
-  @ApiOperation(value = "Create the user", notes = "Create the user")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409, message = "A user with the specified username already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.POST,
+  @Operation(summary = "Create the user", description = "Create the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The user was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A user with the specified username already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
-  public void createUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "user", value = "The user", required = true)
-  @RequestBody User user, @ApiParam(name = "expiredPassword",
-      value = "Create the user with its password expired")
-  @RequestParam(value = "expiredPassword", required = false) Boolean expiredPassword, @ApiParam(
-      name = "userLocked",
-      value = "Create the user locked")
-  @RequestParam(value = "userLocked", required = false) Boolean userLocked)
+  public void createUser(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(name = "user", description = "The user", required = true) @RequestBody User user,
+      @Parameter(
+              name = "expiredPassword",
+              description = "Create the user with its password expired")
+          @RequestParam(value = "expiredPassword", required = false)
+          Boolean expiredPassword,
+      @Parameter(name = "userLocked", description = "Create the user locked")
+          @RequestParam(value = "userLocked", required = false)
+          Boolean userLocked)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -599,21 +873,24 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("user");
     }
 
-    if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+    if (!hasAccessToUserDirectory(
+        SecurityContextHolder.getContext().getAuthentication(), userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("user", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "user", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.createUser(userDirectoryId, user, (expiredPassword != null)
-        && expiredPassword, (userLocked != null) && userLocked);
+    securityService.createUser(
+        userDirectoryId,
+        user,
+        (expiredPassword != null) && expiredPassword,
+        (userLocked != null) && userLocked);
   }
 
   /**
@@ -621,35 +898,57 @@ public class SecurityRestController extends SecureRestController {
    *
    * @param userDirectory the user directory
    */
-  @ApiOperation(value = "Create the user directory", notes = "Create the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The user directory was created successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 409,
-          message = "A user directory with the specified ID or name already exists",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories", method = RequestMethod.POST,
+  @Operation(summary = "Create the user directory", description = "Create the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The user directory was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A user directory with the specified ID or name already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public void createUserDirectory(@ApiParam(name = "userDirectory", value = "The user directory",
-      required = true)
-  @RequestBody UserDirectory userDirectory)
+  public void createUserDirectory(
+      @Parameter(name = "userDirectory", description = "The user directory", required = true)
+          @RequestBody
+          UserDirectory userDirectory)
       throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
     if (userDirectory == null) {
       throw new InvalidArgumentException("userDirectory");
     }
 
-    Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
-        userDirectory);
+    Set<ConstraintViolation<UserDirectory>> constraintViolations =
+        validator.validate(userDirectory);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
 
     securityService.createUserDirectory(userDirectory);
@@ -658,34 +957,68 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
    */
-  @ApiOperation(value = "Delete the group", notes = "Delete the group")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 409,
-          message = "The group could not be deleted since it is still associated with 1 or more user(s)",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
-      method = RequestMethod.DELETE, produces = "application/json")
+  @Operation(summary = "Delete the group", description = "Delete the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The group was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description =
+                "The group could not be deleted since it is still associated with 1 or more user(s)",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void deleteGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName)
+  public void deleteGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      ExistingGroupMembersException, SecurityServiceException {
+          ExistingGroupMembersException, SecurityServiceException {
     if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -694,10 +1027,10 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+    if (!hasAccessToUserDirectory(
+        SecurityContextHolder.getContext().getAuthentication(), userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     securityService.deleteGroup(userDirectoryId, groupName);
@@ -706,27 +1039,53 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    */
-  @ApiOperation(value = "Delete the organization", notes = "Delete the organization")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The organization was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
+  @Operation(summary = "Delete the organization", description = "Delete the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The organization was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void deleteOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+  public void deleteOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
@@ -738,31 +1097,60 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
    */
-  @ApiOperation(value = "Delete the user", notes = "Delete the user")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
-      method = RequestMethod.DELETE, produces = "application/json")
+  @Operation(summary = "Delete the user", description = "Delete the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The user was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
-  public void deleteUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username)
+  public void deleteUser(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -771,10 +1159,10 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("username");
     }
 
-    if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+    if (!hasAccessToUserDirectory(
+        SecurityContextHolder.getContext().getAuthentication(), userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     securityService.deleteUser(userDirectoryId, username);
@@ -783,27 +1171,53 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
-  @ApiOperation(value = "Delete the user directory", notes = "Delete the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The user directory was deleted successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.DELETE,
+  @Operation(summary = "Delete the user directory", description = "Delete the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The user directory was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}",
+      method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public void deleteUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public void deleteUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
@@ -815,33 +1229,61 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
    * @return the group
    */
-  @ApiOperation(value = "Retrieve the group", notes = "Retrieve the group")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(summary = "Retrieve the group", description = "Retrieve the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public Group getGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName)
+  public Group getGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (StringUtils.isEmpty(userDirectoryId)) {
@@ -853,8 +1295,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getGroup(userDirectoryId, groupName);
@@ -863,28 +1305,52 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the group names
    */
-  @ApiOperation(value = "Retrieve the group names", notes = "Retrieve the group names")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/group-names",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(summary = "Retrieve the group names", description = "Retrieve the group names")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/group-names",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public List<String> getGroupNames(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public List<String> getGroupNames(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -893,14 +1359,14 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+    if (!hasAccessToUserDirectory(
+        SecurityContextHolder.getContext().getAuthentication(), userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getGroupNames(userDirectoryId);
@@ -909,34 +1375,63 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the names identifying the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
    * @return the names identifying the groups the user is a member of
    */
-  @ApiOperation(value = "Retrieve the names identifying the groups the user is a member of",
-      notes = "Retrieve the names identifying the groups the user is a member of")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/group-names",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the names identifying the groups the user is a member of",
+      description = "Retrieve the names identifying the groups the user is a member of")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}/group-names",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public List<String> getGroupNamesForUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username)
+  public List<String> getGroupNamesForUser(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (StringUtils.isEmpty(userDirectoryId)) {
@@ -948,8 +1443,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getGroupNamesForUser(userDirectoryId, username);
@@ -958,42 +1453,70 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param filter          the optional filter to apply to the groups
-   * @param sortDirection   the optional sort direction to apply to the groups
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param filter the optional filter to apply to the groups
+   * @param sortDirection the optional sort direction to apply to the groups
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the groups
    */
-  @ApiOperation(value = "Retrieve the groups", notes = "Retrieve the groups")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the groups", description = "Retrieve the groups")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<Group>> getGroups(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
-      value = "The optional filter to apply to the groups")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the groups")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<Group>> getGroups(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(name = "filter", description = "The optional filter to apply to the groups")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the groups")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1002,12 +1525,12 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var groups = securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex,
-        pageSize);
+    var groups =
+        securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize);
 
     var numberOfGroups = securityService.getNumberOfGroups(userDirectoryId, filter);
 
@@ -1020,45 +1543,78 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the group members.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   * @param filter          the optional filter to apply to the group members
-   * @param sortDirection   the optional sort direction to apply to the group members
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
+   * @param filter the optional filter to apply to the group members
+   * @param sortDirection the optional sort direction to apply to the group members
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
-  @ApiOperation(value = "Retrieve the group members", notes = "Retrieve the group members")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(summary = "Retrieve the group members", description = "Retrieve the group members")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<GroupMember>> getMembersForGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "filter",
-      value = "The optional filter to apply to the group members")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the group members")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<GroupMember>> getMembersForGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(name = "filter", description = "The optional filter to apply to the group members")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the group members")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1070,15 +1626,16 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var groupMembers = securityService.getMembersForGroup(userDirectoryId, groupName, filter,
-        sortDirection, pageIndex, pageSize);
+    var groupMembers =
+        securityService.getMembersForGroup(
+            userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
 
-    var numberOfGroupMembers = securityService.getNumberOfMembersForGroup(userDirectoryId,
-        groupName, filter);
+    var numberOfGroupMembers =
+        securityService.getNumberOfMembersForGroup(userDirectoryId, groupName, filter);
 
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(numberOfGroupMembers));
@@ -1089,28 +1646,52 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @return the organization
    */
-  @ApiOperation(value = "Retrieve the organization", notes = "Retrieve the organization")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public Organization getOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+  public Organization getOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1124,29 +1705,54 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the name of the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @return the name of the organization
    */
-  @ApiOperation(value = "Retrieve the name of organization",
-      notes = "Retrieve the name of the organization")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}/name", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the name of organization",
+      description = "Retrieve the name of the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}/name",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public String getOrganizationName(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+  public String getOrganizationName(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1160,68 +1766,107 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the organizations.
    *
-   * @param filter        the optional filter to apply to the organizations
+   * @param filter the optional filter to apply to the organizations
    * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the organizations
    */
-  @ApiOperation(value = "Retrieve the organizations", notes = "Retrieve the organizations")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the organizations", description = "Retrieve the organizations")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public ResponseEntity<List<Organization>> getOrganizations(@ApiParam(name = "filter",
-      value = "The optional filter to apply to the organizations")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the organizations")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<Organization>> getOrganizations(
+      @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the organizations")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations(
-        filter)));
+    httpHeaders.add(
+        "x-total-count", String.valueOf(securityService.getNumberOfOrganizations(filter)));
 
-    return new ResponseEntity<>(securityService.getOrganizations(filter, sortDirection, pageIndex,
-        pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(
+        securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize),
+        httpHeaders,
+        HttpStatus.OK);
   }
 
   /**
    * Retrieve the organizations the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the organizations the user directory is associated with
    */
-  @ApiOperation(value = "Retrieve the organizations the user directory is associated with",
-      notes = "Retrieve the organizations the user directory is associated with")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/organizations",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the organizations the user directory is associated with",
+      description = "Retrieve the organizations the user directory is associated with")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/organizations",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(@ApiParam(
-      name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1230,17 +1875,17 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!authentication.isAuthenticated()) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    List<Organization> organizations = securityService.getOrganizationsForUserDirectory(
-        userDirectoryId);
+    List<Organization> organizations =
+        securityService.getOrganizationsForUserDirectory(userDirectoryId);
 
     return new ResponseEntity<>(organizations, HttpStatus.OK);
   }
@@ -1248,34 +1893,63 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
    * @return the codes for the roles that have been assigned to the group
    */
-  @ApiOperation(value = "Retrieve the codes for the roles that have been assigned to the group",
-      notes = "Retrieve the codes for the roles that have been assigned to the group")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/role-codes",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the codes for the roles that have been assigned to the group",
+      description = "Retrieve the codes for the roles that have been assigned to the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/role-codes",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public List<String> getRoleCodesForGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName)
+  public List<String> getRoleCodesForGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1287,8 +1961,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getRoleCodesForGroup(userDirectoryId, groupName);
@@ -1299,51 +1973,87 @@ public class SecurityRestController extends SecureRestController {
    *
    * @return the roles
    */
-  @ApiOperation(value = "Retrieve all the roles", notes = "Retrieve all the roles")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
+  @Operation(summary = "Retrieve all the roles", description = "Retrieve all the roles")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
   @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public List<Role> getRoles()
-      throws SecurityServiceException {
+  public List<Role> getRoles() throws SecurityServiceException {
     return securityService.getRoles();
   }
 
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
    * @return the roles that have been assigned to the group
    */
-  @ApiOperation(value = "Retrieve the roles that have been assigned to the group",
-      notes = "Retrieve the roles that have been assigned to the group")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the roles that have been assigned to the group",
+      description = "Retrieve the roles that have been assigned to the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public List<GroupRole> getRolesForGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName)
+  public List<GroupRole> getRolesForGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1355,8 +2065,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getRolesForGroup(userDirectoryId, groupName);
@@ -1365,33 +2075,61 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
    * @return the user
    */
-  @ApiOperation(value = "Retrieve the user", notes = "Retrieve the user")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(summary = "Retrieve the user", description = "Retrieve the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public User getUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username)
+  public User getUser(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1403,8 +2141,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     User user = securityService.getUser(userDirectoryId, username);
@@ -1420,70 +2158,113 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user directories.
    *
-   * @param filter        the optional filter to apply to the user directories
+   * @param filter the optional filter to apply to the user directories
    * @param sortDirection the optional sort direction to apply to the user directories
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the user directories
    */
-  @ApiOperation(value = "Retrieve the user directories", notes = "Retrieve the user directories")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the user directories",
+      description = "Retrieve the user directories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public ResponseEntity<List<UserDirectory>> getUserDirectories(@ApiParam(name = "filter",
-      value = "The optional filter to apply to the user directories")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the user directories")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<UserDirectory>> getUserDirectories(
+      @Parameter(
+              name = "filter",
+              description = "The optional filter to apply to the user directories")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the user directories")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
-        filter)));
+    httpHeaders.add(
+        "x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(filter)));
 
-    return new ResponseEntity<>(securityService.getUserDirectories(filter, sortDirection,
-        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(
+        securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize),
+        httpHeaders,
+        HttpStatus.OK);
   }
 
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @return the user directories the organization is associated with
    */
-  @ApiOperation(value = "Retrieve the user directories the organization is associated with",
-      notes = "Retrieve the user directories the organization is associated with")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}/user-directories",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the user directories the organization is associated with",
+      description = "Retrieve the user directories the organization is associated with")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}/user-directories",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(@ApiParam(
-      name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId)
+  public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1491,8 +2272,8 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("organizationId");
     }
 
-    List<UserDirectory> userDirectories = securityService.getUserDirectoriesForOrganization(
-        organizationId);
+    List<UserDirectory> userDirectories =
+        securityService.getUserDirectoriesForOrganization(organizationId);
 
     if (hasRole(authentication, "Administrator")
         || hasAccessToFunction(authentication, "Security.OrganizationAdministration")) {
@@ -1513,28 +2294,52 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the user directory
    */
-  @ApiOperation(value = "Retrieve the user directory", notes = "Retrieve the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the user directory", description = "Retrieve the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public UserDirectory getUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public UserDirectory getUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1548,29 +2353,54 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the capabilities the user directory supports
    */
-  @ApiOperation(value = "Retrieve the capabilities the user directory supports",
-      notes = "Retrieve the capabilities the user directory supports")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/capabilities",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the capabilities the user directory supports",
+      description = "Retrieve the capabilities the user directory supports")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/capabilities",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public UserDirectoryCapabilities getUserDirectoryCapabilities(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public UserDirectoryCapabilities getUserDirectoryCapabilities(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1579,8 +2409,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getUserDirectoryCapabilities(userDirectoryId);
@@ -1589,29 +2419,54 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the name of user directory
    */
-  @ApiOperation(value = "Retrieve the name of the user directory",
-      notes = "Retrieve the name of the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/name", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the name of the user directory",
+      description = "Retrieve the name of the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/name",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public String getUserDirectoryName(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public String getUserDirectoryName(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1625,73 +2480,115 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the summaries for the user directories.
    *
-   * @param filter        the optional filter to apply to the user directories
+   * @param filter the optional filter to apply to the user directories
    * @param sortDirection the optional sort direction to apply to the user directories
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the summaries for the user directories
    */
-  @ApiOperation(value = "Retrieve the summaries for the user directories",
-      notes = "Retrieve the summaries for the user directories")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directory-summaries", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the summaries for the user directories",
+      description = "Retrieve the summaries for the user directories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directory-summaries",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(@ApiParam(
-      name = "filter",
-      value = "The optional filter to apply to the user directories")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortDirection",
-      value = "The optional sort direction to apply to the user directories")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(
+      @Parameter(
+              name = "filter",
+              description = "The optional filter to apply to the user directories")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the user directories")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
-        filter)));
+    httpHeaders.add(
+        "x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(filter)));
 
-    return new ResponseEntity<>(securityService.getUserDirectorySummaries(filter, sortDirection,
-        pageIndex, pageSize), httpHeaders, HttpStatus.OK);
+    return new ResponseEntity<>(
+        securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize),
+        httpHeaders,
+        HttpStatus.OK);
   }
 
   /**
    * Retrieve the summaries for the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @return the summaries for the user directories the organization is associated with
    */
-  @ApiOperation(
-      value = "Retrieve the summaries for the user directories the organization is associated with",
-      notes = "Retrieve the summaries for the user directories the organization is associated with")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}/user-directory-summaries",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary =
+          "Retrieve the summaries for the user directories the organization is associated with",
+      description =
+          "Retrieve the summaries for the user directories the organization is associated with")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}/user-directory-summaries",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
   public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
-      @ApiParam(name = "organizationId",
-          value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-          required = true)
-      @PathVariable UUID organizationId)
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1716,38 +2613,61 @@ public class SecurityRestController extends SecureRestController {
 
       return new ResponseEntity<>(filteredUserDirectorySummaries, HttpStatus.OK);
     }
-
   }
 
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return the user directory type for the user directory
    */
-  @ApiOperation(value = "Retrieve the user directory type for the user directory",
-      notes = "Retrieve the user directory type for the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404,
-          message = "The user directory or user directory type could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/user-directory-type",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the user directory type for the user directory",
+      description = "Retrieve the user directory type for the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user directory type could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/user-directory-type",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
-  public UserDirectoryType getUserDirectoryTypeForUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public UserDirectoryType getUserDirectoryTypeForUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException,
-      UserDirectoryTypeNotFoundException, SecurityServiceException {
+          UserDirectoryTypeNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1755,8 +2675,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId);
@@ -1767,53 +2687,92 @@ public class SecurityRestController extends SecureRestController {
    *
    * @return the user directory types
    */
-  @ApiOperation(value = "Retrieve the user directory types",
-      notes = "Retrieve the user directory types")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directory-types", method = RequestMethod.GET,
+  @Operation(
+      summary = "Retrieve the user directory types",
+      description = "Retrieve the user directory types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directory-types",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public List<UserDirectoryType> getUserDirectoryTypes()
-      throws SecurityServiceException {
+  public List<UserDirectoryType> getUserDirectoryTypes() throws SecurityServiceException {
     return securityService.getUserDirectoryTypes();
   }
 
   /**
    * Retrieve the full name for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
    * @return the full name for the user
    */
-  @ApiOperation(value = "Retrieve the full name for the user",
-      notes = "Retrieve the full name for the user")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/full-name",
-      method = RequestMethod.GET, produces = "application/json")
+  @Operation(
+      summary = "Retrieve the full name for the user",
+      description = "Retrieve the full name for the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}/full-name",
+      method = RequestMethod.GET,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public String getUserFullName(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username)
+  public String getUserFullName(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1825,8 +2784,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     return RestUtil.quote(securityService.getUserFullName(userDirectoryId, username));
@@ -1835,46 +2794,76 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param filter          the optional filter to apply to the users
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
-   * @param sortDirection   the optional sort direction to apply to the users
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
-   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param filter the optional filter to apply to the users
+   * @param sortBy The optional method used to sort the users e.g. by last name.
+   * @param sortDirection the optional sort direction to apply to the users
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the users
    */
-  @ApiOperation(value = "Retrieve the users", notes = "Retrieve the users")
-  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.GET,
+  @Operation(summary = "Retrieve the users", description = "Retrieve the users")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users",
+      method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public ResponseEntity<List<User>> getUsers(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "filter",
-      value = "The optional filter to apply to the users")
-  @RequestParam(value = "filter", required = false) String filter, @ApiParam(name = "sortBy",
-      value = "The optional method used to sort the users e.g. by last name")
-  @RequestParam(value = "sortBy", required = false) UserSortBy sortBy, @ApiParam(
-      name = "sortDirection",
-      value = "The optional sort direction to apply to the users")
-  @RequestParam(value = "sortDirection", required = false) SortDirection sortDirection, @ApiParam(
-      name = "pageIndex",
-      value = "The optional page index", example = "0")
-  @RequestParam(value = "pageIndex", required = false) Integer pageIndex, @ApiParam(
-      name = "pageSize",
-      value = "The optional page size", example = "0")
-  @RequestParam(value = "pageSize", required = false) Integer pageSize)
+  public ResponseEntity<List<User>> getUsers(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(name = "filter", description = "The optional filter to apply to the users")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The optional method used to sort the users e.g. by last name")
+          @RequestParam(value = "sortBy", required = false)
+          UserSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the users")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -1883,12 +2872,13 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var users = securityService.getUsers(userDirectoryId, filter, sortBy, sortDirection, pageIndex,
-        pageSize);
+    var users =
+        securityService.getUsers(
+            userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize);
 
     var numberOfUsers = securityService.getNumberOfUsers(userDirectoryId, filter);
 
@@ -1901,41 +2891,76 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   * @param memberType      the group member type
-   * @param memberName      the name identifying the group member
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the name identifying the group member
    */
-  @ApiOperation(value = "Remove the group member from the group",
-      notes = "Remove the group member from the group")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The group member was successfully removed from the group"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404,
-          message = "The user directory or group or group member could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
+  @Operation(
+      summary = "Remove the group member from the group",
+      description = "Remove the group member from the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The group member was successfully removed from the group"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group or group member could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
   @RequestMapping(
-      value = "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
-      method = RequestMethod.DELETE, produces = "application/json")
+      value =
+          "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void removeMemberFromGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "memberType", value = "The group member type",
-      required = true)
-  @PathVariable GroupMemberType memberType, @ApiParam(name = "memberName",
-      value = "The name identifying the group member", required = true)
-  @PathVariable String memberName)
+  public void removeMemberFromGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(name = "memberType", description = "The group member type", required = true)
+          @PathVariable
+          GroupMemberType memberType,
+      @Parameter(
+              name = "memberName",
+              description = "The name identifying the group member",
+              required = true)
+          @PathVariable
+          String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      GroupMemberNotFoundException, SecurityServiceException {
+          GroupMemberNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -1955,8 +2980,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     securityService.removeMemberFromGroup(userDirectoryId, groupName, memberType, memberName);
@@ -1965,36 +2990,71 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
-   * @param roleCode        the code used to uniquely identify the role
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
+   * @param roleCode the code uniquely identifying the role
    */
-  @ApiOperation(value = "Remove the role from the group", notes = "Remove the role from the group")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The role was successfully removed from the group"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404,
-          message = "The user directory or group or group role could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles/{roleCode}",
-      method = RequestMethod.DELETE, produces = "application/json")
+  @Operation(
+      summary = "Remove the role from the group",
+      description = "Remove the role from the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The role was successfully removed from the group"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group or group role could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles/{roleCode}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void removeRoleFromGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "roleCode",
-      value = "The code used to uniquely identify the role", required = true)
-  @PathVariable String roleCode)
+  public void removeRoleFromGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(
+              name = "roleCode",
+              description = "The code uniquely identifying the role",
+              required = true)
+          @PathVariable
+          String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      GroupRoleNotFoundException, SecurityServiceException {
+          GroupRoleNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -2010,15 +3070,20 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (roleCode.equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
         && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
-      throw new AccessDeniedException("Insufficient authority to remove the " + SecurityService
-          .ADMINISTRATOR_ROLE_CODE + " role from the group (" + groupName
-          + ") for the user directory (" + userDirectoryId + ")");
+      throw new AccessDeniedException(
+          "Insufficient authority to remove the "
+              + SecurityService.ADMINISTRATOR_ROLE_CODE
+              + " role from the group ("
+              + groupName
+              + ") for the user directory ("
+              + userDirectoryId
+              + ")");
     }
 
     securityService.removeRoleFromGroup(userDirectoryId, groupName, roleCode);
@@ -2027,36 +3092,66 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the user directory from the organization.
    *
-   * @param organizationId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        organization
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
-  @ApiOperation(value = "Remove the user directory from the organization",
-      notes = "Remove the user directory from the organization")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The user directory was successfully removed from the organization"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404,
-          message = "The organization or organization user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}/user-directories/{userDirectoryId}",
-      method = RequestMethod.DELETE, produces = "application/json")
+  @Operation(
+      summary = "Remove the user directory from the organization",
+      description = "Remove the user directory from the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The user directory was successfully removed from the organization"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization or organization user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}/user-directories/{userDirectoryId}",
+      method = RequestMethod.DELETE,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void removeUserDirectoryFromOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId, @ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId)
+  public void removeUserDirectoryFromOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId,
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
       throws InvalidArgumentException, OrganizationNotFoundException,
-      OrganizationUserDirectoryNotFoundException, SecurityServiceException {
+          OrganizationUserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (organizationId == null) {
@@ -2075,25 +3170,52 @@ public class SecurityRestController extends SecureRestController {
    *
    * @param username the username identifying the user
    */
-  @ApiOperation(value = "Initiate the password reset process for the user",
-      notes = "Initiate the password reset process for the user")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The password reset process was initiated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/users/{username}/reset-password", method = RequestMethod.POST,
+  @Operation(
+      summary = "Initiate the password reset process for the user",
+      description = "Initiate the password reset process for the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The password reset process was initiated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/users/{username}/reset-password",
+      method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void resetPassword(@ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username, @ApiParam(
-      name = "resetPasswordUrl",
-      value = "The reset password URL")
-  @RequestParam(value = "resetPasswordUrl") String resetPasswordUrl)
+  public void resetPassword(
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username,
+      @Parameter(name = "resetPasswordUrl", description = "The reset password URL")
+          @RequestParam(value = "resetPasswordUrl")
+          String resetPasswordUrl)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
     if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
@@ -2105,32 +3227,62 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param groupName       the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param groupName the name identifying the group
    */
-  @ApiOperation(value = "Update the group", notes = "Update the group")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
-      method = RequestMethod.PUT, produces = "application/json")
+  @Operation(summary = "Update the group", description = "Update the group")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The group was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or group could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/groups/{groupName}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public void updateGroup(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
-      value = "The name identifying the group", required = true)
-  @PathVariable String groupName, @ApiParam(name = "group", value = "The group", required = true)
-  @RequestBody Group group)
+  public void updateGroup(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "groupName",
+              description = "The name identifying the group",
+              required = true)
+          @PathVariable
+          String groupName,
+      @Parameter(name = "group", description = "The group", required = true) @RequestBody
+          Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -2150,15 +3302,15 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("group", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "group", ValidationError.toValidationErrors(constraintViolations));
     }
 
     securityService.updateGroup(userDirectoryId, group);
@@ -2167,30 +3319,57 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   * @param organization   the organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @param organization the organization
    */
-  @ApiOperation(value = "Update the organization", notes = "Update the organization")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The organization was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.PUT,
+  @Operation(summary = "Update the organization", description = "Update the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The organization was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void updateOrganization(@ApiParam(name = "organizationId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
-      required = true)
-  @PathVariable UUID organizationId, @ApiParam(name = "organization", value = "The organization",
-      required = true)
-  @RequestBody Organization organization)
+  public void updateOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId,
+      @Parameter(name = "organization", description = "The organization", required = true)
+          @RequestBody
+          Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -2209,8 +3388,8 @@ public class SecurityRestController extends SecureRestController {
     Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
     }
 
     securityService.updateOrganization(organization);
@@ -2219,39 +3398,70 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param username        the username identifying the user
-   * @param user            the user
-   * @param expirePassword  expire the user's password
-   * @param lockUser        lock the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param username the username identifying the user
+   * @param user the user
+   * @param expirePassword expire the user's password
+   * @param lockUser lock the user
    */
-  @ApiOperation(value = "Update the user", notes = "Update the user")
-  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
-      method = RequestMethod.PUT, produces = "application/json")
+  @Operation(summary = "Update the user", description = "Update the user")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The user was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory or user could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/users/{username}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
-  public void updateUser(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
-      value = "The username identifying the user", required = true)
-  @PathVariable String username, @ApiParam(name = "user", value = "The user", required = true)
-  @RequestBody User user, @ApiParam(name = "expirePassword", value = "Expire the user's password")
-  @RequestParam(value = "expirePassword", required = false) Boolean expirePassword, @ApiParam(
-      name = "lockUser",
-      value = "Lock the user")
-  @RequestParam(value = "lockUser", required = false) Boolean lockUser)
+  public void updateUser(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(
+              name = "username",
+              description = "The username identifying the user",
+              required = true)
+          @PathVariable
+          String username,
+      @Parameter(name = "user", description = "The user", required = true) @RequestBody User user,
+      @Parameter(name = "expirePassword", description = "Expire the user's password")
+          @RequestParam(value = "expirePassword", required = false)
+          Boolean expirePassword,
+      @Parameter(name = "lockUser", description = "Lock the user")
+          @RequestParam(value = "lockUser", required = false)
+          Boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-      SecurityServiceException {
+          SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (userDirectoryId == null) {
@@ -2271,48 +3481,78 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
-          + ")");
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("user", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "user", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.updateUser(userDirectoryId, user, (expirePassword != null)
-        && expirePassword, (lockUser != null) && lockUser);
+    securityService.updateUser(
+        userDirectoryId,
+        user,
+        (expirePassword != null) && expirePassword,
+        (lockUser != null) && lockUser);
   }
 
   /**
    * Update the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   * @param userDirectory   the user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @param userDirectory the user directory
    */
-  @ApiOperation(value = "Update the user directory", notes = "Update the user directory")
-  @ApiResponses(value = {@ApiResponse(code = 204,
-      message = "The user directory was updated successfully"),
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
-      @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class),
-      @ApiResponse(code = 500,
-          message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class)})
-  @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.PUT,
+  @Operation(summary = "Update the user directory", description = "Update the user directory")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The user directory was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}",
+      method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public void updateUserDirectory(@ApiParam(name = "userDirectoryId",
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
-      required = true)
-  @PathVariable UUID userDirectoryId, @ApiParam(name = "userDirectory",
-      value = "The user directory", required = true)
-  @RequestBody UserDirectory userDirectory)
+  public void updateUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId,
+      @Parameter(name = "userDirectory", description = "The user directory", required = true)
+          @RequestBody
+          UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -2328,12 +3568,12 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
-        userDirectory);
+    Set<ConstraintViolation<UserDirectory>> constraintViolations =
+        validator.validate(userDirectory);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
 
     securityService.updateUserDirectory(userDirectory);
@@ -2343,12 +3583,11 @@ public class SecurityRestController extends SecureRestController {
    * Confirm that the user associated with the authenticated request has access to the user
    * directory.
    *
-   * @param authentication  the authenticated principal
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
-   *
+   * @param authentication the authenticated principal
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    * @return <code>true</code> if the user associated with the authenticated request has access to
-   * the user directory or <code>false</code> otherwise
+   *     the user directory or <code>false</code> otherwise
    */
   protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
       throws AccessDeniedException {
@@ -2363,8 +3602,8 @@ public class SecurityRestController extends SecureRestController {
     }
 
     // If the user is associated with the user directory then they have access
-    List<UUID> userDirectoryAuthorityValues = getUUIDValuesForAuthoritiesWithPrefix(authentication,
-        "USER_DIRECTORY_");
+    List<UUID> userDirectoryAuthorityValues =
+        getUUIDValuesForAuthoritiesWithPrefix(authentication, "USER_DIRECTORY_");
 
     return userDirectoryAuthorityValues.stream().anyMatch(userDirectoryId::equals);
   }

@@ -27,9 +27,7 @@ public class ResourceException extends RuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>ResourceException</code> with <code>null</code> as its message.
-   */
+  /** Constructs a new <code>ResourceException</code> with <code>null</code> as its message. */
   public ResourceException() {
     super();
   }
@@ -47,8 +45,8 @@ public class ResourceException extends RuntimeException {
    * Constructs a new <code>ResourceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ResourceException(String message, Throwable cause) {
     super(message, cause);

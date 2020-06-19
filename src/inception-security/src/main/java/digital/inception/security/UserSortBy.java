@@ -16,16 +16,16 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserSortBy</code> enumeration defines the possible methods used to sort a list of
@@ -33,25 +33,19 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserSortBy")
+@Schema(description = "UserSortBy")
 @XmlEnum
 @XmlType(name = "UserSortBy", namespace = "http://security.inception.digital")
 public enum UserSortBy {
-  /**
-   * Sort by first name.
-   */
+  /** Sort by first name. */
   @XmlEnumValue("FirstName")
   FIRST_NAME(0, "Sort By First Name"),
 
-  /**
-   * Sort by last name.
-   */
+  /** Sort by last name. */
   @XmlEnumValue("LastName")
   LAST_NAME(1, "Sort By Last Name"),
 
-  /**
-   * Sort by username.
-   */
+  /** Sort by username. */
   @XmlEnumValue("Username")
   USERNAME(2, "Sort By Username");
 
@@ -67,7 +61,6 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   @JsonCreator
@@ -88,7 +81,6 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   public static UserSortBy fromCode(String code) {

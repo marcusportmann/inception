@@ -19,8 +19,9 @@ package digital.inception.scheduler;
 /**
  * The <code>InvalidSchedulingPatternException</code> exception is thrown to indicate an error
  * condition when executing a job.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
@@ -43,8 +44,8 @@ public class InvalidSchedulingPatternException extends Exception {
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidSchedulingPatternException(String message, Throwable cause) {
     super(message, cause);

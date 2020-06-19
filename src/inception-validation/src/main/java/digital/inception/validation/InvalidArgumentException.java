@@ -16,7 +16,7 @@
 
 package digital.inception.validation;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition as a
  * result of an invalid argument.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
-@WebFault(name = "InvalidArgumentException",
+@WebFault(
+    name = "InvalidArgumentException",
     targetNamespace = "http://validation.inception.digital",
     faultBean = "digital.inception.validation.InvalidArgumentError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -45,19 +47,13 @@ public class InvalidArgumentException extends Exception {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The invalid argument error information.
-   */
+  /** The invalid argument error information. */
   private InvalidArgumentError invalidArgumentError;
 
-  /**
-   * The name of the invalid argument.
-   */
+  /** The name of the invalid argument. */
   private String name;
 
-  /**
-   * The validation errors associated with the invalid argument.
-   */
+  /** The validation errors associated with the invalid argument. */
   private List<ValidationError> validationErrors;
 
   /**
@@ -75,7 +71,7 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its message.
    *
-   * @param name             the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param validationErrors the validation errors associated with the invalid argument
    */
   public InvalidArgumentException(String name, List<ValidationError> validationErrors) {
@@ -89,7 +85,7 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message.
    *
-   * @param name    the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public InvalidArgumentException(String name, String message) {
@@ -104,9 +100,9 @@ public class InvalidArgumentException extends Exception {
    * of <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
    * message of cause).
    *
-   * @param name  the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, Throwable cause) {
     super(cause);
@@ -118,13 +114,12 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message.
    *
-   * @param name             the name of the invalid argument
-   * @param message          The message saved for later retrieval by the <code>getMessage()</code>
-   *                         method.
+   * @param name the name of the invalid argument
+   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param validationErrors the validation errors associated with the invalid argument
    */
-  public InvalidArgumentException(String name, String message,
-      List<ValidationError> validationErrors) {
+  public InvalidArgumentException(
+      String name, String message, List<ValidationError> validationErrors) {
     super(message);
 
     this.name = name;
@@ -135,10 +130,10 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message and cause.
    *
-   * @param name    the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, String message, Throwable cause) {
     super(message, cause);

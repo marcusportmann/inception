@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,20 +25,23 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DuplicateCaseDefinitionException</code> exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate case definition i.e a case definition
  * with the specified ID already exists.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "A case definition with the specified ID already exists")
-@WebFault(name = "DuplicateCaseDefinitionException",
+@WebFault(
+    name = "DuplicateCaseDefinitionException",
     targetNamespace = "http://bmi.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,10 +52,11 @@ public class DuplicateCaseDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateCaseDefinitionException</code>.
    *
-   * @param caseDefinitionId the ID used to uniquely identify the case definition
+   * @param caseDefinitionId the ID uniquely identifying the case definition
    */
   public DuplicateCaseDefinitionException(String caseDefinitionId) {
-    super("DuplicateCaseDefinitionError", "The case definition with ID ("
-        + caseDefinitionId + ") already exists");
+    super(
+        "DuplicateCaseDefinitionError",
+        "The case definition with ID (" + caseDefinitionId + ") already exists");
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.configuration;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +24,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ConfigurationRepository</code> interface declares the repository for the
- * <code>Configuration</code> domain type.
+ * The <code>ConfigurationRepository</code> interface declares the repository for the <code>
+ * Configuration</code> domain type.
  *
  * @author Marcus Portmann
  */

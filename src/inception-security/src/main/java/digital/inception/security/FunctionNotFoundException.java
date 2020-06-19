@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>FunctionNotFoundException</code> is thrown to indicate that a security operation failed
  * as a result of an authorised function that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The function could not be found")
-@WebFault(name = "FunctionNotFoundException", targetNamespace = "http://security.inception.digital",
+@WebFault(
+    name = "FunctionNotFoundException",
+    targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -47,10 +50,11 @@ public class FunctionNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>FunctionNotFoundException</code>.
    *
-   * @param functionCode the code used to uniquely identify the function
+   * @param functionCode the code uniquely identifying the function
    */
   public FunctionNotFoundException(String functionCode) {
-    super("FunctionNotFoundError", "A function with the code (" + functionCode
-        + ") could not be found");
+    super(
+        "FunctionNotFoundError",
+        "A function with the code (" + functionCode + ") could not be found");
   }
 }

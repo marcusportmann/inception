@@ -16,16 +16,13 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
-import com.mymobileapi.api5.API;
-import com.mymobileapi.api5.APISoap;
 import digital.inception.Debug;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import java.io.StringReader;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,10 +32,8 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.ws.BindingProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +47,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.
@@ -61,20 +56,15 @@ import org.xml.sax.InputSource;
  */
 @Service
 @SuppressWarnings("unused")
-public class SMSService
-    implements ISMSService {
+public class SMSService implements ISMSService {
 
-  /**
-   * The maximum SMS length.
-   */
+  /** The maximum SMS length. */
   private static final int MAXIMUM_SMS_LENGTH = 160;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
   /* Entity Manager */
@@ -84,39 +74,27 @@ public class SMSService
   /* The name of the SMS Service instance. */
   private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
-  /**
-   * The maximum number of times sending will be attempted for a SMS.
-   */
+  /** The maximum number of times sending will be attempted for a SMS. */
   @Value("${application.sms.maximumSendAttempts:100}")
   private int maximumSendAttempts;
 
-  /**
-   * The MyMobileAPI endpoint.
-   */
+  /** The MyMobileAPI endpoint. */
   @Value("${application.sms.myMobileAPIEndPoint:#{null}}")
   private String myMobileAPIEndPoint;
 
-  /**
-   * The MyMobileAPI password.
-   */
+  /** The MyMobileAPI password. */
   @Value("${application.sms.myMobileAPIPassword:#{null}}")
   private String myMobileAPIPassword;
 
-  /**
-   * The MyMobileAPI username.
-   */
+  /** The MyMobileAPI username. */
   @Value("${application.sms.myMobileAPIUsername:#{null}}")
   private String myMobileAPIUsername;
 
-  /**
-   * The delay in milliseconds to wait before re-attempting to send a SMS.
-   */
+  /** The delay in milliseconds to wait before re-attempting to send a SMS. */
   @Value("${application.sms.sendRetryDelay:600000}")
   private int sendRetryDelay;
 
-  /**
-   * The SMS Repository.
-   */
+  /** The SMS Repository. */
   private SMSRepository smsRepository;
 
   /**
@@ -136,8 +114,7 @@ public class SMSService
    */
   @Override
   @Transactional
-  public void createSMS(SMS sms)
-      throws SMSServiceException {
+  public void createSMS(SMS sms) throws SMSServiceException {
     try {
       if (sms.getId() == null) {
         sms.setId(UUID.randomUUID());
@@ -156,8 +133,7 @@ public class SMSService
    */
   @Override
   @Transactional
-  public void deleteSMS(UUID smsId)
-      throws SMSNotFoundException, SMSServiceException {
+  public void deleteSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException {
     try {
       if (!smsRepository.existsById(smsId)) {
         throw new SMSNotFoundException(smsId);
@@ -183,16 +159,15 @@ public class SMSService
 
   /**
    * Retrieve the next SMS that has been queued for sending.
-   * <p/>
-   * The SMS will be locked to prevent duplicate sending.
+   *
+   * <p>The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   * currently queued for sending
+   *     currently queued for sending
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public SMS getNextSMSQueuedForSending()
-      throws SMSServiceException {
+  public SMS getNextSMSQueuedForSending() throws SMSServiceException {
     try {
       LocalDateTime lastProcessedBefore = LocalDateTime.now();
 
@@ -200,8 +175,8 @@ public class SMSService
 
       PageRequest pageRequest = PageRequest.of(0, 1);
 
-      List<SMS> smss = smsRepository.findSMSsScheduledForExecutionForWrite(lastProcessedBefore,
-          pageRequest);
+      List<SMS> smss =
+          smsRepository.findSMSsScheduledForExecutionForWrite(lastProcessedBefore, pageRequest);
 
       if (smss.size() > 0) {
         SMS sms = smss.get(0);
@@ -234,41 +209,43 @@ public class SMSService
    * @return the number of SMS credits remaining
    */
   @Override
-  public int getNumberOfSMSCreditsRemaining()
-      throws SMSServiceException {
-    try {
-      APISoap myMobileAPIService = getMyMobileAPIService();
+  public int getNumberOfSMSCreditsRemaining() throws SMSServiceException {
 
-      String apiResultXml = myMobileAPIService.creditsSTR(myMobileAPIUsername, myMobileAPIPassword);
+    return 0;
 
-      Element apiResultElement = parseAPIResultXML(apiResultXml);
-
-      Element dataElement = XmlUtil.getChildElement(apiResultElement, "data");
-
-      if (dataElement == null) {
-        throw new RuntimeException("Invalid API result XML: data element not found");
-      }
-
-      String credits = XmlUtil.getChildElementText(dataElement, "credits");
-
-      return StringUtils.isEmpty(credits)
-          ? 0
-          : Integer.parseInt(credits);
-    } catch (Throwable e) {
-      throw new SMSServiceException("Failed to retrieve the number of SMS credits remaining", e);
-    }
+    //    try {
+    //      APISoap myMobileAPIService = getMyMobileAPIService();
+    //
+    //      String apiResultXml = myMobileAPIService.creditsSTR(myMobileAPIUsername,
+    // myMobileAPIPassword);
+    //
+    //      Element apiResultElement = parseAPIResultXML(apiResultXml);
+    //
+    //      Element dataElement = XmlUtil.getChildElement(apiResultElement, "data");
+    //
+    //      if (dataElement == null) {
+    //        throw new RuntimeException("Invalid API result XML: data element not found");
+    //      }
+    //
+    //      String credits = XmlUtil.getChildElementText(dataElement, "credits");
+    //
+    //      return StringUtils.isEmpty(credits)
+    //          ? 0
+    //          : Integer.parseInt(credits);
+    //    } catch (Throwable e) {
+    //      throw new SMSServiceException("Failed to retrieve the number of SMS credits remaining",
+    // e);
+    //    }
   }
 
   /**
    * Retrieve the SMS.
    *
    * @param smsId the ID uniquely identifying the SMS
-   *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
-  public SMS getSMS(UUID smsId)
-      throws SMSNotFoundException, SMSServiceException {
+  public SMS getSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException {
     try {
       Optional<SMS> smsOptional = smsRepository.findById(smsId);
 
@@ -280,39 +257,42 @@ public class SMSService
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to retrieve the SMS (" + smsId + ") from the database",
-          e);
+      throw new SMSServiceException(
+          "Failed to retrieve the SMS (" + smsId + ") from the database", e);
     }
   }
 
   /**
    * Reset the SMS locks.
    *
-   * @param status    the current status of the SMSs that have been locked
+   * @param status the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   @Override
   @Transactional
-  public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
-      throws SMSServiceException {
+  public void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws SMSServiceException {
     try {
       smsRepository.resetSMSLocks(status, newStatus, instanceName);
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to reset the locks for the SMSs with the status ("
-          + status + ") that have been locked using the lock name (" + instanceName + ")", e);
+      throw new SMSServiceException(
+          "Failed to reset the locks for the SMSs with the status ("
+              + status
+              + ") that have been locked using the lock name ("
+              + instanceName
+              + ")",
+          e);
     }
   }
 
   /**
    * Send the SMS.
-   * <p/>
-   * NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
+   *
+   * <p>NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
    *
    * @param mobileNumber the mobile number
-   * @param message      the message
+   * @param message the message
    */
-  public void sendSMS(String mobileNumber, String message)
-      throws SMSServiceException {
+  public void sendSMS(String mobileNumber, String message) throws SMSServiceException {
     try {
       SMS sms = new SMS(mobileNumber, message, SMSStatus.QUEUED_FOR_SENDING);
 
@@ -320,20 +300,19 @@ public class SMSService
 
       applicationContext.getBean(BackgroundSMSSender.class).sendSMSs();
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to queue the SMS for the mobile number ("
-          + mobileNumber + ") for sending", e);
+      throw new SMSServiceException(
+          "Failed to queue the SMS for the mobile number (" + mobileNumber + ") for sending", e);
     }
   }
 
   /**
    * Send the SMS synchronously.
-   * <p/>
-   * NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
    *
-   * @param smsId        the ID of the SMS
+   * <p>NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
+   *
+   * @param smsId the ID of the SMS
    * @param mobileNumber the mobile number
-   * @param message      the message
-   *
+   * @param message the message
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
@@ -356,14 +335,19 @@ public class SMSService
       }
 
       if (Debug.inDebugMode()) {
-        logger.info("Skipping sending of SMS (" + message + ") to mobile number (" + mobileNumber
-            + ") in DEBUG mode");
+        logger.info(
+            "Skipping sending of SMS ("
+                + message
+                + ") to mobile number ("
+                + mobileNumber
+                + ") in DEBUG mode");
 
         return true;
       }
 
       String sendXML = buildSendDataXml(smsId, mobileNumber, message);
 
+      /*
       APISoap myMobileAPIService = getMyMobileAPIService();
 
       String apiResultXml = myMobileAPIService.sendSTRSTR(myMobileAPIUsername, myMobileAPIPassword,
@@ -436,17 +420,18 @@ public class SMSService
         logger.debug("Successfully sent a SMS using the mobile number (" + mobileNumber + ")");
       }
 
+      */
       return true;
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to send the SMS to the mobile number (" + mobileNumber
-          + ")", e);
+      throw new SMSServiceException(
+          "Failed to send the SMS to the mobile number (" + mobileNumber + ")", e);
     }
   }
 
   /**
    * Set the status for the SMS.
    *
-   * @param smsId  the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
   @Override
@@ -462,15 +447,20 @@ public class SMSService
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to set the status for the SMS (" + smsId + ") to ("
-          + status + ") in the database", e);
+      throw new SMSServiceException(
+          "Failed to set the status for the SMS ("
+              + smsId
+              + ") to ("
+              + status
+              + ") in the database",
+          e);
     }
   }
 
   /**
    * Unlock the SMS.
    *
-   * @param smsId  the ID uniquely identifying the SMS
+   * @param smsId the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
   @Override
@@ -486,8 +476,13 @@ public class SMSService
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to unlock and set the status for the SMS (" + smsId
-          + ") to (" + status + ") in the database", e);
+      throw new SMSServiceException(
+          "Failed to unlock and set the status for the SMS ("
+              + smsId
+              + ") to ("
+              + status
+              + ") in the database",
+          e);
     }
   }
 
@@ -500,13 +495,31 @@ public class SMSService
     // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
 
     return "<senddata><settings><live>True</live>"
-        + "<return_credits>True</return_credits><default_date>" + dateFormat.format(now)
-        + "</default_date><default_time>" + timeFormat.format(now) + "</default_time>"
-        + "<default_curdate>" + dateFormat.format(now) + "</default_curdate><default_curtime>"
-        + timeFormat.format(now) + "</default_curtime><mo_forwardemail>"
-        + "sms-reply@mmp.guru</mo_forwardemail>" + "</settings>" + "<entries>" + "<numto>"
-        + mobileNumber + "</numto><customerid>" + smsId + "</customerid>" + "<data1>" + message
-        + "</data1><type>" + "SMS" + "</type>" + "</entries>" + "</senddata>";
+        + "<return_credits>True</return_credits><default_date>"
+        + dateFormat.format(now)
+        + "</default_date><default_time>"
+        + timeFormat.format(now)
+        + "</default_time>"
+        + "<default_curdate>"
+        + dateFormat.format(now)
+        + "</default_curdate><default_curtime>"
+        + timeFormat.format(now)
+        + "</default_curtime><mo_forwardemail>"
+        + "sms-reply@mmp.guru</mo_forwardemail>"
+        + "</settings>"
+        + "<entries>"
+        + "<numto>"
+        + mobileNumber
+        + "</numto><customerid>"
+        + smsId
+        + "</customerid>"
+        + "<data1>"
+        + message
+        + "</data1><type>"
+        + "SMS"
+        + "</type>"
+        + "</entries>"
+        + "</senddata>";
   }
 
   private String formatMobileNumber(String mobileNumber) {
@@ -534,6 +547,7 @@ public class SMSService
     return mobileNumber;
   }
 
+  /*
   private APISoap getMyMobileAPIService() {
     // Retrieve the proxy for the MyMobileAPI service
     URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
@@ -551,6 +565,7 @@ public class SMSService
 
     return apiSoap;
   }
+  */
 
   private Element parseAPIResultXML(String xml) {
     try {
@@ -589,10 +604,9 @@ public class SMSService
       if (!result) {
         String error = XmlUtil.getChildElementText(callResultElement, "error");
 
-        throw new RuntimeException("The MyMobileAPI service returned an error: "
-            + (StringUtils.isEmpty(error)
-            ? "UNKNOWN"
-            : error));
+        throw new RuntimeException(
+            "The MyMobileAPI service returned an error: "
+                + (StringUtils.isEmpty(error) ? "UNKNOWN" : error));
       }
 
       return apiResultElement;

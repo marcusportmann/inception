@@ -16,21 +16,20 @@
 
 package digital.inception.persistence;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JtaPlatform</code> class.
  *
  * @author Marcus Portmann
  */
-
 public class JtaPlatform extends AbstractJtaPlatform {
 
   private final JtaTransactionManager transactionManager;

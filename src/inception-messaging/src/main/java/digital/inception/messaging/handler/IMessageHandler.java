@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.handler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.messaging.Message;
 
@@ -39,9 +39,7 @@ public interface IMessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   *
    * @return the response message or <code>null</code> if no response message exists
    */
-  Message processMessage(Message message)
-      throws MessageHandlerException;
+  Message processMessage(Message message) throws MessageHandlerException;
 }

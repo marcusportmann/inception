@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,20 +25,23 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DuplicateMailTemplateException</code> exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate mail template i.e a mail template with
  * the specified ID already exists.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "A mail template with the specified ID already exists")
-@WebFault(name = "DuplicateMailTemplateException",
+@WebFault(
+    name = "DuplicateMailTemplateException",
     targetNamespace = "http://mail.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,10 +52,11 @@ public class DuplicateMailTemplateException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateMailTemplateException</code>.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the ID uniquely identifying the mail template
    */
   public DuplicateMailTemplateException(String mailTemplateId) {
-    super("DuplicateMailTemplateError", "The mail template with ID (" + mailTemplateId
-        + ") already exists");
+    super(
+        "DuplicateMailTemplateError",
+        "The mail template with ID (" + mailTemplateId + ") already exists");
   }
 }

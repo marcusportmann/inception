@@ -16,14 +16,13 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -40,42 +39,39 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplate</code> class holds the information for a mail template.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "MailTemplate")
+@Schema(description = "MailTemplate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType", "template", "updated"})
 @XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")
-@XmlType(name = "MailTemplate", namespace = "http://mail.inception.digital",
+@XmlType(
+    name = "MailTemplate",
+    namespace = "http://mail.inception.digital",
     propOrder = {"id", "name", "contentType", "template", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
 @SuppressWarnings({"unused"})
-public class MailTemplate
-    implements Serializable {
+public class MailTemplate implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The content type for the mail template.
-   */
-  @ApiModelProperty(value = "The content type for the mail template", required = true)
+  /** The content type for the mail template. */
+  @Schema(description = "The content type for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ContentType", required = true)
   @NotNull
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
 
-  /**
-   * The ID used to uniquely identify the mail template.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the mail template", required = true)
+  /** The ID uniquely identifying the mail template. */
+  @Schema(description = "The ID uniquely identifying the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -84,10 +80,8 @@ public class MailTemplate
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the mail template.
-   */
-  @ApiModelProperty(value = "The name of the mail template", required = true)
+  /** The name of the mail template. */
+  @Schema(description = "The name of the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -95,10 +89,8 @@ public class MailTemplate
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The Apache FreeMarker template for the mail template.
-   */
-  @ApiModelProperty(value = "The Apache FreeMarker template for the mail template", required = true)
+  /** The Apache FreeMarker template for the mail template. */
+  @Schema(description = "The Apache FreeMarker template for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Template", required = true)
   @NotNull
@@ -106,10 +98,8 @@ public class MailTemplate
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /**
-   * The date and time the mail template was last updated.
-   */
-  @ApiModelProperty(value = "The date and time the mail template was last updated")
+  /** The date and time the mail template was last updated. */
+  @Schema(description = "The date and time the mail template was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -117,22 +107,19 @@ public class MailTemplate
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <code>MailTemplate</code>.
-   */
-  public MailTemplate() {
-  }
+  /** Constructs a new <code>MailTemplate</code>. */
+  public MailTemplate() {}
 
   /**
    * Constructs a new <code>MailTemplate</code>.
    *
-   * @param id          the ID used to uniquely identify the mail template
-   * @param name        the name of the mail template
+   * @param id the ID uniquely identifying the mail template
+   * @param name the name of the mail template
    * @param contentType the content type for the mail template
-   * @param template    the Apache FreeMarker template for the mail template
+   * @param template the Apache FreeMarker template for the mail template
    */
-  public MailTemplate(String id, String name, MailTemplateContentType contentType,
-      byte[] template) {
+  public MailTemplate(
+      String id, String name, MailTemplateContentType contentType, byte[] template) {
     this.id = id;
     this.name = name;
     this.contentType = contentType;
@@ -143,9 +130,8 @@ public class MailTemplate
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -185,18 +171,18 @@ public class MailTemplate
   }
 
   /**
-   * Returns the ID used to uniquely identify the mail template.
+   * Returns the ID uniquely identifying the mail template.
    *
-   * @return the ID used to uniquely identify the mail template
+   * @return the ID uniquely identifying the mail template
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the mail template.
+   * Set the ID uniquely identifying the mail template.
    *
-   * @param id the ID used to uniquely identify the mail template
+   * @param id the ID uniquely identifying the mail template
    */
   public void setId(String id) {
     this.id = id;
@@ -263,9 +249,7 @@ public class MailTemplate
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -275,7 +259,12 @@ public class MailTemplate
    */
   @Override
   public String toString() {
-    return "MailTemplate {id=\"" + getId() + "\", name=\"" + getName() + "\", contentType=\""
-        + getContentType() + "\"}";
+    return "MailTemplate {id=\""
+        + getId()
+        + "\", name=\""
+        + getName()
+        + "\", contentType=\""
+        + getContentType()
+        + "\"}";
   }
 }

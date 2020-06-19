@@ -16,28 +16,26 @@
 
 package digital.inception.security;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>UserStatusConverter</code> class implements the custom JPA converter for the
- * <code>UserStatus</code> enumeration.
+ * The <code>UserStatusConverter</code> class implements the custom JPA converter for the <code>
+ * UserStatus</code> enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
-public class UserStatusConverter
-    implements AttributeConverter<UserStatus, Integer> {
+public class UserStatusConverter implements AttributeConverter<UserStatus, Integer> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
    *
    * @param attribute the entity attribute value to be converted
-   *
    * @return the converted data to be stored in the database column
    */
   @Override
@@ -52,7 +50,6 @@ public class UserStatusConverter
    * providers are not expected to do such type conversion.
    *
    * @param dbData the data from the database column to be converted
-   *
    * @return the converted value to be stored in the entity attribute
    */
   @Override

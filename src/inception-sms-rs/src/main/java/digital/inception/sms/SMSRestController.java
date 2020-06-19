@@ -16,42 +16,38 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.SecureRestController;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSRestController</code> class.
  *
  * @author Marcus Portmann
  */
-@Api(tags = "SMS API")
+@Tag(name = "SMS API")
 @RestController
 @RequestMapping(value = "/api/sms")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SMSRestController extends SecureRestController {
 
-  /**
-   * The SMS Service.
-   */
-  private ISMSService smsService;
+  /** The SMS Service. */
+  private final ISMSService smsService;
 
-  /**
-   * The JSR-303 validator.
-   */
-  private Validator validator;
+  /** The JSR-303 validator. */
+  private final Validator validator;
 
   /**
    * Constructs a new <code>SMSRestController</code>.
    *
    * @param smsService the SMS Service
-   * @param validator  the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SMSRestController(ISMSService smsService, Validator validator) {
     this.smsService = smsService;

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -34,11 +34,8 @@ import org.springframework.stereotype.Component;
 public class IntegerToOrganizationStatusConverter
     implements Converter<Integer, OrganizationStatus> {
 
-  /**
-   * Constructs a new <code>IntegerToOrganizationStatusConverter</code>.
-   */
-  public IntegerToOrganizationStatusConverter() {
-  }
+  /** Constructs a new <code>IntegerToOrganizationStatusConverter</code>. */
+  public IntegerToOrganizationStatusConverter() {}
 
   @Override
   public OrganizationStatus convert(Integer source) {

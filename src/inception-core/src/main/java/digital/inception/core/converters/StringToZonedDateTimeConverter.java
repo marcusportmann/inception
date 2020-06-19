@@ -16,7 +16,7 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.ZonedDateTime;
@@ -24,7 +24,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>StringToZonedDateTimeConverter</code> class implements the Spring converter that
@@ -34,14 +34,10 @@ import org.springframework.util.StringUtils;
  */
 @SuppressWarnings("unused")
 @Component
-public final class StringToZonedDateTimeConverter
-    implements Converter<String, ZonedDateTime> {
+public final class StringToZonedDateTimeConverter implements Converter<String, ZonedDateTime> {
 
-  /**
-   * Constructs a new <code>StringToZonedDateTimeConverter</code>.
-   */
-  public StringToZonedDateTimeConverter() {
-  }
+  /** Constructs a new <code>StringToZonedDateTimeConverter</code>. */
+  public StringToZonedDateTimeConverter() {}
 
   @Override
   public ZonedDateTime convert(String source) {
@@ -52,8 +48,8 @@ public final class StringToZonedDateTimeConverter
     try {
       return ISO8601Util.toZonedDateTime(source);
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to parse the ISO8601Util date time value (" + source
-          + ")", e);
+      throw new RuntimeException(
+          "Failed to parse the ISO8601Util date time value (" + source + ")", e);
     }
   }
 }

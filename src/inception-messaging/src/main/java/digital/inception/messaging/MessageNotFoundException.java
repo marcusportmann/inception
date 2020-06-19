@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,18 +26,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageNotFoundException</code> exception is thrown to indicate an error condition as a
  * result of a message that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The message could not be found")
-@WebFault(name = "MessageNotFoundException", targetNamespace = "http://messaging.inception.digital",
+@WebFault(
+    name = "MessageNotFoundException",
+    targetNamespace = "http://messaging.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused"})
@@ -48,8 +51,7 @@ public class MessageNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>MessageNotFoundException</code>.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                  message
+   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    */
   public MessageNotFoundException(UUID messageId) {
     super("MessageNotFoundError", "The message with ID (" + messageId + ") could not be found");

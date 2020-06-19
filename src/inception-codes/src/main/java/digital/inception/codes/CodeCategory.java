@@ -16,14 +16,13 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -40,40 +39,37 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategory</code> class holds the information for a code category.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "CodeCategory")
+@Schema(description = "CodeCategory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "data", "updated"})
 @XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
-@XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital",
+@XmlType(
+    name = "CodeCategory",
+    namespace = "http://codes.inception.digital",
     propOrder = {"id", "name", "data", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
-public class CodeCategory
-    implements Serializable {
+public class CodeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional code data for the code category.
-   */
-  @ApiModelProperty(value = "The optional code data for the code category")
+  /** The optional code data for the code category. */
+  @Schema(description = "The optional code data for the code category")
   @JsonProperty
   @XmlElement(name = "Data")
   @Column(name = "data")
   private String data;
 
-  /**
-   * The ID used to uniquely identify the code category.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the code category", required = true)
+  /** The ID uniquely identifying the code category. */
+  @Schema(description = "The ID uniquely identifying the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -82,10 +78,8 @@ public class CodeCategory
   @Column(name = "id", nullable = false, length = 100)
   private String id;
 
-  /**
-   * The name of the code category.
-   */
-  @ApiModelProperty(value = "The name of the code category", required = true)
+  /** The name of the code category. */
+  @Schema(description = "The name of the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -93,10 +87,8 @@ public class CodeCategory
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The date and time the code category was last updated.
-   */
-  @ApiModelProperty(value = "The date and time the code category was last updated")
+  /** The date and time the code category was last updated. */
+  @Schema(description = "The date and time the code category was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -104,16 +96,13 @@ public class CodeCategory
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <code>CodeCategory</code>.
-   */
-  public CodeCategory() {
-  }
+  /** Constructs a new <code>CodeCategory</code>. */
+  public CodeCategory() {}
 
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id   the ID used to uniquely identify the code category
+   * @param id the ID uniquely identifying the code category
    * @param name the name of the code category
    */
   public CodeCategory(String id, String name) {
@@ -124,7 +113,7 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id   the ID used to uniquely identify the code category
+   * @param id the ID uniquely identifying the code category
    * @param name the name of the code category
    * @param data the optional code data for the code category
    */
@@ -137,9 +126,9 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id      the ID used to uniquely identify the code category
-   * @param name    the name of the code category
-   * @param data    the optional code data for the code category
+   * @param id the ID uniquely identifying the code category
+   * @param name the name of the code category
+   * @param data the optional code data for the code category
    * @param updated the date and time the code category was last updated
    */
   public CodeCategory(String id, String name, String data, LocalDateTime updated) {
@@ -153,9 +142,8 @@ public class CodeCategory
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -195,18 +183,18 @@ public class CodeCategory
   }
 
   /**
-   * Returns the ID used to uniquely identify the code category.
+   * Returns the ID uniquely identifying the code category.
    *
-   * @return the ID used to uniquely identify the code category
+   * @return the ID uniquely identifying the code category
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the code category.
+   * Set the ID uniquely identifying the code category.
    *
-   * @param id the ID used to uniquely identify the code category
+   * @param id the ID uniquely identifying the code category
    */
   public void setId(String id) {
     this.id = id;
@@ -255,8 +243,6 @@ public class CodeCategory
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

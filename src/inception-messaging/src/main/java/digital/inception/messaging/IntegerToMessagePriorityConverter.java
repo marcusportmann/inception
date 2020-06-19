@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToMessagePriorityConverter
-    implements Converter<Integer, MessagePriority> {
+public class IntegerToMessagePriorityConverter implements Converter<Integer, MessagePriority> {
 
-  /**
-   * Constructs a new <code>IntegerToMessagePriorityConverter</code>.
-   */
-  public IntegerToMessagePriorityConverter() {
-  }
+  /** Constructs a new <code>IntegerToMessagePriorityConverter</code>. */
+  public IntegerToMessagePriorityConverter() {}
 
   @Override
   public MessagePriority convert(Integer source) {

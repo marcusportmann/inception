@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
@@ -34,11 +34,8 @@ import org.springframework.stereotype.Component;
 public class PasswordChangeReasonToIntegerConverter
     implements Converter<PasswordChangeReason, Integer> {
 
-  /**
-   * Constructs a new <code>PasswordChangeReasonToIntegerConverter</code>.
-   */
-  public PasswordChangeReasonToIntegerConverter() {
-  }
+  /** Constructs a new <code>PasswordChangeReasonToIntegerConverter</code>. */
+  public PasswordChangeReasonToIntegerConverter() {}
 
   @Override
   public Integer convert(PasswordChangeReason source) {

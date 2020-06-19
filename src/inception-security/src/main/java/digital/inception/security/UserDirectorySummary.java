@@ -16,14 +16,13 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -44,32 +43,34 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectorySummary</code> class holds the summary information for a user directory.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserDirectorySummary")
+@Schema(description = "UserDirectorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")
-@XmlType(name = "UserDirectorySummary", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "UserDirectorySummary",
+    namespace = "http://security.inception.digital",
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "user_directories")
 @SuppressWarnings({"unused"})
-public class UserDirectorySummary
-    implements java.io.Serializable {
+public class UserDirectorySummary implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -77,10 +78,8 @@ public class UserDirectorySummary
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the user directory.
-   */
-  @ApiModelProperty(value = "The name of the user directory", required = true)
+  /** The name of the user directory. */
+  @Schema(description = "The name of the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -88,22 +87,19 @@ public class UserDirectorySummary
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The user directories associated with the organization.
-   */
+  /** The user directories associated with the organization. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.REFRESH})
-  @JoinTable(schema = "security", name = "user_directory_to_organization_map",
+  @JoinTable(
+      schema = "security",
+      name = "user_directory_to_organization_map",
       joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
   private Set<Organization> organizations = new HashSet<>();
 
-  /**
-   * The code used to uniquely identify the user directory type.
-   */
-  @ApiModelProperty(value = "The code used to uniquely identify the user directory type",
-      required = true)
+  /** The code uniquely identifying the user directory type. */
+  @Schema(description = "The code uniquely identifying the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -111,19 +107,15 @@ public class UserDirectorySummary
   @Column(name = "type", nullable = false, length = 100)
   private String type;
 
-  /**
-   * Constructs a new <code>UserDirectorySummary</code>.
-   */
-  public UserDirectorySummary() {
-  }
+  /** Constructs a new <code>UserDirectorySummary</code>. */
+  public UserDirectorySummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -145,19 +137,18 @@ public class UserDirectorySummary
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *           directory
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public void setId(UUID id) {
     this.id = id;
@@ -182,18 +173,18 @@ public class UserDirectorySummary
   }
 
   /**
-   * Returns the code used to uniquely identify the user directory type.
+   * Returns the code uniquely identifying the user directory type.
    *
-   * @return the code used to uniquely identify the user directory type
+   * @return the code uniquely identifying the user directory type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Set the code used to uniquely identify the user directory type.
+   * Set the code uniquely identifying the user directory type.
    *
-   * @param type the code used to uniquely identify the user directory type
+   * @param type the code uniquely identifying the user directory type
    */
   public void setType(String type) {
     this.type = type;
@@ -206,8 +197,6 @@ public class UserDirectorySummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

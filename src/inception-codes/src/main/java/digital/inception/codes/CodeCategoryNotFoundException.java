@@ -16,7 +16,7 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryNotFoundException</code> exception is thrown to indicate an error condition
  * as a result of a code category that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The code category could not be found")
-@WebFault(name = "CodeCategoryNotFoundException",
+@WebFault(
+    name = "CodeCategoryNotFoundException",
     targetNamespace = "http://codes.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -47,10 +49,11 @@ public class CodeCategoryNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>CodeCategoryNotFoundException</code>.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category
+   * @param codeCategoryId the ID uniquely identifying the code category
    */
   public CodeCategoryNotFoundException(String codeCategoryId) {
-    super("CodeCategoryNotFoundError", "The code category with ID (" + codeCategoryId
-        + ") could not be found");
+    super(
+        "CodeCategoryNotFoundError",
+        "The code category with ID (" + codeCategoryId + ") could not be found");
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,25 +26,22 @@ import java.util.Map;
 import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ClientDetails</code> class holds the information for an OAuth2 client.
  *
  * @author Marcus Portmann
  */
-public class ClientDetails
-    implements org.springframework.security.oauth2.provider.ClientDetails {
+public class ClientDetails implements org.springframework.security.oauth2.provider.ClientDetails {
 
-  /**
-   * The ID used to uniquely identify the client.
-   */
+  /** The ID uniquely identifying the client. */
   private String clientId;
 
   /**
    * Constructs a new <code>ClientDetails</code>.
    *
-   * @param clientId the ID used to uniquely identify the client
+   * @param clientId the ID uniquely identifying the client
    */
   public ClientDetails(String clientId) {
     this.clientId = clientId;
@@ -65,7 +62,7 @@ public class ClientDetails
    * useful, for example, for storing descriptive information.
    *
    * @return the information for this client, not needed by the vanilla OAuth protocol but might be
-   * useful, for example, for storing descriptive information
+   *     useful, for example, for storing descriptive information
    */
   @Override
   public Map<String, Object> getAdditionalInformation() {
@@ -102,9 +99,9 @@ public class ClientDetails
   }
 
   /**
-   * Returns the ID used to uniquely identify the client.
+   * Returns the ID uniquely identifying the client.
    *
-   * @return the ID used to uniquely identify the client
+   * @return the ID uniquely identifying the client
    */
   @Override
   public String getClientId() {
@@ -136,7 +133,7 @@ public class ClientDetails
    * access grant.
    *
    * @return the pre-defined redirect URI for this client to use during the "authorization_code"
-   * access grant
+   *     access grant
    */
   @Override
   public Set<String> getRegisteredRedirectUri() {
@@ -167,9 +164,8 @@ public class ClientDetails
    * Returns whether the client needs user approval for a particular scope.
    *
    * @param scope the scope
-   *
    * @return <code>true</code> if the client does not need user approval for a particular scope or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
   public boolean isAutoApprove(String scope) {
@@ -180,7 +176,7 @@ public class ClientDetails
    * Returns whether this client is limited to a specific scope.
    *
    * @return <code>true</code> if this client is limited to a specific scope or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   @Override
   public boolean isScoped() {
@@ -190,8 +186,8 @@ public class ClientDetails
   /**
    * Returns whether a secret is required to authenticate this client.
    *
-   * @return <code>true</code> if a secret is required to authenticate this client or
-   * <code>false</code> otherwise
+   * @return <code>true</code> if a secret is required to authenticate this client or <code>false
+   *     </code> otherwise
    */
   @Override
   public boolean isSecretRequired() {

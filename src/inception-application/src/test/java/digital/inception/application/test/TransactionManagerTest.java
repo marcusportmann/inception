@@ -16,7 +16,7 @@
 
 package digital.inception.application.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -33,28 +33,28 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-/**
- * The <code>TransactionManagerTest</code> class.
- */
+/** The <code>TransactionManagerTest</code> class. */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 public class TransactionManagerTest {
 
-  @Autowired
-  private PlatformTransactionManager platformTransactionManager;
+  @Autowired private PlatformTransactionManager platformTransactionManager;
 
-  /**
-   * Test the JTA Transaction Manager.
-   */
+  /** Test the JTA Transaction Manager. */
   @Test
   public void transactionManagerTest() {
-    platformTransactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition
-        .PROPAGATION_NEVER));
+    platformTransactionManager.getTransaction(
+        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_NEVER));
 
-    TransactionStatus transactionStatus = platformTransactionManager.getTransaction(
-        new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
+    TransactionStatus transactionStatus =
+        platformTransactionManager.getTransaction(
+            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
 
     platformTransactionManager.rollback(transactionStatus);
   }

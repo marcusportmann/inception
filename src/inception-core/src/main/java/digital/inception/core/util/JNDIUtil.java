@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -81,9 +81,7 @@ public final class JNDIUtil {
     }
   }
 
-  /**
-   * Dump the contents of the JNDIUtil tree.
-   */
+  /** Dump the contents of the JNDIUtil tree. */
   public static void dumpJNDI() {
     dumpJNDI(new PrintWriter(System.out));
   }
@@ -152,8 +150,8 @@ public final class JNDIUtil {
     }
   }
 
-  private static void dumpNameSpace(PrintWriter pw, TreeDumpStatus treeDumpStatus, Context context,
-      String path, int depth)
+  private static void dumpNameSpace(
+      PrintWriter pw, TreeDumpStatus treeDumpStatus, Context context, String path, int depth)
       throws NamingException {
     StringBuilder indent = new StringBuilder();
 
@@ -168,8 +166,12 @@ public final class JNDIUtil {
     } catch (NameNotFoundException e) {
       return;
     } catch (Throwable e) {
-      pw.println(indent + "[ERROR] Failed to list the JNDIUtil nodes for the context (" + path
-          + "): " + e.getMessage());
+      pw.println(
+          indent
+              + "[ERROR] Failed to list the JNDIUtil nodes for the context ("
+              + path
+              + "): "
+              + e.getMessage());
       pw.println("");
 
       return;
@@ -183,8 +185,13 @@ public final class JNDIUtil {
         Object object = InitialContext.doLookup(path + "/" + nameClassPair.getName());
 
         if (!(object instanceof Context)) {
-          pw.println(indent + nameClassPair.getName() + " [" + nameClassPair.getClassName()
-              + "] = " + object);
+          pw.println(
+              indent
+                  + nameClassPair.getName()
+                  + " ["
+                  + nameClassPair.getClassName()
+                  + "] = "
+                  + object);
           pw.println();
         } else {
           boolean processChildren = true;
@@ -236,13 +243,18 @@ public final class JNDIUtil {
           }
 
           if (processChildren) {
-            pw.println(indent + nameClassPair.getName() + " [" + nameClassPair.getClassName()
-                + "] = " + object);
+            pw.println(
+                indent
+                    + nameClassPair.getName()
+                    + " ["
+                    + nameClassPair.getClassName()
+                    + "] = "
+                    + object);
             pw.println();
 
             if (path.length() > 0) {
-              dumpNameSpace(pw, treeDumpStatus, context, path + "/" + nameClassPair.getName(),
-                  depth + 1);
+              dumpNameSpace(
+                  pw, treeDumpStatus, context, path + "/" + nameClassPair.getName(), depth + 1);
             } else {
               dumpNameSpace(pw, treeDumpStatus, context, nameClassPair.getName(), depth + 1);
             }
@@ -260,39 +272,25 @@ public final class JNDIUtil {
 
   static class TreeDumpStatus {
 
-    /**
-     * foundCell
-     */
+    /** foundCell */
     boolean foundCell;
 
-    /**
-     * foundClusters
-     */
+    /** foundClusters */
     boolean foundClusters;
 
-    /**
-     * foundDomain
-     */
+    /** foundDomain */
     boolean foundDomain;
 
-    /**
-     * foundNode
-     */
+    /** foundNode */
     boolean foundNode;
 
-    /**
-     * foundNodes
-     */
+    /** foundNodes */
     boolean foundNodes;
 
-    /**
-     * foundPersistent
-     */
+    /** foundPersistent */
     boolean foundPersistent;
 
-    /**
-     * foundServers
-     */
+    /** foundServers */
     boolean foundServers;
   }
 }

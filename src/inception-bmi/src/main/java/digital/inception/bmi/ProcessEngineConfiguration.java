@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2019 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,27 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.process;
+// package digital.inception.process;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//// ~--- non-JDK imports --------------------------------------------------------
 //
-//import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
+// import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 //
-//import org.springframework.context.ApplicationContext;
-//import org.springframework.transaction.PlatformTransactionManager;
+// import org.springframework.context.ApplicationContext;
+// import org.springframework.transaction.PlatformTransactionManager;
 //
-////~--- JDK imports ------------------------------------------------------------
+//// ~--- JDK imports ------------------------------------------------------------
 //
-//import javax.sql.DataSource;
+// import javax.sql.DataSource;
 //
-///**
+/// **
 // * The <code>ProcessEngineConfiguration</code> class is used to configure the Camunda Process
 // * Engine.
 // *
 // * @author Marcus Portmann
 // */
-//public class ProcessEngineConfiguration extends SpringProcessEngineConfiguration
-//{
+// public class ProcessEngineConfiguration extends SpringProcessEngineConfiguration
+// {
 //  /**
 //   * Constructs a new <code>ProcessEngineConfiguration</code>.
 //   *
@@ -76,4 +76,4 @@
 //          e);
 //    }
 //  }
-//}
+// }

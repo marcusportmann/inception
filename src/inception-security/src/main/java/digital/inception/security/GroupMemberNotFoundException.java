@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>GroupMemberNotFoundException</code> is thrown to indicate that a security operation
  * failed as a result of a group member that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The group member could not be found")
-@WebFault(name = "GroupMemberNotFoundException",
+@WebFault(
+    name = "GroupMemberNotFoundException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -52,7 +54,12 @@ public class GroupMemberNotFoundException extends ServiceException {
    * @param memberName the group member name
    */
   public GroupMemberNotFoundException(GroupMemberType memberType, String memberName) {
-    super("GroupMemberNotFoundError", "The group member with type (" + memberType.description()
-        + ") and name (" + memberName + ") could not be found");
+    super(
+        "GroupMemberNotFoundError",
+        "The group member with type ("
+            + memberType.description()
+            + ") and name ("
+            + memberName
+            + ") could not be found");
   }
 }

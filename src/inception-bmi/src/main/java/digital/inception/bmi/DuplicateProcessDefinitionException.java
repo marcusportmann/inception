@@ -16,7 +16,7 @@
 
 package digital.inception.bmi;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,20 +25,23 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DuplicateProcessDefinitionException</code> exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate process definition i.e a process
  * definition with the specified ID already exists.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "A process definition with the specified ID already exists")
-@WebFault(name = "DuplicateProcessDefinitionException",
+@WebFault(
+    name = "DuplicateProcessDefinitionException",
     targetNamespace = "http://bmi.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -49,10 +52,11 @@ public class DuplicateProcessDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateProcessDefinitionException</code>.
    *
-   * @param processDefinitionId the ID used to uniquely identify the process definition
+   * @param processDefinitionId the ID uniquely identifying the process definition
    */
   public DuplicateProcessDefinitionException(String processDefinitionId) {
-    super("DuplicateProcessDefinitionError", "The process definition with ID ("
-        + processDefinitionId + ") already exists");
+    super(
+        "DuplicateProcessDefinitionError",
+        "The process definition with ID (" + processDefinitionId + ") already exists");
   }
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.ws;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.transport.servlet.CXFServlet;
@@ -41,8 +41,7 @@ public class InceptionWSConfiguration {
    */
   @Bean
   protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor() {
-    return beanFactory -> beanFactory.registerSingleton("cxf", new SpringBus())
-        ;
+    return beanFactory -> beanFactory.registerSingleton("cxf", new SpringBus());
   }
 
   /**

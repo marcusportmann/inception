@@ -29,14 +29,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class MessageStatusToIntegerConverter
-    implements Converter<MessageStatus, Integer> {
+public class MessageStatusToIntegerConverter implements Converter<MessageStatus, Integer> {
 
-  /**
-   * Constructs a new <code>MessageStatusToIntegerConverter</code>.
-   */
-  public MessageStatusToIntegerConverter() {
-  }
+  /** Constructs a new <code>MessageStatusToIntegerConverter</code>. */
+  public MessageStatusToIntegerConverter() {}
 
   @Override
   public Integer convert(MessageStatus source) {
@@ -47,4 +43,3 @@ public class MessageStatusToIntegerConverter
     return source.code();
   }
 }
-

@@ -16,11 +16,11 @@
 
 package digital.inception.audit;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.stereotype.Service;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuditService</code> class provides the Audit Service implementation.
@@ -29,7 +29,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AuditService
-    implements IAuditService {
-
-}
+public class AuditService implements IAuditService {}

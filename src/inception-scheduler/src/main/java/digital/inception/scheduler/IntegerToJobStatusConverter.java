@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToJobStatusConverter
-    implements Converter<Integer, JobStatus> {
+public class IntegerToJobStatusConverter implements Converter<Integer, JobStatus> {
 
-  /**
-   * Constructs a new <code>IntegerToJobStatusConverter</code>.
-   */
-  public IntegerToJobStatusConverter() {
-  }
+  /** Constructs a new <code>IntegerToJobStatusConverter</code>. */
+  public IntegerToJobStatusConverter() {}
 
   @Override
   public JobStatus convert(Integer source) {

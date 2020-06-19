@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
@@ -37,17 +37,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundJobExecutor
-    implements InitializingBean {
+public class BackgroundJobExecutor implements InitializingBean {
 
-  /**
-   * The default number of minutes an idle processing thread should be kept alive.
-   */
+  /** The default number of minutes an idle processing thread should be kept alive. */
   private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
 
-  /**
-   * The default number of threads to start initially to process jobs.
-   */
+  /** The default number of threads to start initially to process jobs. */
   private static final int DEFAULT_INITIAL_PROCESSING_THREADS = 1;
 
   /**
@@ -56,22 +51,16 @@ public class BackgroundJobExecutor
    */
   private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
 
-  /**
-   * The default maximum number of threads to create to process jobs.
-   */
+  /** The default maximum number of threads to create to process jobs. */
   private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
-  /**
-   * The executor responsible for processing jobs.
-   */
+  /** The executor responsible for processing jobs. */
   private Executor jobProcessor;
 
-  /**
-   * The Scheduler Service.
-   */
+  /** The Scheduler Service. */
   private ISchedulerService schedulerService;
 
   /**
@@ -83,18 +72,20 @@ public class BackgroundJobExecutor
     this.schedulerService = schedulerService;
   }
 
-  /**
-   * Initialize the Background Job Executor.
-   */
+  /** Initialize the Background Job Executor. */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background Job Executor");
 
     if (schedulerService != null) {
       // Initialize the job processor
-      this.jobProcessor = new ThreadPoolExecutor(DEFAULT_INITIAL_PROCESSING_THREADS,
-          DEFAULT_MAXIMUM_PROCESSING_THREADS, DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
-          TimeUnit.MINUTES, new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
+      this.jobProcessor =
+          new ThreadPoolExecutor(
+              DEFAULT_INITIAL_PROCESSING_THREADS,
+              DEFAULT_MAXIMUM_PROCESSING_THREADS,
+              DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME,
+              TimeUnit.MINUTES,
+              new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
 
       /*
        * Reset any locks for jobs that were previously being executed.
@@ -107,14 +98,13 @@ public class BackgroundJobExecutor
         logger.error("Failed to reset the locks for the jobs being executed", e);
       }
     } else {
-      logger.error("Failed to initialize the Background Job Executor: "
-          + "The Scheduler Service was NOT injected");
+      logger.error(
+          "Failed to initialize the Background Job Executor: "
+              + "The Scheduler Service was NOT injected");
     }
   }
 
-  /**
-   * Execute the jobs.
-   */
+  /** Execute the jobs. */
   @SuppressWarnings("StatementWithEmptyBody")
   @Scheduled(cron = "0 * * * * *")
   public void executeJobs() {
@@ -135,8 +125,7 @@ public class BackgroundJobExecutor
           }
 
           // Schedule any unscheduled jobs
-          while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
-          }
+          while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
 
           return;
         }

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://errror.inception.digital",
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://errror.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {@javax.xml.bind.annotation.XmlNs(prefix = "core",
-        namespaceURI = "http://core.inception.digital"),
-        @javax.xml.bind.annotation.XmlNs(prefix = "validation",
-            namespaceURI = "http://validation.inception.digital"),
-        @javax.xml.bind.annotation.XmlNs(prefix = "error",
-            namespaceURI = "http://error.inception.digital"),})
+    xmlns = {
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "core",
+          namespaceURI = "http://core.inception.digital"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "validation",
+          namespaceURI = "http://validation.inception.digital"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "error",
+          namespaceURI = "http://error.inception.digital"),
+    })
 package digital.inception.error;

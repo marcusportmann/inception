@@ -16,27 +16,24 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * The <code>BinaryBuffer</code> class provides the capabilities similar to the
- * <code>StringBuffer</code> class when working with binary data (bytes).
+ * The <code>BinaryBuffer</code> class provides the capabilities similar to the <code>StringBuffer
+ * </code> class when working with binary data (bytes).
  *
  * @author Marcus Portmann
  */
-public class BinaryBuffer
-    implements Serializable {
+public class BinaryBuffer implements Serializable {
 
   private static final long serialVersionUID = 1000000;
   private ByteArrayOutputStream stream = null;
 
-  /**
-   * Constructs a new empty <code>BinaryBuffer</code>.
-   */
+  /** Constructs a new empty <code>BinaryBuffer</code>. */
   public BinaryBuffer() {
     stream = new ByteArrayOutputStream();
   }
@@ -66,8 +63,8 @@ public class BinaryBuffer
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the
-   * <code>BinaryBuffer</code>.
+   * Append the specified binary data to the binary data already stored in the <code>BinaryBuffer
+   * </code>.
    *
    * @param data the binary data to append
    */
@@ -78,9 +75,7 @@ public class BinaryBuffer
     }
   }
 
-  /**
-   * Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer.
-   */
+  /** Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer. */
   public void empty() {
     stream.reset();
   }
@@ -97,7 +92,7 @@ public class BinaryBuffer
   /**
    * Returns the length of the binary data stored by the <code>BinaryBuffer</code>.
    *
-   * @return the length  of the binary data stored by the <code>BinaryBuffer</code>
+   * @return the length of the binary data stored by the <code>BinaryBuffer</code>
    */
   public int getLength() {
     return stream.size();

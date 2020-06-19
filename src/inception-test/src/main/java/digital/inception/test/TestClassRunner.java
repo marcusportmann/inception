@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.sql.Connection;
 import java.util.Map;
@@ -28,7 +28,7 @@ import org.junit.runners.model.InitializationError;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestClassRunner</code> class implements the JUnit runner that provides support for
@@ -43,8 +43,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
    *
    * @param testClass the JUnit test class to run
    */
-  public TestClassRunner(Class<?> testClass)
-      throws InitializationError {
+  public TestClassRunner(Class<?> testClass) throws InitializationError {
     super(testClass);
   }
 
@@ -61,7 +60,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
   /**
    * Run the child test for this runner.
    *
-   * @param method   the test method being run
+   * @param method the test method being run
    * @param notifier the run notifier that will be notified of events while tests are being run
    */
   @Override
@@ -77,76 +76,122 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
     checkForOpenXADatabaseConnections(method, XADataSourceProxy.getActiveXADatabaseConnections());
   }
 
-  private void checkForActiveTransactions(FrameworkMethod method, Map<Transaction,
-      StackTraceElement[]> activeTransactionStackTraces) {
+  private void checkForActiveTransactions(
+      FrameworkMethod method, Map<Transaction, StackTraceElement[]> activeTransactionStackTraces) {
     for (Transaction transaction : activeTransactionStackTraces.keySet()) {
       StackTraceElement[] stackTrace = activeTransactionStackTraces.get(transaction);
 
       for (int i = 0; i < stackTrace.length; i++) {
-        if (stackTrace[i].getMethodName().equals("begin") && (stackTrace[i].getLineNumber()
-            != -1)) {
-          LoggerFactory.getLogger(TestClassRunner.class).warn(
-              "Failed to successfully execute the test (" + method.getName() + "): Found an "
-                  + "unexpected active transaction (" + transaction.toString() + ") that was "
-                  + "started by the method (" + stackTrace[i + 1].getMethodName()
-                  + ") on the class ("
-                  + stackTrace[i + 1].getClassName() + ") on line ("
-                  + stackTrace[i + 1].getLineNumber() + ")");
+        if (stackTrace[i].getMethodName().equals("begin")
+            && (stackTrace[i].getLineNumber() != -1)) {
+          LoggerFactory.getLogger(TestClassRunner.class)
+              .warn(
+                  "Failed to successfully execute the test ("
+                      + method.getName()
+                      + "): Found an "
+                      + "unexpected active transaction ("
+                      + transaction.toString()
+                      + ") that was "
+                      + "started by the method ("
+                      + stackTrace[i + 1].getMethodName()
+                      + ") on the class ("
+                      + stackTrace[i + 1].getClassName()
+                      + ") on line ("
+                      + stackTrace[i + 1].getLineNumber()
+                      + ")");
 
-          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-              + "): Found an unexpected active transaction (" + transaction.toString()
-              + ") that was started by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
+          throw new RuntimeException(
+              "Failed to successfully execute the test ("
+                  + method.getName()
+                  + "): Found an unexpected active transaction ("
+                  + transaction.toString()
+                  + ") that was started by the method ("
+                  + stackTrace[i + 1].getMethodName()
+                  + ") on the class ("
+                  + stackTrace[i + 1].getClassName()
+                  + ") on line ("
+                  + stackTrace[i + 1].getLineNumber()
+                  + ")");
         }
       }
     }
   }
 
-  private void checkForOpenDatabaseConnections(FrameworkMethod method, Map<Connection,
-      StackTraceElement[]> activeDatabaseConnections) {
+  private void checkForOpenDatabaseConnections(
+      FrameworkMethod method, Map<Connection, StackTraceElement[]> activeDatabaseConnections) {
     for (Connection connection : activeDatabaseConnections.keySet()) {
       StackTraceElement[] stackTrace = activeDatabaseConnections.get(connection);
 
       for (int i = 0; i < stackTrace.length; i++) {
         if (stackTrace[i].getMethodName().equals("getConnection")) {
-          LoggerFactory.getLogger(TestClassRunner.class).warn(
-              "Failed to successfully execute the test (" + method.getName() + "): Found an "
-                  + "unexpected open database connection (" + connection.toString() + ") that was "
-                  + "retrieved by the method (" + stackTrace[i + 1].getMethodName()
-                  + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-                  + stackTrace[i + 1].getLineNumber() + ")");
+          LoggerFactory.getLogger(TestClassRunner.class)
+              .warn(
+                  "Failed to successfully execute the test ("
+                      + method.getName()
+                      + "): Found an "
+                      + "unexpected open database connection ("
+                      + connection.toString()
+                      + ") that was "
+                      + "retrieved by the method ("
+                      + stackTrace[i + 1].getMethodName()
+                      + ") on the class ("
+                      + stackTrace[i + 1].getClassName()
+                      + ") on line ("
+                      + stackTrace[i + 1].getLineNumber()
+                      + ")");
 
-          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-              + "): Found an unexpected open database connection (" + connection.toString()
-              + ") that was retrieved by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
+          throw new RuntimeException(
+              "Failed to successfully execute the test ("
+                  + method.getName()
+                  + "): Found an unexpected open database connection ("
+                  + connection.toString()
+                  + ") that was retrieved by the method ("
+                  + stackTrace[i + 1].getMethodName()
+                  + ") on the class ("
+                  + stackTrace[i + 1].getClassName()
+                  + ") on line ("
+                  + stackTrace[i + 1].getLineNumber()
+                  + ")");
         }
       }
     }
   }
 
-  private void checkForOpenXADatabaseConnections(FrameworkMethod method, Map<XAConnection,
-      StackTraceElement[]> activeXADatabaseConnections) {
+  private void checkForOpenXADatabaseConnections(
+      FrameworkMethod method, Map<XAConnection, StackTraceElement[]> activeXADatabaseConnections) {
     for (XAConnection connection : activeXADatabaseConnections.keySet()) {
       StackTraceElement[] stackTrace = activeXADatabaseConnections.get(connection);
 
       for (int i = 0; i < stackTrace.length; i++) {
         if (stackTrace[i].getMethodName().equals("getXAConnection")) {
-          LoggerFactory.getLogger(TestClassRunner.class).warn(
-              "Failed to successfully execute the test (" + method.getName() + "): Found an "
-                  + "unexpected open XA database connection (" + connection.toString()
-                  + ") that was "
-                  + "retrieved by the method (" + stackTrace[i + 1].getMethodName()
-                  + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-                  + stackTrace[i + 1].getLineNumber() + ")");
+          LoggerFactory.getLogger(TestClassRunner.class)
+              .warn(
+                  "Failed to successfully execute the test ("
+                      + method.getName()
+                      + "): Found an "
+                      + "unexpected open XA database connection ("
+                      + connection.toString()
+                      + ") that was "
+                      + "retrieved by the method ("
+                      + stackTrace[i + 1].getMethodName()
+                      + ") on the class ("
+                      + stackTrace[i + 1].getClassName()
+                      + ") on line ("
+                      + stackTrace[i + 1].getLineNumber()
+                      + ")");
 
-          throw new RuntimeException("Failed to successfully execute the test (" + method.getName()
-              + "): Found an unexpected open XA database connection (" + connection.toString()
-              + ") that was retrieved by the method (" + stackTrace[i + 1].getMethodName()
-              + ") on the class (" + stackTrace[i + 1].getClassName() + ") on line ("
-              + stackTrace[i + 1].getLineNumber() + ")");
+          throw new RuntimeException(
+              "Failed to successfully execute the test ("
+                  + method.getName()
+                  + "): Found an unexpected open XA database connection ("
+                  + connection.toString()
+                  + ") that was retrieved by the method ("
+                  + stackTrace[i + 1].getMethodName()
+                  + ") on the class ("
+                  + stackTrace[i + 1].getClassName()
+                  + ") on line ("
+                  + stackTrace[i + 1].getLineNumber()
+                  + ")");
         }
       }
     }

@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -29,34 +29,32 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorWebService</code> class.
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "ErrorService", name = "IErrorService",
+@WebService(
+    serviceName = "ErrorService",
+    name = "IErrorService",
     targetNamespace = "http://error.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ErrorWebService {
 
-  /**
-   * The Error Service.
-   */
+  /** The Error Service. */
   private IErrorService errorService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>ErrorWebService</code>.
    *
    * @param errorService the Error Service
-   * @param validator    the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ErrorWebService(IErrorService errorService, Validator validator) {
     this.errorService = errorService;
@@ -69,8 +67,8 @@ public class ErrorWebService {
    * @param errorReport the error report to create
    */
   @WebMethod(operationName = "CreateErrorReport")
-  public void createErrorReport(@WebParam(name = "ErrorReport")
-  @XmlElement(required = true) ErrorReport errorReport)
+  public void createErrorReport(
+      @WebParam(name = "ErrorReport") @XmlElement(required = true) ErrorReport errorReport)
       throws InvalidArgumentException, ErrorServiceException {
     if (errorReport == null) {
       throw new InvalidArgumentException("errorReport");
@@ -79,8 +77,8 @@ public class ErrorWebService {
     Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("errorReport", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "errorReport", ValidationError.toValidationErrors(constraintViolations));
     }
 
     errorService.createErrorReport(errorReport);

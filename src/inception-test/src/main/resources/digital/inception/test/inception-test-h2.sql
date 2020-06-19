@@ -16,7 +16,7 @@ CREATE TABLE test.test_data (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN test.test_data.id IS 'The ID used to uniquely identify the test data';
+COMMENT ON COLUMN test.test_data.id IS 'The ID uniquely identifying the test data';
 
 COMMENT ON COLUMN test.test_data.name IS 'The name for the test data';
 

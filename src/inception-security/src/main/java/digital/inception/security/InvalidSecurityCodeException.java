@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,18 +25,20 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * An <code>InvalidSecurityCodeException</code> is thrown to indicate that a security operation
  * failed as a result of an invalid security code.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Invalid security code")
-@WebFault(name = "InvalidSecurityCodeException",
+@WebFault(
+    name = "InvalidSecurityCodeException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -45,9 +47,7 @@ public class InvalidSecurityCodeException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>InvalidSecurityCodeException</code>.
-   */
+  /** Constructs a new <code>InvalidSecurityCodeException</code>. */
   public InvalidSecurityCodeException() {
     super("InvalidSecurityCodeError", "Invalid security code");
   }

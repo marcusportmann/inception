@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2019 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,27 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.validation;
+// package digital.inception.validation;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//// ~--- non-JDK imports --------------------------------------------------------
 //
-//import digital.inception.core.support.MergedMessageSource;
+// import digital.inception.core.support.MergedMessageSource;
 //
-//import org.springframework.context.MessageSource;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.context.annotation.DependsOn;
-//import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+// import org.springframework.context.MessageSource;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.context.annotation.DependsOn;
+// import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 //
-///**
+/// **
 // * The <code>ValidationConfiguration</code> class provides access to the Spring configuration for
 // * the <b>Validation</b> module that forms part of the <b>Inception</b> framework.
 // *
 // * @author Marcus Portmann
 // */
-//@Configuration
-//public class ValidationConfiguration
-//{
+// @Configuration
+// public class ValidationConfiguration
+// {
 //  /**
 //   * Returns the local validator factory bean that provides support for JSR 303 Bean Validation.
 //   *
@@ -63,5 +63,4 @@
 //
 //    return validationMessageSource;
 //  }
-//}
-
+// }

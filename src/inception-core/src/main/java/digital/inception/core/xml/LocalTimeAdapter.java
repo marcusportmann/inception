@@ -16,18 +16,17 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LocalTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
- * <code>String</code> and <code>LocalTime</code> types.
- * <br>
+ * <code>String</code> and <code>LocalTime</code> types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -37,7 +36,6 @@ public class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
    * Marshals the <code>java.time.LocalTime</code> value as an ISO8601Util string.
    *
    * @param value the value to marshal
-   *
    * @return the <code>java.time.LocalTime</code> value as an ISO8601Util string
    */
   @Override
@@ -53,7 +51,6 @@ public class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
    * Unmarshals the ISO8601Util string value as a <code>java.time.LocalTime</code>.
    *
    * @param value the ISO8601Util string value
-   *
    * @return the ISO8601Util string value as a <code>java.time.LocalTime</code>
    */
   @Override

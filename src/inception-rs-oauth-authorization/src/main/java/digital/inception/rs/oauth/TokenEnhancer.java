@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.security.ISecurityService;
 import digital.inception.security.User;
@@ -30,7 +30,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TokenEnhancer</code> class implements a token enhancer that adds additional context to
@@ -60,20 +60,20 @@ public class TokenEnhancer
    * Provides an opportunity for customization of an access token (e.g. through its additional
    * information map) during the process of creating a new token for use by a client.
    *
-   * @param accessToken    the current access token with its expiration and refresh token
+   * @param accessToken the current access token with its expiration and refresh token
    * @param authentication the current authentication including client and user details
-   *
    * @return a new token enhanced with additional information
    */
   @Override
-  public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
-      OAuth2Authentication authentication) {
+  public OAuth2AccessToken enhance(
+      OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
     Map<String, Object> additionalInfo = new HashMap<>();
 
     try {
-      UserDetails userDetails = UserDetails.class.isInstance(authentication.getPrincipal())
-          ? UserDetails.class.cast(authentication.getPrincipal())
-          : null;
+      UserDetails userDetails =
+          UserDetails.class.isInstance(authentication.getPrincipal())
+              ? UserDetails.class.cast(authentication.getPrincipal())
+              : null;
 
       if (userDetails != null) {
         User user = userDetails.getUser();
@@ -92,8 +92,12 @@ public class TokenEnhancer
         }
       }
     } catch (Throwable e) {
-      throw new TokenEnhancerException("Failed to retrieve the organizations for the user ("
-          + authentication.getPrincipal() + "): " + e.getMessage(), e);
+      throw new TokenEnhancerException(
+          "Failed to retrieve the organizations for the user ("
+              + authentication.getPrincipal()
+              + "): "
+              + e.getMessage(),
+          e);
     }
 
     ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);

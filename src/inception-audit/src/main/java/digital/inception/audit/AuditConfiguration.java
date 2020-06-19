@@ -16,20 +16,18 @@
 
 package digital.inception.audit;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>AuditConfiguration</code> class provides the Spring configuration for the Audit
- * module.
+ * The <code>AuditConfiguration</code> class provides the Spring configuration for the Audit module.
  *
  * @author Marcus Portmann
  */
 @Configuration
-@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.audit"})
-public class AuditConfiguration {
-
-}
+public class AuditConfiguration {}

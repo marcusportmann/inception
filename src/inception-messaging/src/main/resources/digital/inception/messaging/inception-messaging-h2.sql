@@ -13,7 +13,7 @@ CREATE TABLE messaging.message_types (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN messaging.message_types.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message type';
+COMMENT ON COLUMN messaging.message_types.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the message type';
 
 COMMENT ON COLUMN messaging.message_types.name IS 'The name of the message type';
 
@@ -65,13 +65,13 @@ CREATE INDEX messages_status_ix ON messaging.messages(status);
 
 CREATE INDEX messages_lock_name_ix ON messaging.messages(lock_name);
 
-COMMENT ON COLUMN messaging.messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+COMMENT ON COLUMN messaging.messages.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the message';
 
 COMMENT ON COLUMN messaging.messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.messages.device_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from';
 
-COMMENT ON COLUMN messaging.messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.messages.type_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the type of message';
 
 COMMENT ON COLUMN messaging.messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 
@@ -132,7 +132,7 @@ CREATE INDEX message_parts_message_type_id_ix ON messaging.message_parts(message
 
 CREATE INDEX message_parts_lock_name_ix ON messaging.message_parts(lock_name);
 
-COMMENT ON COLUMN messaging.message_parts.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message part';
+COMMENT ON COLUMN messaging.message_parts.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the message part';
 
 COMMENT ON COLUMN messaging.message_parts.part_no IS 'The number of the message part in the set of message parts for the original message';
 
@@ -144,13 +144,13 @@ COMMENT ON COLUMN messaging.message_parts.download_attempts IS 'The number of ti
 
 COMMENT ON COLUMN messaging.message_parts.status IS 'The message part status e.g. Initialised, QueuedForSending, etc';
 
-COMMENT ON COLUMN messaging.message_parts.message_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the original message';
+COMMENT ON COLUMN messaging.message_parts.message_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_username IS 'The username identifying the user associated with the original message';
 
-COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the original message originated from';
+COMMENT ON COLUMN messaging.message_parts.message_device_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the device the original message originated from';
 
-COMMENT ON COLUMN messaging.message_parts.message_type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of the original message';
+COMMENT ON COLUMN messaging.message_parts.message_type_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the type of the original message';
 
 COMMENT ON COLUMN messaging.message_parts.message_correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the original message';
 
@@ -189,13 +189,13 @@ CREATE INDEX archived_messages_device_id_ix ON messaging.archived_messages(devic
 
 CREATE INDEX archived_messages_type_id_ix ON messaging.archived_messages(type_id);
 
-COMMENT ON COLUMN messaging.archived_messages.id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the message';
+COMMENT ON COLUMN messaging.archived_messages.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the message';
 
 COMMENT ON COLUMN messaging.archived_messages.username IS 'The username identifying the user associated with the message';
 
-COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the device the message originated from';
+COMMENT ON COLUMN messaging.archived_messages.device_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from';
 
-COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The Universally Unique Identifier (UUID) used to uniquely identify the type of message';
+COMMENT ON COLUMN messaging.archived_messages.type_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the type of message';
 
 COMMENT ON COLUMN messaging.archived_messages.correlation_id IS 'The optional Universally Unique Identifier (UUID) used to correlate the message';
 

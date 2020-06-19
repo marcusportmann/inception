@@ -16,14 +16,14 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.ZonedDateTime;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ZonedDateTimeToStringConverter</code> class implements the Spring converter that
@@ -33,14 +33,10 @@ import org.springframework.stereotype.Component;
  */
 @SuppressWarnings("unused")
 @Component
-public final class ZonedDateTimeToStringConverter
-    implements Converter<ZonedDateTime, String> {
+public final class ZonedDateTimeToStringConverter implements Converter<ZonedDateTime, String> {
 
-  /**
-   * Constructs a new <code>ZonedDateTimeToStringConverter</code>.
-   */
-  public ZonedDateTimeToStringConverter() {
-  }
+  /** Constructs a new <code>ZonedDateTimeToStringConverter</code>. */
+  public ZonedDateTimeToStringConverter() {}
 
   @Override
   public String convert(ZonedDateTime source) {

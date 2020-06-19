@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageDownloadResponse</code> class represents the response to a request sent by a
@@ -38,14 +38,10 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageDownloadResponse {
 
-  /**
-   * The error code returned to indicate an invalid request.
-   */
+  /** The error code returned to indicate an invalid request. */
   public static final int ERROR_INVALID_REQUEST = -1;
 
-  /**
-   * The error code returned to indicate an unknown error.
-   */
+  /** The error code returned to indicate an unknown error. */
   public static final int ERROR_UNKNOWN = -2;
 
   /**
@@ -73,9 +69,7 @@ public class MessageDownloadResponse {
    */
   private String exception;
 
-  /**
-   * The messages being downloaded.
-   */
+  /** The messages being downloaded. */
   private List<Message> messages;
 
   /**
@@ -84,8 +78,7 @@ public class MessageDownloadResponse {
    *
    * @param document the WBXML document containing the message download response information
    */
-  public MessageDownloadResponse(Document document)
-      throws MessagingServiceException {
+  public MessageDownloadResponse(Document document) throws MessagingServiceException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
@@ -111,7 +104,8 @@ public class MessageDownloadResponse {
       } catch (Throwable e) {
         throw new MessagingServiceException(
             "Failed to parse the WBXML for a message associated with "
-                + "the message download response", e);
+                + "the message download response",
+            e);
       }
     }
   }
@@ -130,7 +124,7 @@ public class MessageDownloadResponse {
   /**
    * Constructs a new <code>MessageDownloadResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message download request
    */
   MessageDownloadResponse(long code, String detail) {
@@ -141,9 +135,9 @@ public class MessageDownloadResponse {
   /**
    * Constructs a new <code>MessageDownloadResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message download request
-   * @param cause  the exception that resulted from processing the message download request
+   * @param cause the exception that resulted from processing the message download request
    */
   public MessageDownloadResponse(long code, String detail, Throwable cause) {
     this.code = code;
@@ -169,9 +163,8 @@ public class MessageDownloadResponse {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message download response
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -205,7 +198,7 @@ public class MessageDownloadResponse {
    * request.
    *
    * @return the user-friendly text description of the result of processing the message download
-   * request
+   *     request
    */
   public String getDetail() {
     return detail;
@@ -216,7 +209,7 @@ public class MessageDownloadResponse {
    * request.
    *
    * @param detail the user-friendly text description of the result of processing the message
-   *               download request
+   *     download request
    */
   public void setDetail(String detail) {
     this.detail = detail;
@@ -227,7 +220,7 @@ public class MessageDownloadResponse {
    * download request.
    *
    * @return the flattened information for the exception that resulted from processing the message
-   * download request
+   *     download request
    */
   public String getException() {
     return exception;
@@ -238,7 +231,7 @@ public class MessageDownloadResponse {
    * download request.
    *
    * @param exception the flattened information for the exception that resulted from processing the
-   *                  message download request
+   *     message download request
    */
   public void setException(String exception) {
     this.exception = exception;
@@ -268,9 +261,7 @@ public class MessageDownloadResponse {
    * @return the number of messages being downloaded
    */
   public int getNumberOfMessages() {
-    return (messages != null)
-        ? messages.size()
-        : 0;
+    return (messages != null) ? messages.size() : 0;
   }
 
   /**

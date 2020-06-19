@@ -41,5 +41,4 @@ public class MailServiceTestConfiguration {
 
     return javaMailSender;
   }
-
 }

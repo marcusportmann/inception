@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
@@ -36,7 +36,7 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Application</code> class provides the class that all application-specific application
@@ -45,7 +45,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Marcus Portmann
  */
 @Component
-@ComponentScan(basePackages = {"digital.inception"}, lazyInit = true)
+@ComponentScan(
+    basePackages = {"digital.inception"},
+    lazyInit = true)
 @EnableAsync
 @EnableScheduling
 @EnableTransactionManagement
@@ -55,9 +57,7 @@ public abstract class Application extends ApplicationBase {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-  /**
-   * The distributed in-memory caches.
-   */
+  /** The distributed in-memory caches. */
   Map<String, Map> caches = new ConcurrentHashMap<>();
 
   /**

@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -33,15 +33,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unused")
-public class BackgroundMessageAssembler
-    implements InitializingBean {
+public class BackgroundMessageAssembler implements InitializingBean {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageAssembler.class);
 
-  /**
-   * The Messaging Service.
-   */
+  /** The Messaging Service. */
   private IMessagingService messagingService;
 
   /**
@@ -53,9 +50,7 @@ public class BackgroundMessageAssembler
     this.messagingService = messagingService;
   }
 
-  /**
-   * Initialize the Background Message Assembler.
-   */
+  /** Initialize the Background Message Assembler. */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background Message Assembler");
@@ -68,21 +63,20 @@ public class BackgroundMessageAssembler
       try {
         logger.info("Resetting the message part locks for the message parts being assembled");
 
-        messagingService.resetMessagePartLocks(MessagePartStatus.ASSEMBLING,
-            MessagePartStatus.QUEUED_FOR_ASSEMBLY);
+        messagingService.resetMessagePartLocks(
+            MessagePartStatus.ASSEMBLING, MessagePartStatus.QUEUED_FOR_ASSEMBLY);
       } catch (Throwable e) {
-        logger.error("Failed to reset the message part locks for the message parts being assembled",
-            e);
+        logger.error(
+            "Failed to reset the message part locks for the message parts being assembled", e);
       }
     } else {
-      logger.error("Failed to initialize the Background Message Assembler: "
-          + "The Messaging Service was NOT injected");
+      logger.error(
+          "Failed to initialize the Background Message Assembler: "
+              + "The Messaging Service was NOT injected");
     }
   }
 
-  /**
-   * Assemble the messages.
-   */
+  /** Assemble the messages. */
   @Scheduled(cron = "0 * * * * *")
   @Async
   public void assembleMessages() {
@@ -96,8 +90,7 @@ public class BackgroundMessageAssembler
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId  the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                   message
+   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param totalParts the total number of parts for the message
    */
   @Async
@@ -113,5 +106,4 @@ public class BackgroundMessageAssembler
        */
     }
   }
-
 }

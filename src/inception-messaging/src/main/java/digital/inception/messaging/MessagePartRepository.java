@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import java.util.UUID;
@@ -28,18 +28,19 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>MessagePartRepository</code> interface declares the repository for the
- * <code>MessagePart</code> domain type.
+ * The <code>MessagePartRepository</code> interface declares the repository for the <code>
+ * MessagePart</code> domain type.
  *
  * @author Marcus Portmann
  */
 public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> {
 
-  @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
-      + "mp.messageId = :messageId")
+  @Query(
+      "select count(mp.id) from MessagePart mp where mp.status = 3 and "
+          + "mp.messageId = :messageId")
   int countMessagePartsQueuedForAssemblyByMessageId(@Param("messageId") UUID messageId);
 
   @Modifying
@@ -53,46 +54,55 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
   boolean existsByIdAndStatus(UUID messagePartId, MessagePartStatus status);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select mp from MessagePart mp where mp.messageId = :messageId and mp.status = :status "
-      + "order by mp.partNo")
-  List<MessagePart> findMessagePartsByMessageIdAndStatusForWrite(@Param(
-      "messageId") UUID messageId, @Param("status") MessagePartStatus status);
+  @Query(
+      "select mp from MessagePart mp where mp.messageId = :messageId and mp.status = :status "
+          + "order by mp.partNo")
+  List<MessagePart> findMessagePartsByMessageIdAndStatusForWrite(
+      @Param("messageId") UUID messageId, @Param("status") MessagePartStatus status);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select mp from MessagePart mp where mp.messageUsername = :username and "
-      + "mp.messageDeviceId = :deviceId and mp.status = :status "
-      + "order by mp.messageId, mp.partNo")
-  List<MessagePart> findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(@Param(
-      "username") String username, @Param("deviceId") UUID deviceId, @Param(
-      "status") MessagePartStatus status, Pageable pageable);
+  @Query(
+      "select mp from MessagePart mp where mp.messageUsername = :username and "
+          + "mp.messageDeviceId = :deviceId and mp.status = :status "
+          + "order by mp.messageId, mp.partNo")
+  List<MessagePart> findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(
+      @Param("username") String username,
+      @Param("deviceId") UUID deviceId,
+      @Param("status") MessagePartStatus status,
+      Pageable pageable);
 
   @Modifying
-  @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 4 "
-      + "where mp.id = :messagePartId")
-  void lockMessagePartForAssembly(@Param("messagePartId") UUID messagePartId, @Param(
-      "lockName") String lockName);
+  @Query(
+      "update MessagePart mp set mp.lockName = :lockName, mp.status = 4 "
+          + "where mp.id = :messagePartId")
+  void lockMessagePartForAssembly(
+      @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update MessagePart mp set mp.lockName = :lockName, mp.status = 6, "
-      + "mp.downloadAttempts = mp.downloadAttempts + 1 where mp.id = :messagePartId")
-  void lockMessagePartForDownload(@Param("messagePartId") UUID messagePartId, @Param(
-      "lockName") String lockName);
+  @Query(
+      "update MessagePart mp set mp.lockName = :lockName, mp.status = 6, "
+          + "mp.downloadAttempts = mp.downloadAttempts + 1 where mp.id = :messagePartId")
+  void lockMessagePartForDownload(
+      @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
-      + "where mp.status = :status and mp.lockName = :lockName ")
-  void resetStatusAndLocksForMessagePartsWithStatusAndLock(@Param(
-      "status") MessagePartStatus status, @Param("newStatus") MessagePartStatus newStatus, @Param(
-      "lockName") String lockName);
+  @Query(
+      "update MessagePart mp set mp.status = :newStatus, mp.lockName = null "
+          + "where mp.status = :status and mp.lockName = :lockName ")
+  void resetStatusAndLocksForMessagePartsWithStatusAndLock(
+      @Param("status") MessagePartStatus status,
+      @Param("newStatus") MessagePartStatus newStatus,
+      @Param("lockName") String lockName);
 
   @Modifying
   @Query("update MessagePart mp set mp.status = :status where mp.id = :messagePartId")
-  void setStatusById(@Param("messagePartId") UUID messagePartId, @Param(
-      "status") MessagePartStatus status);
+  void setStatusById(
+      @Param("messagePartId") UUID messagePartId, @Param("status") MessagePartStatus status);
 
   @Modifying
-  @Query("update MessagePart mp set mp.status = :status, mp.lockName = null "
-      + "where mp.id = :messagePartId")
-  void unlockMessagePart(@Param("messagePartId") UUID messagePartId, @Param(
-      "status") MessagePartStatus status);
+  @Query(
+      "update MessagePart mp set mp.status = :status, mp.lockName = null "
+          + "where mp.id = :messagePartId")
+  void unlockMessagePart(
+      @Param("messagePartId") UUID messagePartId, @Param("status") MessagePartStatus status);
 }

@@ -16,7 +16,7 @@
 
 package digital.inception.sample.api;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
@@ -33,14 +33,16 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleWebService</code> class.
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "SampleService", name = "ISampleService",
+@WebService(
+    serviceName = "SampleService",
+    name = "ISampleService",
     targetNamespace = "http://sample.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
@@ -64,8 +66,7 @@ public class SampleWebService {
    */
   @WebMethod(operationName = "GetAllData")
   @WebResult(name = "Data")
-  public List<Data> allData()
-      throws SampleServiceException {
+  public List<Data> allData() throws SampleServiceException {
     return sampleService.getAllData();
   }
 
@@ -76,12 +77,12 @@ public class SampleWebService {
    */
   @WebMethod(operationName = "GetData")
   @WebResult(name = "Data")
-  public Data getData()
-      throws SampleServiceException {
+  public Data getData() throws SampleServiceException {
     long id = System.currentTimeMillis();
 
-    Data data = new Data(id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(),
-        LocalDateTime.now());
+    Data data =
+        new Data(
+            id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
 
     sampleService.addData(data);
 
@@ -90,12 +91,9 @@ public class SampleWebService {
     return data;
   }
 
-  /**
-   * Test the exception handling.
-   */
+  /** Test the exception handling. */
   @WebMethod(operationName = "TestExceptionHandling")
-  public void testExceptionHandling()
-      throws SampleServiceException {
+  public void testExceptionHandling() throws SampleServiceException {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
   }
 
@@ -105,8 +103,8 @@ public class SampleWebService {
    * @param localDateTime the local date time
    */
   @WebMethod(operationName = "TestLocalDateTime")
-  public LocalDateTime testLocalDateTime(@WebParam(name = "LocalDateTime")
-  @XmlElement(required = true) LocalDateTime localDateTime)
+  public LocalDateTime testLocalDateTime(
+      @WebParam(name = "LocalDateTime") @XmlElement(required = true) LocalDateTime localDateTime)
       throws SampleServiceException {
     if (true) {
       throw new SampleServiceException("Testing 1.. 2.. 3...");
@@ -123,8 +121,8 @@ public class SampleWebService {
    * @param zonedDateTime the zoned date time
    */
   @WebMethod(operationName = "TestZonedDateTime")
-  public ZonedDateTime testZonedDateTime(@WebParam(name = "ZonedDateTime")
-  @XmlElement(required = true) ZonedDateTime zonedDateTime)
+  public ZonedDateTime testZonedDateTime(
+      @WebParam(name = "ZonedDateTime") @XmlElement(required = true) ZonedDateTime zonedDateTime)
       throws SampleServiceException {
     if (false) {
       throw new SampleServiceException("Testing 1.. 2.. 3...");
@@ -135,13 +133,11 @@ public class SampleWebService {
     return zonedDateTime;
   }
 
-  /**
-   * Validate the data.
-   */
+  /** Validate the data. */
   @WebMethod(operationName = "Validate")
   @WebResult(name = "ValidationError")
-  public List<ValidationError> validate(@WebParam(name = "Data")
-  @XmlElement(required = true) Data data)
+  public List<ValidationError> validate(
+      @WebParam(name = "Data") @XmlElement(required = true) Data data)
       throws SampleServiceException {
     return sampleService.validate(data);
   }

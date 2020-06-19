@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
@@ -31,14 +31,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class StringToGroupMemberTypeConverter
-    implements Converter<String, GroupMemberType> {
+public class StringToGroupMemberTypeConverter implements Converter<String, GroupMemberType> {
 
-  /**
-   * Constructs a new <code>StringToGroupMemberTypeConverter</code>.
-   */
-  public StringToGroupMemberTypeConverter() {
-  }
+  /** Constructs a new <code>StringToGroupMemberTypeConverter</code>. */
+  public StringToGroupMemberTypeConverter() {}
 
   @Override
   public GroupMemberType convert(String source) {

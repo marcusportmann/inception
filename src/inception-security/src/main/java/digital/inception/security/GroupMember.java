@@ -16,13 +16,12 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
@@ -33,84 +32,78 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupMember</code> class holds the information for a group member.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "GroupMember")
+@Schema(description = "GroupMember")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "groupName", "memberName", "memberType"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
-@XmlType(name = "GroupMember", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "GroupMember",
+    namespace = "http://security.inception.digital",
     propOrder = {"userDirectoryId", "groupName", "memberName", "memberType"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
-public class GroupMember
-    implements Serializable {
+public class GroupMember implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The name identifying the group.
-   */
-  @ApiModelProperty(value = "The name identifying the group", required = true)
+  /** The name identifying the group. */
+  @Schema(description = "The name identifying the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String groupName;
 
-  /**
-   * The name identifying the group member.
-   */
-  @ApiModelProperty(value = "The name identifying the group member", required = true)
+  /** The name identifying the group member. */
+  @Schema(description = "The name identifying the group member", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MemberName", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String memberName;
 
-  /**
-   * The group member type.
-   */
-  @ApiModelProperty(value = "The group member type", required = true)
+  /** The group member type. */
+  @Schema(description = "The group member type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MemberType", required = true)
   @NotNull
   private GroupMemberType memberType;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
-   * is associated with.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is
+   * associated with.
    */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group is associated with",
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the "
+              + "group is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
   @NotNull
   private UUID userDirectoryId;
 
-  /**
-   * Constructs a new <code>GroupMember</code>.
-   */
-  public GroupMember() {
-  }
+  /** Constructs a new <code>GroupMember</code>. */
+  public GroupMember() {}
 
   /**
    * Constructs a new <code>GroupMember</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
-   * @param groupName       the name identifying the group
-   * @param memberType      the group member type
-   * @param memberName      the name identifying the group member
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory the group is associated with
+   * @param groupName the name identifying the group
+   * @param memberType the group member type
+   * @param memberName the name identifying the group member
    */
-  public GroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
-      String memberName) {
+  public GroupMember(
+      UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.memberType = memberType;
@@ -172,22 +165,22 @@ public class GroupMember
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * group is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   *     group is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * group is associated with.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

@@ -16,7 +16,7 @@
 
 package digital.inception.persistence;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
@@ -26,7 +26,6 @@ import java.io.Serializable;
  * generated value for an identity column in the database.
  *
  * @param <T>
- *
  * @author Marcus Portmann
  */
 public interface Identifiable<T extends Serializable> {

@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -24,7 +24,7 @@ import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded by a
@@ -35,9 +35,7 @@ import java.io.PrintWriter;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagePartResult {
 
-  /**
-   * The message part result code returned to indicate an invalid request.
-   */
+  /** The message part result code returned to indicate an invalid request. */
   public static final int ERROR_INVALID_REQUEST = -1;
 
   /**
@@ -52,28 +50,24 @@ public class MessagePartResult {
    */
   public static final int ERROR_UNRECOGNISED_TYPE = -2;
 
-  /**
-   * The message part result code returned to indicated successful uploading of a message part.
-   */
+  /** The message part result code returned to indicated successful uploading of a message part. */
   public static final int SUCCESS = 0;
 
   /**
    * The result code.
-   * <p/>
-   * A result code of 0 is used to indicate that the message part was uploaded successfully.
+   *
+   * <p>A result code of 0 is used to indicate that the message part was uploaded successfully.
    */
   private long code;
 
   /**
    * The user-friendly text description of the result of uploading the message part.
-   * <p/>
-   * The <b>detail</b> may be blank if the message part was uploaded successfully.
+   *
+   * <p>The <b>detail</b> may be blank if the message part was uploaded successfully.
    */
   private String detail;
 
-  /**
-   * The flattened information for the exception that resulted from uploading the message part.
-   */
+  /** The flattened information for the exception that resulted from uploading the message part. */
   private String exception;
 
   /**
@@ -98,7 +92,7 @@ public class MessagePartResult {
   /**
    * Constructs a new <code>MessagePartResult</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of uploading the message part
    */
   public MessagePartResult(long code, String detail) {
@@ -109,9 +103,9 @@ public class MessagePartResult {
   /**
    * Constructs a new <code>MessagePartResult</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of uploading the message part
-   * @param cause  the exception that resulted from uploading the message part
+   * @param cause the exception that resulted from uploading the message part
    */
   public MessagePartResult(long code, String detail, Throwable cause) {
     this.code = code;
@@ -127,8 +121,9 @@ public class MessagePartResult {
 
         exception = baos.toString();
       } catch (Throwable e) {
-        exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
-            e.getMessage());
+        exception =
+            String.format(
+                "Unable to dump the stack for the exception (%s): %s", cause, e.getMessage());
       }
     }
   }
@@ -138,9 +133,8 @@ public class MessagePartResult {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message received response
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -153,8 +147,8 @@ public class MessagePartResult {
 
   /**
    * Returns the result code.
-   * <p/>
-   * A result code of 0 is used to indicate that the message part was uploaded successfully.
+   *
+   * <p>A result code of 0 is used to indicate that the message part was uploaded successfully.
    *
    * @return the result code
    */
@@ -194,7 +188,7 @@ public class MessagePartResult {
    * part.
    *
    * @return the flattened information for the exception that resulted from uploading the message
-   * part
+   *     part
    */
   public String getException() {
     return exception;
@@ -204,7 +198,7 @@ public class MessagePartResult {
    * Set the flattened information for the exception that resulted from uploading the message part.
    *
    * @param exception the flattened information for the exception that resulted from uploading the
-   *                  message part
+   *     message part
    */
   public void setException(String exception) {
     this.exception = exception;

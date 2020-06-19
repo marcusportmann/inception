@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -38,7 +38,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
@@ -48,17 +48,18 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 public class SchedulerServiceTest {
 
   private static int jobCount;
 
-  /**
-   * The Scheduler Service.
-   */
-  @Autowired
-  private ISchedulerService schedulerService;
+  /** The Scheduler Service. */
+  @Autowired private ISchedulerService schedulerService;
 
   private static synchronized Job getTestJobDetails() {
     jobCount++;
@@ -72,8 +73,8 @@ public class SchedulerServiceTest {
     job.setStatus(JobStatus.UNSCHEDULED);
 
     for (int i = 1; i <= 10; i++) {
-      JobParameter parameter = new JobParameter("Job Parameter Name " + i, "Job Parameter Value "
-          + i);
+      JobParameter parameter =
+          new JobParameter("Job Parameter Name " + i, "Job Parameter Value " + i);
 
       job.addParameter(parameter);
     }
@@ -81,29 +82,23 @@ public class SchedulerServiceTest {
     return job;
   }
 
-  /**
-   * Test the execute job functionality.
-   */
+  /** Test the execute job functionality. */
   @Test
-  public void executeJobTest()
-      throws Exception {
+  public void executeJobTest() throws Exception {
     Job job = getTestJobDetails();
 
     schedulerService.executeJob(job);
   }
 
-  /**
-   * Test the job parameters functionality.
-   */
+  /** Test the job parameters functionality. */
   @Test
-  public void jobParametersTest()
-      throws Exception {
+  public void jobParametersTest() throws Exception {
     Job job = getTestJobDetails();
     job.setEnabled(false);
 
     for (int i = 0; i < 10; i++) {
-      job.addParameter(new JobParameter(job.getName() + " Parameter " + i, job.getName()
-          + " Value " + i));
+      job.addParameter(
+          new JobParameter(job.getName() + " Parameter " + i, job.getName() + " Value " + i));
     }
 
     schedulerService.createJob(job);
@@ -113,12 +108,9 @@ public class SchedulerServiceTest {
     compareJobs(job, retrievedJob);
   }
 
-  /**
-   * Test the job functionality.
-   */
+  /** Test the job functionality. */
   @Test
-  public void jobTest()
-      throws Exception {
+  public void jobTest() throws Exception {
     Job disabledJob = getTestJobDetails();
     disabledJob.setEnabled(false);
 
@@ -128,8 +120,10 @@ public class SchedulerServiceTest {
 
     for (Job unscheduledJob : unscheduledJobs) {
       if (unscheduledJob.getId().equals(disabledJob.getId())) {
-        fail(String.format("The disabled job (%s) was retrieved incorrectly as an unscheduled job",
-            disabledJob.getId()));
+        fail(
+            String.format(
+                "The disabled job (%s) was retrieved incorrectly as an unscheduled job",
+                disabledJob.getId()));
       }
     }
 
@@ -149,12 +143,16 @@ public class SchedulerServiceTest {
 
     long numberOfJobs = schedulerService.getNumberOfJobs();
 
-    assertEquals("The correct number of jobs was not retrieved", beforeRetrievedJobs.size() + 1,
+    assertEquals(
+        "The correct number of jobs was not retrieved",
+        beforeRetrievedJobs.size() + 1,
         numberOfJobs);
 
     List<Job> afterRetrievedJobs = schedulerService.getJobs();
 
-    assertEquals("The correct number of jobs was not retrieved", beforeRetrievedJobs.size() + 1,
+    assertEquals(
+        "The correct number of jobs was not retrieved",
+        beforeRetrievedJobs.size() + 1,
         afterRetrievedJobs.size());
 
     boolean foundJob = false;
@@ -186,20 +184,21 @@ public class SchedulerServiceTest {
     }
 
     if (!foundUnscheduledJob) {
-      fail(String.format("Failed to find the job (%s) in the list of unscheduled jobs",
-          job.getId()));
+      fail(
+          String.format(
+              "Failed to find the job (%s) in the list of unscheduled jobs", job.getId()));
     }
 
     // noinspection StatementWithEmptyBody
-    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
-    }
+    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 
     for (Job unscheduledJob : unscheduledJobs) {
       if (unscheduledJob.getId().equals(job.getId())) {
-        fail(String.format("The job (%s) was retrieved incorrectly as an unscheduled job",
-            job.getId()));
+        fail(
+            String.format(
+                "The job (%s) was retrieved incorrectly as an unscheduled job", job.getId()));
 
         break;
       }
@@ -207,7 +206,9 @@ public class SchedulerServiceTest {
 
     retrievedJob = schedulerService.getJob(job.getId());
 
-    assertEquals("The status for the job (" + job.getId() + ") is incorrect", JobStatus.SCHEDULED,
+    assertEquals(
+        "The status for the job (" + job.getId() + ") is incorrect",
+        JobStatus.SCHEDULED,
         retrievedJob.getStatus());
 
     job.removeParameter(job.getParameters().iterator().next().getName());
@@ -231,30 +232,46 @@ public class SchedulerServiceTest {
   private void compareJobs(Job job1, Job job2) {
     assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
     assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
-    assertEquals("The scheduling pattern values for the two jobs do not match",
-        job1.getSchedulingPattern(), job2.getSchedulingPattern());
-    assertEquals("The job class values for the two jobs do not match", job1.getJobClass(),
+    assertEquals(
+        "The scheduling pattern values for the two jobs do not match",
+        job1.getSchedulingPattern(),
+        job2.getSchedulingPattern());
+    assertEquals(
+        "The job class values for the two jobs do not match",
+        job1.getJobClass(),
         job2.getJobClass());
-    assertEquals("The is enabled values for the two jobs do not match", job1.isEnabled(),
-        job2.isEnabled());
-    assertEquals("The status values for the two jobs do not match", job1.getStatus(),
-        job2.getStatus());
-    assertEquals("The execution attempts values for the two jobs do not match",
-        job1.getExecutionAttempts(), job2.getExecutionAttempts());
-    assertEquals("The lock name values for the two jobs do not match", job1.getLockName(),
+    assertEquals(
+        "The is enabled values for the two jobs do not match", job1.isEnabled(), job2.isEnabled());
+    assertEquals(
+        "The status values for the two jobs do not match", job1.getStatus(), job2.getStatus());
+    assertEquals(
+        "The execution attempts values for the two jobs do not match",
+        job1.getExecutionAttempts(),
+        job2.getExecutionAttempts());
+    assertEquals(
+        "The lock name values for the two jobs do not match",
+        job1.getLockName(),
         job2.getLockName());
-    assertEquals("The last executed values for the two jobs do not match", job1.getLastExecuted(),
+    assertEquals(
+        "The last executed values for the two jobs do not match",
+        job1.getLastExecuted(),
         job2.getLastExecuted());
-    assertEquals("The number of parameters for the two jobs do not match", job1.getParameters()
-        .size(), job2.getParameters().size());
+    assertEquals(
+        "The number of parameters for the two jobs do not match",
+        job1.getParameters().size(),
+        job2.getParameters().size());
 
     for (JobParameter job1Parameter : job1.getParameters()) {
       boolean foundParameter = false;
 
       for (JobParameter job2Parameter : job2.getParameters()) {
         if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
-          assertEquals("The values for the two job parameters (" + job1Parameter.getName()
-              + ") do not match", job1Parameter.getValue(), job2Parameter.getValue());
+          assertEquals(
+              "The values for the two job parameters ("
+                  + job1Parameter.getName()
+                  + ") do not match",
+              job1Parameter.getValue(),
+              job2Parameter.getValue());
 
           foundParameter = true;
         }

@@ -28,7 +28,6 @@ public final class ExceptionUtil {
    * Returns the nested messages for an exception.
    *
    * @param e the exception
-   *
    * @return the nested messages for the exception
    */
   public static String getNestedMessages(Throwable e) {
@@ -44,8 +43,7 @@ public final class ExceptionUtil {
       buffer.append(current.getMessage());
 
       current = current.getCause();
-    }
-    while (current != null);
+    } while (current != null);
 
     return buffer.toString();
   }

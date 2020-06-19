@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -79,7 +79,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingServletTest</code> class contains the implementation of the JUnit tests for
@@ -90,43 +90,40 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @SuppressWarnings({"unused", "SameParameterValue"})
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServletTest {
 
   private static final String PASSWORD = "Password1";
   private static final String USERNAME = "Administrator";
 
-  /**
-   * The HTTP content-type used when receiving and sending WBXML.
-   */
+  /** The HTTP content-type used when receiving and sending WBXML. */
   private static final String WBXML_CONTENT_TYPE = "application/wbxml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
   private static final UUID DEVICE_ID = UUID.randomUUID();
 
-  /**
-   * The Spring application context.
-   */
-  @Autowired
-  private ApplicationContext applicationContext;
+  /** The Spring application context. */
+  @Autowired private ApplicationContext applicationContext;
+
   private ServletUnitClient servletUnitClient;
 
-  /**
-   * Test the "Another Test" asynchronous encrypted message functionality with no correlation.
-   */
+  /** Test the "Another Test" asynchronous encrypted message functionality with no correlation. */
   @Test
-  public void anotherTestMessageEncryptedNoCorrelationIdTest()
-      throws Exception {
+  public void anotherTestMessageEncryptedNoCorrelationIdTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
-        userEncryptionKey);
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
 
-    AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
-        "Test Data".getBytes());
+    AnotherTestRequestData requestData =
+        new AnotherTestRequestData("Test Value", "Test Data".getBytes());
 
     Message requestMessage = messageTranslator.toMessage(requestData);
 
@@ -144,11 +141,12 @@ public class MessagingServletTest {
     }
 
     // Retrieve the messages queued for download
-    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
-        USERNAME);
+    MessageDownloadResponse messageDownloadResponse =
+        sendMessageDownloadRequest(DEVICE_ID, USERNAME);
 
     assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
-    assertEquals(messageDownloadResponse.getNumberOfMessages(),
+    assertEquals(
+        messageDownloadResponse.getNumberOfMessages(),
         messageDownloadResponse.getMessages().size());
 
     List<Message> messages = messageDownloadResponse.getMessages();
@@ -161,18 +159,18 @@ public class MessagingServletTest {
       assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
-      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
-          + ")");
+      logger.info(
+          "Downloaded message (" + message.getId() + ") with type (" + message.getTypeId() + ")");
 
-      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
-          message.getId());
+      MessageReceivedResponse messageReceivedResponse =
+          sendMessageReceivedRequest(DEVICE_ID, message.getId());
 
       assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
 
       assertTrue(message.isEncrypted());
 
-      AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
-          new AnotherTestResponseData());
+      AnotherTestResponseData responseData =
+          messageTranslator.fromMessage(message, new AnotherTestResponseData());
 
       assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
       assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
@@ -181,19 +179,16 @@ public class MessagingServletTest {
     }
   }
 
-  /**
-   * Test the "Another Test" asynchronous encrypted message functionality.
-   */
+  /** Test the "Another Test" asynchronous encrypted message functionality. */
   @Test
-  public void anotherTestMessageEncryptedTest()
-      throws Exception {
+  public void anotherTestMessageEncryptedTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
-        userEncryptionKey);
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
 
-    AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
-        "Test Data".getBytes());
+    AnotherTestRequestData requestData =
+        new AnotherTestRequestData("Test Value", "Test Data".getBytes());
 
     Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
@@ -211,11 +206,12 @@ public class MessagingServletTest {
     }
 
     // Retrieve the messages queued for download
-    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
-        USERNAME);
+    MessageDownloadResponse messageDownloadResponse =
+        sendMessageDownloadRequest(DEVICE_ID, USERNAME);
 
     assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
-    assertEquals(messageDownloadResponse.getNumberOfMessages(),
+    assertEquals(
+        messageDownloadResponse.getNumberOfMessages(),
         messageDownloadResponse.getMessages().size());
 
     List<Message> messages = messageDownloadResponse.getMessages();
@@ -228,18 +224,18 @@ public class MessagingServletTest {
       assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
-      logger.info("Downloaded message (" + message.getId() + ") with type (" + message.getTypeId()
-          + ")");
+      logger.info(
+          "Downloaded message (" + message.getId() + ") with type (" + message.getTypeId() + ")");
 
-      MessageReceivedResponse messageReceivedResponse = sendMessageReceivedRequest(DEVICE_ID,
-          message.getId());
+      MessageReceivedResponse messageReceivedResponse =
+          sendMessageReceivedRequest(DEVICE_ID, message.getId());
 
       assertEquals(MessageReceivedResponse.SUCCESS, messageReceivedResponse.getCode());
 
       assertTrue(message.isEncrypted());
 
-      AnotherTestResponseData responseData = messageTranslator.fromMessage(message,
-          new AnotherTestResponseData());
+      AnotherTestResponseData responseData =
+          messageTranslator.fromMessage(message, new AnotherTestResponseData());
 
       assertEquals(AnotherTestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
       assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
@@ -248,16 +244,13 @@ public class MessagingServletTest {
     }
   }
 
-  /**
-   * Test the "Another Test" asynchronous unencrypted message functionality.
-   */
+  /** Test the "Another Test" asynchronous unencrypted message functionality. */
   @Test
-  public void anotherTestMessageUnencryptedTest()
-      throws Exception {
+  public void anotherTestMessageUnencryptedTest() throws Exception {
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
-        "Test Data".getBytes());
+    AnotherTestRequestData requestData =
+        new AnotherTestRequestData("Test Value", "Test Data".getBytes());
 
     Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
 
@@ -277,16 +270,13 @@ public class MessagingServletTest {
     // TODO: Confirm that there is no message with the same correlation ID in the database
   }
 
-  /**
-   * Test the "Another Test" asynchronous multi-part message functionality.
-   */
+  /** Test the "Another Test" asynchronous multi-part message functionality. */
   @Test
-  public void anotherTestMultiPartMessageTest()
-      throws Exception {
+  public void anotherTestMultiPartMessageTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
-        userEncryptionKey);
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
 
     byte[] testData = new byte[64 * 1024];
 
@@ -308,8 +298,8 @@ public class MessagingServletTest {
     }
 
     // Retrieve the messages queued for download
-    MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
-        USERNAME);
+    MessageDownloadResponse messageDownloadResponse =
+        sendMessageDownloadRequest(DEVICE_ID, USERNAME);
 
     assertEquals(MessageDownloadResponse.SUCCESS, messageDownloadResponse.getCode());
 
@@ -321,8 +311,8 @@ public class MessagingServletTest {
     assertEquals(0, messages.size());
 
     // Retrieve the message parts queued for download
-    MessagePartDownloadResponse messagePartDownloadResponse = sendMessagePartDownloadRequest(
-        DEVICE_ID, USERNAME);
+    MessagePartDownloadResponse messagePartDownloadResponse =
+        sendMessagePartDownloadRequest(DEVICE_ID, USERNAME);
 
     assertEquals(MessagePartDownloadResponse.SUCCESS, messagePartDownloadResponse.getCode());
 
@@ -338,12 +328,19 @@ public class MessagingServletTest {
       assertEquals(Integer.valueOf(1), messagePart.getDownloadAttempts());
       assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
 
-      logger.info("Downloaded message part (" + messagePart.getPartNo() + "/"
-          + messagePart.getTotalParts() + ") with ID (" + messagePart.getId() + ") and type ("
-          + messagePart.getMessageTypeId() + ")");
+      logger.info(
+          "Downloaded message part ("
+              + messagePart.getPartNo()
+              + "/"
+              + messagePart.getTotalParts()
+              + ") with ID ("
+              + messagePart.getId()
+              + ") and type ("
+              + messagePart.getMessageTypeId()
+              + ")");
 
-      MessagePartReceivedResponse messagePartReceivedResponse = sendMessagePartReceivedRequest(
-          DEVICE_ID, messagePart.getId());
+      MessagePartReceivedResponse messagePartReceivedResponse =
+          sendMessagePartReceivedRequest(DEVICE_ID, messagePart.getId());
 
       assertEquals(0, messagePartReceivedResponse.getCode());
 
@@ -356,28 +353,30 @@ public class MessagingServletTest {
 
     assertEquals(messageParts.get(0).getMessageChecksum(), messageChecksum);
 
-    Message reconstructedMessage = new Message(messageParts.get(0).getMessageUsername(),
-        messageParts.get(0).getMessageDeviceId(), messageParts.get(0).getMessageTypeId(),
-        messageParts.get(0).getMessageCorrelationId(), messageParts.get(0).getMessagePriority(),
-        baos.toByteArray(), messageParts.get(0).getMessageDataHash(), messageParts.get(0)
-        .getMessageEncryptionIV());
+    Message reconstructedMessage =
+        new Message(
+            messageParts.get(0).getMessageUsername(),
+            messageParts.get(0).getMessageDeviceId(),
+            messageParts.get(0).getMessageTypeId(),
+            messageParts.get(0).getMessageCorrelationId(),
+            messageParts.get(0).getMessagePriority(),
+            baos.toByteArray(),
+            messageParts.get(0).getMessageDataHash(),
+            messageParts.get(0).getMessageEncryptionIV());
 
-    AnotherTestResponseData anotherTestResponseData = messageTranslator.fromMessage(
-        reconstructedMessage, new AnotherTestResponseData());
+    AnotherTestResponseData anotherTestResponseData =
+        messageTranslator.fromMessage(reconstructedMessage, new AnotherTestResponseData());
 
     assertArrayEquals(testData, anotherTestResponseData.getTestData());
   }
 
-  /**
-   * Test the "Test" synchronous encrypted message functionality.
-   */
+  /** Test the "Test" synchronous encrypted message functionality. */
   @Test
-  public void testMessageEncryptedTest()
-      throws Exception {
+  public void testMessageEncryptedTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
-        userEncryptionKey);
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
 
     TestRequestData requestData = new TestRequestData("Test Value");
 
@@ -387,20 +386,17 @@ public class MessagingServletTest {
 
     assertEquals(MessageResult.SUCCESS, messageResult.getCode());
 
-    TestResponseData responseData = messageTranslator.fromMessage(messageResult.getMessage(),
-        new TestResponseData());
+    TestResponseData responseData =
+        messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
 
     assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
     assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
     assertEquals("Test Value", responseData.getTestValue());
   }
 
-  /**
-   * Test the "Test" synchronous unencrypted message functionality.
-   */
+  /** Test the "Test" synchronous unencrypted message functionality. */
   @Test
-  public void testMessageUnencryptedTest()
-      throws Exception {
+  public void testMessageUnencryptedTest() throws Exception {
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
     TestRequestData requestData = new TestRequestData("Test Value");
@@ -424,8 +420,8 @@ public class MessagingServletTest {
 
     assertEquals(MessageResult.SUCCESS, messageResult.getCode());
 
-    AuthenticateResponseData responseData = messageTranslator.fromMessage(
-        messageResult.getMessage(), new AuthenticateResponseData());
+    AuthenticateResponseData responseData =
+        messageTranslator.fromMessage(messageResult.getMessage(), new AuthenticateResponseData());
 
     assertEquals(AuthenticateResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
     assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
@@ -444,8 +440,11 @@ public class MessagingServletTest {
       servletUnitClient = servletRunner.newClient();
     }
 
-    PostMethodWebRequest request = new PostMethodWebRequest("http://localhost/MessagingServlet",
-        new ByteArrayInputStream(wbxmlRequestData), WBXML_CONTENT_TYPE);
+    PostMethodWebRequest request =
+        new PostMethodWebRequest(
+            "http://localhost/MessagingServlet",
+            new ByteArrayInputStream(wbxmlRequestData),
+            WBXML_CONTENT_TYPE);
 
     InvocationContext invocationContext = servletUnitClient.newInvocation(request);
 
@@ -456,12 +455,12 @@ public class MessagingServletTest {
     return invocationContext;
   }
 
-  private byte[] invokeMessagingServlet(byte[] requestData)
-      throws Exception {
+  private byte[] invokeMessagingServlet(byte[] requestData) throws Exception {
     InvocationContext invocationContext = getMessagingServletInvocationContext(requestData);
 
-    invocationContext.getServlet().service(invocationContext.getRequest(),
-        invocationContext.getResponse());
+    invocationContext
+        .getServlet()
+        .service(invocationContext.getRequest(), invocationContext.getResponse());
 
     WebResponse response = invocationContext.getServletResponse();
 
@@ -505,8 +504,12 @@ public class MessagingServletTest {
           if (i < (numberOfParts - 1)) {
             messagePartData = new byte[MessagePart.MAX_MESSAGE_PART_SIZE];
 
-            System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
-                messagePartData, 0, MessagePart.MAX_MESSAGE_PART_SIZE);
+            System.arraycopy(
+                message.getData(),
+                (i * MessagePart.MAX_MESSAGE_PART_SIZE),
+                messagePartData,
+                0,
+                MessagePart.MAX_MESSAGE_PART_SIZE);
           }
 
           // If this is the last message part
@@ -515,14 +518,29 @@ public class MessagingServletTest {
 
             messagePartData = new byte[sizeOfPart];
 
-            System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
-                messagePartData, 0, sizeOfPart);
+            System.arraycopy(
+                message.getData(),
+                (i * MessagePart.MAX_MESSAGE_PART_SIZE),
+                messagePartData,
+                0,
+                sizeOfPart);
           }
 
-          MessagePart messagePart = new MessagePart(i + 1, numberOfParts, message.getId(),
-              message.getUsername(), message.getDeviceId(), message.getTypeId(),
-              message.getCorrelationId(), message.getPriority(), message.getCreated(),
-              message.getDataHash(), message.getEncryptionIV(), messageChecksum, messagePartData);
+          MessagePart messagePart =
+              new MessagePart(
+                  i + 1,
+                  numberOfParts,
+                  message.getId(),
+                  message.getUsername(),
+                  message.getDeviceId(),
+                  message.getTypeId(),
+                  message.getCorrelationId(),
+                  message.getPriority(),
+                  message.getCreated(),
+                  message.getDataHash(),
+                  message.getEncryptionIV(),
+                  messageChecksum,
+                  messagePartData);
 
           messagePart.setStatus(MessagePartStatus.QUEUED_FOR_SENDING);
 
@@ -535,14 +553,24 @@ public class MessagingServletTest {
 
           // Check if we have received a valid message result
           if (MessagePartResult.isValidWBXML(document)) {
-            logger.info("Uploaded the message part (" + messagePart.getPartNo() + "/"
-                + messagePart.getTotalParts() + ") for the message (" + messagePart.getMessageId()
-                + ") from the user (" + messagePart.getMessageUsername() + ") and the device ("
-                + messagePart.getMessageDeviceId() + ") with message type ("
-                + messagePart.getMessageTypeId() + ")");
+            logger.info(
+                "Uploaded the message part ("
+                    + messagePart.getPartNo()
+                    + "/"
+                    + messagePart.getTotalParts()
+                    + ") for the message ("
+                    + messagePart.getMessageId()
+                    + ") from the user ("
+                    + messagePart.getMessageUsername()
+                    + ") and the device ("
+                    + messagePart.getMessageDeviceId()
+                    + ") with message type ("
+                    + messagePart.getMessageTypeId()
+                    + ")");
           } else {
-            throw new RuntimeException("The WBXML response data from the remote server is not a "
-                + "valid MessageResult document");
+            throw new RuntimeException(
+                "The WBXML response data from the remote server is not a "
+                    + "valid MessageResult document");
           }
 
           MessagePartResult messagePartResult = new MessagePartResult(document);
@@ -562,13 +590,14 @@ public class MessagingServletTest {
         if (MessageResult.isValidWBXML(document)) {
           return new MessageResult(document);
         } else {
-          throw new RuntimeException("The WBXML response data from the remote server is not a "
-              + "valid MessageResult document");
+          throw new RuntimeException(
+              "The WBXML response data from the remote server is not a "
+                  + "valid MessageResult document");
         }
       }
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to send the message (" + message.getId() + "): "
-          + e.getMessage(), e);
+      throw new RuntimeException(
+          "Failed to send the message (" + message.getId() + "): " + e.getMessage(), e);
     }
   }
 
@@ -585,16 +614,17 @@ public class MessagingServletTest {
     if (MessageDownloadResponse.isValidWBXML(document)) {
       return new MessageDownloadResponse(document);
     } else {
-      throw new RuntimeException("Failed to send the message download request: "
-          + "The WBXML response data from the remote server is not a valid "
-          + "MessageDownloadResponse document");
+      throw new RuntimeException(
+          "Failed to send the message download request: "
+              + "The WBXML response data from the remote server is not a valid "
+              + "MessageDownloadResponse document");
     }
   }
 
   private MessagePartDownloadResponse sendMessagePartDownloadRequest(UUID deviceId, String username)
       throws Exception {
-    MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(
-        deviceId, username);
+    MessagePartDownloadRequest messagePartDownloadRequest =
+        new MessagePartDownloadRequest(deviceId, username);
 
     byte[] data = invokeMessagingServlet(messagePartDownloadRequest.toWBXML());
 
@@ -605,16 +635,17 @@ public class MessagingServletTest {
     if (MessagePartDownloadResponse.isValidWBXML(document)) {
       return new MessagePartDownloadResponse(document);
     } else {
-      throw new RuntimeException("Failed to send the message part download request: "
-          + "The WBXML response data from the remote server is not a valid "
-          + "MessagePartDownloadResponse document");
+      throw new RuntimeException(
+          "Failed to send the message part download request: "
+              + "The WBXML response data from the remote server is not a valid "
+              + "MessagePartDownloadResponse document");
     }
   }
 
   private MessagePartReceivedResponse sendMessagePartReceivedRequest(UUID deviceId, UUID messageId)
       throws Exception {
-    MessagePartReceivedRequest messagePartReceivedRequest = new MessagePartReceivedRequest(
-        deviceId, messageId);
+    MessagePartReceivedRequest messagePartReceivedRequest =
+        new MessagePartReceivedRequest(deviceId, messageId);
 
     byte[] data = invokeMessagingServlet(messagePartReceivedRequest.toWBXML());
 
@@ -625,9 +656,10 @@ public class MessagingServletTest {
     if (MessagePartReceivedResponse.isValidWBXML(document)) {
       return new MessagePartReceivedResponse(document);
     } else {
-      throw new RuntimeException("Failed to send the message part received request: "
-          + "The WBXML response data from the remote server is not a valid "
-          + "MessagePartReceivedResponse document");
+      throw new RuntimeException(
+          "Failed to send the message part received request: "
+              + "The WBXML response data from the remote server is not a valid "
+              + "MessagePartReceivedResponse document");
     }
   }
 
@@ -644,9 +676,10 @@ public class MessagingServletTest {
     if (MessageReceivedResponse.isValidWBXML(document)) {
       return new MessageReceivedResponse(document);
     } else {
-      throw new RuntimeException("Failed to send the message received request: "
-          + "The WBXML response data from the remote server is not a valid "
-          + "MessageReceivedResponse document");
+      throw new RuntimeException(
+          "Failed to send the message received request: "
+              + "The WBXML response data from the remote server is not a valid "
+              + "MessageReceivedResponse document");
     }
   }
 }

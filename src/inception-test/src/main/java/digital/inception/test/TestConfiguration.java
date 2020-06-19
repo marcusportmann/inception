@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
 import io.agroal.api.AgroalDataSource;
@@ -61,7 +61,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
@@ -74,20 +74,24 @@ import org.springframework.util.StringUtils;
 @EnableAutoConfiguration
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"digital.inception"}, lazyInit = true,
-    excludeFilters = {@ComponentScan.Filter(value = SpringBootApplication.class,
-        type = FilterType.ANNOTATION),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.application\\.ApplicationDatabaseConfiguration",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
-            type = FilterType.REGEX)})
+@ComponentScan(
+    basePackages = {"digital.inception"},
+    lazyInit = true,
+    excludeFilters = {
+      @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationDatabaseConfiguration",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
+          type = FilterType.REGEX)
+    })
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration {
 
@@ -129,18 +133,19 @@ public class TestConfiguration {
 
     localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
     localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan(StringUtils.toStringArray(
-        packagesToScanForEntities()));
+    localContainerEntityManagerFactoryBean.setPackagesToScan(
+        StringUtils.toStringArray(packagesToScanForEntities()));
     localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
     Map<String, Object> jpaPropertyMap = localContainerEntityManagerFactoryBean.getJpaPropertyMap();
 
-    PlatformTransactionManager transactionManager = applicationContext.getBean(
-        PlatformTransactionManager.class);
+    PlatformTransactionManager transactionManager =
+        applicationContext.getBean(PlatformTransactionManager.class);
 
     if (transactionManager instanceof JtaTransactionManager) {
-      jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
-          ((JtaTransactionManager) transactionManager)));
+      jpaPropertyMap.put(
+          "hibernate.transaction.jta.platform",
+          new SpringJtaPlatform(((JtaTransactionManager) transactionManager)));
     }
 
     return localContainerEntityManagerFactoryBean;
@@ -169,9 +174,9 @@ public class TestConfiguration {
   /**
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
-   * <p/>
-   * NOTE: This data source returned by this method must be closed after use with the
-   * <code>close()</code> method.
+   *
+   * <p>NOTE: This data source returned by this method must be closed after use with the <code>
+   * close()</code> method.
    *
    * @return the data source that can be used to interact with the in-memory database
    */
@@ -181,41 +186,48 @@ public class TestConfiguration {
     synchronized (dataSourceLock) {
       if (dataSource == null) {
         try {
-          TransactionManager transactionManager = applicationContext.getBean(
-              TransactionManager.class);
+          TransactionManager transactionManager =
+              applicationContext.getBean(TransactionManager.class);
 
           TransactionSynchronizationRegistry transactionSynchronizationRegistry =
               applicationContext.getBean(TransactionSynchronizationRegistry.class);
 
           Properties agroalProperties = new Properties();
-          agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, "jdbc:h2:mem:"
-              + Thread.currentThread().getName()
-              + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
+          agroalProperties.setProperty(
+              AgroalPropertiesReader.JDBC_URL,
+              "jdbc:h2:mem:"
+                  + Thread.currentThread().getName()
+                  + ";AUTOCOMMIT=OFF;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
 
           // db2Agroal.setProperty(AgroalPropertiesReader.PRINCIPAL, AgroalH2Utils.DB_USER);
           // db2Agroal.setProperty(AgroalPropertiesReader.CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
-          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, AgroalH2Utils.DB_USER);
-          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL, AgroalH2Utils.DB_PASSWORD);
-          agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME,
-              "org.h2.jdbcx.JdbcDataSource");
+          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL,
+          // AgroalH2Utils.DB_USER);
+          // db2Agroal.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL,
+          // AgroalH2Utils.DB_PASSWORD);
+          agroalProperties.setProperty(
+              AgroalPropertiesReader.PROVIDER_CLASS_NAME, "org.h2.jdbcx.JdbcDataSource");
           agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE, "10");
 
           AgroalPropertiesReader agroalReaderProperties2 =
               new AgroalPropertiesReader().readProperties(agroalProperties);
           AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
               agroalReaderProperties2.modify();
-          TransactionIntegration transactionIntegration = new NarayanaTransactionIntegration(
-              transactionManager, transactionSynchronizationRegistry);
+          TransactionIntegration transactionIntegration =
+              new NarayanaTransactionIntegration(
+                  transactionManager, transactionSynchronizationRegistry);
 
-//        TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-//          com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
-//          "java:/agroalds2", false, recoveryManagerService);
+          //        TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
+          //          com.arjuna.ats.jta.TransactionManager.transactionManager(),
+          // transactionSynchronizationRegistry,
+          //          "java:/agroalds2", false, recoveryManagerService);
 
-          agroalDataSourceConfigurationSupplier.connectionPoolConfiguration()
+          agroalDataSourceConfigurationSupplier
+              .connectionPoolConfiguration()
               .transactionIntegration(transactionIntegration);
 
-          dataSource = new DataSourceProxy(AgroalDataSource.from(
-              agroalDataSourceConfigurationSupplier));
+          dataSource =
+              new DataSourceProxy(AgroalDataSource.from(agroalDataSourceConfigurationSupplier));
 
           /*
            * Initialize the in-memory database using the SQL statements contained in the resources
@@ -280,8 +292,8 @@ public class TestConfiguration {
       try (Connection connection = dataSource.getConnection()) {
         JDBCUtil.shutdownHsqlDatabase(connection);
       } catch (Throwable f) {
-        LoggerFactory.getLogger(TestConfiguration.class).error(
-            "Failed to shutdown the in-memory application database: " + e.getMessage());
+        LoggerFactory.getLogger(TestConfiguration.class)
+            .error("Failed to shutdown the in-memory application database: " + e.getMessage());
       }
 
       throw e;

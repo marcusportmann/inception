@@ -27,7 +27,7 @@ export class Configuration {
   description: string;
 
   /**
-   * The key used to uniquely identify the configuration.
+   * The key uniquely identifying the configuration.
    */
   key: string;
 
@@ -39,7 +39,7 @@ export class Configuration {
   /**
    * Constructs a new Configuration.
    *
-   * @param key         The key used to uniquely identify the configuration.
+   * @param key         The key uniquely identifying the configuration.
    * @param value       The value for the configuration.
    * @param description The description for the configuration.
    */

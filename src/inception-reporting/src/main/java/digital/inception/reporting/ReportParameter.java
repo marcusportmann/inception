@@ -16,13 +16,12 @@
 
 package digital.inception.reporting;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,55 +31,49 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportParameter</code> class holds the information for a report parameter.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ReportParameter")
+@Schema(description = "ReportParameter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "ReportParameter", namespace = "http://reporting.inception.digital")
-@XmlType(name = "ReportParameter", namespace = "http://reporting.inception.digital",
+@XmlType(
+    name = "ReportParameter",
+    namespace = "http://reporting.inception.digital",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ReportParameter
-    implements Serializable {
+public class ReportParameter implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The name of the report parameter.
-   */
-  @ApiModelProperty(value = "The name of the report parameter", required = true)
+  /** The name of the report parameter. */
+  @Schema(description = "The name of the report parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   private String name;
 
-  /**
-   * The value for the report parameter.
-   */
-  @ApiModelProperty(value = "The value for the report parameter", required = true)
+  /** The value for the report parameter. */
+  @Schema(description = "The value for the report parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
   private String value;
 
-  /**
-   * Constructs a new <code>ReportParameter</code>.
-   */
-  public ReportParameter() {
-  }
+  /** Constructs a new <code>ReportParameter</code>. */
+  public ReportParameter() {}
 
   /**
    * Constructs a new <code>ReportParameter</code>.
    *
-   * @param name  the name of the report parameter
+   * @param name the name of the report parameter
    * @param value the value for the report parameter
    */
   public ReportParameter(String name, String value) {

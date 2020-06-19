@@ -32,7 +32,7 @@ export class Group {
   name: string;
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory the group
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
    * is associated with.
    */
   userDirectoryId: string;
@@ -40,7 +40,7 @@ export class Group {
   /**
    * Constructs a new Group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) used to uniquely identify the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory the group is associated with.
    * @param name            The name identifying the group.
    * @param description     The description for the group.

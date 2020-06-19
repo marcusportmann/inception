@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import freemarker.cache.TemplateLookupContext;
 import freemarker.cache.TemplateLookupResult;
@@ -43,7 +43,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailService</code> class provides the Mail Service implementation.
@@ -52,45 +52,35 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @SuppressWarnings({"unused"})
-public class MailService
-    implements IMailService, InitializingBean {
+public class MailService implements IMailService, InitializingBean {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
-  /**
-   * The Java mail sender.
-   */
+  /** The Java mail sender. */
   JavaMailSender javaMailSender;
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
-  /**
-   * The Apache FreeMarker configuration.,
-   */
+  /** The Apache FreeMarker configuration., */
   private Configuration freeMarkerConfiguration;
 
-  /**
-   * The Mail Template Repository.
-   */
+  /** The Mail Template Repository. */
   private MailTemplateRepository mailTemplateRepository;
 
-  /**
-   * The Mail Template Summary Repository.
-   */
+  /** The Mail Template Summary Repository. */
   private MailTemplateSummaryRepository mailTemplateSummaryRepository;
 
   /**
    * Constructs a new <code>MailService</code>.
    *
-   * @param applicationContext            the Spring application context
-   * @param mailTemplateRepository        the Mail Template Repository
+   * @param applicationContext the Spring application context
+   * @param mailTemplateRepository the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */
-  public MailService(ApplicationContext applicationContext,
+  public MailService(
+      ApplicationContext applicationContext,
       MailTemplateRepository mailTemplateRepository,
       MailTemplateSummaryRepository mailTemplateSummaryRepository) {
     this.applicationContext = applicationContext;
@@ -99,24 +89,24 @@ public class MailService
 
     this.freeMarkerConfiguration = new Configuration(Configuration.VERSION_2_3_29);
     this.freeMarkerConfiguration.setTemplateLoader(new FreeMarkerTemplateLoader(this));
-    this.freeMarkerConfiguration.setTemplateLookupStrategy(new TemplateLookupStrategy() {
-      @Override
-      public TemplateLookupResult lookup(TemplateLookupContext templateLookupContext)
-          throws IOException {
-        return templateLookupContext.lookupWithAcquisitionStrategy(
-            templateLookupContext.getTemplateName());
-      }
+    this.freeMarkerConfiguration.setTemplateLookupStrategy(
+        new TemplateLookupStrategy() {
+          @Override
+          public TemplateLookupResult lookup(TemplateLookupContext templateLookupContext)
+              throws IOException {
+            return templateLookupContext.lookupWithAcquisitionStrategy(
+                templateLookupContext.getTemplateName());
+          }
 
-      @Override
-      public String toString() {
-        return "MailServiceLookupStrategy";
-      }
-    });
+          @Override
+          public String toString() {
+            return "MailServiceLookupStrategy";
+          }
+        });
   }
 
   @Override
-  public void afterPropertiesSet()
-      throws Exception {
+  public void afterPropertiesSet() throws Exception {
     try {
       javaMailSender = applicationContext.getBean(JavaMailSender.class);
     } catch (NoSuchBeanDefinitionException ignored) {
@@ -128,7 +118,7 @@ public class MailService
    * Create the new mail template.
    *
    * @param mailTemplate the <code>MailTemplate</code> instance containing the information for the
-   *                     new mail template
+   *     new mail template
    */
   @Override
   @Transactional
@@ -147,15 +137,15 @@ public class MailService
     } catch (DuplicateMailTemplateException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to create the mail template (" + mailTemplate.getId()
-          + ")", e);
+      throw new MailServiceException(
+          "Failed to create the mail template (" + mailTemplate.getId() + ")", e);
     }
   }
 
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
+   * @param mailTemplateId the ID uniquely identifying the mail template
    */
   @Override
   @Transactional
@@ -178,16 +168,15 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to delete the mail template (" + mailTemplateId + ")",
-          e);
+      throw new MailServiceException(
+          "Failed to delete the mail template (" + mailTemplateId + ")", e);
     }
   }
 
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
-   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @return the mail template
    */
   @Override
@@ -205,16 +194,15 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the mail template (" + mailTemplateId
-          + ")", e);
+      throw new MailServiceException(
+          "Failed to retrieve the mail template (" + mailTemplateId + ")", e);
     }
   }
 
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
-   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @return the name of the mail template
    */
   @Override
@@ -231,10 +219,9 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the name for the mail template ("
-          + mailTemplateId + ")", e);
+      throw new MailServiceException(
+          "Failed to retrieve the name for the mail template (" + mailTemplateId + ")", e);
     }
-
   }
 
   /**
@@ -243,21 +230,18 @@ public class MailService
    * @return the summaries for all the mail templates
    */
   @Override
-  public List<MailTemplateSummary> getMailTemplateSummaries()
-      throws MailServiceException {
+  public List<MailTemplateSummary> getMailTemplateSummaries() throws MailServiceException {
     try {
       return mailTemplateSummaryRepository.findAll();
     } catch (Throwable e) {
       throw new MailServiceException("Failed to retrieve the summaries for the mail templates", e);
     }
-
   }
 
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
-   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @return the summary for the mail template
    */
   @Override
@@ -275,24 +259,23 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the summary for the mail template ("
-          + mailTemplateId + ")", e);
+      throw new MailServiceException(
+          "Failed to retrieve the summary for the mail template (" + mailTemplateId + ")", e);
     }
   }
 
   /**
    * Returns the date and time the mail template was last updated.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
-   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @return the date and time the mail template was last updated
    */
   @Override
   public LocalDateTime getMailTemplateUpdated(String mailTemplateId)
       throws MailTemplateNotFoundException, MailServiceException {
     try {
-      Optional<LocalDateTime> updatedOptional = mailTemplateRepository.getUpdatedById(
-          mailTemplateId);
+      Optional<LocalDateTime> updatedOptional =
+          mailTemplateRepository.getUpdatedById(mailTemplateId);
 
       if (updatedOptional.isPresent()) {
         return updatedOptional.get();
@@ -302,8 +285,11 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the date and time the mail template ("
-          + mailTemplateId + ") was last updated", e);
+      throw new MailServiceException(
+          "Failed to retrieve the date and time the mail template ("
+              + mailTemplateId
+              + ") was last updated",
+          e);
     }
   }
 
@@ -313,14 +299,12 @@ public class MailService
    * @return all the mail templates
    */
   @Override
-  public List<MailTemplate> getMailTemplates()
-      throws MailServiceException {
+  public List<MailTemplate> getMailTemplates() throws MailServiceException {
     try {
       return mailTemplateRepository.findAll();
     } catch (Throwable e) {
       throw new MailServiceException("Failed to retrieve the mail templates", e);
     }
-
   }
 
   /**
@@ -329,40 +313,35 @@ public class MailService
    * @return the number of mail templates
    */
   @Override
-  public long getNumberOfMailTemplates()
-      throws MailServiceException {
+  public long getNumberOfMailTemplates() throws MailServiceException {
     try {
       return mailTemplateRepository.count();
     } catch (Throwable e) {
       throw new MailServiceException("Failed to retrieve the number of mail templates", e);
     }
-
   }
 
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the ID used to uniquely identify the mail template
-   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   @Override
-  public boolean mailTemplateExists(String mailTemplateId)
-      throws MailServiceException {
+  public boolean mailTemplateExists(String mailTemplateId) throws MailServiceException {
     try {
       return mailTemplateRepository.existsById(mailTemplateId);
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to check whether the mail template (" + mailTemplateId
-          + ") exists", e);
+      throw new MailServiceException(
+          "Failed to check whether the mail template (" + mailTemplateId + ") exists", e);
     }
   }
 
   /**
    * Process the mail template.
    *
-   * @param mailTemplateId     the ID used to uniquely identify the mail template
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @param templateParameters the template parameters
-   *
    * @return the output of processing the template
    */
   @Override
@@ -376,24 +355,28 @@ public class MailService
 
       return sw.toString();
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to process the mail template (" + mailTemplateId
-          + ")", e);
-
+      throw new MailServiceException(
+          "Failed to process the mail template (" + mailTemplateId + ")", e);
     }
   }
 
   /**
    * Send a mail.
    *
-   * @param to                     the list of e-mail addresses to send the mail to
-   * @param subject                the subject for the mail
-   * @param from                   the from e-mail address
-   * @param fromName               the from e-mail name
-   * @param mailTemplateId         the ID used to uniquely identify the mail template
+   * @param to the list of e-mail addresses to send the mail to
+   * @param subject the subject for the mail
+   * @param from the from e-mail address
+   * @param fromName the from e-mail name
+   * @param mailTemplateId the ID uniquely identifying the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
-  public void sendMail(List<String> to, String subject, String from, String fromName,
-      String mailTemplateId, Map<String, String> mailTemplateParameters)
+  public void sendMail(
+      List<String> to,
+      String subject,
+      String from,
+      String fromName,
+      String mailTemplateId,
+      Map<String, String> mailTemplateParameters)
       throws MailTemplateNotFoundException, MailServiceException {
     try {
       // Retrieve the mail template
@@ -417,7 +400,8 @@ public class MailService
 
         helper.setSubject(subject);
 
-        helper.setText(processMailTemplate(mailTemplate.getId(), mailTemplateParameters),
+        helper.setText(
+            processMailTemplate(mailTemplate.getId(), mailTemplateParameters),
             mailTemplate.getContentType() == MailTemplateContentType.HTML);
 
         javaMailSender.send(helper.getMimeMessage());
@@ -435,7 +419,7 @@ public class MailService
    * Update the mail template.
    *
    * @param mailTemplate the <code>MailTemplate</code> instance containing the updated information
-   *                     for the mail template
+   *     for the mail template
    */
   @Override
   @Transactional
@@ -460,8 +444,8 @@ public class MailService
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to update the mail template (" + mailTemplate.getId()
-          + ")", e);
+      throw new MailServiceException(
+          "Failed to update the mail template (" + mailTemplate.getId() + ")", e);
     }
   }
 }

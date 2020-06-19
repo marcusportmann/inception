@@ -16,7 +16,7 @@
 
 package digital.inception.rs.oauth;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.security.ISecurityService;
@@ -44,23 +44,16 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuthorizationServerConfiguration</code> class provides the OAuth2 Authorization Server
- * configuration.
- * </p>
- * Execute the following commands to generate the RSA key pair:
+ * configuration. Execute the following commands to generate the RSA key pair:
+ *
  * <ul>
- *   <li>
- *     openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
- *   </li>
- *   <li>
- *     openssl rsa -in private.pem -outform PEM -pubout -out public.pem
- *   </li>
- *   <li>
- *     openssl rsa -in private.pem -out private_unencrypted.pem -outform PEM
- *   </li>
+ *   <li>openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
+ *   <li>openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+ *   <li>openssl rsa -in private.pem -out private_unencrypted.pem -outform PEM
  * </ul>
  *
  * @author Marcus Portmann
@@ -71,31 +64,21 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("WeakerAccess")
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-  /**
-   * The access token validity in seconds (10 minutes).
-   */
+  /** The access token validity in seconds (10 minutes). */
   public static final Integer ACCESS_TOKEN_VALIDITY = 10 * 60;
 
-  /**
-   * The refresh token validity in seconds.
-   */
+  /** The refresh token validity in seconds. */
   public static final Integer REFRESH_TOKEN_VALIDITY = 2 * 365 * 24 * 60 * 60;
 
-  /**
-   * The private key used to sign OAuth2 tokens.
-   */
+  /** The private key used to sign OAuth2 tokens. */
   @Value("${security.oauth2.jwt.privateKey:#{null}}")
   private String jwtPrivateKey;
 
-  /**
-   * The public key used to verify OAuth2 tokens.
-   */
+  /** The public key used to verify OAuth2 tokens. */
   @Value("${security.oauth2.jwt.publicKey:#{null}}")
   private String jwtPublicKey;
 
-  /**
-   * The Security Service.
-   */
+  /** The Security Service. */
   private ISecurityService securityService;
 
   /**
@@ -181,8 +164,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    * @param security a fluent configurer for security features
    */
   @Override
-  public void configure(AuthorizationServerSecurityConfigurer security)
-      throws Exception {
+  public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
     super.configure(security);
 
     // Allow form authentication for clients
@@ -205,8 +187,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    * @param clients the client details service configurer
    */
   @Override
-  public void configure(ClientDetailsServiceConfigurer clients)
-      throws Exception {
+  public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     clients.withClientDetails(new ClientDetailsService());
   }
 

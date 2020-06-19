@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
@@ -33,48 +33,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a "Get Code Category
  * Request" message.
- * <p/>
- * This is a synchronous message.
+ *
+ * <p>This is a synchronous message.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 public class GetCodeCategoryRequestData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Get Code Category Request" message.
-   */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "94d60eb6-a062-492d-b5e7-9fb1f05cf088");
+  /** The UUID for the "Get Code Category Request" message. */
+  public static final UUID MESSAGE_TYPE_ID =
+      UUID.fromString("94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
-  /**
-   * The ID used to uniquely identify the code category to retrieve.
-   */
+  /** The ID uniquely identifying the code category to retrieve. */
   private String codeCategoryId;
 
-  /**
-   * The date and time the code category was last retrieved.
-   */
+  /** The date and time the code category was last retrieved. */
   private LocalDateTime lastRetrieved;
 
-  /**
-   * The parameters.
-   */
+  /** The parameters. */
   private Map<String, String> parameters;
 
-  /**
-   * Should the codes for the code category be returned if the code category is current?
-   */
+  /** Should the codes for the code category be returned if the code category is current? */
   private boolean returnCodesIfCurrent;
 
-  /**
-   * Constructs a new <code>GetCodeCategoryRequestData</code>.
-   */
+  /** Constructs a new <code>GetCodeCategoryRequestData</code>. */
   public GetCodeCategoryRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -82,13 +70,13 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId       the ID used to uniquely identify the code category to retrieve
-   * @param lastRetrieved        the date and time the code category was last retrieved
+   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
+   * @param lastRetrieved the date and time the code category was last retrieved
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
-   *                             category is current
+   *     category is current
    */
-  public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved,
-      boolean returnCodesIfCurrent) {
+  public GetCodeCategoryRequestData(
+      String codeCategoryId, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.codeCategoryId = codeCategoryId;
@@ -100,14 +88,17 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId       the ID used to uniquely identify the code category to retrieve
-   * @param lastRetrieved        the date and time the code category was last retrieved
-   * @param parameters           the parameters
+   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
+   * @param lastRetrieved the date and time the code category was last retrieved
+   * @param parameters the parameters
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
-   *                             category is current
+   *     category is current
    */
-  public GetCodeCategoryRequestData(String codeCategoryId, LocalDateTime lastRetrieved, Map<String,
-      String> parameters, boolean returnCodesIfCurrent) {
+  public GetCodeCategoryRequestData(
+      String codeCategoryId,
+      LocalDateTime lastRetrieved,
+      Map<String, String> parameters,
+      boolean returnCodesIfCurrent) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.codeCategoryId = codeCategoryId;
@@ -120,13 +111,11 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData)
-      throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
     Element rootElement = parseWBXML(messageData).getRootElement();
 
     if (!rootElement.getName().equals("GetCodeCategoryRequest")) {
@@ -147,12 +136,16 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
       try {
         this.lastRetrieved = ISO8601Util.toLocalDateTime(lastRetrievedValue);
       } catch (Throwable e) {
-        throw new RuntimeException("Failed to parse the LastRetrieved ISO8601 timestamp ("
-            + lastRetrievedValue + ") for the \"Get Code Category Request\" message", e);
+        throw new RuntimeException(
+            "Failed to parse the LastRetrieved ISO8601 timestamp ("
+                + lastRetrievedValue
+                + ") for the \"Get Code Category Request\" message",
+            e);
       }
     } else {
-      this.lastRetrieved = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
-          lastRetrievedValue)), ZoneId.systemDefault());
+      this.lastRetrieved =
+          LocalDateTime.ofInstant(
+              Instant.ofEpochSecond(Long.parseLong(lastRetrievedValue)), ZoneId.systemDefault());
     }
 
     this.parameters = new HashMap<>();
@@ -166,8 +159,8 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
       this.parameters.put(parameterName, parameterValue);
     }
 
-    this.returnCodesIfCurrent = Boolean.parseBoolean(rootElement.getChildText(
-        "ReturnCodesIfCurrent"));
+    this.returnCodesIfCurrent =
+        Boolean.parseBoolean(rootElement.getChildText("ReturnCodesIfCurrent"));
 
     return true;
   }
@@ -204,7 +197,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * is current or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the codes for the code category be returned if the code category
-   * is current or <code>false</code> otherwise
+   *     is current or <code>false</code> otherwise
    */
   public boolean getReturnCodesIfCurrent() {
     return returnCodesIfCurrent;
@@ -215,17 +208,19 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {
     Element rootElement = new Element("GetCodeCategoryRequest");
 
     rootElement.addContent(new Element("CodeCategoryId", codeCategoryId));
-    rootElement.addContent(new Element("LastRetrieved",
-        (lastRetrieved == null)
-            ? ISO8601Util.now()
-            : ISO8601Util.fromLocalDateTime(lastRetrieved)));
+    rootElement.addContent(
+        new Element(
+            "LastRetrieved",
+            (lastRetrieved == null)
+                ? ISO8601Util.now()
+                : ISO8601Util.fromLocalDateTime(lastRetrieved)));
 
     for (String parameterName : parameters.keySet()) {
       String parameterValue = parameters.get(parameterName);
@@ -238,8 +233,8 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
       rootElement.addContent(parameterElement);
     }
 
-    rootElement.addContent(new Element("ReturnCodesIfCurrent", String.valueOf(
-        returnCodesIfCurrent)));
+    rootElement.addContent(
+        new Element("ReturnCodesIfCurrent", String.valueOf(returnCodesIfCurrent)));
 
     Encoder encoder = new Encoder(new Document(rootElement));
 

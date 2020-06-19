@@ -16,7 +16,7 @@
 
 package digital.inception.core.xml;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -27,8 +27,7 @@ import org.xml.sax.InputSource;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class DtdJarResolver
-    implements EntityResolver {
+public class DtdJarResolver implements EntityResolver {
 
   private String dtdPath;
   private String publicId;
@@ -38,7 +37,7 @@ public class DtdJarResolver
    * Constructs a new <code>DTDJarResolver</code>.
    *
    * @param systemId the system ID for the DTD
-   * @param dtdPath  the path on the classpath to the DTD
+   * @param dtdPath the path on the classpath to the DTD
    */
   public DtdJarResolver(String systemId, String dtdPath) {
     this.systemId = systemId;
@@ -50,7 +49,7 @@ public class DtdJarResolver
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD
-   * @param dtdPath  the path on the classpath to the DTD
+   * @param dtdPath the path on the classpath to the DTD
    */
   public DtdJarResolver(String publicId, String systemId, String dtdPath) {
     this.publicId = publicId;
@@ -82,11 +81,10 @@ public class DtdJarResolver
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD
-   *
    * @return an InputSource that can be used to read the data for the DTD
    */
   public InputSource resolveEntity(String publicId, String systemId) {
-    return new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(
-        dtdPath));
+    return new InputSource(
+        Thread.currentThread().getContextClassLoader().getResourceAsStream(dtdPath));
   }
 }

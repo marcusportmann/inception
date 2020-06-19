@@ -16,33 +16,30 @@
 
 package digital.inception.scheduler;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.util.List;
 
 /**
  * The <code>IntArrayValueMatcher</code> class implements a <code>ValueMatcher</code> whose rules
  * are in a plain array of integer values.
- * <p/>
- * When asked to validate a value, this ValueMatcher checks if it is in the array.
+ *
+ * <p>When asked to validate a value, this ValueMatcher checks if it is in the array.
  *
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class IntArrayValueMatcher
-    implements ValueMatcher {
+public class IntArrayValueMatcher implements ValueMatcher {
 
-  /**
-   * The accepted values.
-   */
+  /** The accepted values. */
   private int[] values;
 
   /**
    * Builds the ValueMatcher.
    *
    * @param integers The Integer elements, one for every value accepted by the matcher. The match()
-   *                 method will return true only if its parameter will be one of this list.
+   *     method will return true only if its parameter will be one of this list.
    */
   IntArrayValueMatcher(List<Integer> integers) {
     int size = integers.size();
@@ -60,13 +57,12 @@ public class IntArrayValueMatcher
 
   /**
    * Validate the given integer value against a set of rules.
-   * <p/>
-   * Returns <code>true</code> if the given value is included in the matcher list.
+   *
+   * <p>Returns <code>true</code> if the given value is included in the matcher list.
    *
    * @param value the value
-   *
-   * @return <code>true</code> if the given value matches the rules of the
-   * <code>ValueMatcher</code>, <code>false</code> otherwise
+   * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
+   *     , <code>false</code> otherwise
    */
   public boolean match(int value) {
     for (int value1 : values) {

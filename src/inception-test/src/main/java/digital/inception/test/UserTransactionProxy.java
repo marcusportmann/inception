@@ -16,7 +16,7 @@
 
 package digital.inception.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,46 +31,39 @@ import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserTransactionProxy</code> class provides a proxy that tracks the Java Transaction
- * (JTA) API transactions associated with the current thread and managed by a
- * <code>javax.transaction.UserTransaction</code> implementation.
+ * (JTA) API transactions associated with the current thread and managed by a <code>
+ * javax.transaction.UserTransaction</code> implementation.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused"})
-public class UserTransactionProxy
-    implements UserTransaction {
+public class UserTransactionProxy implements UserTransaction {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserTransactionProxy.class);
 
-  /**
-   * The stack traces for the active transactions associated with the current thread.
-   */
+  /** The stack traces for the active transactions associated with the current thread. */
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The JTA user transaction.
-   */
+  /** The JTA user transaction. */
   private UserTransaction userTransaction;
 
-  /**
-   * The JTA transaction manager.
-   */
+  /** The JTA transaction manager. */
   private TransactionManager transactionManager;
 
   /**
    * Constructs a new <code>UserTransactionProxy</code>.
    *
-   * @param userTransaction    the JTA user transaction
+   * @param userTransaction the JTA user transaction
    * @param transactionManager the JTA transaction manager
    */
-  public UserTransactionProxy(UserTransaction userTransaction,
-      TransactionManager transactionManager) {
+  public UserTransactionProxy(
+      UserTransaction userTransaction, TransactionManager transactionManager) {
     this.transactionManager = transactionManager;
     this.userTransaction = userTransaction;
   }
@@ -85,16 +78,15 @@ public class UserTransactionProxy
   }
 
   @Override
-  public void begin()
-      throws NotSupportedException, SystemException {
+  public void begin() throws NotSupportedException, SystemException {
     try {
       userTransaction.begin();
     } finally {
       Transaction afterTransaction = getCurrentTransaction();
 
       if (afterTransaction != null) {
-        getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
-            .getStackTrace());
+        getActiveTransactionStackTraces()
+            .put(afterTransaction, Thread.currentThread().getStackTrace());
       }
     }
   }
@@ -102,7 +94,7 @@ public class UserTransactionProxy
   @Override
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-      SecurityException, IllegalStateException, SystemException {
+          SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
     try {
@@ -117,14 +109,12 @@ public class UserTransactionProxy
   }
 
   @Override
-  public int getStatus()
-      throws SystemException {
+  public int getStatus() throws SystemException {
     return userTransaction.getStatus();
   }
 
   @Override
-  public void rollback()
-      throws IllegalStateException, SecurityException, SystemException {
+  public void rollback() throws IllegalStateException, SecurityException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
     try {
@@ -139,14 +129,12 @@ public class UserTransactionProxy
   }
 
   @Override
-  public void setRollbackOnly()
-      throws IllegalStateException, SystemException {
+  public void setRollbackOnly() throws IllegalStateException, SystemException {
     userTransaction.setRollbackOnly();
   }
 
   @Override
-  public void setTransactionTimeout(int i)
-      throws SystemException {
+  public void setTransactionTimeout(int i) throws SystemException {
     userTransaction.setTransactionTimeout(i);
   }
 

@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2019 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,45 +14,46 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.security;
+// package digital.inception.security;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//// ~--- non-JDK imports --------------------------------------------------------
 //
-//import digital.inception.test.TestClassRunner;
-//import digital.inception.test.TestConfiguration;
+// import digital.inception.test.TestClassRunner;
+// import digital.inception.test.TestConfiguration;
 //
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
+// import org.junit.Test;
+// import org.junit.runner.RunWith;
 //
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.TestExecutionListeners;
-//import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-//import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-//import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.test.context.ContextConfiguration;
+// import org.springframework.test.context.TestExecutionListeners;
+// import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+// import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+// import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 //
-//import static org.junit.Assert.*;
+// import static org.junit.Assert.*;
 //
-////~--- JDK imports ------------------------------------------------------------
+//// ~--- JDK imports ------------------------------------------------------------
 //
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
+// import java.util.ArrayList;
+// import java.util.List;
+// import java.util.UUID;
 //
-///**
+/// **
 // * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit
 // * tests for the <code>SecurityService</code> class.
 // *
 // * @author Marcus Portmann
 // */
-//@RunWith(TestClassRunner.class)
-//@ContextConfiguration(classes = { TestConfiguration.class })
-//@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
+// @RunWith(TestClassRunner.class)
+// @ContextConfiguration(classes = { TestConfiguration.class })
+// @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
 //    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-//public class LDAPUserDirectoryTest
-//{
+// public class LDAPUserDirectoryTest
+// {
 //  /**
-//   * The Universally Unique Identifier (UUID) used to uniquely identify the Sample LDAP user directory.
+//   * The Universally Unique Identifier (UUID) uniquely identifying the Sample LDAP user
+// directory.
 //   */
 //  private static final UUID SAMPLE_LDAP_USER_DIRECTORY_ID = UUID.fromString(
 //      "11111111-1111-1111-1111-111111111111");
@@ -172,7 +173,8 @@
 //
 //      compareGroups(group, retrievedGroup);
 //
-//      securityService.addRoleToGroup(SAMPLE_LDAP_USER_DIRECTORY_ID, group.getName(), SecurityService
+//      securityService.addRoleToGroup(SAMPLE_LDAP_USER_DIRECTORY_ID, group.getName(),
+// SecurityService
 //          .ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
 //
 //      List<GroupRole> retrievedGroupRoles = securityService.getRolesForGroup(
@@ -229,7 +231,8 @@
 //          }
 //        }
 //
-//        List<User> retrievedFilteredUsers = securityService.getUsers(SAMPLE_LDAP_USER_DIRECTORY_ID,
+//        List<User> retrievedFilteredUsers =
+// securityService.getUsers(SAMPLE_LDAP_USER_DIRECTORY_ID,
 //            "Test", UserSortBy.USERNAME, SortDirection.ASCENDING, 0, 100);
 //
 //        assertEquals("The correct number of filtered users was not retrieved", 1,
@@ -449,7 +452,8 @@
 //
 //  private void compareGroups(Group group1, Group group2)
 //  {
-//    assertEquals("The description values for the two groups do not match", group1.getDescription(),
+//    assertEquals("The description values for the two groups do not match",
+// group1.getDescription(),
 //        group2.getDescription());
 //    assertEquals("The group name values for the two groups do not match", group1.getName(),
 //        group2.getName());
@@ -475,4 +479,4 @@
 //        user2.getUsername());
 //
 //  }
-//}
+// }

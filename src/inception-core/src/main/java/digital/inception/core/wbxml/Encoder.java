@@ -16,7 +16,7 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,8 +122,7 @@ public class Encoder {
     do {
       buf[idx++] = (byte) (value & 0x7f);
       value = value >> 7;
-    }
-    while (value != 0);
+    } while (value != 0);
 
     while (idx > 1) {
       appendByte(buf[--idx] | 0x80);
@@ -136,8 +135,8 @@ public class Encoder {
     try {
       buffer.append(str.getBytes(ENCODING_UTF_8));
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to encode the string of length " + str.length()
-          + " for the WBXML document", e);
+      throw new RuntimeException(
+          "Failed to encode the string of length " + str.length() + " for the WBXML document", e);
     }
 
     buffer.append(0);
@@ -253,8 +252,8 @@ public class Encoder {
         stringTablelength += bytes.length;
         stringTablelength += 1;
       } catch (Throwable e) {
-        throw new RuntimeException("Failed to calculate the length of the string table for the "
-            + "WBXML document", e);
+        throw new RuntimeException(
+            "Failed to calculate the length of the string table for the " + "WBXML document", e);
       }
     }
 
@@ -274,8 +273,11 @@ public class Encoder {
           offset += bytes.length;
           offset += 1;
         } catch (Throwable e) {
-          throw new RuntimeException("Failed to calculate the offset of the string (" + str
-              + ") in the string table for the WBXML document", e);
+          throw new RuntimeException(
+              "Failed to calculate the offset of the string ("
+                  + str
+                  + ") in the string table for the WBXML document",
+              e);
         }
       }
     }

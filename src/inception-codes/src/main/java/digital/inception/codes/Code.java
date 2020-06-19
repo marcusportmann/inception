@@ -16,13 +16,12 @@
 
 package digital.inception.codes;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,33 +36,32 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Code</code> class holds the information for a code.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "Code")
+@Schema(description = "Code")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "codeCategoryId", "name", "value"})
 @XmlRootElement(name = "Code", namespace = "http://codes.inception.digital")
-@XmlType(name = "Code", namespace = "http://codes.inception.digital",
+@XmlType(
+    name = "Code",
+    namespace = "http://codes.inception.digital",
     propOrder = {"id", "codeCategoryId", "name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "codes")
 @IdClass(CodeId.class)
-public class Code
-    implements Serializable {
+public class Code implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the code category the code is associated with.
-   */
-  @ApiModelProperty(
-      value = "The ID used to uniquely identify the code category the code is associated with",
+  /** The ID uniquely identifying the code category the code is associated with. */
+  @Schema(
+      description = "The ID uniquely identifying the code category the code is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)
@@ -73,10 +71,8 @@ public class Code
   @Column(name = "code_category_id", nullable = false, length = 100)
   private String codeCategoryId;
 
-  /**
-   * The ID used to uniquely identify the code.
-   */
-  @ApiModelProperty(value = "The ID used to uniquely identify the code", required = true)
+  /** The ID uniquely identifying the code. */
+  @Schema(description = "The ID uniquely identifying the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -85,10 +81,8 @@ public class Code
   @Column(name = "id", nullable = false, length = 100)
   private String id;
 
-  /**
-   * The name of the code.
-   */
-  @ApiModelProperty(value = "The name of the code", required = true)
+  /** The name of the code. */
+  @Schema(description = "The name of the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -96,10 +90,8 @@ public class Code
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The value for the code.
-   */
-  @ApiModelProperty(value = "The value for the code", required = true)
+  /** The value for the code. */
+  @Schema(description = "The value for the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
@@ -107,17 +99,13 @@ public class Code
   @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
-  /**
-   * Constructs a new <code>Code</code>.
-   */
-  public Code() {
-  }
+  /** Constructs a new <code>Code</code>. */
+  public Code() {}
 
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
-   *                       with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
    */
   public Code(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
@@ -126,11 +114,10 @@ public class Code
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param id             the ID used to uniquely identify the code
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
-   *                       with
-   * @param name           the name of the code
-   * @param value          the value for the code
+   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param name the name of the code
+   * @param value the value for the code
    */
   public Code(String id, String codeCategoryId, String name, String value) {
     this.id = id;
@@ -143,9 +130,8 @@ public class Code
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -167,37 +153,36 @@ public class Code
   }
 
   /**
-   * Returns the ID used to uniquely identify the code category the code is associated with.
+   * Returns the ID uniquely identifying the code category the code is associated with.
    *
-   * @return the ID used to uniquely identify the code category the code is associated with
+   * @return the ID uniquely identifying the code category the code is associated with
    */
   public String getCodeCategoryId() {
     return codeCategoryId;
   }
 
   /**
-   * Set the ID used to uniquely identify the code category the code is associated with.
+   * Set the ID uniquely identifying the code category the code is associated with.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
-   *                       with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
    */
   public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
   }
 
   /**
-   * Returns the ID used to uniquely identify the code.
+   * Returns the ID uniquely identifying the code.
    *
-   * @return the ID used to uniquely identify the code
+   * @return the ID uniquely identifying the code
    */
   public String getId() {
     return id;
   }
 
   /**
-   * Set the ID used to uniquely identify the code.
+   * Set the ID uniquely identifying the code.
    *
-   * @param id the ID used to uniquely identify the code
+   * @param id the ID uniquely identifying the code
    */
   public void setId(String id) {
     this.id = id;
@@ -246,8 +231,6 @@ public class Code
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

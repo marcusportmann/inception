@@ -16,14 +16,13 @@
 
 package digital.inception.error;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -41,35 +40,48 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReportSummary</code> class holds the summary information for an error report.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "ErrorReportSummary")
+@Schema(description = "ErrorReportSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "applicationId", "applicationVersion", "description", "created", "who",
-    "deviceId"})
+@JsonPropertyOrder({
+  "id",
+  "applicationId",
+  "applicationVersion",
+  "description",
+  "created",
+  "who",
+  "deviceId"
+})
 @XmlRootElement(name = "ErrorReportSummary", namespace = "http://error.inception.digital")
-@XmlType(name = "ErrorReport", namespace = "http://error.inception.digital",
-    propOrder = {"id", "applicationId", "applicationVersion", "description", "created", "who",
-        "deviceId"})
+@XmlType(
+    name = "ErrorReport",
+    namespace = "http://error.inception.digital",
+    propOrder = {
+      "id",
+      "applicationId",
+      "applicationVersion",
+      "description",
+      "created",
+      "who",
+      "deviceId"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "error", name = "error_reports")
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ErrorReportSummary
-    implements Serializable {
+public class ErrorReportSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the application that generated the error report.
-   */
-  @ApiModelProperty(
-      value = "ID used to uniquely identify the application that generated the error report",
+  /** The ID uniquely identifying the application that generated the error report. */
+  @Schema(
+      description = "ID uniquely identifying the application that generated the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
@@ -78,10 +90,9 @@ public class ErrorReportSummary
   @Column(name = "application_id", nullable = false, length = 200)
   private String applicationId;
 
-  /**
-   * The version of the application that generated the error report.
-   */
-  @ApiModelProperty(value = "The version of the application that generated the error report",
+  /** The version of the application that generated the error report. */
+  @Schema(
+      description = "The version of the application that generated the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationVersion", required = true)
@@ -90,10 +101,8 @@ public class ErrorReportSummary
   @Column(name = "application_version", nullable = false)
   private String applicationVersion;
 
-  /**
-   * The date and time the error report was created.
-   */
-  @ApiModelProperty(value = "The date and time the error report was created", required = true)
+  /** The date and time the error report was created. */
+  @Schema(description = "The date and time the error report was created", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "When")
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
@@ -102,10 +111,8 @@ public class ErrorReportSummary
   @Column(name = "created", nullable = false)
   private LocalDateTime created;
 
-  /**
-   * The description of the error.
-   */
-  @ApiModelProperty(value = "The description of the error", required = true)
+  /** The description of the error. */
+  @Schema(description = "The description of the error", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -114,22 +121,23 @@ public class ErrorReportSummary
   private String description;
 
   /**
-   * The optional Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * error report originated from.
+   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * report originated from.
    */
-  @ApiModelProperty(
-      value = "The optional Universally Unique Identifier (UUID) used to uniquely identify the device the error report originated from")
+  @Schema(
+      description =
+          "The optional Universally Unique Identifier (UUID) uniquely identifying "
+              + "the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Size(max = 50)
   @Column(name = "device_id")
   private UUID deviceId;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the error report.
-   */
-  @ApiModelProperty(
-      value = "The Universally Unique Identifier (UUID) used to uniquely identify the error report",
+  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -138,40 +146,39 @@ public class ErrorReportSummary
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The optional username identifying the user associated with the error report.
-   */
-  @ApiModelProperty(
-      value = "The optional username identifying the user associated with the error report")
+  /** The optional username identifying the user associated with the error report. */
+  @Schema(
+      description = "The optional username identifying the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
   @Column(name = "who", length = 100)
   private String who;
 
-  /**
-   * Constructs a new <code>ErrorReportSummary</code>.
-   */
-  public ErrorReportSummary() {
-  }
+  /** Constructs a new <code>ErrorReportSummary</code>. */
+  public ErrorReportSummary() {}
 
   /**
    * Constructs a new <code>ErrorReportSummary</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) used to uniquely identify
-   *                           the error report
-   * @param applicationId      the ID used to uniquely identify the application that generated the
-   *                           error report
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @param applicationId the ID uniquely identifying the application that generated the error
+   *     report
    * @param applicationVersion the version of the application that generated the error report
-   * @param description        the description of the error
-   * @param created            the date and time the error report was created
-   * @param who                the optional username identifying the user associated with the error
-   *                           report
-   * @param deviceId           the optional Universally Unique Identifier (UUID) used to uniquely
-   *                           identify the device the error report originated from
+   * @param description the description of the error
+   * @param created the date and time the error report was created
+   * @param who the optional username identifying the user associated with the error report
+   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   *     device the error report originated from
    */
-  public ErrorReportSummary(UUID id, String applicationId, String applicationVersion,
-      String description, LocalDateTime created, String who, UUID deviceId) {
+  public ErrorReportSummary(
+      UUID id,
+      String applicationId,
+      String applicationVersion,
+      String description,
+      LocalDateTime created,
+      String who,
+      UUID deviceId) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;
@@ -185,9 +192,8 @@ public class ErrorReportSummary
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -209,19 +215,19 @@ public class ErrorReportSummary
   }
 
   /**
-   * Returns the ID used to uniquely identify the application that generated the error report.
+   * Returns the ID uniquely identifying the application that generated the error report.
    *
-   * @return the ID used to uniquely identify the application that generated the error report
+   * @return the ID uniquely identifying the application that generated the error report
    */
   public String getApplicationId() {
     return applicationId;
   }
 
   /**
-   * Set the ID used to uniquely identify the application that generated the error report.
+   * Set the ID uniquely identifying the application that generated the error report.
    *
-   * @param applicationId the ID used to uniquely identify the application that generated the error
-   *                      report
+   * @param applicationId the ID uniquely identifying the application that generated the error
+   *     report
    */
   public void setApplicationId(String applicationId) {
     this.applicationId = applicationId;
@@ -282,40 +288,40 @@ public class ErrorReportSummary
   }
 
   /**
-   * Returns the optional Universally Unique Identifier (UUID) used to uniquely identify the device
-   * the error report originated from.
+   * Returns the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * error report originated from.
    *
-   * @return the optional Universally Unique Identifier (UUID) used to uniquely identify the device
-   * the error report originated from
+   * @return the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     error report originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Set the optional Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * error report originated from.
+   * Set the optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * report originated from.
    *
-   * @param deviceId the optional Universally Unique Identifier (UUID) used to uniquely identify the
-   *                 device the error report originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   *     device the error report originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the error report.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
    */
   public void setId(UUID id) {
     this.id = id;
@@ -346,8 +352,6 @@ public class ErrorReportSummary
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

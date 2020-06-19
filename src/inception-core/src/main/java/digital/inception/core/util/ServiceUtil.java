@@ -16,13 +16,13 @@
 
 package digital.inception.core.util;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceUtil</code> class provides utility methods that are useful when creating
@@ -37,7 +37,6 @@ public class ServiceUtil {
    * Retrieve the service instance name for the service with the specified name.
    *
    * @param serviceName the service name
-   *
    * @return the service instance name for the service with the specified name
    */
   public static String getServiceInstanceName(String serviceName) {
@@ -55,18 +54,18 @@ public class ServiceUtil {
       }
     }
 
-    String instanceName = (applicationName == null)
-        ? ""
-        : applicationName + "::";
+    String instanceName = (applicationName == null) ? "" : applicationName + "::";
 
     try {
       java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
 
       instanceName += localMachine.getHostName().toLowerCase();
     } catch (Throwable e) {
-      logger.error(String.format(
-          "Failed to retrieve the server hostname while constructing the %s instance name",
-          serviceName), e);
+      logger.error(
+          String.format(
+              "Failed to retrieve the server hostname while constructing the %s instance name",
+              serviceName),
+          e);
       instanceName = "Unknown";
     }
 
@@ -98,8 +97,10 @@ public class ServiceUtil {
       Class<?> clazz = null;
 
       try {
-        clazz = Thread.currentThread().getContextClassLoader().loadClass(
-            "com.ibm.websphere.management.configservice.ConfigurationService");
+        clazz =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass("com.ibm.websphere.management.configservice.ConfigurationService");
       } catch (Throwable ignored) {
       }
 
@@ -107,9 +108,12 @@ public class ServiceUtil {
         try {
           instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
         } catch (Throwable e) {
-          logger.error(String.format(
-              "Failed to retrieve the name of the WebSphere server instance from JNDI while "
-                  + "constructing the %s instance name", serviceName), e);
+          logger.error(
+              String.format(
+                  "Failed to retrieve the name of the WebSphere server instance from JNDI while "
+                      + "constructing the %s instance name",
+                  serviceName),
+              e);
           instanceName = instanceName + "::Unknown";
         }
       }

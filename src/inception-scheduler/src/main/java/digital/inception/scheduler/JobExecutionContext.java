@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -30,21 +30,17 @@ import java.util.Map;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JobExecutionContext {
 
-  /**
-   * The date and time that the job was scheduled to be executed.
-   */
+  /** The date and time that the job was scheduled to be executed. */
   private LocalDateTime executionDate;
 
-  /**
-   * The parameters for the job.
-   */
+  /** The parameters for the job. */
   private Map<String, String> parameters;
 
   /**
    * Constructs a new <code>JobExecutionContext</code>.
    *
    * @param executionDate the date and time that the job was scheduled to be executed
-   * @param parameters    the parameters for the job
+   * @param parameters the parameters for the job
    */
   public JobExecutionContext(LocalDateTime executionDate, Map<String, String> parameters) {
     this.executionDate = executionDate;
@@ -64,9 +60,8 @@ public class JobExecutionContext {
    * Returns the parameter with the specified name for the job.
    *
    * @param name the name of the parameter
-   *
    * @return the value of the parameter with the specified name or <code>null</code> if the
-   * parameter cannot be found
+   *     parameter cannot be found
    */
   public String getParameter(String name) {
     return parameters.get(name);

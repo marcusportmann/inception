@@ -16,43 +16,34 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.codes.Code;
 import digital.inception.core.wbxml.Element;
 import java.io.Serializable;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeData</code> class holds the information for a code.
  *
  * @author Marcus Portmann
  */
-public class CodeData
-    implements Serializable {
+public class CodeData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID used to uniquely identify the category the code is associated with.
-   */
+  /** The ID uniquely identifying the category the code is associated with. */
   private String codeCategoryId;
 
-  /**
-   * The ID used to uniquely identify the code.
-   */
+  /** The ID uniquely identifying the code. */
   private String id;
 
-  /**
-   * The name of the code.
-   */
+  /** The name of the code. */
   private String name;
 
-  /**
-   * The value for the code.
-   */
+  /** The value for the code. */
   private String value;
 
   /**
@@ -76,30 +67,28 @@ public class CodeData
     try {
       this.id = element.getChildText("Id");
       this.codeCategoryId = element.getChildText("CodeCategoryId");
-      this.name = StringUtils.isEmpty(element.getChildText("Name"))
-          ? ""
-          : element.getChildText("Name");
-      this.value = StringUtils.isEmpty(element.getChildText("Value"))
-          ? ""
-          : element.getChildText("Value");
+      this.name =
+          StringUtils.isEmpty(element.getChildText("Name")) ? "" : element.getChildText("Name");
+      this.value =
+          StringUtils.isEmpty(element.getChildText("Value")) ? "" : element.getChildText("Value");
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the code data from the WBXML", e);
     }
   }
 
   /**
-   * Returns the ID used to uniquely identify the category the code is associated with.
+   * Returns the ID uniquely identifying the category the code is associated with.
    *
-   * @return the ID used to uniquely identify the category the code is associated with
+   * @return the ID uniquely identifying the category the code is associated with
    */
   public String getCodeCategoryId() {
     return codeCategoryId;
   }
 
   /**
-   * Returns the ID used to uniquely identify the code.
+   * Returns the ID uniquely identifying the code.
    *
-   * @return the ID used to uniquely identify the code
+   * @return the ID uniquely identifying the code
    */
   public String getId() {
     return id;
@@ -131,16 +120,10 @@ public class CodeData
   Element toElement() {
     Element codeElement = new Element("Code");
 
-    codeElement.addContent(new Element("Id", StringUtils.isEmpty(id)
-        ? ""
-        : id));
+    codeElement.addContent(new Element("Id", StringUtils.isEmpty(id) ? "" : id));
     codeElement.addContent(new Element("CodeCategoryId", codeCategoryId));
-    codeElement.addContent(new Element("Name", StringUtils.isEmpty(name)
-        ? ""
-        : name));
-    codeElement.addContent(new Element("Value", StringUtils.isEmpty(value)
-        ? ""
-        : value));
+    codeElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    codeElement.addContent(new Element("Value", StringUtils.isEmpty(value) ? "" : value));
 
     return codeElement;
   }

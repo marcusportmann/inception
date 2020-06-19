@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,37 +27,29 @@ import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AnotherTestResponseData</code> class manages the data for a "Another Test Response"
  * message.
- * <p/>
- * This is an asynchronous message.
+ *
+ * <p>This is an asynchronous message.
  *
  * @author Marcus Portmann
  */
 public class AnotherTestResponseData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Another Test Response" message.
-   */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "a714a9c6-2914-4498-ab59-64be9991bf37");
+  /** The UUID for the "Another Test Response" message. */
+  public static final UUID MESSAGE_TYPE_ID =
+      UUID.fromString("a714a9c6-2914-4498-ab59-64be9991bf37");
 
-  /**
-   * The test data.
-   */
+  /** The test data. */
   private byte[] testData;
 
-  /**
-   * The test value.
-   */
+  /** The test value. */
   private String testValue;
 
-  /**
-   * Constructs a new <code>AnotherTestResponseData</code>.
-   */
+  /** Constructs a new <code>AnotherTestResponseData</code>. */
   public AnotherTestResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -66,7 +58,7 @@ public class AnotherTestResponseData extends WbxmlMessageData {
    * Constructs a new <code>AnotherTestResponseData</code>.
    *
    * @param testValue the test value
-   * @param testData  the test data
+   * @param testData the test data
    */
   public AnotherTestResponseData(String testValue, byte[] testData) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -79,13 +71,11 @@ public class AnotherTestResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData)
-      throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -127,15 +117,14 @@ public class AnotherTestResponseData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {
     Element rootElement = new Element("AnotherTestResponse");
 
-    rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue)
-        ? ""
-        : testValue));
+    rootElement.addContent(
+        new Element("TestValue", StringUtils.isEmpty(testValue) ? "" : testValue));
     rootElement.addContent(new Element("TestData", testData));
 
     Document document = new Document(rootElement);

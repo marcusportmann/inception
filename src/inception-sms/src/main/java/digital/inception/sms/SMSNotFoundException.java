@@ -16,7 +16,7 @@
 
 package digital.inception.sms;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,18 +26,21 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSNotFoundException</code> exception is thrown to indicate an error condition as a
  * result of a SMS that could not be found.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The SMS could not be found")
-@WebFault(name = "SMSNotFoundException", targetNamespace = "http://sms.inception.digital",
+@WebFault(
+    name = "SMSNotFoundException",
+    targetNamespace = "http://sms.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 public class SMSNotFoundException extends ServiceException {
@@ -47,7 +50,7 @@ public class SMSNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>SMSNotFoundException</code>.
    *
-   * @param smsId the Universally Unique Identifier (UUID) used to uniquely identify the SMS
+   * @param smsId the Universally Unique Identifier (UUID) uniquely identifying the SMS
    */
   public SMSNotFoundException(UUID smsId) {
     super("SMSNotFoundError", "The SMS with ID (" + smsId + ") could not be found");

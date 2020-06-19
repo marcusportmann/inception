@@ -16,12 +16,12 @@
 
 package digital.inception.sample.model;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.ValidationError;
 import java.util.List;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ISampleService</code> interface defines the functionality that must be provided by a
@@ -32,41 +32,32 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface ISampleService {
 
-  /**
-   * Add the data.
-   */
-  void addData()
-      throws SampleServiceException;
+  /** Add the data. */
+  void addData() throws SampleServiceException;
 
   /**
    * Add the data.
    *
    * @param data the data
    */
-  void addData(Data data)
-      throws SampleServiceException;
+  void addData(Data data) throws SampleServiceException;
 
   /**
    * Returns the data.
    *
    * @return the data
    */
-  List<Data> getAllData()
-      throws SampleServiceException;
+  List<Data> getAllData() throws SampleServiceException;
 
   /**
    * Returns the data.
    *
-   * @param id the ID used to uniquely identify the data
-   *
+   * @param id the ID uniquely identifying the data
    * @return the data
    */
-  Data getData(long id)
-      throws SampleServiceException;
+  Data getData(long id) throws SampleServiceException;
 
-  /**
-   * The test method.
-   */
+  /** The test method. */
   void testMethod();
 
   /**
@@ -74,6 +65,5 @@ public interface ISampleService {
    *
    * @return the validation errors
    */
-  List<ValidationError> validate(Data data)
-      throws SampleServiceException;
+  List<ValidationError> validate(Data data) throws SampleServiceException;
 }

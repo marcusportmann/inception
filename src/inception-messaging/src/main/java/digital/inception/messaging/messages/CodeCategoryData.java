@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryData</code> class holds the information for a code category.
@@ -39,34 +39,23 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @SuppressWarnings("WeakerAccess")
-public class CodeCategoryData
-    implements Serializable {
+public class CodeCategoryData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The XML or JSON data for the code category.
-   */
+  /** The XML or JSON data for the code category. */
   private String codeData;
 
-  /**
-   * The codes for the code category.
-   */
+  /** The codes for the code category. */
   private List<CodeData> codes;
 
-  /**
-   * The ID used to uniquely identify the code category.
-   */
+  /** The ID uniquely identifying the code category. */
   private String id;
 
-  /**
-   * The date and time the code category was last updated.
-   */
+  /** The date and time the code category was last updated. */
   private LocalDateTime lastUpdated;
 
-  /**
-   * The name of the code category.
-   */
+  /** The name of the code category. */
   private String name;
 
   /**
@@ -84,12 +73,16 @@ public class CodeCategoryData
       try {
         this.lastUpdated = ISO8601Util.toLocalDateTime(lastUpdatedValue);
       } catch (Throwable e) {
-        throw new RuntimeException("Failed to parse the LastUpdated ISO8601 timestamp ("
-            + lastUpdatedValue + ") for the code category data", e);
+        throw new RuntimeException(
+            "Failed to parse the LastUpdated ISO8601 timestamp ("
+                + lastUpdatedValue
+                + ") for the code category data",
+            e);
       }
     } else {
-      this.lastUpdated = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
-          lastUpdatedValue)), ZoneId.systemDefault());
+      this.lastUpdated =
+          LocalDateTime.ofInstant(
+              Instant.ofEpochSecond(Long.parseLong(lastUpdatedValue)), ZoneId.systemDefault());
     }
 
     if (element.hasChild("CodeData")) {
@@ -111,16 +104,14 @@ public class CodeCategoryData
    * Constructs a new <code>CodeCategoryData</code>.
    *
    * @param codeCategory the code category
-   * @param codeData     the XML or JSON data for the code category
-   * @param codes        the codes for the code category
+   * @param codeData the XML or JSON data for the code category
+   * @param codes the codes for the code category
    */
   public CodeCategoryData(CodeCategory codeCategory, String codeData, List<Code> codes) {
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
     this.lastUpdated = codeCategory.getUpdated();
-    this.codeData = StringUtils.isEmpty(codeData)
-        ? ""
-        : codeData;
+    this.codeData = StringUtils.isEmpty(codeData) ? "" : codeData;
     this.codes = new ArrayList<>();
 
     if (codes != null) {
@@ -147,9 +138,9 @@ public class CodeCategoryData
   }
 
   /**
-   * Returns the ID used to uniquely identify the code category.
+   * Returns the ID uniquely identifying the code category.
    *
-   * @return the ID used to uniquely identify the code category
+   * @return the ID uniquely identifying the code category
    */
   public String getId() {
     return id;
@@ -185,11 +176,14 @@ public class CodeCategoryData
     buffer.append("CodeCategory {");
     buffer.append("id=\"").append(getId()).append("\", ");
     buffer.append("name=\"").append(getName()).append("\", ");
-    buffer.append("lastUpdated=\"").append(ISO8601Util.fromLocalDateTime(getLastUpdated())).append(
-        "\", ");
-    buffer.append("codeData=\"").append((getCodeData() != null)
-        ? getCodeData().length()
-        : 0).append(" characters of XML or JSON code data\"");
+    buffer
+        .append("lastUpdated=\"")
+        .append(ISO8601Util.fromLocalDateTime(getLastUpdated()))
+        .append("\", ");
+    buffer
+        .append("codeData=\"")
+        .append((getCodeData() != null) ? getCodeData().length() : 0)
+        .append(" characters of XML or JSON code data\"");
 
     if ((getCodes() != null) && (getCodes().size() > 0)) {
       buffer.append(", codes = {");
@@ -230,14 +224,13 @@ public class CodeCategoryData
     Element codeCategoryElement = new Element("CodeCategory");
 
     codeCategoryElement.addContent(new Element("Id", id));
-    codeCategoryElement.addContent(new Element("Name",
-        StringUtils.isEmpty(name)
-            ? ""
-            : name));
-    codeCategoryElement.addContent(new Element("LastUpdated",
-        (lastUpdated == null)
-            ? ISO8601Util.now()
-            : ISO8601Util.fromLocalDateTime(lastUpdated)));
+    codeCategoryElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    codeCategoryElement.addContent(
+        new Element(
+            "LastUpdated",
+            (lastUpdated == null)
+                ? ISO8601Util.now()
+                : ISO8601Util.fromLocalDateTime(lastUpdated)));
 
     if (codeData != null) {
       codeCategoryElement.addContent(new Element("CodeData", codeData));

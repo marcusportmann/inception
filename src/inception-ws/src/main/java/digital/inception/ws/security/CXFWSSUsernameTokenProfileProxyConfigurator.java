@@ -16,7 +16,7 @@
 
 package digital.inception.ws.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -28,7 +28,7 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSUsernameTokenProfileProxyConfigurator</code> class provides the capability to
@@ -43,13 +43,13 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator {
    * Configure the CXF web service proxy to support authentication using the the Web Services
    * Security Username Token profile.
    *
-   * @param proxy                the web service proxy to configure
-   * @param username             the username to use when authenticating
-   * @param password             the password to use when authenticating
+   * @param proxy the web service proxy to configure
+   * @param username the username to use when authenticating
+   * @param password the password to use when authenticating
    * @param usePlainTextPassword should a plain text password be used
    */
-  public static void configureProxy(Object proxy, String username, String password,
-      boolean usePlainTextPassword)
+  public static void configureProxy(
+      Object proxy, String username, String password, boolean usePlainTextPassword)
       throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
@@ -59,8 +59,9 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator {
       Client client = clientProxy.getClient();
 
       Map<String, Object> outProperties = new HashMap<>();
-      outProperties.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP + " "
-          + WSHandlerConstants.USERNAME_TOKEN);
+      outProperties.put(
+          WSHandlerConstants.ACTION,
+          WSHandlerConstants.TIMESTAMP + " " + WSHandlerConstants.USERNAME_TOKEN);
 
       if (usePlainTextPassword) {
         outProperties.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
@@ -69,8 +70,8 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator {
       }
 
       outProperties.put(WSHandlerConstants.USER, username);
-      outProperties.put(WSHandlerConstants.PW_CALLBACK_REF, new PasswordCallbackHandler(username,
-          password));
+      outProperties.put(
+          WSHandlerConstants.PW_CALLBACK_REF, new PasswordCallbackHandler(username, password));
 
       client.getOutInterceptors().add(new WSS4JOutInterceptor(outProperties));
     }

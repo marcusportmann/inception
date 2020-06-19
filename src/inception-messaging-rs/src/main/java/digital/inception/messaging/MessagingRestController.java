@@ -16,40 +16,38 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.SecureRestController;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagingRestController</code> class.
  *
  * @author Marcus Portmann
  */
+@Tag(name = "Messaging API")
 @RestController
 @RequestMapping(value = "/api/messaging")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagingRestController extends SecureRestController {
 
-  /**
-   * The Messaging Service.
-   */
+  /** The Messaging Service. */
   private IMessagingService messagingService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>MessagingRestController</code>.
    *
    * @param messagingService the Messaging Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public MessagingRestController(IMessagingService messagingService, Validator validator) {
     this.messagingService = messagingService;

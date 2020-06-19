@@ -16,21 +16,21 @@
 
 package digital.inception.configuration;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the
- * <code>ConfigurationSummary</code> domain type.
+ * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the <code>
+ * ConfigurationSummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationSummaryRepository extends
-    JpaRepository<ConfigurationSummary, String> {
+public interface ConfigurationSummaryRepository
+    extends JpaRepository<ConfigurationSummary, String> {
 
   List<ConfigurationSummary> findAllByOrderByKeyDesc();
 

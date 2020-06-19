@@ -16,7 +16,7 @@
 
 package digital.inception.validation;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import java.io.ByteArrayOutputStream;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentError</code> class holds the invalid argument error information.
@@ -42,48 +42,37 @@ import org.springframework.util.StringUtils;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "InvalidArgumentError", namespace = "http://validation.inception.digital")
-@XmlType(name = "InvalidArgumentError", namespace = "http://validation.inception.digital",
+@XmlType(
+    name = "InvalidArgumentError",
+    namespace = "http://validation.inception.digital",
     propOrder = {"when", "message", "name", "detail", "validationErrors"})
 @SuppressWarnings({"unused"})
 public class InvalidArgumentError {
 
-  /**
-   * The detail for the invalid argument error
-   */
+  /** The detail for the invalid argument error */
   @XmlElement(name = "Detail", required = true)
   private String detail;
 
-  /**
-   * The message for the invalid argument error.
-   */
+  /** The message for the invalid argument error. */
   @XmlElement(name = "Message", required = true)
   private String message;
 
-  /**
-   * The name of the argument associated with the invalid argument error
-   */
+  /** The name of the argument associated with the invalid argument error */
   @XmlElement(name = "Name", required = true)
   private String name;
 
-  /**
-   * The optional validation errors associated with the invalid argument error
-   */
+  /** The optional validation errors associated with the invalid argument error */
   @XmlElement(name = "ValidationErrors")
   private List<ValidationError> validationErrors;
 
-  /**
-   * The date and time the invalid argument error occurred.
-   */
+  /** The date and time the invalid argument error occurred. */
   @XmlElement(name = "When", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /**
-   * Constructs a new <code>InvalidArgumentError</code>.
-   */
-  public InvalidArgumentError() {
-  }
+  /** Constructs a new <code>InvalidArgumentError</code>. */
+  public InvalidArgumentError() {}
 
   /**
    * Constructs a new <code>InvalidArgumentError</code>.
@@ -92,12 +81,11 @@ public class InvalidArgumentError {
    */
   public InvalidArgumentError(InvalidArgumentException cause) {
     this.when = LocalDateTime.now();
-    this.message = (cause.getMessage() != null)
-        ? cause.getMessage()
-        : "Invalid Argument";
-    this.name = (!StringUtils.isEmpty(cause.getName()))
-        ? ValidationError.capitalizePropertyName(cause.getName())
-        : "Unknown";
+    this.message = (cause.getMessage() != null) ? cause.getMessage() : "Invalid Argument";
+    this.name =
+        (!StringUtils.isEmpty(cause.getName()))
+            ? ValidationError.capitalizePropertyName(cause.getName())
+            : "Unknown";
 
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -119,8 +107,8 @@ public class InvalidArgumentError {
         for (ValidationError validationError : cause.getValidationErrors()) {
           ValidationError newValidationError = (ValidationError) validationError.clone();
 
-          newValidationError.setProperty(ValidationError.capitalizePropertyName(
-              newValidationError.getProperty()));
+          newValidationError.setProperty(
+              ValidationError.capitalizePropertyName(newValidationError.getProperty()));
 
           this.validationErrors.add(newValidationError);
         }

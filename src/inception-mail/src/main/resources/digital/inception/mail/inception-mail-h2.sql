@@ -16,7 +16,7 @@ CREATE TABLE mail.mail_templates (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN mail.mail_templates.id IS 'The ID used to uniquely identify the mail template';
+COMMENT ON COLUMN mail.mail_templates.id IS 'The ID uniquely identifying the mail template';
 
 COMMENT ON COLUMN mail.mail_templates.name IS 'The name of the mail template';
 

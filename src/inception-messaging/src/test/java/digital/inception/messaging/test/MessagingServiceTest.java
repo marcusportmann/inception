@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.messaging.IMessagingService;
 import digital.inception.test.TestClassRunner;
@@ -41,23 +41,21 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
-@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+@TestExecutionListeners(
+    listeners = {
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
+    })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServiceTest {
 
-  /**
-   * The Messaging Service.
-   */
-  @Autowired
-  private IMessagingService messagingService;
+  /** The Messaging Service. */
+  @Autowired private IMessagingService messagingService;
 
-  /**
-   * Test.
-   */
+  /** Test. */
   @Test
-  public void test()
-      throws Exception {
+  public void test() throws Exception {
     messagingService.getMaximumProcessingAttempts();
   }
 }

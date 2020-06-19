@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2019 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,48 +14,48 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.process;
+// package digital.inception.process;
 //
-////~--- non-JDK imports --------------------------------------------------------
+//// ~--- non-JDK imports --------------------------------------------------------
 //
-//import com.fasterxml.jackson.annotation.JsonInclude;
-//import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+// import com.fasterxml.jackson.annotation.JsonInclude;
+// import com.fasterxml.jackson.annotation.JsonProperty;
+// import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 //
-//import io.swagger.annotations.ApiModel;
-//import io.swagger.annotations.ApiModelProperty;
+// import io.swagger.v3.oas.annotations.media.Schema;
+// import io.swagger.v3.oas.annotations.media.Schema;
 //
-////~--- JDK imports ------------------------------------------------------------
+//// ~--- JDK imports ------------------------------------------------------------
 //
-//import java.io.Serializable;
+// import java.io.Serializable;
 //
-//import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Size;
+// import javax.validation.constraints.NotNull;
+// import javax.validation.constraints.Size;
 //
-//import javax.xml.bind.annotation.*;
+// import javax.xml.bind.annotation.*;
 //
-///**
+/// **
 // * The <code>ProcessDefinition</code> class holds the information for a process definition.
 // *
 // * @author Marcus Portmann
 // */
-//@ApiModel(value = "ProcessDefinition")
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonPropertyOrder({ "id", "name", "version", "data" })
-//@XmlRootElement(name = "ProcessDefinition", namespace = "http://bmi.inception.digital")
-//@XmlType(name = "ProcessDefinition", namespace = "http://bmi.inception.digital",
+// @Schema(description = "ProcessDefinition")
+// @JsonInclude(JsonInclude.Include.NON_NULL)
+// @JsonPropertyOrder({ "id", "name", "version", "data" })
+// @XmlRootElement(name = "ProcessDefinition", namespace = "http://bmi.inception.digital")
+// @XmlType(name = "ProcessDefinition", namespace = "http://bmi.inception.digital",
 //    propOrder = { "id", "name", "version", "data" })
-//@XmlAccessorType(XmlAccessType.FIELD)
-//@SuppressWarnings({ "unused", "WeakerAccess" })
-//public class ProcessDefinition
+// @XmlAccessorType(XmlAccessType.FIELD)
+// @SuppressWarnings({ "unused", "WeakerAccess" })
+// public class ProcessDefinition
 //  implements Serializable
-//{
+// {
 //  private static final long serialVersionUID = 1000000;
 //
 //  /**
 //   * The BPMN XML data for the process definition.
 //   */
-//  @ApiModelProperty(value = "The BPMN XML data for the process definition", required = true)
+//  @Schema(description = "The BPMN XML data for the process definition", required = true)
 //  @JsonProperty(required = true)
 //  @XmlElement(name = "Data", required = true)
 //  @NotNull
@@ -63,9 +63,9 @@
 //  private byte[] data;
 //
 //  /**
-//   * The ID used to uniquely identify the process definition.
+//   * The ID uniquely identifying the process definition.
 //   */
-//  @ApiModelProperty(value = "The ID used to uniquely identify the process definition",
+//  @Schema(description = "The ID uniquely identifying the process definition",
 //      required = true)
 //  @JsonProperty(required = true)
 //  @XmlElement(name = "Id", required = true)
@@ -76,7 +76,7 @@
 //  /**
 //   * The name of the process definition.
 //   */
-//  @ApiModelProperty(value = "The name of the process definition", required = true)
+//  @Schema(description = "The name of the process definition", required = true)
 //  @JsonProperty(required = true)
 //  @XmlElement(name = "Name", required = true)
 //  @NotNull
@@ -86,7 +86,7 @@
 //  /**
 //   * The version of the process definition.
 //   */
-//  @ApiModelProperty(value = "The version of the process definition", required = true)
+//  @Schema(description = "The version of the process definition", required = true)
 //  @JsonProperty(required = true)
 //  @XmlElement(name = "Version", required = true)
 //  @NotNull
@@ -101,7 +101,7 @@
 //  /**
 //   * Constructs a new <code>ProcessDefinition</code>.
 //   *
-//   * @param id      the ID used to uniquely identify the process definition
+//   * @param id      the ID uniquely identifying the process definition
 //   * @param name    the name of the process definition
 //   * @param version the version of the process definition
 //   * @param data    the BPMN XML data for the process definition
@@ -156,10 +156,10 @@
 //  }
 //
 //  /**
-//   * Returns the ID used to uniquely identify the process
+//   * Returns the ID uniquely identifying the process
 //   * definition.
 //   *
-//   * @return the ID used to uniquely identify the process
+//   * @return the ID uniquely identifying the process
 //   *         definition
 //   */
 //  public String getId()
@@ -211,9 +211,9 @@
 //  }
 //
 //  /**
-//   * Set the ID used to uniquely identify the process definition.
+//   * Set the ID uniquely identifying the process definition.
 //   *
-//   * @param id the ID used to uniquely identify the process
+//   * @param id the ID uniquely identifying the process
 //   *           definition
 //   */
 //  public void setId(String id)
@@ -252,4 +252,4 @@
 //    return "ProcessDefinition {id=\"" + getId() + "\", name=\"" + getName() + "\", version=\""
 //        + getVersion() + "\"}";
 //  }
-//}
+// }

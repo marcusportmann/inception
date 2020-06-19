@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,19 +26,22 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * A <code>DuplicateUserDirectoryException</code> is thrown to indicate that a security operation
  * failed as a result of a duplicate user directory.
- * <p/>
- * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
+ *
+ * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
+ * transaction.
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.CONFLICT,
+@ResponseStatus(
+    value = HttpStatus.CONFLICT,
     reason = "A user directory with the specified ID or name already exists")
-@WebFault(name = "DuplicateUserDirectoryException",
+@WebFault(
+    name = "DuplicateUserDirectoryException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
@@ -53,18 +56,20 @@ public class DuplicateUserDirectoryException extends ServiceException {
    * @param name the name of the user directory
    */
   public DuplicateUserDirectoryException(String name) {
-    super("DuplicateUserDirectoryError", "A user directory with the name (" + name
-        + ") already exists");
+    super(
+        "DuplicateUserDirectoryError",
+        "A user directory with the name (" + name + ") already exists");
   }
 
   /**
    * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
    */
   public DuplicateUserDirectoryException(UUID userDirectoryId) {
-    super("DuplicateUserDirectoryError", "A user directory with the ID (" + userDirectoryId
-        + ") already exists");
+    super(
+        "DuplicateUserDirectoryError",
+        "A user directory with the ID (" + userDirectoryId + ") already exists");
   }
 }

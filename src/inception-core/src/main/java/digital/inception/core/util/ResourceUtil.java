@@ -16,7 +16,7 @@
 
 package digital.inception.core.util;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -31,20 +31,20 @@ import java.nio.charset.StandardCharsets;
 public final class ResourceUtil {
 
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class
-   * loader.
+   * Retrieves the resource with the specified path on the classpath using the context class loader.
    *
    * @param path the path to the resource on the classpath
-   *
    * @return the resource with the specified path on the classpath using the context class loader
    */
   public static byte[] getClasspathResource(String path) {
     try {
-      try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-          path)) {
+      try (InputStream is =
+          Thread.currentThread().getContextClassLoader().getResourceAsStream(path)) {
         if (is == null) {
-          throw new ResourceException("Failed to read the classpath resource (" + path
-              + "): The resource could not be found");
+          throw new ResourceException(
+              "Failed to read the classpath resource ("
+                  + path
+                  + "): The resource could not be found");
         }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -66,11 +66,9 @@ public final class ResourceUtil {
   }
 
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class
-   * loader.
+   * Retrieves the resource with the specified path on the classpath using the context class loader.
    *
    * @param path the path to the resource on the classpath
-   *
    * @return the resource with the specified path on the classpath using the context class loader
    */
   public static String getStringClasspathResource(String path) {

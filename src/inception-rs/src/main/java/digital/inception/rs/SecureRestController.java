@@ -16,7 +16,7 @@
 
 package digital.inception.rs;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecureRestController</code> class provides the base class from which all secure RESTful
@@ -40,12 +40,11 @@ public abstract class SecureRestController {
    * Returns the <code>Long</code> value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param prefix         the authority prefix
-   *
+   * @param prefix the authority prefix
    * @return the <code>Long</code> value portion of the authorities with the specified prefix
    */
-  protected List<Long> getLongValuesForAuthoritiesWithPrefix(Authentication authentication,
-      String prefix) {
+  protected List<Long> getLongValuesForAuthoritiesWithPrefix(
+      Authentication authentication, String prefix) {
     var values = new ArrayList<Long>();
 
     for (GrantedAuthority authority : authentication.getAuthorities()) {
@@ -64,12 +63,11 @@ public abstract class SecureRestController {
    * Returns the <code>UUID</code> value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param prefix         the authority prefix
-   *
+   * @param prefix the authority prefix
    * @return the <code>UUID</code> value portion of the authorities with the specified prefix
    */
-  protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(Authentication authentication,
-      String prefix) {
+  protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(
+      Authentication authentication, String prefix) {
     var values = new ArrayList<UUID>();
 
     for (GrantedAuthority authority : authentication.getAuthorities()) {
@@ -88,10 +86,9 @@ public abstract class SecureRestController {
    * Returns the value portion of the authority with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param prefix         the authority prefix
-   *
+   * @param prefix the authority prefix
    * @return the value portion of the authority with the specified prefix or <code>null</code> if
-   * the authority with the specified prefix could not be found
+   *     the authority with the specified prefix could not be found
    */
   protected String getValueForAuthorityWithPrefix(Authentication authentication, String prefix) {
     for (GrantedAuthority authority : authentication.getAuthorities()) {
@@ -107,12 +104,11 @@ public abstract class SecureRestController {
    * Returns the value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param prefix         the authority prefix
-   *
+   * @param prefix the authority prefix
    * @return the value portion of the authorities with the specified prefix
    */
-  protected List<String> getValuesForAuthoritiesWithPrefix(Authentication authentication,
-      String prefix) {
+  protected List<String> getValuesForAuthoritiesWithPrefix(
+      Authentication authentication, String prefix) {
     var values = new ArrayList<String>();
 
     for (GrantedAuthority authority : authentication.getAuthorities()) {
@@ -129,10 +125,9 @@ public abstract class SecureRestController {
    * function.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param functionCode   the code used to uniquely identify the function
-   *
+   * @param functionCode the code uniquely identifying the function
    * @return <code>true</code> if the user associated with the authenticated request has access to
-   * the function identified by the specified function code or <code>false</code> otherwise
+   *     the function identified by the specified function code or <code>false</code> otherwise
    */
   protected boolean hasAccessToFunction(Authentication authentication, String functionCode) {
     return hasAuthority(authentication, "FUNCTION_" + functionCode);
@@ -142,10 +137,9 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param authority      the authority
-   *
+   * @param authority the authority
    * @return <code>true</code> if the user associated with the authenticated request has the
-   * specified authority or <code>false</code> otherwise
+   *     specified authority or <code>false</code> otherwise
    */
   protected boolean hasAuthority(Authentication authentication, String authority) {
     if ((authentication == null) || (StringUtils.isEmpty(authority))) {
@@ -169,10 +163,9 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has the specified role.
    *
    * @param authentication the authenticated principal associated with the authenticated request
-   * @param roleName       the name of the role
-   *
+   * @param roleName the name of the role
    * @return <code>true</code> if the user associated with the authenticated request has the
-   * specified role or <code>false</code> otherwise
+   *     specified role or <code>false</code> otherwise
    */
   protected boolean hasRole(Authentication authentication, String roleName) {
     return hasAuthority(authentication, "ROLE_" + roleName);

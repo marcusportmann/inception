@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,11 +29,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>JobRepository</code> interface declares the repository for the
- * <code>Job</code> domain type.
+ * The <code>JobRepository</code> interface declares the repository for the <code>Job</code> domain
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -43,16 +43,18 @@ public interface JobRepository extends JpaRepository<Job, String> {
   @Query("delete from Job j where j.id = :jobId")
   void deleteById(@Param("jobId") String jobId);
 
-  @Query("select j from Job j where lower(j.name) like lower(:filter) or lower(j.jobClass) "
-      + "like lower(:filter)")
+  @Query(
+      "select j from Job j where lower(j.name) like lower(:filter) or lower(j.jobClass) "
+          + "like lower(:filter)")
   List<Job> findFiltered(String filter);
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select j from Job j where j.enabled = true and j.status = 1 and "
-      + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
-      + "and j.nextExecution <= current_timestamp")
-  List<Job> findJobsScheduledForExecutionForWrite(@Param(
-      "lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
+  @Query(
+      "select j from Job j where j.enabled = true and j.status = 1 and "
+          + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
+          + "and j.nextExecution <= current_timestamp")
+  List<Job> findJobsScheduledForExecutionForWrite(
+      @Param("lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
 
   @Query("select j from Job j where j.enabled = true and j.status = 0")
   List<Job> findUnscheduledJobs();
@@ -65,23 +67,30 @@ public interface JobRepository extends JpaRepository<Job, String> {
   Optional<String> getNameById(@Param("jobId") String jobId);
 
   @Modifying
-  @Query("update Job j set j.lockName = :lockName, j.status = 2, "
-      + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
-      + "where j.id = :jobId")
-  void lockJobForExecution(@Param("jobId") String jobId, @Param("lockName") String lockName, @Param(
-      "when") LocalDateTime when);
+  @Query(
+      "update Job j set j.lockName = :lockName, j.status = 2, "
+          + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
+          + "where j.id = :jobId")
+  void lockJobForExecution(
+      @Param("jobId") String jobId,
+      @Param("lockName") String lockName,
+      @Param("when") LocalDateTime when);
 
   @Modifying
-  @Query("update Job j set j.status = :newStatus, j.lockName = null "
-      + "where j.lockName = :lockName and j.status = :status")
-  void resetJobLocks(@Param("status") JobStatus status, @Param("newStatus") JobStatus newStatus,
+  @Query(
+      "update Job j set j.status = :newStatus, j.lockName = null "
+          + "where j.lockName = :lockName and j.status = :status")
+  void resetJobLocks(
+      @Param("status") JobStatus status,
+      @Param("newStatus") JobStatus newStatus,
       @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update Job j set j.status = 1, j.executionAttempts = null, "
-      + "j.nextExecution = :nextExecution where j.id = :jobId")
-  void scheduleJob(@Param("jobId") String jobId, @Param(
-      "nextExecution") LocalDateTime nextExecution);
+  @Query(
+      "update Job j set j.status = 1, j.executionAttempts = null, "
+          + "j.nextExecution = :nextExecution where j.id = :jobId")
+  void scheduleJob(
+      @Param("jobId") String jobId, @Param("nextExecution") LocalDateTime nextExecution);
 
   @Modifying
   @Query("update Job j set j.status = :status where j.id = :jobId")

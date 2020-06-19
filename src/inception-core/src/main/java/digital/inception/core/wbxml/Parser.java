@@ -16,7 +16,7 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,21 +34,16 @@ public class Parser {
   private ByteArrayInputStream stream = null;
   private byte[] stringTable = null;
 
-  /**
-   * Constructs a new <code>Parser</code>.
-   */
-  public Parser() {
-  }
+  /** Constructs a new <code>Parser</code>. */
+  public Parser() {}
 
   /**
    * Parse the specified binary data representation of the WBXML document.
    *
    * @param data the binary data representation of the WBXML document
-   *
    * @return the WBXML object hierarchy
    */
-  public Document parse(byte[] data)
-      throws IOException, ParserException {
+  public Document parse(byte[] data) throws IOException, ParserException {
     // Local variables
     int tmpValue;
 
@@ -81,8 +76,8 @@ public class Parser {
       stringTable = new byte[stringTableLength];
 
       if (stream.read(stringTable, 0, stringTableLength) != stringTableLength) {
-        throw new ParserException("Failed to read " + stringTableLength
-            + " bytes for the string table");
+        throw new ParserException(
+            "Failed to read " + stringTableLength + " bytes for the string table");
       }
     }
 
@@ -91,31 +86,34 @@ public class Parser {
 
     while ((tmpValue = readByte()) != -1) {
       switch (tmpValue) {
-        case WBXML.TOKEN_SWITCH_PAGE: {
-          throw new ParserException("Unsupported token: TOKEN_SWITCH_PAGE");
-        }
+        case WBXML.TOKEN_SWITCH_PAGE:
+          {
+            throw new ParserException("Unsupported token: TOKEN_SWITCH_PAGE");
+          }
 
-        case WBXML.TOKEN_PI: {
-          throw new ParserException("Unsupported token: TOKEN_PI");
-        }
+        case WBXML.TOKEN_PI:
+          {
+            throw new ParserException("Unsupported token: TOKEN_PI");
+          }
 
-        case WBXML.TOKEN_END: {
-          throw new ParserException("Unexpected token: TOKEN_END");
-        }
+        case WBXML.TOKEN_END:
+          {
+            throw new ParserException("Unexpected token: TOKEN_END");
+          }
 
-        default: {
-          parseElement(tmpValue, rootElement);
+        default:
+          {
+            parseElement(tmpValue, rootElement);
 
-          break;
-        }
+            break;
+          }
       }
     }
 
     return new Document(rootElement);
   }
 
-  void parseAttributes(Element element)
-      throws IOException, ParserException {
+  void parseAttributes(Element element) throws IOException, ParserException {
     int tmpValue;
     int attributeNameOffset;
     String attributeName;
@@ -135,8 +133,8 @@ public class Parser {
 
       // Read the name of the attribute from the string table
       if ((attributeName = readFromStringTable(attributeNameOffset)) == null) {
-        throw new ParserException("Invalid string table offset for attribute name: "
-            + attributeNameOffset);
+        throw new ParserException(
+            "Invalid string table offset for attribute name: " + attributeNameOffset);
       }
 
       // Read the byte giving the type of value for this attribute
@@ -159,8 +157,7 @@ public class Parser {
     }
   }
 
-  void parseContent(Element element)
-      throws IOException, ParserException {
+  void parseContent(Element element) throws IOException, ParserException {
     int tmpValue;
 
     // Read the first byte detailing the format of the content
@@ -168,52 +165,57 @@ public class Parser {
       tmpValue = readByte();
 
       switch (tmpValue) {
-        case WBXML.TOKEN_END: {
-          // End of content under this element
-          return;
-        }
-
-        case WBXML.TOKEN_ENTITY: {
-          // NOTE: We do not process the entity token
-          int entityLength = readMultiByteUINT32();
-
-          if (stream.skip(entityLength) != entityLength) {
-            throw new IOException("Unexpected EOF while skipping entity with length: "
-                + entityLength);
+        case WBXML.TOKEN_END:
+          {
+            // End of content under this element
+            return;
           }
 
-          break;
-        }
+        case WBXML.TOKEN_ENTITY:
+          {
+            // NOTE: We do not process the entity token
+            int entityLength = readMultiByteUINT32();
 
-        case WBXML.TOKEN_STR_I: {
-          // Read the inline string
-          String str = readString();
+            if (stream.skip(entityLength) != entityLength) {
+              throw new IOException(
+                  "Unexpected EOF while skipping entity with length: " + entityLength);
+            }
 
-          // Add as text content to the element
-          element.addContent(str);
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_STR_I:
+          {
+            // Read the inline string
+            String str = readString();
 
-        case WBXML.TOKEN_STR_T: {
-          // Read the index into the string table
-          int stringTableOffset = readMultiByteUINT32();
+            // Add as text content to the element
+            element.addContent(str);
 
-          // Read the string from the string table and add as text content to the element
-          element.addContent(readFromStringTable(stringTableOffset));
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_STR_T:
+          {
+            // Read the index into the string table
+            int stringTableOffset = readMultiByteUINT32();
 
-        case WBXML.TOKEN_OPAQUE: {
-          // Read the length of the opaque data
-          int opaqueLength = readMultiByteUINT32();
+            // Read the string from the string table and add as text content to the element
+            element.addContent(readFromStringTable(stringTableOffset));
 
-          // Read the opaque data
-          element.addContent(readOpaque(opaqueLength));
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_OPAQUE:
+          {
+            // Read the length of the opaque data
+            int opaqueLength = readMultiByteUINT32();
+
+            // Read the opaque data
+            element.addContent(readOpaque(opaqueLength));
+
+            break;
+          }
 
         case WBXML.TOKEN_EXT_I_0:
           throw new ParserException("Unsupported token: TOKEN_EXT_I_0");
@@ -245,20 +247,20 @@ public class Parser {
         case WBXML.TOKEN_PI:
           throw new ParserException("Unsupported token: TOKEN_PI");
 
-        default: {
-          Element childElement = new Element();
+        default:
+          {
+            Element childElement = new Element();
 
-          parseElement(tmpValue, childElement);
-          element.addContent(childElement);
+            parseElement(tmpValue, childElement);
+            element.addContent(childElement);
 
-          break;
-        }
+            break;
+          }
       }
     }
   }
 
-  private void parseElement(int token, Element element)
-      throws IOException, ParserException {
+  private void parseElement(int token, Element element) throws IOException, ParserException {
     // Local variables
     // int result = 0;
     boolean hasAttributes = (token & 0x80) > 0;
@@ -277,8 +279,8 @@ public class Parser {
     String elementName;
 
     if ((elementName = readFromStringTable(elementNameOffset)) == null) {
-      throw new ParserException("Invalid string table offset for element name: "
-          + elementNameOffset);
+      throw new ParserException(
+          "Invalid string table offset for element name: " + elementNameOffset);
     }
 
     element.setName(elementName);
@@ -298,13 +300,11 @@ public class Parser {
     }
   }
 
-  private int readByte()
-      throws IOException {
+  private int readByte() throws IOException {
     return stream.read();
   }
 
-  private String readFromStringTable(int offset)
-      throws ParserException {
+  private String readFromStringTable(int offset) throws ParserException {
     int index = offset;
 
     while (index < stringTable.length) {
@@ -312,8 +312,8 @@ public class Parser {
         try {
           return new String(stringTable, offset, index - offset, ENCODING_UTF_8);
         } catch (Throwable e) {
-          throw new ParserException("Failed to retrieve the string at offset " + offset
-              + " from the string table");
+          throw new ParserException(
+              "Failed to retrieve the string at offset " + offset + " from the string table");
         }
       }
 
@@ -323,22 +323,19 @@ public class Parser {
     throw new ParserException("String exceeds string table at offset: " + offset);
   }
 
-  private int readMultiByteUINT32()
-      throws IOException {
+  private int readMultiByteUINT32() throws IOException {
     int result = 0;
     int i;
 
     do {
       i = readByte();
       result = (result << 7) | (i & 0x7f);
-    }
-    while ((i & 0x80) != 0);
+    } while ((i & 0x80) != 0);
 
     return result;
   }
 
-  private byte[] readOpaque(int length)
-      throws IOException {
+  private byte[] readOpaque(int length) throws IOException {
     byte[] data = new byte[length];
 
     if (stream.read(data, 0, length) != length) {
@@ -348,8 +345,7 @@ public class Parser {
     return data;
   }
 
-  private String readString()
-      throws IOException {
+  private String readString() throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
     while (true) {

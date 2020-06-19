@@ -16,20 +16,20 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageDownloadRequest</code> class represents a request sent by a mobile device to
  * download the queued messages for the device.
- * <p/>
- * NOTE: No information in the download request is encrypted and the request itself is not
+ *
+ * <p>NOTE: No information in the download request is encrypted and the request itself is not
  * authenticated. This is because the queued messages returned will themselves be encrypted.
  *
  * @author Marcus Portmann
@@ -38,14 +38,12 @@ import java.util.UUID;
 public class MessageDownloadRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * download request originated from.
+   * The Universally Unique Identifier (UUID) uniquely identifying the device the message download
+   * request originated from.
    */
   private UUID deviceId;
 
-  /**
-   * The username identifying the user whose messages should be downloaded.
-   */
+  /** The username identifying the user whose messages should be downloaded. */
   private String username;
 
   /**
@@ -64,8 +62,8 @@ public class MessageDownloadRequest {
   /**
    * Constructs a new <code>MessageDownloadRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message download request originated from
    * @param username the username identifying the user whose messages should be downloaded
    */
   public MessageDownloadRequest(UUID deviceId, String username) {
@@ -78,9 +76,8 @@ public class MessageDownloadRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message download request
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -92,22 +89,22 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message download request originated from.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * download request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   * message download request originated from
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   *     download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message
    * download request originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -138,8 +135,8 @@ public class MessageDownloadRequest {
    */
   @Override
   public String toString() {
-    return String.format("<MessageDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
-        username);
+    return String.format(
+        "<MessageDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId, username);
   }
 
   /**

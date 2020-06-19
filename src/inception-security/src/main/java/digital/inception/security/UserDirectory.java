@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,8 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,32 +59,34 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectory</code> class holds the information for a user directory.
  *
  * @author Marcus Portmann
  */
-@ApiModel(value = "UserDirectory")
+@Schema(description = "UserDirectory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name", "parameters"})
 @XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
-@XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
+@XmlType(
+    name = "UserDirectory",
+    namespace = "http://security.inception.digital",
     propOrder = {"id", "type", "name", "parameters"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "user_directories")
 @SuppressWarnings({"unused"})
-public class UserDirectory
-    implements Serializable {
+public class UserDirectory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   */
-  @ApiModelProperty(value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory", required = true)
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -93,10 +94,8 @@ public class UserDirectory
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the user directory.
-   */
-  @ApiModelProperty(value = "The name of the user directory", required = true)
+  /** The name of the user directory. */
+  @Schema(description = "The name of the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -104,10 +103,8 @@ public class UserDirectory
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The parameters for the user directory.
-   */
-  @ApiModelProperty(value = "The parameters for the user directory", required = true)
+  /** The parameters for the user directory. */
+  @Schema(description = "The parameters for the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Parameters", required = true)
   @XmlElement(name = "Parameter", required = true)
@@ -115,19 +112,14 @@ public class UserDirectory
   @Transient
   private List<UserDirectoryParameter> parameters = new ArrayList<>();
 
-  /**
-   * The organizations the user directory is associated with.
-   */
+  /** The organizations the user directory is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "userDirectories")
   private Set<Organization> organizations = new HashSet<>();
 
-  /**
-   * The code used to uniquely identify the user directory type.
-   */
-  @ApiModelProperty(value = "The code used to uniquely identify the user directory type",
-      required = true)
+  /** The code uniquely identifying the user directory type. */
+  @Schema(description = "The code uniquely identifying the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -135,19 +127,15 @@ public class UserDirectory
   @Column(name = "type", nullable = false, length = 100)
   private String type;
 
-  /**
-   * Constructs a new <code>UserDirectory</code>.
-   */
-  public UserDirectory() {
-  }
+  /** Constructs a new <code>UserDirectory</code>. */
+  public UserDirectory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
-   * @return <code>true</code> if this object is the same as the object argument otherwise
-   * <code>false</code>
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   *     false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -187,9 +175,10 @@ public class UserDirectory
     for (UserDirectoryParameter parameter : parameters) {
       buffer.append("<parameter>");
       buffer.append("<name>").append(parameter.getName()).append("</name>");
-      buffer.append("<value>").append(StringUtils.isEmpty(parameter.getValue())
-          ? ""
-          : parameter.getValue()).append("</value>");
+      buffer
+          .append("<value>")
+          .append(StringUtils.isEmpty(parameter.getValue()) ? "" : parameter.getValue())
+          .append("</value>");
       buffer.append("</parameter>");
     }
 
@@ -203,8 +192,7 @@ public class UserDirectory
    *
    * @param configuration the XML configuration data for the user directory
    */
-  public void setConfiguration(String configuration)
-      throws SecurityServiceException {
+  public void setConfiguration(String configuration) throws SecurityServiceException {
     try {
       // Parse the XML configuration data
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -213,8 +201,9 @@ public class UserDirectory
 
       DocumentBuilder builder = builderFactory.newDocumentBuilder();
 
-      builder.setEntityResolver(new DtdJarResolver("UserDirectoryConfiguration.dtd",
-          "META-INF/UserDirectoryConfiguration.dtd"));
+      builder.setEntityResolver(
+          new DtdJarResolver(
+              "UserDirectoryConfiguration.dtd", "META-INF/UserDirectoryConfiguration.dtd"));
       builder.setErrorHandler(new XmlParserErrorHandler());
 
       InputSource inputSource = new InputSource(new ByteArrayInputStream(configuration.getBytes()));
@@ -230,8 +219,10 @@ public class UserDirectory
       for (int i = 0; i < parameterElements.getLength(); i++) {
         Element parameterElement = (Element) parameterElements.item(i);
 
-        parameters.add(new UserDirectoryParameter(XmlUtil.getChildElementText(parameterElement,
-            "name"), XmlUtil.getChildElementText(parameterElement, "value")));
+        parameters.add(
+            new UserDirectoryParameter(
+                XmlUtil.getChildElementText(parameterElement, "name"),
+                XmlUtil.getChildElementText(parameterElement, "value")));
       }
     } catch (Throwable e) {
       throw new SecurityServiceException(
@@ -240,19 +231,18 @@ public class UserDirectory
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
-   *           directory
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public void setId(UUID id) {
     this.id = id;
@@ -313,18 +303,18 @@ public class UserDirectory
   }
 
   /**
-   * Returns the code used to uniquely identify the user directory type.
+   * Returns the code uniquely identifying the user directory type.
    *
-   * @return the code used to uniquely identify the user directory type
+   * @return the code uniquely identifying the user directory type
    */
   public String getType() {
     return type;
   }
 
   /**
-   * Set the code used to uniquely identify the user directory type.
+   * Set the code uniquely identifying the user directory type.
    *
-   * @param type the code used to uniquely identify the user directory type
+   * @param type the code uniquely identifying the user directory type
    */
   public void setType(String type) {
     this.type = type;
@@ -337,8 +327,6 @@ public class UserDirectory
    */
   @Override
   public int hashCode() {
-    return (id == null)
-        ? 0
-        : id.hashCode();
+    return (id == null) ? 0 : id.hashCode();
   }
 }

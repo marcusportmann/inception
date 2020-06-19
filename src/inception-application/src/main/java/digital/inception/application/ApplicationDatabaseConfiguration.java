@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
 import io.agroal.api.AgroalDataSource;
@@ -46,7 +46,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ApplicationDatabaseConfiguration</code> class provides access to the application
@@ -61,17 +61,13 @@ import org.springframework.util.StringUtils;
 public class ApplicationDatabaseConfiguration {
 
   /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(
-      ApplicationDatabaseConfiguration.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(ApplicationDatabaseConfiguration.class);
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private ApplicationContext applicationContext;
 
-  /**
-   * The application data source.
-   */
+  /** The application data source. */
   private DataSource dataSource;
 
   /**
@@ -106,57 +102,39 @@ public class ApplicationDatabaseConfiguration {
   @Value("${application.database.minPoolSize:1}")
   private int minPoolSize;
 
-  /**
-   * The password for the application database.
-   */
+  /** The password for the application database. */
   @Value("${application.database.password:#{null}}")
   private String password;
 
-  /**
-   * Is transaction recovery enabled for the application database.
-   */
+  /** Is transaction recovery enabled for the application database. */
   @Value("${application.database.recoveryEnabled:false}")
   private boolean recoveryEnabled;
 
-  /**
-   * The recovery password for the application database.
-   */
+  /** The recovery password for the application database. */
   @Value("${application.database.recoveryPassword:#{null}}")
   private String recoveryPassword;
 
-  /**
-   * The recovery username for the application database.
-   */
+  /** The recovery username for the application database. */
   @Value("${application.database.recoveryUsername:#{null}}")
   private String recoveryUsername;
 
-  /**
-   * The URL used to connect to the application database.
-   */
+  /** The URL used to connect to the application database. */
   @Value("${application.database.url:#{null}}")
   private String url;
 
-  /**
-   * The username for the application database.
-   */
+  /** The username for the application database. */
   @Value("${application.database.username:#{null}}")
   private String username;
 
-  /**
-   * The XA password for the application database.
-   */
+  /** The XA password for the application database. */
   @Value("${application.database.xaPassword:#{null}}")
   private String xaPassword;
 
-  /**
-   * The XA server name for the application database.
-   */
+  /** The XA server name for the application database. */
   @Value("${application.database.xaServerName:#{null}}")
   private String xaServerName;
 
-  /**
-   * The XA username for the application database.
-   */
+  /** The XA username for the application database. */
   @Value("${application.database.xaUsername:#{null}}")
   private String xaUsername;
 
@@ -204,76 +182,80 @@ public class ApplicationDatabaseConfiguration {
         }
 
         if (!StringUtils.isEmpty(recoveryPassword)) {
-          agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL,
-              recoveryPassword);
+          agroalProperties.setProperty(
+              AgroalPropertiesReader.RECOVERY_CREDENTIAL, recoveryPassword);
         }
       }
 
       agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, dataSourceClass);
 
-      agroalProperties.setProperty(AgroalPropertiesReader.MIN_SIZE,
-          (minPoolSize > 0)
-              ? Integer.toString(minPoolSize)
-              : "1");
-      agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE,
-          (maxPoolSize > 0)
-              ? Integer.toString(maxPoolSize)
-              : "5");
+      agroalProperties.setProperty(
+          AgroalPropertiesReader.MIN_SIZE, (minPoolSize > 0) ? Integer.toString(minPoolSize) : "1");
+      agroalProperties.setProperty(
+          AgroalPropertiesReader.MAX_SIZE, (maxPoolSize > 0) ? Integer.toString(maxPoolSize) : "5");
 
-      AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(
-          agroalProperties);
+      AgroalPropertiesReader agroalReaderProperties2 =
+          new AgroalPropertiesReader().readProperties(agroalProperties);
       AgroalDataSourceConfigurationSupplier agroalDataSourceConfigurationSupplier =
           agroalReaderProperties2.modify();
-      TransactionIntegration transactionIntegration = new NarayanaTransactionIntegration(
-          transactionManager, transactionSynchronizationRegistry);
+      TransactionIntegration transactionIntegration =
+          new NarayanaTransactionIntegration(
+              transactionManager, transactionSynchronizationRegistry);
 
-//    TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
-//      com.arjuna.ats.jta.TransactionManager.transactionManager(), transactionSynchronizationRegistry,
-//      "java:/agroalds2", false, recoveryManagerService);
+      //    TransactionIntegration txIntegration2 = new NarayanaTransactionIntegration(
+      //      com.arjuna.ats.jta.TransactionManager.transactionManager(),
+      // transactionSynchronizationRegistry,
+      //      "java:/agroalds2", false, recoveryManagerService);
 
-      agroalDataSourceConfigurationSupplier.connectionPoolConfiguration().transactionIntegration(
-          transactionIntegration);
+      agroalDataSourceConfigurationSupplier
+          .connectionPoolConfiguration()
+          .transactionIntegration(transactionIntegration);
 
       dataSource = AgroalDataSource.from(agroalDataSourceConfigurationSupplier);
 
-//    /*
-//     * The SAP JDBC driver does not return a DataSource, instead it provides connections so we
-//     * make use of the DriverManagerDataSource.
-//     */
-//    if (dataSourceClass.equals("com.sap.db.jdbc.Driver"))
-//    {
-//      DriverManagerDataSource ds = new DriverManagerDataSource();
-//      ds.setDriverClassName(dataSourceClass);
-//      ds.setUrl(url);
-//      dataSource = ds;
-//    }
-//    else
-//    {
-//      Class<? extends DataSource> dataSourceClass = Thread.currentThread().getContextClassLoader()
-//          .loadClass(this.dataSourceClass).asSubclass(DataSource.class);
-//
-//      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(url).build();
-//    }
+      //    /*
+      //     * The SAP JDBC driver does not return a DataSource, instead it provides connections so
+      // we
+      //     * make use of the DriverManagerDataSource.
+      //     */
+      //    if (dataSourceClass.equals("com.sap.db.jdbc.Driver"))
+      //    {
+      //      DriverManagerDataSource ds = new DriverManagerDataSource();
+      //      ds.setDriverClassName(dataSourceClass);
+      //      ds.setUrl(url);
+      //      dataSource = ds;
+      //    }
+      //    else
+      //    {
+      //      Class<? extends DataSource> dataSourceClass =
+      // Thread.currentThread().getContextClassLoader()
+      //          .loadClass(this.dataSourceClass).asSubclass(DataSource.class);
+      //
+      //      dataSource = DataSourceBuilder.create().type(dataSourceClass).url(url).build();
+      //    }
 
       boolean isInMemoryH2Database = false;
 
       try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
-        logger.info("Connected to the " + metaData.getDatabaseProductName()
-            + " application database with version " + metaData.getDatabaseProductVersion());
+        logger.info(
+            "Connected to the "
+                + metaData.getDatabaseProductName()
+                + " application database with version "
+                + metaData.getDatabaseProductVersion());
 
         switch (metaData.getDatabaseProductName()) {
           case "H2":
-
             isInMemoryH2Database = true;
 
             break;
 
           default:
-
-            logger.info("The default database tables will not be populated for the database type ("
-                + metaData.getDatabaseProductName() + ")");
+            logger.info(
+                "The default database tables will not be populated for the database type ("
+                    + metaData.getDatabaseProductName()
+                    + ")");
 
             break;
         }
@@ -313,8 +295,8 @@ public class ApplicationDatabaseConfiguration {
 
   private void loadSQL(DataSource dataSource, Resource databaseInitResource)
       throws IOException, SQLException {
-    logger.info("Executing the SQL statements in the file '" + databaseInitResource.getFilename()
-        + "'");
+    logger.info(
+        "Executing the SQL statements in the file '" + databaseInitResource.getFilename() + "'");
 
     try {
       // Load the SQL statements used to initialize the database tables
@@ -323,8 +305,8 @@ public class ApplicationDatabaseConfiguration {
       // Get a connection to the in-memory database
       try (Connection connection = dataSource.getConnection()) {
         for (String sqlStatement : sqlStatements) {
-          LoggerFactory.getLogger(Application.class).debug("Executing SQL statement: "
-              + sqlStatement);
+          LoggerFactory.getLogger(Application.class)
+              .debug("Executing SQL statement: " + sqlStatement);
 
           try (Statement statement = connection.createStatement()) {
             statement.execute(sqlStatement);

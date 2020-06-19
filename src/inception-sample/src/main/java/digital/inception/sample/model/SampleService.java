@@ -16,7 +16,7 @@
 
 package digital.inception.sample.model;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.ValidationError;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ import javax.validation.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
@@ -41,8 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class SampleService
-    implements ISampleService {
+public class SampleService implements ISampleService {
 
   private static final String VERSION = "1.0.0";
 
@@ -50,9 +49,7 @@ public class SampleService
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
@@ -64,13 +61,10 @@ public class SampleService
     this.validator = validator;
   }
 
-  /**
-   * Add the data.
-   */
+  /** Add the data. */
   @Override
   @Transactional
-  public void addData()
-      throws SampleServiceException {
+  public void addData() throws SampleServiceException {
     try {
       Data newData = new Data();
       newData.setId(666);
@@ -92,8 +86,7 @@ public class SampleService
    */
   @Override
   @Transactional
-  public void addData(Data data)
-      throws SampleServiceException {
+  public void addData(Data data) throws SampleServiceException {
     try {
       entityManager.persist(data);
     } catch (Throwable e) {
@@ -108,8 +101,7 @@ public class SampleService
    */
   @Override
   @Transactional
-  public List<Data> getAllData()
-      throws SampleServiceException {
+  public List<Data> getAllData() throws SampleServiceException {
     try {
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
@@ -122,17 +114,15 @@ public class SampleService
   /**
    * Returns the data.
    *
-   * @param id the ID used to uniquely identify the data
-   *
+   * @param id the ID uniquely identifying the data
    * @return the data
    */
   @Override
   @Transactional
-  public Data getData(long id)
-      throws SampleServiceException {
+  public Data getData(long id) throws SampleServiceException {
     try {
-      TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d WHERE ID=:id",
-          Data.class);
+      TypedQuery<Data> query =
+          entityManager.createQuery("SELECT d FROM Data d WHERE ID=:id", Data.class);
 
       query.setParameter("id", id);
 
@@ -148,9 +138,7 @@ public class SampleService
     }
   }
 
-  /**
-   * The test method.
-   */
+  /** The test method. */
   @Override
   public void testMethod() {
     System.out.println("[DEBUG] Hello world from the test method!!!");
@@ -162,8 +150,7 @@ public class SampleService
    * @return the validation errors
    */
   @Override
-  public List<ValidationError> validate(Data data)
-      throws SampleServiceException {
+  public List<ValidationError> validate(Data data) throws SampleServiceException {
     try {
       Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
 

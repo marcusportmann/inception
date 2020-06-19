@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,31 +27,25 @@ import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TestRequestData</code> class manages the data for a "Test Request" message.
- * <p/>
- * This is a synchronous message.
+ *
+ * <p>This is a synchronous message.
  *
  * @author Marcus Portmann
  */
 public class TestRequestData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Test Request" message.
-   */
-  public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-      "a589dc87-2328-4a9b-bdb6-970e55ca2323");
+  /** The UUID for the "Test Request" message. */
+  public static final UUID MESSAGE_TYPE_ID =
+      UUID.fromString("a589dc87-2328-4a9b-bdb6-970e55ca2323");
 
-  /**
-   * The test value.
-   */
+  /** The test value. */
   private String testValue;
 
-  /**
-   * Constructs a new <code>TestRequestData</code>.
-   */
+  /** Constructs a new <code>TestRequestData</code>. */
   public TestRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -71,13 +65,11 @@ public class TestRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData)
-      throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -109,15 +101,14 @@ public class TestRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {
     Element rootElement = new Element("TestRequest");
 
-    rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue)
-        ? ""
-        : testValue));
+    rootElement.addContent(
+        new Element("TestValue", StringUtils.isEmpty(testValue) ? "" : testValue));
 
     Document document = new Document(rootElement);
 

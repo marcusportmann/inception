@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>FunctionRepository</code> interface declares the repository for the
- * <code>Function</code> domain type.
+ * The <code>FunctionRepository</code> interface declares the repository for the <code>Function
+ * </code> domain type.
  *
  * @author Marcus Portmann
  */

@@ -28,6 +28,5 @@ public interface IJob {
    *
    * @param context the job execution context
    */
-  void execute(JobExecutionContext context)
-      throws JobExecutionFailedException;
+  void execute(JobExecutionContext context) throws JobExecutionFailedException;
 }

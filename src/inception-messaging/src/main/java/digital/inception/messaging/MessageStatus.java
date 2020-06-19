@@ -16,21 +16,19 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
-/**
- * The enumeration giving the possible statuses for a message.
- */
-@ApiModel(value = "MessageStatus")
+/** The enumeration giving the possible statuses for a message. */
+@Schema(description = "MessageStatus")
 @XmlEnum
 @XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
 public enum MessageStatus {
@@ -69,7 +67,6 @@ public enum MessageStatus {
    * Returns the message status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the message status
-   *
    * @return the message status given by the specified numeric code value
    */
   @JsonCreator

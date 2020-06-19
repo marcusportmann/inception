@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -27,8 +27,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Marcus Portmann
  */
 @Configuration
-@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.mail"})
-public class MailConfiguration {
-
-}
+public class MailConfiguration {}

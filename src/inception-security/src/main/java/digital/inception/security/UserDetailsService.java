@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDetailsService</code> class provides the User Details Service implementation that
@@ -37,8 +37,7 @@ public class UserDetailsService
     implements org.springframework.security.core.userdetails.UserDetailsService {
 
   /* Security Service */
-  @Autowired
-  private ISecurityService securityService;
+  @Autowired private ISecurityService securityService;
 
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly
@@ -47,30 +46,29 @@ public class UserDetailsService
    * username that is of a different case than what was actually requested.
    *
    * @param username the username identifying the user whose data is required.
-   *
    * @return a fully populated user record (never <code>null</code>)
    */
   @Override
-  public UserDetails loadUserByUsername(String username)
-      throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     try {
       UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
       if (userDirectoryId == null) {
-        throw new UsernameNotFoundException("Failed to retrieve the details for the user ("
-            + username
-            + "): The user is not associated with any of the configured user directories");
+        throw new UsernameNotFoundException(
+            "Failed to retrieve the details for the user ("
+                + username
+                + "): The user is not associated with any of the configured user directories");
       } else {
         // Retrieve the details for the user
         User user = securityService.getUser(userDirectoryId, username);
 
         // Retrieve the function codes for the user
-        List<String> functionCodes = securityService.getFunctionCodesForUser(userDirectoryId,
-            username);
+        List<String> functionCodes =
+            securityService.getFunctionCodesForUser(userDirectoryId, username);
 
         // Retrieve the list of IDs for the organizations the user is associated with
-        List<UUID> organizationIds = securityService.getOrganizationIdsForUserDirectory(
-            userDirectoryId);
+        List<UUID> organizationIds =
+            securityService.getOrganizationIdsForUserDirectory(userDirectoryId);
 
         /*
          * Retrieve the list of IDs for the user directories the user is associated with as a result
@@ -80,8 +78,8 @@ public class UserDetailsService
 
         for (var organizationId : organizationIds) {
           // Retrieve the list of user directories associated with the organization
-          var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
-              organizationId);
+          var userDirectoryIdsForOrganization =
+              securityService.getUserDirectoryIdsForOrganization(organizationId);
 
           userDirectoryIdsForOrganizations.addAll(userDirectoryIdsForOrganization);
         }
@@ -89,17 +87,19 @@ public class UserDetailsService
         // Retrieve the list of roles for the user
         List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
 
-        return new digital.inception.security.UserDetails(user, roleCodes, functionCodes,
-            organizationIds, userDirectoryIdsForOrganizations);
+        return new digital.inception.security.UserDetails(
+            user, roleCodes, functionCodes, organizationIds, userDirectoryIdsForOrganizations);
       }
     } catch (UserNotFoundException e) {
-      throw new UsernameNotFoundException("Failed to retrieve the details for the user ("
-          + username + "): The user could not be found");
+      throw new UsernameNotFoundException(
+          "Failed to retrieve the details for the user ("
+              + username
+              + "): The user could not be found");
     } catch (UsernameNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new RuntimeException("Failed to retrieve the details for the user (" + username + ")",
-          e);
+      throw new RuntimeException(
+          "Failed to retrieve the details for the user (" + username + ")", e);
     }
   }
 }

@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://core.inception.digital",
+@javax.xml.bind.annotation.XmlSchema(
+    namespace = "http://core.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = {@javax.xml.bind.annotation.XmlNs(prefix = "core",
-        namespaceURI = "http://core.inception.digital"),})
+    xmlns = {
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "core",
+          namespaceURI = "http://core.inception.digital"),
+    })
 package digital.inception.core.service;

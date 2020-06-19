@@ -16,7 +16,7 @@
 
 package digital.inception.configuration;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -32,34 +32,32 @@ import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ConfigurationWebService</code> class.
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "ConfigurationService", name = "IConfigurationService",
+@WebService(
+    serviceName = "ConfigurationService",
+    name = "IConfigurationService",
     targetNamespace = "http://configuration.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ConfigurationWebService {
 
-  /**
-   * The Configuration Service.
-   */
+  /** The Configuration Service. */
   private IConfigurationService configurationService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>ConfigurationWebService</code>.
    *
    * @param configurationService the Configuration Service
-   * @param validator            the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ConfigurationWebService(IConfigurationService configurationService, Validator validator) {
     this.configurationService = configurationService;
@@ -69,12 +67,12 @@ public class ConfigurationWebService {
   /**
    * Delete the configuration.
    *
-   * @param key the key used to uniquely identify the configuration
+   * @param key the key uniquely identifying the configuration
    */
   @WebMethod(operationName = "DeleteConfiguration")
-  public void deleteConfiguration(@WebParam(name = "Key")
-  @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+  public void deleteConfiguration(@WebParam(name = "Key") @XmlElement(required = true) String key)
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -85,15 +83,15 @@ public class ConfigurationWebService {
   /**
    * Retrieve the configuration.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the configuration
    */
   @WebMethod(operationName = "GetConfiguration")
   @WebResult(name = "Configuration")
-  public Configuration getConfiguration(@WebParam(name = "Key")
-  @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+  public Configuration getConfiguration(
+      @WebParam(name = "Key") @XmlElement(required = true) String key)
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -104,15 +102,15 @@ public class ConfigurationWebService {
   /**
    * Retrieve the configuration value.
    *
-   * @param key the key used to uniquely identify the configuration
-   *
+   * @param key the key uniquely identifying the configuration
    * @return the configuration value
    */
   @WebMethod(operationName = "GetConfigurationValue")
   @WebResult(name = "ConfigurationValue")
-  public String getConfigurationValue(@WebParam(name = "Key")
-  @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+  public String getConfigurationValue(
+      @WebParam(name = "Key") @XmlElement(required = true) String key)
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -127,8 +125,7 @@ public class ConfigurationWebService {
    */
   @WebMethod(operationName = "GetConfigurations")
   @WebResult(name = "Configuration")
-  public List<Configuration> getConfigurations()
-      throws ConfigurationServiceException {
+  public List<Configuration> getConfigurations() throws ConfigurationServiceException {
     return configurationService.getConfigurations();
   }
 
@@ -138,15 +135,15 @@ public class ConfigurationWebService {
    * @param configuration the configuration
    */
   @WebMethod(operationName = "SetConfiguration")
-  public void setConfiguration(@WebParam(name = "Configuration")
-  @XmlElement(required = true) Configuration configuration)
+  public void setConfiguration(
+      @WebParam(name = "Configuration") @XmlElement(required = true) Configuration configuration)
       throws InvalidArgumentException, ConfigurationServiceException {
-    Set<ConstraintViolation<Configuration>> constraintViolations = validator.validate(
-        configuration);
+    Set<ConstraintViolation<Configuration>> constraintViolations =
+        validator.validate(configuration);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("configuration", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "configuration", ValidationError.toValidationErrors(constraintViolations));
     }
 
     configurationService.setConfiguration(configuration);

@@ -27,9 +27,7 @@ public class ParserException extends Exception {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>ParserException</code> with <code>null</code> as its message.
-   */
+  /** Constructs a new <code>ParserException</code> with <code>null</code> as its message. */
   public ParserException() {
     super();
   }
@@ -44,12 +42,12 @@ public class ParserException extends Exception {
   }
 
   /**
-   * Constructs a new <code>ParserException</code> with the specified cause and a message of
-   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
-   * message of cause).
+   * Constructs a new <code>ParserException</code> with the specified cause and a message of <code>
+   * (cause==null ? null : cause.toString())</code> (which typically contains the class and message
+   * of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ParserException(Throwable cause) {
     super(cause);
@@ -59,15 +57,13 @@ public class ParserException extends Exception {
    * Constructs a new <code>ParserException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ParserException(String message, Throwable cause) {
     super(message, cause);
   }
 }
-
-
 
 /*
   public static final int ErrEOF = -1;

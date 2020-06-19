@@ -16,14 +16,14 @@
 
 package digital.inception.core.converters;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LocalDateTimeToStringConverter</code> class implements the Spring converter that
@@ -33,14 +33,10 @@ import org.springframework.stereotype.Component;
  */
 @SuppressWarnings("unused")
 @Component
-public final class LocalDateTimeToStringConverter
-    implements Converter<LocalDateTime, String> {
+public final class LocalDateTimeToStringConverter implements Converter<LocalDateTime, String> {
 
-  /**
-   * Constructs a new <code>LocalDateTimeToStringConverter</code>.
-   */
-  public LocalDateTimeToStringConverter() {
-  }
+  /** Constructs a new <code>LocalDateTimeToStringConverter</code>. */
+  public LocalDateTimeToStringConverter() {}
 
   @Override
   public String convert(LocalDateTime source) {

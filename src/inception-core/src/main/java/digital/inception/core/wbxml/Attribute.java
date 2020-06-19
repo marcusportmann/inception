@@ -16,7 +16,7 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
 
@@ -25,16 +25,13 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
-public class Attribute
-    implements Serializable {
+public class Attribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
   private String name;
   private String value;
 
-  /**
-   * Constructs a new <code>Attribute</code>.
-   */
+  /** Constructs a new <code>Attribute</code>. */
   public Attribute() {
     name = "";
     value = "";
@@ -43,7 +40,7 @@ public class Attribute
   /**
    * Constructs a new <code>Attribute</code> with the specified name and value.
    *
-   * @param name  the name of the attribute
+   * @param name the name of the attribute
    * @param value the value for the attribute
    */
   public Attribute(String name, String value) {

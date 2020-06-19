@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -29,9 +29,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author Marcus Portmann
  */
 @Configuration
-@EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
+@EnableJpaRepositories(
+    entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.messaging"})
 @EnableScheduling
-public class MessagingConfiguration {
-
-}
+public class MessagingConfiguration {}

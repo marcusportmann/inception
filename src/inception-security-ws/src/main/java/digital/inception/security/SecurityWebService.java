@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-//~--- non-JDK imports --------------------------------------------------------
+// ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
@@ -32,34 +32,32 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecurityWebService</code> class.
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "SecurityService", name = "ISecurityService",
+@WebService(
+    serviceName = "SecurityService",
+    name = "ISecurityService",
     targetNamespace = "http://security.inception.digital")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SecurityWebService {
 
-  /**
-   * The Security Service.
-   */
+  /** The Security Service. */
   private ISecurityService securityService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
    * Constructs a new <code>SecurityWebService</code>.
    *
    * @param securityService the Security Service
-   * @param validator       the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SecurityWebService(ISecurityService securityService, Validator validator) {
     this.securityService = securityService;
@@ -69,30 +67,30 @@ public class SecurityWebService {
   /**
    * Create the organization.
    *
-   * @param organization        the organization to create
-   * @param createUserDirectory should a new internal user directory be created for the
-   *                            organization
+   * @param organization the organization to create
+   * @param createUserDirectory should a new internal user directory be created for the organization
    */
   @WebMethod(operationName = "CreateOrganization")
-  public void createOrganization(@WebParam(name = "Organization")
-  @XmlElement(required = true) Organization organization, @WebParam(name = "CreateUserDirectory")
-  @XmlElement(required = true) Boolean createUserDirectory)
+  public void createOrganization(
+      @WebParam(name = "Organization") @XmlElement(required = true) Organization organization,
+      @WebParam(name = "CreateUserDirectory") @XmlElement(required = true)
+          Boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException {
     validateOrganization(organization);
 
-    securityService.createOrganization(organization, (createUserDirectory != null)
-        && createUserDirectory);
+    securityService.createOrganization(
+        organization, (createUserDirectory != null) && createUserDirectory);
   }
 
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    */
   @WebMethod(operationName = "DeleteOrganization")
-  public void deleteOrganization(@WebParam(name = "OrganizationId")
-  @XmlElement(required = true) UUID organizationId)
+  public void deleteOrganization(
+      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
@@ -104,20 +102,19 @@ public class SecurityWebService {
   /**
    * Retrieve the filtered organizations using pagination.
    *
-   * @param filter        the optional filter to apply to the organizations
+   * @param filter the optional filter to apply to the organizations
    * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the organizations
    */
   @WebMethod(operationName = "GetOrganizations")
   @WebResult(name = "Organization")
-  public List<Organization> getOrganizations(@WebParam(name = "Filter")
-  @XmlElement(required = true) String filter, @WebParam(name = "SortDirection")
-  @XmlElement(required = true) SortDirection sortDirection, @WebParam(name = "PageIndex")
-  @XmlElement(required = true) Integer pageIndex, @WebParam(name = "PageSize")
-  @XmlElement(required = true) Integer pageSize)
+  public List<Organization> getOrganizations(
+      @WebParam(name = "Filter") @XmlElement(required = true) String filter,
+      @WebParam(name = "SortDirection") @XmlElement(required = true) SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement(required = true) Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement(required = true) Integer pageSize)
       throws SecurityServiceException {
     return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
@@ -125,21 +122,19 @@ public class SecurityWebService {
   /**
    * Retrieve the user directories the organization is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                       organization
-   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @return the user directories the organization is associated with
    */
   @WebMethod(operationName = "GetUserDirectoriesForOrganization")
   @WebResult(name = "UserDirectory")
-  public List<UserDirectory> getUserDirectoriesForOrganization(@WebParam(name = "OrganizationId")
-  @XmlElement(required = true) UUID organizationId)
+  public List<UserDirectory> getUserDirectoriesForOrganization(
+      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
       throws OrganizationNotFoundException, SecurityServiceException {
     return securityService.getUserDirectoriesForOrganization(organizationId);
   }
 
-  private void validateOrganization(Organization organization)
-      throws InvalidArgumentException {
+  private void validateOrganization(Organization organization) throws InvalidArgumentException {
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
@@ -147,8 +142,8 @@ public class SecurityWebService {
     Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
 
     if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
-          constraintViolations));
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

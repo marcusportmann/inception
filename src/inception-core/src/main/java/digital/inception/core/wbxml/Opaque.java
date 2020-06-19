@@ -16,7 +16,7 @@
 
 package digital.inception.core.wbxml;
 
-//~--- JDK imports ------------------------------------------------------------
+// ~--- JDK imports ------------------------------------------------------------
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -26,20 +26,17 @@ import java.io.Serializable;
 /**
  * The <code>Opaque</code> class stores the data for an opaque (binary data) content type in a WBXML
  * document.
- * <p/>
- * This content type is used to store binary data.
+ *
+ * <p>This content type is used to store binary data.
  *
  * @author Marcus Portmann
  */
-public class Opaque
-    implements Serializable, Content {
+public class Opaque implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
   private BinaryBuffer buffer = null;
 
-  /**
-   * Constructs a new empty <code>Opaque</code>.
-   */
+  /** Constructs a new empty <code>Opaque</code>. */
   public Opaque() {
     buffer = new BinaryBuffer();
   }
@@ -54,8 +51,8 @@ public class Opaque
   }
 
   /**
-   * Append the specified binary data to the binary data already contained in the
-   * <code>Opaque</code> instance.
+   * Append the specified binary data to the binary data already contained in the <code>Opaque
+   * </code> instance.
    *
    * @param data the binary data to add to the opaque instance
    */
@@ -103,7 +100,7 @@ public class Opaque
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out    the <code>OuputStream</code> to output the content to
+   * @param out the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {
@@ -117,7 +114,6 @@ public class Opaque
 
   /**
    * @return the string representation of the <code>Opaque</code> instance
-   *
    * @see Object#toString()
    */
   @Override
